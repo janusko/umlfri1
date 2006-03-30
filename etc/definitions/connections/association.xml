@@ -1,0 +1,9 @@
+<ConnectionType id="Association">
+    <Icon path="icons/class.png" />
+	<SrcArrow possible="1" default="0">
+	<DestArrow possible="1" default="0">
+    <Appearance>
+    	<LineStyle style="solid" />
+    	<ArrowStyle type="simple" />
+    </Appearance>
+</ConnectionType>
