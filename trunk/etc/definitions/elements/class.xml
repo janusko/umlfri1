@@ -1,0 +1,43 @@
+<ElementType id="Class">
+    <Diagrams>
+        <Item value="Class diagram" />
+    </Diagrams>
+    <Icon path="icons/class.png" />
+    <Connections>
+        <Item value="Association" />
+        <Item value="Generalization" />
+    </Connections>
+    <Appearance>
+        <Rectangle fill="yellow" border="black">
+            <HBox>
+                <Padding padding="5">
+                    <TextBox align="center" propid="name" />
+                </Padding>
+                <Line type="horizontal" />
+                <Padding padding="5">
+                    <HBox>
+                        <Loop collection="attributes">
+                            <VBox>
+                                <TextBox align="left" propid="_type" />
+                                <TextBox align="left" propid="_line" />
+                            </VBox>
+                        </Loop>
+                    </HBox>
+                </Padding>
+                <Condition condition="methods" type="empty" negate="1">
+                    <Line type="horizontal" />
+                </Condition>
+                <Padding padding="5">
+                    <HBox>
+                        <Loop collection="methods">
+                            <VBox>
+                                <TextBox align="left" propid="_type" />
+                                <TextBox align="left" propid="_line" />
+                            </VBox>
+                        </Loop>
+                    </HBox>
+                </Padding>
+            </HBox>
+        </Rectangle>
+    </Appearance>
+</ElementType>
