@@ -1,0 +1,33 @@
+<ElementType id="Package">
+    <Icon path="icons/package.png" />
+    <Connections>
+        <!--Item value="Association" />
+        <Item value="Generalization" with="Class" allowrecursive="0" /-->
+    </Connections>
+    <Attributes>
+        <Item value="Name" type="str" propid="name" />
+        <Item value="Scope" type="enum">
+            <Option value="public" />
+            <Option value="private" />
+            <Option value="protected" />
+        </Item>
+        <Item value="Notes" type="note" />
+    </Attributes>
+    <Appearance>
+        <Shadow padding="3" color="#505050">
+            <HBox>
+                <VBox>
+                    <Rectangle fill="lightpink2" border="black">
+                        <Padding padding="5">
+                            <TextBox align="left" text="#name" color="yellow" />
+                        </Padding>
+                    </Rectangle>
+                    <Padding padding="8" />
+                </VBox>
+                <Rectangle fill="lightpink2" border="black">
+                    <Padding padding="40" />
+                </Rectangle>
+            </HBox>
+        </Shadow>
+    </Appearance>
+</ElementType>
