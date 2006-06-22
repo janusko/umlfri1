@@ -1,18 +1,21 @@
 class CVisualObject:
     def __init__(self):
-        pass
-
+        self.parent = None
+    
     def GetHeight(self, element):
-        pass
-
-    def GetParent(self):
-        pass
+        return 0
 
     def GetWidth(self, element):
-        pass
+        return 0
 
-    def Paint(self, x, y, element):
+    def GetParent(self):
+        return self.parent
+
+    def Paint(self, x, y, element, w = None, h = None):
+        pass
+    
+    def PaintShadow(self, x, y, element, color, w = None, h = None):
         pass
 
     def SetParent(self, parent):
-        pass
+        self.parent = parent

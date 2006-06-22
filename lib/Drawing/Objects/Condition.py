@@ -1,26 +1,59 @@
 from SimpleContainer import CSimpleContainer
 
+from lib.lib import ToBool
+
 class CCondition(CSimpleContainer):
     def __init__(self, condition, type, negate):
-        pass
+        CSimpleContainer.__init__(self)
+        self.condition = condition
+        self.type = type
+        self.negate = ToBool(negate)
+    
+    def __IsTrue(self, element):
+        ret = True
+        if self.type == 'empty':
+            if element.GetObject().GetVisualProperty(self.condition):
+                ret = False
+            else:
+                ret = True
+        if self.negate:
+            return not ret
+        return ret
 
     def GetCondition(self):
-        pass
+        return self.condition
 
     def GetNegate(self):
-        pass
+        self.negate
 
     def GetType(self):
-        pass
+        self.type
 
-    def Paint(self, x, y, element):
-        pass
+    def GetHeight(self, element):
+        if self.__IsTrue(element):
+            return CSimpleContainer.GetHeight(self, element)
+        return 0
 
+    def GetWidth(self, element):
+        if self.__IsTrue(element):
+            return CSimpleContainer.GetWidth(self, element)
+        return 0
+
+    def PaintShadow(self, x, y, element, color, w = None, h = None):
+        if self.__IsTrue(element):
+            for child in self.childs:
+                CSimpleContainer.Paint(self, x, y, element, color, w, h)
+
+    def Paint(self, x, y, element, w = None, h = None):
+        if self.__IsTrue(element):
+            for child in self.childs:
+                CSimpleContainer.Paint(self, x, y, element, w, h)
+    
     def SetCondition(self, condition):
-        pass
+        self.condition = condition
 
     def SetNegate(self, negate):
-        pass
+        self.negate = negate
 
     def SetType(self, type):
-        pass
+        self.type = type
