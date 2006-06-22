@@ -1,43 +1,56 @@
 <ElementType id="Class">
-    <Diagrams>
-        <Item value="Class diagram" />
-    </Diagrams>
     <Icon path="icons/class.png" />
     <Connections>
         <Item value="Association" />
-        <Item value="Generalization" />
+        <Item value="Generalization" with="Class" allowrecursive="0" />
     </Connections>
+    <Attributes>
+        <Item value="Name" type="str" propid="name" />
+        <Item value="Scope" type="enum">
+            <Option value="public" />
+            <Option value="private" />
+            <Option value="protected" />
+        </Item>
+        <Item value="Attributes" type="attrs" propid="attributes" />
+        <Item value="Operations" type="opers" propid="operations" />
+        <Item value="Abstract" type="bool" />
+        <Item value="Notes" type="note" />
+    </Attributes>
     <Appearance>
-        <Rectangle fill="yellow" border="black">
-            <HBox>
-                <Padding padding="5">
-                    <TextBox align="center" propid="name" />
-                </Padding>
-                <Line type="horizontal" />
-                <Padding padding="5">
-                    <HBox>
-                        <Loop collection="attributes">
-                            <VBox>
-                                <TextBox align="left" propid="_type" />
-                                <TextBox align="left" propid="_line" />
-                            </VBox>
-                        </Loop>
-                    </HBox>
-                </Padding>
-                <Condition condition="methods" type="empty" negate="1">
+        <Shadow padding="3" color="#505050">
+            <Rectangle fill="lightpink2" border="black">
+                <HBox>
+                    <Padding padding="5">
+                        <TextBox align="center" text="#name" color="yellow" />
+                    </Padding>
                     <Line type="horizontal" />
-                </Condition>
-                <Padding padding="5">
-                    <HBox>
-                        <Loop collection="methods">
-                            <VBox>
-                                <TextBox align="left" propid="_type" />
-                                <TextBox align="left" propid="_line" />
-                            </VBox>
-                        </Loop>
-                    </HBox>
-                </Padding>
-            </HBox>
-        </Rectangle>
+                    <Padding padding="5">
+                        <HBox>
+                            <Loop collection="attributes">
+                                <VBox>
+                                    <TextBox align="left" text="@scope" />
+                                    <TextBox align="left" text="@line" />
+                                </VBox>
+                            </Loop>
+                        </HBox>
+                    </Padding>
+                    <Condition condition="operations" type="empty" negate="1">
+                        <HBox>
+                            <Line type="horizontal" />
+                            <Padding padding="5">
+                                <HBox>
+                                    <Loop collection="operations">
+                                        <VBox>
+                                            <TextBox align="left" text="@scope" />
+                                            <TextBox align="left" text="@line" />
+                                        </VBox>
+                                    </Loop>
+                                </HBox>
+                            </Padding>
+                        </HBox>
+                    </Condition>
+                </HBox>
+            </Rectangle>
+        </Shadow>
     </Appearance>
 </ElementType>

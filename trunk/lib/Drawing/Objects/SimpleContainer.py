@@ -1,17 +1,13 @@
 from Container import CContainer
+from lib.lib import UMLException
 
 class CSimpleContainer(CContainer):
-    def __init__(self):
-        pass
-
     def AppendChild(self, child):
-        pass
-
-    def Paint(self, x, y, element):
-        pass
-
-    def RemoveChild(self, child):
-        pass
+        if len(self.GetChilds()) > 0:
+            raise UMLException("SCChildCount")
+        CContainer.AppendChild(self, child)
 
     def SetChild(self, child):
-        pass
+        if len(self.GetChilds()) > 0:
+            self.RemoveChild(self.GetChild(0))
+        self.AppendChild(child)
