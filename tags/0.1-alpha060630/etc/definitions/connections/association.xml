@@ -1,0 +1,15 @@
+<ConnectionType id="Association">
+    <Icon path="icons/associate.png" />
+	<SrcArrow possible="1" default="0" />
+	<DestArrow possible="1" default="0" />
+    <Attributes>
+        <Item value="Name" type="str" propid="name" />
+    </Attributes>
+    <Appearance>
+    	<LineStyle style="solid" color="red" />
+    	<ArrowStyle style="simple" fill="blue" color="black" />
+        <Label position="center">
+            <TextBox align="left" text="#name" />
+        </Label>
+    </Appearance>
+</ConnectionType>
