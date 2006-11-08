@@ -21,7 +21,8 @@ class CDiagramFactory:
         self.umlVersion = umlVersion
         
         for file in os.listdir(self.path):
-            self.__Load(os.path.join(self.path, file))
+            if file.endswith('.xml'):
+                self.__Load(os.path.join(self.path, file))
     
     def __iter__(self):
         for i in self.types.values():
