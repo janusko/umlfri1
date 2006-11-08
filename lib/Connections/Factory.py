@@ -14,7 +14,8 @@ class CConnectionFactory:
         self.types = {}
         self.path = path
         for file in os.listdir(self.path):
-            self.__Load(os.path.join(self.path, file))
+            if file.endswith('.xml'):
+                self.__Load(os.path.join(self.path, file))
 
     def GetConnection(self, type):
         return self.types[type]

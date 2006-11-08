@@ -13,7 +13,8 @@ class CElementFactory:
         self.path = path
         
         for file in os.listdir(self.path):
-            self.__Load(os.path.join(self.path, file))
+            if file.endswith('.xml'):
+                self.__Load(os.path.join(self.path, file))
 
     def GetElement(self, type):
         return self.types[type]
