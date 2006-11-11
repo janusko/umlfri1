@@ -4,6 +4,8 @@ class CConnectionObject(object):
         self.source = source
         self.destination = dest
         self.attributes = {}
+        for i in self.type.GetAttributes():
+            self.SetAttribute(i, self.type.GetDefValue(i))            
 
     def GetType(self):
         return self.type
@@ -23,8 +25,8 @@ class CConnectionObject(object):
     def SetSource(self, source):
         self.source = source 
     
-    def Paint(self, Connection):
-        self.type.Paint(Connection)
+    def Paint(self, canvas, Connection):
+        self.type.Paint(canvas, Connection)
     
     def GetAttribute(self, key):
         if key in self.attributes:

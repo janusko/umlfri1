@@ -12,7 +12,6 @@ class CConnection:
         self.labels = {}
         self.selected = False        
     
-    
     def Select(self):
         self.selected = True
     
@@ -74,7 +73,7 @@ class CConnection:
         else:
             raise UMLException("PointNotExists")
 
-    def AreYouAtPosition(self, x, y):
+    def AreYouAtPosition(self, canvas, x, y):
         Xo, Yo = self.points[0]
         for i in self.points[1:]:
             A = Yo - i[1]
@@ -100,17 +99,11 @@ class CConnection:
         else:
             raise UMLException("PointNotExists")
 
-    def Paint(self):
-        self.conObject.Paint(self)
+    def Paint(self, canvas):
+        self.conObject.Paint(canvas, self)
         if self.selected is True:
-            wgt = self.screen.GetDrawable()
-            gc = wgt.new_gc()
-            cmap = wgt.get_colormap()
-            gc.foreground = cmap.alloc_color(SELECT_SQUARES_COLOR)
             for i in self.points:
-                wgt.draw_rectangle(gc, True, i[0] - SELECT_SQUARES_SIZE//2, i[1] - SELECT_SQUARES_SIZE//2, SELECT_SQUARES_SIZE, SELECT_SQUARES_SIZE)
-            
-        
+                canvas.DrawRectangle((i[0] - SELECT_SQUARES_SIZE//2, i[1] - SELECT_SQUARES_SIZE//2), (SELECT_SQUARES_SIZE, SELECT_SQUARES_SIZE), SELECT_SQUARES_COLOR)
 
     def RemovePoint(self, index):
         if index < len(self.points) - 1:

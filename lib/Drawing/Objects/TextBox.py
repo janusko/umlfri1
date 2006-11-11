@@ -1,8 +1,6 @@
 from VisualObject import CVisualObject
-import gtk.gdk
 import lib.consts
 import sys
-import pango
 
 class CTextBox(CVisualObject):
     def __init__(self, text, align = "center", linestart = "", color = "black"):
@@ -28,37 +26,21 @@ class CTextBox(CVisualObject):
     def GetColor(self):
         return self.color
 
-    def GetHeight(self, element):
+    def GetHeight(self, canvas, element):
         txt = self.__GetValue(element)
-        ctx, layout = element.GetDrawingArea().GetPango()
-        layout.set_text(txt)
-        return int(layout.get_size()[1]/float(pango.SCALE))
+        return canvas.GetTextSize(txt, lib.consts.FONT_TYPE)[1]
 
-    def GetWidth(self, element):
+    def GetWidth(self, canvas, element):
         txt = self.__GetValue(element)
-        ctx, layout = element.GetDrawingArea().GetPango()
-        layout.set_text(txt)
-        return int(layout.get_size()[0]/float(pango.SCALE))
+        return canvas.GetTextSize(txt, lib.consts.FONT_TYPE)[0]
 
-    def PaintShadow(self, x, y, element, color, w = None, h = None):
+    def PaintShadow(self, pos, canvas, element, color, size = (None, None)):
         txt = self.__GetValue(element)
-        wgt = element.GetDrawingArea().GetDrawable()
-        cmap = wgt.get_colormap()
-        gc = wgt.new_gc(foreground = cmap.alloc_color(color))
-        
-        ctx, layout = element.GetDrawingArea().GetPango()
-        layout.set_text(txt)
-        wgt.draw_layout(gc, x=x, y=y, layout=layout)
+        canvas.DrawText(pos, txt, lib.consts.FONT_TYPE, color)
 
-    def Paint(self, x, y, element, w = None, h = None):
+    def Paint(self, canvas, pos, element, size = (None, None)):
         txt = self.__GetValue(element)
-        wgt = element.GetDrawingArea().GetDrawable()
-        cmap = wgt.get_colormap()
-        gc = wgt.new_gc(foreground = cmap.alloc_color(self.color))
-        
-        ctx, layout = element.GetDrawingArea().GetPango()
-        layout.set_text(txt)
-        wgt.draw_layout(gc, x=x, y=y, layout=layout)
+        canvas.DrawText(pos, txt, lib.consts.FONT_TYPE, self.color)
 
     def SetAlign(self, align = "center"):
         self.align = align

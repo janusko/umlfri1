@@ -8,7 +8,8 @@ from lib.Drawing import CDrawingArea, CElement, CConnection
 from lib.Drawing import CDrawingArea, CElement, CConnection
 from lib.Elements import CElementObject
 from lib.Connections import CConnectionObject
-#^odstranit^ ???
+
+from lib.Drawing.Canvas import GtkCanvas
 
 targets = [('document/uml', 0, gtk.TARGET_SAME_WIDGET)]
 
@@ -32,7 +33,9 @@ class CpicDrawingArea(CWidget):
         CWidget.__init__(self, app, wTree)
         #self.picEventBox.drag_dest_set(gtk.DEST_DEFAULT_ALL, targets, gtk.gdk.ACTION_MOVE)
         self.Buffer = gtk.gdk.Pixmap(self.picDrawingArea.window, 1000, 1000)
-        self.DrawingArea = CDrawingArea(self.picDrawingArea, self.Buffer)
+        #self.DrawingArea = CDrawingArea(self.picDrawingArea, self.Buffer)
+        self.DrawingArea = CDrawingArea()
+        self.canvas = GtkCanvas(self.picDrawingArea, self.Buffer)
         
         self.AdjustScrollBars()
         self.Paint()
@@ -56,7 +59,7 @@ class CpicDrawingArea(CWidget):
         return int(-self.picHBar.get_value() + posx), int(-self.picVBar.get_value() + posy)
         
     def Paint(self):
-        self.DrawingArea.Paint()
+        self.DrawingArea.Paint(self.canvas)
         self.Repaint()
         
     def Repaint(self):
@@ -87,7 +90,7 @@ class CpicDrawingArea(CWidget):
         toolBtnSel =  self.emit('get-selected')
         posx, posy = self.GetAbsolutePos(event.x, event.y)
         if toolBtnSel is None:
-            itemSel = self.DrawingArea.GetElementAtPosition(posx, posy)
+            itemSel = self.DrawingArea.GetElementAtPosition(self.canvas, posx, posy)
             if itemSel is not None:
                 if itemSel in self.DrawingArea.GetSelected():
                     if (event.state & gtk.gdk.CONTROL_MASK):
@@ -181,7 +184,7 @@ class CpicDrawingArea(CWidget):
     def __DragBegin(self, event):
         #self.picEventBox.drag_begin(targets, gtk.gdk.ACTION_MOVE, event.button, event)
         self.DragStartPos = self.GetAbsolutePos(event.x, event.y)
-        self.DragRect = self.DrawingArea.GetSelectSquare()
+        self.DragRect = self.DrawingArea.GetSelectSquare(self.canvas)
         cmap = self.picDrawingArea.window.get_colormap()
         self.DragGC = self.picDrawingArea.window.new_gc(foreground = cmap.alloc_color(SELECT_SQUARE_COLOR), 
             function = gtk.gdk.XOR, line_width = SELECT_SQUARE_SIZE)

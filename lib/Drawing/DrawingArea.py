@@ -1,22 +1,12 @@
 from lib.lib import UMLException
-import pango
 import lib.consts
 
 class CDrawingArea:
-    def __init__(self, widget, drawable = None):
-        self.widget = widget
-        self.font = pango.FontDescription(lib.consts.FONT_TYPE)
-        self.pango = (self.widget.create_pango_context(), self.widget.create_pango_layout(""))
-        self.pango[1].set_font_description(self.font)
+    def __init__(self):
         self.elements = []
         self.elementsreverse = []
         self.connections = []
         self.selected = set()
-        
-        if drawable is None:
-            self.drawable = self.widget.window
-        else:
-            self.drawable = drawable
         
     def AddElement(self, element):
         if element not in self.elements:
@@ -60,13 +50,13 @@ class CDrawingArea:
             self.selected.add(c)
             c.Select()
     
-    def GetSelectSquare(self):
+    def GetSelectSquare(self, canvas):
         x1, y1 = self.GetSize()
         x2, y2 = 0, 0
         
         for el in self.selected:
             x, y = el.GetPosition()
-            w, h = el.GetSize()
+            w, h = el.GetSize(canvas)
             if x < x1:
                 x1 = x
             if y < y1:
@@ -101,28 +91,21 @@ class CDrawingArea:
     def GetDrawable(self):
         return self.drawable        
         
-    def GetElementAtPosition(self, x, y):
+    def GetElementAtPosition(self, canvas, x, y):
         for c in self.connections:
-            if c.AreYouAtPosition(x, y):
+            if c.AreYouAtPosition(canvas, x, y):
                 return c
                 
         for e in self.elementsreverse:
-            if e.AreYouAtPosition(x, y):
+            if e.AreYouAtPosition(canvas, x, y):
                 return e
             
         return None
-        
-    def GetWidget(self):
-        return self.widget
-    
-    def GetPango(self):
-        return self.pango
 
-    def Paint(self):
-        gc = self.widget.get_style().white_gc
-        self.drawable.draw_rectangle(gc, True, 0, 0, *self.GetSize())
+    def Paint(self, canvas):
+        canvas.Clear()
         for e in self.elements:
-            e.Paint()
+            e.Paint(canvas)
         
         for c in self.connections:
-            c.Paint()
+            c.Paint(canvas)

@@ -1,4 +1,3 @@
-import gtk.gdk
 from lib.lib import ToBool,UMLException
 from math import sin, cos, radians
 
@@ -75,7 +74,7 @@ class CConnectionArrow(object):
                 j[0] = j[0] * size
         return matrix
     
-    def Paint(self, x, y, angle, Connection):
+    def Paint(self, canvas, pos, angle, Connection):
         if self.possible is False:
             return
         rotationMatrix = self.__RotationMatrix(angle)
@@ -85,29 +84,17 @@ class CConnectionArrow(object):
                 matrix = self.__MultiplyMatrix(rotationMatrix, i)
                 points.append((int(matrix[0][0]*self.size+x),int(matrix[1][0]*self.size+y)))
             
-            wgt = Connection.GetDrawingArea().GetDrawable()
-            cmap = wgt.get_colormap()
-            gc = wgt.new_gc()
             if ARROW_TYPES[self.style][0] == 'polyline':
-                gc.foreground = cmap.alloc_color(self.color)
-                wgt.draw_lines(gc,points)
+                canvas.DrawLines(points, self.color)
             elif ARROW_TYPES[self.style][0] == 'polygon':
-                gc.foreground = cmap.alloc_color(self.fill)
-                wgt.draw_polygon(gc, True, points)
-                gc.foreground = cmap.alloc_color(self.color)
-                wgt.draw_polygon(gc, False, points)
+                canvas.DrawPolygon(points, bg = self.fill, fg = self.color)
             elif ARROW_TYPES[self.style][0] == 'fillPolygon':
-                gc.foreground = cmap.alloc_color(self.color)
-                wgt.draw_polygon(gc, True, points)
+                canvas.DrawPolygon(points, bg = self.color)
             elif ARROW_TYPES[self.style][0] == 'line':
                 if self.style == 'crosscircle':
-                    gc.foreground = cmap.alloc_color(self.fill)
-                    wgt.draw_arc(gc, True, x - self.size/2, y - self.size/2, self.size, self.size ,0, 360*64)
-                    gc.foreground = cmap.alloc_color(self.color)
-                    wgt.draw_arc(gc, False, x - self.size/2, y -self.size/2, self.size, self.size ,0, 360*64)
+                    canvas.DrawArc((x - self.size/2, y - self.size/2), (self.size, self.size), fg = self.color, bg = self.fill)
                 for i in xrange(0,len(points) - 1, 2):
-                    gc.foreground = cmap.alloc_color(self.color)
-                    wgt.draw_line(gc, points[i][0], points[i][1], points[i+1][0], points[i+1][1])                 
+                    canvas.DrawLine(points[i], points[i+1], self.color)
         else:
             raise UMLException("UndefinedStyleArrow")
 

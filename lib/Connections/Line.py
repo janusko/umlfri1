@@ -1,10 +1,5 @@
 import gtk.gdk
 
-LINE_STYLES = {'solid': gtk.gdk.LINE_SOLID,
-               'dot': gtk.gdk.LINE_ON_OFF_DASH,
-               'doubledot': gtk.gdk.LINE_DOUBLE_DASH}
-
-
 class CConnectionLine(object):
     def __init__(self, color = 'black', style = 'solid', width = 1):
         self.color = gtk.gdk.color_parse(color)
@@ -20,12 +15,8 @@ class CConnectionLine(object):
     def GetWidth(self):
         return self.width
 
-    def Paint(self, x1, y1, x2, y2, Connection):
-        wgt = Connection.GetDrawingArea().GetDrawable()
-        cmap = wgt.get_colormap()
-        gc = wgt.new_gc(foreground = cmap.alloc_color(self.color),  line_width = self.width, line_style = LINE_STYLES[self.style])
-        wgt.draw_line(gc, x1, y1, x2, y2)
-        
+    def Paint(self, canvas, start, end, Connection):
+        canvas.DrawLine(start, end, line_width = self.width, line_style = self.style)
 
     def SetColor(self, value):
         self.color = value
