@@ -1,4 +1,4 @@
-from common import CWidget
+from common import CWidget, event
 
 import gtk
 from gtk.gdk import pixbuf_new_from_file
@@ -11,7 +11,8 @@ class CtbToolBox(CWidget):
     
     __visible = True
     
-    def Init(self):
+    def __init__(self, app, wTree):
+        CWidget.__init__(self, app, wTree)
         self.Selected = None
         
         self.tooltips = gtk.Tooltips()
@@ -68,9 +69,11 @@ class CtbToolBox(CWidget):
     def __ResetSelected(self):
         self.ArrowButton.set_active(True)
             
+    #@event("tbArrowBtn", "toggled")
     def on_tbArrowBtn_toggled(self, widget):
         self.Selected = None
         
+    #@event("tbButton", "toggled")
     def on_tbButton_toggled(self, widget, ItemId, ItemType):
         self.Selected = (ItemType, ItemId)
         

@@ -1,4 +1,4 @@
-from common import CWidget
+from common import CWidget, event
 from lib.Projekt import CProjekt, CProjectNode
 from lib.Elements import CElementFactory, CElementObject
 from lib.Drawing import CElement
@@ -12,9 +12,10 @@ class CtwProjectView(CWidget):
     name = 'twProjectView'
     widgets = ('twProjectView', )
     
-    def Init(self):
+    def __init__(self, app, wTree):
         # vytvorime si model
         self.TreeStore = gtk.TreeStore(str, gtk.gdk.Pixbuf)
+        CWidget.__init__(self, app, wTree)
         # ikonky
         self.icons = {  'View' : pixbuf_new_from_file(VIEW_IMAGE),
                         'Element' : pixbuf_new_from_file(ELEMENT_IMAGE),

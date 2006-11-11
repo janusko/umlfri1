@@ -1,5 +1,6 @@
 import pygtk
 import gtk
+from common import CWindow, event
 import common
 
 from tbToolBox import CtbToolBox
@@ -8,29 +9,34 @@ from mnuItems import CmnuItems
 from picDrawingArea import CpicDrawingArea
 from nbProperties import CnbProperties
 
-class CfrmMain(common.CWindow):
+class CfrmMain(CWindow):
     name = 'frmMain'
     widgets = ('hboxWorkSpace', 'mnuUseCaseDiagram', 
-        'twProjectView', 'lwProperties')
+        'twProjectView', 'lwProperties', 
+        #mItemFile
+        'mnuNew', 'mnuOpen', 'mnuSave', 'mnuSaveAs', 'mnuQuit',
+        #mItemEdit
+        'mnuCut', 'mnuCopy', 'mnuPaste', 'mnuDelete', 
+        #mItemDiagrams
+        #mItemView
+        'mnuViewTools', 
+        #mItemHelp
+        'mnuAbout', 
+        )
     
     complexWidgets = (CtbToolBox, CtwProjectView, CmnuItems, CpicDrawingArea, CnbProperties)
     
-    def Init(self):
-        #self.mnuItems.connect('create_diagram', self.on_mnuItems_create_diagram)
-        #self.picDrawingArea.connect('get_selected', self.on_picDrawingArea_get_selected)
-        #self.picDrawingArea.connect('set_selected', self.on_picDrawingArea_set_selected)
-        #self.picDrawingArea.connect('selected_item', self.on_picDrawingArea_selected_item)
-        #self.nbProperties.connect('content_update', self.on_nbProperties_content_update)
+    def __init__(self, app, wTree):
+        CWindow.__init__(self, app, wTree)
         self.mnuItems.LoadDiagramsMenu()
         
         self.form.maximize()
     
     # ** Main menu **
     # File
-    @common.event("form", "destroy")
     def on_frmMain_destroy(self, frm):
         self.ActionQuit(frm)
-    
+
     def on_mnuNew_activate(self, mnu):
         pass
         
@@ -60,6 +66,7 @@ class CfrmMain(common.CWindow):
         pass
         
     # Diagrams
+    @event("mnuViewTools", "activate")
     def on_mnuViewTools_activate(self, mnu):
         self.tbToolBox.SetVisible(mnu.get_active())
             
@@ -71,12 +78,15 @@ class CfrmMain(common.CWindow):
         pass
         
     # Help
+    @event("mnuAbout", "activate")
     def on_mnuAbout_activate(self, mnu):
         tmp = self.application.GetWindow('frmAbout')
         tmp.SetParent(self)
         tmp.Show()
         
     # Actions
+    @event("form", "destroy")
+    @event("mnuQuit", "activate")
     def ActionQuit(self, widget):
         self.application.Quit()
     
@@ -90,18 +100,23 @@ class CfrmMain(common.CWindow):
         pass
     
     # Moje vlastne signale
+    @event("mnuItems", "create-diagram")
     def on_mnuItems_create_diagram(self, widget, diagramId):
         self.tbToolBox.SetButtons(diagramId)
         
+    @event("picDrawingArea", "get-selected")
     def on_picDrawingArea_get_selected(self, widget):
         return self.tbToolBox.GetSelected()
         
+    @event("picDrawingArea", "set-selected")
     def on_picDrawingArea_set_selected(self, widget, selected):
         self.tbToolBox.SetSelected(selected)
         
+    @event("picDrawingArea", "selected-item")
     def on_picDrawingArea_selected_item(self, widget, selected):
         self.nbProperties.Fill(selected)
     
+    @event("nbProperties", "content-update")
     def on_nbProperties_content_update(self, widget, element, property):
         if element.GetObject().GetType().HasVisualAttribute(property):
             self.picDrawingArea.Paint()
