@@ -1,6 +1,7 @@
-[ ] Abstraktna vrstva na vykreslovanie (janik)
-[ ] XML pre verzie UML (BG)
-[ ] ODSTRANIT Drag and Drop (palino)
+[x] Abstraktna vrstva na vykreslovanie (janik)
+[x] XML pre verzie UML (BG)
+[x] Prehodenie eventov z glade suboru do kodu
+[x] ODSTRANIT Drag and Drop (palino)
 [ ] Project tree (miroslav, frizi)
     [ ] Tabovanie
     [ ] Prerobit menu (na pridaj diagram)
@@ -8,12 +9,15 @@
     [ ] Samotny project tree
 [?] Generovanie formulara
 [ ] Ciary
+    [ ] Pridavanie ciar
+    [ ] Zmena ciar (posuvanie)
 [ ] Flexibilna plocha
     [ ] Vyhodit ten sprosty backbuffer
     [ ] Hladanie kolizii objektov
     [ ] Vymysliet naky inteligentny sposob hladania tried na kraji viewport-u
     [ ] Skrolovanie bitblit-om + vykreslovanie zvysku
 [ ] Mazanie elementov
+[ ] Mazanie ciar
 [ ] CProportional kontainer
 [?] CSVG Visual object
 ...

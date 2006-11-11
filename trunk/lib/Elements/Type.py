@@ -79,9 +79,9 @@ class CElementType:
     def GetAttribute(self, key):
         return self.attributes[key]
     
-    def Paint(self, element):
-        x, y = element.GetPosition()
-        self.appearance.Paint(x, y, element)
+    def Paint(self, canvas, element):
+        pos = element.GetPosition()
+        self.appearance.Paint(canvas, pos, element)
     
     def SetAppearance(self, appearance):
         self.appearance = appearance
@@ -101,8 +101,8 @@ class CElementType:
         else:
             raise UMLException('VisAttrDontExists')
     
-    def GetWidth(self, element):
-        return self.appearance.GetWidth(element)
+    def GetWidth(self, canvas, element):
+        return self.appearance.GetWidth(canvas, element)
     
-    def GetHeight(self, element):
-        return self.appearance.GetHeight(element)
+    def GetHeight(self, canvas, element):
+        return self.appearance.GetHeight(canvas, element)

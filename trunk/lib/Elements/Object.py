@@ -21,11 +21,11 @@ class CElementObject:
     def GetType(self):
         return self.type
     
-    def GetWidth(self, element):
-        return self.type.GetWidth(element)
+    def GetWidth(self, canvas, element):
+        return self.type.GetWidth(canvas, element)
     
-    def GetHeight(self, element):
-        return self.type.GetHeight(element)
+    def GetHeight(self, canvas, element):
+        return self.type.GetHeight(canvas, element)
         
     def GetName(self):
         if 'Name' in self.attribs:
@@ -88,8 +88,8 @@ class CElementObject:
             val = v
         return val
 
-    def Paint(self, element):
-        self.type.Paint(element)
+    def Paint(self, canvas, element):
+        self.type.Paint(canvas, element)
 
     def RemoveAttribute(self, key):
         if self.attribs.has_key(key):

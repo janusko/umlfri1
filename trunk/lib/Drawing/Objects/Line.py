@@ -23,39 +23,35 @@ class CLine(CVisualObject):
     def GetColor(self):
         return self.color
 
-    def GetHeight(self, element):
+    def GetHeight(self, canvas, element):
         tp = self.ComputeType()
         if tp == 'horizontal':
             return 1
         else:
             return 0
 
-    def GetWidth(self, element):
+    def GetWidth(self, canvas, element):
         tp = self.ComputeType()
         if tp == 'vertical':
             return 1
         else:
             return 0
 
-    def PaintShadow(self, x, y, element, color, w = None, h = None):
+    def PaintShadow(self, canvas, pos, element, color, size = (None, None)):
+        size = self.ComputeSize(canvas, element, size)
         tp = self.ComputeType()
-        wgt = element.GetDrawingArea().GetDrawable()
-        cmap = wgt.get_colormap()
-        gc = wgt.new_gc(foreground = cmap.alloc_color(color))
-        if tp == 'horizontal' and w is not None:
-            wgt.draw_line(gc, x, y, x+w, y)
-        elif tp == 'vertical' and h is not None:
-            wgt.draw_line(gc, x, y, x, y+h)
+        if tp == 'horizontal' and pos[0] is not None:
+            canvas.DrawLine(pos, (pos[0]+size[0], pos[1]), color)
+        elif tp == 'vertical' and pos[1] is not None:
+            canvas.DrawLine(pos, (pos[0], pos[1]+size[1]), color)
 
-    def Paint(self, x, y, element, w = None, h = None):
+    def Paint(self, canvas, pos, element, size = (None, None)):
+        size = self.ComputeSize(canvas, element, size)
         tp = self.ComputeType()
-        wgt = element.GetDrawingArea().GetDrawable()
-        cmap = wgt.get_colormap()
-        gc = wgt.new_gc(foreground = cmap.alloc_color(self.color))
-        if tp == 'horizontal' and w is not None:
-            wgt.draw_line(gc, x, y, x+w, y)
-        elif tp == 'vertical' and h is not None:
-            wgt.draw_line(gc, x, y, x, y+h)
+        if tp == 'horizontal' and pos[0] is not None:
+            canvas.DrawLine(pos, (pos[0]+size[0], pos[1]), self.color)
+        elif tp == 'vertical' and pos[1] is not None:
+            canvas.DrawLine(pos, (pos[0], pos[1]+size[1]), self.color)
 
     def SetType(self, type = "auto"):
         self.type = type

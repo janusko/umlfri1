@@ -19,13 +19,13 @@ class CLoop(CSimpleContainer):
         else:
             raise UMLException("XMLError")
     
-    def GetWidth(self, element):
+    def GetWidth(self, canvas, element):
         w = 0
         o = self.__GetOrientation()
         for item in element.GetObject().GetVisualProperty(self.collection):
             for i in self.childs:
                 element.__LOOPVARS__ = item
-                v = i.GetWidth(element)
+                v = i.GetWidth(canvas, element)
                 if o == "horizontal":
                     if v > w:
                         w = v
@@ -34,13 +34,13 @@ class CLoop(CSimpleContainer):
                 del element.__LOOPVARS__
         return w
     
-    def GetHeight(self, element):
+    def GetHeight(self, canvas, element):
         h = 0
         o = self.__GetOrientation()
         for item in element.GetObject().GetVisualProperty(self.collection):
             for i in self.childs:
                 element.__LOOPVARS__ = item
-                v = i.GetHeight(element)
+                v = i.GetHeight(canvas, element)
                 if o == "horizontal":
                     h += v
                 else:
@@ -49,34 +49,38 @@ class CLoop(CSimpleContainer):
                 del element.__LOOPVARS__
         return h
 
-    def PaintShadow(self, x, y, element, color, w = None, h = None):
-        if w is None:
-            w = self.GetWidth(element)
-        if h is None:
-            h = self.GetHeight(element)
+    def PaintShadow(self, canvas, pos, element, color, size = (None, None)):
+        size = self.ComputeSize(canvas, element, size)
+        w, h = size
+        x, y = pos
         o = self.__GetOrientation()
         for item in element.GetObject().GetVisualProperty(self.collection):
             for i in self.childs:
                 element.__LOOPVARS__ = item
-                h = i.GetHeight(element)
-                i.PaintShadow(x, y, element, color, w, h)
+                if o == "horizontal":
+                    h = i.GetHeight(canvas, element)
+                else:
+                    w = i.GetWidth(canvas, element)
+                i.PaintShadow(canvas, (x, y), element, color, (w, h))
                 if o == "horizontal":
                     y += h
                 else:
                     x += w
                 del element.__LOOPVARS__
 
-    def Paint(self, x, y, element, w = None, h = None):
-        if w is None:
-            w = self.GetWidth(element)
-        if h is None:
-            h = self.GetHeight(element)
+    def Paint(self, canvas, pos, element, size = (None, None)):
+        size = self.ComputeSize(canvas, element, size)
+        w, h = size
+        x, y = pos
         o = self.__GetOrientation()
         for item in element.GetObject().GetVisualProperty(self.collection):
             for i in self.childs:
                 element.__LOOPVARS__ = item
-                h = i.GetHeight(element)
-                i.Paint(x, y, element, w, h)
+                if o == "horizontal":
+                    h = i.GetHeight(canvas, element)
+                else:
+                    w = i.GetWidth(canvas, element)
+                i.Paint(canvas, (x, y), element, (w, h))
                 if o == "horizontal":
                     y += h
                 else:

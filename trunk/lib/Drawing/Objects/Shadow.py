@@ -9,23 +9,20 @@ class CShadow(CSimpleContainer):
     def GetPadding(self):
         return self.padding
 
-    def GetHeight(self, element):
-        return self.GetChilds()[0].GetHeight(element)
+    def GetHeight(self, canvas, element):
+        return self.GetChilds()[0].GetHeight(canvas, element)
 
-    def GetWidth(self, element):
-        return self.GetChilds()[0].GetWidth(element)
+    def GetWidth(self, canvas, element):
+        return self.GetChilds()[0].GetWidth(canvas, element)
 
-    def PaintShadow(self, x, y, element, color, w = None, h = None):
+    def PaintShadow(self, canvas, pos, element, color, size = (None, None)):
         raise UMLException("ShadowInShadow")
 
-    def Paint(self, x, y, element, w = None, h = None):
-        if w is None:
-            w = self.GetWidth(element)
-        if h is None:
-            h = self.GetHeight(element)
-        self.GetChilds()[0].PaintShadow(x + self.padding, y + self.padding,
-                                    element, self.color, w, h)
-        self.GetChilds()[0].Paint(x, y, element, w, h)
+    def Paint(self, canvas, pos, element, size = (None, None)):
+        size = self.ComputeSize(canvas, element, size)
+        self.GetChilds()[0].PaintShadow(canvas, (pos[0] + self.padding, pos[1] + self.padding),
+                                    element, self.color, size)
+        self.GetChilds()[0].Paint(canvas, pos, element, size)
 
     def SetPadding(self, padding):
         self.padding = padding

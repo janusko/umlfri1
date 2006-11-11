@@ -87,26 +87,26 @@ class CConnectionType(object):
     def SetSrcArrow(self, value):
         self.scrArrow = value
 
-    def Paint(self, Connection):
+    def Paint(self, canvas, Connection):
         tmp = Connection.GetPoints()
-        Xo,Yo = tmp[0]
+        o = tmp[0]
         for i in tmp[1:]:
-            self.line.Paint(Xo,Yo,i[0],i[1],Connection)
-            Xo,Yo = i
-            
+            self.line.Paint(canvas, o, i, Connection)
+            o = i
+        
         if self.scrArrow is not None:
             X = tmp[0][0] - tmp[1][0]
             Y = tmp[0][1] - tmp[1][1]
-            self.scrArrow.Paint(tmp[0][0],tmp[0][1],atan2(-X,Y),Connection)
+            self.scrArrow.Paint(canvas, tmp[0], atan2(-X, Y), Connection)
         
         if self.destArrow is not None:
             X = tmp[-1][0] - tmp[-2][0]
             Y = tmp[-1][1] - tmp[-2][1]
-            self.destArrow.Paint(tmp[-1][0],tmp[-1][1],atan2(-X,Y),Connection)
-            
+            self.destArrow.Paint(canvas, tmp[-1], atan2(-X, Y), Connection)
+        
         for id, lbl in enumerate(self.labels):
-            x, y = Connection.GetLabelPosition(lbl[0], id)
-            lbl[1].Paint(x, y, Connection)
+            pos = Connection.GetLabelPosition(lbl[0], id)
+            lbl[1].Paint(canvas, pos, Connection)
     
     def GetLabels(self):
         for id, label in enumerate(self.labels):

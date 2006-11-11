@@ -29,25 +29,25 @@ class CCondition(CSimpleContainer):
     def GetType(self):
         self.type
 
-    def GetHeight(self, element):
+    def GetHeight(self, canvas, element):
         if self.__IsTrue(element):
-            return CSimpleContainer.GetHeight(self, element)
+            return CSimpleContainer.GetHeight(self, canvas, element)
         return 0
 
-    def GetWidth(self, element):
+    def GetWidth(self, canvas, element):
         if self.__IsTrue(element):
-            return CSimpleContainer.GetWidth(self, element)
+            return CSimpleContainer.GetWidth(self, canvas, element)
         return 0
 
-    def PaintShadow(self, x, y, element, color, w = None, h = None):
+    def PaintShadow(self, canvas, pos, element, color, size = (None, None)):
         if self.__IsTrue(element):
             for child in self.childs:
-                CSimpleContainer.Paint(self, x, y, element, color, w, h)
+                CSimpleContainer.Paint(self, canvas, pos, element, color, size)
 
-    def Paint(self, x, y, element, w = None, h = None):
+    def Paint(self, canvas, pos, element, size = (None, None)):
         if self.__IsTrue(element):
             for child in self.childs:
-                CSimpleContainer.Paint(self, x, y, element, w, h)
+                CSimpleContainer.Paint(self, canvas, pos, element, size)
     
     def SetCondition(self, condition):
         self.condition = condition

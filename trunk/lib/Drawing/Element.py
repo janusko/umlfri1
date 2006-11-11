@@ -24,11 +24,11 @@ class CElement:
             x1, x = x, x1
         if y1 < y:
             y1, y = y, y1
-        self.squares.append((x, y, x1 - x, y1 - y))
+        self.squares.append(((x, y), (x1 - x, y1 - y)))
 
-    def AreYouAtPosition(self, x, y):
-        width = self.objct.GetType().GetAppearance().GetWidth(self)
-        height = self.objct.GetType().GetAppearance().GetHeight(self)
+    def AreYouAtPosition(self, canvas, x, y):
+        width = self.objct.GetType().GetAppearance().GetWidth(canvas, self)
+        height = self.objct.GetType().GetAppearance().GetHeight(canvas, self)
         
         if  (self.position[0] <= x <= self.position[0] + width) and (self.position[1] <= y <= self.position[1] + height):
             return True
@@ -51,15 +51,15 @@ class CElement:
     def GetPosition(self):
         return self.position
     
-    def GetSize(self):
-        return self.objct.GetWidth(self), self.objct.GetHeight(self)
+    def GetSize(self, canvas):
+        return self.objct.GetWidth(canvas, self), self.objct.GetHeight(canvas, self)
 
-    def Paint(self):
-        self.objct.Paint(self)
+    def Paint(self, canvas):
+        self.objct.Paint(canvas, self)
         if self.selected:
             x, y = self.position
-            w = self.objct.GetType().GetAppearance().GetWidth(self)
-            h = self.objct.GetType().GetAppearance().GetHeight(self)
+            w = self.objct.GetType().GetAppearance().GetWidth(canvas, self)
+            h = self.objct.GetType().GetAppearance().GetHeight(canvas, self)
             
             self.squares = []
             
@@ -72,17 +72,10 @@ class CElement:
             self.__AddSquare(x + w//2, y + h   ,  0, -1)
             self.__AddSquare(x + w   , y + h   , -1, -1)
             
-            wgt = self.drawArea.GetDrawable()
-            cmap = wgt.get_colormap()
-            gc = wgt.new_gc()
-            gc.foreground = cmap.alloc_color(lib.consts.SELECT_SQUARES_COLOR)
-            
             for i in self.squares:
-                wgt.draw_rectangle(gc, True, *i)
+                canvas.DrawRectangle(i[0], i[1], None, lib.consts.SELECT_SQUARES_COLOR)
             
-            gc.foreground = cmap.alloc_color(lib.consts.SELECT_SQUARE_COLOR)
-            gc.line_width = lib.consts.SELECT_SQUARE_SIZE
-            wgt.draw_rectangle(gc, False, x, y, w, h)
+            canvas.DrawRectangle((x, y), (w, h), fg = lib.consts.SELECT_SQUARE_COLOR, line_width = lib.consts.SELECT_SQUARE_SIZE)
 
     def SetPosition(self, x, y):
         self.position = (x, y)
