@@ -1,0 +1,33 @@
+UML .FRI
+========
+
+UML .FRI is new UML Case Tool from perspective young authors from University Of Zilina, Slovakia. It is developed for educational purposes, but it is also ready for corporate usage.
+
+So, what can this tool offer to me?
+- Pretty nice UML editor
+- Simplified editation of UML objects on meta-model level
+- (In near future) Architekture client/server for working in teams
+- Adjustable code generation and reverse engineering
+- Multiplatform GTK GUI (Tested under Windows XP and Linux)
+and all of this under GPL license
+
+Who makes it works?
+There is more peoples to who you can thank for this. Tool was developing many years.
+academic year 2005:
+    Bc. Jan Janech          - Team Leader + developer
+    Bc. Pavol Kovalik       - GUI deasigner + developer
+    Bc. Miroslav Spigura    - GUI deasigner + developer
+    Bc. Marek Dovjak        - Graphics maker + developer
+academic year 2006:
+    Bc. Martina Iskerkova   - All what must to be done
+
+We want also thanks to Ing. Lubomir Sadlon, our supervisor. Without him, that is no project like this.
+
+Where I can get actual version?
+We don't have any official website (now), but you can download it from our svn.
+
+    bash-3.2$ svn co http://vaii.fri.utc.sk/svn/uml_fri/
+
+How can I helps you?
+Testing. Testing. Testing. Or if you want, send email to janech@kios.sk and I send you our account number :D . 
+
