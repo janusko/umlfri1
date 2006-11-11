@@ -30,7 +30,7 @@ class CpicDrawingArea(CWidget):
     
     def __init__(self, app, wTree):
         CWidget.__init__(self, app, wTree)
-        self.picEventBox.drag_dest_set(gtk.DEST_DEFAULT_ALL, targets, gtk.gdk.ACTION_MOVE)
+        #self.picEventBox.drag_dest_set(gtk.DEST_DEFAULT_ALL, targets, gtk.gdk.ACTION_MOVE)
         self.Buffer = gtk.gdk.Pixmap(self.picDrawingArea.window, 1000, 1000)
         self.DrawingArea = CDrawingArea(self.picDrawingArea, self.Buffer)
         
@@ -127,6 +127,19 @@ class CpicDrawingArea(CWidget):
             #ConnectionObject = CConnectionObject(ConnectionType)
             #CConnection(self.DrawingArea, ConnectionObject).SetPosition(posx, posy)
         
+    @event("picEventBox", "button_release_event")
+    def on_button_release_event(self, widget, event):
+        if self.dnd:
+            dx, dy = self.__GetDelta(event.x, event.y)
+            self.DrawingArea.MoveSelection(dx, dy)
+            self.dnd = False
+            self.Paint()
+        
+    @event("picEventBox", "motion_notify_event")
+    def on_motion_notify_event(self, widget, event):
+        if self.dnd:
+            self.__DrawDragRect(event.x, event.y)
+        
     @event("picDrawingArea", "expose-event")
     def on_picDrawingArea_configure_event(self, widget, tmp):
         self.Repaint()
@@ -155,21 +168,8 @@ class CpicDrawingArea(CWidget):
         else:
             self.__Scroll(self.picVBar, event.direction)
         self.Repaint()
-           
-    @event("picEventBox", "drag-motion")
-    def on_picEventBox_drag_motion(self, widget, context, x, y, time):
-        self.__DrawDragRect(x,y)
+        
     
-    @event("picEventBox", "drag-drop")
-    def on_picEventBox_drag_drop(self, widget, context, x, y, time):
-        dx, dy = self.__GetDelta(x, y)
-        self.DrawingArea.MoveSelection(dx, dy)
-        
-    @event("picEventBox", "drag-end")
-    def on_picEventBox_drag_end(self, widget, context):
-        self.dnd = False
-        self.Paint()
-        
     def __Scroll(self, scrollbar, direction):
         tmp = scrollbar.get_adjustment()
         if direction == gtk.gdk.SCROLL_UP:
@@ -179,7 +179,7 @@ class CpicDrawingArea(CWidget):
         scrollbar.set_adjustment(tmp)
         
     def __DragBegin(self, event):
-        self.picEventBox.drag_begin(targets, gtk.gdk.ACTION_MOVE, event.button, event)
+        #self.picEventBox.drag_begin(targets, gtk.gdk.ACTION_MOVE, event.button, event)
         self.DragStartPos = self.GetAbsolutePos(event.x, event.y)
         self.DragRect = self.DrawingArea.GetSelectSquare()
         cmap = self.picDrawingArea.window.get_colormap()
