@@ -1,8 +1,6 @@
-import gtk.gdk
-
 class CConnectionLine(object):
     def __init__(self, color = 'black', style = 'solid', width = 1):
-        self.color = gtk.gdk.color_parse(color)
+        self.color = color
         self.style = style
         self.width = int(width)
 
@@ -16,7 +14,7 @@ class CConnectionLine(object):
         return self.width
 
     def Paint(self, canvas, start, end, Connection):
-        canvas.DrawLine(start, end, line_width = self.width, line_style = self.style)
+        canvas.DrawLine(start, end, self.color, line_width = self.width, line_style = self.style)
 
     def SetColor(self, value):
         self.color = value

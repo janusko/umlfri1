@@ -31,6 +31,8 @@ class CpicDrawingArea(CWidget):
     
     def __init__(self, app, wTree):
         CWidget.__init__(self, app, wTree)
+        
+        self.NewConnection = None
         #self.picEventBox.drag_dest_set(gtk.DEST_DEFAULT_ALL, targets, gtk.gdk.ACTION_MOVE)
         self.Buffer = gtk.gdk.Pixmap(self.picDrawingArea.window, 1000, 1000)
         #self.DrawingArea = CDrawingArea(self.picDrawingArea, self.Buffer)
@@ -125,10 +127,24 @@ class CpicDrawingArea(CWidget):
             self.Paint()
             
         elif toolBtnSel[0] == 'Connection':
-            pass
-            #ConnectionType = self.application.ConnectionFactory.GetConnection(self.tbToolBox.toolBtnSel[0])
-            #ConnectionObject = CConnectionObject(ConnectionType)
-            #CConnection(self.DrawingArea, ConnectionObject).SetPosition(posx, posy)
+            itemSel = self.DrawingArea.GetElementAtPosition(self.canvas, posx, posy)
+            if itemSel is None:
+                if self.NewConnection is not None:
+                    self.NewConnection[1].append((posx, posy))
+                    print self.NewConnection[1]
+            elif self.NewConnection is None:
+                ConnectionType = self.application.ConnectionFactory.GetConnection(toolBtnSel[1])
+                self.NewConnection = (CConnectionObject(ConnectionType), [(posx, posy)])
+                self.NewConnection[0].SetSource(itemSel)
+                print "selected 1"
+            else:
+                self.NewConnection[0].SetDestination(itemSel)
+                self.NewConnection[1].append((posx, posy))
+                CConnection(self.DrawingArea, *self.NewConnection)
+                self.NewConnection = None
+                self.emit('set-selected', None)
+                self.Paint()
+                print "selected 2"
         
     @event("picEventBox", "button_release_event")
     def on_button_release_event(self, widget, event):
