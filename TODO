@@ -1,0 +1,31 @@
+[ ] Abstraktna vrstva na vykreslovanie (janik)
+[ ] XML pre verzie UML (BG)
+[ ] ODSTRANIT Drag and Drop (palino)
+[ ] Project tree (miroslav, frizi)
+    [ ] Tabovanie
+    [ ] Prerobit menu (na pridaj diagram)
+    [?] Content menu na pridavanie
+    [ ] Samotny project tree
+[?] Generovanie formulara
+[ ] Ciary
+[ ] Flexibilna plocha
+    [ ] Vyhodit ten sprosty backbuffer
+    [ ] Hladanie kolizii objektov
+    [ ] Vymysliet naky inteligentny sposob hladania tried na kraji viewport-u
+    [ ] Skrolovanie bitblit-om + vykreslovanie zvysku
+[ ] Mazanie elementov
+[ ] CProportional kontainer
+[?] CSVG Visual object
+...
+[ ] Menenie kurzoru po prechode nad volaco
+[ ] Resizovanie elementov
+[ ] Save/Load
+[ ] Sablony
+[ ] Export/Import XMI
+[!] Napisat README
+[!] Vyhodit autorov z gui (Automaticke parsovanie README :D )
+...
+[ ] Easter Eggs
+... (Far in future)
+[ ] Spinka
+[ ] Help

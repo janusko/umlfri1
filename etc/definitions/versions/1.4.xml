@@ -1,0 +1,7 @@
+<Version id="UML 1.4">
+    <Diagrams>
+        <Item value="Class Diagram">
+            <!--Restriction type="delete" value="Class" /-->
+        </Item>
+    </Diagrams>
+</Version>

@@ -1,14 +1,14 @@
-<DiagramType id="Class diagram" umlversion="*">
+<DiagramType id="Class diagram">
     <Special swimlines="0" lifelines="0" />
     <Elements>
-        <Item value="Package" umlversion="*" />
-        <Item value="Object" umlversion="*" />
-        <Item value="Class" umlversion="*" />
+        <Item value="Package" />
+        <Item value="Object" />
+        <Item value="Class" />
     </Elements>
     <Connections>
-        <Item value="Generalization" umlversion="*" />
-        <Item value="Association" umlversion="*" />
-        <Item value="Agregation" umlversion="*" />
-        <Item value="Compose" umlversion="*" />        
+        <Item value="Generalization" />
+        <Item value="Association" />
+        <Item value="Agregation" />
+        <Item value="Compose" />        
     </Connections>
 </DiagramType>
