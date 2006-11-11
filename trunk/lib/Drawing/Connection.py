@@ -93,6 +93,22 @@ class CConnection:
         else:
             return False
 
+    def MoveAll(self, deltax, deltay):
+        points = []
+        for x, y in self.points:
+            points.append((x+deltax, y+deltay))
+        self.points = points
+        
+    def MoveEndPoint(self, element, deltax, deltay):
+        if element.GetObject() is self.conObject.GetSource():
+            x, y = self.points[0]
+            self.points[0] = (x+deltax, y+deltay)
+        elif element.GetObject() is self.conObject.GetDestination():
+            x, y = self.points[-1]
+            self.points[-1] = (x+deltax, y+deltay)
+        else:
+            raise UMLException("InvalidElement")
+            
     def MovePoint(self, index, x, y):
         if index < len(self.points) - 1:
             self.points[index] = (x,y)

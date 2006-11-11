@@ -71,6 +71,12 @@ class CDrawingArea:
         for el in self.selected:
             x, y = el.GetPosition()
             el.SetPosition(x + deltax, y + deltay)
+            for con in el.GetConnections():
+                print con
+                if con.GetSource() in self.selected and con.GetDestination() in self.selected:
+                    con.MoveAll(deltax, deltay)
+                else:
+                    con.MoveEndPoint(el, deltax, deltay)
         
     def DeleteElement(self, element):
         if element in self.elements:
@@ -91,17 +97,20 @@ class CDrawingArea:
     def GetDrawable(self):
         return self.drawable        
         
-    def GetElementAtPosition(self, canvas, x, y):
+    def GetConnectionAtPosition(self, canvas, x, y):
         for c in self.connections:
             if c.AreYouAtPosition(canvas, x, y):
                 return c
                 
+        return None
+                
+    def GetElementAtPosition(self, canvas, x, y):
         for e in self.elementsreverse:
             if e.AreYouAtPosition(canvas, x, y):
                 return e
             
         return None
-
+        
     def Paint(self, canvas):
         canvas.Clear()
         for e in self.elements:
@@ -109,3 +118,7 @@ class CDrawingArea:
         
         for c in self.connections:
             c.Paint(canvas)
+            
+    def GetConnections(self):
+        for c in self.connections:
+            yield c

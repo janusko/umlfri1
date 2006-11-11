@@ -78,6 +78,7 @@ class CConnectionArrow(object):
         if self.possible is False:
             return
         rotationMatrix = self.__RotationMatrix(angle)
+        x, y = pos
         points = []
         if self.style in ARROW_TYPES.keys():
             for i in ARROW_TYPES[self.style][1]:

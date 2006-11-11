@@ -24,7 +24,7 @@ class GtkCanvas(AbstractCanvas):
         if line_width is not None:
             gc.line_width = line_width
         if line_style is not None:
-            gc.line_style = LINE_STYLES[line_width]
+            gc.line_style = LINE_STYLES[line_style]
         cmap = self.window.get_colormap()
         if bg is not None:
             gc.foreground = cmap.alloc_color(bg)
@@ -39,7 +39,7 @@ class GtkCanvas(AbstractCanvas):
         if line_width is not None:
             gc.line_width = line_width
         if line_style is not None:
-            gc.line_style = LINE_STYLES[line_width]
+            gc.line_style = LINE_STYLES[line_style]
         self.window.draw_line(gc, start[0], start[1], end[0], end[1])
     
     def DrawLines(self, points, fg, line_width = None, line_style = None):
@@ -48,7 +48,7 @@ class GtkCanvas(AbstractCanvas):
         if line_width is not None:
             gc.line_width = line_width
         if line_style is not None:
-            gc.line_style = LINE_STYLES[line_width]
+            gc.line_style = LINE_STYLES[line_style]
         widget.draw_lines(gc, points)
     
     def DrawPolygon(self, points, fg = None, bg = None, line_width = None, line_style = None):
@@ -56,7 +56,7 @@ class GtkCanvas(AbstractCanvas):
         if line_width is not None:
             gc.line_width = line_width
         if line_style is not None:
-            gc.line_style = LINE_STYLES[line_width]
+            gc.line_style = LINE_STYLES[line_style]
         cmap = self.window.get_colormap()
         if bg is not None:
             gc.foreground = cmap.alloc_color(bg)
@@ -70,7 +70,7 @@ class GtkCanvas(AbstractCanvas):
         if line_width is not None:
             gc.line_width = line_width
         if line_style is not None:
-            gc.line_style = LINE_STYLES[line_width]
+            gc.line_style = LINE_STYLES[line_style]
         cmap = self.window.get_colormap()
         if bg is not None:
             gc.foreground = cmap.alloc_color(bg)
