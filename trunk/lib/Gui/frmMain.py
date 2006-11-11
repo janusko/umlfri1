@@ -16,17 +16,18 @@ class CfrmMain(common.CWindow):
     complexWidgets = (CtbToolBox, CtwProjectView, CmnuItems, CpicDrawingArea, CnbProperties)
     
     def Init(self):
-        self.mnuItems.connect('create_diagram', self.on_mnuItems_create_diagram)
-        self.picDrawingArea.connect('get_selected', self.on_picDrawingArea_get_selected)
-        self.picDrawingArea.connect('set_selected', self.on_picDrawingArea_set_selected)
-        self.picDrawingArea.connect('selected_item', self.on_picDrawingArea_selected_item)
-        self.nbProperties.connect('content_update', self.on_nbProperties_content_update)
+        #self.mnuItems.connect('create_diagram', self.on_mnuItems_create_diagram)
+        #self.picDrawingArea.connect('get_selected', self.on_picDrawingArea_get_selected)
+        #self.picDrawingArea.connect('set_selected', self.on_picDrawingArea_set_selected)
+        #self.picDrawingArea.connect('selected_item', self.on_picDrawingArea_selected_item)
+        #self.nbProperties.connect('content_update', self.on_nbProperties_content_update)
         self.mnuItems.LoadDiagramsMenu()
         
         self.form.maximize()
     
     # ** Main menu **
     # File
+    @common.event("form", "destroy")
     def on_frmMain_destroy(self, frm):
         self.ActionQuit(frm)
     

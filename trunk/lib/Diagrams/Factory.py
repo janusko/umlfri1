@@ -5,11 +5,11 @@ from lib.lib import UMLException
 from Type import CDiagramType
 
 class CDiagramFactory:
-    def __init__(self, path, umlVersion = '1.4'):
+    def __init__(self, path):
         self.types = {}
         self.path = path
         
-        self.Reload(umlVersion)
+        self.Reload()
         
     def GetDiagram(self, type):
         if self.types.has_key(type):
@@ -17,9 +17,7 @@ class CDiagramFactory:
         else:
             raise UMLException("KeyError")
     
-    def Reload(self, umlVersion = '1.4'):
-        self.umlVersion = umlVersion
-        
+    def Reload(self):
         for file in os.listdir(self.path):
             if file.endswith('.xml'):
                 self.__Load(os.path.join(self.path, file))
@@ -35,12 +33,6 @@ class CDiagramFactory:
             raise UMLException("XMLError")
         if not root.hasAttribute('id'):
             raise UMLException("XMLError")
-        if not root.hasAttribute('umlversion'):
-            raise UMLException("XMLError")
-        
-        umlver = root.getAttribute('umlversion')
-        if (umlver != self.umlVersion) and (umlver != '*'):
-            return
         
         obj = CDiagramType(root.getAttribute('id'))
         
@@ -64,13 +56,9 @@ class CDiagramFactory:
                         raise UMLException("XMLError")
                     if not item.hasAttribute('value'):
                         raise UMLException("XMLError")
-                    if not item.hasAttribute('umlversion'):
-                        raise UMLException("XMLError")
                     
                     value = item.getAttribute('value')
-                    umlver = item.getAttribute('umlversion')
-                    if (umlver == self.umlVersion) or (umlver == '*'):
-                        obj.AppendElement(value)
+                    obj.AppendElement(value)
                     
             elif en == 'Connections':
                 for item in i.childNodes:
@@ -80,13 +68,9 @@ class CDiagramFactory:
                         raise UMLException("XMLError")
                     if not item.hasAttribute('value'):
                         raise UMLException("XMLError")
-                    if not item.hasAttribute('umlversion'):
-                        raise UMLException("XMLError")
                     
                     value = item.getAttribute('value')
-                    umlver = item.getAttribute('umlversion')
-                    if (umlver == self.umlVersion) or (umlver == '*'):
-                        obj.AppendConnection(value)
+                    obj.AppendConnection(value)
         
         self.types[root.getAttribute('id')] = obj
     
