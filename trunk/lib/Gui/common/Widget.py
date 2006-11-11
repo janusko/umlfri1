@@ -11,20 +11,24 @@ class CWidget(gobject.GObject):
         for fnc in dir(self):
             fnc = getattr(self, fnc)
             if callable(fnc):
-                if hasattr(fnc, 'event'):
-                    obj, event = fnc.event
-                    events.setdefault(obj, []).append((event, fnc))
+                if hasattr(fnc, 'events'):
+                    for event in fnc.events:
+                        obj, event = event
+                        events.setdefault(obj, []).append((event, fnc))
         self.application = app
         for widgetName in self.widgets:
             setattr(self, widgetName, wTree.get_widget(widgetName))
         for widgetClass in self.complexWidgets:
             setattr(self, widgetClass.name, widgetClass(app, wTree))
+            
         #wTree.signal_autoconnect(self)
         for obj, oevents in events.iteritems():
-            obj = getattr(self, obj)
+            objtxt = obj.split(".")
+            obj = getattr(self, objtxt[0])
+            for attr in objtxt[1:]:
+                try:
+                    obj = getattr(obj, attr)
+                except AttributeError:
+                    obj = obj.get_property(attr)
             for event, fnc in oevents:
                 obj.connect(event, fnc)
-        self.Init()
-    
-    def Init(self):
-        pass

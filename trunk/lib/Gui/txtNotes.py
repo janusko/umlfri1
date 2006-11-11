@@ -1,4 +1,4 @@
-from common import CWidget
+from common import CWidget, event
 from lib.lib import UMLException
 import gobject
 
@@ -7,14 +7,15 @@ class CtxtNotes(CWidget):
     widgets = ('txtNotes', )
     
     __gsignals__ = {
-        'content_update':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
+        'content-update':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
             (gobject.TYPE_PYOBJECT, gobject.TYPE_STRING)),
     }
     
-    def Init(self):
+    def __init__(self, app, wTree):
+        CWidget.__init__(self, app, wTree)
         self.txtNotes.set_sensitive(False)
         
-        self.txtNotes.get_buffer().connect('changed', self.on_txtNotes_changed)
+        #self.txtNotes.get_buffer().connect('changed', self.on_txtNotes_changed)
     
     def Fill(self, Element):
         self.element = Element
@@ -37,6 +38,7 @@ class CtxtNotes(CWidget):
                 self.attr = k
                 cnt += 1
     
+    @event("txtNotes.buffer", "changed")
     def on_txtNotes_changed(self, buffer):
         if self.element is not None:
             self.element.GetObject().SetAttribute(self.attr, buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter()))

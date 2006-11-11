@@ -1,13 +1,14 @@
-import common
+from common import CWindow, event
 import gtk
 
 import gobject
 
-class CfrmProperties(common.CWindow):
-    widgets = ('nbProProperties', 'twAttributes', 'twOperations', 'cmdDeleteAttribute', 'cmdDeleteOperation')
+class CfrmProperties(CWindow):
+    widgets = ('nbProProperties', 'twAttributes', 'twOperations', 'cmdDeleteAttribute', 'cmdDeleteOperation', 'cmdNewAttribute', 'cmdNewOperation', )
     name = 'frmProperties'
     
-    def Init(self):
+    def __init__(self, app, wTree):
+        CWindow.__init__(self, app, wTree)
         self.attrModel = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
         self.operModel = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
         
@@ -75,6 +76,7 @@ class CfrmProperties(common.CWindow):
     def __SetOperLine(self, iter, oper):
         self.operModel.set(iter, 0, oper['scope'], 1, oper['type'], 2, oper['name'], 3, oper['params'])
         
+    @event("cmdNewAttribute", "clicked")
     def on_cmdNewAttribute_clicked(self, widget):
         attr = {}
         tmp = self.application.GetWindow('frmAttribute')
@@ -84,6 +86,7 @@ class CfrmProperties(common.CWindow):
             iter = self.attrModel.append()
             self.__SetAttrLine(iter, attr)
         
+    @event("cmdNewOperation", "clicked")
     def on_cmdNewOperation_clicked(self, widget):
         oper = {}
         tmp = self.application.GetWindow('frmOperation')
@@ -93,6 +96,7 @@ class CfrmProperties(common.CWindow):
             iter = self.operModel.append()
             self.__SetOperLine(iter, oper)
     
+    @event("cmdDeleteOperation", "clicked")
     def on_cmdDeleteOperation_clicked(self, widget):
         sel = self.twOperations.get_selection()
         model, iter = sel.get_selected()
@@ -100,6 +104,7 @@ class CfrmProperties(common.CWindow):
         model.remove(iter)
         self.cmdDeleteOperation.set_sensitive(False)
     
+    @event("cmdDeleteAttribute", "clicked")
     def on_cmdDeleteAttribute_clicked(self, widget):
         sel = self.twAttributes.get_selection()
         model, iter = sel.get_selected()
@@ -107,18 +112,22 @@ class CfrmProperties(common.CWindow):
         model.remove(iter)
         self.cmdDeleteAttribute.set_sensitive(False)
     
+    @event("twAttributes", "cursor-changed")
     def on_twAttributes_cursor_changed(self, widget):
         self.cmdDeleteAttribute.set_sensitive(True)
     
+    @event("twOperations", "cursor-changed")
     def on_twOperations_cursor_changed(self, widget):
         self.cmdDeleteOperation.set_sensitive(True)
     
+    @event("twAttributes", "row-activated")
     def on_twAttributes_row_activated(self, widget, path, column):
         attr = self.__attributes[path[0]]
         if self.application.GetWindow('frmAttribute').ShowFrmAttribute(attr):
             iter = self.attrModel.get_iter(path)
             self.__SetAttrLine(iter, attr)
     
+    @event("twOperations", "row-activated")
     def on_twOperations_row_activated(self, widget, path, column):
         oper = self.__operations[path[0]]
         if self.application.GetWindow('frmOperation').ShowFrmOperation(oper):

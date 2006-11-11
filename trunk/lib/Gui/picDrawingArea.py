@@ -2,7 +2,7 @@ import gtk, gtk.gdk, gobject
 
 from lib.consts import SELECT_SQUARE_COLOR, SELECT_SQUARE_SIZE
 
-from common import CWidget
+from common import CWidget, event
 from lib.Drawing import CDrawingArea, CElement, CConnection
 
 from lib.Drawing import CDrawingArea, CElement, CConnection
@@ -17,18 +17,19 @@ class CpicDrawingArea(CWidget):
     widgets = ('picDrawingArea', 'picEventBox', 'picVBar', 'picHBar')
     
     __gsignals__ = {
-        'get_selected':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_PYOBJECT, 
+        'get-selected':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_PYOBJECT, 
             ()), 
-        'set_selected':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
+        'set-selected':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
             (gobject.TYPE_PYOBJECT, )), 
-        'selected_item':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
+        'selected-item':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
             (gobject.TYPE_PYOBJECT, )), 
         
 
     }
     dnd = False
     
-    def Init(self):
+    def __init__(self, app, wTree):
+        CWidget.__init__(self, app, wTree)
         self.picEventBox.drag_dest_set(gtk.DEST_DEFAULT_ALL, targets, gtk.gdk.ACTION_MOVE)
         self.Buffer = gtk.gdk.Pixmap(self.picDrawingArea.window, 1000, 1000)
         self.DrawingArea = CDrawingArea(self.picDrawingArea, self.Buffer)
@@ -81,8 +82,9 @@ class CpicDrawingArea(CWidget):
         tmp.page_size = wisy
         self.picVBar.set_adjustment(tmp)
         
+    @event("picEventBox", "button-press-event")
     def on_picEventBox_button_press_event(self, widget, event):
-        toolBtnSel =  self.emit('get_selected')
+        toolBtnSel =  self.emit('get-selected')
         posx, posy = self.GetAbsolutePos(event.x, event.y)
         if toolBtnSel is None:
             itemSel = self.DrawingArea.GetElementAtPosition(posx, posy)
@@ -98,13 +100,13 @@ class CpicDrawingArea(CWidget):
                 elif not (event.state & gtk.gdk.CONTROL_MASK):
                     self.DrawingArea.DeselectAll()
                     self.DrawingArea.AddToSelection(itemSel)
-                    self.emit('selected_item', itemSel)
+                    self.emit('selected-item', itemSel)
                     if event.button == 1:
                         self.__DragBegin(event)
                     self.Paint()
                 else:
                     self.DrawingArea.AddToSelection(itemSel)
-                    self.emit('selected_item', None)
+                    self.emit('selected-item', None)
                     self.Paint()
             elif self.DrawingArea.SelectedCount() > 0:
                 if not (event.state & gtk.gdk.CONTROL_MASK):
@@ -116,7 +118,7 @@ class CpicDrawingArea(CWidget):
             ElementType = self.application.ElementFactory.GetElement(toolBtnSel[1])
             ElementObject = CElementObject(ElementType)
             CElement(self.DrawingArea, ElementObject).SetPosition(posx, posy)
-            self.emit('set_selected', None)
+            self.emit('set-selected', None)
             self.Paint()
             
         elif toolBtnSel[0] == 'Connection':
@@ -125,22 +127,28 @@ class CpicDrawingArea(CWidget):
             #ConnectionObject = CConnectionObject(ConnectionType)
             #CConnection(self.DrawingArea, ConnectionObject).SetPosition(posx, posy)
         
+    @event("picDrawingArea", "expose-event")
     def on_picDrawingArea_configure_event(self, widget, tmp):
         self.Repaint()
         
+    @event("picDrawingArea", "expose-event")
     def on_picDrawingArea_expose_event(self, widget, tmp):
         self.Repaint()
         
+    @event("picVBar", "value-changed")
     def on_picVBar_value_changed(self, widget):
         self.Repaint()
         
+    @event("picHBar", "value-changed")
     def on_picHBar_value_changed(self, widget):
         self.Repaint()
         
+    @event("picDrawingArea", "size-allocate")
     def on_picDrawingArea_size_allocate(self, widget, tmp):
         self.AdjustScrollBars()
         self.Repaint()
         
+    @event("picEventBox", "scroll-event")
     def on_picEventBox_scroll_event(self, widget, event):
         if  event.state & gtk.gdk.SHIFT_MASK :
             self.__Scroll(self.picHBar, event.direction)
@@ -148,13 +156,16 @@ class CpicDrawingArea(CWidget):
             self.__Scroll(self.picVBar, event.direction)
         self.Repaint()
            
+    @event("picEventBox", "drag-motion")
     def on_picEventBox_drag_motion(self, widget, context, x, y, time):
         self.__DrawDragRect(x,y)
     
+    @event("picEventBox", "drag-drop")
     def on_picEventBox_drag_drop(self, widget, context, x, y, time):
         dx, dy = self.__GetDelta(x, y)
         self.DrawingArea.MoveSelection(dx, dy)
         
+    @event("picEventBox", "drag-end")
     def on_picEventBox_drag_end(self, widget, context):
         self.dnd = False
         self.Paint()

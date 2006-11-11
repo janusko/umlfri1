@@ -1,4 +1,4 @@
-from common import CWidget, CellRendererButton
+from common import CWidget, CellRendererButton, event
 
 import gobject
 import gtk
@@ -15,13 +15,13 @@ class ClwProperties(CWidget):
             (gobject.TYPE_PYOBJECT, gobject.TYPE_STRING)),      
     }
     
-    def Init(self):
+    def __init__(self, app, wTree):
         self.listStore = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_BOOLEAN, gobject.TYPE_BOOLEAN, gobject.TYPE_BOOLEAN, gobject.TYPE_BOOLEAN, gtk.TreeModel, gobject.TYPE_STRING)
-        self.StrRenderer = gtk.CellRendererText()
+        renderer = gtk.CellRendererText()
         
         self.Column1 = gtk.TreeViewColumn('Name')
-        self.Column1.pack_start(self.StrRenderer, True)
-        self.Column1.add_attribute(self.StrRenderer, 'text', ID_NAME)
+        self.Column1.pack_start(renderer, True)
+        self.Column1.add_attribute(renderer, 'text', ID_NAME)
                  
         self.StrRenderer = gtk.CellRendererText()
         self.StrRenderer.set_property('editable', True)
@@ -30,12 +30,12 @@ class ClwProperties(CWidget):
         self.ComboRenderer.set_property('editable', True)
         self.ButtonRenderer = CellRendererButton()
         
+        CWidget.__init__(self, app, wTree)
         
-        self.StrRenderer.connect('edited',self.on_change_text)
-        self.ComboRenderer.connect('edited',self.on_change_combo)
-        self.ButtonRenderer.connect('click',self.on_change_button)
+        #~ self.StrRenderer.connect('edited',self.on_change_text)
+        #~ self.ComboRenderer.connect('edited',self.on_change_combo)
+        #~ self.ButtonRenderer.connect('click',self.on_change_button)
         
- 
         self.Column2 = gtk.TreeViewColumn('Value')
         self.Column2.pack_start(self.StrRenderer, True)
         self.Column2.pack_start(self.ComboRenderer, True)
@@ -92,6 +92,7 @@ class ClwProperties(CWidget):
         self.element = None
         self.listStore.clear()
     
+    @event("StrRenderer", "edited")
     def on_change_text(self, cellrenderer, path, new_value):
         model = self.lwProperties.get_model()
         iter = model.get_iter_from_string(path)
@@ -100,6 +101,7 @@ class ClwProperties(CWidget):
         self.element.GetObject().SetAttribute(name ,new_value)
         self.emit('content_update', self.element, name)
         
+    @event("ComboRenderer", "edited")
     def on_change_combo(self, cellrenderer, path, new_value):
         model = self.lwProperties.get_model()
         iter = model.get_iter_from_string(path)
@@ -108,6 +110,7 @@ class ClwProperties(CWidget):
         self.element.GetObject().SetAttribute(name ,new_value)
         self.emit('content_update', self.element, name)
     
+    @event("ButtonRenderer", "click")
     def on_change_button(self, cellrenderer, path):
         model = self.lwProperties.get_model()
         iter = model.get_iter_from_string(path)

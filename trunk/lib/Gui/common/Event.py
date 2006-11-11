@@ -1,5 +1,7 @@
 def event(obj, event):
     def tmp(fnc):
-        fnc.event = (obj, event)
+        if not hasattr(fnc, 'events'):
+            fnc.events = []
+        fnc.events.append((obj, event))
         return fnc
     return tmp
