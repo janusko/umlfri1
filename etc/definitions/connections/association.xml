@@ -9,7 +9,7 @@
     	<LineStyle style="solid" color="red" />
     	<ArrowStyle style="simple" fill="blue" color="black" />
         <Label position="center">
-            <TextBox align="left" text="#name" />
+            <TextBox text="#name" />
         </Label>
     </Appearance>
 </ConnectionType>

@@ -12,22 +12,22 @@ So, what can this tool offer to me?
 and all of this under GPL license
 
 Who makes it works?
-There is more peoples to who you can thank for this. Tool was developing many years.
+There is more peoples to who you can thank for this. Tool was developed many years.
 academic year 2005:
     Bc. Jan Janech          - Team Leader + developer
-    Bc. Pavol Kovalik       - GUI deasigner + developer
-    Bc. Miroslav Spigura    - GUI deasigner + developer
-    Bc. Marek Dovjak        - Graphics maker + developer
+    Bc. Pavol Kovalik       - GUI designer + developer
+    Bc. Miroslav Spigura    - GUI designer + developer
+    Bc. Marek Dovjak        - Graphics + developer
 academic year 2006:
-    Bc. Martina Iskerkova   - All what must to be done
+    Bc. Martina Iskerkova   - Everything that had to be done
 
-We want also thanks to Ing. Lubomir Sadlon, our supervisor. Without him, that is no project like this.
+We want also thanks to Ing. Lubomir Sadlon, our supervisor. Without him, that would be no project like this.
 
-Where I can get actual version?
+Where can I get actual version?
 We don't have any official website (now), but you can download it from our svn.
 
     bash-3.2$ svn co http://vaii.fri.utc.sk/svn/uml_fri/
 
 How can I helps you?
-Testing. Testing. Testing. Or if you want, send email to janech@kios.sk and I send you our account number :D . 
+Testing. Testing. Testing. Or if you want, send email to janech@kios.sk and I will send you our account numbers :D . 
 

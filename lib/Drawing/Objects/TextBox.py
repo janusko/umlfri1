@@ -3,10 +3,9 @@ import lib.consts
 import sys
 
 class CTextBox(CVisualObject):
-    def __init__(self, text, align = "center", linestart = "", color = "black"):
+    def __init__(self, text, linestart = "", color = "black"):
         CVisualObject.__init__(self)
         self.text = text
-        self.align = align
         self.linestart = linestart
         self.color = color
     
@@ -16,9 +15,6 @@ class CTextBox(CVisualObject):
         if self.text[0] == '@':
             return element.__LOOPVARS__[self.text[1:]]
         return self.text
-
-    def GetAlign(self):
-        return self.align
 
     def GetLineStart(self):
         return self.linestart
@@ -41,9 +37,6 @@ class CTextBox(CVisualObject):
     def Paint(self, canvas, pos, element, size = (None, None)):
         txt = self.__GetValue(element)
         canvas.DrawText(pos, txt, lib.consts.FONT_TYPE, self.color)
-
-    def SetAlign(self, align = "center"):
-        self.align = align
 
     def SetLineStart(self, linestart = ""):
         self.linestart = linestart

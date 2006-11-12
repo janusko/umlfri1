@@ -23,7 +23,7 @@ class CEllipse(CSimpleContainer):
 
     def Paint(self, canvas, pos, element, size = (None, None)):
         size = self.ComputeSize(canvas, element, size)
-        canvas.DrawArc(canvas, pos, size, (0, 360), self.border, self.fill)
+        canvas.DrawArc(pos, size, (0, 360), self.border, self.fill)
         
         for i in self.childs:
             i.Paint(canvas, pos, element, size)

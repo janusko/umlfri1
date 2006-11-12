@@ -8,7 +8,9 @@ from Rectangle import CRectangle
 from TextBox import CTextBox
 from VBox import CVBox
 from Shadow import CShadow
+from Proportional import CProportional
+from Align import CAlign
 
 ALL = {'Condition': CCondition, 'Ellipse': CEllipse, 'HBox': CHBox, 'Line': CLine, 'Loop': CLoop,
        'Padding': CPadding, 'Rectangle': CRectangle, 'TextBox': CTextBox, 'VBox': CVBox,
-       'Shadow': CShadow}
+       'Shadow': CShadow, 'Proportional': CProportional, 'Align': CAlign}
