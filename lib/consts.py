@@ -10,6 +10,7 @@ FONT_TYPE = 'Arial 10'
 ROOT_PATH = abspath(join(dirname(__file__), '..'))
 ETC_PATH = join(ROOT_PATH, 'etc')
 DEFINITIONS_PATH = join(ETC_PATH, 'definitions')
+VERSIONS_PATH = join(DEFINITIONS_PATH, 'versions')
 DIAGRAMS_PATH = join(DEFINITIONS_PATH, 'diagrams')
 ELEMENTS_PATH = join(DEFINITIONS_PATH, 'elements')
 CONNECTIONS_PATH = join(DEFINITIONS_PATH, 'connections')

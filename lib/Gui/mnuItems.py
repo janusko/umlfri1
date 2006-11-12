@@ -18,9 +18,9 @@ class CmnuItems(CWidget):
     def LoadDiagramsMenu(self):
         for item in self.mnuDiagrams.get_children():
             self.mnuDiagrams.remove(item)
-        for diagram in self.application.DiagramFactory:
-            newItem = gtk.ImageMenuItem(diagram.GetId())
-            newItem.connect("activate", self.on_mnuDiagrams_activate, diagram.GetId())
+        for diagram in self.application.version.GetDiagrams():
+            newItem = gtk.ImageMenuItem(diagram)
+            newItem.connect("activate", self.on_mnuDiagrams_activate, diagram)
             self.mnuDiagrams.append(newItem)
             newItem.show()
         

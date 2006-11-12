@@ -8,11 +8,12 @@ import lib.Gui.common
 import os.path
 
 from lib.Gui import CfrmMain, CfrmAbout, CfrmProperties, CfrmAttribute, CfrmOperation
+from lib.Versions import CVersionFactory
 from lib.Diagrams import CDiagramFactory
 from lib.Elements import CElementFactory
 from lib.Connections import CConnectionFactory
 
-from lib.consts import DIAGRAMS_PATH, ELEMENTS_PATH, CONNECTIONS_PATH
+from lib.consts import VERSIONS_PATH, DIAGRAMS_PATH, ELEMENTS_PATH, CONNECTIONS_PATH
 
 class Application(lib.Gui.common.CApplication):
     windows = (CfrmMain, CfrmAbout, CfrmProperties, CfrmAttribute, CfrmOperation)
@@ -23,7 +24,10 @@ class Application(lib.Gui.common.CApplication):
         self.DiagramFactory = CDiagramFactory(DIAGRAMS_PATH)
         self.ElementFactory = CElementFactory(ELEMENTS_PATH)
         self.ConnectionFactory = CConnectionFactory(CONNECTIONS_PATH)
+        self.VersionFactory = CVersionFactory(VERSIONS_PATH)
+        self.version = self.VersionFactory.GetVersion('UML 1.4')
         lib.Gui.common.CApplication.__init__(self)
         self.Project = None
+        
 
 Application().Main()

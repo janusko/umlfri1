@@ -87,7 +87,7 @@ class CDrawingArea:
             x, y = el.GetPosition()
             el.SetPosition(x + deltax, y + deltay)
             for con in el.GetConnections():
-                if (con.GetSourceObject() in self.selected) and (con.GetDestinationObject() in self.selected):
+                if (con.GetSource() in self.selected) and (con.GetDestination() in self.selected):
                     if con not in movedCon:
                         con.MoveAll(deltax , deltay )
                         movedCon.add(con)

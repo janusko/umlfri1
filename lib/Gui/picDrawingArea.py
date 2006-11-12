@@ -140,6 +140,8 @@ class CpicDrawingArea(CWidget):
             if itemSel is None:
                 if self.NewConnObject is not None:
                     self.NewConnObject[1].append((posx, posy))
+            elif isinstance(itemSel, CConnection):
+                return
             elif self.NewConnObject is None:
                 ConnectionType = self.application.ConnectionFactory.GetConnection(toolBtnSel[1])
                 self.NewConnObject = (CConnectionObject(ConnectionType), [], itemSel)
