@@ -4,11 +4,13 @@ from lib.Connections.Object import CConnectionObject
 from math import sqrt
 
 class CConnection:
-    def __init__(self, screen, obj, points):
-        self.screen = screen
-        self.screen.AddConnection(self)
+    def __init__(self, drawingArea, obj, source, destination, points):
+        self.drawingArea = drawingArea
+        self.drawingArea.AddConnection(self)
         self.object = obj
         self.points = points
+        self.source = source
+        self.destination = destination
         self.labels = {}
         self.selected = False        
     
@@ -28,6 +30,12 @@ class CConnection:
         else:
             return False
         
+    def GetSource(self):
+        return self.source
+        
+    def GetDestination(self):
+        return self.destination
+        
     def GetSourceObject(self):
         return self.object.GetSource()
         
@@ -37,24 +45,25 @@ class CConnection:
     def GetObject(self):
         return self.object
     
-    def GetLabelPosition(self, position, id):
+    def GetLabelPosition(self, canvas, position, id):
         if id in self.labels:
             return self.labels[id]
         else:
+            points = [p for p in self.GetPoints(canvas)]
             if position == 'source':
-                tmp = self.labels[id] = (self.points[0][0] , self.points[0][1])
+                tmp = self.labels[id] = (points[0][0] , points[0][1])
             elif position == 'destination':
-                tmp = self.labels[id] = (self.points[-1][0] , self.points[-1][1])
+                tmp = self.labels[id] = (points[-1][0] , points[-1][1])
             elif position == 'center':
                 L = 0
-                Lo = self.points[0]
-                for i in self.points[1:]:
+                Lo = points[0]
+                for i in points[1:]:
                     L += sqrt((Lo[0] - i[0])**2 + (Lo[1] - i[1])**2)
                     Lo = i
-                Lo = self.points[0]
+                Lo = points[0]
                 L1 = L/2
                 L = 0
-                for i in self.points[1:]:
+                for i in points[1:]:
                     LX = sqrt((Lo[0] - i[0])**2 + (Lo[1] - i[1])**2)
                     L += LX
                     if L > L1:
@@ -80,8 +89,9 @@ class CConnection:
             raise UMLException("PointNotExists")
 
     def AreYouAtPosition(self, canvas, x, y):
-        Xo, Yo = self.points[0]
-        for i in self.points[1:]:
+        points = [p for p in self.GetPoints(canvas)]
+        Xo, Yo = points[0]
+        for i in points[1:]:
             A = Yo - i[1]
             B = i[0] - Xo
             C = Xo*i[1] - i[0] * Yo
@@ -105,15 +115,14 @@ class CConnection:
             points.append((x+deltax, y+deltay))
         self.points = points
         
-    def MoveEndPoint(self, element, deltax, deltay):
-        if element.GetObject() is self.object.GetSource():
-            x, y = self.points[0]
-            self.points[0] = (x+deltax, y+deltay)
-        elif element.GetObject() is self.object.GetDestination():
-            x, y = self.points[-1]
-            self.points[-1] = (x+deltax, y+deltay)
-        else:
-            pass
+    #~ def MoveEndPoint(self, element, deltax, deltay):
+        #~ if element.GetObject() is self.object.GetSource():
+            #~ x, y = self.points[0]
+            #~ self.points[0] = (x+deltax, y+deltay)
+        #~ elif element.GetObject() is self.object.GetDestination():
+            #~ x, y = self.points[-1]
+            #~ self.points[-1] = (x+deltax, y+deltay)
+        #~ else:
             #~ raise UMLException("InvalidElement")
             
     def MovePoint(self, index, x, y):
@@ -125,7 +134,7 @@ class CConnection:
     def Paint(self, canvas):
         self.object.Paint(canvas, self)
         if self.selected is True:
-            for i in self.points:
+            for i in self.GetPoints(canvas):
                 canvas.DrawRectangle((i[0] - SELECT_SQUARES_SIZE//2, i[1] - SELECT_SQUARES_SIZE//2), (SELECT_SQUARES_SIZE, SELECT_SQUARES_SIZE), SELECT_SQUARES_COLOR)
 
     def RemovePoint(self, index):
@@ -134,8 +143,13 @@ class CConnection:
         else:
             raise UMLException("PointNotExists")
     
-    def GetPoints(self):
-        return self.points
+    def GetPoints(self, canvas):
+        if self.source is not None:
+            yield self.source.GetCenter(canvas)
+        for point in self.points:
+            yield point
+        if self.destination is not None:
+            yield self.destination.GetCenter(canvas)
 
     def GetDrawingArea(self):
-        return self.screen
+        return self.drawingArea

@@ -88,7 +88,7 @@ class CConnectionType(object):
         self.scrArrow = value
 
     def Paint(self, canvas, Connection):
-        tmp = Connection.GetPoints()
+        tmp = [p for p in Connection.GetPoints(canvas)]
         o = tmp[0]
         for i in tmp[1:]:
             self.line.Paint(canvas, o, i, Connection)
@@ -105,7 +105,7 @@ class CConnectionType(object):
             self.destArrow.Paint(canvas, tmp[-1], atan2(-X, Y), Connection)
         
         for id, lbl in enumerate(self.labels):
-            pos = Connection.GetLabelPosition(lbl[0], id)
+            pos = Connection.GetLabelPosition(canvas, lbl[0], id)
             lbl[1].Paint(canvas, pos, Connection)
     
     def GetLabels(self):

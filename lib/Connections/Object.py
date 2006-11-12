@@ -29,6 +29,13 @@ class CConnectionObject(object):
             source.AddConnection(self)
         self.source = source
     
+    def Disconnect(self):
+        if self.source is self.destination:
+            self.GetSource().RemoveConnection(self)
+        else:
+            self.GetSource().RemoveConnection(self)
+            self.GetDestination().RemoveConnection(self)            
+    
     def Paint(self, canvas, Connection):
         self.type.Paint(canvas, Connection)
     
