@@ -16,7 +16,8 @@ class CElementObject:
             raise UMLException("ConnectionAlreadyExists")
             
     def GetConnections(self):
-        return self.connections
+        for c in self.connections:
+            yield c
         
     def GetType(self):
         return self.type

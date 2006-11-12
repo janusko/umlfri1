@@ -1,5 +1,6 @@
 from lib.lib import UMLException
 import lib.consts
+import Connection, Element
 
 class CDrawingArea:
     def __init__(self):
@@ -68,13 +69,17 @@ class CDrawingArea:
         return (x1, y1), (x2 - x1, y2 - y1)
     
     def MoveSelection(self, deltax, deltay):
+        selected = set([el.GetObject() for el in self.selected if isinstance(el, Element.CElement)])
+        movedCon = set()
+        #~ print "selected: ", selected, "\n"
         for el in self.selected:
             x, y = el.GetPosition()
             el.SetPosition(x + deltax, y + deltay)
             for con in el.GetConnections():
-                print con
-                if con.GetSource() in self.selected and con.GetDestination() in self.selected:
-                    con.MoveAll(deltax, deltay)
+                if (con.GetSourceObject() in selected) and (con.GetDestinationObject() in selected):
+                    if con not in movedCon:
+                        con.MoveAll(deltax , deltay )
+                        movedCon.add(con)
                 else:
                     con.MoveEndPoint(el, deltax, deltay)
         

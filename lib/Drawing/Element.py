@@ -86,6 +86,5 @@ class CElement:
     def GetConnections(self):
         for c1 in self.GetObject().GetConnections(): #ConnectionObject
             for c2 in self.drawArea.GetConnections(): # Connection
-                print c2.GetObject(), c1
                 if c2.GetObject() is c1:
                     yield c2

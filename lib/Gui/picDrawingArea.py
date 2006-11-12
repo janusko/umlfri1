@@ -5,7 +5,6 @@ from lib.consts import SELECT_SQUARE_COLOR, SELECT_SQUARE_SIZE
 from common import CWidget, event
 from lib.Drawing import CDrawingArea, CElement, CConnection
 
-from lib.Drawing import CDrawingArea, CElement, CConnection
 from lib.Elements import CElementObject
 from lib.Connections import CConnectionObject
 
@@ -32,7 +31,7 @@ class CpicDrawingArea(CWidget):
     def __init__(self, app, wTree):
         CWidget.__init__(self, app, wTree)
         
-        self.NewConnection = None
+        self.NewConnObject = None
         #self.picEventBox.drag_dest_set(gtk.DEST_DEFAULT_ALL, targets, gtk.gdk.ACTION_MOVE)
         self.Buffer = gtk.gdk.Pixmap(self.picDrawingArea.window, 1000, 1000)
         #self.DrawingArea = CDrawingArea(self.picDrawingArea, self.Buffer)
@@ -129,22 +128,20 @@ class CpicDrawingArea(CWidget):
         elif toolBtnSel[0] == 'Connection':
             itemSel = self.DrawingArea.GetElementAtPosition(self.canvas, posx, posy)
             if itemSel is None:
-                if self.NewConnection is not None:
-                    self.NewConnection[1].append((posx, posy))
-                    print self.NewConnection[1]
-            elif self.NewConnection is None:
+                if self.NewConnObject is not None:
+                    self.NewConnObject[1].append((posx, posy))
+            elif self.NewConnObject is None:
                 ConnectionType = self.application.ConnectionFactory.GetConnection(toolBtnSel[1])
-                self.NewConnection = (CConnectionObject(ConnectionType), [(posx, posy)])
-                self.NewConnection[0].SetSource(itemSel)
-                print "selected 1"
+                self.NewConnObject = (CConnectionObject(ConnectionType), [(posx, posy)])
+                self.NewConnObject[0].SetSource(itemSel.GetObject())
             else:
-                self.NewConnection[0].SetDestination(itemSel)
-                self.NewConnection[1].append((posx, posy))
-                CConnection(self.DrawingArea, *self.NewConnection)
-                self.NewConnection = None
+                self.NewConnObject[0].SetDestination(itemSel.GetObject())
+                self.NewConnObject[1].append((posx, posy))
+                x = CConnection(self.DrawingArea, *self.NewConnObject)
+                self.NewConnObject = None
                 self.emit('set-selected', None)
                 self.Paint()
-                print "selected 2"
+                #~ print "connection finished:", x.GetSourceObject(), x.GetDestinationObject(), "\n"
         
     @event("picEventBox", "button_release_event")
     def on_button_release_event(self, widget, event):
@@ -207,7 +204,7 @@ class CpicDrawingArea(CWidget):
         self.__DrawDragRect(event.x, event.y, False)
         self.dnd = True
         
-    def  __GetDelta(self, x, y):
+    def __GetDelta(self, x, y):
         sizx, sizy = self.GetDrawingAreaSize()
         selx, sely = self.DragRect[1]
         sizx, sizy = sizx - selx, sizy - sely

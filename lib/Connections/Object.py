@@ -1,8 +1,8 @@
 class CConnectionObject(object):
     def __init__(self, type, source = None, dest = None):
         self.type = type
-        self.source = source
-        self.destination = dest
+        self.SetSource(source)
+        self.SetDestination(dest)
         self.attributes = {}
         for i in self.type.GetAttributes():
             self.SetAttribute(i, self.type.GetDefValue(i))            
@@ -20,10 +20,14 @@ class CConnectionObject(object):
         return self.source
 
     def SetDestination(self, dest):
+        if dest is not None:
+            dest.AddConnection(self)
         self.destination = dest
 
     def SetSource(self, source):
-        self.source = source 
+        if source is not None:
+            source.AddConnection(self)
+        self.source = source
     
     def Paint(self, canvas, Connection):
         self.type.Paint(canvas, Connection)

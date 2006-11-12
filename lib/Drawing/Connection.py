@@ -7,7 +7,7 @@ class CConnection:
     def __init__(self, screen, obj, points):
         self.screen = screen
         self.screen.AddConnection(self)
-        self.conObject = obj
+        self.object = obj
         self.points = points
         self.labels = {}
         self.selected = False        
@@ -27,9 +27,15 @@ class CConnection:
                 return True
         else:
             return False
-    
+        
+    def GetSourceObject(self):
+        return self.object.GetSource()
+        
+    def GetDestinationObject(self):
+        return self.object.GetDestination()
+        
     def GetObject(self):
-        return self.conObject
+        return self.object
     
     def GetLabelPosition(self, position, id):
         if id in self.labels:
@@ -100,14 +106,15 @@ class CConnection:
         self.points = points
         
     def MoveEndPoint(self, element, deltax, deltay):
-        if element.GetObject() is self.conObject.GetSource():
+        if element.GetObject() is self.object.GetSource():
             x, y = self.points[0]
             self.points[0] = (x+deltax, y+deltay)
-        elif element.GetObject() is self.conObject.GetDestination():
+        elif element.GetObject() is self.object.GetDestination():
             x, y = self.points[-1]
             self.points[-1] = (x+deltax, y+deltay)
         else:
-            raise UMLException("InvalidElement")
+            pass
+            #~ raise UMLException("InvalidElement")
             
     def MovePoint(self, index, x, y):
         if index < len(self.points) - 1:
@@ -116,7 +123,7 @@ class CConnection:
             raise UMLException("PointNotExists")
 
     def Paint(self, canvas):
-        self.conObject.Paint(canvas, self)
+        self.object.Paint(canvas, self)
         if self.selected is True:
             for i in self.points:
                 canvas.DrawRectangle((i[0] - SELECT_SQUARES_SIZE//2, i[1] - SELECT_SQUARES_SIZE//2), (SELECT_SQUARES_SIZE, SELECT_SQUARES_SIZE), SELECT_SQUARES_COLOR)
