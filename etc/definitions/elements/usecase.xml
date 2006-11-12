@@ -1,0 +1,25 @@
+<ElementType id="UseCase">
+    <Icon path="icons/usecase.png" />
+    <Connections>
+        <Item value="Association" />
+        <Item value="Generalization" with="UseCase" allowrecursive="0" />
+    </Connections>
+    <Attributes>
+        <Item value="Name" type="str" propid="name" />
+        <Item value="Abstract" type="bool" />
+        <Item value="Notes" type="note" />
+    </Attributes>
+    <Appearance>
+        <Shadow padding="3" color="#505050">
+            <Ellipse fill="lightpink2" border="black">
+                <Proportional ratio="3:1">
+                    <Padding padding="8">
+                        <Align align="center center">
+                            <TextBox text="#name" color="yellow" />
+                        </Align>
+                    </Padding>
+                </Proportional>
+            </Ellipse>
+        </Shadow>
+    </Appearance>
+</ElementType>
