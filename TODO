@@ -1,16 +1,17 @@
 [x] Abstraktna vrstva na vykreslovanie (janik)
 [x] XML pre verzie UML (BG)
-[x] Prehodenie eventov z glade suboru do kodu
+[x] Prehodenie eventov z glade suboru do kodu (janik, palino)
 [x] ODSTRANIT Drag and Drop (palino)
-[-] Project tree (miroslav, frizi)
-    [ ] Tabovanie
+[ ] Project tree (miroslav, frizi)
+    [x] Tabovanie (miroslav, frizi)
     [ ] Prerobit menu (na pridaj diagram)
     [?] Content menu na pridavanie
-    [ ] Samotny project tree
+    [x] Samotny project tree (miroslav, frizi)
+    [ ] Uvodna stranka
 [?] Generovanie formulara
 [ ] Ciary
     [x] Pridavanie ciar (palino)
-    [ ] Zmena ciar (posuvanie)
+    [ ] Zmena ciar - posuvanie
     [x] Presuvanie ciar s elementami (palino)
     [x] Select ciar (palino)
     [ ] Zarovnanie konca ciary s koncom elementu
@@ -21,10 +22,10 @@
     [ ] Skrolovanie bitblit-om + vykreslovanie zvysku
 [ ] Mazanie elementov
     [x] Zmazanie z drawing area (palino)
-    [ ] Mazanie vsetkych pozozstatkov
+    [ ] Mazanie vsetkych pozostatkov
 [ ] Mazanie ciar
-    [ ] Zmazanie z drawing area
-    [ ] Mazanie vsetkych pozozstatkov
+    [x] Zmazanie z drawing area (palino)
+    [ ] Mazanie vsetkych pozostatkov
 [x] CProportional kontainer (janik)
 [x] CAlign kontainer (janik)
 [ ] CSVG Visual object (janik)
