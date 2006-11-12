@@ -100,8 +100,11 @@ class CElementFactory:
         for i in root.attributes.values():
             params[str(i.name)] = i.nodeValue
         obj = cls(**params)
-        for child in root.childNodes:
-            if child.nodeType not in (xml.dom.minidom.Node.ELEMENT_NODE, xml.dom.minidom.Node.DOCUMENT_NODE):
-                continue
-            obj.AppendChild(self.__LoadAppearance(child))
+        if hasattr(obj, "LoadXml"):
+            obj.LoadXml(root)
+        else:
+            for child in root.childNodes:
+                if child.nodeType not in (xml.dom.minidom.Node.ELEMENT_NODE, xml.dom.minidom.Node.DOCUMENT_NODE):
+                    continue
+                obj.AppendChild(self.__LoadAppearance(child))
         return obj

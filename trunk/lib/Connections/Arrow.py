@@ -1,44 +1,46 @@
 from lib.lib import ToBool,UMLException
-from math import sin, cos, radians
+# from math import sin, cos, radians
+
+from lib.transform_matrix import TransformMatrix, PointMatrix
 
 ARROW_TYPES = {'simple': ('polyline',
                           [
-                           [[-0.5],[-1],[1]],
-                           [[0],[0],[1]],
-                           [[0.5],[-1],[1]],
+                           PointMatrix.mk_xy((-0.5, -1)),
+                           PointMatrix.mk_xy((0, 0)),
+                           PointMatrix.mk_xy((0.5, -1)),
                           ]),
                 'triangle': ('polygon',
                               [
-                               [[-0.5],[-1],[1]],
-                               [[0],[0],[1]],
-                               [[0.5],[-1],[1]],
+                               PointMatrix.mk_xy((-0.5, -1)),
+                               PointMatrix.mk_xy((0, 0)),
+                               PointMatrix.mk_xy((0.5, -1)),
                               ]),
                 'ftriangle': ('fillPolygon',
                               [
-                               [[-0.5],[-1],[1]],
-                               [[0],[0],[1]],
-                               [[0.5],[-1],[1]],
+                               PointMatrix.mk_xy((-0.5, -1)),
+                               PointMatrix.mk_xy((0, 0)),
+                               PointMatrix.mk_xy((0.5, -1)),
                               ]),
                 'diamond': ('polygon',
                             [
-                               [[-0.5],[-1],[1]],
-                               [[0],[0],[1]],
-                               [[0.5],[-1],[1]],
-                               [[0],[-2],[1]]
+                               PointMatrix.mk_xy((-0.5, -1)),
+                               PointMatrix.mk_xy((0, 0)),
+                               PointMatrix.mk_xy((0.5, -1)),
+                               PointMatrix.mk_xy((0, -2)),
                             ]),
                 'fdiamond': ('fillPolygon',
                             [
-                               [[-0.5],[-1],[1]],
-                               [[0],[0],[1]],
-                               [[0.5],[-1],[1]],
-                               [[0],[-2],[1]]
+                               PointMatrix.mk_xy((-0.5, -1)),
+                               PointMatrix.mk_xy((0, 0)),
+                               PointMatrix.mk_xy((0.5, -1)),
+                               PointMatrix.mk_xy((0, -2)),
                             ]),
                 'crosscircle': ('line',
                                 [
-                                    [[-0.5],[0],[1]],
-                                    [[0.5],[0],[1]],
-                                    [[0],[0.5],[1]],
-                                    [[0],[-0.5],[1]],
+                                    PointMatrix.mk_xy((-0.5, 0)),
+                                    PointMatrix.mk_xy((0.5, 0)),
+                                    PointMatrix.mk_xy((0, 0.5)),
+                                    PointMatrix.mk_xy((0, -0.5)),
                                 ])
               }
 
@@ -51,39 +53,16 @@ class CConnectionArrow(object):
         self.size = int(size)
         self.color = color
     
-    def __RotationMatrix(self, angle):
-        return   [
-                    [cos(angle),-sin(angle),0],
-                    [sin(angle),cos(angle),0],
-                    [0,0,1]
-                 ]
-    
-    def __MultiplyMatrix(self, rotationMatrix, columnMatrix):
-        resultMatrix = []
-        for i in rotationMatrix:
-            number = 0
-            for j in xrange(len(i)):
-                number += i[j] * columnMatrix[j][0]
-            resultMatrix.append([number])
-        return resultMatrix
-    
-    
-    def __ResizeMatrix(self, matrix, size):
-        for i in matrix:
-            for j in i:
-                j[0] = j[0] * size
-        return matrix
-    
     def Paint(self, canvas, pos, angle, Connection):
         if self.possible is False:
             return
-        rotationMatrix = self.__RotationMatrix(angle)
+        transMatrix = TransformMatrix.mk_translation(pos)*TransformMatrix.mk_rotation(angle)* \
+                        TransformMatrix.mk_scale(self.size)
         x, y = pos
         points = []
         if self.style in ARROW_TYPES.keys():
             for i in ARROW_TYPES[self.style][1]:
-                matrix = self.__MultiplyMatrix(rotationMatrix, i)
-                points.append((int(matrix[0][0]*self.size+x),int(matrix[1][0]*self.size+y)))
+                points.append((transMatrix*i).GetIntPos())
             
             if ARROW_TYPES[self.style][0] == 'polyline':
                 canvas.DrawLines(points, self.color)

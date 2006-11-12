@@ -1,0 +1,41 @@
+<ElementType id="Actor">
+    <Icon path="icons/actor.png" />
+    <Connections>
+        <Item value="Association" />
+        <Item value="Generalization" with="UseCase" allowrecursive="0" />
+    </Connections>
+    <Attributes>
+        <Item value="Name" type="str" propid="name" />
+        <Item value="Notes" type="note" />
+    </Attributes>
+    <Appearance>
+        <Shadow padding="3" color="#505050">
+            <HBox>
+                <Align align="center">
+                    <Svg width="745" height="1000" scale="10%">
+                        <g
+                           id="g3972"
+                           style="stroke:black;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+                           transform="translate(2.857143,-5.714286)">
+                          <path
+                             id="path2209"
+                             d="M 120.49998,974.50016 L 369.49995,726.88474 L 369.49995,345.50006 L 126.22412,587.42318"
+                             style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:black;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+                          <path
+                             style="fill:none;stroke-width:1.01209199;stroke:black;stroke-opacity:1"
+                             d="M 528.63693,184.71422 C 528.63693,272.75492 457.18361,344.20824 369.14291,344.20824 C 281.10221,344.20824 209.6489,272.75492 209.6489,184.71422 C 209.6489,96.67352 281.10221,25.220208 369.14291,25.220208 C 457.18361,25.220208 528.63693,96.67352 528.63693,184.71422 z "
+                             id="path3966" />
+                          <path
+                             style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:black;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+                             d="M 619.49997,974.50016 L 370.5,726.88474 L 370.5,345.50006 L 613.77584,587.42318"
+                             id="path3970" />
+                        </g>
+                    </Svg>
+                </Align>
+                <Align align="center">
+                    <TextBox text="#name" color="black" />
+                </Align>
+            </HBox>
+        </Shadow>
+    </Appearance>
+</ElementType>

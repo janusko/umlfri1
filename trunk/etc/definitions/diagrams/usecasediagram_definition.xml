@@ -2,6 +2,7 @@
     <Special swimlines="0" lifelines="0" />
     <Elements>
         <Item value="UseCase" umlversion="*" />
+        <Item value="Actor" umlversion="*" />
     </Elements>
     <Connections>
         <Item value="Generalization" umlversion="*" />

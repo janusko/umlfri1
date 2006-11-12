@@ -8,10 +8,11 @@
     [?] Content menu na pridavanie
     [ ] Samotny project tree
 [?] Generovanie formulara
-[-] Ciary
-    [x] Pridavanie ciar
+[ ] Ciary
+    [x] Pridavanie ciar (palino)
     [ ] Zmena ciar (posuvanie)
-    [x] Presuvanie ciar s elementami
+    [x] Presuvanie ciar s elementami (palino)
+    [x] Select ciar (palino)
     [ ] Zarovnanie konca ciary s koncom elementu
 [ ] Flexibilna plocha
     [ ] Vyhodit ten sprosty backbuffer
@@ -19,10 +20,36 @@
     [ ] Vymysliet naky inteligentny sposob hladania tried na kraji viewport-u
     [ ] Skrolovanie bitblit-om + vykreslovanie zvysku
 [ ] Mazanie elementov
+    [x] Zmazanie z drawing area (palino)
+    [ ] Mazanie vsetkych pozozstatkov
 [ ] Mazanie ciar
-[x] CProportional kontainer
-[x] CAlign kontainer
-[?] CSVG Visual object
+    [ ] Zmazanie z drawing area
+    [ ] Mazanie vsetkych pozozstatkov
+[x] CProportional kontainer (janik)
+[x] CAlign kontainer (janik)
+[ ] CSVG Visual object (janik)
+    [x] Group object (janik)
+    [ ] shapes
+        [ ] rect
+        [ ] circle
+        [ ] ellipse
+        [ ] line
+        [ ] polygon
+        [ ] polyline
+    [ ] path
+        [x] move (janik)
+        [x] line (janik)
+        [x] cubic bezier curve (janik)
+        [ ] arc
+    [ ] styles
+        [x] stroke color (janik)
+        [ ] stroke style
+        [ ] fill color
+        [?] fill style
+    [ ] transformation matrixes
+        [x] translate (janik)
+        [x] matrix (janik)
+
 ...
 [ ] ZOrder
 [ ] Menenie kurzoru po prechode nad volaco
