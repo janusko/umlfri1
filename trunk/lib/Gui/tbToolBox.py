@@ -43,6 +43,14 @@ class CtbToolBox(CWidget):
         self.tbToolBox.insert(newSeparator, -1)
                 
     def SetButtons(self, DiagramId):
+        if DiagramId is None:
+            ArrowButton = self.tbToolBox.get_nth_item(0)
+            for button in self.tbToolBox.get_children():
+                self.tbToolBox.remove(button)
+                
+            self.tbToolBox.insert(ArrowButton, -1)
+            return
+            
         self.DiagramType = self.application.DiagramFactory.GetDiagram(DiagramId)
         if self.DiagramType is None:
             raise Exception('tbToolBox.DiagramType is None')

@@ -14,7 +14,7 @@ targets = [('document/uml', 0, gtk.TARGET_SAME_WIDGET)]
 
 class CpicDrawingArea(CWidget):
     name = 'picDrawingArea'
-    widgets = ('picDrawingArea', 'picEventBox', 'picVBar', 'picHBar')
+    widgets = ('picDrawingArea', 'picEventBox', 'picVBar', 'picHBar', 'tbDrawingArea', 'vbAll', 'nbTabs')
     
     __gsignals__ = {
         'get-selected':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_PYOBJECT, 
@@ -23,7 +23,7 @@ class CpicDrawingArea(CWidget):
             (gobject.TYPE_PYOBJECT, )), 
         'selected-item':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
             (gobject.TYPE_PYOBJECT, )), 
-        
+        'add-element':(gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,gobject.TYPE_PYOBJECT,)), 
 
     }
     
@@ -37,15 +37,27 @@ class CpicDrawingArea(CWidget):
         #self.picEventBox.drag_dest_set(gtk.DEST_DEFAULT_ALL, targets, gtk.gdk.ACTION_MOVE)
         self.Buffer = gtk.gdk.Pixmap(self.picDrawingArea.window, 1000, 1000)
         #self.DrawingArea = CDrawingArea(self.picDrawingArea, self.Buffer)
-        self.DrawingArea = CDrawingArea()
+        self.DrawingArea = CDrawingArea(None,"Start page")
         self.canvas = GtkCanvas(self.picDrawingArea, self.Buffer)
         
         self.AdjustScrollBars()
+        self.Hide()
         self.Paint()
         
-        
+    def Hide(self):
+        self.vbAll.set_child_packing(self.nbTabs, True, True, 0, gtk.PACK_START)
+        self.tbDrawingArea.hide()
+    
+    def Show(self):
+        self.vbAll.set_child_packing(self.nbTabs, False, True, 0, gtk.PACK_START)
+        self.tbDrawingArea.show()
+    
     def GetDrawingArea(self):
         return self.picDrawingArea
+    
+    def SetDrawingArea(self, drawingArea):
+        self.DrawingArea = drawingArea
+        self.Paint()
         
     def GetWindowSize(self):
         tmpx, tmpy =  self.picDrawingArea.window.get_size()
@@ -125,7 +137,6 @@ class CpicDrawingArea(CWidget):
                 self.emit('selected-item', None)
                 self.Paint()
         
-        
     def __AddItem(self, toolBtnSel, event):
         posx, posy = self.GetAbsolutePos(event.x, event.y)
         if toolBtnSel[0] == 'Element':
@@ -133,8 +144,9 @@ class CpicDrawingArea(CWidget):
             ElementObject = CElementObject(ElementType)
             CElement(self.DrawingArea, ElementObject).SetPosition(posx, posy)
             self.emit('set-selected', None)
+            self.emit('add-element', ElementObject, self.DrawingArea)
             self.Paint()
-            
+        
         elif toolBtnSel[0] == 'Connection':
             itemSel = self.DrawingArea.GetElementAtPosition(self.canvas, posx, posy)
             if itemSel is None:

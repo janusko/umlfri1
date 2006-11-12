@@ -20,8 +20,6 @@
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
-  <property name="urgency_hint">False</property>
-
 
   <child>
     <widget class="GtkVBox" id="vbox1">
@@ -32,8 +30,6 @@
       <child>
 	<widget class="GtkMenuBar" id="menubar1">
 	  <property name="visible">True</property>
-	  <property name="pack_direction">GTK_PACK_DIRECTION_LTR</property>
-	  <property name="child_pack_direction">GTK_PACK_DIRECTION_LTR</property>
 
 	  <child>
 	    <widget class="GtkMenuItem" id="mItemFile">
@@ -49,7 +45,6 @@
 		      <property name="visible">True</property>
 		      <property name="label">gtk-new</property>
 		      <property name="use_stock">True</property>
-
 		    </widget>
 		  </child>
 
@@ -58,7 +53,6 @@
 		      <property name="visible">True</property>
 		      <property name="label">gtk-open</property>
 		      <property name="use_stock">True</property>
-
 		    </widget>
 		  </child>
 
@@ -67,7 +61,6 @@
 		      <property name="visible">True</property>
 		      <property name="label">gtk-save</property>
 		      <property name="use_stock">True</property>
-
 		    </widget>
 		  </child>
 
@@ -76,14 +69,12 @@
 		      <property name="visible">True</property>
 		      <property name="label">gtk-save-as</property>
 		      <property name="use_stock">True</property>
-
 		    </widget>
 		  </child>
 
 		  <child>
 		    <widget class="GtkSeparatorMenuItem" id="separatormenuitem1">
 		      <property name="visible">True</property>
-
 		    </widget>
 		  </child>
 
@@ -92,7 +83,6 @@
 		      <property name="visible">True</property>
 		      <property name="label">gtk-quit</property>
 		      <property name="use_stock">True</property>
-
 		    </widget>
 		  </child>
 		</widget>
@@ -114,7 +104,6 @@
 		      <property name="visible">True</property>
 		      <property name="label">gtk-cut</property>
 		      <property name="use_stock">True</property>
-
 		    </widget>
 		  </child>
 
@@ -123,7 +112,6 @@
 		      <property name="visible">True</property>
 		      <property name="label">gtk-copy</property>
 		      <property name="use_stock">True</property>
-
 		    </widget>
 		  </child>
 
@@ -132,7 +120,6 @@
 		      <property name="visible">True</property>
 		      <property name="label">gtk-paste</property>
 		      <property name="use_stock">True</property>
-
 		    </widget>
 		  </child>
 
@@ -141,7 +128,6 @@
 		      <property name="visible">True</property>
 		      <property name="label">gtk-delete</property>
 		      <property name="use_stock">True</property>
-
 		    </widget>
 		  </child>
 		</widget>
@@ -163,7 +149,6 @@
 		      <property name="visible">True</property>
 		      <property name="label" translatable="yes">item3</property>
 		      <property name="use_underline">True</property>
-
 		    </widget>
 		  </child>
 		</widget>
@@ -186,7 +171,6 @@
 		      <property name="label" translatable="yes">Toolbar</property>
 		      <property name="use_underline">True</property>
 		      <property name="active">True</property>
-
 		      <accelerator key="space" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 		    </widget>
 		  </child>
@@ -209,7 +193,6 @@
 		      <property name="visible">True</property>
 		      <property name="label" translatable="yes">_About</property>
 		      <property name="use_underline">True</property>
-
 		    </widget>
 		  </child>
 		</widget>
@@ -389,13 +372,13 @@
 	      <property name="position">400</property>
 
 	      <child>
-		<widget class="GtkVBox" id="vbox4">
+		<widget class="GtkVBox" id="vbAll">
 		  <property name="visible">True</property>
 		  <property name="homogeneous">False</property>
 		  <property name="spacing">0</property>
 
 		  <child>
-		    <widget class="GtkNotebook" id="notebook2">
+		    <widget class="GtkNotebook" id="nbTabs">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="show_tabs">True</property>
@@ -415,61 +398,22 @@
 		      </child>
 
 		      <child>
-			<widget class="GtkHBox" id="hbox7">
+			<widget class="GtkLabel" id="lblStart">
 			  <property name="visible">True</property>
-			  <property name="homogeneous">False</property>
-			  <property name="spacing">0</property>
-
-			  <child>
-			    <widget class="GtkLabel" id="label16">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">label16</property>
-			      <property name="use_underline">False</property>
-			      <property name="use_markup">False</property>
-			      <property name="justify">GTK_JUSTIFY_LEFT</property>
-			      <property name="wrap">False</property>
-			      <property name="selectable">False</property>
-			      <property name="xalign">0.5</property>
-			      <property name="yalign">0.5</property>
-			      <property name="xpad">0</property>
-			      <property name="ypad">0</property>
-			      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-			      <property name="width_chars">-1</property>
-			      <property name="single_line_mode">False</property>
-			      <property name="angle">0</property>
-			    </widget>
-			    <packing>
-			      <property name="padding">0</property>
-			      <property name="expand">False</property>
-			      <property name="fill">False</property>
-			    </packing>
-			  </child>
-
-			  <child>
-			    <widget class="GtkButton" id="button4">
-			      <property name="visible">True</property>
-			      <property name="can_focus">True</property>
-			      <property name="relief">GTK_RELIEF_NONE</property>
-			      <property name="focus_on_click">True</property>
-
-			      <child>
-				<widget class="GtkImage" id="image7">
-				  <property name="visible">True</property>
-				  <property name="stock">gtk-close</property>
-				  <property name="icon_size">4</property>
-				  <property name="xalign">0.5</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				</widget>
-			      </child>
-			    </widget>
-			    <packing>
-			      <property name="padding">0</property>
-			      <property name="expand">False</property>
-			      <property name="fill">False</property>
-			    </packing>
-			  </child>
+			  <property name="label" translatable="yes">Start page</property>
+			  <property name="use_underline">False</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_LEFT</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">7</property>
+			  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+			  <property name="width_chars">-1</property>
+			  <property name="single_line_mode">False</property>
+			  <property name="angle">0</property>
 			</widget>
 			<packing>
 			  <property name="type">tab</property>
@@ -484,7 +428,7 @@
 		  </child>
 
 		  <child>
-		    <widget class="GtkTable" id="table1">
+		    <widget class="GtkTable" id="tbDrawingArea">
 		      <property name="visible">True</property>
 		      <property name="n_rows">2</property>
 		      <property name="n_columns">2</property>
@@ -498,19 +442,11 @@
 			  <property name="visible_window">True</property>
 			  <property name="above_child">False</property>
 
-
-
-
-
-
 			  <child>
 			    <widget class="GtkDrawingArea" id="picDrawingArea">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="has_focus">True</property>
-
-
-
 			    </widget>
 			  </child>
 			</widget>
@@ -528,7 +464,6 @@
 			  <property name="update_policy">GTK_UPDATE_CONTINUOUS</property>
 			  <property name="inverted">False</property>
 			  <property name="adjustment">1.37142860889 0 10 0 0 5</property>
-
 			</widget>
 			<packing>
 			  <property name="left_attach">0</property>
@@ -546,7 +481,6 @@
 			  <property name="update_policy">GTK_UPDATE_CONTINUOUS</property>
 			  <property name="inverted">False</property>
 			  <property name="adjustment">0 0 0 0 0 0</property>
-
 			</widget>
 			<packing>
 			  <property name="left_attach">1</property>
@@ -782,7 +716,6 @@
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
-  <property name="urgency_hint">False</property>
   <property name="has_separator">True</property>
 
   <child internal-child="vbox">
@@ -1170,7 +1103,6 @@ Bc. Miroslav Spigura &lt;ms1@post.sk&gt;</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
-  <property name="urgency_hint">False</property>
   <property name="has_separator">True</property>
 
   <child internal-child="vbox">
@@ -1264,7 +1196,6 @@ Bc. Miroslav Spigura &lt;ms1@post.sk&gt;</property>
 		      <property name="use_stock">True</property>
 		      <property name="relief">GTK_RELIEF_NONE</property>
 		      <property name="focus_on_click">True</property>
-
 		    </widget>
 		  </child>
 
@@ -1278,7 +1209,6 @@ Bc. Miroslav Spigura &lt;ms1@post.sk&gt;</property>
 		      <property name="use_stock">True</property>
 		      <property name="relief">GTK_RELIEF_NONE</property>
 		      <property name="focus_on_click">True</property>
-
 		    </widget>
 		  </child>
 		</widget>
@@ -1311,8 +1241,6 @@ Bc. Miroslav Spigura &lt;ms1@post.sk&gt;</property>
 		      <property name="fixed_height_mode">False</property>
 		      <property name="hover_selection">False</property>
 		      <property name="hover_expand">False</property>
-
-
 		    </widget>
 		  </child>
 		</widget>
@@ -1374,7 +1302,6 @@ Bc. Miroslav Spigura &lt;ms1@post.sk&gt;</property>
 		      <property name="use_stock">True</property>
 		      <property name="relief">GTK_RELIEF_NONE</property>
 		      <property name="focus_on_click">True</property>
-
 		    </widget>
 		  </child>
 
@@ -1388,7 +1315,6 @@ Bc. Miroslav Spigura &lt;ms1@post.sk&gt;</property>
 		      <property name="use_stock">True</property>
 		      <property name="relief">GTK_RELIEF_NONE</property>
 		      <property name="focus_on_click">True</property>
-
 		    </widget>
 		  </child>
 		</widget>
@@ -1419,8 +1345,6 @@ Bc. Miroslav Spigura &lt;ms1@post.sk&gt;</property>
 		      <property name="fixed_height_mode">False</property>
 		      <property name="hover_selection">False</property>
 		      <property name="hover_expand">False</property>
-
-
 		    </widget>
 		  </child>
 		</widget>
@@ -1483,7 +1407,6 @@ Bc. Miroslav Spigura &lt;ms1@post.sk&gt;</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
-  <property name="urgency_hint">False</property>
   <property name="has_separator">True</property>
 
   <child internal-child="vbox">
@@ -2054,7 +1977,6 @@ Not Specified</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
-  <property name="urgency_hint">False</property>
   <property name="has_separator">True</property>
 
   <child internal-child="vbox">
