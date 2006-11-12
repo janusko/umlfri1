@@ -5,14 +5,12 @@ import Connection, Element
 class CDrawingArea:
     def __init__(self):
         self.elements = []
-        self.elementsreverse = []
         self.connections = []
         self.selected = set()
         
     def AddElement(self, element):
         if element not in self.elements:
             self.elements.append(element)
-            self.elementsreverse.insert(0, element)
         else:
             raise UMLException("ElementAlreadyExists")
      
@@ -80,13 +78,14 @@ class CDrawingArea:
                     if con not in movedCon:
                         con.MoveAll(deltax , deltay )
                         movedCon.add(con)
-                else:
-                    con.MoveEndPoint(el, deltax, deltay)
         
     def DeleteElement(self, element):
         if element in self.elements:
             self.elements.remove(element)
-            self.elementsreverse.remove(element)
+            for con in self.connections:
+                if (con.GetSource() is element) or \
+                    (con.GetDestination() is element):
+                    self.DeleteConnection(con)
         else:
             raise UMLException("ElementDoesNotExists")
         
@@ -110,7 +109,7 @@ class CDrawingArea:
         return None
                 
     def GetElementAtPosition(self, canvas, x, y):
-        for e in self.elementsreverse:
+        for e in self.elements[::1]:
             if e.AreYouAtPosition(canvas, x, y):
                 return e
             
@@ -127,3 +126,4 @@ class CDrawingArea:
     def GetConnections(self):
         for c in self.connections:
             yield c
+            

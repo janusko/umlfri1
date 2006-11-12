@@ -1,4 +1,4 @@
-import gtk, gtk.gdk, gobject
+import gtk, gtk.gdk, gobject, gtk.keysyms
 
 from lib.consts import SELECT_SQUARE_COLOR, SELECT_SQUARE_SIZE
 
@@ -88,6 +88,7 @@ class CpicDrawingArea(CWidget):
         
     @event("picEventBox", "button-press-event")
     def on_picEventBox_button_press_event(self, widget, event):
+        self.picDrawingArea.grab_focus()
         toolBtnSel =  self.emit('get-selected')
         posx, posy = self.GetAbsolutePos(event.x, event.y)
         if toolBtnSel is None:
@@ -115,7 +116,7 @@ class CpicDrawingArea(CWidget):
             elif self.DrawingArea.SelectedCount() > 0:
                 if not (event.state & gtk.gdk.CONTROL_MASK):
                     self.DrawingArea.DeselectAll()
-                    self.emit('selected_item', None)
+                    self.emit('selected-item', None)
                     self.Paint()
         
         elif toolBtnSel[0] == 'Element':
@@ -132,18 +133,28 @@ class CpicDrawingArea(CWidget):
                     self.NewConnObject[1].append((posx, posy))
             elif self.NewConnObject is None:
                 ConnectionType = self.application.ConnectionFactory.GetConnection(toolBtnSel[1])
-                self.NewConnObject = (CConnectionObject(ConnectionType), [(posx, posy)])
+                self.NewConnObject = (CConnectionObject(ConnectionType), [], itemSel)
                 self.NewConnObject[0].SetSource(itemSel.GetObject())
             else:
                 self.NewConnObject[0].SetDestination(itemSel.GetObject())
-                self.NewConnObject[1].append((posx, posy))
-                x = CConnection(self.DrawingArea, *self.NewConnObject)
+                obj, points, source, destination = self.NewConnObject + (itemSel, )
+                x = CConnection(self.DrawingArea, obj, source, destination, points)
                 self.NewConnObject = None
                 self.emit('set-selected', None)
                 self.Paint()
                 #~ print "connection finished:", x.GetSourceObject(), x.GetDestinationObject(), "\n"
         
-    @event("picEventBox", "button_release_event")
+    def __AddElement(self):
+        pass
+        
+    @event("picEventBox", "key-press-event")
+    def on_key_press_event(self, widget, event):
+        if event.keyval == gtk.keysyms.Delete:
+            for sel in self.DrawingArea.GetSelected():
+                self.DrawingArea.DeleteElement(sel)
+            self.Paint()
+        
+    @event("picEventBox", "button-release-event")
     def on_button_release_event(self, widget, event):
         if self.dnd:
             dx, dy = self.__GetDelta(event.x, event.y)
@@ -151,7 +162,7 @@ class CpicDrawingArea(CWidget):
             self.dnd = False
             self.Paint()
         
-    @event("picEventBox", "motion_notify_event")
+    @event("picEventBox", "motion-notify-event")
     def on_motion_notify_event(self, widget, event):
         if self.dnd:
             self.__DrawDragRect(event.x, event.y)

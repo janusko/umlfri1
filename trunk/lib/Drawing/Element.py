@@ -1,9 +1,9 @@
 import lib.consts
 
 class CElement:
-    def __init__(self, drwngArea, obj):
-        self.drawArea = drwngArea
-        self.drawArea.AddElement(self)
+    def __init__(self, drawingArea, obj):
+        self.drawingArea = drawingArea
+        self.drawingArea.AddElement(self)
         self.objct = obj
         self.position = (0,0)
         self.selected = False
@@ -50,6 +50,9 @@ class CElement:
 
     def GetPosition(self):
         return self.position
+        
+    def GetCenter(self, canvas):
+        return self.objct.GetWidth(canvas, self) / 2 + self.position[0], self.objct.GetHeight(canvas, self) / 2 + self.position[1]
     
     def GetSize(self, canvas):
         return self.objct.GetWidth(canvas, self), self.objct.GetHeight(canvas, self)
@@ -81,10 +84,10 @@ class CElement:
         self.position = (x, y)
         
     def GetDrawingArea(self):
-        return self.drawArea
+        return self.drawingArea
         
     def GetConnections(self):
         for c1 in self.GetObject().GetConnections(): #ConnectionObject
-            for c2 in self.drawArea.GetConnections(): # Connection
+            for c2 in self.drawingArea.GetConnections(): # Connection
                 if c2.GetObject() is c1:
                     yield c2

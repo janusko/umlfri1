@@ -13,7 +13,7 @@ class CElementObject:
         if connection not in self.connections:
             self.connections.append(connection)
         else:
-            raise UMLException("ConnectionAlreadyExists")
+            pass
             
     def GetConnections(self):
         for c in self.connections:
@@ -104,8 +104,11 @@ class CElementObject:
     def SetAttribute(self, key, value):
         self.attribs[key] = value
         
+    def Disconnect(self, connection):
+        connection.Disconnect()
+        
     def RemoveConnection(self, connection):
         if connection in self.connections:
-            self.connections.remove
+            self.connections.remove(connection)
         else:
             raise UMLException("ConnectionNotFound")
