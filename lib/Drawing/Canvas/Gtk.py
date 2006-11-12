@@ -28,10 +28,10 @@ class GtkCanvas(AbstractCanvas):
         cmap = self.window.get_colormap()
         if bg is not None:
             gc.foreground = cmap.alloc_color(bg)
-            self.window.draw_arc(gc, True, pos[0], pos[1], size[0], size[1], arc[0]*64, arc[1]*64)
+            self.window.draw_arc(gc, True, int(pos[0]), int(pos[1]), int(size[0]), int(size[1]), int(arc[0]*64), int(arc[1]*64))
         if fg is not None:
             gc.foreground = cmap.alloc_color(fg)
-            self.window.draw_arc(gc, False, pos[0], pos[1], size[0], size[1], arc[0]*64, arc[1]*64)
+            self.window.draw_arc(gc, False, int(pos[0]), int(pos[1]), int(size[0]), int(size[1]), int(arc[0]*64), int(arc[1]*64))
     
     def DrawLine(self, start, end, fg, line_width = None, line_style = None):
         cmap = self.window.get_colormap()
@@ -40,7 +40,7 @@ class GtkCanvas(AbstractCanvas):
             gc.line_width = line_width
         if line_style is not None:
             gc.line_style = LINE_STYLES[line_style]
-        self.window.draw_line(gc, start[0], start[1], end[0], end[1])
+        self.window.draw_line(gc, int(start[0]), int(start[1]), int(end[0]), int(end[1]))
     
     def DrawLines(self, points, fg, line_width = None, line_style = None):
         cmap = self.window.get_colormap()
@@ -49,7 +49,7 @@ class GtkCanvas(AbstractCanvas):
             gc.line_width = line_width
         if line_style is not None:
             gc.line_style = LINE_STYLES[line_style]
-        self.window.draw_lines(gc, points)
+        self.window.draw_lines(gc, [(int(x), int(y)) for x,y in points])
     
     def DrawPolygon(self, points, fg = None, bg = None, line_width = None, line_style = None):
         gc = self.window.new_gc()
@@ -60,10 +60,22 @@ class GtkCanvas(AbstractCanvas):
         cmap = self.window.get_colormap()
         if bg is not None:
             gc.foreground = cmap.alloc_color(bg)
-            self.window.draw_polygon(gc, True, points)
+            self.window.draw_polygon(gc, True, [(int(x), int(y)) for x,y in points])
         if fg is not None:
             gc.foreground = cmap.alloc_color(fg)
-            self.window.draw_polygon(gc, False, points)
+            self.window.draw_polygon(gc, False, [(int(x), int(y)) for x,y in points])
+    
+    def DrawBezier(self, pt1, pt2, pt3, pt4, fg, line_width = None, line_style = None):
+        t = 0
+        step = 1/16.0
+        old = pt1
+        while (t-step) < 1:
+            new = (1-t)**3*pt1[0]+3*t*(1-t)**2*pt2[0]+3*t**2*(1-t)*pt3[0]+t**3*pt4[0], \
+                  (1-t)**3*pt1[1]+3*t*(1-t)**2*pt2[1]+3*t**2*(1-t)*pt3[1]+t**3*pt4[1]
+            self.DrawLine(old, new, fg, line_width, line_style)
+            old = new
+            t += step
+        self.DrawLine(old, pt4, fg, line_width, line_style)
     
     def DrawRectangle(self, pos, size, fg = None, bg = None, line_width = None, line_style = None):
         gc = self.window.new_gc()
@@ -74,10 +86,10 @@ class GtkCanvas(AbstractCanvas):
         cmap = self.window.get_colormap()
         if bg is not None:
             gc.foreground = cmap.alloc_color(bg)
-            self.window.draw_rectangle(gc, True, pos[0], pos[1], size[0], size[1])
+            self.window.draw_rectangle(gc, True, int(pos[0]), int(pos[1]), int(size[0]), int(size[1]))
         if fg is not None:
             gc.foreground = cmap.alloc_color(fg)
-            self.window.draw_rectangle(gc, False, pos[0], pos[1], size[0], size[1])
+            self.window.draw_rectangle(gc, False, int(pos[0]), int(pos[1]), int(size[0]), int(size[1]))
     
     def DrawText(self, pos, text, font, fg):
         if font in self.fonts:
@@ -90,7 +102,7 @@ class GtkCanvas(AbstractCanvas):
         gc = self.window.new_gc(foreground = cmap.alloc_color(fg))
         
         self.pango_layout.set_text(text)
-        self.window.draw_layout(gc, x=pos[0], y=pos[1], layout=self.pango_layout)
+        self.window.draw_layout(gc, x=int(pos[0]), y=int(pos[1]), layout=self.pango_layout)
     
     def GetTextSize(self, text, font):
         if font in self.fonts:

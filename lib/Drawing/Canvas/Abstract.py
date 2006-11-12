@@ -14,6 +14,9 @@ class AbstractCanvas:
     def DrawPolygon(self, points, fg = None, bg = None, width = 1):
         pass
     
+    def DrawBezier(self, pt1, pt2, pt3, pt4, fg, line_width = None, line_style = None):
+        pass
+    
     def DrawRectangle(self, pos, size, fg = None, bg = None, width = 1):
         pass
     
