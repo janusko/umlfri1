@@ -1,17 +1,41 @@
 from lib.lib import UMLException
 
 class CProjectNode(object):
-    def __init__(self, parent = None, type = None):
+    def __init__(self, parent = None, object = None):
         self.parent = parent
         self.childs = []
-        self.drawingareas = []        
-        self.type = type
+        self.drawingareas = []   
+        self.object = object
     
-    def GetType(self):
-        return self.type
+    def Change(self):
+        if self.parent is not None:
+            parentPath = self.parent.GetPath()+ "/" 
+        else:
+            parentPath = ""
+        
+        
+        self.object.SetPath(parentPath + self.GetName() + ":" + self.GetType())        
+        for i in self.drawingareas:
+            i.SetPath(parentPath + i.GetName() + ":=DrawingArea=")
+        
+        for i in self.childs:
+            i.Change()
+        
+    
+    def GetPath(self):
+        return self.object.GetPath()
+    
+    def SetPath(self, path):
+        self.object.SetPath(path)
+
+    def GetObject(self):
+        return self.object
     
     def GetName(self):
-        return self.type.GetName()
+        return self.object.GetName()
+    
+    def GetType(self):
+        return self.object.GetType().GetId()
     
     def AddChild(self, child):
         if child not in self.childs:
@@ -24,12 +48,17 @@ class CProjectNode(object):
     def AddDrawingArea(self, area):
         if area not in self.drawingareas:
             self.drawingareas.append(area)
-        else:
-            raise UMLException("ExistsArea")
     
-    def GetChild(self, name):
-        for i in childs:
+    def FindDrawingArea(self, name):
+        for i in self.drawingareas:
             if i.GetName() == name:
+                return i
+        return None
+        
+    
+    def GetChild(self, name, type):
+        for i in self.childs:
+            if i.GetName() == name and i.GetType() == type:
                 return i
         else:
             return None

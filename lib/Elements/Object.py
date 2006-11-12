@@ -3,12 +3,21 @@ from lib.lib import UMLException
 class CElementObject:
     def __init__(self, type):
         self.type = type
+        self.path = None
         self.connections = []
         self.attribs = {}
         for i in self.type.GetAttributes():
             self.SetAttribute(i, self.type.GetDefValue(i))            
         self.SetAttribute('Name', 'New ' + type.GetId())        
 
+    
+    def GetPath(self):
+        return self.path
+    
+    def SetPath(self, path):
+        self.path = path 
+    
+    
     def AddConnection(self, connection):
         if connection not in self.connections:
             self.connections.append(connection)

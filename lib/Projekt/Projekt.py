@@ -11,13 +11,24 @@ class CProjekt(object):
     def GetRoot(self):
         return self.root
     
-    def GetElement(self, path):
+    def GetNode(self, path):
         node = self.root
-        for i in path.split('/')[1:]:
-            node = node.GetChild(i)
-            if node is None:
-                raise UMLException("BadPath")
-        return node            
+        
+        k = path.split('/')[0]
+        i,j = k.split(':')
+                
+        if i == self.root.GetName() and j == self.root.GetType():
+            for i in path.split('/')[1:]:
+                j, k  = i.split(':')
+                if k == "=DrawingArea=":
+                    return node
+                else:
+                    node = node.GetChild(j, k)
+                if node is None:
+                    raise UMLException("BadPath")
+            return node
+        raise UMLException("BadPath3")
+    
     
     def Find(self, name):
         stack = [self.root]
@@ -33,6 +44,7 @@ class CProjekt(object):
             self.root = node
         else:
             parent.AddChild(node)
+            
 
     def MoveNode(self, node, newParent):
         node.GetParent(node).RemoveChild(node)

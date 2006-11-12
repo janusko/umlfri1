@@ -3,11 +3,14 @@ import gtk
 from common import CWindow, event
 import common
 
+from lib.Elements import CElementObject
+from lib.Drawing import CDrawingArea
 from tbToolBox import CtbToolBox
 from twProjectView import CtwProjectView
 from mnuItems import CmnuItems
 from picDrawingArea import CpicDrawingArea
 from nbProperties import CnbProperties
+from tabs import CTabs
 
 class CfrmMain(CWindow):
     name = 'frmMain'
@@ -21,10 +24,12 @@ class CfrmMain(CWindow):
         #mItemView
         'mnuViewTools', 
         #mItemHelp
-        'mnuAbout', 
+        'mnuAbout',
+        #tabs
+        'nbTabs',
         )
     
-    complexWidgets = (CtbToolBox, CtwProjectView, CmnuItems, CpicDrawingArea, CnbProperties)
+    complexWidgets = (CtbToolBox, CtwProjectView, CmnuItems, CpicDrawingArea, CnbProperties, CTabs)
     
     def __init__(self, app, wTree):
         CWindow.__init__(self, app, wTree)
@@ -83,7 +88,8 @@ class CfrmMain(CWindow):
         tmp = self.application.GetWindow('frmAbout')
         tmp.SetParent(self)
         tmp.Show()
-        
+       
+       
     # Actions
     @event("form", "destroy")
     @event("mnuQuit", "activate")
@@ -99,24 +105,60 @@ class CfrmMain(CWindow):
     def ActionLoadToolBar(self, widget):
         pass
     
+    
+    
     # Moje vlastne signale
+    @event("picDrawingArea", "add-element")
+    def on_add_element(self, widget, Element, drawingArea):
+        self.twProjectView.AddElement(Element, drawingArea.GetPath())
+    
+    
+    
     @event("mnuItems", "create-diagram")
-    def on_mnuItems_create_diagram(self, widget, diagramId):
+    def on_mnuItems_create_diagram(self, widget, diagramId):      
+        area = CDrawingArea(diagramId, "New " + diagramId)
+        self.twProjectView.AddDrawingArea(area)
+        self.nbTabs.AddTab(area)
+        self.picDrawingArea.SetDrawingArea(area)
         self.tbToolBox.SetButtons(diagramId)
         
+   
     @event("picDrawingArea", "get-selected")
     def on_picDrawingArea_get_selected(self, widget):
         return self.tbToolBox.GetSelected()
+
+
+    @event("twProjectView", "selected_drawing_area")
+    def on_select_drawing_area(self, widget, drawingArea):
+        self.nbTabs.AddTab(drawingArea)
+        self.picDrawingArea.SetDrawingArea(drawingArea)
+      
+      
+    @event("nbTabs", "change_current_page")
+    def on_change_drawing_area(self, widget, drawingArea):
+        if drawingArea is None:
+            self.picDrawingArea.Hide()
+            self.tbToolBox.SetButtons(None)
+        else:
+            self.picDrawingArea.Show()
+            self.picDrawingArea.SetDrawingArea(drawingArea)
+            self.tbToolBox.SetButtons(drawingArea.GetDiagram())
         
     @event("picDrawingArea", "set-selected")
     def on_picDrawingArea_set_selected(self, widget, selected):
         self.tbToolBox.SetSelected(selected)
-        
+                
     @event("picDrawingArea", "selected-item")
     def on_picDrawingArea_selected_item(self, widget, selected):
         self.nbProperties.Fill(selected)
+        
+    @event("twProjectView", "selected-item-tree")
+    def on_twTreeView_selected_item(self, widget, selected):
+        self.nbProperties.Fill(selected)
+
     
     @event("nbProperties", "content-update")
     def on_nbProperties_content_update(self, widget, element, property):
         if element.GetObject().GetType().HasVisualAttribute(property):
             self.picDrawingArea.Paint()
+            self.twProjectView.UpdateElement(element.GetObject())

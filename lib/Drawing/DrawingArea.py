@@ -3,11 +3,31 @@ import lib.consts
 import Connection, Element
 
 class CDrawingArea:
-    def __init__(self):
+    def __init__(self, type, name = "untitled"):
         self.elements = []
         self.connections = []
         self.selected = set()
+        self.path = None
+        self.name = name
+        self.typeDiagram = type
         
+        
+    # Cesta v strome kde sa nachadza drawing area
+    def GetPath(self):
+        return self.path
+    
+    def SetPath(self, Path):
+        self.path = Path
+    
+    def GetDiagram(self):
+        return self.typeDiagram
+    
+    def GetName(self):
+        return self.name
+    
+    def SetName(self, name):
+        self.name = name
+    
     def AddElement(self, element):
         if element not in self.elements:
             self.elements.append(element)
@@ -80,9 +100,7 @@ class CDrawingArea:
         return (int(x1), int(y1)), (int(x2 - x1), int(y2 - y1))
     
     def MoveSelection(self, deltax, deltay):
-        #selected = set([el.GetObject() for el in self.selected if isinstance(el, Element.CElement)])
         movedCon = set()
-        #~ print "selected: ", selected, "\n"
         for el in self.GetSelectedElements():
             x, y = el.GetPosition()
             el.SetPosition(x + deltax, y + deltay)
