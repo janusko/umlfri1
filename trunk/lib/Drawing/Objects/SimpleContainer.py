@@ -9,5 +9,8 @@ class CSimpleContainer(CContainer):
 
     def SetChild(self, child):
         if len(self.GetChilds()) > 0:
-            self.RemoveChild(self.GetChild(0))
+            self.RemoveChild(self.GetChild())
         self.AppendChild(child)
+    
+    def GetChild(self):
+        return CContainer.GetChild(self, 0)

@@ -21,15 +21,17 @@
             <Rectangle fill="lightpink2" border="black">
                 <HBox>
                     <Padding padding="5">
-                        <TextBox align="center" text="#name" color="yellow" />
+                        <Align align="center">
+                            <TextBox text="#name" color="yellow" />
+                        </Align>
                     </Padding>
                     <Line type="horizontal" />
                     <Padding padding="5">
                         <HBox>
                             <Loop collection="attributes">
                                 <VBox>
-                                    <TextBox align="left" text="@scope" />
-                                    <TextBox align="left" text="@line" />
+                                    <TextBox text="@scope" />
+                                    <TextBox text="@line" />
                                 </VBox>
                             </Loop>
                         </HBox>
@@ -41,8 +43,8 @@
                                 <HBox>
                                     <Loop collection="operations">
                                         <VBox>
-                                            <TextBox align="left" text="@scope" />
-                                            <TextBox align="left" text="@line" />
+                                            <TextBox text="@scope" />
+                                            <TextBox text="@line" />
                                         </VBox>
                                     </Loop>
                                 </HBox>

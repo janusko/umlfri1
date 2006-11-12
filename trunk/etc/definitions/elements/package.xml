@@ -19,7 +19,7 @@
                 <VBox>
                     <Rectangle fill="lightpink2" border="black">
                         <Padding padding="5">
-                            <TextBox align="left" text="#name" color="yellow" />
+                            <TextBox text="#name" color="yellow" />
                         </Padding>
                     </Rectangle>
                     <Padding padding="8" />

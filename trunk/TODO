@@ -2,15 +2,17 @@
 [x] XML pre verzie UML (BG)
 [x] Prehodenie eventov z glade suboru do kodu
 [x] ODSTRANIT Drag and Drop (palino)
-[ ] Project tree (miroslav, frizi)
+[-] Project tree (miroslav, frizi)
     [ ] Tabovanie
     [ ] Prerobit menu (na pridaj diagram)
     [?] Content menu na pridavanie
     [ ] Samotny project tree
 [?] Generovanie formulara
-[ ] Ciary
-    [ ] Pridavanie ciar
+[-] Ciary
+    [x] Pridavanie ciar
     [ ] Zmena ciar (posuvanie)
+    [x] Presuvanie ciar s elementami
+    [ ] Zarovnanie konca ciary s koncom elementu
 [ ] Flexibilna plocha
     [ ] Vyhodit ten sprosty backbuffer
     [ ] Hladanie kolizii objektov
@@ -18,9 +20,11 @@
     [ ] Skrolovanie bitblit-om + vykreslovanie zvysku
 [ ] Mazanie elementov
 [ ] Mazanie ciar
-[ ] CProportional kontainer
+[x] CProportional kontainer
+[x] CAlign kontainer
 [?] CSVG Visual object
 ...
+[ ] ZOrder
 [ ] Menenie kurzoru po prechode nad volaco
 [ ] Resizovanie elementov
 [ ] Save/Load
