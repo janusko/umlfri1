@@ -39,6 +39,10 @@ class CConnectionObject(object):
     def Paint(self, canvas, Connection):
         self.type.Paint(canvas, Connection)
     
+    def GetAttributes(self):
+        for attr in self.attribs:
+            yield attr
+        
     def GetAttribute(self, key):
         if key in self.attributes:
             return self.attributes[key]

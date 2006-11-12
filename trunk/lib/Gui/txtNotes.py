@@ -23,11 +23,11 @@ class CtxtNotes(CWidget):
             self.txtNotes.get_buffer().set_text("")
             self.txtNotes.set_sensitive(False)
             return
-        attrs = Element.GetObject().GetAttributes()
+        object = Element.GetObject()
         type = Element.GetObject().GetType()
         cnt = 0
         for k in type.GetAttributes(): # attrs.items():
-            v = attrs[k]
+            v = object.GetAttribute(k)
             atrtype = type.GetAttribute(k)
             if atrtype[0] == 'note':
                 if cnt > 0:

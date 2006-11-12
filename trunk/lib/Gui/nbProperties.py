@@ -14,8 +14,6 @@ class CnbProperties(CWidget):
     
     def __init__(self, app, wTree):
         CWidget.__init__(self, app, wTree)
-        #~ self.lwProperties.connect('content_update', self.on_lwProperties_content_update)
-        #~ self.txtNotes.connect('content_update', self.on_txtNotes_content_update)
     
     def Fill(self, element):
         self.lwProperties.Fill(element)

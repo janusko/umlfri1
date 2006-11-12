@@ -11,6 +11,7 @@ class CConnectionType(object):
         self.icon = icon
         self.labels = []
         self.attributes = {}
+        self.attributeList = []
         self.visAttrs = {}
     
     def SetIcon(self, value):
@@ -51,6 +52,7 @@ class CConnectionType(object):
         if propid is not None:
             self.visAttrs[propid] = value
         self.attributes[value] = (type, options)
+        self.attributeList.append(value)
     
     def AddLabel(self, position, label):
         self.labels.append((position,label))
@@ -87,6 +89,9 @@ class CConnectionType(object):
     def SetSrcArrow(self, value):
         self.scrArrow = value
 
+    def HasVisualAttribute(self, id):
+        return id in self.visAttrs.itervalues()
+
     def Paint(self, canvas, Connection):
         tmp = [p for p in Connection.GetPoints(canvas)]
         o = tmp[0]
@@ -111,9 +116,15 @@ class CConnectionType(object):
     def GetLabels(self):
         for id, label in enumerate(self.labels):
             yield id, label[0]
+            
+    def GetAttribute(self, key):
+        if key in self.attributes:
+            return self.attributes[key]
+        else:
+            raise UMLException("BadKey")
     
     def GetAttributes(self):
-        for i in self.attributes:
+        for i in self.attributeList:
             yield i
     
     def GetVisAttr(self, id):
