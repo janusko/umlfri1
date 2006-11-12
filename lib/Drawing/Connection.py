@@ -20,7 +20,7 @@ class CConnection:
     def Deselect(self):
         self.selected = False
         
-    def Getselelected(self):
+    def GetSelelected(self):
         return self.selected
     
     def IsSquareSize(self, x, y):
@@ -56,7 +56,7 @@ class CConnection:
                 tmp = self.labels[id] = (points[-1][0] , points[-1][1])
             elif position == 'center':
                 L = 0
-                Lo = points[0]
+                tmp = Lo = points[0]
                 for i in points[1:]:
                     L += sqrt((Lo[0] - i[0])**2 + (Lo[1] - i[1])**2)
                     Lo = i
@@ -94,16 +94,22 @@ class CConnection:
         for i in points[1:]:
             A = Yo - i[1]
             B = i[0] - Xo
+            if A + B == 0:
+                if (A-x)**2 + (B-x)**2 <= 2:
+                    return True
+                else:
+                    Xo, Yo = i
+                    continue
             C = Xo*i[1] - i[0] * Yo
             T = (-B*Xo + A*Yo - A*y + B*x)/(A**2 + B**2)
             if T < 0:
-                if sqrt((Xo - x)**2 + (Yo - y)**2) <=2:
+                if sqrt((Xo - x)**2 + (Yo - y)**2) <= 2:
                     return True
             elif T > 1:
-                if sqrt((i[0] - x)**2 + (i[1] - y)**2) <=2:
+                if sqrt((i[0] - x)**2 + (i[1] - y)**2) <= 2:
                     return True
             else:
-                if abs((abs(A*x + B*y + C))/sqrt(A**2 + B**2)) <=2:
+                if abs((abs(A*x + B*y + C))/sqrt(A**2 + B**2)) <= 2:
                     return True
             Xo, Yo = i
         else:
@@ -115,16 +121,6 @@ class CConnection:
             points.append((x+deltax, y+deltay))
         self.points = points
         
-    #~ def MoveEndPoint(self, element, deltax, deltay):
-        #~ if element.GetObject() is self.object.GetSource():
-            #~ x, y = self.points[0]
-            #~ self.points[0] = (x+deltax, y+deltay)
-        #~ elif element.GetObject() is self.object.GetDestination():
-            #~ x, y = self.points[-1]
-            #~ self.points[-1] = (x+deltax, y+deltay)
-        #~ else:
-            #~ raise UMLException("InvalidElement")
-            
     def MovePoint(self, index, x, y):
         if index < len(self.points) - 1:
             self.points[index] = (x,y)
@@ -153,3 +149,5 @@ class CConnection:
 
     def GetDrawingArea(self):
         return self.drawingArea
+    
+    

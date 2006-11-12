@@ -41,7 +41,8 @@ class CElementObject:
             return None
     
     def GetAttributes(self):
-        return self.attribs
+        for attr in self.attribs:
+            yield attr
         
     def GetVisualProperty(self, key):
         attr = self.type.GetVisAttr(key)

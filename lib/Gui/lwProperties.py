@@ -32,10 +32,6 @@ class ClwProperties(CWidget):
         
         CWidget.__init__(self, app, wTree)
         
-        #~ self.StrRenderer.connect('edited',self.on_change_text)
-        #~ self.ComboRenderer.connect('edited',self.on_change_combo)
-        #~ self.ButtonRenderer.connect('click',self.on_change_button)
-        
         self.Column2 = gtk.TreeViewColumn('Value')
         self.Column2.pack_start(self.StrRenderer, True)
         self.Column2.pack_start(self.ComboRenderer, True)
@@ -64,10 +60,10 @@ class ClwProperties(CWidget):
         self.listStore.clear()
         if Element is  None:
             return
-        attrs = Element.GetObject().GetAttributes()
+        object = Element.GetObject()
         type = Element.GetObject().GetType()
         for k in type.GetAttributes(): # attrs.items():
-            v = attrs[k]
+            v = object.GetAttribute(k)
             row = self.listStore.append()
             atrtype = type.GetAttribute(k)
             if atrtype[0] == 'bool':

@@ -26,12 +26,14 @@ class CpicDrawingArea(CWidget):
         
 
     }
-    dnd = False
     
     def __init__(self, app, wTree):
         CWidget.__init__(self, app, wTree)
         
         self.NewConnObject = None
+        self.dnd = False
+        self.selecting = None
+        
         #self.picEventBox.drag_dest_set(gtk.DEST_DEFAULT_ALL, targets, gtk.gdk.ACTION_MOVE)
         self.Buffer = gtk.gdk.Pixmap(self.picDrawingArea.window, 1000, 1000)
         #self.DrawingArea = CDrawingArea(self.picDrawingArea, self.Buffer)
@@ -90,36 +92,43 @@ class CpicDrawingArea(CWidget):
     def on_picEventBox_button_press_event(self, widget, event):
         self.picDrawingArea.grab_focus()
         toolBtnSel =  self.emit('get-selected')
+        if toolBtnSel is not None:
+            self.__AddItem(toolBtnSel, event)
+            return
+            
         posx, posy = self.GetAbsolutePos(event.x, event.y)
-        if toolBtnSel is None:
-            itemSel = self.DrawingArea.GetElementAtPosition(self.canvas, posx, posy)
-            if itemSel is not None:
-                if itemSel in self.DrawingArea.GetSelected():
-                    if (event.state & gtk.gdk.CONTROL_MASK):
-                        self.DrawingArea.RemoveFromSelection(itemSel)
-                        self.Paint()
-                    elif event.button == 1:
-                        self.__DragBegin(event)
-                    else:
-                        self.Paint()
-                elif not (event.state & gtk.gdk.CONTROL_MASK):
-                    self.DrawingArea.DeselectAll()
-                    self.DrawingArea.AddToSelection(itemSel)
-                    self.emit('selected-item', itemSel)
-                    if event.button == 1:
-                        self.__DragBegin(event)
+        itemSel = self.DrawingArea.GetElementAtPosition(self.canvas, posx, posy)
+        if itemSel is not None:
+            if itemSel in self.DrawingArea.GetSelected():
+                if (event.state & gtk.gdk.CONTROL_MASK):
+                    self.DrawingArea.RemoveFromSelection(itemSel)
                     self.Paint()
+                elif event.button == 1:
+                    self.__DragBegin(event)
                 else:
-                    self.DrawingArea.AddToSelection(itemSel)
-                    self.emit('selected-item', None)
                     self.Paint()
-            elif self.DrawingArea.SelectedCount() > 0:
-                if not (event.state & gtk.gdk.CONTROL_MASK):
-                    self.DrawingArea.DeselectAll()
-                    self.emit('selected-item', None)
-                    self.Paint()
+            elif not (event.state & gtk.gdk.CONTROL_MASK):
+                self.DrawingArea.DeselectAll()
+                self.DrawingArea.AddToSelection(itemSel)
+                self.emit('selected-item', itemSel)
+                if event.button == 1:
+                    self.__DragBegin(event)
+                self.Paint()
+            else:
+                self.DrawingArea.AddToSelection(itemSel)
+                self.emit('selected-item', None)
+                self.Paint()
+            
+        elif self.DrawingArea.SelectedCount() > 0:
+            if not (event.state & gtk.gdk.CONTROL_MASK):
+                self.DrawingArea.DeselectAll()
+                self.emit('selected-item', None)
+                self.Paint()
         
-        elif toolBtnSel[0] == 'Element':
+        
+    def __AddItem(self, toolBtnSel, event):
+        posx, posy = self.GetAbsolutePos(event.x, event.y)
+        if toolBtnSel[0] == 'Element':
             ElementType = self.application.ElementFactory.GetElement(toolBtnSel[1])
             ElementObject = CElementObject(ElementType)
             CElement(self.DrawingArea, ElementObject).SetPosition(posx, posy)
@@ -142,16 +151,12 @@ class CpicDrawingArea(CWidget):
                 self.NewConnObject = None
                 self.emit('set-selected', None)
                 self.Paint()
-                #~ print "connection finished:", x.GetSourceObject(), x.GetDestinationObject(), "\n"
-        
-    def __AddElement(self):
-        pass
         
     @event("picEventBox", "key-press-event")
     def on_key_press_event(self, widget, event):
         if event.keyval == gtk.keysyms.Delete:
             for sel in self.DrawingArea.GetSelected():
-                self.DrawingArea.DeleteElement(sel)
+                self.DrawingArea.DeleteItem(sel)
             self.Paint()
         
     @event("picEventBox", "button-release-event")
@@ -206,7 +211,6 @@ class CpicDrawingArea(CWidget):
         scrollbar.set_adjustment(tmp)
         
     def __DragBegin(self, event):
-        #self.picEventBox.drag_begin(targets, gtk.gdk.ACTION_MOVE, event.button, event)
         self.DragStartPos = self.GetAbsolutePos(event.x, event.y)
         self.DragRect = self.DrawingArea.GetSelectSquare(self.canvas)
         cmap = self.picDrawingArea.window.get_colormap()
@@ -234,5 +238,5 @@ class CpicDrawingArea(CWidget):
         if draw:
             tmpx, tmpy = self.GetRelativePos(*self.DragRect[0])
             dx, dy = self.__GetDelta(x, y)
-            self.picDrawingArea.window.draw_rectangle(self.DragGC, False, int(tmpx + dx), int(tmpy + dy), *self.DragRect[1])
-            self.__oldx, self.__oldy = int(tmpx + dx), int(tmpy + dy)
+            self.picDrawingArea.window.draw_rectangle(self.DragGC, False, tmpx + dx, tmpy + dy, *self.DragRect[1])
+            self.__oldx, self.__oldy = tmpx + dx, tmpy + dy
