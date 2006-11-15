@@ -77,7 +77,7 @@ class CSvgXML:
     def PaintSvgPath(self, canvas, node, transform):
         st = node['attrs'].get('style', {})
         if 'transform' in node['attrs']:
-            transform = node['attrs']['transform'] * transform
+            transform = transform * node['attrs']['transform']
         for cmd in node['attrs']['d']:
             if cmd[0] == 'move':
                 old = (transform * cmd[1]).GetIntPos()
@@ -94,7 +94,7 @@ class CSvgXML:
     
     def PaintSvgG(self, canvas, node, transform):
         if 'transform' in node['attrs']:
-            transform = node['attrs']['transform'] * transform
+            transform = transform * node['attrs']['transform']
         self.PaintChilds(canvas, node['childs'], transform)
 
 class CSvg(CVisualObject):

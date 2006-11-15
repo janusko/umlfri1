@@ -30,18 +30,18 @@
 [x] CAlign kontainer (janik)
 [ ] CSVG Visual object (janik)
     [x] Group object (janik)
-    [ ] shapes
-        [ ] rect
-        [ ] circle
-        [ ] ellipse
-        [ ] line
-        [ ] polygon
-        [ ] polyline
+    [?] shapes
+        [?] rect
+        [?] circle
+        [?] ellipse
+        [?] line
+        [?] polygon
+        [?] polyline
     [ ] path
         [x] move (janik)
         [x] line (janik)
         [x] cubic bezier curve (janik)
-        [ ] arc
+        [?] arc
     [ ] styles
         [x] stroke color (janik)
         [ ] stroke style
@@ -50,10 +50,11 @@
     [ ] transformation matrixes
         [x] translate (janik)
         [x] matrix (janik)
-
+[ ] Prerobit SVG na predpocitavanie suradnic (a pod) pri starte
+[ ] Dorobit DrawPath(path, fg = None, bg = None) do canvasu
 ...
 [ ] ZOrder
-[ ] Menenie kurzoru po prechode nad volaco
+[?] Menenie kurzoru po prechode nad volaco
 [ ] Resizovanie elementov
 [ ] Save/Load
 [ ] Sablony
