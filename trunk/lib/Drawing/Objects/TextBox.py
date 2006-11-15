@@ -30,6 +30,10 @@ class CTextBox(CVisualObject):
         txt = self.__GetValue(element)
         return canvas.GetTextSize(txt, lib.consts.FONT_TYPE)[0]
 
+    def PaintShadow(self, canvas, pos, element, color, size = (None, None)):
+        txt = self.__GetValue(element)
+        canvas.DrawText(pos, txt, lib.consts.FONT_TYPE, color)
+
     def Paint(self, canvas, pos, element, size = (None, None)):
         txt = self.__GetValue(element)
         canvas.DrawText(pos, txt, lib.consts.FONT_TYPE, self.color)

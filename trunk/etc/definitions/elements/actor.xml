@@ -9,9 +9,9 @@
         <Item value="Notes" type="note" />
     </Attributes>
     <Appearance>
-        <Shadow padding="3" color="#505050">
-            <HBox>
-                <Align align="center">
+        <HBox>
+            <Align align="center">
+                <Shadow padding="3" color="#505050">
                     <Svg width="745" height="1000" scale="10%">
                         <g
                            id="g3972"
@@ -31,11 +31,11 @@
                              id="path3970" />
                         </g>
                     </Svg>
-                </Align>
-                <Align align="center">
-                    <TextBox text="#name" color="black" />
-                </Align>
-            </HBox>
-        </Shadow>
+                </Shadow>
+            </Align>
+            <Align align="center">
+                <TextBox text="#name" color="black" />
+            </Align>
+        </HBox>
     </Appearance>
 </ElementType>
