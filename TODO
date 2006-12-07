@@ -1,20 +1,24 @@
 [x] Abstraktna vrstva na vykreslovanie (janik)
 [x] XML pre verzie UML (BG)
-[x] Prehodenie eventov z glade suboru do kodu (janik, palino)
+[x] Prehodenie eventov z glade suboru do kodu
 [x] ODSTRANIT Drag and Drop (palino)
-[ ] Project tree (miroslav, frizi)
-    [x] Tabovanie (miroslav, frizi)
-    [ ] Prerobit menu (na pridaj diagram)
-    [?] Content menu na pridavanie
-    [x] Samotny project tree (miroslav, frizi)
-    [ ] Uvodna stranka
+[ ] Autonaticke nazvy diagramov
+[ ] Automaticke nazvy elementov
+[-] Project tree (miroslav, frizi)
+    [X] Tabovanie
+    [x] Prerobit menu (na pridaj diagram)
+    [x] Content menu na pridavanie
+    [X] Samotny project tree
+    [+] Ikonky na diagramy
+    [+] Ikonky na elementy
 [?] Generovanie formulara
 [ ] Ciary
     [x] Pridavanie ciar (palino)
-    [ ] Zmena ciar - posuvanie
+    [ ] Zmena ciar (posuvanie)
     [x] Presuvanie ciar s elementami (palino)
     [x] Select ciar (palino)
     [ ] Zarovnanie konca ciary s koncom elementu
+    [ ] Lamanie ciar
 [ ] Flexibilna plocha
     [ ] Vyhodit ten sprosty backbuffer
     [ ] Hladanie kolizii objektov
@@ -22,26 +26,26 @@
     [ ] Skrolovanie bitblit-om + vykreslovanie zvysku
 [ ] Mazanie elementov
     [x] Zmazanie z drawing area (palino)
-    [ ] Mazanie vsetkych pozostatkov
+    [ ] Mazanie vsetkych pozozstatkov
 [ ] Mazanie ciar
-    [x] Zmazanie z drawing area (palino)
-    [ ] Mazanie vsetkych pozostatkov
+    [ ] Zmazanie z drawing area
+    [ ] Mazanie vsetkych pozozstatkov
 [x] CProportional kontainer (janik)
 [x] CAlign kontainer (janik)
 [ ] CSVG Visual object (janik)
     [x] Group object (janik)
-    [?] shapes
-        [?] rect
-        [?] circle
-        [?] ellipse
-        [?] line
-        [?] polygon
-        [?] polyline
+    [ ] shapes
+        [ ] rect
+        [ ] circle
+        [ ] ellipse
+        [ ] line
+        [ ] polygon
+        [ ] polyline
     [ ] path
         [x] move (janik)
         [x] line (janik)
         [x] cubic bezier curve (janik)
-        [?] arc
+        [ ] arc
     [ ] styles
         [x] stroke color (janik)
         [ ] stroke style
@@ -50,11 +54,10 @@
     [ ] transformation matrixes
         [x] translate (janik)
         [x] matrix (janik)
-[ ] Prerobit SVG na predpocitavanie suradnic (a pod) pri starte
-[ ] Dorobit DrawPath(path, fg = None, bg = None) do canvasu
+
 ...
 [ ] ZOrder
-[?] Menenie kurzoru po prechode nad volaco
+[ ] Menenie kurzoru po prechode nad volaco
 [ ] Resizovanie elementov
 [ ] Save/Load
 [ ] Sablony

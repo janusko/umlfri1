@@ -3,7 +3,7 @@ from lib.Projekt import CProjekt, CProjectNode
 from lib.Elements import CElementFactory, CElementObject
 from lib.Drawing import CElement
 from gtk.gdk import pixbuf_new_from_file
-from lib.consts import ELEMENT_IMAGE, VIEW_IMAGE, FOLDER_IMAGE
+from lib.consts import ELEMENT_IMAGE, VIEW_IMAGE, FOLDER_IMAGE, DIAGRAMS, ELEMENTS
 from lib.lib import UMLException
 
 from common import  event
@@ -15,24 +15,54 @@ import gtk.gdk
 
 class CtwProjectView(CWidget):
     name = 'twProjectView'
-    widgets = ('twProjectView', )
+    widgets = ('twProjectView','menuTreeElement', 'mnuTreeAddDiagram', 'mnuTreeAddElement', 'mnuTreeDelete',)
     
     __gsignals__ = {
-        'selected_drawing_area':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,) 
-            ), 
-        'selected-item-tree':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
-            (gobject.TYPE_PYOBJECT, )), 
+        'selected_drawing_area':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)), 
+        'selected-item-tree':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )), 
+        'create-diagram':   (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
+            (gobject.TYPE_STRING, )),
+        'repaint':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, () )
     }
     
     def __init__(self, app, wTree):
         # vytvorime si model
         self.TreeStore = gtk.TreeStore(str, gtk.gdk.Pixbuf, str, object)
         CWidget.__init__(self, app, wTree)
+        
+        self.EventButton = (0,0)
+        
+        
         # ikonky
         self.icons = {  'View' : pixbuf_new_from_file(VIEW_IMAGE),
-                        'Element' : pixbuf_new_from_file(ELEMENT_IMAGE),
-                        'Folder' : pixbuf_new_from_file(FOLDER_IMAGE) }
+                    }
+                    
+            
         
+        for k, v in DIAGRAMS.items():
+            self.icons.setdefault(k,pixbuf_new_from_file(v))
+            mi = gtk.ImageMenuItem(k)
+            
+            img = gtk.Image()
+            img.set_from_pixbuf(pixbuf_new_from_file(v))
+            img.show()
+            
+            mi.set_image(img)
+            mi.show()   
+            mi.connect("activate", self.on_mnuTreeAddDiagram_activate, k)
+            self.mnuTreeAddDiagram.append(mi)
+            
+        for k, v in ELEMENTS.items():
+            self.icons.setdefault(k,pixbuf_new_from_file(v))
+            mi = gtk.ImageMenuItem(k)
+            img = gtk.Image()
+            img.set_from_pixbuf(pixbuf_new_from_file(v))
+            img.show()
+            mi.set_image(img)
+            mi.show()   
+            mi.connect("activate", self.on_mnuTreeAddElement_activate, k)
+            self.mnuTreeAddElement.append(mi)
+            
         #projekt view, pametova reprezentacia
         self.Project = CProjekt()
        
@@ -67,6 +97,7 @@ class CtwProjectView(CWidget):
         #povolenie oznacit jeden prvkov
         self.twProjectView.get_selection().set_mode(gtk.SELECTION_SINGLE)
         
+        #oznacenie korena
         self.twProjectView.get_selection().select_iter(parent)
 
         
@@ -97,15 +128,37 @@ class CtwProjectView(CWidget):
             raise UMLException("BadPath4")
 
     
+    def get_area_from_path(self, model, root, path):
+        chld = root
+        
+        i = path.split('/')[0]
+        j,k = i.split(':')
+        name, type = model.get(root, 0, 2)
+        if name == j and type == k:
+            for i in path.split('/')[1:]:
+                j, k = i.split(':')
+                for id in xrange(model.iter_n_children(root)):
+                    chld = model.iter_nth_child(root, id)
+                    name, type = model.get(chld, 0, 2)
+                    
+                    if k == "=DrawingArea=":
+                        return model.get(chld, 3)[0]
+                root = chld
+        else:
+            raise UMLException("BadPath4")
+    
     
     def AddElement(self, element, path):
+        
         parent = self.Project.GetNode(path)
         node = CProjectNode(parent, element)
         node.SetPath(parent.GetPath() + "/" + node.GetName() + ":" + node.GetType())
+        if (path.split('/')[-1]).split(':')[-1] == "=DrawingArea=":
+            node.AddDrawingArea(self.get_area_from_path(self.twProjectView.get_model(), self.twProjectView.get_model().get_iter_root() ,path))
         self.Project.AddNode(node, parent)
-        
+            
         novy = self.TreeStore.append(self.get_iter_from_path(self.twProjectView.get_model(), self.twProjectView.get_model().get_iter_root() ,path))
-        self.TreeStore.set(novy, 0, element.GetName() , 1, self.icons['Folder'], 2, element.GetType().GetId(),3,node)
+        self.TreeStore.set(novy, 0, element.GetName() , 1, self.icons[element.GetType().GetId()], 2, element.GetType().GetId(),3,node)
         
     
     
@@ -125,7 +178,7 @@ class CtwProjectView(CWidget):
         drawingArea.SetPath(node.GetPath() + "/" + drawingArea.GetName() + ":=DrawingArea=")
         node.AddDrawingArea(drawingArea)
         novy = self.TreeStore.append(iter)
-        self.TreeStore.set(novy, 0, drawingArea.GetName() , 1, self.icons['Element'], 2, '=DrawingArea=',3,drawingArea)
+        self.TreeStore.set(novy, 0, drawingArea.GetName() , 1, self.icons[drawingArea.GetDiagram()], 2, '=DrawingArea=',3,drawingArea)
 
     
     def UpdateElement(self, object):
@@ -135,7 +188,11 @@ class CtwProjectView(CWidget):
         self.TreeStore.set_value(iter, 0, object.GetName())
     
     
-        
+    @event("twProjectView","button-press-event")
+    def button_clicked(self, widget, event):
+        self.EventButton = (event.button, event.time)       
+     
+    
     @event("twProjectView", "row-activated")
     def on_twProjectView_set_selected(self, treeView, path, column):
         model = self.twProjectView.get_model()
@@ -146,12 +203,38 @@ class CtwProjectView(CWidget):
                 raise UMLException("None")
             else:
                 self.emit('selected_drawing_area',area)
-    
+
     
     @event("twProjectView", "cursor-changed")
     def on_twProjectView_change_selection(self, treeView):
+        if self.EventButton[0] == 3:
+            self.menuTreeElement.popup(None,None,None,self.EventButton[0],self.EventButton[1])
+            
         iter = treeView.get_selection().get_selected()[1]
         if treeView.get_model().get(iter,2)[0] == "=DrawingArea=":
             return
         self.emit('selected-item-tree',treeView.get_model().get(iter,3)[0])
+    
+    
+    def on_mnuTreeAddDiagram_activate(self, widget, diagramId):
+        self.emit('create-diagram', diagramId)
+        
+        
+    def on_mnuTreeAddElement_activate(self, widget, element):
+        pass 
+    
+    
+    @event("mnuTreeDelete","activate")
+    def on_mnuTreeDelete_activate(self, menuItem):
+        iter = self.twProjectView.get_selection().get_selected()[1]
+        model = self.twProjectView.get_model()
+        if model.get(iter,2)[0] != "=DrawingArea=":
+            node = model.get(iter,3)[0]
+            for i in node.GetDrawingAreas():
+                i.DeleteObject(node.GetObject())
+                self.emit('repaint')
+                self.TreeStore.remove(iter)
+                
+            
+            
         

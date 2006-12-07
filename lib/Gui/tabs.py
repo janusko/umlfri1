@@ -1,11 +1,11 @@
 from common import CWidget
-#from gtk.gdk import HBox
 import gtk
 import gtk.gdk
 import gobject
 from common import  event
 from lib.Drawing import CDrawingArea
-
+from gtk.gdk import pixbuf_new_from_file
+from lib.consts import DIAGRAMS
 
 class CTabs(CWidget):
     name = 'nbTabs'
@@ -28,9 +28,11 @@ class CTabs(CWidget):
                 return
 
         hbox = gtk.HBox()
-        hbox.show()        
-        hboxbut = gtk.HBox()
+        hbox.show()  
+        
+        hboxbut = gtk.HBox(spacing = 3)
         hboxbut.show()     
+
         button = gtk.Button()
         image = gtk.image_new_from_stock(gtk.STOCK_CLOSE, gtk.ICON_SIZE_SMALL_TOOLBAR)       
         image.show()
@@ -38,7 +40,13 @@ class CTabs(CWidget):
         button.set_relief(gtk.RELIEF_NONE)
         button.show()                
         label1 = gtk.Label(drawingArea.GetName())
-        label1.show()        
+        label1.show() 
+        
+        img = gtk.Image()
+        img.set_from_pixbuf(pixbuf_new_from_file(DIAGRAMS[drawingArea.GetDiagram()]))
+        img.show()
+        
+        hboxbut.add(img)
         hboxbut.add(label1)
         hboxbut.add(button)
         self.nbTabs.append_page(hbox,hboxbut)

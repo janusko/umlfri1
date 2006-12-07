@@ -20,3 +20,16 @@ ARROW_IMAGE = join(ICONS_PATH, 'arrow.png')
 ELEMENT_IMAGE = join(ICONS_PATH, 'element.png')
 VIEW_IMAGE = join(ICONS_PATH, 'view.png')
 FOLDER_IMAGE = join(ICONS_PATH, 'folder.png')
+
+
+ELEMENTS = {'Class' : join(ICONS_PATH,'class.png'),
+            'Package' : join(ICONS_PATH,'package.png'),
+            'Object' : join(ICONS_PATH,'object.png'),
+            'UseCase' : join(ICONS_PATH,'usecase.png'),
+            'Actor' : join(ICONS_PATH,'actor.png'),
+}
+
+
+DIAGRAMS = {'Class diagram' : join(ICONS_PATH, 'class_diagram.png'),
+            'Use Case diagram' : join(ICONS_PATH, 'use_case_diagram.png'),
+}

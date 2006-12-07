@@ -110,7 +110,13 @@ class CDrawingArea:
                         con.MoveAll(deltax , deltay )
                         movedCon.add(con)
         
-        
+    
+    def DeleteObject(self, object):
+        for i in self.elements:
+            if i.GetObject() is object:
+                self.DeleteItem(i)
+                return
+    
     def DeleteItem(self, item):
         if isinstance(item, Connection.CConnection):
             self.DeleteConnection(item)
