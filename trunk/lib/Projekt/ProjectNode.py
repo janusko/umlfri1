@@ -22,6 +22,9 @@ class CProjectNode(object):
             i.Change()
         
     
+    def GetDrawingAreas(self):
+        return self.drawingareas
+    
     def GetPath(self):
         return self.object.GetPath()
     

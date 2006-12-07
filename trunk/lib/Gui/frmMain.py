@@ -115,6 +115,7 @@ class CfrmMain(CWindow):
     
     
     @event("mnuItems", "create-diagram")
+    @event("twProjectView","create-diagram")
     def on_mnuItems_create_diagram(self, widget, diagramId):      
         area = CDrawingArea(diagramId, "New " + diagramId)
         self.twProjectView.AddDrawingArea(area)
@@ -154,7 +155,13 @@ class CfrmMain(CWindow):
         
     @event("twProjectView", "selected-item-tree")
     def on_twTreeView_selected_item(self, widget, selected):
-        self.nbProperties.Fill(selected)
+        self.picDrawingArea.DrawingArea.DeselectAll()
+        self.picDrawingArea.Paint()
+        self.nbProperties.Fill(selected) 
+    
+    @event("twProjectView", "repaint")
+    def on_repaint_picDravingArea(self, widget):
+        self.picDrawingArea.Paint()
 
     
     @event("nbProperties", "content-update")

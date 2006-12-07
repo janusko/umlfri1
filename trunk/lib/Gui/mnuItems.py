@@ -1,10 +1,11 @@
 import gtk, gobject
-
+from lib.consts import DIAGRAMS
 from common import CWidget, event
+from gtk.gdk import pixbuf_new_from_file
 
 class CmnuItems(CWidget):
     name = 'mnuItems'
-    widgets = ('mnuDiagrams', )
+    widgets = ('mnuAddDiagram', )
     
     __gsignals__ = {
         'create-diagram':   (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
@@ -16,12 +17,16 @@ class CmnuItems(CWidget):
         self.DiagramType = None
         
     def LoadDiagramsMenu(self):
-        for item in self.mnuDiagrams.get_children():
-            self.mnuDiagrams.remove(item)
+        for item in self.mnuAddDiagram.get_children():
+            self.mnuAddDiagram.remove(item)
         for diagram in self.application.version.GetDiagrams():
             newItem = gtk.ImageMenuItem(diagram)
             newItem.connect("activate", self.on_mnuDiagrams_activate, diagram)
-            self.mnuDiagrams.append(newItem)
+            img = gtk.Image()
+            img.set_from_pixbuf(pixbuf_new_from_file(DIAGRAMS[diagram]))
+            img.show()
+            newItem.set_image(img)
+            self.mnuAddDiagram.append(newItem)
             newItem.show()
         
     #@event("mnuDiagrams", "activate")
