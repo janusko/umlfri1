@@ -117,12 +117,11 @@ class CfrmMain(CWindow):
     @event("mnuItems", "create-diagram")
     @event("twProjectView","create-diagram")
     def on_mnuItems_create_diagram(self, widget, diagramId):      
-        area = CDrawingArea(diagramId, "New " + diagramId)
+        area = CDrawingArea(self.application.DiagramFactory.GetDiagram(diagramId), "New " + diagramId)
         self.twProjectView.AddDrawingArea(area)
         self.nbTabs.AddTab(area)
         self.picDrawingArea.SetDrawingArea(area)
         self.tbToolBox.SetButtons(diagramId)
-        
    
     @event("picDrawingArea", "get-selected")
     def on_picDrawingArea_get_selected(self, widget):
@@ -143,7 +142,7 @@ class CfrmMain(CWindow):
         else:
             self.picDrawingArea.Show()
             self.picDrawingArea.SetDrawingArea(drawingArea)
-            self.tbToolBox.SetButtons(drawingArea.GetDiagram())
+            self.tbToolBox.SetButtons(drawingArea.GetType().GetId())
         
     @event("picDrawingArea", "set-selected")
     def on_picDrawingArea_set_selected(self, widget, selected):

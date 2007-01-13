@@ -19,7 +19,7 @@ class CDrawingArea:
     def SetPath(self, Path):
         self.path = Path
     
-    def GetDiagram(self):
+    def GetType(self):
         return self.typeDiagram
     
     def GetName(self):

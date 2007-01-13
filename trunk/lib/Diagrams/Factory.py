@@ -40,7 +40,11 @@ class CDiagramFactory:
             if i.nodeType not in (xml.dom.minidom.Node.ELEMENT_NODE, xml.dom.minidom.Node.DOCUMENT_NODE):
                 continue
             en = i.tagName
-            if en == 'Special':
+            if en == 'Icon':
+                if not i.hasAttribute('path'):
+                    raise UMLException("XMLError", ('Icon', 'path'))
+                obj.SetIcon(i.getAttribute('path'))
+            elif en == 'Special':
                 swimlines = False
                 lifelines = False
                 if root.hasAttribute('swimlines'):

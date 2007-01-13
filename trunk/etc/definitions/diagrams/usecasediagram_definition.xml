@@ -1,4 +1,5 @@
 <DiagramType id="Use Case diagram" umlversion="*">
+    <Icon path="icons/use_case_diagram.png" />
     <Special swimlines="0" lifelines="0" />
     <Elements>
         <Item value="UseCase" umlversion="*" />

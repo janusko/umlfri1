@@ -3,7 +3,6 @@ import os
 import os.path
 from lib.lib import UMLException
 from Type import CElementType
-from gtk.gdk import pixbuf_new_from_file
 
 from lib.Drawing.Objects import ALL
 
@@ -35,7 +34,7 @@ class CElementFactory:
             if en == 'Icon':
                 if not i.hasAttribute('path'):
                     raise UMLException("XMLError", ('Icon', 'path'))
-                obj.SetIcon(pixbuf_new_from_file(i.getAttribute('path')))
+                obj.SetIcon(i.getAttribute('path'))
             elif en == 'Connections':
                 for item in i.childNodes:
                     if item.nodeType not in (xml.dom.minidom.Node.ELEMENT_NODE, xml.dom.minidom.Node.DOCUMENT_NODE):

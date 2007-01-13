@@ -2,10 +2,10 @@ from common import CWidget
 import gtk
 import gtk.gdk
 import gobject
+
 from common import  event
 from lib.Drawing import CDrawingArea
-from gtk.gdk import pixbuf_new_from_file
-from lib.consts import DIAGRAMS
+from lib.Drawing.Canvas.Gtk import PixmapFromPath
 
 class CTabs(CWidget):
     name = 'nbTabs'
@@ -43,7 +43,7 @@ class CTabs(CWidget):
         label1.show() 
         
         img = gtk.Image()
-        img.set_from_pixbuf(pixbuf_new_from_file(DIAGRAMS[drawingArea.GetDiagram()]))
+        img.set_from_pixbuf(PixmapFromPath(drawingArea.GetType().GetIcon()))
         img.show()
         
         hboxbut.add(img)

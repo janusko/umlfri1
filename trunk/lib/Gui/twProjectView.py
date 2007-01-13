@@ -2,9 +2,9 @@ from common import CWidget
 from lib.Projekt import CProjekt, CProjectNode
 from lib.Elements import CElementFactory, CElementObject
 from lib.Drawing import CElement
-from gtk.gdk import pixbuf_new_from_file
-from lib.consts import ELEMENT_IMAGE, VIEW_IMAGE, FOLDER_IMAGE, DIAGRAMS, ELEMENTS
+from lib.consts import VIEW_IMAGE
 from lib.lib import UMLException
+from lib.Drawing.Canvas.Gtk import PixmapFromPath
 
 from common import  event
 import common
@@ -15,7 +15,7 @@ import gtk.gdk
 
 class CtwProjectView(CWidget):
     name = 'twProjectView'
-    widgets = ('twProjectView','menuTreeElement', 'mnuTreeAddDiagram', 'mnuTreeAddElement', 'mnuTreeDelete',)
+    widgets = ('twProjectView','menuTreeElement', 'mnuTreeAddDiagram', 'mnuTreeDelete',)
     
     __gsignals__ = {
         'selected_drawing_area':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)), 
@@ -26,43 +26,28 @@ class CtwProjectView(CWidget):
     }
     
     def __init__(self, app, wTree):
+        CWidget.__init__(self, app, wTree)
+        
         # vytvorime si model
         self.TreeStore = gtk.TreeStore(str, gtk.gdk.Pixbuf, str, object)
-        CWidget.__init__(self, app, wTree)
         
         self.EventButton = (0,0)
         
+        for item in self.mnuTreeAddDiagram.get_children():
+            self.mnuTreeAddDiagram.remove(item)
         
-        # ikonky
-        self.icons = {  'View' : pixbuf_new_from_file(VIEW_IMAGE),
-                    }
-                    
-            
-        
-        for k, v in DIAGRAMS.items():
-            self.icons.setdefault(k,pixbuf_new_from_file(v))
-            mi = gtk.ImageMenuItem(k)
+        for diagram in self.application.DiagramFactory:
+            mi = gtk.ImageMenuItem(diagram.GetId())
             
             img = gtk.Image()
-            img.set_from_pixbuf(pixbuf_new_from_file(v))
+            img.set_from_pixbuf(PixmapFromPath(diagram.GetIcon()))
             img.show()
             
             mi.set_image(img)
             mi.show()   
-            mi.connect("activate", self.on_mnuTreeAddDiagram_activate, k)
+            mi.connect("activate", self.on_mnuTreeAddDiagram_activate, diagram.GetId())
             self.mnuTreeAddDiagram.append(mi)
-            
-        for k, v in ELEMENTS.items():
-            self.icons.setdefault(k,pixbuf_new_from_file(v))
-            mi = gtk.ImageMenuItem(k)
-            img = gtk.Image()
-            img.set_from_pixbuf(pixbuf_new_from_file(v))
-            img.show()
-            mi.set_image(img)
-            mi.show()   
-            mi.connect("activate", self.on_mnuTreeAddElement_activate, k)
-            self.mnuTreeAddElement.append(mi)
-            
+        
         #projekt view, pametova reprezentacia
         self.Project = CProjekt()
        
@@ -75,7 +60,7 @@ class CtwProjectView(CWidget):
         
         
         parent = self.TreeStore.append(None)
-        self.TreeStore.set(parent, 0, 'Untitled', 1, self.icons['View'], 2, 'Package', 3, project)
+        self.TreeStore.set(parent, 0, 'Untitled', 1, PixmapFromPath(VIEW_IMAGE), 2, 'Package', 3, project)
          
         
         #spravime jeden column
@@ -158,7 +143,7 @@ class CtwProjectView(CWidget):
         self.Project.AddNode(node, parent)
             
         novy = self.TreeStore.append(self.get_iter_from_path(self.twProjectView.get_model(), self.twProjectView.get_model().get_iter_root() ,path))
-        self.TreeStore.set(novy, 0, element.GetName() , 1, self.icons[element.GetType().GetId()], 2, element.GetType().GetId(),3,node)
+        self.TreeStore.set(novy, 0, element.GetName() , 1, PixmapFromPath(element.GetType().GetIcon()), 2, element.GetType().GetId(),3,node)
         
     
     
@@ -178,7 +163,7 @@ class CtwProjectView(CWidget):
         drawingArea.SetPath(node.GetPath() + "/" + drawingArea.GetName() + ":=DrawingArea=")
         node.AddDrawingArea(drawingArea)
         novy = self.TreeStore.append(iter)
-        self.TreeStore.set(novy, 0, drawingArea.GetName() , 1, self.icons[drawingArea.GetDiagram()], 2, '=DrawingArea=',3,drawingArea)
+        self.TreeStore.set(novy, 0, drawingArea.GetName() , 1, PixmapFromPath(drawingArea.GetType().GetIcon()), 2, '=DrawingArea=',3,drawingArea)
 
     
     def UpdateElement(self, object):
@@ -219,9 +204,6 @@ class CtwProjectView(CWidget):
     def on_mnuTreeAddDiagram_activate(self, widget, diagramId):
         self.emit('create-diagram', diagramId)
         
-        
-    def on_mnuTreeAddElement_activate(self, widget, element):
-        pass 
     
     
     @event("mnuTreeDelete","activate")

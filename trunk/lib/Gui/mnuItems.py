@@ -1,7 +1,8 @@
 import gtk, gobject
-from lib.consts import DIAGRAMS
+
+from lib.Drawing.Canvas.Gtk import PixmapFromPath
+
 from common import CWidget, event
-from gtk.gdk import pixbuf_new_from_file
 
 class CmnuItems(CWidget):
     name = 'mnuItems'
@@ -23,7 +24,7 @@ class CmnuItems(CWidget):
             newItem = gtk.ImageMenuItem(diagram)
             newItem.connect("activate", self.on_mnuDiagrams_activate, diagram)
             img = gtk.Image()
-            img.set_from_pixbuf(pixbuf_new_from_file(DIAGRAMS[diagram]))
+            img.set_from_pixbuf(PixmapFromPath(self.application.DiagramFactory.GetDiagram(diagram).GetIcon()))
             img.show()
             newItem.set_image(img)
             self.mnuAddDiagram.append(newItem)

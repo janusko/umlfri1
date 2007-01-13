@@ -2,8 +2,9 @@
 [x] XML pre verzie UML (BG)
 [x] Prehodenie eventov z glade suboru do kodu
 [x] ODSTRANIT Drag and Drop (palino)
-[ ] Autonaticke nazvy diagramov
+[ ] Automaticke nazvy diagramov
 [ ] Automaticke nazvy elementov
+[!] Presunut CProjekt do Application
 [-] Project tree (miroslav, frizi)
     [X] Tabovanie
     [x] Prerobit menu (na pridaj diagram)
@@ -62,7 +63,7 @@
 [ ] Save/Load
 [ ] Sablony
 [ ] Export/Import XMI
-[!] Napisat README
+[x] Napisat README
 [!] Vyhodit autorov z gui (Automaticke parsovanie README :D )
 ...
 [ ] Easter Eggs
