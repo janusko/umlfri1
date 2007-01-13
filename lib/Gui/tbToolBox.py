@@ -17,7 +17,7 @@ class CtbToolBox(CWidget):
         
         self.tooltips = gtk.Tooltips()
         
-        pixbuf = PixmapFromPath(ARROW_IMAGE)
+        pixbuf = PixmapFromPath(None, ARROW_IMAGE)
         newIconWidget = gtk.Image()
         newIconWidget.set_from_pixbuf(pixbuf)
         newIconWidget.show()
@@ -28,7 +28,7 @@ class CtbToolBox(CWidget):
         
     def __InsertButton(self, Type, TypeDesc, Group):
         newIconWidget = gtk.Image()
-        newIconWidget.set_from_pixbuf(PixmapFromPath(Type.GetIcon()))
+        newIconWidget.set_from_pixbuf(PixmapFromPath(self.application.Storage, Type.GetIcon()))
         newIconWidget.show()
         newButton = gtk.RadioToolButton(Group, None)
         newButton.set_icon_widget(newIconWidget)
