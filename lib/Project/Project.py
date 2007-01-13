@@ -1,7 +1,7 @@
 from lib.lib import UMLException
 from ProjectNode import CProjectNode
 
-class CProjekt(object):
+class CProject(object):
     def __init__(self, file = None):
         self.root = None
       

@@ -1,5 +1,5 @@
 from common import CWidget
-from lib.Projekt import CProjekt, CProjectNode
+from lib.Project import CProject, CProjectNode
 from lib.Elements import CElementFactory, CElementObject
 from lib.Drawing import CElement
 from lib.consts import VIEW_IMAGE
@@ -49,7 +49,7 @@ class CtwProjectView(CWidget):
             self.mnuTreeAddDiagram.append(mi)
         
         #projekt view, pametova reprezentacia
-        self.Project = CProjekt()
+        self.Project = CProject()
        
         #vytvorenie hlavneho uzla a nastavenie korena projektu
         pckg = CElementObject( self.application.ElementFactory.GetElement('Package') )
