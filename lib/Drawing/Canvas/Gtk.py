@@ -8,6 +8,16 @@ LINE_STYLES = {'solid': gtk.gdk.LINE_SOLID,
                'dot': gtk.gdk.LINE_ON_OFF_DASH,
                'doubledot': gtk.gdk.LINE_DOUBLE_DASH}
 
+pixmaps = {}
+
+def PixmapFromPath(path):
+    if path in pixmaps:
+        tmp = pixmaps[path]
+    else:
+        tmp = gtk.gdk.pixbuf_new_from_file(path)
+        pixmaps[path] = tmp
+    return tmp
+
 class GtkCanvas(AbstractCanvas):
     def __init__(self, widget, window = None):
         self.widget = widget

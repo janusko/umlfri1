@@ -88,6 +88,14 @@ class TransformMatrix(Matrix):
         ])
     
     @classmethod
+    def mk_scale2(cls, scaleX, scaleY):
+        return cls([
+            [scaleX,    0,      0],
+            [0,         scaleY, 0],
+            [0,         0,      1]
+        ])
+    
+    @classmethod
     def mk_translation(cls, (dx, dy)):
         return cls([
             [1, 0,  dx],

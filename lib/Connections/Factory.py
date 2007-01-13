@@ -5,7 +5,6 @@ from lib.lib import UMLException
 from Type import CConnectionType
 from Line import CConnectionLine
 from Arrow import CConnectionArrow
-from gtk.gdk import pixbuf_new_from_file
 
 from lib.Drawing.Objects import ALL
 
@@ -41,7 +40,7 @@ class CConnectionFactory:
             if en == 'Icon':
                 if not i.hasAttribute('path'):
                     raise UMLException("XMLError", ('Icon', 'path'))
-                icon = pixbuf_new_from_file(i.getAttribute('path'))
+                icon = i.getAttribute('path')
             elif en == 'SrcArrow':
                 if i.hasAttribute('possible'):
                     sarr['possible'] = i.getAttribute('possible')

@@ -1,7 +1,7 @@
 from common import CWidget, event
 
 import gtk
-from gtk.gdk import pixbuf_new_from_file
+from lib.Drawing.Canvas.Gtk import PixmapFromPath
 
 from lib.consts import ARROW_IMAGE
 
@@ -17,7 +17,7 @@ class CtbToolBox(CWidget):
         
         self.tooltips = gtk.Tooltips()
         
-        pixbuf = pixbuf_new_from_file(ARROW_IMAGE)
+        pixbuf = PixmapFromPath(ARROW_IMAGE)
         newIconWidget = gtk.Image()
         newIconWidget.set_from_pixbuf(pixbuf)
         newIconWidget.show()
@@ -28,7 +28,7 @@ class CtbToolBox(CWidget):
         
     def __InsertButton(self, Type, TypeDesc, Group):
         newIconWidget = gtk.Image()
-        newIconWidget.set_from_pixbuf(Type.GetIcon())
+        newIconWidget.set_from_pixbuf(PixmapFromPath(Type.GetIcon()))
         newIconWidget.show()
         newButton = gtk.RadioToolButton(Group, None)
         newButton.set_icon_widget(newIconWidget)

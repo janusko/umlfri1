@@ -1,5 +1,6 @@
 class CDiagramType:
     def __init__(self, id):
+        self.icon = None
         self.id = id
         self.elements = []
         self.connections = []
@@ -24,6 +25,9 @@ class CDiagramType:
     def GetElements(self):
         return self.elements
     
+    def GetIcon(self):
+        return self.icon
+    
     def GetId(self):
         return self.id
         
@@ -36,6 +40,9 @@ class CDiagramType:
         
     def AllowLifelines(self):
         return self.lifelines
+    
+    def SetIcon(self, pixbuf):
+        self.icon = pixbuf
     
     def SetId(self, id):
         self.id = id

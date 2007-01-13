@@ -1,2 +1,2 @@
-from Projekt import CProjekt
+from Project import CProject
 from ProjectNode import CProjectNode
