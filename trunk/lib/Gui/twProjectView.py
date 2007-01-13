@@ -40,7 +40,7 @@ class CtwProjectView(CWidget):
             mi = gtk.ImageMenuItem(diagram.GetId())
             
             img = gtk.Image()
-            img.set_from_pixbuf(PixmapFromPath(diagram.GetIcon()))
+            img.set_from_pixbuf(PixmapFromPath(self.application.Storage, diagram.GetIcon()))
             img.show()
             
             mi.set_image(img)
@@ -60,7 +60,7 @@ class CtwProjectView(CWidget):
         
         
         parent = self.TreeStore.append(None)
-        self.TreeStore.set(parent, 0, 'Untitled', 1, PixmapFromPath(VIEW_IMAGE), 2, 'Package', 3, project)
+        self.TreeStore.set(parent, 0, 'Untitled', 1, PixmapFromPath(None, VIEW_IMAGE), 2, 'Package', 3, project)
          
         
         #spravime jeden column
@@ -143,7 +143,7 @@ class CtwProjectView(CWidget):
         self.Project.AddNode(node, parent)
             
         novy = self.TreeStore.append(self.get_iter_from_path(self.twProjectView.get_model(), self.twProjectView.get_model().get_iter_root() ,path))
-        self.TreeStore.set(novy, 0, element.GetName() , 1, PixmapFromPath(element.GetType().GetIcon()), 2, element.GetType().GetId(),3,node)
+        self.TreeStore.set(novy, 0, element.GetName() , 1, PixmapFromPath(self.application.Storage, element.GetType().GetIcon()), 2, element.GetType().GetId(),3,node)
         
     
     
@@ -163,7 +163,10 @@ class CtwProjectView(CWidget):
         drawingArea.SetPath(node.GetPath() + "/" + drawingArea.GetName() + ":=DrawingArea=")
         node.AddDrawingArea(drawingArea)
         novy = self.TreeStore.append(iter)
-        self.TreeStore.set(novy, 0, drawingArea.GetName() , 1, PixmapFromPath(drawingArea.GetType().GetIcon()), 2, '=DrawingArea=',3,drawingArea)
+        self.TreeStore.set(novy, 0, drawingArea.GetName() , 1, PixmapFromPath(self.application.Storage, drawingArea.GetType().GetIcon()), 2, '=DrawingArea=',3,drawingArea)
+        path = self.TreeStore.get_path(novy)
+        self.twProjectView.expand_to_path(path)
+        self.twProjectView.get_selection().select_iter(novy)
 
     
     def UpdateElement(self, object):

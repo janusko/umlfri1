@@ -6,10 +6,12 @@ from lib.lib import UMLException
 from Type import CVersionType
 
 class CVersionFactory:
-    def __init__(self, path):
+    def __init__(self, storage, path):
         self.types = {}
         self.path = path
-        for file in os.listdir(self.path):
+        
+        self.storage = storage
+        for file in storage.listdir(self.path):
             if file.endswith('.xml'):
                 self.__Load(os.path.join(self.path, file))
                 
@@ -24,7 +26,7 @@ class CVersionFactory:
             raise UMLException("Version not found")
 
     def __Load(self, file_path):
-        dom = xml.dom.minidom.parse(file_path)
+        dom = xml.dom.minidom.parseString(self.storage.read_file(file_path))
         root = dom.documentElement
         if root.tagName != 'Version':
             raise UMLException("XMLError", root.tagName)

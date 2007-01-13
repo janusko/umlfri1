@@ -5,6 +5,9 @@
 [ ] Automaticke nazvy diagramov
 [ ] Automaticke nazvy elementov
 [!] Presunut CProjekt do Application
+[ ] Nastavovanie fontu z XML
+[ ] Presunutie konfiguracnych hodnot z const.py do /etc
+[ ] Optimalizacia CSvg
 [-] Project tree (miroslav, frizi)
     [X] Tabovanie
     [x] Prerobit menu (na pridaj diagram)

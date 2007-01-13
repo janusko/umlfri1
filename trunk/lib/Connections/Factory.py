@@ -9,10 +9,12 @@ from Arrow import CConnectionArrow
 from lib.Drawing.Objects import ALL
 
 class CConnectionFactory:
-    def __init__(self, path):
+    def __init__(self, storage, path):
         self.types = {}
         self.path = path
-        for file in os.listdir(self.path):
+        
+        self.storage = storage
+        for file in storage.listdir(self.path):
             if file.endswith('.xml'):
                 self.__Load(os.path.join(self.path, file))
 
@@ -20,7 +22,7 @@ class CConnectionFactory:
         return self.types[type]
 
     def __Load(self, file_path):
-        dom = xml.dom.minidom.parse(file_path)
+        dom = xml.dom.minidom.parseString(self.storage.read_file(file_path))
         root = dom.documentElement
         if root.tagName != 'ConnectionType':
             raise UMLException("XMLError", root.tagName)

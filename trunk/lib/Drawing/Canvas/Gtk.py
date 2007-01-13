@@ -10,12 +10,16 @@ LINE_STYLES = {'solid': gtk.gdk.LINE_SOLID,
 
 pixmaps = {}
 
-def PixmapFromPath(path):
-    if path in pixmaps:
-        tmp = pixmaps[path]
+def PixmapFromPath(storage, path):
+    if (storage, path) in pixmaps:
+        tmp = pixmaps[(storage, path)]
     else:
-        tmp = gtk.gdk.pixbuf_new_from_file(path)
-        pixmaps[path] = tmp
+        if storage is None:
+            pathx = path
+        else:
+            pathx = storage.get_file_path(path)
+        tmp = gtk.gdk.pixbuf_new_from_file(str(pathx))
+        pixmaps[(storage, path)] = tmp
     return tmp
 
 class GtkCanvas(AbstractCanvas):
