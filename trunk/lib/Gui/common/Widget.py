@@ -21,7 +21,6 @@ class CWidget(gobject.GObject):
         for widgetClass in self.complexWidgets:
             setattr(self, widgetClass.name, widgetClass(app, wTree))
             
-        #wTree.signal_autoconnect(self)
         for obj, oevents in events.iteritems():
             objtxt = obj.split(".")
             obj = getattr(self, objtxt[0])

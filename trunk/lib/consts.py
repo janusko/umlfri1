@@ -9,20 +9,15 @@ FONT_TYPE = 'Arial 10'
 
 ROOT_PATH = abspath(join(dirname(__file__), '..'))
 ETC_PATH = join(ROOT_PATH, 'etc')
-#DEFINITIONS_PATH = join(ETC_PATH, 'definitions')
-#VERSIONS_PATH = join(DEFINITIONS_PATH, 'versions')
-#DIAGRAMS_PATH = join(DEFINITIONS_PATH, 'diagrams')
-#ELEMENTS_PATH = join(DEFINITIONS_PATH, 'elements')
-#CONNECTIONS_PATH = join(DEFINITIONS_PATH, 'connections')
 VERSIONS_PATH = 'versions'
 DIAGRAMS_PATH = 'diagrams'
 ELEMENTS_PATH = 'elements'
 CONNECTIONS_PATH = 'connections'
 ICONS_PATH = 'icons'
 
-#ICONS_PATH = join(ROOT_PATH, 'icons')
-#ARROW_IMAGE = join(ICONS_PATH, 'arrow.png')
-#VIEW_IMAGE = join(ICONS_PATH, 'view.png')
 IMAGES_PATH = join(ROOT_PATH, 'img')
 ARROW_IMAGE = join(IMAGES_PATH, 'arrow.png')
 VIEW_IMAGE = join(IMAGES_PATH, 'view.png')
+
+PROJECT_EXTENSION = '.frip'
+PROJECT_TPL_EXTENSION = '.frit'

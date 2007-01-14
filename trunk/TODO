@@ -7,7 +7,7 @@
 [!] Presunut CProjekt do Application
 [ ] Nastavovanie fontu z XML
 [ ] Presunutie konfiguracnych hodnot z const.py do /etc
-[ ] Optimalizacia CSvg
+[ ] Prerobit Get* na yield, kde treba
 [-] Project tree (miroslav, frizi)
     [X] Tabovanie
     [x] Prerobit menu (na pridaj diagram)
@@ -22,6 +22,7 @@
     [x] Presuvanie ciar s elementami (palino)
     [x] Select ciar (palino)
     [ ] Zarovnanie konca ciary s koncom elementu
+    [ ] Ked zmenim ciaru, neposunie sa label
     [ ] Lamanie ciar
 [ ] Flexibilna plocha
     [ ] Vyhodit ten sprosty backbuffer
@@ -38,6 +39,7 @@
 [x] CAlign kontainer (janik)
 [ ] CSVG Visual object (janik)
     [x] Group object (janik)
+    [ ] Optimalizacia
     [ ] shapes
         [ ] rect
         [ ] circle
@@ -58,7 +60,7 @@
     [ ] transformation matrixes
         [x] translate (janik)
         [x] matrix (janik)
-
+[ ] Zaoblene rohy na Rectangle Visual Object-e
 ...
 [ ] ZOrder
 [ ] Menenie kurzoru po prechode nad volaco

@@ -77,6 +77,9 @@ class CConnection:
                 raise UMLException("UndefinedPosition")
             return tmp
     
+    def GetLabelDefinedPositions(self):
+        for id, lbl in self.GetObject().GetType().GetLabels():
+            yield self.labels.get(id, None)
     
     def SetLabelPosition(self, label, x, y):
         self.labels[label] = (x, y)
@@ -146,6 +149,10 @@ class CConnection:
             yield point
         if self.destination is not None:
             yield self.destination.GetCenter(canvas)
+    
+    def GetMiddlePoints(self):
+        for point in self.points:
+            yield point
 
     def GetDrawingArea(self):
         return self.drawingArea

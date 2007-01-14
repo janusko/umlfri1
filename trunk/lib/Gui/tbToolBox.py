@@ -77,11 +77,9 @@ class CtbToolBox(CWidget):
     def __ResetSelected(self):
         self.ArrowButton.set_active(True)
             
-    #@event("tbArrowBtn", "toggled")
     def on_tbArrowBtn_toggled(self, widget):
         self.Selected = None
         
-    #@event("tbButton", "toggled")
     def on_tbButton_toggled(self, widget, ItemId, ItemType):
         self.Selected = (ItemType, ItemId)
         

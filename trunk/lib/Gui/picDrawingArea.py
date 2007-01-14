@@ -34,9 +34,7 @@ class CpicDrawingArea(CWidget):
         self.dnd = False
         self.selecting = None
         
-        #self.picEventBox.drag_dest_set(gtk.DEST_DEFAULT_ALL, targets, gtk.gdk.ACTION_MOVE)
         self.Buffer = gtk.gdk.Pixmap(self.picDrawingArea.window, 1000, 1000)
-        #self.DrawingArea = CDrawingArea(self.picDrawingArea, self.Buffer)
         self.DrawingArea = CDrawingArea(None,"Start page")
         self.canvas = GtkCanvas(self.picDrawingArea, self.Buffer)
         

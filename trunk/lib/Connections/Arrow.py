@@ -1,5 +1,4 @@
 from lib.lib import ToBool,UMLException
-# from math import sin, cos, radians
 
 from lib.transform_matrix import TransformMatrix, PointMatrix
 
