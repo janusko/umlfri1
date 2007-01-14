@@ -15,6 +15,9 @@ class CmnuItems(CWidget):
     
     def __init__(self, app, wTree):
         CWidget.__init__(self, app, wTree)
+        
+        self.LoadDiagramsMenu()
+        
         self.DiagramType = None
         
     def LoadDiagramsMenu(self):
@@ -30,7 +33,6 @@ class CmnuItems(CWidget):
             self.mnuAddDiagram.append(newItem)
             newItem.show()
         
-    #@event("mnuDiagrams", "activate")
     def on_mnuDiagrams_activate(self, widget, diagramId):
         self.emit('create-diagram', diagramId)
         

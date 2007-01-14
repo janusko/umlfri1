@@ -7,12 +7,6 @@ class CDiagramType:
         self.swimlines = False
         self.lifelines = False
     
-    #def __iter__(self):
-    #    for i in self.elements:
-    #        yield i
-    #    for i in self.connections:
-    #        yield i
-    
     def AppendElement(self, value):
         self.elements.append( value )
         

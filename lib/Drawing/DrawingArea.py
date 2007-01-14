@@ -174,6 +174,10 @@ class CDrawingArea:
         for c in self.connections:
             c.Paint(canvas)
             
+    def GetElements(self):
+        for e in self.elements:
+            yield e
+    
     def GetConnections(self):
         for c in self.connections:
             yield c

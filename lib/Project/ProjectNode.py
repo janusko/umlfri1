@@ -25,6 +25,9 @@ class CProjectNode(object):
     def GetDrawingAreas(self):
         return self.drawingareas
     
+    def HasDrawingArea(self):
+        return len(self.drawingareas) > 0
+    
     def GetPath(self):
         return self.object.GetPath()
     
@@ -74,6 +77,9 @@ class CProjectNode(object):
     
     def GetChilds(self):
         return self.childs
+    
+    def HasChild(self):
+        return len(self.childs) > 0
     
     def GetParent(self):
         return self.parent

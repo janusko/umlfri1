@@ -17,7 +17,7 @@ class CfrmMain(CWindow):
     widgets = ('hboxWorkSpace', 'mnuUseCaseDiagram', 
         'twProjectView', 'lwProperties', 
         #mItemFile
-        'mnuNew', 'mnuOpen', 'mnuSave', 'mnuSaveAs', 'mnuQuit',
+        'mnuOpen', 'mnuSave', 'mnuSaveAs', 'mnuQuit',
         #mItemEdit
         'mnuCut', 'mnuCopy', 'mnuPaste', 'mnuDelete', 
         #mItemDiagrams
@@ -27,61 +27,23 @@ class CfrmMain(CWindow):
         'mnuAbout',
         #tabs
         'nbTabs',
+        #toolbar
+        'cmdOpen', 'cmdSave',
         )
     
     complexWidgets = (CtbToolBox, CtwProjectView, CmnuItems, CpicDrawingArea, CnbProperties, CTabs)
     
     def __init__(self, app, wTree):
         CWindow.__init__(self, app, wTree)
-        self.mnuItems.LoadDiagramsMenu()
         
         self.form.maximize()
     
-    # ** Main menu **
-    # File
-    def on_frmMain_destroy(self, frm):
-        self.ActionQuit(frm)
-
-    def on_mnuNew_activate(self, mnu):
-        pass
-        
-    def on_mnuOpen_activate(self, mnu):
-        pass
-        
-    def on_mnuSave_activate(self, mnu):
-        pass
-        
-    def on_mnuSaveAs_activate(self, mnu):
-        pass
-        
-    def on_mnuQuit_activate(self, mnu):
-        self.ActionQuit(mnu)
-    
-    # Edit
-    def on_mnuCut_activate(self, mnu):
-        pass
-        
-    def on_mnuCopy_activate(self, mnu):
-        pass
-        
-    def on_mnuPaste_activate(self, mnu):
-        pass
-        
-    def on_mnuDelete_activate(self, mnu):
-        pass
-        
     # Diagrams
     @event("mnuViewTools", "activate")
     def on_mnuViewTools_activate(self, mnu):
         self.tbToolBox.SetVisible(mnu.get_active())
             
-    # View
-    def on_mnuClassDiahram_activate(self, mnu):
-        pass
-        
-    def on_mnuUseCaseDiahram_activate(self, mnu):
-        pass
-        
+    
     # Help
     @event("mnuAbout", "activate")
     def on_mnuAbout_activate(self, mnu):
@@ -95,12 +57,20 @@ class CfrmMain(CWindow):
     @event("mnuQuit", "activate")
     def ActionQuit(self, widget):
         self.application.Quit()
-    
-    def ActionNew(self, widget):
-        pass
         
+    @event("cmdOpen", "clicked")
+    @event("mnuOpen", "activate")
     def ActionOpen(self, widget):
-        pass
+        filename, copy = self.application.GetWindow("frmOpen").ShowDialog()
+        if filename is not None:
+            print filename
+        
+    @event("cmdSave", "clicked")
+    @event("mnuSave", "activate")
+    def ActionSave(self, widget):
+        filename = self.application.GetWindow("frmSave").ShowDialog()
+        if filename is not None:
+            self.twProjectView.Project.SaveProject(filename)
     
     def ActionLoadToolBar(self, widget):
         pass

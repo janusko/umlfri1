@@ -14,8 +14,6 @@ class CtxtNotes(CWidget):
     def __init__(self, app, wTree):
         CWidget.__init__(self, app, wTree)
         self.txtNotes.set_sensitive(False)
-        
-        #self.txtNotes.get_buffer().connect('changed', self.on_txtNotes_changed)
     
     def Fill(self, Element):
         self.element = Element
@@ -26,7 +24,7 @@ class CtxtNotes(CWidget):
         object = Element.GetObject()
         type = Element.GetObject().GetType()
         cnt = 0
-        for k in type.GetAttributes(): # attrs.items():
+        for k in type.GetAttributes():
             v = object.GetAttribute(k)
             atrtype = type.GetAttribute(k)
             if atrtype[0] == 'note':

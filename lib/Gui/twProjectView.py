@@ -138,8 +138,6 @@ class CtwProjectView(CWidget):
         parent = self.Project.GetNode(path)
         node = CProjectNode(parent, element)
         node.SetPath(parent.GetPath() + "/" + node.GetName() + ":" + node.GetType())
-        if (path.split('/')[-1]).split(':')[-1] == "=DrawingArea=":
-            node.AddDrawingArea(self.get_area_from_path(self.twProjectView.get_model(), self.twProjectView.get_model().get_iter_root() ,path))
         self.Project.AddNode(node, parent)
             
         novy = self.TreeStore.append(self.get_iter_from_path(self.twProjectView.get_model(), self.twProjectView.get_model().get_iter_root() ,path))

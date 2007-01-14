@@ -4,3 +4,5 @@ from tbToolBox import CtbToolBox
 from frmProperties import CfrmProperties
 from frmAttribute import CfrmAttribute
 from frmOperation import CfrmOperation
+from frmOpen import CfrmOpen
+from frmSave import CfrmSave

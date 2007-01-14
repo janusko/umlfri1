@@ -62,7 +62,7 @@ class ClwProperties(CWidget):
             return
         object = Element.GetObject()
         type = Element.GetObject().GetType()
-        for k in type.GetAttributes(): # attrs.items():
+        for k in type.GetAttributes():
             v = object.GetAttribute(k)
             row = self.listStore.append()
             atrtype = type.GetAttribute(k)
