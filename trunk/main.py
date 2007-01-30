@@ -9,6 +9,7 @@ import gtk
 import lib.Gui.common
 import os.path
 
+from lib.Project import CProject
 from lib.Gui import CfrmMain, CfrmAbout, CfrmProperties, CfrmAttribute, CfrmOperation, CfrmOpen, CfrmSave
 from lib.Versions import CVersionFactory
 from lib.Diagrams import CDiagramFactory
@@ -24,6 +25,10 @@ class Application(lib.Gui.common.CApplication):
     main_window = 'frmMain'
     
     def __init__(self):
+        #projekt view, pametova reprezentacia
+        #Project = DebugAttribute('Project')
+        self.Project = CProject()
+        
         self.Storage = open_storage(os.path.join(ROOT_PATH, 'etc', 'uml'))
         self.DiagramFactory = CDiagramFactory(self.Storage, DIAGRAMS_PATH)
         self.ElementFactory = CElementFactory(self.Storage, ELEMENTS_PATH)
@@ -31,7 +36,7 @@ class Application(lib.Gui.common.CApplication):
         self.VersionFactory = CVersionFactory(self.Storage, VERSIONS_PATH)
         self.version = self.VersionFactory.GetVersion('UML 1.4')
         lib.Gui.common.CApplication.__init__(self)
-        self.Project = None
+        
     
     def cw_FileChooserWidget(self, str1, str2, int1, int2):
         if str1:

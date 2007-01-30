@@ -70,7 +70,7 @@ class CfrmMain(CWindow):
     def ActionSave(self, widget):
         filename = self.application.GetWindow("frmSave").ShowDialog()
         if filename is not None:
-            self.twProjectView.Project.SaveProject(filename)
+            self.application.Project.SaveProject(filename)
     
     def ActionLoadToolBar(self, widget):
         pass
@@ -80,7 +80,7 @@ class CfrmMain(CWindow):
     # Moje vlastne signale
     @event("picDrawingArea", "add-element")
     def on_add_element(self, widget, Element, drawingArea):
-        self.twProjectView.AddElement(Element, drawingArea.GetPath())
+        self.twProjectView.AddElement(Element, drawingArea)
     
     
     
@@ -102,8 +102,11 @@ class CfrmMain(CWindow):
     def on_select_drawing_area(self, widget, drawingArea):
         self.nbTabs.AddTab(drawingArea)
         self.picDrawingArea.SetDrawingArea(drawingArea)
-      
-      
+        
+    @event("twProjectView", "close-drawing-area")
+    def on_remove_drawing_area(self, widget, drawingArea):
+        self.nbTabs.CloseTab(drawingArea)
+    
     @event("nbTabs", "change_current_page")
     def on_change_drawing_area(self, widget, drawingArea):
         if drawingArea is None:
