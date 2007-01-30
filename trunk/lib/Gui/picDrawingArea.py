@@ -24,20 +24,23 @@ class CpicDrawingArea(CWidget):
         'selected-item':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
             (gobject.TYPE_PYOBJECT, )), 
         'add-element':(gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,gobject.TYPE_PYOBJECT,)), 
-
     }
     
     def __init__(self, app, wTree):
         CWidget.__init__(self, app, wTree)
         
-        self.NewConnObject = None
-        self.dnd = False
+        self.__NewConnection = None
+        self.dnd = None
         self.selecting = None
         
         self.Buffer = gtk.gdk.Pixmap(self.picDrawingArea.window, 1000, 1000)
         self.DrawingArea = CDrawingArea(None,"Start page")
         self.canvas = GtkCanvas(self.picDrawingArea, self.Buffer)
         
+        cmap = self.picDrawingArea.window.get_colormap()
+        self.DragGC = self.picDrawingArea.window.new_gc(foreground = cmap.alloc_color(SELECT_SQUARE_COLOR), 
+            function = gtk.gdk.XOR, line_width = SELECT_SQUARE_SIZE)
+            
         self.AdjustScrollBars()
         self.Hide()
         self.Paint()
@@ -81,8 +84,13 @@ class CpicDrawingArea(CWidget):
         wgt = self.picDrawingArea.window
         gc = wgt.new_gc()
         wgt.draw_drawable(gc, self.Buffer, posx, posy, 0, 0, sizx, sizy)
-        if self.dnd:
+        if self.dnd == 'rect':
             self.__DrawDragRect(0,0, True, False)
+        elif self.dnd == 'point':
+            self.__DrawDragPoint(None, None, True, False)
+        
+        if self.__NewConnection is not None:
+            self.__DrawNewConnection(None, None, False)
         
     def AdjustScrollBars(self):
         dasx, dasy = self.GetDrawingAreaSize()
@@ -114,7 +122,12 @@ class CpicDrawingArea(CWidget):
                     self.DrawingArea.RemoveFromSelection(itemSel)
                     self.Paint()
                 elif event.button == 1:
-                    self.__DragBegin(event)
+                    if isinstance(itemSel, CConnection):
+                        i = itemSel.GetPointAtPosition(posx, posy)
+                        if i is not None:
+                            self.__BeginDragPoint(event, itemSel, i)
+                    else:
+                        self.__BeginDragRect(event)
                 else:
                     self.Paint()
             elif not (event.state & gtk.gdk.CONTROL_MASK):
@@ -122,7 +135,12 @@ class CpicDrawingArea(CWidget):
                 self.DrawingArea.AddToSelection(itemSel)
                 self.emit('selected-item', itemSel)
                 if event.button == 1:
-                    self.__DragBegin(event)
+                    if isinstance(itemSel, CConnection):
+                        i = itemSel.GetPointAtPosition(posx, posy)
+                        if i is not None:
+                            self.__BeginDragPoint(event, itemSel, i)
+                    else:
+                        self.__BeginDragRect(event)
                 self.Paint()
             else:
                 self.DrawingArea.AddToSelection(itemSel)
@@ -147,22 +165,20 @@ class CpicDrawingArea(CWidget):
         
         elif toolBtnSel[0] == 'Connection':
             itemSel = self.DrawingArea.GetElementAtPosition(self.canvas, posx, posy)
+            
             if itemSel is None:
-                if self.NewConnObject is not None:
-                    self.NewConnObject[1].append((posx, posy))
+                if self.__NewConnection is not None:
+                    pass
             elif isinstance(itemSel, CConnection):
                 return
-            elif self.NewConnObject is None:
+            elif self.__NewConnection is None:
                 ConnectionType = self.application.ConnectionFactory.GetConnection(toolBtnSel[1])
-                self.NewConnObject = (CConnectionObject(ConnectionType), [], itemSel)
-                self.NewConnObject[0].SetSource(itemSel.GetObject())
+                center = itemSel.GetCenter(self.canvas)
+                self.__NewConnection = (CConnectionObject(ConnectionType), [center], itemSel)
+                self.__NewConnection[0].SetSource(itemSel.GetObject())
+                self.__DrawNewConnection( center[0], center[1], False )
             else:
-                self.NewConnObject[0].SetDestination(itemSel.GetObject())
-                obj, points, source, destination = self.NewConnObject + (itemSel, )
-                x = CConnection(self.DrawingArea, obj, source, destination, points)
-                self.NewConnObject = None
-                self.emit('set-selected', None)
-                self.Paint()
+                pass
         
     @event("picEventBox", "key-press-event")
     def on_key_press_event(self, widget, event):
@@ -170,19 +186,48 @@ class CpicDrawingArea(CWidget):
             for sel in self.DrawingArea.GetSelected():
                 self.DrawingArea.DeleteItem(sel)
             self.Paint()
+        elif event.keyval == gtk.keysyms.Escape:
+            self.ResetAction()
+            self.emit('set-selected', None)
+            
         
     @event("picEventBox", "button-release-event")
     def on_button_release_event(self, widget, event):
-        if self.dnd:
+        posx, posy = self.GetAbsolutePos(event.x, event.y)
+        if self.dnd == 'rect':
             dx, dy = self.__GetDelta(event.x, event.y)
             self.DrawingArea.MoveSelection(dx, dy)
-            self.dnd = False
+            self.dnd = None
             self.Paint()
+        elif self.dnd == 'point':            
+            x, y = self.GetAbsolutePos(event.x, event.y)
+            connection, point = self.DragPoint
+            connection.MovePoint(point, x, y)
+            self.dnd = None
+            self.Paint()
+        if self.__NewConnection is not None:
+            itemSel = self.DrawingArea.GetElementAtPosition(self.canvas, posx, posy)
+            if itemSel is None:
+                self.__NewConnection[1].append((posx, posy))
+                self.__DrawNewConnection( None, None )
+            elif itemSel is not self.__NewConnection[2] or len(self.__NewConnection[1]) > 3:
+                self.__NewConnection[0].SetDestination(itemSel.GetObject())
+                (obj, points, source), destination = self.__NewConnection, itemSel
+                x = CConnection(self.DrawingArea, obj, source, destination, points[1:])
+                self.__NewConnection = None
+                self.emit('set-selected', None)
+                self.Paint()
+            else:
+                pass
         
     @event("picEventBox", "motion-notify-event")
     def on_motion_notify_event(self, widget, event):
-        if self.dnd:
+        if self.dnd == 'rect':
             self.__DrawDragRect(event.x, event.y)
+        elif self.dnd == 'point':
+            self.__DrawDragPoint(event.x, event.y)
+        if self.__NewConnection is not None:
+            self.__DrawNewConnection(event.x, event.y)
         
     @event("picDrawingArea", "expose-event")
     def on_picDrawingArea_configure_event(self, widget, tmp):
@@ -213,7 +258,11 @@ class CpicDrawingArea(CWidget):
             self.__Scroll(self.picVBar, event.direction)
         self.Repaint()
         
-    
+    @event("picDrawingArea", "focus-out-event")
+    def on_picDrawingArea_foucus_out_event(self, widget, event):
+        self.emit('set-selected', None)
+        self.ResetAction()
+        
     def __Scroll(self, scrollbar, direction):
         tmp = scrollbar.get_adjustment()
         if direction == gtk.gdk.SCROLL_UP:
@@ -222,14 +271,17 @@ class CpicDrawingArea(CWidget):
             tmp.value = min(tmp.upper - tmp.page_size, tmp.value + 20)
         scrollbar.set_adjustment(tmp)
         
-    def __DragBegin(self, event):
+    def __BeginDragRect(self, event):
         self.DragStartPos = self.GetAbsolutePos(event.x, event.y)
         self.DragRect = self.DrawingArea.GetSelectSquare(self.canvas)
-        cmap = self.picDrawingArea.window.get_colormap()
-        self.DragGC = self.picDrawingArea.window.new_gc(foreground = cmap.alloc_color(SELECT_SQUARE_COLOR), 
-            function = gtk.gdk.XOR, line_width = SELECT_SQUARE_SIZE)
         self.__DrawDragRect(event.x, event.y, False)
-        self.dnd = True
+        self.dnd = 'rect'
+        
+    def __BeginDragPoint(self, event, connection, point):
+        self.DragStartPos = self.GetAbsolutePos(event.x, event.y)
+        self.DragPoint = (connection, point)
+        self.__DrawDragPoint(event.x, event.y, False)
+        self.dnd = 'point'
         
     def __GetDelta(self, x, y):
         sizx, sizy = self.GetDrawingAreaSize()
@@ -241,7 +293,7 @@ class CpicDrawingArea(CWidget):
         tmpx, tmpy = posx + dx, posy + dy
         tmpx = min(max(0, tmpx), sizx)
         tmpy = min(max(0, tmpy), sizy)
-        return tmpx - posx, tmpy - posy
+        return int(tmpx - posx), int(tmpy - posy)
         
     
     def __DrawDragRect(self, x, y, erase = True, draw = True):
@@ -252,3 +304,37 @@ class CpicDrawingArea(CWidget):
             dx, dy = self.__GetDelta(x, y)
             self.picDrawingArea.window.draw_rectangle(self.DragGC, False, tmpx + dx, tmpy + dy, *self.DragRect[1])
             self.__oldx, self.__oldy = tmpx + dx, tmpy + dy
+            
+    def __DrawDragPoint(self, x, y, erase = True, draw = True):
+        if x is None:
+            x, y = self.__oldPoints2
+        connection, point = self.DragPoint
+        prev, next = connection.GetNeighbours(point, self.canvas)
+        points = [self.GetRelativePos(*prev), (int(x), int(y)), self.GetRelativePos(*next)]
+        if erase:
+            self.picDrawingArea.window.draw_lines(self.DragGC, self.__oldPoints)
+        if draw:
+            self.__oldPoints = points
+            self.__oldPoints2 = self.GetAbsolutePos(x, y)
+            self.picDrawingArea.window.draw_lines(self.DragGC, self.__oldPoints)
+    
+    def __DrawNewConnection(self, x, y, erase = True, draw = True):
+        if x is None:
+            points = self.__NewConnection[1][:]
+        else:
+            points = self.__NewConnection[1]
+        points = [self.GetRelativePos(*point) for point in points]
+        if x is not None:
+            points += [(int(x), int(y))]
+        if erase:
+            self.picDrawingArea.window.draw_lines(self.DragGC, self.__oldNewConnection)
+        if draw:
+            self.__oldNewConnection = points
+            self.picDrawingArea.window.draw_lines(self.DragGC, self.__oldNewConnection)
+    
+    def ResetAction(self):
+        self.dnd = None
+        if self.__NewConnection is not None:
+            self.__NewConnection = None
+        self.Paint()
+        

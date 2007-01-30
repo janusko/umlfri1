@@ -138,3 +138,7 @@ class CfrmMain(CWindow):
         if element.GetObject().GetType().HasVisualAttribute(property):
             self.picDrawingArea.Paint()
             self.twProjectView.UpdateElement(element.GetObject())
+            
+    @event("tbToolBox", "toggled")
+    def on_tbToolBox_toggled(self, widget, ItemId, ItemType):
+        self.picDrawingArea.ResetAction()

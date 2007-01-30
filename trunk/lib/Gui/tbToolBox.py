@@ -1,6 +1,6 @@
 from common import CWidget, event
 
-import gtk
+import gtk, gobject
 from lib.Drawing.Canvas.Gtk import PixmapFromPath
 
 from lib.consts import ARROW_IMAGE
@@ -9,6 +9,10 @@ class CtbToolBox(CWidget):
     name = 'tbToolBox'
     widgets = ('tbToolBox', 'hboxWorkSpace')
     
+    __gsignals__ = {
+        "toggled":  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_PYOBJECT, 
+            (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT, )), 
+    }
     __visible = True
     
     def __init__(self, app, wTree):
@@ -82,6 +86,7 @@ class CtbToolBox(CWidget):
         
     def on_tbButton_toggled(self, widget, ItemId, ItemType):
         self.Selected = (ItemType, ItemId)
+        self.emit("toggled", ItemId, ItemType)
         
     def GetSelected(self):
         return self.Selected
