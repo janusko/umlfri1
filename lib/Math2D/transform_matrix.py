@@ -20,9 +20,9 @@ class Matrix:
                 for srow in self.matrix
             ])
         if not isinstance(other, Matrix):
-            raise TypeError, "Can not multiply matrix by non-matrix and non-numeric type"
+            return NotImplemented
         if self.size[0] != other.size[1]:
-            raise TypeError, "Multiplicated matrixes must have correct sizes"
+            return NotImplemented
         omat = other.matrix
         return Matrix(matrix = [
             [
@@ -34,7 +34,7 @@ class Matrix:
     
     def __div__(self, other):
         if not isinstance(other, (int, float, long)):
-            raise TypeError, "Can not divide matrix by non-numeric type"
+            return NotImplemented
         return Matrix(matrix = [
             [scol/other for scol in srow]
             for srow in self.matrix
@@ -58,7 +58,7 @@ class TransformMatrix(Matrix):
     
     def __mul__(self, other):
         if not isinstance(other, (TransformMatrix, PointMatrix)):
-            raise TypeError, "Transformation matrix can be multipled only by other transformation matrix, or the point matrix"
+            return NotImplemented
         xxx = Matrix.__mul__(self, other)
         if isinstance(other, PointMatrix):
             ctl = xxx[(1, 3)]
@@ -157,4 +157,4 @@ class PointMatrix(Matrix):
         return self.matrix[0][0], self.matrix[1][0]
     
     def __mul__(self, other):
-        raise TypeError, "Point matrix can not be multipled"
+        return NotImplemented

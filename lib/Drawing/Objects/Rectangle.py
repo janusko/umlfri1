@@ -1,5 +1,10 @@
 from SimpleContainer import CSimpleContainer
 
+corners = {
+    'rounded': 'M 0,0 C 0.55,0 1,0.446 1,1',
+    'note': 'M 0,0 L 1,1 L 0,1 L 0,0 z M 0,0 L 1,1',
+}
+
 class CRectangle(CSimpleContainer):
     def __init__(self, fill = None, border = "white", borderwidth = 1):
         CSimpleContainer.__init__(self)

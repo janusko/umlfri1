@@ -4,7 +4,7 @@
 [x] ODSTRANIT Drag and Drop (palino)
 [ ] Automaticke nazvy diagramov
 [ ] Automaticke nazvy elementov
-[!] Presunut CProjekt do Application
+[x] Presunut CProjekt do Application
 [ ] Nastavovanie fontu z XML
 [ ] Presunutie konfiguracnych hodnot z const.py do /etc
 [ ] Prerobit Get* na yield, kde treba
@@ -14,11 +14,13 @@
     [x] Content menu na pridavanie
     [X] Samotny project tree
     [+] Ikonky na diagramy
-    [+] Ikonky na elementy
+    [x] Ikonky na elementy
 [?] Generovanie formulara
-[ ] Ciary
+[-] Ciary
     [x] Pridavanie ciar (palino)
-    [ ] Zmena ciar (posuvanie)
+    [x] Kreslenie ciar pri stlacenom mouse tlacidle
+    [x] Priebezne kreslenie ciary pri kresleni ciary
+    [x] Zmena ciar (posuvanie)
     [x] Presuvanie ciar s elementami (palino)
     [x] Select ciar (palino)
     [ ] Zarovnanie konca ciary s koncom elementu
@@ -29,17 +31,19 @@
     [ ] Hladanie kolizii objektov
     [ ] Vymysliet naky inteligentny sposob hladania tried na kraji viewport-u
     [ ] Skrolovanie bitblit-om + vykreslovanie zvysku
-[ ] Mazanie elementov
+[-] Mazanie elementov
     [x] Zmazanie z drawing area (palino)
-    [ ] Mazanie vsetkych pozozstatkov
+    [-] Mazanie vsetkych pozozstatkov
+        [x] Mazanie cez kontextove menu v strome
+        [ ] Mazanie priamo z diagramu (klavesovou skratkou)
 [ ] Mazanie ciar
-    [ ] Zmazanie z drawing area
+    [x] Zmazanie z drawing area
     [ ] Mazanie vsetkych pozozstatkov
 [x] CProportional kontainer (janik)
 [x] CAlign kontainer (janik)
 [ ] CSVG Visual object (janik)
     [x] Group object (janik)
-    [ ] Optimalizacia
+    [x] Optimalizacia
     [ ] shapes
         [ ] rect
         [ ] circle
@@ -55,19 +59,19 @@
     [ ] styles
         [x] stroke color (janik)
         [ ] stroke style
-        [ ] fill color
-        [?] fill style
-    [ ] transformation matrixes
+        [x] fill color
+    [x] transformation matrixes
         [x] translate (janik)
         [x] matrix (janik)
-[ ] Zaoblene rohy na Rectangle Visual Object-e
+[-] Zaoblene rohy na Rectangle Visual Object-e
 ...
 [ ] ZOrder
-[ ] Menenie kurzoru po prechode nad volaco
+[?] Menenie kurzoru po prechode nad volaco
 [ ] Resizovanie elementov
-[ ] Save/Load
-[ ] Sablony
-[ ] Export/Import XMI
+[x] Save
+[ ] Load
+    [ ] Sablony
+[?] Export/Import XMI
 [x] Napisat README
 [!] Vyhodit autorov z gui (Automaticke parsovanie README :D )
 ...
