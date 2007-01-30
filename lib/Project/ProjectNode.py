@@ -4,7 +4,8 @@ class CProjectNode(object):
     def __init__(self, parent = None, object = None):
         self.parent = parent
         self.childs = []
-        self.drawingareas = []   
+        self.drawingareas = [] 
+        self.appears = []
         self.object = object
     
     def Change(self):
@@ -21,6 +22,15 @@ class CProjectNode(object):
         for i in self.childs:
             i.Change()
         
+        
+    def GetAppears(self):
+        return self.appears
+    
+    def AddAppears(self, drawingArea):
+        self.appears.append(drawingArea)
+    
+    def RemoveAppears(self, drawingArea):
+        self.appears.remove(drawingArea)
     
     def GetDrawingAreas(self):
         return self.drawingareas

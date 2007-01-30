@@ -6,10 +6,11 @@ import gobject
 from common import  event
 from lib.Drawing import CDrawingArea
 from lib.Drawing.Canvas.Gtk import PixmapFromPath
+from twProjectView import CtwProjectView
 
 class CTabs(CWidget):
     name = 'nbTabs'
-    widgets = ('nbTabs',)
+    widgets = ('nbTabs','twProjectView')
     
     __gsignals__ = {
         'change_current_page':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,) 
@@ -53,7 +54,7 @@ class CTabs(CWidget):
         button.connect("clicked", self.on_button_click, self.nbTabs.get_nth_page(self.nbTabs.get_n_pages()-1))
         self.drawingAreas.append(drawingArea)
         self.nbTabs.set_current_page(self.nbTabs.get_n_pages()-1)
-    
+       
     def on_button_click(self, widget, page):
         number = self.nbTabs.page_num(page)
         self.drawingAreas.remove(self.drawingAreas[number])
@@ -66,4 +67,8 @@ class CTabs(CWidget):
         else:
             self.emit("change_current_page", self.drawingAreas[page_num])
         
+    def CloseTab(self, drawingArea):
+        if drawingArea in self.drawingAreas:
+            self.nbTabs.remove_page(self.drawingAreas.index(drawingArea))
+            self.drawingAreas.remove(drawingArea)
         

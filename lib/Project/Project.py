@@ -52,11 +52,13 @@ class CProject(object):
         node.GetParent(node).RemoveChild(node)
         node.SetParent(newParent)
         newParent.AddChild(node)
+              
 
     def RemoveNode(self, node):
-        node.GetParent(node).RemoveChild(node)
-    
-    def searchCE(self, node): # search for all connections and elements under given node
+        node.GetParent().RemoveChild(node)
+   
+    # search for all connections and elements under given node
+    def searchCE(self, node): 
         elements = set()
         connections = set()
         def _search(node):
@@ -121,7 +123,7 @@ class CProject(object):
             print>>f, '  '*level+'</node>'
         
         elements, connections = self.searchCE(self.root)
-        print>>f, '<?xml version="1.0">'
+        print>>f, '<?xml version="1.0"?>'
         print>>f, '<umlproject>'
         print>>f, '  <objects>'
         for object in elements:
