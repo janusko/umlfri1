@@ -1,6 +1,6 @@
 from lib.lib import ToBool,UMLException
 
-from lib.transform_matrix import TransformMatrix, PointMatrix
+from lib.Math2D import TransformMatrix, PointMatrix
 
 ARROW_TYPES = {'simple': ('polyline',
                           [

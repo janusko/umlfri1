@@ -72,24 +72,21 @@ class GtkCanvas(AbstractCanvas):
         if line_style is not None:
             gc.line_style = LINE_STYLES[line_style]
         cmap = self.window.get_colormap()
+        points = [(int(x), int(y)) for x,y in points]
         if bg is not None:
             gc.foreground = cmap.alloc_color(bg)
-            self.window.draw_polygon(gc, True, [(int(x), int(y)) for x,y in points])
+            self.window.draw_polygon(gc, True, points)
         if fg is not None:
             gc.foreground = cmap.alloc_color(fg)
-            self.window.draw_polygon(gc, False, [(int(x), int(y)) for x,y in points])
+            self.window.draw_polygon(gc, False, points)
     
-    def DrawBezier(self, pt1, pt2, pt3, pt4, fg, line_width = None, line_style = None):
-        t = 0
-        step = 1/16.0
-        old = pt1
-        while (t-step) < 1:
-            new = (1-t)**3*pt1[0]+3*t*(1-t)**2*pt2[0]+3*t**2*(1-t)*pt3[0]+t**3*pt4[0], \
-                  (1-t)**3*pt1[1]+3*t*(1-t)**2*pt2[1]+3*t**2*(1-t)*pt3[1]+t**3*pt4[1]
-            self.DrawLine(old, new, fg, line_width, line_style)
-            old = new
-            t += step
-        self.DrawLine(old, pt4, fg, line_width, line_style)
+    def DrawPath(self, path, fg = None, bg = None, line_width = None, line_style = None):
+        for single in path:
+            t = single.GetType()
+            if t == 'polygon':
+                self.DrawPolygon(single, fg, bg, line_width, line_style)
+            elif t == 'polyline':
+                self.DrawLines(single, fg, line_width, line_style)
     
     def DrawRectangle(self, pos, size, fg = None, bg = None, line_width = None, line_style = None):
         gc = self.window.new_gc()
