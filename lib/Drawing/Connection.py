@@ -23,12 +23,12 @@ class CConnection:
     def GetSelelected(self):
         return self.selected
     
-    def IsSquareSize(self, x, y):
-        for i in self.points:
-            if i[0] <= x <= i[0] + SELECT_SQUARES_SIZE and i[1] <= y <= i[1] + SELECT_SQUARES_SIZE:
-                return True
+    def GetPointAtPosition(self, x, y):
+        for i, point in enumerate(self.points):
+            if max(abs(point[0] - x), abs(point[1]-y)) <= SELECT_SQUARES_SIZE//2:
+                return i
         else:
-            return False
+            return None
         
     def GetSource(self):
         return self.source
@@ -38,6 +38,20 @@ class CConnection:
         
     def GetSourceObject(self):
         return self.object.GetSource()
+        
+    def GetNeighbours(self, index, canvas):
+        if index < 0 or index >= len(self.points):
+            raise UMLException("PointNotExists")
+        if index == 0:
+            previous = self.source.GetCenter(canvas)
+        else:
+            previous = self.points[index-1]
+        if index == len(self.points) - 1:
+            next = self.destination.GetCenter(canvas)
+        else:
+            next = self.points[index+1]
+        return previous, next
+        
         
     def GetDestinationObject(self):
         return self.object.GetDestination()
@@ -85,9 +99,11 @@ class CConnection:
         self.labels[label] = (x, y)
         
         
-    def AddPoint(self, index, x, y):
-        if index < len(self.points) - 1:
-            self.insert(index,(x,y))
+    def AddPoint(self, x, y, index = None):
+        if index is None:
+            self.points.append((x, y))
+        elif index < len(self.points) - 1:
+            self.points.insert(index,(x,y))
         else:
             raise UMLException("PointNotExists")
 
@@ -125,7 +141,7 @@ class CConnection:
         self.points = points
         
     def MovePoint(self, index, x, y):
-        if index < len(self.points) - 1:
+        if index < len(self.points):
             self.points[index] = (x,y)
         else:
             raise UMLException("PointNotExists")
@@ -156,5 +172,4 @@ class CConnection:
 
     def GetDrawingArea(self):
         return self.drawingArea
-    
     
