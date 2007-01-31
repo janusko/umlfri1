@@ -145,3 +145,4 @@ class CElementObject:
                         self.SetAttribute('Name', nName)
                         id = id + 1
                         checkNames = True #znovu prekontroluj nazvy
+            cprojNode.Change()

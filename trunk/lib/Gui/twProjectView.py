@@ -36,7 +36,7 @@ class CtwProjectView(CWidget):
         for item in self.mnuTreeAddDiagram.get_children():
             self.mnuTreeAddDiagram.remove(item)
         
-        for diagram in self.application.DiagramFactory:
+        for diagram in self.application.Project.GetDiagramFactory():
             mi = gtk.ImageMenuItem(diagram.GetId())
             
             img = gtk.Image()
@@ -50,10 +50,9 @@ class CtwProjectView(CWidget):
         
         #projekt view, pametova reprezentacia
         #vytvorenie hlavneho uzla a nastavenie korena projektu
-        pckg = CElementObject( self.application.ElementFactory.GetElement('Package') )
+        pckg = CElementObject( self.application.Project.GetElementFactory().GetElement('Package') )
         pckg.SetAttribute('Name', 'Untitled') #defaultne meno projektu
-        project = CProjectNode(None, pckg)    
-        project.SetPath("Untitled:Package")
+        project = CProjectNode(None, pckg, "Untitled:Package" )    
         self.application.Project.SetRoot(project)
         
         parent = self.TreeStore.append(None)
@@ -101,6 +100,7 @@ class CtwProjectView(CWidget):
         for node in root.GetChilds():
             novy = self.TreeStore.append(parent)
             self.TreeStore.set(novy, 0, node.GetName() , 1, PixmapFromPath(self.application.Storage, node.GetObject().GetType().GetIcon()), 2, node.GetType(),3,node)
+
             self.__DrawTree(node, novy)
             
          
@@ -179,20 +179,17 @@ class CtwProjectView(CWidget):
     def AddElement(self, element, drawingArea):
         path = drawingArea.GetPath()
         parent = self.application.Project.GetNode(path)
-        node = CProjectNode(parent, element)
+        node = CProjectNode(parent, element, parent.GetPath() + "/" + element.GetName() + ":" + element.GetType().GetId())
         node.AddAppears(drawingArea)
-        node.SetPath(parent.GetPath() + "/" + node.GetName() + ":" + node.GetType())
         self.application.Project.AddNode(node, parent)
-            
         novy = self.TreeStore.append(self.get_iter_from_path(self.twProjectView.get_model(), self.twProjectView.get_model().get_iter_root() ,path))
         self.TreeStore.set(novy, 0, element.GetName() , 1, PixmapFromPath(self.application.Storage, element.GetType().GetIcon()), 2, element.GetType().GetId(),3,node)
         
     
     
     def AddDrawingArea(self, drawingArea):
-                
-        iter = self.twProjectView.get_selection().get_selected()[1]
         
+        iter = self.twProjectView.get_selection().get_selected()[1]
         if iter is None:
             iter = self.twProjectView.get_model().get_iter_root()
             self.twProjectView.get_selection().select_iter(iter)
@@ -212,17 +209,19 @@ class CtwProjectView(CWidget):
         
     
     def UpdateElement(self, object):
-        for iter in self.get_iters_from_path(self.twProjectView.get_model(),self.twProjectView.get_model().get_iter_root() ,object.GetPath()):
-            node = self.twProjectView.get_model().get(iter,3)[0]
-            if object is node.GetObject():
-                break
-        node.Change()        
-        self.TreeStore.set_value(iter, 0, object.GetName())
+        if isinstance(object, CElementObject):
+            for iter in self.get_iters_from_path(self.twProjectView.get_model(),self.twProjectView.get_model().get_iter_root() ,object.GetPath()):
+                node = self.twProjectView.get_model().get(iter,3)[0]
+                if object is node.GetObject():
+                    break
+            node.Change()        
+            self.TreeStore.set_value(iter, 0, object.GetName())
     
     
     @event("twProjectView","button-press-event")
     def button_clicked(self, widget, event):
-        self.EventButton = (event.button, event.time)       
+        self.EventButton = (event.button, event.time) 
+        
         
     
     @event("twProjectView", "row-activated")
@@ -255,7 +254,6 @@ class CtwProjectView(CWidget):
     
     def on_mnuTreeAddDiagram_activate(self, widget, diagramId):
         self.emit('create-diagram', diagramId)
-        
     
     def RemoveFromArea(self,node):
         for i in node.GetDrawingAreas():
@@ -266,6 +264,15 @@ class CtwProjectView(CWidget):
             
         for i in node.GetAppears():
             i.DeleteObject(node.GetObject())
+    
+    def DeleteElement(self, elementObject):
+        for iter in self.get_iters_from_path(self.twProjectView.get_model(),self.twProjectView.get_model().get_iter_root() ,elementObject.GetPath()):
+            node = self.twProjectView.get_model().get(iter,3)[0]
+            if object is node.GetObject():
+                break
+        self.TreeStore.remove(iter)
+        self.RemoveFromArea(node)
+        self.application.Project.RemoveNode(node)
     
     @event("mnuTreeDelete","activate")
     def on_mnuTreeDelete_activate(self, menuItem):
