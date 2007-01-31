@@ -26,7 +26,8 @@ class CElement:
             y1, y = y, y1
         self.squares.append(((x, y), (x1 - x, y1 - y)))
 
-    def AreYouAtPosition(self, canvas, x, y):
+    def AreYouAtPosition(self, canvas, pos):
+        x, y = pos
         width = self.objct.GetType().GetAppearance().GetWidth(canvas, self)
         height = self.objct.GetType().GetAppearance().GetHeight(canvas, self)
         
@@ -56,6 +57,11 @@ class CElement:
     
     def GetSize(self, canvas):
         return self.objct.GetWidth(canvas, self), self.objct.GetHeight(canvas, self)
+        
+    def GetSquare(self, canvas):
+        x, y = self.GetPosition()
+        w, h = self.GetSize(canvas)
+        return (x, y), (x + w, y + h)
 
     def Paint(self, canvas):
         self.objct.Paint(canvas, self)
@@ -80,8 +86,8 @@ class CElement:
             
             canvas.DrawRectangle((x, y), (w, h), fg = lib.consts.SELECT_SQUARE_COLOR, line_width = lib.consts.SELECT_SQUARE_SIZE)
 
-    def SetPosition(self, x, y):
-        self.position = (x, y)
+    def SetPosition(self, pos):
+        self.position = pos
         
     def GetDrawingArea(self):
         return self.drawingArea

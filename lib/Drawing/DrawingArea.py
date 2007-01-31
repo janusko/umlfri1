@@ -101,15 +101,16 @@ class CDrawingArea:
                 y2 = y + h
         return (int(x1), int(y1)), (int(x2 - x1), int(y2 - y1))
     
-    def MoveSelection(self, deltax, deltay):
+    def MoveSelection(self, delta):
+        deltax, deltay = delta
         movedCon = set()
         for el in self.GetSelectedElements():
             x, y = el.GetPosition()
-            el.SetPosition(x + deltax, y + deltay)
+            el.SetPosition((x + deltax, y + deltay))
             for con in el.GetConnections():
                 if (con.GetSource() in self.selected) and (con.GetDestination() in self.selected):
                     if con not in movedCon:
-                        con.MoveAll(deltax , deltay )
+                        con.MoveAll(delta)
                         movedCon.add(con)
         
     
@@ -157,13 +158,13 @@ class CDrawingArea:
     def GetDrawable(self):
         return self.drawable        
         
-    def GetElementAtPosition(self, canvas, x, y):
+    def GetElementAtPosition(self, canvas, pos):
         for c in self.connections:
-            if c.AreYouAtPosition(canvas, x, y):
+            if c.AreYouAtPosition(canvas, pos):
                 return c
                 
         for e in self.elements[::-1]:
-            if e.AreYouAtPosition(canvas, x, y):
+            if e.AreYouAtPosition(canvas, pos):
                 return e
             
         return None

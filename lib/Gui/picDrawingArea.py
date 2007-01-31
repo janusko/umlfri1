@@ -109,62 +109,73 @@ class CpicDrawingArea(CWidget):
     @event("picEventBox", "button-press-event")
     def on_picEventBox_button_press_event(self, widget, event):
         self.picDrawingArea.grab_focus()
-        toolBtnSel =  self.emit('get-selected')
-        if toolBtnSel is not None:
-            self.__AddItem(toolBtnSel, event)
-            return
-            
-        posx, posy = self.GetAbsolutePos(event.x, event.y)
-        itemSel = self.DrawingArea.GetElementAtPosition(self.canvas, posx, posy)
-        if itemSel is not None:
-            if itemSel in self.DrawingArea.GetSelected():
-                if (event.state & gtk.gdk.CONTROL_MASK):
-                    self.DrawingArea.RemoveFromSelection(itemSel)
-                    self.Paint()
-                elif event.button == 1:
-                    if isinstance(itemSel, CConnection):
-                        i = itemSel.GetPointAtPosition(posx, posy)
+        if event.button == 1:
+            toolBtnSel =  self.emit('get-selected')
+            if toolBtnSel is not None:
+                self.__AddItem(toolBtnSel, event)
+                return
+                
+            pos = self.GetAbsolutePos(event.x, event.y)
+            itemSel = self.DrawingArea.GetElementAtPosition(self.canvas, pos)
+            if itemSel is not None:
+                if itemSel in self.DrawingArea.GetSelected():
+                    if (event.state & gtk.gdk.CONTROL_MASK):
+                        self.DrawingArea.RemoveFromSelection(itemSel)
+                        self.Paint()
+                    elif isinstance(itemSel, CConnection):
+                        i = itemSel.GetPointAtPosition(pos)
                         if i is not None:
+                            itemSel.SelectPoint(i)
                             self.__BeginDragPoint(event, itemSel, i)
+                            #self.Paint()
+                        else:
+                            itemSel.DeselectPoint()
+                            i = itemSel.WhatPartOfYouIsAtPosition(self.canvas, pos)
+                            self.__BeginDragLine(event, itemSel, i)
+                            #self.Paint()
                     else:
                         self.__BeginDragRect(event)
+                elif not (event.state & gtk.gdk.CONTROL_MASK):
+                    self.DrawingArea.DeselectAll()
+                    self.DrawingArea.AddToSelection(itemSel)
+                    self.emit('selected-item', itemSel)
+                    if isinstance(itemSel, CConnection):
+                        i = itemSel.GetPointAtPosition(pos)
+                        if i is not None:
+                            itemSel.SelectPoint(i)
+                            self.__BeginDragPoint(event, itemSel, i)
+                            #self.Paint()
+                        else:
+                            itemSel.DeselectPoint()
+                            i = itemSel.WhatPartOfYouIsAtPosition(self.canvas, pos)
+                            self.__BeginDragLine(event, itemSel, i)
+                            #self.Paint()
+                    else:
+                        self.__BeginDragRect(event)
+                    #self.Paint()
                 else:
+                    self.DrawingArea.AddToSelection(itemSel)
+                    self.emit('selected-item', None)
                     self.Paint()
-            elif not (event.state & gtk.gdk.CONTROL_MASK):
-                self.DrawingArea.DeselectAll()
-                self.DrawingArea.AddToSelection(itemSel)
-                self.emit('selected-item', itemSel)
-                if event.button == 1:
-                    if isinstance(itemSel, CConnection):
-                        i = itemSel.GetPointAtPosition(posx, posy)
-                        if i is not None:
-                            self.__BeginDragPoint(event, itemSel, i)
-                    else:
-                        self.__BeginDragRect(event)
-                self.Paint()
-            else:
-                self.DrawingArea.AddToSelection(itemSel)
-                self.emit('selected-item', None)
-                self.Paint()
-            
-        elif self.DrawingArea.SelectedCount() > 0:
-            if not (event.state & gtk.gdk.CONTROL_MASK):
-                self.DrawingArea.DeselectAll()
-                self.emit('selected-item', None)
-                self.Paint()
+                
+            elif self.DrawingArea.SelectedCount() > 0:
+                if not (event.state & gtk.gdk.CONTROL_MASK):
+                    self.DrawingArea.DeselectAll()
+                    self.emit('selected-item', None)
+                    self.Paint()
         
     def __AddItem(self, toolBtnSel, event):
-        posx, posy = self.GetAbsolutePos(event.x, event.y)
+        pos = self.GetAbsolutePos(event.x, event.y)
         if toolBtnSel[0] == 'Element':
             ElementType = self.application.ElementFactory.GetElement(toolBtnSel[1])
             ElementObject = CElementObject(ElementType)
-            CElement(self.DrawingArea, ElementObject).SetPosition(posx, posy)
+            CElement(self.DrawingArea, ElementObject).SetPosition(pos)
             self.emit('set-selected', None)
             self.emit('add-element', ElementObject, self.DrawingArea)
             self.Paint()
         
         elif toolBtnSel[0] == 'Connection':
-            itemSel = self.DrawingArea.GetElementAtPosition(self.canvas, posx, posy)
+            itemSel = self.DrawingArea.GetElementAtPosition(self.canvas, pos)
             
             if itemSel is None:
                 if self.__NewConnection is not None:
@@ -184,6 +195,13 @@ class CpicDrawingArea(CWidget):
     def on_key_press_event(self, widget, event):
         if event.keyval == gtk.keysyms.Delete:
             for sel in self.DrawingArea.GetSelected():
+                if isinstance(sel, CConnection):
+                    index = sel.GetSelectedPoint()
+                    if index is not None and (sel.GetSource() != sel.GetDestination() or len(tuple(sel.GetMiddlePoints())) > 2):
+                        sel.RemovePoint(self.canvas, index)
+                        self.Paint()
+                        return
+            for sel in self.DrawingArea.GetSelected():
                 self.DrawingArea.DeleteItem(sel)
             self.Paint()
         elif event.keyval == gtk.keysyms.Escape:
@@ -193,24 +211,30 @@ class CpicDrawingArea(CWidget):
         
     @event("picEventBox", "button-release-event")
     def on_button_release_event(self, widget, event):
-        posx, posy = self.GetAbsolutePos(event.x, event.y)
+        pos = self.GetAbsolutePos(event.x, event.y)
         if self.dnd == 'rect':
-            dx, dy = self.__GetDelta(event.x, event.y)
-            self.DrawingArea.MoveSelection(dx, dy)
+            delta = self.__GetDelta(event.x, event.y)
+            self.DrawingArea.MoveSelection(delta)
             self.dnd = None
             self.Paint()
         elif self.dnd == 'point':            
-            x, y = self.GetAbsolutePos(event.x, event.y)
-            connection, point = self.DragPoint
-            connection.MovePoint(point, x, y)
+            point = self.GetAbsolutePos(event.x, event.y)
+            connection, index = self.DragPoint
+            connection.MovePoint(self.canvas, point, index)
             self.dnd = None
             self.Paint()
-        if self.__NewConnection is not None:
-            itemSel = self.DrawingArea.GetElementAtPosition(self.canvas, posx, posy)
+        elif self.dnd == 'line':
+            point = self.GetAbsolutePos(event.x, event.y)
+            connection, index = self.DragPoint
+            connection.AddPoint(self.canvas, point, index)
+            self.dnd = None
+            self.Paint()
+        elif self.__NewConnection is not None:
+            itemSel = self.DrawingArea.GetElementAtPosition(self.canvas, pos)
             if itemSel is None:
-                self.__NewConnection[1].append((posx, posy))
+                self.__NewConnection[1].append(pos)
                 self.__DrawNewConnection( None, None )
-            elif itemSel is not self.__NewConnection[2] or len(self.__NewConnection[1]) > 3:
+            elif itemSel is not self.__NewConnection[2] or len(self.__NewConnection[1]) > 2:
                 self.__NewConnection[0].SetDestination(itemSel.GetObject())
                 (obj, points, source), destination = self.__NewConnection, itemSel
                 x = CConnection(self.DrawingArea, obj, source, destination, points[1:])
@@ -226,7 +250,9 @@ class CpicDrawingArea(CWidget):
             self.__DrawDragRect(event.x, event.y)
         elif self.dnd == 'point':
             self.__DrawDragPoint(event.x, event.y)
-        if self.__NewConnection is not None:
+        elif self.dnd == 'line':
+            self.__DrawDragLine(event.x, event.y)
+        elif self.__NewConnection is not None:
             self.__DrawNewConnection(event.x, event.y)
         
     @event("picDrawingArea", "expose-event")
@@ -283,6 +309,12 @@ class CpicDrawingArea(CWidget):
         self.__DrawDragPoint(event.x, event.y, False)
         self.dnd = 'point'
         
+    def __BeginDragLine(self, event, connection, point):
+        self.DragStartPos = self.GetAbsolutePos(event.x, event.y)
+        self.DragPoint = (connection, point)
+        self.__DrawDragLine(event.x, event.y, False)
+        self.dnd = 'line'
+        
     def __GetDelta(self, x, y):
         sizx, sizy = self.GetDrawingAreaSize()
         selx, sely = self.DragRect[1]
@@ -308,8 +340,22 @@ class CpicDrawingArea(CWidget):
     def __DrawDragPoint(self, x, y, erase = True, draw = True):
         if x is None:
             x, y = self.__oldPoints2
-        connection, point = self.DragPoint
-        prev, next = connection.GetNeighbours(point, self.canvas)
+        connection, index = self.DragPoint
+        prev, next = connection.GetNeighbours(index, self.canvas)
+        points = [self.GetRelativePos(*prev), (int(x), int(y)), self.GetRelativePos(*next)]
+        if erase:
+            self.picDrawingArea.window.draw_lines(self.DragGC, self.__oldPoints)
+        if draw:
+            self.__oldPoints = points
+            self.__oldPoints2 = self.GetAbsolutePos(x, y)
+            self.picDrawingArea.window.draw_lines(self.DragGC, self.__oldPoints)
+    
+    def __DrawDragLine(self, x, y, erase = True, draw = True):
+        if x is None:
+            x, y = self.__oldPoints2
+        connection, index = self.DragPoint
+        all = tuple(connection.GetPoints(self.canvas))
+        prev, next = all[index], all[index + 1]
         points = [self.GetRelativePos(*prev), (int(x), int(y)), self.GetRelativePos(*next)]
         if erase:
             self.picDrawingArea.window.draw_lines(self.DragGC, self.__oldPoints)

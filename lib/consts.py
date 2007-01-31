@@ -3,6 +3,7 @@ from os.path import join, dirname, abspath
 SELECT_SQUARES_SIZE = 7
 SELECT_SQUARES_COLOR = "lightgreen"
 SELECT_SQUARE_COLOR = "yellow"
+SELECT_POINT_SQUARES_COLOR = "magenta"
 SELECT_SQUARE_SIZE = 3
 
 FONT_TYPE = 'Arial 10'
