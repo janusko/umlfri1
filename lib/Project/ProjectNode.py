@@ -7,6 +7,7 @@ class CProjectNode(object):
         self.drawingareas = [] 
         self.appears = []
         self.object = object
+        object.Assign(self)
     
     def Change(self):
         if self.parent is not None:
@@ -63,6 +64,7 @@ class CProjectNode(object):
 
     def AddDrawingArea(self, area):
         if area not in self.drawingareas:
+            area.Assign(self) # vygenerovanie nazvu
             self.drawingareas.append(area)
     
     def FindDrawingArea(self, name):

@@ -87,7 +87,7 @@ class CfrmMain(CWindow):
     @event("mnuItems", "create-diagram")
     @event("twProjectView","create-diagram")
     def on_mnuItems_create_diagram(self, widget, diagramId):      
-        area = CDrawingArea(self.application.DiagramFactory.GetDiagram(diagramId), "New " + diagramId)
+        area = CDrawingArea(self.application.DiagramFactory.GetDiagram(diagramId))
         self.twProjectView.AddDrawingArea(area)
         self.nbTabs.AddTab(area)
         self.picDrawingArea.SetDrawingArea(area)
