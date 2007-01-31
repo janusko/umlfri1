@@ -3,13 +3,15 @@ import lib.consts
 import Connection, Element
 
 class CDrawingArea:
-    def __init__(self, type, name = "untitled"):
+    def __init__(self, type, name = None): #  name = "untitled"
         self.elements = []
         self.connections = []
         self.selected = set()
         self.path = None
-        self.name = name
         self.typeDiagram = type
+        if name is None:
+            name = "New " + type.GetId()
+        self.name = name
         
         
     # Cesta v strome kde sa nachadza drawing area
@@ -181,3 +183,26 @@ class CDrawingArea:
     def GetConnections(self):
         for c in self.connections:
             yield c
+            
+    # Automaticke generovanie mena diagramu 
+    # pomocou cprojNode zisti mena diagramov na rovnakej urovni
+    # ak meno uz existuje (a je rovnaky typ), area sa premenuje
+    def Assign(self, cprojNode):
+        if cprojNode.drawingareas != []:
+            id = 1
+            # zisti nazvy / typy diagramov, porovnaj a pripadne sa premenuj
+            checkNames = True
+            while checkNames :
+                checkNames = False
+                nName = self.GetName()
+                for drArea in cprojNode.drawingareas:
+                    if drArea.GetName() == self.GetName() and drArea.GetType() is self.GetType():
+                        while nName[-1].isdigit(): # useknem cisla
+                            nName = nName[:-1]
+                        if nName.endswith(' '):
+                            nName = nName + str(id)
+                        else:
+                            nName = nName + ' ' + str(id)
+                        self.SetName(nName)
+                        id = id + 1
+                        checkNames = True #znovu prekontroluj nazvy

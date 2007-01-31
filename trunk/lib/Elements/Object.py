@@ -122,3 +122,26 @@ class CElementObject:
             self.connections.remove(connection)
         else:
             raise UMLException("ConnectionNotFound")
+     
+    # Automaticke generovanie mena elementu 
+    # pomocou cprojNode zisti mena elementov na rovnakej urovni
+    # ak meno uz existuje (a je rovnaky typ), objekt sa premenuje
+    def Assign(self, cprojNode):
+        if cprojNode.parent is not None:
+            id = 1
+            # zisti nazvy / typy deti, porovnaj a pripadne sa premenuj
+            checkNames = True
+            while checkNames :
+                checkNames = False
+                for child in cprojNode.parent.childs:
+                    if child.GetName() == self.GetName() and child.GetObject().GetType() is self.GetType():
+                        nName = self.GetName()
+                        while nName[-1].isdigit(): # useknem cisla
+                            nName = nName[:-1]
+                        if nName.endswith(' '):
+                            nName = nName + str(id)
+                        else:
+                            nName = nName + ' ' + str(id)
+                        self.SetAttribute('Name', nName)
+                        id = id + 1
+                        checkNames = True #znovu prekontroluj nazvy
