@@ -1,0 +1,18 @@
+<ElementType id="Note">
+    <Icon path="icons/class.png" />
+    <Connections>
+    </Connections>
+    <Attributes>
+        <Item value="Name" type="str" propid="name" />
+        <Item value="Notes" type="note" propid="note" />
+    </Attributes>
+    <Appearance>
+        <Shadow padding="3" color="#505050">
+            <Rectangle fill="lightpink2" border="black" righttop="10 pink note">
+                <Padding padding="5">
+                    <TextBox text="#note" color="yellow" />
+                </Padding>
+            </Rectangle>
+        </Shadow>
+    </Appearance>
+</ElementType>

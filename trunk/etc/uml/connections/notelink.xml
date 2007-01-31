@@ -1,0 +1,9 @@
+<ConnectionType id="Note Link">
+    <Icon path="icons/agregate.png" />
+    <SrcArrow possible="0" default="0" />
+    <DestArrow possible="1" default="0" />
+    <Appearance>
+    	<LineStyle style="dot" color="black" />
+    	<ArrowStyle style="simple" fill="blue" color="black" />
+    </Appearance>
+</ConnectionType>

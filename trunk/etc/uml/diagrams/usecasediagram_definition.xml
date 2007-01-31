@@ -4,9 +4,11 @@
     <Elements>
         <Item value="UseCase" umlversion="*" />
         <Item value="Actor" umlversion="*" />
+        <Item value="Note" umlversion="*" />
     </Elements>
     <Connections>
         <Item value="Generalization" umlversion="*" />
         <Item value="Association" umlversion="*" />
+        <Item value="Note Link" umlversion="*" />
     </Connections>
 </DiagramType>
