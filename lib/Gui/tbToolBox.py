@@ -55,27 +55,26 @@ class CtbToolBox(CWidget):
             self.tbToolBox.insert(ArrowButton, -1)
             return
             
-        self.DiagramType = self.application.DiagramFactory.GetDiagram(DiagramId)
+        self.DiagramType = self.application.Project.GetDiagramFactory().GetDiagram(DiagramId)
         if self.DiagramType is None:
             raise Exception('tbToolBox.DiagramType is None')
         ArrowButton = self.tbToolBox.get_nth_item(0)
         for button in self.tbToolBox.get_children():
             self.tbToolBox.remove(button)
-            
         self.tbToolBox.insert(ArrowButton, -1)
         
         ElementNameList = self.DiagramType.GetElements()
         if len(ElementNameList) > 0:
             self.__InsertSeparator()
             for ElementName in ElementNameList:
-                ElementType = self.application.ElementFactory.GetElement(ElementName)
+                ElementType = self.application.Project.GetElementFactory().GetElement(ElementName)
                 self.__InsertButton(ElementType, 'Element', ArrowButton)
             
         ConnectionNameList = self.DiagramType.GetConnections()
         if len(ConnectionNameList) > 0:
             self.__InsertSeparator()
             for ConnectionName in ConnectionNameList:
-                ConnectionType = self.application.ConnectionFactory.GetConnection(ConnectionName)
+                ConnectionType = self.application.Project.GetConnectionFactory().GetConnection(ConnectionName)
                 self.__InsertButton(ConnectionType, 'Connection', ArrowButton)
                 
     def __ResetSelected(self):
