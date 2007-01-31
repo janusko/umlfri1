@@ -2,12 +2,13 @@
 [x] XML pre verzie UML (BG)
 [x] Prehodenie eventov z glade suboru do kodu
 [x] ODSTRANIT Drag and Drop (palino)
-[ ] Automaticke nazvy diagramov
-[ ] Automaticke nazvy elementov
+[x] Automaticke nazvy diagramov
+[x] Automaticke nazvy elementov
 [x] Presunut CProjekt do Application
 [ ] Nastavovanie fontu z XML
 [ ] Presunutie konfiguracnych hodnot z const.py do /etc
 [ ] Prerobit Get* na yield, kde treba
+[ ] Drag 'n Drop pridavanie elementov zo stromu do diagramu
 [-] Project tree (miroslav, frizi)
     [X] Tabovanie
     [x] Prerobit menu (na pridaj diagram)
@@ -23,9 +24,10 @@
     [x] Zmena ciar (posuvanie)
     [x] Presuvanie ciar s elementami (palino)
     [x] Select ciar (palino)
-    [ ] Zarovnanie konca ciary s koncom elementu
+    [x] Zarovnanie konca ciary s koncom elementu
     [ ] Ked zmenim ciaru, neposunie sa label
-    [ ] Lamanie ciar
+    [x] Lamanie ciar
+    [ ] Kontrola validity ciar
 [ ] Flexibilna plocha
     [ ] Vyhodit ten sprosty backbuffer
     [ ] Hladanie kolizii objektov
@@ -44,13 +46,6 @@
 [ ] CSVG Visual object (janik)
     [x] Group object (janik)
     [x] Optimalizacia
-    [ ] shapes
-        [ ] rect
-        [ ] circle
-        [ ] ellipse
-        [ ] line
-        [ ] polygon
-        [ ] polyline
     [ ] path
         [x] move (janik)
         [x] line (janik)
@@ -63,13 +58,13 @@
     [x] transformation matrixes
         [x] translate (janik)
         [x] matrix (janik)
-[-] Zaoblene rohy na Rectangle Visual Object-e
+[x] Zaoblene rohy na Rectangle Visual Object-e
 ...
 [ ] ZOrder
 [?] Menenie kurzoru po prechode nad volaco
 [ ] Resizovanie elementov
 [x] Save
-[ ] Load
+[x] Load
     [ ] Sablony
 [?] Export/Import XMI
 [x] Napisat README

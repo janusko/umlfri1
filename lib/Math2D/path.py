@@ -1,6 +1,7 @@
 from transform_matrix import TransformMatrix, PointMatrix
+from exceptions import MathException
 
-class PathPart:
+class PathPart(object):
     operation = None
     
     def GetOp(self):
@@ -8,6 +9,12 @@ class PathPart:
     
     def SetOp(self, value):
         self.operation = value
+    
+    def __str__(self):
+        return ""
+    
+    def __repr__(self):
+        return '<%s "%s">'%(self.__class__.__name__, self)
 
 class PathPartMove(PathPart):
     operation = 'start'
@@ -17,6 +24,12 @@ class PathPartMove(PathPart):
             self.point = point
         else:
             self.point = PointMatrix.mk_xy(point)
+    
+    def GetFirstPos(self):
+        return self.point
+    
+    def GetLastPos(self):
+        return self.point
     
     def __iter__(self):
         yield self.point.GetIntPos()
@@ -44,6 +57,12 @@ class PathPartLine(PathPart):
             self.point2 = point2
         else:
             self.point2 = PointMatrix.mk_xy(point2)
+    
+    def GetFirstPos(self):
+        return self.point1
+    
+    def GetLastPos(self):
+        return self.point2
     
     def __iter__(self):
         yield self.point2.GetIntPos()
@@ -80,6 +99,12 @@ class PathPartBezier(PathPart):
         else:
             self.point4 = PointMatrix.mk_xy(point4)
     
+    def GetFirstPos(self):
+        return self.point1
+    
+    def GetLastPos(self):
+        return self.point4
+    
     def __iter__(self):
         pt1 = self.point1.GetIntPos()
         pt2 = self.point2.GetIntPos()
@@ -106,7 +131,7 @@ class PathPartBezier(PathPart):
     def __str__(self):
         return 'C %d,%d %d,%d %d,%d'%(self.point2.GetIntPos()+self.point3.GetIntPos()+self.point4.GetIntPos())
 
-class PathSingle:
+class PathSingle(object):
     def __init__(self, path = None):
         if path is None:
             self.path = []
@@ -116,14 +141,26 @@ class PathSingle:
     def append(self, part):
         self.path.append(part)
     
+    def extend(self, other):
+        self.path.extend(other.path)
+    
     def __iter__(self):
         return (point for part in self.path for point in part)
         #for part in self.path:
         #    for point in part:
         #        yield point
     
-    def __getitem__(self, item):
-        return self.path[item]
+    def __getitem__(self, index):
+        if type(index) is slice:
+            return self.__class__(self.path[index])
+        else:
+            return self.path[index]
+    
+    def __add__(self, other):
+        if isinstance(other, PathSingle):
+            return self.__class__(self.path+other.path)
+        else:
+            return self.__class__(self.path+other)
     
     def __rmul__(self, other):
         if not isinstance(other, TransformMatrix):
@@ -133,6 +170,9 @@ class PathSingle:
             ret.append(other*part)
         return self.__class__(ret)
     
+    def __len__(self):
+        return len(self.path)
+    
     def GetType(self):
         if self.path[0].GetOp() == 'startstop':
             return 'polygon'
@@ -141,8 +181,11 @@ class PathSingle:
     
     def __str__(self):
         return ' '.join([str(i) for i in self.path])
+    
+    def __repr__(self):
+        return '<%s "%s">'%(self.__class__.__name__, self)
 
-class Path:
+class Path(object):
     def __init__(self, path):
         if isinstance(path, list):
             self.path = path
@@ -188,6 +231,55 @@ class Path:
                     ret2 = None
         return ret
     
+    def GetFirstPos(self):
+        return self.path[0][0].GetFirstPos()
+    
+    def GetLastPos(self):
+        return self.path[-1][-1].GetLastPos()
+    
+    def Flattern(self):
+        ret = PathSingle()
+        for path in self.path:
+            if ret:
+                if ret[-1].GetLastPos() == path[0].GetFirstPos():
+                    if isinstance(path[0], PathPartMove):
+                        ret.extend(path[1:])
+                    else:
+                        ret.extend(path)
+                else:
+                    ret.append(PathPartLine(ret[-1].GetLastPos(), path[0].GetFirstPos()))
+                    ret.extend(path[1:])
+            else:
+                ret.extend(path)
+        return self.__class__([ret])
+    
+    def Close(self, index = 0):
+        self.path[index][0].SetOp('startstop')
+    
+    def __add__(self, other):
+        if isinstance(other, Path):
+            return self.__class__(self.path+other.path)
+        elif isinstance(other, PathSingle):
+            return self.__class__(self.path+[other])
+        elif isinstance(other, PathPart):
+            return self.__class__(self.path+[PathSingle([other])])
+        else:
+            return NotImplemented
+    
+    @classmethod
+    def Join(cls, iterator):
+        ret = []
+        for other in iterator:
+            if isinstance(other, Path):
+                ret.extend(other.path)
+            elif isinstance(other, PathSingle):
+                ret.append(other)
+            elif isinstance(other, PathPartMove):
+                ret.append(PathSingle([other]))
+            elif isinstance(other, PathPart):
+                ret.append(PathSingle([PathPartMove(other.GetFirstPos()), other]))
+        return cls(ret)
+    
     def __rmul__(self, other):
         if not isinstance(other, TransformMatrix):
             return NotImplemented
@@ -201,14 +293,17 @@ class Path:
     
     def __getitem__(self, index):
         if type(index) is slice:
-            return Path(self.path[index])
+            return self.__class__(self.path[index])
         else:
-            return self.path[index]
+            return self.__class__([self.path[index]])
     
     def __iter__(self):
         return (single for single in self.path)
         #for single in self.path:
         #    yield single
     
-    def __repr__(self):
+    def __str__(self):
         return ' '.join([str(i) for i in self.path])
+    
+    def __repr__(self):
+        return '<%s "%s">'%(self.__class__.__name__, self)

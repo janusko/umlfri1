@@ -5,11 +5,13 @@
         <Item value="Package" />
         <Item value="Object" />
         <Item value="Class" />
+        <Item value="Note" />
     </Elements>
     <Connections>
         <Item value="Generalization" />
         <Item value="Association" />
         <Item value="Agregation" />
-        <Item value="Compose" />        
+        <Item value="Compose" />
+        <Item value="Note Link" />
     </Connections>
 </DiagramType>

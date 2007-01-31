@@ -1,6 +1,6 @@
 import math
 
-class Matrix:
+class Matrix(object):
     def __init__(self, size = None, matrix = None):
         if size is not None:
             self.matrix = [[0]*size[0] for i in xrange(size[1])]
@@ -88,7 +88,7 @@ class TransformMatrix(Matrix):
         ])
     
     @classmethod
-    def mk_scale2(cls, scaleX, scaleY):
+    def mk_scale2(cls, (scaleX, scaleY)):
         return cls([
             [scaleX,    0,      0],
             [0,         scaleY, 0],
