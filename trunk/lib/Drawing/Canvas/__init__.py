@@ -1,1 +1,2 @@
-from Gtk import GtkCanvas
+from Gtk import CGtkCanvas
+from Svg import CSvgCanvas

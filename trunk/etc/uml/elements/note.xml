@@ -10,9 +10,11 @@
     <Appearance>
         <Shadow padding="3" color="#505050">
             <Rectangle fill="lightpink2" border="black" righttop="10 pink note">
-                <Padding padding="5">
-                    <TextBox text="#note" color="yellow" />
-                </Padding>
+                <Sizer minwidth="50">
+                    <Padding padding="5">
+                        <TextBox text="#note" color="yellow" />
+                    </Padding>
+                </Sizer>
             </Rectangle>
         </Shadow>
     </Appearance>

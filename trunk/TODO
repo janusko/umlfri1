@@ -8,8 +8,7 @@
 [ ] Nastavovanie fontu z XML
 [ ] Presunutie konfiguracnych hodnot z const.py do /etc
 [ ] Prerobit Get* na yield, kde treba
-[X] Drag 'n Drop pridavanie elementov zo stromu do diagramu
-[X] Drag 'n Drop premiestnovanie elementov v strome
+[ ] Drag 'n Drop pridavanie elementov zo stromu do diagramu
 [-] Project tree (miroslav, frizi)
     [X] Tabovanie
     [x] Prerobit menu (na pridaj diagram)
@@ -28,17 +27,17 @@
     [x] Zarovnanie konca ciary s koncom elementu
     [ ] Ked zmenim ciaru, neposunie sa label
     [x] Lamanie ciar
-    [ ] Kontrola validity ciar
+    [+] Kontrola validity ciar
 [ ] Flexibilna plocha
     [ ] Vyhodit ten sprosty backbuffer
     [ ] Hladanie kolizii objektov
     [ ] Vymysliet naky inteligentny sposob hladania tried na kraji viewport-u
     [ ] Skrolovanie bitblit-om + vykreslovanie zvysku
-[X] Mazanie elementov
+[x] Mazanie elementov
     [x] Zmazanie z drawing area (palino)
-    [X] Mazanie vsetkych pozozstatkov
+    [x] Mazanie vsetkych pozozstatkov
         [x] Mazanie cez kontextove menu v strome
-        [X] Mazanie priamo z diagramu (klavesovou skratkou)
+        [x] Mazanie priamo z diagramu (klavesovou skratkou)
 [ ] Mazanie ciar
     [x] Zmazanie z drawing area
     [ ] Mazanie vsetkych pozozstatkov
@@ -60,8 +59,14 @@
         [x] translate (janik)
         [x] matrix (janik)
 [x] Zaoblene rohy na Rectangle Visual Object-e
+[x] Visual object na min, max - width, height
+[x] Visual object na ikonu
+[x] Specialna visual property CHILDREN
+[X] Zobrazovanie childov v Package
+[ ] Preklady sk_SK, en_US
+[-] Export do SVG
 ...
-[ ] ZOrder
+[x] ZOrder
 [?] Menenie kurzoru po prechode nad volaco
 [ ] Resizovanie elementov
 [x] Save

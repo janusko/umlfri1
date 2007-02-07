@@ -8,9 +8,6 @@ class CLine(CVisualObject):
         self.type = type
         self.color = color
 
-    def GetType(self):
-        return self.type
-
     def ComputeType(self):
         tp = self.type
         if tp == 'auto':
@@ -52,9 +49,3 @@ class CLine(CVisualObject):
             canvas.DrawLine(pos, (pos[0]+size[0], pos[1]), self.color)
         elif tp == 'vertical' and pos[1] is not None:
             canvas.DrawLine(pos, (pos[0], pos[1]+size[1]), self.color)
-
-    def SetType(self, type = "auto"):
-        self.type = type
-    
-    def SetColor(self, color):
-        self.color = color

@@ -1,4 +1,5 @@
 from SimpleContainer import CSimpleContainer
+from lib.lib import UMLException
 
 class CAlign(CSimpleContainer):
     def __init__(self, align):
@@ -25,18 +26,6 @@ class CAlign(CSimpleContainer):
                 self.aligny = i
             elif i == 'middle':
                 self.aligny = 'center'
-
-    def GetAlignX(self):
-        return self.alignx
-    
-    def GetAlignY(self):
-        return self.aligny
-    
-    def SetAlignX(self, align):
-        self.alignx = align
-    
-    def SetAlignY(self, align):
-        self.aligny = align
 
     def PaintShadow(self, canvas, pos, element, color, size = (None, None)):
         x, y = pos

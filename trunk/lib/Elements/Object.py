@@ -1,4 +1,5 @@
 from lib.lib import UMLException
+import weakref
 
 class CElementObject:
     def __init__(self, type):
@@ -9,7 +10,7 @@ class CElementObject:
         for i in self.type.GetAttributes():
             self.SetAttribute(i, self.type.GetDefValue(i))            
         self.SetAttribute('Name', 'New ' + type.GetId())        
-
+        self.node = lambda: None
     
     def GetPath(self):
         return self.path
@@ -54,6 +55,17 @@ class CElementObject:
             yield attr
         
     def GetVisualProperty(self, key):
+        if key == 'CHILDREN':
+            node = self.node()
+            if node is None:
+                return []
+            v = []
+            for vi in node.GetChilds():
+                o = {}
+                o['icon'] = vi.GetObject().GetType().GetIcon()
+                o['name'] = vi.GetObject().GetName()
+                v.append(o)
+            return v
         attr = self.type.GetVisAttr(key)
         type = self.type.GetAttribute(attr)
         val = self.attribs[attr]
@@ -127,6 +139,7 @@ class CElementObject:
     # pomocou cprojNode zisti mena elementov na rovnakej urovni
     # ak meno uz existuje (a je rovnaky typ), objekt sa premenuje
     def Assign(self, cprojNode):
+        self.node = weakref.ref(cprojNode)
         if cprojNode.parent is not None:
             id = 1
             # zisti nazvy / typy deti, porovnaj a pripadne sa premenuj

@@ -20,15 +20,6 @@ class CCondition(CSimpleContainer):
             return not ret
         return ret
 
-    def GetCondition(self):
-        return self.condition
-
-    def GetNegate(self):
-        self.negate
-
-    def GetType(self):
-        self.type
-
     def GetHeight(self, canvas, element):
         if self.__IsTrue(element):
             return CSimpleContainer.GetHeight(self, canvas, element)
@@ -48,12 +39,3 @@ class CCondition(CSimpleContainer):
         if self.__IsTrue(element):
             for child in self.childs:
                 CSimpleContainer.Paint(self, canvas, pos, element, size)
-    
-    def SetCondition(self, condition):
-        self.condition = condition
-
-    def SetNegate(self, negate):
-        self.negate = negate
-
-    def SetType(self, type):
-        self.type = type

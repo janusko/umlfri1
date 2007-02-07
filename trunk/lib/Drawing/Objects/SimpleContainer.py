@@ -1,5 +1,5 @@
-from Container import CContainer
 from lib.lib import UMLException
+from Container import CContainer
 
 class CSimpleContainer(CContainer):
     def AppendChild(self, child):

@@ -1,13 +1,11 @@
 from SimpleContainer import CSimpleContainer
+from lib.lib import UMLException
 
 class CShadow(CSimpleContainer):
     def __init__(self, padding, color):
         CSimpleContainer.__init__(self)
         self.padding = int(padding)
         self.color = color
-
-    def GetPadding(self):
-        return self.padding
 
     def GetHeight(self, canvas, element):
         return self.GetChilds()[0].GetHeight(canvas, element)
@@ -23,6 +21,3 @@ class CShadow(CSimpleContainer):
         self.GetChilds()[0].PaintShadow(canvas, (pos[0] + self.padding, pos[1] + self.padding),
                                     element, self.color, size)
         self.GetChilds()[0].Paint(canvas, pos, element, size)
-
-    def SetPadding(self, padding):
-        self.padding = padding

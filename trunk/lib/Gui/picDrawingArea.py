@@ -8,7 +8,7 @@ from lib.Drawing import CDrawingArea, CElement, CConnection
 from lib.Elements import CElementObject
 from lib.Connections import CConnectionObject, EConnectionRestriction
 
-from lib.Drawing.Canvas import GtkCanvas
+from lib.Drawing.Canvas import CGtkCanvas, CSvgCanvas
 from lib.Drawing import Element
 
 targets = [('document/uml', 0, gtk.TARGET_SAME_WIDGET)]
@@ -44,7 +44,7 @@ class CpicDrawingArea(CWidget):
 
         self.Buffer = gtk.gdk.Pixmap(self.picDrawingArea.window, 1000, 1000)
         self.DrawingArea = CDrawingArea(None,"Start page")
-        self.canvas = GtkCanvas(self.picDrawingArea, self.Buffer)
+        self.canvas = CGtkCanvas(self.picDrawingArea, self.Buffer, self.application.Project.GetStorage())
 
         cmap = self.picDrawingArea.window.get_colormap()
         self.DragGC = self.picDrawingArea.window.new_gc(foreground = cmap.alloc_color(SELECT_SQUARE_COLOR),
@@ -123,6 +123,12 @@ class CpicDrawingArea(CWidget):
         tmp.upper = dasy
         tmp.page_size = wisy
         self.picVBar.set_adjustment(tmp)
+    
+    def ExportSvg(self, filename):
+        canvas = CSvgCanvas(1000, 1000, self.canvas, self.application.Project.GetStorage())
+        canvas.Clear()
+        self.DrawingArea.Paint(canvas)
+        canvas.WriteOut(file(filename, 'w'))
     
     def DeleteElements(self):
         for sel in self.DrawingArea.GetSelected():

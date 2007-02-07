@@ -24,15 +24,6 @@ class CRectangle(CSimpleContainer):
         
         self.borderwidth = int(borderwidth)
 
-    def GetBorder(self):
-        return self.border
-
-    def GetBorderWidth(self):
-        return self.borderwidth
-
-    def GetFill(self):
-        return self.fill
-
     def PaintShadow(self, canvas, pos, element, color, size = (None, None)):
         size = self.ComputeSize(canvas, element, size)
         if self.corners == (None, None, None, None):
@@ -86,14 +77,3 @@ class CRectangle(CSimpleContainer):
             if c is not None and len(c[1]) > 0:
                 tmp = TransformMatrix.mk_translation(positions[i])*c[1][:-1]
                 canvas.DrawPath(tmp, self.border, c[0])
-
-    def SetBorder(self, border):
-        self.border = border
-        self.border_obj = gtk.gdk.color_parse(border)
-
-    def SetBorderWidth(self, width = 1):
-        self.borderwidth = width
-
-    def SetFill(self, fill = None):
-        self.fill = fill
-        self.fill_obj = gtk.gdk.color_parse(fill)

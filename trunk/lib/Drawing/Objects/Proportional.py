@@ -9,16 +9,6 @@ class CProportional(CSimpleContainer):
         if len(ratio) != 2:
             raise UMLException("XMLError", ("Proportional", "ratio"))
         self.ratio = float(int(ratio[0]))/int(ratio[1])
-    
-    def GetRatio(self):
-        return self.strratio
-    
-    def SetRatio(self, ratio):
-        self.strratio = ratio
-        ratio = ratio.split(':')
-        if len(ratio) != 2:
-            raise exception, ratio
-        self.ratio = float(int(ratio[0]))/int(ratio[1])
 
     def GetHeight(self, canvas, element):
         h = CSimpleContainer.GetHeight(self, canvas, element)
