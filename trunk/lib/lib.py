@@ -8,7 +8,7 @@ class UMLException(Exception):
     
     def __repr__(self):
         return self.__class__.__name__
-
+        
 def ToBool(val):
     if type(val) in (str, unicode):
         return val.lower() in ('1', 'yes', 'true')

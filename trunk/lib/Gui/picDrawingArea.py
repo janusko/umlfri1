@@ -6,7 +6,7 @@ from common import CWidget, event
 from lib.Drawing import CDrawingArea, CElement, CConnection
 
 from lib.Elements import CElementObject
-from lib.Connections import CConnectionObject
+from lib.Connections import CConnectionObject, EConnectionRestriction
 
 from lib.Drawing.Canvas import GtkCanvas
 from lib.Drawing import Element
@@ -24,8 +24,12 @@ class CpicDrawingArea(CWidget):
             (gobject.TYPE_PYOBJECT, )),
         'selected-item':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE,
             (gobject.TYPE_PYOBJECT, )),
-        'add-element':(gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,gobject.TYPE_PYOBJECT,)),
-        'delete-element-from-all':(gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
+        'run-dialog':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_PYOBJECT,
+            (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT, )), #type, message
+        'add-element':(gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
+            (gobject.TYPE_PYOBJECT,gobject.TYPE_PYOBJECT,)),
+        'delete-element-from-all':(gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
+            (gobject.TYPE_PYOBJECT, )),
     }
 
     def __init__(self, app, wTree):
@@ -187,8 +191,8 @@ class CpicDrawingArea(CWidget):
             elif self.__NewConnection is None:
                 ConnectionType = self.application.Project.GetConnectionFactory().GetConnection(toolBtnSel[1])
                 center = itemSel.GetCenter(self.canvas)
-                self.__NewConnection = (CConnectionObject(ConnectionType), [center], itemSel)
-                self.__NewConnection[0].SetSource(itemSel.GetObject())
+                self.__NewConnection = (ConnectionType, [center], itemSel)
+                #self.__NewConnection[0].SetSource(itemSel.GetObject())
                 self.__DrawNewConnection( center[0], center[1], False )
             else:
                 pass
@@ -220,38 +224,43 @@ class CpicDrawingArea(CWidget):
 
     @event("picEventBox", "button-release-event")
     def on_button_release_event(self, widget, event):
-        pos = self.GetAbsolutePos(event.x, event.y)
-        if self.dnd == 'rect':
-            delta = self.__GetDelta(event.x, event.y)
-            self.DrawingArea.MoveSelection(delta)
-            self.dnd = None
-            self.Paint()
-        elif self.dnd == 'point':
-            point = self.GetAbsolutePos(event.x, event.y)
-            connection, index = self.DragPoint
-            connection.MovePoint(self.canvas, point, index)
-            self.dnd = None
-            self.Paint()
-        elif self.dnd == 'line':
-            point = self.GetAbsolutePos(event.x, event.y)
-            connection, index = self.DragPoint
-            connection.AddPoint(self.canvas, point, index)
-            self.dnd = None
-            self.Paint()
-        elif self.__NewConnection is not None:
-            itemSel = self.DrawingArea.GetElementAtPosition(self.canvas, pos)
-            if itemSel is None:
-                self.__NewConnection[1].append(pos)
-                self.__DrawNewConnection( None, None )
-            elif itemSel is not self.__NewConnection[2] or len(self.__NewConnection[1]) > 2:
-                self.__NewConnection[0].SetDestination(itemSel.GetObject())
-                (obj, points, source), destination = self.__NewConnection, itemSel
-                x = CConnection(self.DrawingArea, obj, source, destination, points[1:])
-                self.__NewConnection = None
-                self.emit('set-selected', None)
+        try:
+            pos = self.GetAbsolutePos(event.x, event.y)
+            if self.dnd == 'rect':
+                delta = self.__GetDelta(event.x, event.y)
+                self.DrawingArea.MoveSelection(delta)
+                self.dnd = None
                 self.Paint()
-            else:
-                pass
+            elif self.dnd == 'point':
+                point = self.GetAbsolutePos(event.x, event.y)
+                connection, index = self.DragPoint
+                connection.MovePoint(self.canvas, point, index)
+                self.dnd = None
+                self.Paint()
+            elif self.dnd == 'line':
+                point = self.GetAbsolutePos(event.x, event.y)
+                connection, index = self.DragPoint
+                connection.AddPoint(self.canvas, point, index)
+                self.dnd = None
+                self.Paint()
+            elif self.__NewConnection is not None:
+                itemSel = self.DrawingArea.GetElementAtPosition(self.canvas, pos)
+                if itemSel is None or isinstance(itemSel, CConnection):
+                    self.__NewConnection[1].append(pos)
+                    self.__DrawNewConnection( None, None )
+                elif itemSel is not self.__NewConnection[2] or len(self.__NewConnection[1]) > 2:
+                    (type, points, source), destination = self.__NewConnection, itemSel
+                    obj = CConnectionObject(type, source.GetObject(), destination.GetObject())
+                    x = CConnection(self.DrawingArea, obj, source, destination, points[1:])
+                    self.__NewConnection = None
+                    self.emit('set-selected', None)
+                    self.Paint()
+                else:
+                    pass
+        except EConnectionRestriction:
+            self.ResetAction()
+            self.emit('set-selected', None)
+            self.emit('run-dialog', 'warning', 'invalid connection')
 
     @event("picEventBox", "motion-notify-event")
     def on_motion_notify_event(self, widget, event):

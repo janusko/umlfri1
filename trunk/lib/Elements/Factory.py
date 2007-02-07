@@ -48,7 +48,7 @@ class CElementFactory:
                     with_what = None
                     allow_recursive = False
                     if item.hasAttribute('with'):
-                        with_what = item.getAttribute('with')
+                        with_what = item.getAttribute('with').split(',')
                     if item.hasAttribute('allowrecursive'):
                         allow_recursive = item.getAttribute('allowrecursive').lower() in ('1', 'true', 'yes')
                     obj.AppendConnection(value, with_what, allow_recursive)

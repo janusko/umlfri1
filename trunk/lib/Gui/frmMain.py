@@ -4,6 +4,7 @@ from common import CWindow, event
 import common
 
 from lib.Elements import CElementObject
+from dialogs import CWarningDialog
 from lib.Drawing import CDrawingArea
 from tbToolBox import CtbToolBox
 from twProjectView import CtwProjectView
@@ -151,3 +152,11 @@ class CfrmMain(CWindow):
     @event("tbToolBox", "toggled")
     def on_tbToolBox_toggled(self, widget, ItemId, ItemType):
         self.picDrawingArea.ResetAction()
+        
+    @event("picDrawingArea", "run-dialog")
+    def on_run_dialog(self, widget, type, message):
+        if type == 'warning':
+            return CWarningDialog(self.form, message).run()
+        else:
+            pass
+    
