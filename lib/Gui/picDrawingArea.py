@@ -15,7 +15,9 @@ targets = [('document/uml', 0, gtk.TARGET_SAME_WIDGET)]
 
 class CpicDrawingArea(CWidget):
     name = 'picDrawingArea'
-    widgets = ('picDrawingArea', 'picEventBox', 'picVBar', 'picHBar', 'tbDrawingArea', 'vbAll', 'nbTabs')
+    widgets = ('picDrawingArea', 'picEventBox', 'picVBar', 'picHBar',
+                'tbDrawingArea', 'vbAll', 'nbTabs', 'pMenuShift', 
+                'pmShift_SendBack', 'pmShift_BringForward', 'pmShift_ToBottom', 'pmShift_ToTop',)
 
     __gsignals__ = {
         'get-selected':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_PYOBJECT,
@@ -191,6 +193,11 @@ class CpicDrawingArea(CWidget):
                     self.DrawingArea.DeselectAll()
                     self.emit('selected-item', None)
                     self.Paint()
+        else:
+            if event.button == 3:
+                #ak je nieco vyselectovane:
+                if len( list(self.DrawingArea.GetSelectedElements()) ) > 0: 
+                    self.pMenuShift.popup(None,None,None,event.button,event.time)
 
     def __AddItem(self, toolBtnSel, event):
         pos = self.GetAbsolutePos(event.x, event.y)
@@ -430,3 +437,31 @@ class CpicDrawingArea(CWidget):
         if self.__NewConnection is not None:
             self.__NewConnection = None
         self.Paint()
+
+    
+    # Menu na Z-Order:       
+    @event("pmShift_SendBack","activate")
+    def on_pmShift_SendBack_activate(self, menuItem):
+        self.DrawingArea.ShiftElementsBack(self.canvas)
+        #self.DrawingArea.DeselectAll()
+        self.Paint()
+        
+    @event("pmShift_BringForward","activate")
+    def on_pmShift_BringForward_activate(self, menuItem):
+        self.DrawingArea.ShiftElementsForward(self.canvas)
+        #self.DrawingArea.DeselectAll()
+        self.Paint()        
+      
+      
+    @event("pmShift_ToBottom","activate")
+    def on_pmShift_ToBottom_activate(self, menuItem):
+        self.DrawingArea.ShiftElementsToBottom()
+        #self.DrawingArea.DeselectAll()
+        self.Paint()        
+      
+    @event("pmShift_ToTop","activate")
+    def on_pmShift_ToTop_activate(self, menuItem):
+        self.DrawingArea.ShiftElementsToTop()
+        #self.DrawingArea.DeselectAll()
+        self.Paint()        
+      
