@@ -80,9 +80,6 @@ class CConnectionType(object):
     def GetId(self):
         return self.id
     
-    def SetId(self, value):
-        self.id = value
-    
     def SetDestArrow(self, value):
         self.destArrow = value
     
@@ -133,7 +130,7 @@ class CConnectionType(object):
         else:
             raise UMLException('VisAttrDontExists')
     
-    ID = property(GetId, SetId)
+    ID = property(GetId)
     Icon = property(GetIcon, SetIcon)
     DestinationArrow = property(GetDestArrow, SetDestArrow)
     SourceArrow = property(GetSrcArrow, SetSrcArrow)

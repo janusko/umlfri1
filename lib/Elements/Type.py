@@ -21,9 +21,10 @@ class CElementType:
     
     def GetAppearance(self):
         return self.appearance
-    
+                
     def GetConnections(self):
-        return self.connections
+        for item in self.connections.iteritems():
+            yield item
     
     def GetIcon(self):
         return self.icon

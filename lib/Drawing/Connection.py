@@ -1,7 +1,7 @@
 from lib.lib import UMLException
 from lib.consts import SELECT_SQUARES_SIZE, SELECT_POINT_SQUARES_COLOR, SELECT_SQUARES_COLOR
 from lib.Connections.Object import CConnectionObject
-from lib.Math2D import Point, Line, Square
+from lib.Math2D import CPoint, CLine, CRectangle
 from math import sqrt, atan2, pi
 
 class CConnection:
@@ -126,29 +126,13 @@ class CConnection:
 
     def WhatPartOfYouIsAtPosition(self, canvas, point):
         points = [p for p in self.GetPoints(canvas)]
-        x, y = point
-        Xo, Yo = points[0]
-        for index, i in enumerate(points[1:]):
-            A = Yo - i[1]
-            B = i[0] - Xo
-            if A + B == 0:
-                if (A-x)**2 + (B-x)**2 <= 2:
-                    return index
-                else:
-                    Xo, Yo = i
-                    continue
-            C = Xo*i[1] - i[0] * Yo
-            T = (-B*Xo + A*Yo - A*y + B*x)/(A**2 + B**2)
-            if T < 0:
-                if sqrt((Xo - x)**2 + (Yo - y)**2) <= 2:
-                    return index
-            elif T > 1:
-                if sqrt((i[0] - x)**2 + (i[1] - y)**2) <= 2:
-                    return index
-            else:
-                if abs((abs(A*x + B*y + C))/sqrt(A**2 + B**2)) <= 2:
-                    return index
-            Xo, Yo = i
+        point = CPoint(point)
+        point1 = points[0]
+        for index, point2 in enumerate(points[1:]):
+            line = CLine(CPoint(point1), CPoint(point2))
+            if line - point < 2:
+                return index
+            point1 = point2
         else:
             return None
     
@@ -221,8 +205,8 @@ class CConnection:
         
     def __ComputeIntersect(self, canvas, element, center, point):
         topLeft, bottomRight = element.GetSquare(canvas)
-        square = Square(Point(topLeft), Point(bottomRight))
-        line = Line(Point(center), Point(point))
+        square = CRectangle(CPoint(topLeft), CPoint(bottomRight))
+        line = CLine(CPoint(center), CPoint(point))
         intersects = square * line
         if len(intersects) > 0:
             return intersects[0].GetPos()

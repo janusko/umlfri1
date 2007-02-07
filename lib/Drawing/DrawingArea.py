@@ -112,7 +112,6 @@ class CDrawingArea:
                     if con not in movedCon:
                         con.MoveAll(delta)
                         movedCon.add(con)
-        
     
     def DeleteObject(self, object):
         for i in self.elements:
@@ -162,7 +161,7 @@ class CDrawingArea:
         for c in self.connections:
             if c.AreYouAtPosition(canvas, pos):
                 return c
-                
+            
         for e in self.elements[::-1]:
             if e.AreYouAtPosition(canvas, pos):
                 return e
