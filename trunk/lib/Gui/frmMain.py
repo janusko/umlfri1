@@ -3,6 +3,7 @@ import gtk
 from common import CWindow, event
 import common
 
+from lib.Drawing import CElement
 from lib.Elements import CElementObject
 from dialogs import CWarningDialog
 from lib.Drawing import CDrawingArea
@@ -75,10 +76,25 @@ class CfrmMain(CWindow):
         if filename is not None:
             self.application.Project.SaveProject(filename)
 
+    @event("mnuDelete","activate")
+    def on_mnuDelete_click(self, widget):
+        self.picDrawingArea.DeleteElements()
+    
+    @event("mnuCut","activate")
+    def on_mnuCut_click(self, widget):
+        pass
+        
+    @event("mnuCopy","activate")
+    def on_mnuCopy_click(self, widget):
+        pass
+        
+    @event("mnuPaste","activate")
+    def on_mnuPaste_click(self, widget):
+        pass
+        
+        
     def ActionLoadToolBar(self, widget):
         pass
-
-
 
     # Moje vlastne signale
     @event("picDrawingArea", "add-element")
@@ -153,10 +169,17 @@ class CfrmMain(CWindow):
     def on_tbToolBox_toggled(self, widget, ItemId, ItemType):
         self.picDrawingArea.ResetAction()
         
+    @event("picDrawingArea","drop-from-treeview")
+    def on_drop_from_treeview(self, widget, position):
+        node = self.twProjectView.GetSelectedNode()
+        if node is not None:
+            drawingArea = self.picDrawingArea.GetDrawingArea()
+            Element = CElement(drawingArea, node.GetObject()).SetPosition(position)
+            node.AddAppears(drawingArea)
+    
     @event("picDrawingArea", "run-dialog")
     def on_run_dialog(self, widget, type, message):
         if type == 'warning':
             return CWarningDialog(self.form, message).run()
         else:
             pass
-    

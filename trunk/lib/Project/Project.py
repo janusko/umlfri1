@@ -22,15 +22,17 @@ from lib.consts import ROOT_PATH, VERSIONS_PATH, DIAGRAMS_PATH, ELEMENTS_PATH, C
 
 
 class CProject(object):
-    def __init__(self, Storage = None):
+    def __init__(self):
         self.root = None
-        self.Storage = Storage
+        self.Storage = open_storage(os.path.join(ROOT_PATH, 'etc', 'uml'))
         self.ElementFactory = CElementFactory(self.Storage, ELEMENTS_PATH)
         self.DiagramFactory = CDiagramFactory(self.Storage, DIAGRAMS_PATH)
         self.ConnectionFactory = CConnectionFactory(self.Storage, CONNECTIONS_PATH)
         self.VersionFactory = CVersionFactory(self.Storage, VERSIONS_PATH)
         self.version = self.VersionFactory.GetVersion('UML 1.4')
     
+    def GetStorage(self):
+        return self.Storage
     
     def GetElementFactory(self):
         return self.ElementFactory
@@ -191,6 +193,10 @@ class CProject(object):
     def LoadProject(self, file_path):
         ListObj = {}
         ListCon = {}
+        file = ZipFile(file_path,"r")
+        
+            
+        data = file.read('content.xml')
         
         def CreateTree(root, parentNode):
             for i in root.childNodes:
@@ -218,6 +224,7 @@ class CProject(object):
                                 if pic.tagName == "element":
                                     element = CElement(drawingarea,ListObj[pic.getAttribute("id")])
                                     element.SetPosition((int(pic.getAttribute("x")),int(pic.getAttribute("y"))))
+                                    proNode.AddAppears(drawingarea)
                                 elif pic.tagName == "connection":
                                     for e in drawingarea.GetElements():
                                         if e.GetObject() is ListCon[pic.getAttribute("id")].GetSource():
@@ -233,7 +240,7 @@ class CProject(object):
                                         elif propCon.tagName == "label":
                                             conect.SetLabelPosition(int(propCon.getAttribute("num")),(int(propCon.getAttribute("x")),int(propCon.getAttribute("y"))))
             
-        dom = xml.dom.minidom.parse(file_path)
+        dom = xml.dom.minidom.parseString(data)
         root = dom.documentElement
         if root.tagName != 'umlproject':
             raise UMLException("XMLError", root.tagName)

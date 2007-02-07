@@ -30,6 +30,7 @@ class CpicDrawingArea(CWidget):
             (gobject.TYPE_PYOBJECT,gobject.TYPE_PYOBJECT,)),
         'delete-element-from-all':(gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
             (gobject.TYPE_PYOBJECT, )),
+        'drop-from-treeview': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
     }
 
     def __init__(self, app, wTree):
@@ -46,7 +47,16 @@ class CpicDrawingArea(CWidget):
         cmap = self.picDrawingArea.window.get_colormap()
         self.DragGC = self.picDrawingArea.window.new_gc(foreground = cmap.alloc_color(SELECT_SQUARE_COLOR),
             function = gtk.gdk.XOR, line_width = SELECT_SQUARE_SIZE)
-
+        
+        self.TARGETS = [
+        ('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_WIDGET, 0),
+        ('text/plain', 0, 1),
+        ('TEXT', 0, 2),
+        ('STRING', 0, 3),
+        ]
+        
+        self.picEventBox.drag_dest_set(gtk.DEST_DEFAULT_ALL, self.TARGETS, gtk.gdk.ACTION_COPY)
+        
         self.AdjustScrollBars()
         self.Hide()
         self.Paint()
@@ -60,7 +70,7 @@ class CpicDrawingArea(CWidget):
         self.tbDrawingArea.show()
 
     def GetDrawingArea(self):
-        return self.picDrawingArea
+        return self.DrawingArea
 
     def SetDrawingArea(self, drawingArea):
         self.DrawingArea = drawingArea
@@ -111,7 +121,19 @@ class CpicDrawingArea(CWidget):
         tmp.upper = dasy
         tmp.page_size = wisy
         self.picVBar.set_adjustment(tmp)
-
+    
+    def DeleteElements(self):
+        for sel in self.DrawingArea.GetSelected():
+            if isinstance(sel, CConnection):
+                index = sel.GetSelectedPoint()
+                if index is not None and (sel.GetSource() != sel.GetDestination() or len(tuple(sel.GetMiddlePoints())) > 2):
+                    sel.RemovePoint(self.canvas, index)
+                    self.Paint()
+                    return
+        for sel in self.DrawingArea.GetSelected():
+            self.DrawingArea.DeleteItem(sel)
+        self.Paint()
+    
     @event("picEventBox", "button-press-event")
     def on_picEventBox_button_press_event(self, widget, event):
         self.picDrawingArea.grab_focus()
@@ -272,6 +294,13 @@ class CpicDrawingArea(CWidget):
             self.__DrawDragLine(event.x, event.y)
         elif self.__NewConnection is not None:
             self.__DrawNewConnection(event.x, event.y)
+
+    
+    @event("picEventBox","drag-data-received")
+    def on_drag_data_received(self, widget, drag_context, x, y, selection, targettype, timestamp):
+        position = self.GetAbsolutePos(x, y)
+        self.emit('drop-from-treeview',position)
+        self.Paint()
 
     @event("picDrawingArea", "expose-event")
     def on_picDrawingArea_configure_event(self, widget, tmp):

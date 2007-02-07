@@ -40,7 +40,7 @@ class CtwProjectView(CWidget):
             mi = gtk.ImageMenuItem(diagram.GetId())
             
             img = gtk.Image()
-            img.set_from_pixbuf(PixmapFromPath(self.application.Storage, diagram.GetIcon()))
+            img.set_from_pixbuf(PixmapFromPath(self.application.Project.GetStorage(), diagram.GetIcon()))
             img.show()
             
             mi.set_image(img)
@@ -80,14 +80,26 @@ class CtwProjectView(CWidget):
         
         #oznacenie korena
         self.twProjectView.get_selection().select_iter(parent)
+        
+        self.TARGETS = [
+        ('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_WIDGET, 0),
+        ('text/plain', 0, 1),
+        ('TEXT', 0, 2),
+        ('STRING', 0, 3),
+        ]
+        
+        self.twProjectView.enable_model_drag_source(gtk.gdk.BUTTON1_MASK, self.TARGETS, gtk.gdk.ACTION_DEFAULT | gtk.gdk.ACTION_MOVE | gtk.gdk.ACTION_COPY)
+        self.twProjectView.enable_model_drag_dest(self.TARGETS, gtk.gdk.ACTION_DEFAULT)
+        
 
-
+    
     def Redraw(self):
+        
         project = self.application.Project
         root = project.GetRoot()
         self.TreeStore.clear()
         parent = self.TreeStore.append(None)
-        self.TreeStore.set(parent, 0, root.GetName(), 1, PixmapFromPath(None, VIEW_IMAGE), 2, root.GetType(), 3, root)
+        self.TreeStore.set(parent, 0, root.GetName(), 1, PixmapFromPath(self.application.Project.GetStorage(), root.GetObject().GetType().GetIcon()), 2, root.GetType(), 3, root)
         self.__DrawTree(root, parent)
     
     
@@ -95,22 +107,25 @@ class CtwProjectView(CWidget):
         
         for area in root.GetDrawingAreas():
             novy = self.TreeStore.append(parent)
-            self.TreeStore.set(novy, 0, area.GetName() , 1, PixmapFromPath(self.application.Storage, area.GetType().GetIcon()), 2, '=DrawingArea=',3,area)
+            self.TreeStore.set(novy, 0, area.GetName() , 1, PixmapFromPath(self.application.Project.GetStorage(), area.GetType().GetIcon()), 2, '=DrawingArea=',3,area)
         
         for node in root.GetChilds():
             novy = self.TreeStore.append(parent)
-            self.TreeStore.set(novy, 0, node.GetName() , 1, PixmapFromPath(self.application.Storage, node.GetObject().GetType().GetIcon()), 2, node.GetType(),3,node)
-
+            self.TreeStore.set(novy, 0, node.GetName() , 1, PixmapFromPath(self.application.Project.GetStorage(), node.GetObject().GetType().GetIcon()), 2, node.GetType(),3,node)
             self.__DrawTree(node, novy)
             
          
-    
+
     def get_iter_from_path(self, model, root, path):
         chld = root
         
         i = path.split('/')[0]
         j,k = i.split(':')
         name, type = model.get(root, 0, 2)
+        
+        if len(path.split('/')) == 1 and name == j and type == k:
+            return root
+            
         if name == j and type == k:
             for i in path.split('/')[1:]:
                 j, k = i.split(':')
@@ -137,6 +152,9 @@ class CtwProjectView(CWidget):
         i = path.split('/')[0]
         j,k = i.split(':')
         name, type = model.get(root, 0, 2)
+        if len(path.split('/')) == 1 and name == j and type == k:
+            return [root]
+            
         if name == j and type == k:
             for i in path.split('/')[1:]:
                 j, k = i.split(':')
@@ -183,7 +201,7 @@ class CtwProjectView(CWidget):
         node.AddAppears(drawingArea)
         self.application.Project.AddNode(node, parent)
         novy = self.TreeStore.append(self.get_iter_from_path(self.twProjectView.get_model(), self.twProjectView.get_model().get_iter_root() ,path))
-        self.TreeStore.set(novy, 0, element.GetName() , 1, PixmapFromPath(self.application.Storage, element.GetType().GetIcon()), 2, element.GetType().GetId(),3,node)
+        self.TreeStore.set(novy, 0, element.GetName() , 1, PixmapFromPath(self.application.Project.GetStorage(), element.GetType().GetIcon()), 2, element.GetType().GetId(),3,node)
         
     
     
@@ -202,7 +220,7 @@ class CtwProjectView(CWidget):
         drawingArea.SetPath(node.GetPath() + "/" + drawingArea.GetName() + ":=DrawingArea=")
         node.AddDrawingArea(drawingArea)
         novy = self.TreeStore.append(iter)
-        self.TreeStore.set(novy, 0, drawingArea.GetName() , 1, PixmapFromPath(self.application.Storage, drawingArea.GetType().GetIcon()), 2, '=DrawingArea=',3,drawingArea)
+        self.TreeStore.set(novy, 0, drawingArea.GetName() , 1, PixmapFromPath(self.application.Project.GetStorage(), drawingArea.GetType().GetIcon()), 2, '=DrawingArea=',3,drawingArea)
         path = self.TreeStore.get_path(novy)
         self.twProjectView.expand_to_path(path)
         self.twProjectView.get_selection().select_iter(novy)
@@ -234,7 +252,6 @@ class CtwProjectView(CWidget):
                 raise UMLException("None")
             else:
                 self.emit('selected_drawing_area',area)
-
     
     @event("twProjectView", "cursor-changed")
     def on_twProjectView_change_selection(self, treeView):
@@ -261,18 +278,23 @@ class CtwProjectView(CWidget):
             
         for i in node.GetChilds():
             self.RemoveFromArea(i)
-            
+        
         for i in node.GetAppears():
             i.DeleteObject(node.GetObject())
     
     def DeleteElement(self, elementObject):
+        iter = self.twProjectView.get_model().get_iter_root()
+        if elementObject is self.twProjectView.get_model().get(iter,3)[0].GetObject():
+            return
+        
         for iter in self.get_iters_from_path(self.twProjectView.get_model(),self.twProjectView.get_model().get_iter_root() ,elementObject.GetPath()):
             node = self.twProjectView.get_model().get(iter,3)[0]
-            if object is node.GetObject():
+            if elementObject is node.GetObject():
                 break
         self.TreeStore.remove(iter)
         self.RemoveFromArea(node)
         self.application.Project.RemoveNode(node)
+    
     
     @event("mnuTreeDelete","activate")
     def on_mnuTreeDelete_activate(self, menuItem):
@@ -292,8 +314,104 @@ class CtwProjectView(CWidget):
             self.TreeStore.remove(iter)
             self.emit('close-drawing-area',area)
 
-                
-                
-            
-            
+
+
+    def GetSelectedNode(self):
+        iter = self.twProjectView.get_selection().get_selected()[1]
+        node = self.twProjectView.get_model().get(iter,3)[0]
+        if isinstance(node,CProjectNode):
+            return node
+        else:
+            return None
         
+        
+        
+    @event("twProjectView","drag-data-get")
+    def on_drag_data_get(self, widget,drag_context, selection_data, info, time):
+        treeselection = widget.get_selection()
+        model, iter = treeselection.get_selected()
+        data = model.get_value(iter, 0)
+        selection_data.set(selection_data.target, 8, data)
+
+        
+    
+    def CheckSanity(self, model, iter_to_copy, target_iter):
+        path_of_iter_to_copy = model.get_path(iter_to_copy)
+        path_of_target_iter = model.get_path(target_iter)
+        if path_of_target_iter[0:len(path_of_iter_to_copy)] == path_of_iter_to_copy:
+            return False
+        elif len(path_of_target_iter) < 2:
+            return False
+        else:
+            return True
+    
+    
+    def IterCopy(self, treeview, model, iter_to_copy, target_iter, pos):
+        
+        if treeview.get_model().get(iter_to_copy,2)[0] == "=DrawingArea=":
+            node_to_copy = treeview.get_model().get(treeview.get_model().iter_parent(iter_to_copy),3)[0]
+        else:
+            node_to_copy = treeview.get_model().get(iter_to_copy,3)[0]
+        if treeview.get_model().get(target_iter,2)[0] == "=DrawingArea=":
+            target_node = treeview.get_model().get(treeview.get_model().iter_parent(target_iter),3)[0]
+        else:
+            target_node = treeview.get_model().get(target_iter,3)[0]
+        
+        if (pos == gtk.TREE_VIEW_DROP_INTO_OR_BEFORE) or (pos == gtk.TREE_VIEW_DROP_INTO_OR_AFTER):
+            if treeview.get_model().get(target_iter,2)[0] == "=DrawingArea=":
+                raise UMLException("MoveElementToDrawingArea")
+            elif treeview.get_model().get(iter_to_copy,2)[0] == "=DrawingArea=":
+                node_to_copy.MoveDrawingAreaToNewNode(target_node,treeview.get_model().get(iter_to_copy,3)[0])
+            else:
+                node_to_copy.MoveNode(target_node)
+            new_iter = model.prepend(target_iter, None)
+        
+        elif pos == gtk.TREE_VIEW_DROP_BEFORE:
+            if treeview.get_model().get(iter_to_copy,2)[0] == "=DrawingArea=":
+                if target_node.GetParent() is not None:
+                    target_node = target_node.GetParent()
+                node_to_copy.MoveDrawingAreaToNewNode(target_node,treeview.get_model().get(iter_to_copy,3)[0])
+            elif treeview.get_model().get(target_iter,2)[0] == "=DrawingArea=":
+                node_to_copy.MoveNode(target_node)
+            else:
+                node_to_copy.MoveNode(target_node.GetParent())
+            new_iter = model.insert_before(None, target_iter)
+        
+        elif pos == gtk.TREE_VIEW_DROP_AFTER:
+            if treeview.get_model().get(iter_to_copy,2)[0] == "=DrawingArea=":
+                if target_node.GetParent() is not None:
+                    target_node = target_node.GetParent()
+                node_to_copy.MoveDrawingAreaToNewNode(target_node,treeview.get_model().get(iter_to_copy,3)[0])
+            elif treeview.get_model().get(target_iter,2)[0] == "=DrawingArea=":
+                node_to_copy.MoveNode(target_node)
+            else:
+                node_to_copy.MoveNode(target_node.GetParent())
+            new_iter = model.insert_after(None, target_iter)
+                    
+        for i in range(4):
+            model.set_value(new_iter, i, model.get_value(iter_to_copy, i))
+              
+        if model.iter_has_child(iter_to_copy):
+            for i in range(0, model.iter_n_children(iter_to_copy)):
+                next_iter_to_copy = model.iter_nth_child(iter_to_copy, i)
+                self.IterCopy(treeview, model, next_iter_to_copy, new_iter, gtk.TREE_VIEW_DROP_INTO_OR_BEFORE)
+    
+    
+    
+    @event("twProjectView","drag_data_received")
+    def on_drag_data_received(self, widget, context, x, y, selection, info, etime):
+        if widget.get_dest_row_at_pos(x, y) is not None:
+            path, pos = widget.get_dest_row_at_pos(x, y)
+            model, iter_to_copy = widget.get_selection().get_selected()
+            target_iter = model.get_iter(path)
+                       
+            if self.CheckSanity(model, iter_to_copy, target_iter):
+                try:
+                    self.IterCopy(widget, model, iter_to_copy, target_iter, pos)
+                except UMLException, e:
+                    if e.GetName() == "MoveElementToDrawingArea":
+                        context.finish(False, False, etime)
+                        return
+                context.finish(True, True, etime)
+            else:
+                context.finish(False, False, etime)

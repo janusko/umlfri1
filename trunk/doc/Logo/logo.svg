@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   version="1.0"
+   width="512"
+   height="512"
+   id="svg1352">
+  <defs
+     id="defs1354">
+    <linearGradient
+       id="linearGradient24674">
+      <stop
+         style="stop-color:black;stop-opacity:1"
+         offset="0"
+         id="stop24676" />
+      <stop
+         style="stop-color:black;stop-opacity:0"
+         offset="1"
+         id="stop24678" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient22734">
+      <stop
+         style="stop-color:#991414;stop-opacity:1"
+         offset="0"
+         id="stop22736" />
+      <stop
+         style="stop-color:#4c1461;stop-opacity:1"
+         offset="0.64814812"
+         id="stop22742" />
+      <stop
+         style="stop-color:#231287;stop-opacity:1"
+         offset="1"
+         id="stop22738" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient11270">
+      <stop
+         style="stop-color:black;stop-opacity:1"
+         offset="0"
+         id="stop11272" />
+      <stop
+         style="stop-color:black;stop-opacity:0"
+         offset="1"
+         id="stop11274" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient9512">
+      <stop
+         style="stop-color:#7bedff;stop-opacity:1"
+         offset="0"
+         id="stop9522" />
+      <stop
+         style="stop-color:#7beeff;stop-opacity:1"
+         offset="0.7037037"
+         id="stop13024" />
+      <stop
+         style="stop-color:#0078fd;stop-opacity:1"
+         offset="1"
+         id="stop9516" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient9500">
+      <stop
+         style="stop-color:#ffeb42;stop-opacity:0.49803922"
+         offset="0"
+         id="stop9508" />
+      <stop
+         style="stop-color:#ffeb42;stop-opacity:0"
+         offset="1"
+         id="stop9504" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient9482">
+      <stop
+         style="stop-color:#f706ff;stop-opacity:1"
+         offset="0"
+         id="stop9484" />
+      <stop
+         style="stop-color:#f706ff;stop-opacity:0.49803922"
+         offset="0.87037039"
+         id="stop9496" />
+      <stop
+         style="stop-color:#f706ff;stop-opacity:0"
+         offset="1"
+         id="stop9486" />
+    </linearGradient>
+    <radialGradient
+       cx="257.5"
+       cy="257"
+       r="239"
+       fx="257.5"
+       fy="257"
+       id="radialGradient9520"
+       xlink:href="#linearGradient9512"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1,0,0,0.98954,0,2.688285)" />
+    <linearGradient
+       x1="18.5"
+       y1="257"
+       x2="496.5"
+       y2="257"
+       id="linearGradient11276"
+       xlink:href="#linearGradient11270"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       x1="-520.38086"
+       y1="147.0589"
+       x2="-282.85645"
+       y2="147.0589"
+       id="linearGradient23795"
+       xlink:href="#linearGradient22734"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       x1="-520.38086"
+       y1="147.0589"
+       x2="-449.84863"
+       y2="147.0589"
+       id="linearGradient24680"
+       xlink:href="#linearGradient24674"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <g
+     style="display:none"
+     id="layer3">
+    <image
+       xlink:href="C:\Student\a.GIF"
+       x="-6.9410089e-006"
+       y="2.4999819"
+       width="524.4043"
+       height="534.1886"
+       style="opacity:0.73999993"
+       id="image5744" />
+  </g>
+  <g
+     style="display:inline"
+     id="layer1">
+    <path
+       d="M 495 257 A 237.5 235 0 1 1  20,257 A 237.5 235 0 1 1  495 257 z"
+       style="opacity:1;fill:url(#radialGradient9520);fill-opacity:1;fill-rule:evenodd;stroke:url(#linearGradient11276);stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path1364" />
+    <path
+       d="M 495 257 A 237.5 235 0 1 1  20,257 A 237.5 235 0 1 1  495 257 z"
+       transform="matrix(0.726414,0,0,0.716343,70.44815,70.39994)"
+       style="fill:#7bedff;fill-opacity:0;fill-rule:evenodd;stroke:black;stroke-width:2.03781486;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path4080" />
+  </g>
+  <g
+     id="layer8">
+    <g
+       style="display:inline"
+       id="g5054">
+      <path
+         d="M 73.5,354.00735 L 70.45286,342.2778 L 58.771202,345.50368 L 67.405721,337 L 58.771202,328.49632 L 70.45286,331.7222 L 73.5,319.99265 L 76.54714,331.7222 L 88.228798,328.49632 L 79.594279,337 L 88.228798,345.50368 L 76.54714,342.2778 L 73.5,354.00735 z "
+         transform="matrix(0.643007,0,0,0.643007,27.8024,131.5566)"
+         style="fill:black;fill-opacity:0.99382719;stroke:black;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="path4856" />
+      <path
+         d="M 73.5,354.00735 L 70.45286,342.2778 L 58.771202,345.50368 L 67.405721,337 L 58.771202,328.49632 L 70.45286,331.7222 L 73.5,319.99265 L 76.54714,331.7222 L 88.228798,328.49632 L 79.594279,337 L 88.228798,345.50368 L 76.54714,342.2778 L 73.5,354.00735 z "
+         transform="matrix(0.643007,0,0,0.643007,391.9624,131.5566)"
+         style="fill:black;fill-opacity:0.99382719;stroke:black;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="path5733" />
+      <g
+         id="g5041">
+        <g
+           id="g5030">
+          <g
+             id="g5021">
+            <text
+               transform="matrix(-0.941377,0.337359,-0.337359,-0.941377,585.2737,408.5435)"
+               style="font-size:41.09731674px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:arial"
+               id="text4972"
+               xml:space="preserve"><textPath
+                 xlink:href="#path1385"
+                 id="textPath1393"><tspan
+   id="tspan4974"><tspan
+     x="-99.900131"
+     y="438.84842"
+     id="tspan4976">FAKULTA RIADENIA A INFORMATIKY</tspan></tspan></textPath></text>
+            <text
+               transform="matrix(0.995293,-9.691524e-2,9.691524e-2,0.995293,-23.67074,24.95741)"
+               style="font-size:40.92269516px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:arial"
+               id="text5040"
+               xml:space="preserve"><textPath
+                 xlink:href="#path2278"
+                 id="textPath2280"><tspan
+   id="tspan5044">ŽILINSKÁ UNIVERZITA</tspan></textPath></text>
+          </g>
+          <path
+             d="M 495 257 A 237.5 235 0 1 1  20,257 A 237.5 235 0 1 1  495 257 z"
+             transform="matrix(0.80202,0,0,0.790901,50.97968,51.23866)"
+             style="opacity:0;fill:black;fill-opacity:0;fill-rule:evenodd;stroke:#0000f9;stroke-width:2.03781486;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.7962963;display:inline"
+             id="path1385" />
+        </g>
+        <path
+           d="M 59.5,362.5 C 116.5,453.5 198.87882,477.90398 254.68941,477.90398 C 307.5,477.90398 394.5,453.5 451,367"
+           style="opacity:0;fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:black;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           id="path2278" />
+      </g>
+    </g>
+  </g>
+  <g
+     style="display:inline"
+     id="layer4">
+    <path
+       d="M 211.04435,92.436455 C 187.83468,98.613789 167.74261,108.42933 154.00851,119.3138 C 147.14147,124.75604 141.86236,130.47447 138.57188,136.17362 C 135.2814,141.87277 133.98705,147.61808 135.18866,152.98811 C 136.39027,158.35813 139.95516,162.75994 145.28289,166.16532 C 150.61061,169.5707 157.71156,171.99414 166.10529,173.37467 C 182.89274,176.13573 204.87196,174.75385 228.08161,168.57652 C 251.29127,162.39919 271.34368,152.59421 285.07777,141.70973 C 291.94482,136.2675 297.26359,130.5385 300.55408,124.83935 C 303.84457,119.1402 305.14951,113.44227 303.9479,108.07225 C 302.74629,102.70222 299.1708,98.253034 293.84307,94.847652 C 288.51534,91.442265 281.37472,89.029391 272.981,87.648862 C 256.19355,84.887806 234.254,86.259128 211.04435,92.436455 z M 211.28819,93.526201 C 234.40783,87.372832 256.29132,85.981839 272.92594,88.717757 C 281.24325,90.085715 288.24926,92.501193 293.42824,95.811494 C 298.60722,99.121795 301.91971,103.3287 303.03547,108.31509 C 304.15124,113.30148 302.9774,118.65224 299.77879,124.19226 C 296.58017,129.73229 291.38197,135.39596 284.57744,140.78865 C 270.96837,151.57404 250.95741,161.3334 227.83777,167.48677 C 204.71813,173.64014 182.83464,175.03114 166.20001,172.29522 C 157.8827,170.92725 150.87669,168.51178 145.69771,165.20148 C 140.51873,161.89118 137.17718,157.74221 136.06142,152.75582 C 134.94565,147.76943 136.14856,142.36073 139.34717,136.82071 C 142.54578,131.28068 147.74399,125.61701 154.54852,120.22432 C 168.15759,109.43894 188.16855,99.679573 211.28819,93.526201 z "
+       style="opacity:1;fill:black;fill-opacity:1;stroke:none;stroke-width:0.70025229;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path6628" />
+    <path
+       d="M 121.62236,151.022 C 98.994946,180.72049 112.42998,200.87302 132.58252,207.59054 C 152.73506,214.30805 187.02974,219.96491 233.34523,207.59054 C 279.66072,195.21617 326.32978,169.40677 341.53257,143.24382 C 356.73537,117.08087 330.21885,101.17097 319.61226,97.281884"
+       style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:black;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="path11030" />
+    <path
+       d="M 97.22718,192.03419 C 78.488851,237.64258 117.37972,254.96669 164.40232,257.08801 C 208.22118,259.0648 286.01695,245.7802 342.23968,202.99435 C 398.45466,160.21438 381.13054,134.05143 359.56379,118.84864"
+       style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:black;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="path11910" />
+    <path
+       d="M 86.620578,231.98572 C 79.549511,279.71543 108.80341,293.12505 163.79877,298.80731 C 229.54381,305.60026 319.5999,275.08768 365.92775,237.99613 C 411.88298,201.20291 412.95035,177.18495 397.57078,155.97174"
+       style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:black;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="path11912" />
+    <path
+       d="M 90.999998,298.87501 C 102.75,337.5 157.00625,345.75666 223.99999,339.875 C 289.22671,334.10542 360.24999,296.00001 383.74999,278.00001 C 407.24999,260.00001 433.24999,231.00001 420.74999,200.00001"
+       style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:black;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="path11914" />
+    <path
+       d="M 109.04089,340.3195 C 128.25409,369.62154 160.37415,377.19261 213.08914,375.67484 C 269.30883,374.0638 334.97203,350.70508 380.04844,320.55973 C 426.07472,289.77914 430.27447,265.38763 429.92091,245.9422"
+       style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:black;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="path11916" />
+    <path
+       d="M 142.83557,380.30136 C 173.76197,407.67662 241.80468,410.44909 311.18243,386.54921 C 383.74965,361.48673 417.21812,329.06646 425.50149,293.50401"
+       style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:black;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="path11918" />
+    <path
+       d="M 200.77817,413.68198 C 236.1057,424.37868 283.20057,415.13786 306.99999,407.75 C 337.20701,398.37308 382.83578,375.97487 399.83578,349.72487"
+       style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:black;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="path11920" />
+    <path
+       d="M 218.99999,90.500011 C 218.99999,90.500011 210.0401,95.683174 217.48222,165.62564 C 221.84874,206.66303 233.32062,263.92033 243.18096,302.72917 C 253.0413,341.538 269.72633,386.04096 276.66681,399.98268 C 286.10361,418.93892 291.68154,419.28063 291.68154,419.28063"
+       style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:black;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="path11922" />
+    <path
+       d="M 263.87867,86.146458 C 221.03032,87.646458 185.97823,129.64935 169,209.50001 C 151.57673,291.4438 173.49923,365.7215 200.38387,396.32322 C 222.96446,422.05025 242.53463,422.14645 242.53463,422.14645"
+       style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:black;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="path11924" />
+    <path
+       d="M 347.24999,110.75001 C 277.74999,75.000011 219.36752,106.75341 208.49999,112.75001 C 179.34583,128.837 137.50371,164.12658 119.25,212.25001 C 102.75,255.75001 92.374998,340.40625 155.375,390.40625"
+       style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:black;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="path11926" />
+    <path
+       d="M 139.88388,131.64646 C 154.75888,118.02146 180.28143,109.69473 208.11462,109.43761 C 235.94781,109.1805 266.09164,116.993 297.63387,135.64646 C 355.22189,169.75995 395.5354,230.18386 405.24999,275.50001 C 420.18984,345.19067 375.49999,377.25 375.49999,377.25"
+       style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:black;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="path11930" />
+    <path
+       d="M 338.37499,403 C 350.87499,396 353.49999,367.5 344.99999,329.5 C 336.49999,291.50001 305.65768,199.42634 242.38387,132.96968 C 204.07741,92.718497 185.38388,101.46968 185.38388,101.46968"
+       style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:black;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="path11932" />
+  </g>
+  <g
+     style="display:inline"
+     id="layer5">
+    <flowRoot
+       style="font-size:150px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:impact"
+       id="flowRoot3212"
+       xml:space="preserve"><flowRegion
+         id="flowRegion3214"><rect
+           width="94.752312"
+           height="104.6518"
+           x="-123.03658"
+           y="179.65982"
+           style="font-size:150px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:impact"
+           id="rect3216" /></flowRegion><flowPara
+         id="flowPara3218">UML</flowPara></flowRoot>    <g
+       style="fill:#00123c;fill-opacity:1"
+       id="g7716">
+      <flowRoot
+         transform="matrix(1.253829,0,0,1.301703,757.1703,67.47622)"
+         style="font-size:150px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#8f1414;fill-opacity:1;font-family:impact"
+         id="flowRoot4093"
+         xml:space="preserve"><flowRegion
+           style="fill:url(#linearGradient24680);fill-opacity:1"
+           id="flowRegion4095"><rect
+             width="509.11688"
+             height="353.55338"
+             x="-526.08746"
+             y="66.522728"
+             style="font-size:150px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#8f1414;fill-opacity:1;font-family:impact"
+             id="rect4097" /></flowRegion><flowPara
+           style="fill:#8f1414;fill-opacity:1"
+           id="flowPara4099">U</flowPara></flowRoot>      <text
+         x="203.11429"
+         y="342.50549"
+         transform="scale(0.889872,1.123758)"
+         style="font-size:76.13917542px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#00123c;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:arial black"
+         id="text4109"
+         xml:space="preserve"><tspan
+           x="203.11429"
+           y="342.50549"
+           style="font-size:76.13917542px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#00123c;fill-opacity:1;font-family:arial black"
+           id="tspan4111">.FRI</tspan></text>
+      <text
+         x="229.06351"
+         y="264.2016"
+         transform="scale(0.881059,1.134998)"
+         style="font-size:204.29974365px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ad6e00;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:impact"
+         id="text4113"
+         xml:space="preserve"><tspan
+           x="229.06351"
+           y="264.2016"
+           style="fill:#ad6e00;fill-opacity:1"
+           id="tspan4115">M</tspan></text>
+      <flowRoot
+         transform="matrix(1.253829,0,0,1.301703,990.5611,68.573)"
+         style="font-size:150px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#231287;fill-opacity:1;display:inline;font-family:impact"
+         id="flowRoot23785"
+         xml:space="preserve"><flowRegion
+           style="fill:url(#linearGradient23795);fill-opacity:1"
+           id="flowRegion23787"><rect
+             width="509.11688"
+             height="353.55338"
+             x="-526.08746"
+             y="66.522728"
+             style="font-size:150px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#231287;fill-opacity:1;font-family:impact"
+             id="rect23789" /></flowRegion><flowPara
+           style="fill:#231287;fill-opacity:1"
+           id="flowPara23791">L</flowPara></flowRoot>    </g>
+  </g>
+  <g
+     style="display:none"
+     id="layer6">
+    <text
+       x="123.8818"
+       y="308.16385"
+       transform="scale(0.917876,1.089471)"
+       style="font-size:187.53746033px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:impact"
+       id="text4117"
+       xml:space="preserve"><tspan
+         x="123.8818"
+         y="308.16385"
+         id="tspan4119">UML</tspan></text>
+  </g>
+</svg>
