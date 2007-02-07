@@ -131,6 +131,37 @@ class PathPartBezier(PathPart):
     def __str__(self):
         return 'C %d,%d %d,%d %d,%d'%(self.point2.GetIntPos()+self.point3.GetIntPos()+self.point4.GetIntPos())
 
+class PathPartArc(PathPart):
+    operation = 'arc'
+    
+    def __init__(self, point1, radius, rotation, flags, point2):
+        if isinstance(point1, PointMatrix):
+            self.point1 = point1
+        else:
+            self.point1 = PointMatrix.mk_xy(point1)
+        self.radius = radius
+        self.rotation = roatation
+        self.flags = flags
+        if isinstance(point2, PointMatrix):
+            self.point2 = point2
+        else:
+            self.point2 = PointMatrix.mk_xy(point2)
+    
+    def GetFirstPos(self):
+        return self.point1
+    
+    def GetLastPos(self):
+        return self.point2
+    
+    def __iter__(self):
+        raise NotImplemented
+    
+    def __rmul__(self, other):
+        raise NotImplemented
+    
+    def __str__(self):
+        return 'A %d,%d %d %d,%d %d,%d'%(self.radius+(self.rotation, int(self.flags[0]), int(self.flags[1]))+self.point2.GetIntPos())
+
 class PathSingle(object):
     def __init__(self, path = None):
         if path is None:

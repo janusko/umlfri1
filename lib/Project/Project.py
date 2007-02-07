@@ -46,6 +46,9 @@ class CProject(object):
     def GetVersionFactory(self):
         return self.VersionFactory
     
+    def GetStorage(self):
+        return self.Storage
+    
     def GetVersion(self):
         return self.version
     

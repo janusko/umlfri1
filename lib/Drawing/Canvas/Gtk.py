@@ -1,4 +1,5 @@
-from Abstract import AbstractCanvas
+from lib.lib import UMLException
+from Abstract import CAbstractCanvas
 
 import pango
 import gtk
@@ -22,13 +23,14 @@ def PixmapFromPath(storage, path):
         pixmaps[(storage, path)] = tmp
     return tmp
 
-class GtkCanvas(AbstractCanvas):
-    def __init__(self, widget, window = None):
+class CGtkCanvas(CAbstractCanvas):
+    def __init__(self, widget, window = None, storage = None):
         self.widget = widget
         if window is None:
             self.window = widget.window
         else:
             self.window = window
+        self.storage = storage
         self.pango_ctx = self.widget.create_pango_context()
         self.pango_layout = self.widget.create_pango_layout("")
         self.fonts = {}
@@ -124,6 +126,19 @@ class GtkCanvas(AbstractCanvas):
         
         self.pango_layout.set_text(text)
         return int(self.pango_layout.get_size()[0]/float(pango.SCALE)), int(self.pango_layout.get_size()[1]/float(pango.SCALE))
+    
+    def DrawIcon(self, pos, filename):
+        if self.storage is None:
+            raise UMLException('storage')
+        pixmap = PixmapFromPath(self.storage, filename)
+        gc = self.window.new_gc()
+        self.window.draw_pixbuf(gc, pixmap, 0, 0, pos[0], pos[1])
+    
+    def GetIconSize(self, filename):
+        if self.storage is None:
+            raise UMLException('storage')
+        pixmap = PixmapFromPath(self.storage, filename)
+        return pixmap.get_width(), pixmap.get_height()
     
     def Clear(self):
         gc = self.widget.get_style().white_gc

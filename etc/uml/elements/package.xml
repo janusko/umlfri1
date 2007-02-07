@@ -25,7 +25,20 @@
                     <Padding padding="8" />
                 </VBox>
                 <Rectangle fill="lightpink2" border="black">
-                    <Padding padding="40" />
+                    <Sizer minwidth="60" minheight="60">
+                        <Padding padding="5">
+                            <HBox>
+                                <Loop collection="CHILDREN">
+                                    <VBox>
+                                        <Icon filename="@icon" />
+                                        <Align align="left center">
+                                            <TextBox text="@name" />
+                                        </Align>
+                                    </VBox>
+                                </Loop>
+                            </HBox>
+                        </Padding>
+                    </Sizer>
                 </Rectangle>
             </HBox>
         </Shadow>

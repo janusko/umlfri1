@@ -1,14 +1,12 @@
 from SimpleContainer import CSimpleContainer
 from HBox import CHBox
 from VBox import CVBox
+from lib.lib import UMLException
 
 class CLoop(CSimpleContainer):
     def __init__(self, collection):
         CSimpleContainer.__init__(self)
         self.collection = collection
-
-    def GetCollection(self):
-        return self.collection
     
     def __GetOrientation(self):
         parent = self.GetParent()
@@ -86,6 +84,3 @@ class CLoop(CSimpleContainer):
                 else:
                     x += w
                 del element.__LOOPVARS__
-
-    def SetCollection(self, collection):
-        self.collection = collection

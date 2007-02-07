@@ -31,6 +31,7 @@ class CfrmMain(CWindow):
         'nbTabs',
         #toolbar
         'cmdOpen', 'cmdSave',
+        'mnuExportSvg',
         #mZ-Order 'mMenuShift',
         'mmShift_SendBack', 'mmShift_BringForward', 'mmShift_ToBottom', 'mmShift_ToTop'
         )
@@ -54,7 +55,10 @@ class CfrmMain(CWindow):
         tmp = self.application.GetWindow('frmAbout')
         tmp.SetParent(self)
         tmp.Show()
-
+    
+    @event('mnuExportSvg', 'activate')
+    def on_mnuExportSvg_activate(self, widget):
+        self.picDrawingArea.ExportSvg('/Student/ahoj.svg')
 
     # Actions
     @event("form", "destroy")

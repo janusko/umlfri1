@@ -1,4 +1,4 @@
-class AbstractCanvas:
+class CAbstractCanvas:
     def __init__(self):
         pass
     
@@ -24,6 +24,12 @@ class AbstractCanvas:
         pass
     
     def GetTextSize(self, text, font):
+        return (0, 0)
+    
+    def DrawIcon(self, pos, filename):
+        pass
+    
+    def GetIconSize(self, filename):
         return (0, 0)
     
     def Clear(self):
