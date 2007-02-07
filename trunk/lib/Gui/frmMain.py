@@ -31,6 +31,8 @@ class CfrmMain(CWindow):
         'nbTabs',
         #toolbar
         'cmdOpen', 'cmdSave',
+        #mZ-Order 'mMenuShift',
+        'mmShift_SendBack', 'mmShift_BringForward', 'mmShift_ToBottom', 'mmShift_ToTop'
         )
 
     complexWidgets = (CtbToolBox, CtwProjectView, CmnuItems, CpicDrawingArea, CnbProperties, CTabs)
@@ -183,3 +185,21 @@ class CfrmMain(CWindow):
             return CWarningDialog(self.form, message).run()
         else:
             pass
+    
+    #Z-Order 
+# 'mmShift_SendBack', 'mmShift_BringForward', 'mmShift_ToBottom', 'mmShift_ToTop'    
+    @event("mmShift_SendBack", "activate")
+    def on_mnuItems_mmShift_SendBack(self, menuItem):
+        self.picDrawingArea.on_pmShift_SendBack_activate(None)
+        
+    @event("mmShift_BringForward", "activate")
+    def on_mnuItems_mmShift_BringForward(self, menuItem):
+        self.picDrawingArea.on_pmShift_BringForward_activate(None)
+        
+    @event("mmShift_ToBottom", "activate")
+    def on_mnuItems_mmShift_ToBottom(self, menuItem):
+        self.picDrawingArea.on_pmShift_ToBottom_activate(None)
+        
+    @event("mmShift_ToTop", "activate")
+    def on_mnuItems_mmShift_ToTop(self, menuItem):
+        self.picDrawingArea.on_pmShift_ToTop_activate(None)        

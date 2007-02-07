@@ -1,6 +1,10 @@
 from lib.lib import UMLException
 import lib.consts
 import Connection, Element
+import lib.Math2D
+from lib.Math2D import CRectangle
+from lib.Math2D import CPoint
+
 
 class CDrawingArea:
     def __init__(self, type, name = None): #  name = "untitled"
@@ -111,7 +115,7 @@ class CDrawingArea:
                 if (con.GetSource() in self.selected) and (con.GetDestination() in self.selected):
                     if con not in movedCon:
                         con.MoveAll(delta)
-                        movedCon.add(con)
+                        movedCon.add(con) 
     
     def DeleteObject(self, object):
         for i in self.elements:
@@ -161,7 +165,7 @@ class CDrawingArea:
         for c in self.connections:
             if c.AreYouAtPosition(canvas, pos):
                 return c
-            
+                
         for e in self.elements[::-1]:
             if e.AreYouAtPosition(canvas, pos):
                 return e
@@ -206,3 +210,57 @@ class CDrawingArea:
                         self.SetName(nName)
                         id = id + 1
                         checkNames = True #znovu prekontroluj nazvy
+                        
+    # Presunutie elementov uplne dopredu
+    def ShiftElementsToTop(self):
+        for selectedElement in self.GetSelectedElements():
+            selectedIdx = self.elements.index(selectedElement)
+            del self.elements[selectedIdx]
+            self.elements.append(selectedElement) 
+        self.DeselectAll()    
+
+    # Presunutie elementov uplne dozadu
+    def ShiftElementsToBottom(self):
+        for selectedElement in self.GetSelectedElements():
+            selectedIdx = self.elements.index(selectedElement)
+            del self.elements[selectedIdx]
+            self.elements.insert(0, selectedElement);
+        self.DeselectAll()    
+            
+    # Presunutie elementov o 1 dopredu
+    def ShiftElementsForward(self, canvas):
+        for selectedElement in self.GetSelectedElements():
+            selectedIdx = self.elements.index(selectedElement)
+            s_b, s_e = selectedElement.GetSquare(canvas);
+            selectedSquare = CRectangle(CPoint(s_b), CPoint(s_e))
+            selectedShifted = False
+            otherElementIdx = selectedIdx + 1
+            while otherElementIdx < len(self.elements) and selectedShifted == False:
+                o_b, o_e = self.elements[otherElementIdx].GetSquare(canvas)
+                otherSquare = CRectangle(CPoint(o_b), CPoint(o_e))
+                prienik = selectedSquare*otherSquare 
+                if len(prienik) > 0:
+                    del self.elements[selectedIdx]
+                    self.elements.insert(otherElementIdx, selectedElement);
+                    selectedShifted = True # uz je posunuty -> koncim a presuvam dalsi selecnuty
+                otherElementIdx += 1
+        self.DeselectAll()
+                
+    # Presunutie elementov o 1 dozadu
+    def ShiftElementsBack(self, canvas):
+        for selectedElement in self.GetSelectedElements():
+            selectedIdx = self.elements.index(selectedElement)
+            s_b, s_e = selectedElement.GetSquare(canvas);
+            selectedSquare = CRectangle(CPoint(s_b), CPoint(s_e))
+            selectedShifted = False
+            otherElementIdx = selectedIdx - 1
+            while otherElementIdx >= 0 and selectedShifted == False:
+                o_b, o_e = self.elements[otherElementIdx].GetSquare(canvas)
+                otherSquare = CRectangle(CPoint(o_b), CPoint(o_e))
+                prienik = selectedSquare*otherSquare 
+                if len(prienik) > 0:
+                    del self.elements[selectedIdx]
+                    self.elements.insert(otherElementIdx, selectedElement);
+                    selectedShifted = True # uz je posunuty -> koncim a presuvam dalsi selecnuty
+                otherElementIdx -= 1
+        self.DeselectAll()
