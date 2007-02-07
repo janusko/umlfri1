@@ -27,7 +27,7 @@ class CmnuItems(CWidget):
             newItem = gtk.ImageMenuItem(diagram)
             newItem.connect("activate", self.on_mnuDiagrams_activate, diagram)
             img = gtk.Image()
-            img.set_from_pixbuf(PixmapFromPath(self.application.Storage, self.application.Project.GetDiagramFactory().GetDiagram(diagram).GetIcon()))
+            img.set_from_pixbuf(PixmapFromPath(self.application.Project.GetStorage(), self.application.Project.GetDiagramFactory().GetDiagram(diagram).GetIcon()))
             img.show()
             newItem.set_image(img)
             self.mnuAddDiagram.append(newItem)

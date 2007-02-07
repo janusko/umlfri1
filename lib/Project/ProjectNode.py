@@ -69,7 +69,18 @@ class CProjectNode(object):
         if area not in self.drawingareas:
             area.Assign(self) # vygenerovanie nazvu
             self.drawingareas.append(area)
-
+    
+    def MoveDrawingAreaToNewNode(self, newNode, area):
+        self.RemoveDrawingArea(area)
+        #newNode.AddDrawingArea(area)
+        newNode.drawingareas.append(area)
+    
+    def MoveNode(self, parentNode):
+        self.parent.RemoveChild(self)
+        self.parent = parentNode
+        parentNode.AddChild(self)
+        self.SetPath(parentNode.GetPath() + "/" + self.GetPath().split('/')[-1])
+    
     def FindDrawingArea(self, name):
         for i in self.drawingareas:
             if i.GetName() == name:

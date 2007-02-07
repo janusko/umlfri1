@@ -1,6 +1,7 @@
 <ElementType id="Note">
-    <Icon path="icons/class.png" />
+    <Icon path="icons/note.png" />
     <Connections>
+        <Item value="Note Link" />
     </Connections>
     <Attributes>
         <Item value="Name" type="str" propid="name" />

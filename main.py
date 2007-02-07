@@ -23,8 +23,7 @@ class Application(lib.Gui.common.CApplication):
     def __init__(self):
         #projekt view, pametova reprezentacia
         #Project = DebugAttribute('Project')
-        self.Storage = open_storage(os.path.join(ROOT_PATH, 'etc', 'uml'))
-        self.Project = CProject(self.Storage)
+        self.Project = CProject()
         lib.Gui.common.CApplication.__init__(self)
         
     

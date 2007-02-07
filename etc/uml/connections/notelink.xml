@@ -1,5 +1,5 @@
 <ConnectionType id="Note Link">
-    <Icon path="icons/agregate.png" />
+    <Icon path="icons/note_link.png" />
     <SrcArrow possible="0" default="0" />
     <DestArrow possible="1" default="0" />
     <Appearance>

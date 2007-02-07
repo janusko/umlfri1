@@ -8,7 +8,8 @@
 [ ] Nastavovanie fontu z XML
 [ ] Presunutie konfiguracnych hodnot z const.py do /etc
 [ ] Prerobit Get* na yield, kde treba
-[ ] Drag 'n Drop pridavanie elementov zo stromu do diagramu
+[X] Drag 'n Drop pridavanie elementov zo stromu do diagramu
+[X] Drag 'n Drop premiestnovanie elementov v strome
 [-] Project tree (miroslav, frizi)
     [X] Tabovanie
     [x] Prerobit menu (na pridaj diagram)
@@ -33,11 +34,11 @@
     [ ] Hladanie kolizii objektov
     [ ] Vymysliet naky inteligentny sposob hladania tried na kraji viewport-u
     [ ] Skrolovanie bitblit-om + vykreslovanie zvysku
-[-] Mazanie elementov
+[X] Mazanie elementov
     [x] Zmazanie z drawing area (palino)
-    [-] Mazanie vsetkych pozozstatkov
+    [X] Mazanie vsetkych pozozstatkov
         [x] Mazanie cez kontextove menu v strome
-        [ ] Mazanie priamo z diagramu (klavesovou skratkou)
+        [X] Mazanie priamo z diagramu (klavesovou skratkou)
 [ ] Mazanie ciar
     [x] Zmazanie z drawing area
     [ ] Mazanie vsetkych pozozstatkov
