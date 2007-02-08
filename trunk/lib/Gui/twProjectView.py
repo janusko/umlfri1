@@ -50,13 +50,13 @@ class CtwProjectView(CWidget):
         
         #projekt view, pametova reprezentacia
         #vytvorenie hlavneho uzla a nastavenie korena projektu
-        pckg = CElementObject( self.application.Project.GetElementFactory().GetElement('Package') )
-        pckg.SetAttribute('Name', 'Untitled') #defaultne meno projektu
-        project = CProjectNode(None, pckg, "Untitled:Package" )    
-        self.application.Project.SetRoot(project)
+        #~ pckg = CElementObject( self.application.Project.GetElementFactory().GetElement('Package') )
+        #~ pckg.SetAttribute('Name', 'Untitled') #defaultne meno projektu
+        #~ project = CProjectNode(None, pckg, "Untitled:Package" )    
+        #~ self.application.Project.SetRoot(project)
         
-        parent = self.TreeStore.append(None)
-        self.TreeStore.set(parent, 0, 'Untitled', 1, PixmapFromPath(None, VIEW_IMAGE), 2, 'Package', 3, project)
+        #~ parent = self.TreeStore.append(None)
+        #~ self.TreeStore.set(parent, 0, 'Untitled', 1, PixmapFromPath(None, VIEW_IMAGE), 2, 'Package', 3, project)
          
         
         #spravime jeden column
@@ -79,7 +79,7 @@ class CtwProjectView(CWidget):
         self.twProjectView.get_selection().set_mode(gtk.SELECTION_SINGLE)
         
         #oznacenie korena
-        self.twProjectView.get_selection().select_iter(parent)
+        #~ self.twProjectView.get_selection().select_iter(parent)
         
         self.TARGETS = [
         ('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_WIDGET, 0),

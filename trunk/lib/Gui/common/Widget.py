@@ -14,7 +14,11 @@ class CWidget(gobject.GObject):
                 if hasattr(fnc, 'events'):
                     for event in fnc.events:
                         obj, event = event
-                        events.setdefault(obj, []).append((event, fnc))
+                        if event is None:
+                            if obj == 'load':
+                                gobject.idle_add(fnc)
+                        else:
+                            events.setdefault(obj, []).append((event, fnc))
         self.application = app
         for widgetName in self.widgets:
             setattr(self, widgetName, wTree.get_widget(widgetName))

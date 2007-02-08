@@ -1,5 +1,8 @@
 import gtk
 
+class ECancelPressed(Exception):
+    pass
+
 class CWarningDialog:
     def __init__(self, form, message):
         self.dialog = gtk.MessageDialog(form, 0, gtk.MESSAGE_INFO, gtk.BUTTONS_OK)
@@ -7,8 +10,24 @@ class CWarningDialog:
         self.dialog.set_title("Warning")
         
     def run(self):
-        result = self.dialog.run()
+        self.dialog.run()
+    
+    def __del__(self):
         self.dialog.destroy()
-        return result
-        
-        
+
+class CQuestionDialog:
+    def __init__(self, form, message, allow_cancel = False):
+        self.dialog = gtk.MessageDialog(form, 0, gtk.MESSAGE_INFO, gtk.BUTTONS_YES_NO)
+        if allow_cancel:
+             self.dialog.add_buttons(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL)
+        self.dialog.set_markup(message)
+        self.dialog.set_title("Question")
+    
+    def run(self):
+        tmp = self.dialog.run()
+        if tmp == gtk.RESPONSE_CANCEL:
+            raise ECancelPressed
+        return tmp == gtk.RESPONSE_YES
+    
+    def __del__(self):
+        self.dialog.destroy()

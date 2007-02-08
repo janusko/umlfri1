@@ -24,12 +24,15 @@ from lib.consts import ROOT_PATH, VERSIONS_PATH, DIAGRAMS_PATH, ELEMENTS_PATH, C
 class CProject(object):
     def __init__(self):
         self.root = None
+        
         self.Storage = open_storage(os.path.join(ROOT_PATH, 'etc', 'uml'))
         self.ElementFactory = CElementFactory(self.Storage, ELEMENTS_PATH)
         self.DiagramFactory = CDiagramFactory(self.Storage, DIAGRAMS_PATH)
         self.ConnectionFactory = CConnectionFactory(self.Storage, CONNECTIONS_PATH)
         self.VersionFactory = CVersionFactory(self.Storage, VERSIONS_PATH)
         self.version = self.VersionFactory.GetVersion('UML 1.4')
+        
+        self.filename = None
     
     def GetStorage(self):
         return self.Storage
@@ -57,6 +60,9 @@ class CProject(object):
     
     def GetRoot(self):
         return self.root
+    
+    def GetFileName(self):
+        return self.filename
     
     def GetNode(self, path):
         node = self.root
@@ -117,7 +123,11 @@ class CProject(object):
         _search(node)
         return elements, connections
     
-    def SaveProject(self, filename):
+    def SaveProject(self, filename = None):
+        if filename is None:
+            filename = self.filename
+        else:
+            self.filename = filename
         f = StringIO()
         id = IDGenerator()
         
@@ -193,12 +203,16 @@ class CProject(object):
         
         # file(filename, 'w').write(f.getvalue())
     
-    def LoadProject(self, file_path):
+    def LoadProject(self, filename, copy = False):
         ListObj = {}
         ListCon = {}
-        file = ZipFile(file_path,"r")
+        file = ZipFile(filename,"r")
         
-            
+        if copy:
+            self.filename = None
+        else:
+            self.filename = filename
+        
         data = file.read('content.xml')
         
         def CreateTree(root, parentNode):
@@ -209,7 +223,7 @@ class CProject(object):
                     for node in i.childNodes:
                         if node.nodeType not in (xml.dom.minidom.Node.ELEMENT_NODE, xml.dom.minidom.Node.DOCUMENT_NODE):
                             continue
-                        proNode = CProjectNode(parentNode,ListObj[node.getAttribute("id")],parentNode.GetPath() + "/" + ListObj[node.getAttribute("id")].GetName() + ":" + ListObj[node.getAttribute("id")].GetType().GetId())
+                        proNode = CProjectNode(parentNode,ListObj[node.getAttribute("id").decode('unicode_escape')],parentNode.GetPath() + "/" + ListObj[node.getAttribute("id").decode('unicode_escape')].GetName() + ":" + ListObj[node.getAttribute("id").decode('unicode_escape')].GetType().GetId())
                         self.AddNode(proNode,parentNode)
                         CreateTree(node,proNode)
                         
@@ -218,30 +232,30 @@ class CProject(object):
                         if area.nodeType not in (xml.dom.minidom.Node.ELEMENT_NODE, xml.dom.minidom.Node.DOCUMENT_NODE):
                             continue
                         if area.tagName == 'drawingarea':
-                            drawingarea = CDrawingArea(self.DiagramFactory.GetDiagram(area.getAttribute("type")),area.getAttribute("name"))
+                            drawingarea = CDrawingArea(self.DiagramFactory.GetDiagram(area.getAttribute("type").decode('unicode_escape')),area.getAttribute("name").decode('unicode_escape'))
                             drawingarea.SetPath(parentNode.GetPath() + "/" + drawingarea.GetName() + ":=DrawingArea=")
                             parentNode.AddDrawingArea(drawingarea)
                             for pic in area.childNodes:
                                 if pic.nodeType not in (xml.dom.minidom.Node.ELEMENT_NODE, xml.dom.minidom.Node.DOCUMENT_NODE):
                                     continue
                                 if pic.tagName == "element":
-                                    element = CElement(drawingarea,ListObj[pic.getAttribute("id")])
-                                    element.SetPosition((int(pic.getAttribute("x")),int(pic.getAttribute("y"))))
+                                    element = CElement(drawingarea,ListObj[pic.getAttribute("id").decode('unicode_escape')])
+                                    element.SetPosition((int(pic.getAttribute("x").decode('unicode_escape')),int(pic.getAttribute("y").decode('unicode_escape'))))
                                     proNode.AddAppears(drawingarea)
                                 elif pic.tagName == "connection":
                                     for e in drawingarea.GetElements():
-                                        if e.GetObject() is ListCon[pic.getAttribute("id")].GetSource():
+                                        if e.GetObject() is ListCon[pic.getAttribute("id").decode('unicode_escape')].GetSource():
                                             source = e
-                                        if e.GetObject() is ListCon[pic.getAttribute("id")].GetDestination():
+                                        if e.GetObject() is ListCon[pic.getAttribute("id").decode('unicode_escape')].GetDestination():
                                             destination = e
-                                    conect = CConnection(drawingarea,ListCon[pic.getAttribute("id")],source,destination,[])
+                                    conect = CConnection(drawingarea,ListCon[pic.getAttribute("id").decode('unicode_escape')],source,destination,[])
                                     for propCon in pic.childNodes:
                                         if propCon.nodeType not in (xml.dom.minidom.Node.ELEMENT_NODE, xml.dom.minidom.Node.DOCUMENT_NODE):
                                             continue
                                         if propCon.tagName == "point":
-                                            conect.AddPoint(int(propCon.getAttribute("x")),int(propCon.getAttribute("y")))
+                                            conect.AddPoint(int(propCon.getAttribute("x").decode('unicode_escape')),int(propCon.getAttribute("y").decode('unicode_escape')))
                                         elif propCon.tagName == "label":
-                                            conect.SetLabelPosition(int(propCon.getAttribute("num")),(int(propCon.getAttribute("x")),int(propCon.getAttribute("y"))))
+                                            conect.SetLabelPosition(int(propCon.getAttribute("num").decode('unicode_escape')),(int(propCon.getAttribute("x").decode('unicode_escape')),int(propCon.getAttribute("y").decode('unicode_escape'))))
             
         dom = xml.dom.minidom.parseString(data)
         root = dom.documentElement
@@ -257,14 +271,14 @@ class CProject(object):
                     if j.nodeType not in (xml.dom.minidom.Node.ELEMENT_NODE, xml.dom.minidom.Node.DOCUMENT_NODE):
                         continue
                     if j.tagName == 'object':
-                        id = j.getAttribute("id")
-                        object = CElementObject(self.ElementFactory.GetElement(j.getAttribute("type")))
+                        id = j.getAttribute("id").decode('unicode_escape')
+                        object = CElementObject(self.ElementFactory.GetElement(j.getAttribute("type").decode('unicode_escape')))
                         
                         for property in j.childNodes:
                             if property.nodeType not in (xml.dom.minidom.Node.ELEMENT_NODE, xml.dom.minidom.Node.DOCUMENT_NODE):
                                 continue
                             if property.hasAttribute("value"):
-                                object.SetAttribute(property.getAttribute("name"),property.getAttribute("value"))
+                                object.SetAttribute(property.getAttribute("name").decode('unicode_escape'),property.getAttribute("value").decode('unicode_escape'))
                             elif property.hasAttribute("type"):
                                 attributes = []
                                 for item in property.childNodes:
@@ -272,10 +286,10 @@ class CProject(object):
                                     for attribute in item.childNodes:
                                         if attribute.nodeType not in (xml.dom.minidom.Node.ELEMENT_NODE, xml.dom.minidom.Node.DOCUMENT_NODE):
                                             continue
-                                        atrib[attribute.getAttribute("name")] = attribute.getAttribute("value")
+                                        atrib[attribute.getAttribute("name").decode('unicode_escape')] = attribute.getAttribute("value").decode('unicode_escape')
                                     if len(atrib) > 0:
                                         attributes.append(atrib)
-                                object.SetAttribute(property.getAttribute("name"),attributes)
+                                object.SetAttribute(property.getAttribute("name").decode('unicode_escape'),attributes)
                         ListObj[id] = object
                         
             elif en == 'connections':
@@ -283,19 +297,19 @@ class CProject(object):
                     if connection.nodeType not in (xml.dom.minidom.Node.ELEMENT_NODE, xml.dom.minidom.Node.DOCUMENT_NODE):
                         continue
                     if connection.tagName == 'connection':
-                        id = connection.getAttribute("id")
-                        con = CConnectionObject(self.ConnectionFactory.GetConnection(connection.getAttribute("type")),ListObj[connection.getAttribute("source")],ListObj[connection.getAttribute("destination")])
+                        id = connection.getAttribute("id").decode('unicode_escape')
+                        con = CConnectionObject(self.ConnectionFactory.GetConnection(connection.getAttribute("type").decode('unicode_escape')),ListObj[connection.getAttribute("source").decode('unicode_escape')],ListObj[connection.getAttribute("destination").decode('unicode_escape')])
                         for propCon in connection.childNodes:
                             if propCon.nodeType not in (xml.dom.minidom.Node.ELEMENT_NODE, xml.dom.minidom.Node.DOCUMENT_NODE):
                                 continue
-                            con.SetAttribute(propCon.getAttribute("name"),propCon.getAttribute("value"))
+                            con.SetAttribute(propCon.getAttribute("name").decode('unicode_escape'),propCon.getAttribute("value").decode('unicode_escape'))
                         ListCon[id] = con
             elif en == 'projecttree':
                 for j in i.childNodes:
                     if j.nodeType not in (xml.dom.minidom.Node.ELEMENT_NODE, xml.dom.minidom.Node.DOCUMENT_NODE):
                         continue
                     if j.tagName == 'node':
-                        proNode = CProjectNode(None,ListObj[j.getAttribute("id")],ListObj[j.getAttribute("id")].GetName() + ":" + ListObj[j.getAttribute("id")].GetType().GetId())
+                        proNode = CProjectNode(None,ListObj[j.getAttribute("id").decode('unicode_escape')],ListObj[j.getAttribute("id").decode('unicode_escape')].GetName() + ":" + ListObj[j.getAttribute("id").decode('unicode_escape')].GetType().GetId())
                         self.SetRoot(proNode)
                         CreateTree(j,proNode)
                         

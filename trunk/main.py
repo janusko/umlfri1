@@ -4,6 +4,9 @@ import pygtk
 
 pygtk.require('2.0')
 
+import warnings
+warnings.simplefilter('ignore', Warning)
+
 import gtk
 
 import lib.Gui.common
