@@ -126,6 +126,8 @@ class CpicDrawingArea(CWidget):
         self.picVBar.set_adjustment(tmp)
     
     def ExportSvg(self, filename):
+        self.DrawingArea.DeselectAll()
+        self.Paint()
         canvas = CSvgCanvas(1000, 1000, self.canvas, self.application.Project.GetStorage())
         canvas.Clear()
         self.DrawingArea.Paint(canvas)

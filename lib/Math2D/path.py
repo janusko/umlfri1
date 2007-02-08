@@ -140,7 +140,7 @@ class PathPartArc(PathPart):
         else:
             self.point1 = PointMatrix.mk_xy(point1)
         self.radius = radius
-        self.rotation = roatation
+        self.rotation = rotation
         self.flags = flags
         if isinstance(point2, PointMatrix):
             self.point2 = point2
@@ -154,10 +154,10 @@ class PathPartArc(PathPart):
         return self.point2
     
     def __iter__(self):
-        raise NotImplemented
+        raise NotImplementedError
     
     def __rmul__(self, other):
-        raise NotImplemented
+        raise NotImplementedError
     
     def __str__(self):
         return 'A %d,%d %d %d,%d %d,%d'%(self.radius+(self.rotation, int(self.flags[0]), int(self.flags[1]))+self.point2.GetIntPos())
@@ -211,7 +211,11 @@ class PathSingle(object):
             return 'polyline'
     
     def __str__(self):
-        return ' '.join([str(i) for i in self.path])
+        if self.GetType() == 'polygon':
+            xx = ' z'
+        else:
+            xx = ''
+        return ' '.join([str(i) for i in self.path])+xx
     
     def __repr__(self):
         return '<%s "%s">'%(self.__class__.__name__, self)

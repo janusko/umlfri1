@@ -3,6 +3,8 @@ import gtk
 from common import CWindow, event
 import common
 
+import os.path
+
 from lib.Drawing import CElement
 from lib.Elements import CElementObject
 from dialogs import CWarningDialog
@@ -27,25 +29,20 @@ class CfrmMain(CWindow):
         'mnuViewTools',
         #mItemHelp
         'mnuAbout',
-        #tabs
-        'nbTabs',
         #toolbar
         'cmdOpen', 'cmdSave',
         'mnuExportSvg',
         #mZ-Order 'mMenuShift',
-        'mMenuShift',
         'mmShift_SendBack', 'mmShift_BringForward', 'mmShift_ToBottom', 'mmShift_ToTop'
         )
 
     complexWidgets = (CtbToolBox, CtwProjectView, CmnuItems, CpicDrawingArea, CnbProperties, CTabs)
-    
+
     def __init__(self, app, wTree):
         CWindow.__init__(self, app, wTree)
-        
-        # default zasednutie Z-Order menu:
-        self.mMenuShift.set_sensitive(0)
 
         self.form.maximize()
+        self.mnuExportSvg.set_sensitive(False)
 
     # Diagrams
     @event("mnuViewTools", "activate")
@@ -62,7 +59,17 @@ class CfrmMain(CWindow):
     
     @event('mnuExportSvg', 'activate')
     def on_mnuExportSvg_activate(self, widget):
-        self.picDrawingArea.ExportSvg('/Student/ahoj.svg')
+        filedlg = gtk.FileChooserDialog('Choose SVG file', self.form, gtk.FILE_CHOOSER_ACTION_SAVE, (gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
+        filter = gtk.FileFilter()
+        filter.set_name("SVG vector images")
+        filter.add_pattern('*.svg')
+        filedlg.add_filter(filter)
+        if filedlg.run() == gtk.RESPONSE_OK:
+            filename = filedlg.get_filename()
+            if '.' not in os.path.basename(filename):
+                filename += '.svg'
+            self.picDrawingArea.ExportSvg(filename)
+        filedlg.destroy()
 
     # Actions
     @event("form", "destroy")
@@ -141,10 +148,12 @@ class CfrmMain(CWindow):
         if drawingArea is None:
             self.picDrawingArea.Hide()
             self.tbToolBox.SetButtons(None)
+            self.mnuExportSvg.set_sensitive(False)
         else:
             self.picDrawingArea.Show()
             self.picDrawingArea.SetDrawingArea(drawingArea)
             self.tbToolBox.SetButtons(drawingArea.GetType().GetId())
+            self.mnuExportSvg.set_sensitive(True)
 
     @event("picDrawingArea", "set-selected")
     def on_picDrawingArea_set_selected(self, widget, selected):
@@ -195,12 +204,7 @@ class CfrmMain(CWindow):
             pass
     
     #Z-Order 
-    @event("picDrawingArea", "zorder-change")
-    def on_zorder_change(self, menuItem):
-        drawingArea = self.picDrawingArea.GetDrawingArea()
-        selCount = drawingArea.SelectedCount()
-        self.mMenuShift.set_sensitive(selCount)
-   
+# 'mmShift_SendBack', 'mmShift_BringForward', 'mmShift_ToBottom', 'mmShift_ToTop'    
     @event("mmShift_SendBack", "activate")
     def on_mnuItems_mmShift_SendBack(self, menuItem):
         self.picDrawingArea.on_pmShift_SendBack_activate(None)

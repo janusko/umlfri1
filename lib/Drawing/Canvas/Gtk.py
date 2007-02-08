@@ -127,6 +127,14 @@ class CGtkCanvas(CAbstractCanvas):
         self.pango_layout.set_text(text)
         return int(self.pango_layout.get_size()[0]/float(pango.SCALE)), int(self.pango_layout.get_size()[1]/float(pango.SCALE))
     
+    def GetFontBaseLine(self, font):
+        if font in self.fonts:
+            fontobj = self.fonts[font]
+        else:
+            self.fonts[font] = fontobj = pango.FontDescription(font)
+        metrics = self.pango_ctx.get_metrics(fontobj, None)
+        return metrics.get_ascent() / pango.SCALE
+    
     def DrawIcon(self, pos, filename):
         if self.storage is None:
             raise UMLException('storage')

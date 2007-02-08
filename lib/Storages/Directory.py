@@ -12,7 +12,7 @@ class CDirectory:
         return os.path.join(self.path, path)
     
     def file(self, path):
-        return open(self.get_file_path(path))
+        return open(self.get_file_path(path), 'rb')
     
     def read_file(self, path):
         return self.file(path).read()
