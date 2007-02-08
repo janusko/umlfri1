@@ -33,6 +33,7 @@ class CpicDrawingArea(CWidget):
         'delete-element-from-all':(gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
             (gobject.TYPE_PYOBJECT, )),
         'drop-from-treeview': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
+        'zorder-change':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE,()),    
     }
 
     def __init__(self, app, wTree):
@@ -144,7 +145,7 @@ class CpicDrawingArea(CWidget):
     
     @event("picEventBox", "button-press-event")
     def on_picEventBox_button_press_event(self, widget, event):
-        self.picDrawingArea.grab_focus()
+        self.picDrawingArea.grab_focus()        
         if event.button == 1:
             toolBtnSel =  self.emit('get-selected')
             if toolBtnSel is not None:
@@ -199,6 +200,9 @@ class CpicDrawingArea(CWidget):
                     self.DrawingArea.DeselectAll()
                     self.emit('selected-item', None)
                     self.Paint()
+                    
+            # povol / zakaz Z-Order
+            self.emit('zorder-change')
         else:
             if event.button == 3:
                 #ak je nieco vyselectovane:
@@ -449,25 +453,21 @@ class CpicDrawingArea(CWidget):
     @event("pmShift_SendBack","activate")
     def on_pmShift_SendBack_activate(self, menuItem):
         self.DrawingArea.ShiftElementsBack(self.canvas)
-        #self.DrawingArea.DeselectAll()
         self.Paint()
         
     @event("pmShift_BringForward","activate")
     def on_pmShift_BringForward_activate(self, menuItem):
         self.DrawingArea.ShiftElementsForward(self.canvas)
-        #self.DrawingArea.DeselectAll()
         self.Paint()        
       
       
     @event("pmShift_ToBottom","activate")
     def on_pmShift_ToBottom_activate(self, menuItem):
         self.DrawingArea.ShiftElementsToBottom()
-        #self.DrawingArea.DeselectAll()
         self.Paint()        
       
     @event("pmShift_ToTop","activate")
     def on_pmShift_ToTop_activate(self, menuItem):
         self.DrawingArea.ShiftElementsToTop()
-        #self.DrawingArea.DeselectAll()
         self.Paint()        
       
