@@ -82,7 +82,7 @@ class CElementType:
     
     def Paint(self, canvas, element):
         pos = element.GetPosition()
-        self.appearance.Paint(canvas, pos, element)
+        self.appearance.Paint(canvas, pos, element, element.GetSize(canvas))
     
     def SetAppearance(self, appearance):
         self.appearance = appearance

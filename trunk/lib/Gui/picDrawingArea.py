@@ -42,6 +42,8 @@ class CpicDrawingArea(CWidget):
         self.__NewConnection = None
         self.dnd = None
         self.selecting = None
+        self.selElem = None
+        self.selSq = None
 
         self.Buffer = gtk.gdk.Pixmap(self.picDrawingArea.window, 1000, 1000)
         self.DrawingArea = CDrawingArea(None,"Start page")
@@ -155,8 +157,9 @@ class CpicDrawingArea(CWidget):
                 return
 
             pos = self.GetAbsolutePos(event.x, event.y)
+            self.clickPos = pos
             itemSel = self.DrawingArea.GetElementAtPosition(self.canvas, pos)
-            if itemSel is not None:
+            if itemSel is not None: #ak som nieco vyselektoval               
                 if itemSel in self.DrawingArea.GetSelected():
                     if (event.state & gtk.gdk.CONTROL_MASK):
                         self.DrawingArea.RemoveFromSelection(itemSel)
@@ -166,12 +169,11 @@ class CpicDrawingArea(CWidget):
                         if i is not None:
                             itemSel.SelectPoint(i)
                             self.__BeginDragPoint(event, itemSel, i)
-                            #self.Paint()
                         else:
                             itemSel.DeselectPoint()
                             i = itemSel.WhatPartOfYouIsAtPosition(self.canvas, pos)
                             self.__BeginDragLine(event, itemSel, i)
-                            #self.Paint()
+                        self.Paint()    
                     else:
                         self.__BeginDragRect(event)
                 elif not (event.state & gtk.gdk.CONTROL_MASK):
@@ -183,15 +185,13 @@ class CpicDrawingArea(CWidget):
                         if i is not None:
                             itemSel.SelectPoint(i)
                             self.__BeginDragPoint(event, itemSel, i)
-                            #self.Paint()
                         else:
                             itemSel.DeselectPoint()
                             i = itemSel.WhatPartOfYouIsAtPosition(self.canvas, pos)
                             self.__BeginDragLine(event, itemSel, i)
-                            #self.Paint()
                     else:
                         self.__BeginDragRect(event)
-                    #self.Paint()
+                    self.Paint()
                 else:
                     self.DrawingArea.AddToSelection(itemSel)
                     self.emit('selected-item', None)
@@ -205,6 +205,13 @@ class CpicDrawingArea(CWidget):
                     
             # povol / zakaz Z-Order
             self.emit('zorder-change')
+            
+            # Resizing 1 elementu
+            selElements = list(self.DrawingArea.GetSelectedElements())
+            if len(selElements) == 1:
+                self.selElem = selElements[0]
+                self.selSq = self.selElem.GetSquareAtPosition(pos)
+            
         else:
             if event.button == 3:
                 #ak je nieco vyselectovane:
@@ -265,8 +272,14 @@ class CpicDrawingArea(CWidget):
 
     @event("picEventBox", "button-release-event")
     def on_button_release_event(self, widget, event):
+        self.releasePos = self.GetAbsolutePos(event.x, event.y)
+        if self.selSq is not None:
+            dx = self.releasePos[0] - self.clickPos[0]
+            dy = self.releasePos[1] - self.clickPos[1]
+            self.selElem.Resize((dx, dy), self.selSq)
+            self.Paint()
         try:
-            pos = self.GetAbsolutePos(event.x, event.y)
+            pos = self.releasePos
             if self.dnd == 'rect':
                 delta = self.__GetDelta(event.x, event.y)
                 self.DrawingArea.MoveSelection(delta)
@@ -305,6 +318,11 @@ class CpicDrawingArea(CWidget):
 
     @event("picEventBox", "motion-notify-event")
     def on_motion_notify_event(self, widget, event):
+        if self.selSq is not None:
+            #self.__DrawResizingRect()
+            self.dnd = None
+            return
+            
         if self.dnd == 'rect':
             self.__DrawDragRect(event.x, event.y)
         elif self.dnd == 'point':
@@ -400,8 +418,22 @@ class CpicDrawingArea(CWidget):
         if draw:
             tmpx, tmpy = self.GetRelativePos(*self.DragRect[0])
             dx, dy = self.__GetDelta(x, y)
-            self.picDrawingArea.window.draw_rectangle(self.DragGC, False, tmpx + dx, tmpy + dy, *self.DragRect[1])
-            self.__oldx, self.__oldy = tmpx + dx, tmpy + dy
+            if self.selSq is None:
+                self.picDrawingArea.window.draw_rectangle(self.DragGC, False, tmpx + dx, tmpy + dy, *self.DragRect[1])
+                self.__oldx, self.__oldy = tmpx + dx, tmpy + dy
+            #else:
+            #    endX = self.DragRect[1][0]-dx
+            #    endY = self.DragRect[1][1]-dy
+            #    self.picDrawingArea.window.draw_rectangle(self.DragGC, False, tmpx + dx, tmpy + dy, endX, endY)
+            #    self.DragRect = ((tmpx, tmpy), (endX, endY))  
+
+    def __DrawResizingRect(self, erase = True, draw = True):
+        begpos = self.selElem.GetPosition()
+        size = self.selElem.GetSize(self.canvas)
+        if erase:
+            self.picDrawingArea.window.draw_rectangle(self.DragGC, False, begpos[0], begpos[1], size[0], size[1])
+        if draw:
+            self.picDrawingArea.window.draw_rectangle(self.DragGC, False, begpos[0], begpos[1], size[0], size[1])
 
     def __DrawDragPoint(self, x, y, erase = True, draw = True):
         if x is None:

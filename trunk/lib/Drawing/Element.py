@@ -6,6 +6,7 @@ class CElement:
         self.drawingArea.AddElement(self)
         self.objct = obj
         self.position = (0,0)
+        self.deltaSize = (0,0)
         self.selected = False
         self.squares = []
     
@@ -28,8 +29,7 @@ class CElement:
 
     def AreYouAtPosition(self, canvas, pos):
         x, y = pos
-        width = self.objct.GetType().GetAppearance().GetWidth(canvas, self)
-        height = self.objct.GetType().GetAppearance().GetHeight(canvas, self)
+        width, height = self.GetSize(canvas)
         
         if  (self.position[0] <= x <= self.position[0] + width) and (self.position[1] <= y <= self.position[1] + height):
             return True
@@ -56,7 +56,9 @@ class CElement:
         return self.objct.GetWidth(canvas, self) / 2 + self.position[0], self.objct.GetHeight(canvas, self) / 2 + self.position[1]
     
     def GetSize(self, canvas):
-        return self.objct.GetWidth(canvas, self), self.objct.GetHeight(canvas, self)
+        w = self.objct.GetWidth(canvas, self) + self.deltaSize[0]
+        h = self.objct.GetHeight(canvas, self) + self.deltaSize[1]
+        return w, h 
         
     def GetSquare(self, canvas):
         x, y = self.GetPosition()
@@ -67,8 +69,7 @@ class CElement:
         self.objct.Paint(canvas, self)
         if self.selected:
             x, y = self.position
-            w = self.objct.GetType().GetAppearance().GetWidth(canvas, self)
-            h = self.objct.GetType().GetAppearance().GetHeight(canvas, self)
+            w, h = self.GetSize(canvas)
             
             self.squares = []
             
@@ -97,3 +98,44 @@ class CElement:
             for c2 in self.drawingArea.GetConnections(): # Connection
                 if c2.GetObject() is c1:
                     yield c2
+
+    
+    # Vrati poziciu obvodoveho stvorceka na pozicii
+    def GetSquareAtPosition(self, pos):
+        x, y = pos
+        for sq in self.squares:
+            sqbx = sq[0][0]
+            sqby = sq[0][1]
+            sqex = sqbx + sq[1][0]
+            sqey = sqby + sq[1][1]
+            if (x >= sqbx and x <= sqex and y >= sqby and y <= sqey):
+                return self.squares.index(sq)
+    
+    # Zmena velkosti - zmenenie nejde pod minimum
+    def Resize(self, delta, selSquareIdx):
+        # Zmenim velkost bez ohladu na minim. velkost:
+        if (selSquareIdx not in [3,4]):
+            # changing horisontally
+            if (selSquareIdx in [0, 1, 2]):
+                self.deltaSize = (self.deltaSize[0], self.deltaSize[1] - delta[1])
+                self.position = (self.position[0], self.position[1] + delta[1])
+            else:
+                self.deltaSize = (self.deltaSize[0], self.deltaSize[1] + delta[1])
+        if (selSquareIdx not in [1, 6]):
+            if (selSquareIdx in [0, 3, 5]):
+                # changing vertically
+                self.deltaSize = (self.deltaSize[0] - delta[0], self.deltaSize[1])
+                self.position = (self.position[0] + delta[0], self.position[1])
+            else:
+                self.deltaSize = (self.deltaSize[0] + delta[0], self.deltaSize[1])
+            
+        # Pripadne nastavenie minimalnej velkosti:
+        if (self.deltaSize[0] < 0):
+            self.deltaSize = (0, self.deltaSize[1]) 
+        if (self.deltaSize[1] < 0):
+            self.deltaSize = (self.deltaSize[0], 0)
+            
+    def GetDelta(self):
+        return self.deltaSize
+
+
