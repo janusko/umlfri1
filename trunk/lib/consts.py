@@ -22,3 +22,5 @@ VIEW_IMAGE = join(IMAGES_PATH, 'view.png')
 
 PROJECT_EXTENSION = '.frip'
 PROJECT_TPL_EXTENSION = '.frit'
+
+DEBUG=True

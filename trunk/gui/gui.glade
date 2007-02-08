@@ -13,7 +13,8 @@
   <property name="modal">False</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
-  <property name="icon_name">stock_object-behind</property>
+  <property name="icon">32.png</property>
+  <property name="icon_name"></property>
   <property name="decorated">True</property>
   <property name="skip_taskbar_hint">False</property>
   <property name="skip_pager_hint">False</property>
@@ -197,7 +198,6 @@
 	  </child>
 
 	  <child>
-
 	    <widget class="GtkMenuItem" id="mItemView">
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">_View</property>
