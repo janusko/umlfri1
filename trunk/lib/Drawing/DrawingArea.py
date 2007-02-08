@@ -217,7 +217,6 @@ class CDrawingArea:
             selectedIdx = self.elements.index(selectedElement)
             del self.elements[selectedIdx]
             self.elements.append(selectedElement) 
-        self.DeselectAll()    
 
     # Presunutie elementov uplne dozadu
     def ShiftElementsToBottom(self):
@@ -225,7 +224,6 @@ class CDrawingArea:
             selectedIdx = self.elements.index(selectedElement)
             del self.elements[selectedIdx]
             self.elements.insert(0, selectedElement);
-        self.DeselectAll()    
             
     # Presunutie elementov o 1 dopredu
     def ShiftElementsForward(self, canvas):
@@ -244,7 +242,6 @@ class CDrawingArea:
                     self.elements.insert(otherElementIdx, selectedElement);
                     selectedShifted = True # uz je posunuty -> koncim a presuvam dalsi selecnuty
                 otherElementIdx += 1
-        self.DeselectAll()
                 
     # Presunutie elementov o 1 dozadu
     def ShiftElementsBack(self, canvas):
@@ -263,4 +260,3 @@ class CDrawingArea:
                     self.elements.insert(otherElementIdx, selectedElement);
                     selectedShifted = True # uz je posunuty -> koncim a presuvam dalsi selecnuty
                 otherElementIdx -= 1
-        self.DeselectAll()

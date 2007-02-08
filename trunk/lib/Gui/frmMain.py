@@ -33,13 +33,17 @@ class CfrmMain(CWindow):
         'cmdOpen', 'cmdSave',
         'mnuExportSvg',
         #mZ-Order 'mMenuShift',
+        'mMenuShift',
         'mmShift_SendBack', 'mmShift_BringForward', 'mmShift_ToBottom', 'mmShift_ToTop'
         )
 
     complexWidgets = (CtbToolBox, CtwProjectView, CmnuItems, CpicDrawingArea, CnbProperties, CTabs)
-
+    
     def __init__(self, app, wTree):
         CWindow.__init__(self, app, wTree)
+        
+        # default zasednutie Z-Order menu:
+        self.mMenuShift.set_sensitive(0)
 
         self.form.maximize()
 
@@ -191,7 +195,12 @@ class CfrmMain(CWindow):
             pass
     
     #Z-Order 
-# 'mmShift_SendBack', 'mmShift_BringForward', 'mmShift_ToBottom', 'mmShift_ToTop'    
+    @event("picDrawingArea", "zorder-change")
+    def on_zorder_change(self, menuItem):
+        drawingArea = self.picDrawingArea.GetDrawingArea()
+        selCount = drawingArea.SelectedCount()
+        self.mMenuShift.set_sensitive(selCount)
+   
     @event("mmShift_SendBack", "activate")
     def on_mnuItems_mmShift_SendBack(self, menuItem):
         self.picDrawingArea.on_pmShift_SendBack_activate(None)
