@@ -71,4 +71,10 @@ class CTabs(CWidget):
         if drawingArea in self.drawingAreas:
             self.nbTabs.remove_page(self.drawingAreas.index(drawingArea))
             self.drawingAreas.remove(drawingArea)
+    
+    def CloseAll(self):
+        for i in xrange(1, len(self.drawingAreas)):
+            self.nbTabs.remove_page(1)
         
+        del self.drawingAreas[1:]
+        self.emit("change_current_page", None)

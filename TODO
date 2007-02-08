@@ -8,12 +8,12 @@
 [ ] Nastavovanie fontu z XML
 [ ] Presunutie konfiguracnych hodnot z const.py do /etc
 [ ] Prerobit Get* na yield, kde treba
-[ ] Drag 'n Drop pridavanie elementov zo stromu do diagramu
-[-] Project tree (miroslav, frizi)
-    [X] Tabovanie
+[x] Drag 'n Drop pridavanie elementov zo stromu do diagramu
+[x] Project tree (miroslav, frizi)
+    [x] Tabovanie
     [x] Prerobit menu (na pridaj diagram)
     [x] Content menu na pridavanie
-    [X] Samotny project tree
+    [x] Samotny project tree
     [x] Ikonky na diagramy
     [x] Ikonky na elementy
 [?] Generovanie formulara
@@ -65,13 +65,16 @@
 [X] Zobrazovanie childov v Package
 [ ] Preklady sk_SK, en_US
 [x] Export do SVG
+[ ] Pri spusteni zakazat menu, povolit az pri otvoreni projektu
+[ ] StartPage
+[ ] Recent files in xml in home directory
 ...
 [x] ZOrder
 [?] Menenie kurzoru po prechode nad volaco
-[ ] Resizovanie elementov
+[-] Resizovanie elementov
 [x] Save
 [x] Load
-    [ ] Sablony
+    [x] Sablony
 [?] Export/Import XMI
 [x] Napisat README
 [!] Vyhodit autorov z gui (Automaticke parsovanie README :D )

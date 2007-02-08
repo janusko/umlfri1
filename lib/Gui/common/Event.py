@@ -1,7 +1,13 @@
 import lib.consts
 import lib.debug
+import gobject
 
-def event(obj, event):
+def event(obj, event = None):
+    """
+        event(obj, event)
+        or
+        event(type), where type is one of ('load', )
+    """
     def tmp(fnc):
         if not hasattr(fnc, 'events'):
             if lib.consts.DEBUG == True:

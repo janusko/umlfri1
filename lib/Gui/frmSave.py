@@ -23,16 +23,23 @@ class CfrmSave(common.CWindow):
         filter.add_pattern("*")
         self.form.add_filter(filter)
     
-    def ShowDialog(self):
-        if self.form.run() == gtk.RESPONSE_CANCEL:
+    def ShowDialog(self, parent):
+        self.form.set_transient_for(parent.form)
+        try:
+            while True:
+                if self.form.run() == gtk.RESPONSE_CANCEL:
+                    self.form.hide()
+                    return None
+                filter = self.form.get_filter().get_name()
+                filename = self.form.get_filename()
+                if filename is None:
+                    continue
+                if '.' not in os.path.basename(filename):
+                    if filter == "UML .FRI Projects":
+                        filename += lib.consts.PROJECT_EXTENSION
+                    elif filter == "UML .FRI Project templates":
+                        filename += lib.consts.PROJECT_TPL_EXTENSION
+                if not os.path.isdir(filename):
+                    return filename
+        finally:
             self.form.hide()
-            return None
-        self.form.hide()
-        filter = self.form.get_filter().get_name()
-        file = self.form.get_filename()
-        if '.' not in os.path.basename(file):
-            if filter == "UML .FRI Projects":
-                file += lib.consts.PROJECT_EXTENSION
-            elif filter == "UML .FRI Project templates":
-                file += lib.consts.PROJECT_TPL_EXTENSION
-        return file

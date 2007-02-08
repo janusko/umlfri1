@@ -7,7 +7,7 @@ import os.path
 
 from lib.Drawing import CElement
 from lib.Elements import CElementObject
-from dialogs import CWarningDialog
+from dialogs import CWarningDialog, CQuestionDialog, ECancelPressed
 from lib.Drawing import CDrawingArea
 from tbToolBox import CtbToolBox
 from twProjectView import CtwProjectView
@@ -49,7 +49,6 @@ class CfrmMain(CWindow):
     def on_mnuViewTools_activate(self, mnu):
         self.tbToolBox.SetVisible(mnu.get_active())
 
-
     # Help
     @event("mnuAbout", "activate")
     def on_mnuAbout_activate(self, mnu):
@@ -64,12 +63,19 @@ class CfrmMain(CWindow):
         filter.set_name("SVG vector images")
         filter.add_pattern('*.svg')
         filedlg.add_filter(filter)
-        if filedlg.run() == gtk.RESPONSE_OK:
-            filename = filedlg.get_filename()
-            if '.' not in os.path.basename(filename):
-                filename += '.svg'
-            self.picDrawingArea.ExportSvg(filename)
-        filedlg.destroy()
+        try:
+            while True:
+                if filedlg.run() == gtk.RESPONSE_OK:
+                    filename = filedlg.get_filename()
+                    if '.' not in os.path.basename(filename):
+                        filename += '.svg'
+                    if os.path.isfile(filename):
+                        self.picDrawingArea.ExportSvg(filename)
+                        return
+                else:
+                    return
+        finally:
+            filedlg.destroy()
 
     # Actions
     @event("form", "destroy")
@@ -80,16 +86,29 @@ class CfrmMain(CWindow):
     @event("cmdOpen", "clicked")
     @event("mnuOpen", "activate")
     def ActionOpen(self, widget):
-        filename, copy = self.application.GetWindow("frmOpen").ShowDialog()
+        filename, copy = self.application.GetWindow("frmOpen").ShowDialog(self)
         if filename is not None:
-            self.application.Project.LoadProject(filename)
+            try:
+                if self.application.Project.GetFileName() is not None and CQuestionDialog(self.form, 'Do you want to save proejct?', True).run():
+                    self.application.Project.SaveProject()
+            except ECancelPressed:
+                return
+            self.application.Project.LoadProject(filename, copy)
+            self.nbTabs.CloseAll()
             self.twProjectView.Redraw()
 
 
     @event("cmdSave", "clicked")
     @event("mnuSave", "activate")
     def ActionSave(self, widget):
-        filename = self.application.GetWindow("frmSave").ShowDialog()
+        if self.application.Project.GetFileName() is None:
+            self.ActionSaveAs(widget)
+        else:
+            self.application.Project.SaveProject()
+
+    @event("mnuSaveAs", "activate")
+    def ActionSaveAs(self, widget):
+        filename = self.application.GetWindow("frmSave").ShowDialog(self)
         if filename is not None:
             self.application.Project.SaveProject(filename)
 
