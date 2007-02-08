@@ -64,7 +64,7 @@
 [x] Specialna visual property CHILDREN
 [X] Zobrazovanie childov v Package
 [ ] Preklady sk_SK, en_US
-[-] Export do SVG
+[x] Export do SVG
 ...
 [x] ZOrder
 [?] Menenie kurzoru po prechode nad volaco

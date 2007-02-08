@@ -3,14 +3,15 @@ from lib.Math2D import Path, PathSingle, PathPartArc, PathPartBezier, PathPartLi
 import math
 import Gtk
 from lib.lib import XMLEncode
+from lib.colors import colors
 
 LINE_STYLES = {'solid': 'none',
-               'dot': '1,1',
-               'doubledot': '1,4'}
+               'dot': '3,3',
+               'doubledot': '3,2,1,2'}
 
 class CSvgCanvas(CAbstractCanvas):
-    def __init__(self, width, height, gtkcanvas, storage = None):
-        self.gtkcanvas = gtkcanvas
+    def __init__(self, width, height, othercanvas, storage = None):
+        self.othercanvas = othercanvas
         self.storage = storage
         self.width = width
         self.height = height
@@ -19,7 +20,7 @@ class CSvgCanvas(CAbstractCanvas):
     
     def WriteOut(self, f):
         print>>f, '<?xml version="1.0" encoding="UTF-8" standalone="no"?>'
-        print>>f, '<svg width="%d" height="%d" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg">'%(self.width, self.height)
+        print>>f, '<svg width="%d" height="%d" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">'%(self.width, self.height)
         print>>f, '    <g id="Layer1">'
         for type, params, style in self.paths:
             style = ' '.join(["%s: %s;"%s for s in style.iteritems()])
@@ -28,12 +29,12 @@ class CSvgCanvas(CAbstractCanvas):
             elif type == 'text':
                 print>>f, '        <text x="%s" y="%s" style="%s">%s</text>'%(params[0][0], params[0][1], style, XMLEncode(params[1]))
             elif type == 'img':
-                print>>f, '        <image x="%s" y="%s" style="%s" xlink:href="data:application/octetstream;base64,%s" />'%(params[0][0], params[0][1], style, params[1].encode('base64'))
+                print>>f, '        <image x="%s" y="%s" width="%s" height="%s" style="%s" xlink:href="data:application/octetstream;base64,%s" />'%(params[0][0], params[0][1], params[1][0], params[1][1], style, params[2].encode('base64').replace('\n', '').replace('\r', ''))
         print>>f, '    </g>'
         print>>f, '</svg>'
     
     def __createpart(self, parts, styles = {}):
-        if isinstance(parts, (Path, PathSingle, PathPart)):
+        if isinstance(parts, PathPart):
             parts = [parts]
         tmp = Path([PathSingle([PathPartMove(parts[0].GetFirstPos())]+parts)])
         self.paths.append(('path', tmp, styles))
@@ -42,27 +43,40 @@ class CSvgCanvas(CAbstractCanvas):
     def __createstyle(self, fg = None, bg = None, line_width = None, line_style = None, font = None):
         style = {}
         if fg is not None:
-            style['stroke'] = fg
+            style['stroke'] = colors.get(fg, fg)
+        else:
+            style['stroke'] = 'none'
         if bg is not None:
-            style['fill'] = bg
+            style['fill'] = colors.get(bg, bg)
+        else:
+            style['fill'] = 'none'
         if line_width is not None:
             style['stroke-width'] = line_width
         if line_style is not None:
-            style['stroke-dashoffset'] = LINE_STYLES[line_style]
+            style['stroke-dashoffset'] = '0'
+            style['stroke-miterlimit'] = '4'
+            style['stroke-dasharray'] = LINE_STYLES[line_style]
         if font is not None:
             family, size, fstyle = (font.split()+['normal'])[:3]
             style['font-family'] = family
-            style['font-size'] = size+'px'
+            style['font-size'] = size+'pt'
         return style
     
     def DrawArc(self, pos, size, arc = (0, 360), fg = None, bg = None, line_width = None, line_style = None):
-        x1 = size[0]/2.0*cos(arc[0]*math.pi/180)+pos[0]+size[0]/2.0
-        y1 = size[1]/2.0*cos(arc[0]*math.pi/180)+pos[1]+size[1]/2.0
-        x2 = size[0]/2.0*cos(arc[1]*math.pi/180)+pos[0]+size[0]/2.0
-        y2 = size[1]/2.0*cos(arc[1]*math.pi/180)+pos[1]+size[1]/2.0
-        roz = arc[1] - arc[0]
-        self.__createpart(PathPartArc((x1, y1), (size[0]/2.0, size[1]/2.0), 0, (roz > 0, abs(roz) >= 180)),
-                self.__createstyle(fg, bg, line_width, line_style))
+        def tmp(arc):
+            x1 = size[0]/2.0*math.cos(arc[0]*math.pi/180)+pos[0]+size[0]/2.0
+            y1 = size[1]/2.0*math.sin(arc[0]*math.pi/180)+pos[1]+size[1]/2.0
+            x2 = size[0]/2.0*math.cos(arc[1]*math.pi/180)+pos[0]+size[0]/2.0
+            y2 = size[1]/2.0*math.sin(arc[1]*math.pi/180)+pos[1]+size[1]/2.0
+            roz = arc[1] - arc[0]
+            return PathPartArc((x1, y1), (size[0]/2.0, size[1]/2.0), 0, (roz > 0, abs(roz) >= 180), (x2, y2))
+        
+        if arc[1] - arc[0] > 180:
+            self.__createpart([tmp((arc[0], arc[0]+180)), tmp((arc[0]+180, arc[1]))], self.__createstyle(fg, bg, line_width, line_style))
+        elif arc[1] - arc[0] < -180:
+            self.__createpart([tmp((arc[0], arc[0]-180)), tmp((arc[0]-180, arc[1]))], self.__createstyle(fg, bg, line_width, line_style))
+        else:
+            self.__createpart(tmp(arc), self.__createstyle(fg, bg, line_width, line_style))
     
     def DrawLine(self, start, end, fg, line_width = None, line_style = None):
         self.__createpart(PathPartLine(start, end),
@@ -93,16 +107,16 @@ class CSvgCanvas(CAbstractCanvas):
         self.DrawPolygon([pos, (pos[0]+size[0], pos[1]), (pos[0]+size[0], pos[1]+size[1]), (pos[0], pos[1]+size[1])], fg, bg, line_width, line_style)
     
     def DrawText(self, pos, text, font, fg):
-        self.paths.append(('text', (pos, text), self.__createstyle(bg=fg, font=font)))
+        self.paths.append(('text', ((pos[0], pos[1]+self.othercanvas.GetFontBaseLine(font)), text), self.__createstyle(bg=fg, font=font)))
     
     def GetTextSize(self, text, font):
-        return self.gtkcanvas.GetTextSize(text, font)
+        return self.othercanvas.GetTextSize(text, font)
     
     def DrawIcon(self, pos, filename):
-        self.paths.append(('img', (pos, self.storage.read_file(filename)), {}))
+        self.paths.append(('img', (pos, self.GetIconSize(filename), self.storage.read_file(filename)), {}))
     
     def GetIconSize(self, filename):
-        return self.gtkcanvas.GetIconSize(filename)
+        return self.othercanvas.GetIconSize(filename)
     
     def Clear(self):
         self.paths = []
