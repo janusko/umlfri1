@@ -61,5 +61,3 @@ def display_exc():
     buffer.insert(iter, "\n")
     buffer.insert_with_tags_by_name(iter, exccls.__name__, "bold")
     buffer.insert(iter, ": %s\n"%exc)
-    
-    traceback.print_exc()
