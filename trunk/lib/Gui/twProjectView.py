@@ -221,10 +221,10 @@ class CtwProjectView(CWidget):
                 node = self.twProjectView.get_model().get(iter,3)[0]
                 if object is node.GetObject():
                     break
-        node.Change()  
-        
-        model = self.twProjectView.get_model()
-        self.TreeStore.set_value(iter, 0, object.GetName())
+            node.Change()  
+            
+            model = self.twProjectView.get_model()
+            self.TreeStore.set_value(iter, 0, object.GetName())
     
     
     @event("twProjectView","button-press-event")

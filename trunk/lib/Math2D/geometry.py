@@ -50,18 +50,58 @@ class CPoint:
         return repr(self.point)
 
 class CLine:
-    def __init__(self, src, dest):
-        self.src = src
-        self.dest = dest
+    def __init__(self, start, end):
+        if not isinstance(start, CPoint):
+            start = CPoint(start)
+        if not isinstance(end, CPoint):
+            end = CPoint(end)
+        self.start = start
+        self.end = end
         
     def GetStart(self):
-        return self.src
+        return self.start
         
     def GetEnd(self):
-        return self.dest
+        return self.end
         
+    def GetPos(self):
+        return self.GetStart().GetPos(), self.GetEnd().GetPos()
+        
+    def Angle(self):
+        (x1, y1), (x2, y2) = self.GetPos()
+        return math.atan2(y2 - y1, x2 - x1)
+        
+    def Scale(self, factor):
+        (Ax, Ay), (Bx, By) = self.GetPos()
+        return CLine(self.GetStart(), (Ax + (Bx - Ax)*factor, Ay + (By - Ay)*factor))
+
+    def Nearest(self, point):
+        (Ax, Ay), (Bx, By) = self.GetPos()
+        Cx, Cy = point.GetPos()
+        D = float((Bx - Ax)**2 + (By - Ay)**2)
+        if D == 0:
+            return self.GetStart(), self.GetStart - point, math.atan2(Cy - Ay, Cx - Ax)
+        t1 = (Cx - Ax)*(Bx - Ax) - (Cy - Ay)*(Ay - By)
+        t2 = (Bx - Ax)*(Cy - Ay) - (Cx - Ax)*(By - Ay)
+        if t1 <= 0:
+            angle = math.atan2(Cy - Ay, Cx - Ax) - self.Angle()
+            return self.GetStart(), self.GetStart() - point, angle
+        elif 0 < t1 < D:
+            pos = CPoint((Ax + (Bx - Ax)*t1/D, Ay + (By - Ay)*t1/D))
+            if t2 >= 0:
+                angle = math.atan2(Cy - By, Cx - Bx) - math.pi/2
+            else:
+                angle = math.atan2(Cy - By, Cx - Bx) + math.pi/2
+            return pos, pos - point, angle
+        else:
+            angle = math.atan2(Cy - By, Cx - Bx) - self.Angle()
+            return self.GetEnd(), self.GetEnd() - point, angle
+    
     def __repr__(self):
-        return '[' + repr(self.src) + ' ' + repr(self.dest) + ']'
+        return '[' + repr(self.start) + ' ' + repr(self.end) + ']'
+        
+    def __abs__(self):
+        return self.GetStart() - self.GetEnd()
         
     def __mul__(self, other):
         if isinstance(other, CPoint):
@@ -69,8 +109,8 @@ class CLine:
                 return [other]
             return []
         elif isinstance(other, CLine):
-            (ax1, ay1), (ax2, ay2) = self.GetStart().GetPos(), self.GetEnd().GetPos()
-            (bx1, by1), (bx2, by2) = other.GetStart().GetPos(), other.GetEnd().GetPos()
+            (ax1, ay1), (ax2, ay2) = self.GetPos()
+            (bx1, by1), (bx2, by2) = other.GetPos()
             D = (((ay2 - ay1)*(bx2 - bx1)) + ((by1 - by2)*(ax2 - ax1)))
             if D == 0:
                 result = set()
@@ -97,8 +137,7 @@ class CLine:
     
     def __sub__(self, other):
         if isinstance(other, CPoint):
-            x1, y1 = self.src.GetPos()
-            x2, y2 = self.dest.GetPos()
+            (x1, y1), (x2, y2) = self.GetPos()
             x, y = other.GetPos()
             A = y2 - y1
             B = x1 - x2
@@ -114,7 +153,7 @@ class CLine:
                 return abs(A*x + B*y + C)/math.sqrt(A**2 + B**2)
         elif isinstance(other, CLine):
             if len(self * other):
-                return 0
+                    return 0
             return min(self - other.GetStart(), self - other.GetEnd(), other - self.GetStart(), other - self.GetEnd())
         else:
             return NotImplemented
@@ -122,11 +161,19 @@ class CLine:
     __rsub__ = __sub__
     
     def __eq__(self, other):
-        return (self.src == other.GetStart() and self.dest == other.GetEnd()) or \
-            (self.src == other.GetEnd() and self.dest ==other.GetStart())
+        return (self.start == other.GetStart() and self.end == other.GetEnd()) or \
+            (self.start == other.GetEnd() and self.end ==other.GetStart())
+            
+class CLineVector(CLine):
+    def __init__(self, start, alpha, length):
+        if not isinstance(start, CPoint):
+            start = CPoint(start)
+        x, y = start.GetPos()
+        end = CPoint((x + math.cos(alpha)*length, y + math.sin(alpha)*length))
+        CLine.__init__(self, start, end)
     
 class CPolyLine:
-    def __init__(self, *points):
+    def __init__(self, points):
         if len(points) < 2:
             raise MathException
         self.lines = []
@@ -134,12 +181,32 @@ class CPolyLine:
         for end in points[1:]:
             self.lines.append(CLine(start, end))
             start = end
+            
+    def GetLine(self, index):
+        return self.lines[index]
         
     def GetLines(self):
-        yield self.lines
+        for line in self.lines:
+            yield line
+            
+    def GetPos(self):
+        result = [self.lines[0].GetStart().GetPos()]
+        result.extend([line.GetEnd().GetPos() for line in self.lines])
+        return result
+        
+    def Nearest(self, point):
+        result = None
+        for index, line in enumerate(self.lines):
+            nearest, dist, angle = line.Nearest(point)
+            if result is None or dist < result[2]:
+                result = (index, nearest, dist, angle)
+        return result
         
     def __repr__(self):
         return repr(self.lines)
+        
+    def __abs__(self):
+        return sum([abs(line) for line in self.lines])
             
     def __mul__(self, other):
         result = set()
@@ -150,18 +217,28 @@ class CPolyLine:
     __rmul__ = __mul__
     
 class CPolygon(CPolyLine):
-    def __init__(self, *points):
-        CPolyLine.__init__(self, *points)
+    def __init__(self, points):
+        CPolyLine.__init__(self, points)
         self.lines.append(CLine(points[-1], points[0]))
+        
+    def GetPos(self):
+        return [line.GetStart().GetPos() for line in self.lines]
         
 class CRectangle(CPolygon):
     def __init__(self, topLeft, bottomRight):
-        (x1, y1), (x2, y2) = topLeft.GetPos(), bottomRight.GetPos()
+        if isinstance(topLeft, CPoint):
+            (x1, y1) = topLeft.GetPos()
+        else:
+            x1, y1 = topLeft
+        if isinstance(bottomRight, CPoint):
+            (x2, y2) = bottomRight.GetPos()
+        else:
+            x2, y2 = bottomRight
         if x1 > x2:
             x1, x2 = x2, x1
         if y1 > y2:
             y1, y2 = y2, y1
-        CPolygon.__init__(self, CPoint((x1, y1)), CPoint((x2, y1)), CPoint((x2, y2)), CPoint((x1, y2)))
+        CPolygon.__init__(self, (CPoint((x1, y1)), CPoint((x2, y1)), CPoint((x2, y2)), CPoint((x1, y2))))
         
     def GetTopLeft(self):
         return self.lines[0].GetStart()
@@ -176,3 +253,4 @@ class CRectangle(CPolygon):
             if self.GetTopLeft() >= other.GetTopLeft() and self.GetBottomRight() <= other.GetBottomRight():
                 return [self.GetTopLeft(), self.GetBottomRight()]
         return CPolygon.__mul__(self, other)
+

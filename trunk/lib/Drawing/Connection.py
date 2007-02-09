@@ -1,7 +1,7 @@
 from lib.lib import UMLException
 from lib.config import config
 from lib.Connections.Object import CConnectionObject
-from lib.Math2D import CPoint, CLine, CRectangle
+from lib.Math2D import CPoint, CLine, CLineVector, CPolyLine, CRectangle
 from math import sqrt, atan2, pi
 
 class CConnection:
@@ -69,6 +69,12 @@ class CConnection:
             next = self.points[index]
         return previous, next
         
+    def __CalculateLabelPos(self, canvas, index, t, dist, angle):
+        line = CLine(self.GetPoint(canvas, index), self.GetPoint(canvas, index + 1))
+        lineang = line.Angle()
+        scaled = line.Scale(t)
+        newline = CLineVector(scaled.GetEnd(), angle + lineang,  dist)
+        return newline.GetEnd().GetPos()
         
     def GetDestinationObject(self):
         return self.object.GetDestination()
@@ -76,58 +82,97 @@ class CConnection:
     def GetObject(self):
         return self.object
     
-    def GetLabelPosition(self, canvas, position, id):
+    def GetLabelPosition(self, canvas, id, position, size):
+        width, height = size
         if id in self.labels:
-            return self.labels[id]
+            pnt, idx, t, dist, angle = self.labels[id]
+            if pnt is None:
+                self.labels[id][0] = pnt = self.__CalculateLabelPos(canvas, idx, t, dist, angle)
+            x, y = pnt
+            return x - width/2, y - height/2
         else:
-            points = [p for p in self.GetPoints(canvas)]
+            points = list(self.GetPoints(canvas))
             if position == 'source':
-                tmp = self.labels[id] = (points[0][0] , points[0][1])
+                tmp = self.labels[id] = [points[0], 0, 0.0, 0, 0]
             elif position == 'destination':
-                tmp = self.labels[id] = (points[-1][0] , points[-1][1])
+                tmp = self.labels[id] = [points[-1], len(points) - 1, 1.0, 0, 0]
             elif position == 'center':
                 L = 0
                 tmp = Lo = points[0]
-                for i in points[1:]:
-                    L += sqrt((Lo[0] - i[0])**2 + (Lo[1] - i[1])**2)
-                    Lo = i
+                for point in points[1:]:
+                    L += sqrt((Lo[0] - point[0])**2 + (Lo[1] - point[1])**2)
+                    Lo = point
                 Lo = points[0]
                 L1 = L/2
                 L = 0
-                for i in points[1:]:
-                    LX = sqrt((Lo[0] - i[0])**2 + (Lo[1] - i[1])**2)
+                for index, point in enumerate(points[1:]):
+                    LX = sqrt((Lo[0] - point[0])**2 + (Lo[1] - point[1])**2)
                     L += LX
                     if L > L1:
                         L -= L1
                         t = L / LX
-                        tmp = self.labels[id] = (int(Lo[0] * t  + i[0] * (1 - t)),
-                                                 int(Lo[1] * t  + i[1] * (1 - t)))
+                        tmp = self.labels[id] = [self.__CalculateLabelPos(canvas, index, t, height/2, pi/2), 
+                            index, t, height/2, pi/2]
                         break
-                    Lo = i
+                    Lo = point
             else:
                 raise UMLException("UndefinedPosition")
-            return tmp
+            return tmp[0]
     
     def GetLabelDefinedPositions(self):
         for id, lbl in self.GetObject().GetType().GetLabels():
-            yield self.labels.get(id, None)
+            yield self.labels.get(id, (None, None, None, None, None))[1:]
     
-    def SetLabelPosition(self, label, pos):
-        self.labels[label] = pos
+    def SetLabelPosition(self, label, index, t, dist, angle):
+        self.labels[label] = [None, index, t, dist, angle]
         
+    def SetLabelPositionXY(self, label, pos, canvas):
+        polyline = CPolyLine(tuple(self.GetPoints()))
+        point = CPoint(pos)
+        index, point, dist, angle = polyline.Nearest(point)
+        line = polyline.GetLine(index)
+        (Sx, Sy), (Ex, Ey) = line.GetPos()
+        Px, Py = point.GetPos()
+        if Sx != Ex:
+            t = (Px - Sx) / (Ex - Sx)
+        elif Sy != Ey:
+            t = (Py - Sy) / (Ey - Sy)
+        else:
+            t = 0
+        self.labels[label] = [pos, index, t, dist, angle]
         
-    def AddPoint(self, canvas, point, index = None):
+    def InsertPoint(self, canvas, point, index = None):
         if index is None:
             self.points.append(point)
-        elif 0 <= index <= len(self.points):
+            return
+        if 0 <= index  <= len(self.points):
+            prevpoint = self.GetPoint(canvas, index)
+            nextpoint = self.GetPoint(canvas, index + 1)
+            len1 = abs(CLine(prevpoint, point))
+            len2 = abs(CLine(point, nextpoint))
+            for id in self.labels:
+                pnt, idx, t, dist, angle = self.labels[id]
+                if idx < index:
+                    continue
+                elif idx == index:
+                    if len1 >= (len1 + len2)*t:
+                        t = (len1 + len2)*t / len1
+                    else:
+                        t = ((len1 + len2)*t - len1)/len2
+                        idx += 1
+                else:
+                    idx += 1
+                self.labels[id] = [None, idx, t, dist, angle]
             self.points.insert(index, point)
         else:
             raise UMLException("PointNotExists")
-        if canvas is not None:
-            self.ValidatePoints(canvas)
-
+        self.ValidatePoints(canvas)
+    
+    def AddPoint(self, point):
+        self.points.append(point)
+        
     def WhatPartOfYouIsAtPosition(self, canvas, point):
-        points = [p for p in self.GetPoints(canvas)]
+        points = list(self.GetPoints(canvas))
         point = CPoint(point)
         point1 = points[0]
         for index, point2 in enumerate(points[1:]):
@@ -146,11 +191,19 @@ class CConnection:
         points = []
         for x, y in self.points:
             points.append((x+deltax, y+deltay))
+        for id in self.labels:
+            if self.labels[id][0] is not None:
+                x, y = self.labels[id][0]
+                self.labels[key][0] = (x+deltax, y+deltay)
         self.points = points
         
     def MovePoint(self, canvas, point, index):
         if 0 < index <= len(self.points):
             self.points[index - 1] = point
+            for id in self.labels:
+                pnt, idx, t, dist, angle = self.labels[id]
+                if index == idx or index  == idx + 1:
+                    self.labels[id][0] = None
         else:
             raise UMLException("PointNotExists")
         self.ValidatePoints(canvas)
@@ -164,6 +217,23 @@ class CConnection:
 
     def RemovePoint(self, canvas, index):
         if 0 < index <= len(self.points):
+            prevpoint = self.GetPoint(canvas, index - 1)
+            point = self.GetPoint(canvas, index )
+            nextpoint = self.GetPoint(canvas, index + 1)
+            len1 = abs(CLine(prevpoint, point))
+            len2 = abs(CLine(point, nextpoint))
+            for id in self.labels:
+                pnt, idx, t, dist, angle = self.labels[id]
+                if idx < index - 1:
+                    continue
+                elif idx == index - 1:
+                    t = (len1*t) / (len1 + len2)
+                elif idx == index:
+                    t = (len1 + len2*t) / (len1 + len2)
+                    idx -= 1
+                else:
+                    idx -= 1
+                self.labels[id] = [None, idx, t, dist, angle]
             self.points.pop(index - 1)
             if index  == self.selpoint:
                 self.selpoint = None
@@ -172,31 +242,33 @@ class CConnection:
         self.ValidatePoints(canvas)
     
     def GetPoints(self, canvas):
-        if self.source is not None:
-            center = self.source.GetCenter(canvas)
-            if len(self.points) == 0 and self.destination is None:
-                yield center
-            else:
-                if len(self.points) == 0:
-                    point = self.destination.GetCenter(canvas)
-                else:
-                    point = self.points[0]
-                yield self.__ComputeIntersect(canvas, self.source, center, point)
-                    
+        yield self.GetPoint(canvas, 0)
+            
         for point in self.points:
             yield point
             
-        if self.destination is not None:
-            center = self.destination.GetCenter(canvas)
-            if len(self.points) == 0 and self.source is None:
-                yield center
-            else:
-                if len(self.points) == 0:
-                    point = self.source.GetCenter(canvas)
-                else:
-                    point = self.points[-1]
-                yield self.__ComputeIntersect(canvas, self.destination, center, point)
+        yield self.GetPoint(canvas, len(self.points) + 1)
     
+    def GetPoint(self, canvas, index):
+        if index == 0:
+            center = self.source.GetCenter(canvas)
+            if len(self.points) == 0:
+                point = self.destination.GetCenter(canvas)
+            else:
+                point = self.points[0]
+            return self.__ComputeIntersect(canvas, self.source, center, point)
+        elif index - 1 < len(self.points):
+            return self.points[index - 1]
+        elif index - 1 == len(self.points) :
+            center = self.destination.GetCenter(canvas)
+            if len(self.points) == 0:
+                point = self.source.GetCenter(canvas)
+            else:
+                point = self.points[-1]
+            return self.__ComputeIntersect(canvas, self.destination, center, point)
+        else:
+            raise UMLException("PointNotExists")
+        
     def GetMiddlePoints(self):
         for point in self.points:
             yield point
@@ -225,24 +297,15 @@ class CConnection:
     
     def ValidatePoints(self, canvas):
         points = list(self.GetPoints(canvas))
+        lenold = len(points)
         changed = True
-        while changed:
-            changed = False
-            for i in xrange(1, len(points) - 1):
-                (x1, y1), (x2, y2), (x3, y3) = points[i-1], points[i], points[i+1]
-                angle = atan2(y1 - y2, x1 - x2) - atan2(y2 - y3, x2 - x3)
-                if -0.1 < angle < 0.1:
-                    del points[i]
-                    changed = True
-                    break
-        result = []
-        if self.source is None:
-            result.append(points[0])
-        result.extend(points[1:-1])
-        if self.destination is None:
-            result.append(points[-1])
-        if len(self.points) != len(result):
-            self.points = result
-            self.DeselectPoint()
-            
-        
+        for i in xrange(1, len(points) - 1):
+            (x1, y1), (x2, y2), (x3, y3) = points[i-1], points[i], points[i+1]
+            angle = atan2(y1 - y2, x1 - x2) - atan2(y2 - y3, x2 - x3)
+            if -0.1 < angle < 0.1:
+                self.RemovePoint(canvas, i)
+                return
+                
+    def RecalculateLabels(self):
+        for id in self.labels:
+            self.labels[id][0] = None

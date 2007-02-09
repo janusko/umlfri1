@@ -109,7 +109,7 @@ class CDrawingArea:
                 y2 = y + h
         return (int(x1), int(y1)), (int(x2 - x1), int(y2 - y1))
     
-    def MoveSelection(self, delta):
+    def MoveSelection(self, delta, canvas = None):
         deltax, deltay = delta
         movedCon = set()
         for el in self.GetSelectedElements():
@@ -120,6 +120,10 @@ class CDrawingArea:
                     if con not in movedCon:
                         con.MoveAll(delta)
                         movedCon.add(con) 
+        if canvas is not None:
+            for conn in self.connections:
+                conn.ValidatePoints(canvas)
+                conn.RecalculateLabels()
     
     def DeleteObject(self, object):
         for i in self.elements:
