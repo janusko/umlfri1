@@ -289,7 +289,7 @@ class CpicDrawingArea(CWidget):
                 
             elif self.dnd == 'rect':
                 delta = self.__GetDelta(event.x, event.y)
-                self.DrawingArea.MoveSelection(delta)
+                self.DrawingArea.MoveSelection(delta, self.canvas)
                 self.dnd = None
                 self.Paint()
             elif self.dnd == 'point':
@@ -301,7 +301,7 @@ class CpicDrawingArea(CWidget):
             elif self.dnd == 'line':
                 point = self.GetAbsolutePos(event.x, event.y)
                 connection, index = self.DragPoint
-                connection.AddPoint(self.canvas, point, index)
+                connection.InsertPoint(self.canvas, point, index)
                 self.dnd = None
                 self.Paint()
             elif self.__NewConnection is not None:

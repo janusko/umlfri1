@@ -172,9 +172,9 @@ class CProject(object):
                         print>>f, '  '*level+'    <connection id="%d">'%(id(c.GetObject()))
                         for pos in c.GetMiddlePoints():
                             print>>f, '  '*level+'      <point x="%d" y="%d" />'%pos
-                        for num, pos in enumerate(c.GetLabelDefinedPositions()):
-                            if pos is not None:
-                                print>>f, '  '*level+'      <label num="%d" x="%d" y="%d" />'%(num, pos[0], pos[1])
+                        for num, (index, t, dist, angle) in enumerate(c.GetLabelDefinedPositions()):
+                            if index is not None:
+                                print>>f, '  '*level+'      <label num="%d" index="%d" section="%f" distance="%d" angle="%f" />'%(num, index, t, dist, angle)
                         print>>f, '  '*level+'    </connection>'
                     print>>f, '  '*level+'    </drawingarea>'
             print>>f, '  '*level+'  </drawingareas>'
@@ -256,9 +256,13 @@ class CProject(object):
                                         if propCon.nodeType not in (xml.dom.minidom.Node.ELEMENT_NODE, xml.dom.minidom.Node.DOCUMENT_NODE):
                                             continue
                                         if propCon.tagName == "point":
-                                            conect.AddPoint(None,(int(propCon.getAttribute("x").decode('unicode_escape')),int(propCon.getAttribute("y").decode('unicode_escape'))))
+                                            conect.AddPoint((int(propCon.getAttribute("x").decode('unicode_escape')),int(propCon.getAttribute("y").decode('unicode_escape'))))
                                         elif propCon.tagName == "label":
-                                            conect.SetLabelPosition(int(propCon.getAttribute("num").decode('unicode_escape')),(int(propCon.getAttribute("x").decode('unicode_escape')),int(propCon.getAttribute("y").decode('unicode_escape'))))
+                                            conect.SetLabelPosition(int(propCon.getAttribute("num").decode('unicode_escape')),
+                                                int(propCon.getAttribute("index").decode('unicode_escape')),
+                                                float(propCon.getAttribute("section").decode('unicode_escape')),
+                                                int(propCon.getAttribute("distance").decode('unicode_escape')),
+                                                float(propCon.getAttribute("angle").decode('unicode_escape')))
             
         dom = xml.dom.minidom.parseString(data)
         root = dom.documentElement
