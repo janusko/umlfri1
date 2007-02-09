@@ -1,6 +1,7 @@
 import gtk, gtk.gdk, gobject, gtk.keysyms
 
-from lib.consts import SELECT_SQUARE_COLOR, SELECT_SQUARE_SIZE
+from lib.colors import invert
+from lib.config import config
 
 from common import CWidget, event
 from lib.Drawing import CDrawingArea, CElement, CConnection
@@ -47,11 +48,11 @@ class CpicDrawingArea(CWidget):
 
         self.Buffer = gtk.gdk.Pixmap(self.picDrawingArea.window, 1000, 1000)
         self.DrawingArea = CDrawingArea(None,"Start page")
-        self.canvas = CGtkCanvas(self.picDrawingArea, self.Buffer, self.application.Project.GetStorage())
+        self.canvas = None
 
         cmap = self.picDrawingArea.window.get_colormap()
-        self.DragGC = self.picDrawingArea.window.new_gc(foreground = cmap.alloc_color(SELECT_SQUARE_COLOR),
-            function = gtk.gdk.XOR, line_width = SELECT_SQUARE_SIZE)
+        self.DragGC = self.picDrawingArea.window.new_gc(foreground = cmap.alloc_color(invert(config['/Config/Styles/Drag/RectangleColor'])),
+            function = gtk.gdk.XOR, line_width = config['/Config/Styles/Drag/RectangleWidth'])
         
         self.TARGETS = [
         ('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_WIDGET, 0),
@@ -64,7 +65,9 @@ class CpicDrawingArea(CWidget):
         
         self.AdjustScrollBars()
         self.Hide()
-        self.Paint()
+
+    def Redraw(self):
+        self.canvas = CGtkCanvas(self.picDrawingArea, self.Buffer, self.application.Project.GetStorage())
 
     def Hide(self):
         self.vbAll.set_child_packing(self.nbTabs, True, True, 0, gtk.PACK_START)
