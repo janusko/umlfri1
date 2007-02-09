@@ -69,7 +69,10 @@ class CProject(object):
         
         k = path.split('/')[0]
         i,j = k.split(':')
-                
+        
+        if i == self.root.GetName() and j == self.root.GetType() and len(path.split('/')) == 1:
+            return root        
+        
         if i == self.root.GetName() and j == self.root.GetType():
             for i in path.split('/')[1:]:
                 j, k  = i.split(':')
@@ -253,7 +256,7 @@ class CProject(object):
                                         if propCon.nodeType not in (xml.dom.minidom.Node.ELEMENT_NODE, xml.dom.minidom.Node.DOCUMENT_NODE):
                                             continue
                                         if propCon.tagName == "point":
-                                            conect.AddPoint(int(propCon.getAttribute("x").decode('unicode_escape')),int(propCon.getAttribute("y").decode('unicode_escape')))
+                                            conect.AddPoint(None,(int(propCon.getAttribute("x").decode('unicode_escape')),int(propCon.getAttribute("y").decode('unicode_escape'))))
                                         elif propCon.tagName == "label":
                                             conect.SetLabelPosition(int(propCon.getAttribute("num").decode('unicode_escape')),(int(propCon.getAttribute("x").decode('unicode_escape')),int(propCon.getAttribute("y").decode('unicode_escape'))))
             

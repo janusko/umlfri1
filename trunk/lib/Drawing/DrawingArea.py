@@ -36,6 +36,11 @@ class CDrawingArea:
     
     def AddElement(self, element):
         if element not in self.elements:
+            if element.GetObject().GetType().GetId() not in self.typeDiagram.GetElements():
+                    raise UMLException("DiagramHaveNotThisElement")
+            for i in self.elements:
+                if i.GetObject() is element.GetObject():
+                    raise UMLException("ElementAlreadyExists")
             self.elements.append(element)
         else:
             raise UMLException("ElementAlreadyExists")

@@ -18,23 +18,22 @@ class CProjectNode(object):
             parentPath = ""
 
 
-        self.object.SetPath(parentPath + self.GetName() + ":" + self.GetType())
+        self.SetPath(parentPath + self.GetName() + ":" + self.GetType())
         for i in self.drawingareas:
-            i.SetPath(parentPath + i.GetName() + ":=DrawingArea=")
-
+            i.SetPath(self.GetPath() + "/" +  i.GetName() + ":=DrawingArea=")
+            
         for i in self.childs:
             i.Change()
 
 
     def GetAppears(self):
-        for i in self.appears:
-            yield i
+        return self.GetObject().GetAppears()
 
     def AddAppears(self, drawingArea):
-        self.appears.append(drawingArea)
+        self.GetObject().AddAppears(drawingArea)
 
     def RemoveAppears(self, drawingArea):
-        self.appears.remove(drawingArea)
+        self.GetObject().RemoveAppears(drawingArea)
 
     def GetDrawingAreas(self):
         return self.drawingareas

@@ -13,6 +13,7 @@ import gobject
 import gtk
 import gtk.gdk
 
+
 class CtwProjectView(CWidget):
     name = 'twProjectView'
     widgets = ('twProjectView','menuTreeElement', 'mnuTreeAddDiagram', 'mnuTreeDelete',)
@@ -30,7 +31,6 @@ class CtwProjectView(CWidget):
         
         # vytvorime si model
         self.TreeStore = gtk.TreeStore(str, gtk.gdk.Pixbuf, str, object)
-        
         self.EventButton = (0,0)
         
         for item in self.mnuTreeAddDiagram.get_children():
@@ -152,23 +152,29 @@ class CtwProjectView(CWidget):
         i = path.split('/')[0]
         j,k = i.split(':')
         name, type = model.get(root, 0, 2)
+        endName, endType = path.split('/')[-1].split(':')
+        
         if len(path.split('/')) == 1 and name == j and type == k:
             return [root]
-            
+        
         if name == j and type == k:
-            for i in path.split('/')[1:]:
-                j, k = i.split(':')
+            def rekurzia(root,path):
+                j, k = path.split('/')[0].split(':')
                 for id in xrange(model.iter_n_children(root)):
                     chld = model.iter_nth_child(root, id)
                     name, type = model.get(chld, 0, 2)
                     
                     if k == "=DrawingArea=":
-                        iter.append(root)
-                        
+                        iter.append(root) 
+                    
                     if name == j and type == k:
-                        iter.append(chld) 
-                        
-                root = chld
+                        if len(path.split('/')) > 1:
+                            rekurzia(chld,path.split('/',1)[1])
+                        else:
+                            iter.append(chld)
+            
+            rekurzia(root,path.split('/',1)[1])                        
+
         else:
             raise UMLException("BadPath4")
         return iter
@@ -232,8 +238,12 @@ class CtwProjectView(CWidget):
                 node = self.twProjectView.get_model().get(iter,3)[0]
                 if object is node.GetObject():
                     break
-            node.Change()        
-            self.TreeStore.set_value(iter, 0, object.GetName())
+        node.Change()  
+        
+        model = self.twProjectView.get_model()
+        print model.get(iter,3)[0].GetName()," Name"
+        self.TreeStore.set_value(iter, 0, object.GetName())
+        print iter
     
     
     @event("twProjectView","button-press-event")
@@ -247,11 +257,14 @@ class CtwProjectView(CWidget):
         model = self.twProjectView.get_model()
         iter =  model.get_iter(path)
         if model.get(iter,2)[0] == "=DrawingArea=":
+            print model.get(iter,3)[0].GetPath()
             area = model.get(iter,3)[0]
             if area is None:
                 raise UMLException("None")
             else:
                 self.emit('selected_drawing_area',area)
+        else:
+            print model.get(iter,3)[0].GetPath()
     
     @event("twProjectView", "cursor-changed")
     def on_twProjectView_change_selection(self, treeView):

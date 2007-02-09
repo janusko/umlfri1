@@ -2,13 +2,13 @@ import lib.consts
 
 class CElement:
     def __init__(self, drawingArea, obj):
-        self.drawingArea = drawingArea
-        self.drawingArea.AddElement(self)
         self.objct = obj
         self.position = (0,0)
         self.deltaSize = (0,0)
         self.selected = False
         self.squares = []
+        self.drawingArea = drawingArea
+        self.drawingArea.AddElement(self)
     
     def __AddSquare(self, x, y, posx, posy):
         if posx == 0:
@@ -137,5 +137,9 @@ class CElement:
             
     def GetDelta(self):
         return self.deltaSize
+       
+    def CopyFromElement(self, element):
+        self.deltaSize = element.deltaSize
+        self.position = element.position
 
 
