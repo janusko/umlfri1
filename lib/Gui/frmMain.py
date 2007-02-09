@@ -15,6 +15,8 @@ from mnuItems import CmnuItems
 from picDrawingArea import CpicDrawingArea
 from nbProperties import CnbProperties
 from tabs import CTabs
+from lib.lib import UMLException
+
 
 class CfrmMain(CWindow):
     name = 'frmMain'
@@ -30,7 +32,7 @@ class CfrmMain(CWindow):
         #mItemHelp
         'mnuAbout',
         #toolbar
-        'cmdOpen', 'cmdSave',
+        'cmdOpen', 'cmdSave','cmdCopy','cmdCut','cmdPaste',
         'mnuExportSvg',
         #mZ-Order 'mMenuShift',
         'mmShift_SendBack', 'mmShift_BringForward', 'mmShift_ToBottom', 'mmShift_ToTop'
@@ -116,19 +118,44 @@ class CfrmMain(CWindow):
     def on_mnuDelete_click(self, widget):
         self.picDrawingArea.DeleteElements()
     
+    @event("cmdCut", "clicked")
     @event("mnuCut","activate")
     def on_mnuCut_click(self, widget):
-        pass
+        if len(tuple(self.picDrawingArea.GetDrawingArea().GetSelected())) > 0:
+            self.application.Clipboard.SetContent(tuple(self.picDrawingArea.GetDrawingArea().GetSelected()))
+            for i in self.picDrawingArea.GetDrawingArea().GetSelected():
+                if isinstance(i, CElement):
+                    self.picDrawingArea.GetDrawingArea().DeleteElement(i)
+            self.picDrawingArea.Paint()
         
+
+    @event("cmdCopy", "clicked")
     @event("mnuCopy","activate")
     def on_mnuCopy_click(self, widget):
-        pass
-        
+        if len(tuple(self.picDrawingArea.GetDrawingArea().GetSelected())) > 0:
+            self.application.Clipboard.SetContent(tuple(self.picDrawingArea.GetDrawingArea().GetSelected()))
+    
+    
+    @event("cmdPaste", "clicked")
     @event("mnuPaste","activate")
     def on_mnuPaste_click(self, widget):
-        pass
-        
-        
+        drawingArea = self.picDrawingArea.GetDrawingArea()
+        drawingArea.DeselectAll()
+        for i in self.application.Clipboard.GetContent() or []:
+            if isinstance(i,CElement):
+                try:
+                    Element = CElement(drawingArea, i.GetObject())
+                except UMLException, e:
+                    if e.GetName() == "ElementAlreadyExists":
+                        return CWarningDialog(self.form, "Pozeraj sa co robis").run()
+                    elif e.GetName() == "DiagramHaveNotThisElement": 
+                        return CWarningDialog(self.form, "Zly element: " + i.GetObject().GetType().GetId()).run()
+                Element.CopyFromElement(i)
+                i.GetObject().AddAppears(drawingArea)
+                drawingArea.AddToSelection(Element)
+        self.picDrawingArea.Paint()
+
+
     def ActionLoadToolBar(self, widget):
         pass
 
@@ -212,7 +239,14 @@ class CfrmMain(CWindow):
         node = self.twProjectView.GetSelectedNode()
         if node is not None:
             drawingArea = self.picDrawingArea.GetDrawingArea()
-            Element = CElement(drawingArea, node.GetObject()).SetPosition(position)
+            try:
+                Element = CElement(drawingArea, node.GetObject()).SetPosition(position)
+            except UMLException, e:
+                if e.GetName() == "ElementAlreadyExists":
+                    return CWarningDialog(self.form, "Pozeraj sa co robis").run()
+                elif e.GetName() == "DiagramHaveNotThisElement": 
+                    return CWarningDialog(self.form, "Zly element: " + node.GetObject().GetType().GetId()).run()
+                
             node.AddAppears(drawingArea)
     
     @event("picDrawingArea", "run-dialog")

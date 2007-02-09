@@ -122,7 +122,8 @@ class CConnection:
             self.points.insert(index, point)
         else:
             raise UMLException("PointNotExists")
-        self.ValidatePoints(canvas)
+        if canvas is not None:
+            self.ValidatePoints(canvas)
 
     def WhatPartOfYouIsAtPosition(self, canvas, point):
         points = [p for p in self.GetPoints(canvas)]

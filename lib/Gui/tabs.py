@@ -62,6 +62,7 @@ class CTabs(CWidget):
 
     @event("nbTabs", "switch-page")
     def on_change_current_page(self, notebook, page, page_num):
+        self.drawingAreas[page_num].DeselectAll()
         if page_num  == 0:
             self.emit("change_current_page", None)
         else:

@@ -9,6 +9,7 @@ warnings.simplefilter('ignore', Warning)
 
 import gtk
 
+from lib.Clipboard import CClipboard
 import lib.Gui.common
 import os.path
 
@@ -26,9 +27,15 @@ class Application(lib.Gui.common.CApplication):
     def __init__(self):
         #projekt view, pametova reprezentacia
         #Project = DebugAttribute('Project')
-        self.Project = CProject()
+        self.project = CProject()
+        self.clipboard = CClipboard()
         lib.Gui.common.CApplication.__init__(self)
-        
+    
+    def GetProject(self):
+        return self.project
+    
+    def GetClipboard(self):
+        return self.clipboard
     
     def cw_FileChooserWidget(self, str1, str2, int1, int2):
         if str1:
@@ -38,5 +45,8 @@ class Application(lib.Gui.common.CApplication):
         widget = gtk.FileChooserWidget(action)
         widget.show()
         return widget
-
+    
+    Project = property(GetProject)
+    Clipboard = property(GetClipboard)
+    
 Application().Main()

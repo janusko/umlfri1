@@ -13,7 +13,6 @@
   <property name="modal">False</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
-  <property name="icon">32.png</property>
   <property name="icon_name"></property>
   <property name="decorated">True</property>
   <property name="skip_taskbar_hint">False</property>
@@ -402,7 +401,7 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkToolButton" id="toolbutton4">
+		<widget class="GtkToolButton" id="cmdCopy">
 		  <property name="visible">True</property>
 		  <property name="stock_id">gtk-copy</property>
 		  <property name="visible_horizontal">True</property>
@@ -416,7 +415,7 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkToolButton" id="toolbutton5">
+		<widget class="GtkToolButton" id="cmdCut">
 		  <property name="visible">True</property>
 		  <property name="stock_id">gtk-cut</property>
 		  <property name="visible_horizontal">True</property>
@@ -430,7 +429,7 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkToolButton" id="toolbutton6">
+		<widget class="GtkToolButton" id="cmdPaste">
 		  <property name="visible">True</property>
 		  <property name="stock_id">gtk-paste</property>
 		  <property name="visible_horizontal">True</property>

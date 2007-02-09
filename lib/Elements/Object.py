@@ -11,6 +11,19 @@ class CElementObject:
             self.SetAttribute(i, self.type.GetDefValue(i))            
         self.SetAttribute('Name', 'New ' + type.GetId())        
         self.node = lambda: None
+        self.appears = []
+        
+        
+    def GetAppears(self):
+        for i in self.appears:
+            yield i
+
+
+    def AddAppears(self, drawingArea):
+        self.appears.append(drawingArea)
+
+    def RemoveAppears(self, drawingArea):
+        self.appears.remove(drawingArea)
     
     def GetPath(self):
         return self.path
@@ -18,7 +31,9 @@ class CElementObject:
     def SetPath(self, path):
         self.path = path 
     
-    
+    def GetNode(self):
+        return self.node
+        
     def AddConnection(self, connection):
         if connection not in self.connections:
             self.connections.append(connection)

@@ -4,5 +4,6 @@
             <!--Restriction type="delete" value="Class" /-->
         </Item>
         <Item value="Use Case diagram" />
+        <Item value="State diagram" />
     </Diagrams>
 </Version>

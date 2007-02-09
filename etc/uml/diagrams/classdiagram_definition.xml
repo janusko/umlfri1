@@ -2,10 +2,10 @@
     <Icon path="icons/class_diagram.png" />
     <Special swimlines="0" lifelines="0" />
     <Elements>
+        <Item value="Note" />
         <Item value="Package" />
         <Item value="Object" />
         <Item value="Class" />
-        <Item value="Note" />
     </Elements>
     <Connections>
         <Item value="Generalization" />
