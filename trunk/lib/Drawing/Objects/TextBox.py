@@ -1,13 +1,13 @@
 from VisualObject import CVisualObject
-import lib.consts
 import sys
 
 class CTextBox(CVisualObject):
-    def __init__(self, text, linestart = "", color = "black"):
+    def __init__(self, text, linestart = "", color = "black", font = "Arial 10"):
         CVisualObject.__init__(self)
         self.text = text
         self.linestart = linestart
         self.color = color
+        self.font = font
     
     def __GetValue(self, element):
         if self.text[0] == '#':
@@ -18,16 +18,16 @@ class CTextBox(CVisualObject):
 
     def GetHeight(self, canvas, element):
         txt = self.__GetValue(element)
-        return canvas.GetTextSize(txt, lib.consts.FONT_TYPE)[1]
+        return canvas.GetTextSize(txt, self.font)[1]
 
     def GetWidth(self, canvas, element):
         txt = self.__GetValue(element)
-        return canvas.GetTextSize(txt, lib.consts.FONT_TYPE)[0]
+        return canvas.GetTextSize(txt, self.font)[0]
 
     def PaintShadow(self, canvas, pos, element, color, size = (None, None)):
         txt = self.__GetValue(element)
-        canvas.DrawText(pos, txt, lib.consts.FONT_TYPE, color)
+        canvas.DrawText(pos, txt, self.font, color)
 
     def Paint(self, canvas, pos, element, size = (None, None)):
         txt = self.__GetValue(element)
-        canvas.DrawText(pos, txt, lib.consts.FONT_TYPE, self.color)
+        canvas.DrawText(pos, txt, self.font, self.color)

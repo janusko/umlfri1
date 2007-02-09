@@ -552,3 +552,6 @@ colors = {"aliceblue": "#f0f8ff",
 "yellow3": "#cdcd00", 
 "yellow4": "#8b8b00", 
 "yellowgreen": "#9acd32"}
+
+def invert(color):
+    return "#%06x"%(0xFFFFFF-int(colors.get(color, color)[1:], 16))

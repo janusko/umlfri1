@@ -1,5 +1,5 @@
 from lib.lib import UMLException
-from lib.consts import SELECT_SQUARES_SIZE, SELECT_POINT_SQUARES_COLOR, SELECT_SQUARES_COLOR
+from lib.config import config
 from lib.Connections.Object import CConnectionObject
 from lib.Math2D import CPoint, CLine, CRectangle
 from math import sqrt, atan2, pi
@@ -40,8 +40,9 @@ class CConnection:
     
     def GetPointAtPosition(self, pos):
         x, y = pos
+        size = config['/Config/Styles/Selection/PointsSize']
         for i, point in enumerate(self.points):
-            if max(abs(point[0] - x), abs(point[1]-y)) <= SELECT_SQUARES_SIZE//2:
+            if max(abs(point[0] - x), abs(point[1]-y)) <= size //2:
                 return i + 1
         else:
             return None
@@ -155,12 +156,11 @@ class CConnection:
         self.ValidatePoints(canvas)
 
     def Paint(self, canvas):
+        size = config['/Config/Styles/Selection/PointsSize']
         self.object.Paint(canvas, self)
         if self.selected is True:
             for index, i in enumerate(self.GetPoints(canvas)):
-                canvas.DrawRectangle((i[0] - SELECT_SQUARES_SIZE//2, i[1] - SELECT_SQUARES_SIZE//2), (SELECT_SQUARES_SIZE, SELECT_SQUARES_SIZE), SELECT_SQUARES_COLOR)
-                if index  == self.selpoint:
-                    canvas.DrawRectangle((i[0] - SELECT_SQUARES_SIZE//2, i[1] - SELECT_SQUARES_SIZE//2), (SELECT_SQUARES_SIZE, SELECT_SQUARES_SIZE), SELECT_POINT_SQUARES_COLOR)
+                canvas.DrawRectangle((i[0] - size//2, i[1] - size//2), (size, size), config['/Config/Styles/Selection/PointsColor'])
 
     def RemovePoint(self, canvas, index):
         if 0 < index <= len(self.points):

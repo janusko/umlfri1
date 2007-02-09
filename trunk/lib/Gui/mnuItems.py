@@ -12,15 +12,8 @@ class CmnuItems(CWidget):
         'create-diagram':   (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
             (gobject.TYPE_STRING, ))
     }
-    
-    def __init__(self, app, wTree):
-        CWidget.__init__(self, app, wTree)
         
-        self.LoadDiagramsMenu()
-        
-        self.DiagramType = None
-        
-    def LoadDiagramsMenu(self):
+    def Redraw(self):
         for item in self.mnuAddDiagram.get_children():
             self.mnuAddDiagram.remove(item)
         for diagram in self.application.Project.GetVersion().GetDiagrams():
