@@ -224,9 +224,7 @@ class CtwProjectView(CWidget):
         node.Change()  
         
         model = self.twProjectView.get_model()
-        print model.get(iter,3)[0].GetName()," Name"
         self.TreeStore.set_value(iter, 0, object.GetName())
-        print iter
     
     
     @event("twProjectView","button-press-event")
@@ -240,14 +238,11 @@ class CtwProjectView(CWidget):
         model = self.twProjectView.get_model()
         iter =  model.get_iter(path)
         if model.get(iter,2)[0] == "=DrawingArea=":
-            print model.get(iter,3)[0].GetPath()
             area = model.get(iter,3)[0]
             if area is None:
                 raise UMLException("None")
             else:
                 self.emit('selected_drawing_area',area)
-        else:
-            print model.get(iter,3)[0].GetPath()
     
     @event("twProjectView", "cursor-changed")
     def on_twProjectView_change_selection(self, treeView):

@@ -61,10 +61,15 @@ class CElement:
         h = self.objct.GetHeight(canvas, self) + self.deltaSize[1]
         return w, h 
         
+    def GetMinimalSize(self, canvas):
+        w = self.objct.GetWidth(canvas, self)
+        h = self.objct.GetHeight(canvas, self)
+        return w, h
+        
     def GetSquare(self, canvas):
         x, y = self.GetPosition()
         w, h = self.GetSize(canvas)
-        return (x, y), (x + w, y + h)
+        return ((x, y), (x + w, y + h))
 
     def Paint(self, canvas):
         self.objct.Paint(canvas, self)
@@ -101,7 +106,7 @@ class CElement:
                     yield c2
 
     
-    # Vrati poziciu obvodoveho stvorceka na pozicii
+    # Vrati poziciu obvodoveho(resizing) stvorceka na pozicii
     def GetSquareAtPosition(self, pos):
         x, y = pos
         for sq in self.squares:
@@ -112,35 +117,59 @@ class CElement:
             if (x >= sqbx and x <= sqex and y >= sqby and y <= sqey):
                 return self.squares.index(sq)
     
-    # Zmena velkosti - zmenenie nejde pod minimum
-    def Resize(self, delta, selSquareIdx):
-        # Zmenim velkost bez ohladu na minim. velkost:
-        if (selSquareIdx not in [3,4]):
-            # changing horisontally
-            if (selSquareIdx in [0, 1, 2]):
-                self.deltaSize = (self.deltaSize[0], self.deltaSize[1] - delta[1])
-                self.position = (self.position[0], self.position[1] + delta[1])
-            else:
-                self.deltaSize = (self.deltaSize[0], self.deltaSize[1] + delta[1])
-        if (selSquareIdx not in [1, 6]):
-            if (selSquareIdx in [0, 3, 5]):
-                # changing vertically
-                self.deltaSize = (self.deltaSize[0] - delta[0], self.deltaSize[1])
-                self.position = (self.position[0] + delta[0], self.position[1])
-            else:
-                self.deltaSize = (self.deltaSize[0] + delta[0], self.deltaSize[1])
+    # Zmena velkosti(pripadne pozicie) elementu
+    def Resize(self, canvas, delta, selSquareIdx):
+        resRect = self.GetResizedRect(canvas, delta, selSquareIdx)
+        minSize = self.GetMinimalSize(canvas)
+        self.position = resRect[0]
+        self.deltaSize = (resRect[1][0]-minSize[0], resRect[1][1]-minSize[1])
             
-        # Pripadne nastavenie minimalnej velkosti:
-        if (self.deltaSize[0] < 0):
-            self.deltaSize = (0, self.deltaSize[1]) 
-        if (self.deltaSize[1] < 0):
-            self.deltaSize = (self.deltaSize[0], 0)
-            
-    def GetDelta(self):
+    def GetSizeRelative(self):
         return self.deltaSize
-       
+        
+    def SetSizeRelative(self, relatSize):
+        self.deltaSize = relatSize
+    
+    # Zistenie novej polohy a velkosti pri resizingu
+        # delta = relativna zmena velkosti
+        # selSquareIdx = index uchytavacieho-resizovacieho bodu
+    def GetResizedRect(self, canvas, delta, selSquareIdx):
+        oldPos = self.GetPosition()
+        position = oldPos
+        oldSize = self.GetSize(canvas)
+        size = oldSize
+        minSize = self.GetMinimalSize(canvas)
+        
+        if (selSquareIdx not in [3,4]):
+        # changing vertically (height)
+            if (selSquareIdx in [0, 1, 2]):
+                size = (size[0], size[1] + delta[1])
+                if (size[1] < minSize[1]):
+                    position = (position[0], position[1]+oldSize[1]-minSize[1])
+                    size = (size[0], minSize[1])
+                else:
+                    position = (position[0], position[1] - delta[1])
+            else: # [5,6,7]:  #position je nemenne
+                size = (size[0], size[1] - delta[1])
+                if (size[1] < minSize[1]):
+                    size = (size[0], minSize[1])
+                
+        if (selSquareIdx not in [1, 6]):
+        # changing horisontally (width)
+            if (selSquareIdx in [0, 3, 5]):
+                size = (size[0] + delta[0], size[1])
+                if (size[0] < minSize[0]):
+                    position = (position[0]+oldSize[0]-minSize[0], position[1])
+                    size = (minSize[0], size[1])
+                else:    
+                    position = (position[0] - delta[0], position[1])
+            else: # [2,4,7] #position je nemenne
+                size = (size[0] - delta[0], size[1])
+                if (size[0] < minSize[0]):
+                    size = (minSize[0], size[1])
+            
+        return ((position), (size))
+        
     def CopyFromElement(self, element):
         self.deltaSize = element.deltaSize
         self.position = element.position
-
-
