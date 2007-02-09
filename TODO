@@ -5,8 +5,9 @@
 [x] Automaticke nazvy diagramov
 [x] Automaticke nazvy elementov
 [x] Presunut CProjekt do Application
-[ ] Nastavovanie fontu z XML
-[ ] Presunutie konfiguracnych hodnot z const.py do /etc
+[x] Nastavovanie fontu z XML
+[x] Presunutie konfiguracnych hodnot z const.py do /etc
+[ ] Pridanie moznosti citania atributov elementov a spojeni z config.xml
 [ ] Prerobit Get* na yield, kde treba
 [x] Drag 'n Drop pridavanie elementov zo stromu do diagramu
 [x] Project tree (miroslav, frizi)
@@ -65,7 +66,8 @@
 [X] Zobrazovanie childov v Package
 [ ] Preklady sk_SK, en_US
 [x] Export do SVG
-[ ] Pri spusteni zakazat menu, povolit az pri otvoreni projektu
+[x] Pri spusteni zakazat menu, povolit az pri otvoreni projektu
+[x] Save on Quit
 [ ] StartPage
 [ ] Recent files in xml in home directory
 ...

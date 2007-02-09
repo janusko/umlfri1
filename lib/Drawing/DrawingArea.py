@@ -1,5 +1,4 @@
 from lib.lib import UMLException
-import lib.consts
 import Connection, Element
 import lib.Math2D
 from lib.Math2D import CRectangle

@@ -2,6 +2,7 @@ import common
 import gtk
 import gtk.gdk
 import lib.consts
+from lib.config import config
 import os
 import os.path
 import gobject
@@ -37,7 +38,7 @@ class CfrmOpen(common.CWindow):
     
     def __GetIcon(self, filename):
         f = os.tempnam()
-        z = zipfile.ZipFile(os.path.join(lib.consts.TEMPLATES_PATH, filename))
+        z = zipfile.ZipFile(os.path.join(config['/Config/Paths/Templates'], filename))
         for i in z.namelist():
             if i in ('icon.png', 'icon.gif', 'icon.jpg', 'icon.ico', 'icon.png'):
                 file(f, 'wb').write(z.read(i))
@@ -56,13 +57,15 @@ class CfrmOpen(common.CWindow):
         self.form.response(gtk.RESPONSE_OK)
     
     def ShowDialog(self, parent):
+        self.fwOpenExisting.set_current_folder_uri(self.fwOpenExisting.get_current_folder_uri())
+        
         self.ivOpenModel.clear()
-        for filename in os.listdir(lib.consts.TEMPLATES_PATH):
+        for filename in os.listdir(config['/Config/Paths/Templates']):
             if filename.endswith(lib.consts.PROJECT_TPL_EXTENSION):
                 iter = self.ivOpenModel.append()
                 self.ivOpenModel.set(iter, 0, filename[:-len(lib.consts.PROJECT_TPL_EXTENSION)],
                                            1, self.__GetIcon(filename),
-                                           2, os.path.join(lib.consts.TEMPLATES_PATH, filename))
+                                           2, os.path.join(config['/Config/Paths/Templates'], filename))
         
         self.form.set_transient_for(parent.form)
         try:

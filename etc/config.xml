@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<Config>
+    <Styles>
+        <Element>
+            <LineColor>black</LineColor>
+            <FillColor>lightpink2</FillColor>
+            <Fill2Color>pink</Fill2Color>
+            <NameTextColor>yellow</NameTextColor>
+            <TextColor>black</TextColor>
+            <NameTextFont>Arial 10</NameTextFont>
+            <TextFont>Arial 10</TextFont>
+        </Element>
+        <Connection>
+            <LineColor>black</LineColor>
+            <ArrowColor>lightpink2</ArrowColor>
+            <ArrowFillColor>pink</ArrowFillColor>
+            <NameTextColor>yellow</NameTextColor>
+            <TextColor>black</TextColor>
+            <NameTextFont>Arial 10</NameTextFont>
+            <TextFont>Arial 10</TextFont>
+        </Connection>
+        <Selection>
+            <PointsSize type="int">7</PointsSize>
+            <PointsColor>lightgreen</PointsColor>
+            <RectangleColor>yellow</RectangleColor>
+            <RectangleWidth type="int">3</RectangleWidth>
+        </Selection>
+        <Drag>
+            <RectangleColor>blue</RectangleColor>
+            <RectangleWidth type="int">3</RectangleWidth>
+        </Drag>
+    </Styles>
+    <Paths>
+        <Root><Include what="app_path" /></Root>
+        <Templates><Include path="/Config/Paths/Root" />/etc/templates/</Templates>
+        <Images><Include path="/Config/Paths/Root" />/img/</Images>
+        <Gui><Include path="/Config/Paths/Root" />/gui/</Gui>
+    </Paths>
+</Config>

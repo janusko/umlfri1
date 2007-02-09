@@ -1,5 +1,4 @@
 from VisualObject import CVisualObject
-import lib.consts
 import sys
 
 class CIcon(CVisualObject):

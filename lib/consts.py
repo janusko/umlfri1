@@ -1,4 +1,4 @@
-from os.path import join, dirname, abspath
+from os.path import join, dirname, abspath, expanduser
 
 SELECT_SQUARES_SIZE = 7
 SELECT_SQUARES_COLOR = "lightgreen"
@@ -12,6 +12,9 @@ ROOT_PATH = abspath(join(dirname(__file__), '..'))
 ETC_PATH = join(ROOT_PATH, 'etc')
 
 TEMPLATES_PATH = join(ETC_PATH, 'templates')
+
+MAIN_CONFIG_PATH = join(ETC_PATH, 'config.xml')
+USER_CONFIG_PATH = expanduser(join('~', '.uml_fri', 'config.xml'))
 
 VERSIONS_PATH = 'versions'
 DIAGRAMS_PATH = 'diagrams'

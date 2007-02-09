@@ -15,21 +15,22 @@ import os.path
 
 from lib.Project import CProject
 from lib.Gui import CfrmMain, CfrmAbout, CfrmProperties, CfrmAttribute, CfrmOperation, CfrmOpen, CfrmSave
-from lib.Storages import open_storage
-
-from lib.consts import ROOT_PATH, VERSIONS_PATH, DIAGRAMS_PATH, ELEMENTS_PATH, CONNECTIONS_PATH
 
 class Application(lib.Gui.common.CApplication):
     windows = (CfrmMain, CfrmAbout, CfrmProperties, CfrmAttribute, CfrmOperation, CfrmOpen, CfrmSave)
     glade = os.path.join(os.path.dirname(__file__), 'gui', 'gui.glade')
     main_window = 'frmMain'
     
+    project = None
+    
     def __init__(self):
-        #projekt view, pametova reprezentacia
-        #Project = DebugAttribute('Project')
-        self.project = CProject()
-        self.clipboard = CClipboard()
         lib.Gui.common.CApplication.__init__(self)
+        
+        self.clipboard = CClipboard()
+    
+    def ProjectInit(self):
+        if self.project is None:
+            self.project = CProject()
     
     def GetProject(self):
         return self.project
@@ -48,5 +49,5 @@ class Application(lib.Gui.common.CApplication):
     
     Project = property(GetProject)
     Clipboard = property(GetClipboard)
-    
+
 Application().Main()

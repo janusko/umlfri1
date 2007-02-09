@@ -17,25 +17,33 @@ from nbProperties import CnbProperties
 from tabs import CTabs
 from lib.lib import UMLException
 
-
 class CfrmMain(CWindow):
     name = 'frmMain'
     widgets = ('hboxWorkSpace', 'mnuUseCaseDiagram',
-        'twProjectView', 'lwProperties',
-        #mItemFile
+        #menu
+        #############
+        'mItemFile',
         'mnuOpen', 'mnuSave', 'mnuSaveAs', 'mnuQuit',
-        #mItemEdit
+        #############
+        'mItemEdit',
         'mnuCut', 'mnuCopy', 'mnuPaste', 'mnuDelete',
-        #mItemDiagrams
-        #mItemView
-        'mnuViewTools',
-        #mItemHelp
-        'mnuAbout',
-        #toolbar
-        'cmdOpen', 'cmdSave','cmdCopy','cmdCut','cmdPaste',
+        #############
+        'mItemProject',
+        #############
+        'mItemDiagram',
         'mnuExportSvg',
-        #mZ-Order 'mMenuShift',
-        'mmShift_SendBack', 'mmShift_BringForward', 'mmShift_ToBottom', 'mmShift_ToTop'
+        #############
+        'mItemView',
+        'mnuViewTools',
+        #############
+        'mItemHelp',
+        'mnuAbout',
+        #############
+        'mMenuShift',
+        'mmShift_SendBack', 'mmShift_BringForward', 'mmShift_ToBottom', 'mmShift_ToTop',
+        #############
+        #toolbar
+        'cmdOpen', 'cmdSave', 'cmdCopy', 'cmdCut', 'cmdPaste',
         )
 
     complexWidgets = (CtbToolBox, CtwProjectView, CmnuItems, CpicDrawingArea, CnbProperties, CTabs)
@@ -45,6 +53,16 @@ class CfrmMain(CWindow):
 
         self.form.maximize()
         self.mnuExportSvg.set_sensitive(False)
+        self.mItemEdit.set_sensitive(False)
+        self.mItemProject.set_sensitive(False)
+        self.mItemDiagram.set_sensitive(False)
+        self.mMenuShift.set_sensitive(False)
+        self.mnuSave.set_sensitive(False)
+        self.mnuSaveAs.set_sensitive(False)
+        self.cmdSave.set_sensitive(False)
+        self.cmdCopy.set_sensitive(False)
+        self.cmdCut.set_sensitive(False)
+        self.cmdPaste.set_sensitive(False)
 
     # Diagrams
     @event("mnuViewTools", "activate")
@@ -71,7 +89,7 @@ class CfrmMain(CWindow):
                     filename = filedlg.get_filename()
                     if '.' not in os.path.basename(filename):
                         filename += '.svg'
-                    if os.path.isfile(filename):
+                    if not os.path.isdir(filename):
                         self.picDrawingArea.ExportSvg(filename)
                         return
                 else:
@@ -80,9 +98,14 @@ class CfrmMain(CWindow):
             filedlg.destroy()
 
     # Actions
-    @event("form", "destroy")
+    @event("form", "delete-event")
     @event("mnuQuit", "activate")
-    def ActionQuit(self, widget):
+    def ActionQuit(self, widget, event = None):
+        try:
+            if self.application.Project is not None and CQuestionDialog(self.form, 'Do you want to save project?', True).run():
+                self.ActionSave(widget)
+        except ECancelPressed:
+            return True
         self.application.Quit()
 
     @event("cmdOpen", "clicked")
@@ -91,15 +114,26 @@ class CfrmMain(CWindow):
         filename, copy = self.application.GetWindow("frmOpen").ShowDialog(self)
         if filename is not None:
             try:
-                if self.application.Project.GetFileName() is not None and CQuestionDialog(self.form, 'Do you want to save proejct?', True).run():
-                    self.application.Project.SaveProject()
+                if self.application.Project is not None and CQuestionDialog(self.form, 'Do you want to save project?', True).run():
+                    self.ActionSave(widget)
             except ECancelPressed:
                 return
+            self.application.ProjectInit()
             self.application.Project.LoadProject(filename, copy)
             self.nbTabs.CloseAll()
             self.twProjectView.Redraw()
-
-
+            self.mnuItems.Redraw()
+            self.picDrawingArea.Redraw()
+            self.mItemEdit.set_sensitive(True)
+            self.mItemProject.set_sensitive(True)
+            self.mItemDiagram.set_sensitive(True)
+            self.mnuSave.set_sensitive(True)
+            self.mnuSaveAs.set_sensitive(True)
+            self.cmdSave.set_sensitive(True)
+            self.cmdCopy.set_sensitive(True)
+            self.cmdCut.set_sensitive(True)
+            self.cmdPaste.set_sensitive(True)
+    
     @event("cmdSave", "clicked")
     @event("mnuSave", "activate")
     def ActionSave(self, widget):
@@ -127,14 +161,12 @@ class CfrmMain(CWindow):
                 if isinstance(i, CElement):
                     self.picDrawingArea.GetDrawingArea().DeleteElement(i)
             self.picDrawingArea.Paint()
-        
-
+    
     @event("cmdCopy", "clicked")
     @event("mnuCopy","activate")
     def on_mnuCopy_click(self, widget):
         if len(tuple(self.picDrawingArea.GetDrawingArea().GetSelected())) > 0:
             self.application.Clipboard.SetContent(tuple(self.picDrawingArea.GetDrawingArea().GetSelected()))
-    
     
     @event("cmdPaste", "clicked")
     @event("mnuPaste","activate")
@@ -148,14 +180,13 @@ class CfrmMain(CWindow):
                 except UMLException, e:
                     if e.GetName() == "ElementAlreadyExists":
                         return CWarningDialog(self.form, "Pozeraj sa co robis").run()
-                    elif e.GetName() == "DiagramHaveNotThisElement": 
+                    elif e.GetName() == "DiagramHaveNotThisElement":
                         return CWarningDialog(self.form, "Zly element: " + i.GetObject().GetType().GetId()).run()
                 Element.CopyFromElement(i)
                 i.GetObject().AddAppears(drawingArea)
                 drawingArea.AddToSelection(Element)
-        self.picDrawingArea.Paint()
-
-
+        self.picDrawingArea.Paint()        
+        
     def ActionLoadToolBar(self, widget):
         pass
 
@@ -207,6 +238,7 @@ class CfrmMain(CWindow):
 
     @event("picDrawingArea", "selected-item")
     def on_picDrawingArea_selected_item(self, widget, selected):
+        self.mMenuShift.set_sensitive(selected is not None)
         self.nbProperties.Fill(selected)
 
     @event("picDrawingArea","delete-element-from-all")
@@ -244,9 +276,9 @@ class CfrmMain(CWindow):
             except UMLException, e:
                 if e.GetName() == "ElementAlreadyExists":
                     return CWarningDialog(self.form, "Pozeraj sa co robis").run()
-                elif e.GetName() == "DiagramHaveNotThisElement": 
+                elif e.GetName() == "DiagramHaveNotThisElement":
                     return CWarningDialog(self.form, "Zly element: " + node.GetObject().GetType().GetId()).run()
-                
+            
             node.AddAppears(drawingArea)
     
     @event("picDrawingArea", "run-dialog")

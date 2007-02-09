@@ -4,16 +4,16 @@
     <Elements>
         <Item value="Note" />
         <Item value="Package" />
-        <Item value="State" />
+        <!--Item value="State" />
         <Item value="StartState" />
         <Item value="EndState" />
         <Item value="Decision" />
         <Item value="VerticalSynchronization" />
-        <Item value="HorizontalSynchronization" />
+        <Item value="HorizontalSynchronization" /-->
         
     </Elements>
     <Connections>
-        <Item value="StateTransition" />
+        <!--Item value="StateTransition" /-->
         <Item value="Note Link" />
     </Connections>
 </DiagramType>

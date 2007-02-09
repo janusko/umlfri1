@@ -1,4 +1,4 @@
-import lib.consts
+from lib.config import config
 
 class CElement:
     def __init__(self, drawingArea, obj):
@@ -11,16 +11,17 @@ class CElement:
         self.drawingArea.AddElement(self)
     
     def __AddSquare(self, x, y, posx, posy):
+        size = config['/Config/Styles/Selection/PointsSize']
         if posx == 0:
-            x = x - lib.consts.SELECT_SQUARES_SIZE // 2
-            x1 = x + lib.consts.SELECT_SQUARES_SIZE
+            x = x - size // 2
+            x1 = x + size
         else:
-            x1 = x + posx * lib.consts.SELECT_SQUARES_SIZE
+            x1 = x + posx * size
         if posy == 0:
-            y = y - lib.consts.SELECT_SQUARES_SIZE // 2
-            y1 = y + lib.consts.SELECT_SQUARES_SIZE
+            y = y - size // 2
+            y1 = y + size
         else:
-            y1 = y + posy * lib.consts.SELECT_SQUARES_SIZE
+            y1 = y + posy * size
         if x1 < x:
             x1, x = x, x1
         if y1 < y:
@@ -83,9 +84,9 @@ class CElement:
             self.__AddSquare(x + w   , y + h   , -1, -1)
             
             for i in self.squares:
-                canvas.DrawRectangle(i[0], i[1], None, lib.consts.SELECT_SQUARES_COLOR)
+                canvas.DrawRectangle(i[0], i[1], None, config['/Config/Styles/Selection/PointsColor'])
             
-            canvas.DrawRectangle((x, y), (w, h), fg = lib.consts.SELECT_SQUARE_COLOR, line_width = lib.consts.SELECT_SQUARE_SIZE)
+            canvas.DrawRectangle((x, y), (w, h), fg = config['/Config/Styles/Selection/RectangleColor'], line_width = config['/Config/Styles/Selection/RectangleWidth'])
 
     def SetPosition(self, pos):
         self.position = pos

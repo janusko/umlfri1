@@ -2,7 +2,6 @@ from common import CWidget
 from lib.Project import CProject, CProjectNode
 from lib.Elements import CElementFactory, CElementObject
 from lib.Drawing import CElement
-from lib.consts import VIEW_IMAGE
 from lib.lib import UMLException
 from lib.Drawing.Canvas.Gtk import PixmapFromPath
 
@@ -33,32 +32,6 @@ class CtwProjectView(CWidget):
         self.TreeStore = gtk.TreeStore(str, gtk.gdk.Pixbuf, str, object)
         self.EventButton = (0,0)
         
-        for item in self.mnuTreeAddDiagram.get_children():
-            self.mnuTreeAddDiagram.remove(item)
-        
-        for diagram in self.application.Project.GetDiagramFactory():
-            mi = gtk.ImageMenuItem(diagram.GetId())
-            
-            img = gtk.Image()
-            img.set_from_pixbuf(PixmapFromPath(self.application.Project.GetStorage(), diagram.GetIcon()))
-            img.show()
-            
-            mi.set_image(img)
-            mi.show()   
-            mi.connect("activate", self.on_mnuTreeAddDiagram_activate, diagram.GetId())
-            self.mnuTreeAddDiagram.append(mi)
-        
-        #projekt view, pametova reprezentacia
-        #vytvorenie hlavneho uzla a nastavenie korena projektu
-        #~ pckg = CElementObject( self.application.Project.GetElementFactory().GetElement('Package') )
-        #~ pckg.SetAttribute('Name', 'Untitled') #defaultne meno projektu
-        #~ project = CProjectNode(None, pckg, "Untitled:Package" )    
-        #~ self.application.Project.SetRoot(project)
-        
-        #~ parent = self.TreeStore.append(None)
-        #~ self.TreeStore.set(parent, 0, 'Untitled', 1, PixmapFromPath(None, VIEW_IMAGE), 2, 'Package', 3, project)
-         
-        
         #spravime jeden column
         self.Column = gtk.TreeViewColumn('Elements')
         self.twProjectView.append_column(self.Column)
@@ -78,9 +51,6 @@ class CtwProjectView(CWidget):
         #povolenie oznacit jeden prvkov
         self.twProjectView.get_selection().set_mode(gtk.SELECTION_SINGLE)
         
-        #oznacenie korena
-        #~ self.twProjectView.get_selection().select_iter(parent)
-        
         self.TARGETS = [
         ('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_WIDGET, 0),
         ('text/plain', 0, 1),
@@ -91,9 +61,22 @@ class CtwProjectView(CWidget):
         self.twProjectView.enable_model_drag_source(gtk.gdk.BUTTON1_MASK, self.TARGETS, gtk.gdk.ACTION_DEFAULT | gtk.gdk.ACTION_MOVE | gtk.gdk.ACTION_COPY)
         self.twProjectView.enable_model_drag_dest(self.TARGETS, gtk.gdk.ACTION_DEFAULT)
         
-
     
     def Redraw(self):
+        for item in self.mnuTreeAddDiagram.get_children():
+            self.mnuTreeAddDiagram.remove(item)
+        
+        for diagram in self.application.Project.GetDiagramFactory():
+            mi = gtk.ImageMenuItem(diagram.GetId())
+            
+            img = gtk.Image()
+            img.set_from_pixbuf(PixmapFromPath(self.application.Project.GetStorage(), diagram.GetIcon()))
+            img.show()
+            
+            mi.set_image(img)
+            mi.show()   
+            mi.connect("activate", self.on_mnuTreeAddDiagram_activate, diagram.GetId())
+            self.mnuTreeAddDiagram.append(mi)
         
         project = self.application.Project
         root = project.GetRoot()
