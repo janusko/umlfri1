@@ -233,14 +233,14 @@ class CDrawingArea:
     def ShiftElementsForward(self, canvas):
         for selectedElement in self.GetSelectedElements():
             selectedIdx = self.elements.index(selectedElement)
-            s_b, s_e = selectedElement.GetSquare(canvas);
-            selectedSquare = CRectangle(CPoint(s_b), CPoint(s_e))
+            selSq = selectedElement.GetSquare(canvas);
+            selRect = CRectangle(CPoint(selSq[0]), CPoint(selSq[1]))
             selectedShifted = False
             otherElementIdx = selectedIdx + 1
             while otherElementIdx < len(self.elements) and selectedShifted == False:
-                o_b, o_e = self.elements[otherElementIdx].GetSquare(canvas)
-                otherSquare = CRectangle(CPoint(o_b), CPoint(o_e))
-                prienik = selectedSquare*otherSquare 
+                othSq = self.elements[otherElementIdx].GetSquare(canvas)
+                othRect = CRectangle(CPoint(othSq[0]), CPoint(othSq[1]))
+                prienik = selRect*othRect 
                 if len(prienik) > 0:
                     del self.elements[selectedIdx]
                     self.elements.insert(otherElementIdx, selectedElement);
@@ -251,14 +251,14 @@ class CDrawingArea:
     def ShiftElementsBack(self, canvas):
         for selectedElement in self.GetSelectedElements():
             selectedIdx = self.elements.index(selectedElement)
-            s_b, s_e = selectedElement.GetSquare(canvas);
-            selectedSquare = CRectangle(CPoint(s_b), CPoint(s_e))
+            selSq = selectedElement.GetSquare(canvas);
+            selRect = CRectangle(CPoint(selSq[0]), CPoint(selSq[1]))
             selectedShifted = False
             otherElementIdx = selectedIdx - 1
             while otherElementIdx >= 0 and selectedShifted == False:
-                o_b, o_e = self.elements[otherElementIdx].GetSquare(canvas)
-                otherSquare = CRectangle(CPoint(o_b), CPoint(o_e))
-                prienik = selectedSquare*otherSquare 
+                othSq = self.elements[otherElementIdx].GetSquare(canvas)
+                othRect = CRectangle(CPoint(othSq[0]), CPoint(othSq[1]))
+                prienik = selRect*othRect
                 if len(prienik) > 0:
                     del self.elements[selectedIdx]
                     self.elements.insert(otherElementIdx, selectedElement);

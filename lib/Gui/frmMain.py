@@ -292,16 +292,16 @@ class CfrmMain(CWindow):
 # 'mmShift_SendBack', 'mmShift_BringForward', 'mmShift_ToBottom', 'mmShift_ToTop'    
     @event("mmShift_SendBack", "activate")
     def on_mnuItems_mmShift_SendBack(self, menuItem):
-        self.picDrawingArea.on_pmShift_SendBack_activate(None)
+        self.picDrawingArea.Shift_activate('SendBack')
         
     @event("mmShift_BringForward", "activate")
     def on_mnuItems_mmShift_BringForward(self, menuItem):
-        self.picDrawingArea.on_pmShift_BringForward_activate(None)
+        self.picDrawingArea.Shift_activate('BringForward')
         
     @event("mmShift_ToBottom", "activate")
     def on_mnuItems_mmShift_ToBottom(self, menuItem):
-        self.picDrawingArea.on_pmShift_ToBottom_activate(None)
+        self.picDrawingArea.Shift_activate('ToBottom')
         
     @event("mmShift_ToTop", "activate")
     def on_mnuItems_mmShift_ToTop(self, menuItem):
-        self.picDrawingArea.on_pmShift_ToTop_activate(None)        
+        self.picDrawingArea.Shift_activate('ToTop')        
