@@ -54,7 +54,8 @@ class CElement:
         return self.position
         
     def GetCenter(self, canvas):
-        return self.objct.GetWidth(canvas, self) / 2 + self.position[0], self.objct.GetHeight(canvas, self) / 2 + self.position[1]
+        w, h = self.GetSize(canvas)
+        return w / 2 + self.position[0], h / 2 + self.position[1]
     
     def GetSize(self, canvas):
         w = self.objct.GetWidth(canvas, self) + self.deltaSize[0]
