@@ -89,8 +89,9 @@ class CConnectionType(object):
     def HasVisualAttribute(self, id):
         return id in self.visAttrs.itervalues()
 
-    def Paint(self, canvas, Connection):
-        tmp = [p for p in Connection.GetPoints(canvas)]
+    def Paint(self, canvas, Connection, delta = (0, 0)):
+        dx, dy = delta
+        tmp = [(x + dx, y + dy) for (x, y) in Connection.GetPoints(canvas)]
         o = tmp[0]
         for i in tmp[1:]:
             self.line.Paint(canvas, o, i, Connection)

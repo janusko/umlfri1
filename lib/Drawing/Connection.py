@@ -46,6 +46,12 @@ class CConnection:
                 return i + 1
         else:
             return None
+            
+    def GetSquare(self, canvas):
+        left, top, right, bottom = 1000000, 1000000, -1000000, -1000000
+        for x, y in self.GetPoints(canvas):
+            left, top, right, bottom = min(left, x), min(top, y), max(right, x), max(bottom, x)
+        return ((left, top), (right, bottom))
         
     def GetSource(self):
         return self.source
@@ -194,7 +200,7 @@ class CConnection:
         for id in self.labels:
             if self.labels[id][0] is not None:
                 x, y = self.labels[id][0]
-                self.labels[key][0] = (x+deltax, y+deltay)
+                self.labels[id][0] = (x+deltax, y+deltay)
         self.points = points
         
     def MovePoint(self, canvas, point, index):
@@ -208,12 +214,13 @@ class CConnection:
             raise UMLException("PointNotExists")
         self.ValidatePoints(canvas)
 
-    def Paint(self, canvas):
+    def Paint(self, canvas, delta = (0, 0)):
         size = config['/Config/Styles/Selection/PointsSize']
-        self.object.Paint(canvas, self)
+        self.object.Paint(canvas, self, delta)
         if self.selected is True:
+            dx, dy = delta
             for index, i in enumerate(self.GetPoints(canvas)):
-                canvas.DrawRectangle((i[0] - size//2, i[1] - size//2), (size, size), config['/Config/Styles/Selection/PointsColor'])
+                canvas.DrawRectangle((i[0] + dx - size//2, i[1] + dy - size//2), (size, size), config['/Config/Styles/Selection/PointsColor'])
 
     def RemovePoint(self, canvas, index):
         if 0 < index <= len(self.points):
@@ -300,9 +307,14 @@ class CConnection:
         lenold = len(points)
         changed = True
         for i in xrange(1, len(points) - 1):
-            (x1, y1), (x2, y2), (x3, y3) = points[i-1], points[i], points[i+1]
-            angle = atan2(y1 - y2, x1 - x2) - atan2(y2 - y3, x2 - x3)
-            if -0.1 < angle < 0.1:
+            pnts = [CPoint(pnt) for pnt in points[i-1:i+2]]
+            if pnts[0] - pnts[1] <= config['/Config/Styles/Selection/PointsSize'] or \
+                pnts[1] - pnts[2] <= config['/Config/Styles/Selection/PointsSize']:
+                self.RemovePoint(canvas, i)
+                return
+            line1 = CLine(pnts[0], pnts[1])
+            line2 = CLine(pnts[1], pnts[2])
+            if -0.1 < line1.Angle() - line2.Angle() < 0.1:
                 self.RemovePoint(canvas, i)
                 return
                 

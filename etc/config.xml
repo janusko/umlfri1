@@ -37,4 +37,8 @@
         <Gui><Include path="/Config/Paths/Root" />/gui/</Gui>
         <RecentFiles>~/.uml_fri/RecentFiles.xml</RecentFiles>
     </Paths>
+    <Page>
+        <Width type="int">797</Width>
+        <Height type="int">1123</Height>
+    </Page>
 </Config>

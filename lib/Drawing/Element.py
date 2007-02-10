@@ -72,10 +72,13 @@ class CElement:
         w, h = self.GetSize(canvas)
         return ((x, y), (x + w, y + h))
 
-    def Paint(self, canvas):
-        self.objct.Paint(canvas, self)
+    def Paint(self, canvas, delta = (0, 0)):
+        self.objct.Paint(canvas, self, delta)
         if self.selected:
             x, y = self.position
+            dx, dy = delta
+            x += dx
+            y += dy
             w, h = self.GetSize(canvas)
             
             self.squares = []

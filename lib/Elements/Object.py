@@ -126,8 +126,8 @@ class CElementObject:
             val = v
         return val
 
-    def Paint(self, canvas, element):
-        self.type.Paint(canvas, element)
+    def Paint(self, canvas, element, delta = (0, 0)):
+        self.type.Paint(canvas, element, delta)
 
     def RemoveAttribute(self, key):
         if self.attribs.has_key(key):

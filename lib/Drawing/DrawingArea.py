@@ -1,4 +1,5 @@
 from lib.lib import UMLException
+from lib.config import config
 import Connection, Element
 import lib.Math2D
 from lib.Math2D import CRectangle
@@ -12,6 +13,8 @@ class CDrawingArea:
         self.selected = set()
         self.path = None
         self.typeDiagram = type
+        self.size = None
+        self.viewport = ((0, 0), (0, 0))
         if name is None:
             name = "New " + type.GetId()
         self.name = name
@@ -34,6 +37,7 @@ class CDrawingArea:
         self.name = name
     
     def AddElement(self, element):
+        self.size = None
         if element not in self.elements:
             if element.GetObject().GetType().GetId() not in self.typeDiagram.GetElements():
                     raise UMLException("DiagramHaveNotThisElement")
@@ -62,6 +66,7 @@ class CDrawingArea:
             
     
     def AddConnection(self, connection):
+        self.size = None
         if connection not in self.connections:
             self.connections.append(connection)
         else:
@@ -93,7 +98,7 @@ class CDrawingArea:
             c.Select()
     
     def GetSelectSquare(self, canvas):
-        x1, y1 = self.GetSize()
+        x1, y1 = self.GetSize(canvas)
         x2, y2 = 0, 0
         
         for el in self.GetSelectedElements():
@@ -110,6 +115,7 @@ class CDrawingArea:
         return (int(x1), int(y1)), (int(x2 - x1), int(y2 - y1))
     
     def MoveSelection(self, delta, canvas = None):
+        self.size = None
         deltax, deltay = delta
         movedCon = set()
         for el in self.GetSelectedElements():
@@ -126,12 +132,14 @@ class CDrawingArea:
                 conn.RecalculateLabels()
     
     def DeleteObject(self, object):
+        self.size = None
         for i in self.elements:
             if i.GetObject() is object:
                 self.DeleteItem(i)
                 return
     
     def DeleteItem(self, item):
+        self.size = None
         if isinstance(item, Connection.CConnection):
             self.DeleteConnection(item)
         elif isinstance(item, Element.CElement):
@@ -141,6 +149,7 @@ class CDrawingArea:
         
         
     def DeleteElement(self, element):
+        self.size = None
         if element in self.elements:
             deleted = []
             self.elements.remove(element)
@@ -156,6 +165,7 @@ class CDrawingArea:
             raise UMLException("ElementDoesNotExists")
         
     def DeleteConnection(self, connection):
+        self.size = None
         if connection in self.connections:
             self.connections.remove(connection)
             if connection in self.selected:
@@ -163,8 +173,21 @@ class CDrawingArea:
         else:
             raise UMLException("ConnectionDoesNotExists")
 
-    def GetSize(self):
-        return (1000, 1000)
+    def GetSize(self, canvas):
+        if self.size is not None:
+            return self.size
+        else:
+            result = (0, 0)
+            for connection in self.connections:
+                for point in connection.GetMiddlePoints():
+                    result = tuple(max(x) for x in zip(result, point))
+            for element in self.elements:
+                    point = tuple(sum(x) for x in zip(element.GetPosition(), element.GetSize(canvas)))
+                    result = tuple(max(x) for x in zip(result, point))
+            page = (config['/Config/Page/Width'], config['/Config/Page/Height'])
+            result = (page[0] * (result[0]//page[0] + 1), page[1] * (result[1]//page[1] + 1))
+            self.size = result
+        return result
         
     def GetDrawable(self):
         return self.drawable        
@@ -179,14 +202,25 @@ class CDrawingArea:
                 return e
             
         return None
+    
+    def SetViewPort(self, view):
+        self.viewport = view
         
+    def GetViewPort(self):
+        return self.viewport
+        
+    #view = ((x, y), (w, h)
     def Paint(self, canvas):
+        ((x, y), (w, h)) = self.viewport
         canvas.Clear()
         for e in self.elements:
-            e.Paint(canvas)
-        
+            ((ex1, ey1), (ex2, ey2)) = e.GetSquare(canvas)
+            if not (ex2 < x or x + w < ex1 or ey2 < y or y + w < ey1):
+                e.Paint(canvas, delta = (-x, -y))
         for c in self.connections:
-            c.Paint(canvas)
+            ((ex1, ey1), (ex2, ey2)) = c.GetSquare(canvas)
+            if not (ex2 < x or x + w < ex1 or ey2 < y or y + w < ey1):
+                c.Paint(canvas, delta = (-x, -y))
             
     def GetElements(self):
         for e in self.elements:

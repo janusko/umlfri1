@@ -58,8 +58,8 @@ class CConnectionObject(object):
             self.GetSource().RemoveConnection(self)
             self.GetDestination().RemoveConnection(self)            
     
-    def Paint(self, canvas, Connection):
-        self.type.Paint(canvas, Connection)
+    def Paint(self, canvas, Connection, delta = (0, 0)):
+        self.type.Paint(canvas, Connection, delta)
     
     def GetAttributes(self):
         for attr in self.attribs:
