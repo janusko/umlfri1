@@ -144,12 +144,18 @@ class CElement:
         if (selSquareIdx not in [3,4]):
         # changing vertically (height)
             if (selSquareIdx in [0, 1, 2]):
-                size = (size[0], size[1] + delta[1])
-                if (size[1] < minSize[1]):
-                    position = (position[0], position[1]+oldSize[1]-minSize[1])
-                    size = (size[0], minSize[1])
-                else:
+                if (delta[1] <= 0): #zmensujem
+                    size = (size[0], size[1] + delta[1])
+                    if (size[1] < minSize[1]): #zmensujem pod minimum
+                        position = (position[0], position[1]+oldSize[1]-minSize[1])
+                        size = (size[0], minSize[1])
+                    else:
+                        position = (position[0], position[1] - delta[1])
+                else: #zvacsujem
+                    if (position[1] - delta[1] < 0):
+                        delta = (delta[0], position[1])
                     position = (position[0], position[1] - delta[1])
+                    size = (size[0], size[1] + delta[1])
             else: # [5,6,7]:  #position je nemenne
                 size = (size[0], size[1] - delta[1])
                 if (size[1] < minSize[1]):
@@ -158,17 +164,23 @@ class CElement:
         if (selSquareIdx not in [1, 6]):
         # changing horisontally (width)
             if (selSquareIdx in [0, 3, 5]):
-                size = (size[0] + delta[0], size[1])
-                if (size[0] < minSize[0]):
-                    position = (position[0]+oldSize[0]-minSize[0], position[1])
-                    size = (minSize[0], size[1])
-                else:    
+                if (delta[0] <= 0): #zmensujem
+                    size = (size[0] + delta[0], size[1])
+                    if (size[0] < minSize[0]): #zmensujem pod minimum
+                        position = (position[0]+oldSize[0]-minSize[0], position[1])
+                        size = (minSize[0], size[1])
+                    else:
+                        position = (position[0] - delta[0], position[1])
+                else: #zvacsujem
+                    if (position[0] - delta[0] < 0):
+                        delta = (position[0], delta[1])
                     position = (position[0] - delta[0], position[1])
+                    size = (size[0] + delta[0], size[1])
             else: # [2,4,7] #position je nemenne
                 size = (size[0] - delta[0], size[1])
                 if (size[0] < minSize[0]):
                     size = (minSize[0], size[1])
-            
+                    
         return ((position), (size))
         
     def CopyFromElement(self, element):

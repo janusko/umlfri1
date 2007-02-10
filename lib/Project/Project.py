@@ -167,7 +167,8 @@ class CProject(object):
                     print>>f, '  '*level+'    <drawingarea name="%s" type="%s">'%(XMLEncode(area.GetName()), XMLEncode(area.GetType().GetId()))
                     for e in area.GetElements():
                         pos = e.GetPosition()
-                        print>>f, '  '*level+'    <element id="%d" x="%d" y="%d" />'%(id(e.GetObject()), pos[0], pos[1])
+                        dw, dh = e.GetSizeRelative()
+                        print>>f, '  '*level+'    <element id="%d" x="%d" y="%d" dw="%d" dh="%d"/>'%(id(e.GetObject()), pos[0], pos[1], dw, dh)
                     for c in area.GetConnections():
                         print>>f, '  '*level+'    <connection id="%d">'%(id(c.GetObject()))
                         for pos in c.GetMiddlePoints():
@@ -244,6 +245,9 @@ class CProject(object):
                                 if pic.tagName == "element":
                                     element = CElement(drawingarea,ListObj[pic.getAttribute("id").decode('unicode_escape')])
                                     element.SetPosition((int(pic.getAttribute("x").decode('unicode_escape')),int(pic.getAttribute("y").decode('unicode_escape'))))
+                                    dw = int(pic.getAttribute("dw").decode('unicode_escape'))
+                                    dh = int(pic.getAttribute("dh").decode('unicode_escape'))
+                                    element.SetSizeRelative((dw, dh))
                                     proNode.AddAppears(drawingarea)
                                 elif pic.tagName == "connection":
                                     for e in drawingarea.GetElements():
