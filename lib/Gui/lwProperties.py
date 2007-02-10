@@ -80,7 +80,7 @@ class ClwProperties(CWidget):
             elif atrtype[0] == 'str':
                 self.listStore.set(row, ID_TYPE, atrtype[0], ID_NAME, str(k), ID_VALUE, str(v), ID_TEXT_VISIBLE, True, ID_COMBO_VISIBLE, False, ID_BUTTON_VISIBLE, False, ID_EDITABLE, True)
             elif atrtype[0] == 'note':
-                pass
+                self.listStore.remove(row)
             else:
                 self.listStore.set(row, ID_TYPE, atrtype[0], ID_NAME, str(k), ID_VALUE, "<<list>>", ID_TEXT_VISIBLE, False, ID_COMBO_VISIBLE, False, ID_BUTTON_VISIBLE, True)
     

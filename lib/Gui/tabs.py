@@ -7,14 +7,16 @@ from common import  event
 from lib.Drawing import CDrawingArea
 from lib.Drawing.Canvas.Gtk import PixmapFromPath
 from twProjectView import CtwProjectView
+from picDrawingArea import CpicDrawingArea
 
 class CTabs(CWidget):
     name = 'nbTabs'
-    widgets = ('nbTabs','twProjectView')
+    widgets = ('nbTabs','twProjectView', 'picDrawingArea')
     
     __gsignals__ = {
         'change_current_page':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,) 
             ),
+        'drawingArea-set-focus': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
     }
     
     def __init__(self, app, wTree):
@@ -72,6 +74,27 @@ class CTabs(CWidget):
         if drawingArea in self.drawingAreas:
             self.nbTabs.remove_page(self.drawingAreas.index(drawingArea))
             self.drawingAreas.remove(drawingArea)
+    
+    def NextTab(self):
+        if len(self.drawingAreas) == self.nbTabs.get_current_page() + 1:
+            self.nbTabs.set_current_page(0)
+        else:
+            self.nbTabs.next_page()
+            self.emit("drawingArea-set-focus")
+    
+    def PreviousTab(self):
+        if self.nbTabs.get_current_page() == 0:
+            self.nbTabs.set_current_page(len(self.drawingAreas)-1)
+        else:
+            self.nbTabs.prev_page()
+            if self.nbTabs.get_current_page() == 0:
+                return
+        
+        self.emit("drawingArea-set-focus")
+    
+    def SetCurrentPage(self, page):
+        if page <= len(self.drawingAreas)-1:
+            self.nbTabs.set_current_page(page)
     
     def CloseAll(self):
         for i in xrange(1, len(self.drawingAreas)):

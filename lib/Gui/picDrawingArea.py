@@ -18,7 +18,7 @@ class CpicDrawingArea(CWidget):
     name = 'picDrawingArea'
     widgets = ('picDrawingArea', 'picEventBox', 'picVBar', 'picHBar',
                 'tbDrawingArea', 'vbAll', 'nbTabs', 'pMenuShift', 
-                'pmShift_SendBack', 'pmShift_BringForward', 'pmShift_ToBottom', 'pmShift_ToTop',)
+                'pmShift_SendBack', 'pmShift_BringForward', 'pmShift_ToBottom', 'pmShift_ToTop','pmShowInProjectView')
 
     __gsignals__ = {
         'get-selected':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_PYOBJECT,
@@ -35,6 +35,7 @@ class CpicDrawingArea(CWidget):
             (gobject.TYPE_PYOBJECT, )),
         'drop-from-treeview': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
         'zorder-change':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE,()),    
+        'show-element-in-treeView': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
     }
 
     def __init__(self, app, wTree):
@@ -184,6 +185,7 @@ class CpicDrawingArea(CWidget):
                 elif not (event.state & gtk.gdk.CONTROL_MASK):
                     self.DrawingArea.DeselectAll()
                     self.DrawingArea.AddToSelection(itemSel)
+                    self.pmShowInProjectView.set_sensitive(True)
                     self.emit('selected-item', itemSel)
                     if isinstance(itemSel, CConnection):
                         i = itemSel.GetPointAtPosition(pos)
@@ -202,6 +204,7 @@ class CpicDrawingArea(CWidget):
                         self.__BeginDragRect(event)
                     self.Paint()
                 else:
+                    self.pmShowInProjectView.set_sensitive(False)
                     self.DrawingArea.AddToSelection(itemSel)
                     self.emit('selected-item', None)
                     self.Paint()
@@ -493,7 +496,17 @@ class CpicDrawingArea(CWidget):
         if self.__NewConnection is not None:
             self.__NewConnection = None
         self.Paint()
-
+    
+    def SetFocus(self):
+        self.picDrawingArea.grab_focus()
+   
+    @event("pmShowInProjectView","activate")
+    def on_mnuShowInProjectView_click(self, menuItem):
+        if len(tuple(self.DrawingArea.GetSelected())) == 1:
+            for Element in self.DrawingArea.GetSelected():
+                if isinstance(Element, CElement):
+                    self.emit('show-element-in-treeView',Element)
+                    
     
     # Menu na Z-Order:  
     def Shift_activate(self, actionName):

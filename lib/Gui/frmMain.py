@@ -134,6 +134,26 @@ class CfrmMain(CWindow):
             self.cmdCut.set_sensitive(True)
             self.cmdPaste.set_sensitive(True)
     
+    
+    @event("form", "key-press-event")
+    def on_key_press_event(self, widget, event):
+        if event.keyval in (gtk.keysyms.Tab, gtk.keysyms.ISO_Left_Tab):
+            if event.state == (gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK):
+                self.nbTabs.PreviousTab()
+                self.form.emit_stop_by_name('key-press-event')
+            elif event.state == gtk.gdk.CONTROL_MASK:
+                self.nbTabs.NextTab()
+                self.form.emit_stop_by_name('key-press-event')
+        if event.state == gtk.gdk.MOD1_MASK:
+            Keys = [gtk.keysyms._1, gtk.keysyms._2, gtk.keysyms._3, gtk.keysyms._4, gtk.keysyms._5, 
+                    gtk.keysyms._6, gtk.keysyms._7, gtk.keysyms._8, gtk.keysyms._9, gtk.keysyms._0]
+            if event.keyval in Keys:
+                self.nbTabs.SetCurrentPage(Keys.index(event.keyval))
+
+    @event("nbTabs","drawingArea-set-focus")
+    def on_DrawingArea_set_focus(self,widget):
+        self.picDrawingArea.SetFocus()
+    
     @event("cmdSave", "clicked")
     @event("mnuSave", "activate")
     def ActionSave(self, widget):
@@ -287,6 +307,12 @@ class CfrmMain(CWindow):
             return CWarningDialog(self.form, message).run()
         else:
             pass
+    
+    
+    @event("picDrawingArea","show-element-in-treeView")
+    def on_show_element_in_treeView(self, widget, Element):
+        self.twProjectView.ShowElement(Element)
+        
     
     #Z-Order 
 # 'mmShift_SendBack', 'mmShift_BringForward', 'mmShift_ToBottom', 'mmShift_ToTop'    

@@ -3092,7 +3092,7 @@ Protected</property>
       <accelerator key="Page_Down" modifiers="0" signal="activate"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image25">
+	<widget class="GtkImage" id="image40">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-go-down</property>
 	  <property name="icon_size">1</property>
@@ -3113,7 +3113,7 @@ Protected</property>
       <accelerator key="Page_Up" modifiers="0" signal="activate"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image26">
+	<widget class="GtkImage" id="image41">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-go-up</property>
 	  <property name="icon_size">1</property>
@@ -3134,7 +3134,7 @@ Protected</property>
       <accelerator key="End" modifiers="0" signal="activate"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image27">
+	<widget class="GtkImage" id="image42">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-goto-bottom</property>
 	  <property name="icon_size">1</property>
@@ -3155,7 +3155,7 @@ Protected</property>
       <accelerator key="Home" modifiers="0" signal="activate"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image28">
+	<widget class="GtkImage" id="image43">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-goto-top</property>
 	  <property name="icon_size">1</property>
@@ -3165,6 +3165,14 @@ Protected</property>
 	  <property name="ypad">0</property>
 	</widget>
       </child>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkMenuItem" id="pmShowInProjectView">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">Show in project view</property>
+      <property name="use_underline">True</property>
     </widget>
   </child>
 </widget>
