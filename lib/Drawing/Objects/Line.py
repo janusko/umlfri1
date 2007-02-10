@@ -8,7 +8,7 @@ class CLine(CVisualObject):
         self.type = type
         self.color = color
 
-    def ComputeType(self):
+    def __ComputeType(self):
         tp = self.type
         if tp == 'auto':
             if isinstance(self.parent, CVBox):
@@ -16,19 +16,16 @@ class CLine(CVisualObject):
             else:
                 tp = 'horizontal'
         return tp
-    
-    def GetColor(self):
-        return self.color
 
     def GetHeight(self, canvas, element):
-        tp = self.ComputeType()
+        tp = self.__ComputeType()
         if tp == 'horizontal':
             return 1
         else:
             return 0
 
     def GetWidth(self, canvas, element):
-        tp = self.ComputeType()
+        tp = self.__ComputeType()
         if tp == 'vertical':
             return 1
         else:
@@ -36,7 +33,7 @@ class CLine(CVisualObject):
 
     def PaintShadow(self, canvas, pos, element, color, size = (None, None)):
         size = self.ComputeSize(canvas, element, size)
-        tp = self.ComputeType()
+        tp = self.__ComputeType()
         if tp == 'horizontal' and pos[0] is not None:
             canvas.DrawLine(pos, (pos[0]+size[0], pos[1]), color)
         elif tp == 'vertical' and pos[1] is not None:
@@ -44,8 +41,9 @@ class CLine(CVisualObject):
 
     def Paint(self, canvas, pos, element, size = (None, None)):
         size = self.ComputeSize(canvas, element, size)
-        tp = self.ComputeType()
+        tp = self.__ComputeType()
+        color, = self.GetVariables(element, 'color')
         if tp == 'horizontal' and pos[0] is not None:
-            canvas.DrawLine(pos, (pos[0]+size[0], pos[1]), self.color)
+            canvas.DrawLine(pos, (pos[0]+size[0], pos[1]), color)
         elif tp == 'vertical' and pos[1] is not None:
-            canvas.DrawLine(pos, (pos[0], pos[1]+size[1]), self.color)
+            canvas.DrawLine(pos, (pos[0], pos[1]+size[1]), color)

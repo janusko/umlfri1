@@ -7,9 +7,10 @@
 [x] Presunut CProjekt do Application
 [x] Nastavovanie fontu z XML
 [x] Presunutie konfiguracnych hodnot z const.py do /etc
-[ ] Pridanie moznosti citania atributov elementov a spojeni z config.xml
+[x] Pridanie moznosti citania atributov elementov a spojeni z config.xml
 [ ] Prerobit Get* na yield, kde treba
 [x] Drag 'n Drop pridavanie elementov zo stromu do diagramu
+    [x] Automaticke pridavanie spojeni
 [x] Project tree (miroslav, frizi)
     [x] Tabovanie
     [x] Prerobit menu (na pridaj diagram)
@@ -18,7 +19,7 @@
     [x] Ikonky na diagramy
     [x] Ikonky na elementy
 [?] Generovanie formulara
-[-] Ciary
+[x] Ciary
     [x] Pridavanie ciar (palino)
     [x] Kreslenie ciar pri stlacenom mouse tlacidle
     [x] Priebezne kreslenie ciary pri kresleni ciary
@@ -26,14 +27,11 @@
     [x] Presuvanie ciar s elementami (palino)
     [x] Select ciar (palino)
     [x] Zarovnanie konca ciary s koncom elementu
-    [ ] Ked zmenim ciaru, neposunie sa label
+    [x] Ked zmenim ciaru, neposunie sa label
     [x] Lamanie ciar
-    [+] Kontrola validity ciar
-[ ] Flexibilna plocha
-    [ ] Vyhodit ten sprosty backbuffer
-    [ ] Hladanie kolizii objektov
-    [ ] Vymysliet naky inteligentny sposob hladania tried na kraji viewport-u
-    [ ] Skrolovanie bitblit-om + vykreslovanie zvysku
+    [x] Kontrola validity ciar
+[x] Flexibilna plocha
+    [x] Zmenit sprosty backbuffer
 [x] Mazanie elementov
     [x] Zmazanie z drawing area (palino)
     [x] Mazanie vsetkych pozozstatkov
@@ -44,17 +42,16 @@
     [ ] Mazanie vsetkych pozozstatkov
 [x] CProportional kontainer (janik)
 [x] CAlign kontainer (janik)
-[ ] CSVG Visual object (janik)
+[x] CSVG Visual object (janik)
     [x] Group object (janik)
     [x] Optimalizacia
-    [ ] path
+    [x] path
         [x] move (janik)
         [x] line (janik)
         [x] cubic bezier curve (janik)
-        [ ] arc
-    [ ] styles
+    [x] styles
         [x] stroke color (janik)
-        [ ] stroke style
+        [x] stroke style
         [x] fill color
     [x] transformation matrixes
         [x] translate (janik)
@@ -63,25 +60,29 @@
 [x] Visual object na min, max - width, height
 [x] Visual object na ikonu
 [x] Specialna visual property CHILDREN
-[X] Zobrazovanie childov v Package
+[x] Zobrazovanie childov v Package
 [ ] Preklady sk_SK, en_US
 [x] Export do SVG
 [x] Pri spusteni zakazat menu, povolit az pri otvoreni projektu
 [x] Save on Quit
 [ ] StartPage
-[ ] Recent files in xml in home directory
+[x] Recent files in xml in home directory
+[ ] Spravit exe
+[ ] Kontrolu, ci sa da element resizovat
 ...
 [x] ZOrder
 [?] Menenie kurzoru po prechode nad volaco
-[-] Resizovanie elementov
+[x] Resizovanie elementov
 [x] Save
 [x] Load
     [x] Sablony
-[?] Export/Import XMI
 [x] Napisat README
-[!] Vyhodit autorov z gui (Automaticke parsovanie README :D )
+[ ] Zefektivnit menu
+[ ] (mozno) poprepisovat nazvy premennych/metod
+[x] Vyhodit autorov z gui (Automaticke parsovanie ABOUT :D )
+[ ] Pacicka na skrolovanie
 ...
-[ ] Easter Eggs
+[?] Easter Eggs
+[ ] Help
 ... (Far in future)
 [ ] Spinka
-[ ] Help

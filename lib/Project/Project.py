@@ -182,7 +182,7 @@ class CProject(object):
             print>>f, '  '*level+'</node>'
         
         elements, connections = self.searchCE(self.root)
-        print>>f, '<?xml version="1.0"?>'
+        print>>f, '<?xml version="1.0" encoding="utf-8"?>'
         print>>f, '<umlproject>'
         print>>f, '  <objects>'
         for object in elements:

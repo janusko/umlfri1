@@ -8,7 +8,7 @@ corners = {
 }
 
 class CRectangle(CSimpleContainer):
-    def __init__(self, fill = None, border = "white", borderwidth = 1, lefttop = None, righttop = None, leftbottom = None, rightbottom = None):
+    def __init__(self, fill = None, border = "white", lefttop = None, righttop = None, leftbottom = None, rightbottom = None):
         CSimpleContainer.__init__(self)
         self.fill = fill
         self.border = border
@@ -21,8 +21,6 @@ class CRectangle(CSimpleContainer):
                 c = str(c[1]), trans*Path(corners.get(c[2], c[2]))
             self.corners.append(c)
         self.corners = tuple(self.corners)
-        
-        self.borderwidth = int(borderwidth)
 
     def PaintShadow(self, canvas, pos, element, color, size = (None, None)):
         size = self.ComputeSize(canvas, element, size)
@@ -49,8 +47,9 @@ class CRectangle(CSimpleContainer):
 
     def Paint(self, canvas, pos, element, size = (None, None)):
         size = self.ComputeSize(canvas, element, size)
+        border, fill = self.GetVariables(element, 'border', 'fill')
         if self.corners == (None, None, None, None):
-            canvas.DrawRectangle(pos, size, self.border, self.fill)
+            canvas.DrawRectangle(pos, size, border, fill)
         else:
             corners = []
             positions = pos, (pos[0] + size[0], pos[1]), (pos[0] + size[0], pos[1]+size[1]), (pos[0], pos[1]+size[1])
@@ -68,7 +67,7 @@ class CRectangle(CSimpleContainer):
                     oldpos = tmp.GetLastPos()
             corners = Path.Join(corners).Flattern()
             corners.Close()
-            canvas.DrawPath(corners, self.border, self.fill)
+            canvas.DrawPath(corners, border, fill)
         
         for i in self.childs:
             i.Paint(canvas, pos, element, size)
@@ -76,4 +75,5 @@ class CRectangle(CSimpleContainer):
         for i, c in enumerate(self.corners):
             if c is not None and len(c[1]) > 0:
                 tmp = TransformMatrix.mk_translation(positions[i])*c[1][:-1]
-                canvas.DrawPath(tmp, self.border, c[0])
+                color, = self.ParseVariables(element, c[0])
+                canvas.DrawPath(tmp, border, color)

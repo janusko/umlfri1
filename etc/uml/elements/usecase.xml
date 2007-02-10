@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <ElementType id="UseCase">
     <Icon path="icons/usecase.png" />
     <Connections>
@@ -10,12 +11,12 @@
         <Item value="Notes" type="note" />
     </Attributes>
     <Appearance>
-        <Shadow padding="3" color="#505050">
-            <Ellipse fill="lightpink2" border="black">
+        <Shadow padding="3" color="/Styles/Element/ShadowColor">
+            <Ellipse fill="/Styles/Element/FillColor" border="/Styles/Element/LineColor">
                 <Proportional ratio="3:1">
                     <Padding padding="8">
                         <Align align="center center">
-                            <TextBox text="#name" color="yellow" />
+                            <TextBox text="#name" font="/Styles/Element/NameTextFont" color="/Styles/Element/NameTextColor" />
                         </Align>
                     </Padding>
                 </Proportional>

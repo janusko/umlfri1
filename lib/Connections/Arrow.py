@@ -1,4 +1,5 @@
 from lib.lib import ToBool,UMLException
+from lib.config import config
 
 from lib.Math2D import TransformMatrix, PointMatrix
 
@@ -58,43 +59,29 @@ class CConnectionArrow(object):
         transMatrix = TransformMatrix.mk_translation(pos)*TransformMatrix.mk_rotation(angle)* \
                         TransformMatrix.mk_scale(self.size)
         x, y = pos
+        if self.fill[0] == '/':
+            fill = config[self.fill]
+        else:
+            fill = self.fill
+        if self.color[0] == '/':
+            color = config[self.color]
+        else:
+            color = self.color
         points = []
         if self.style in ARROW_TYPES.keys():
             for i in ARROW_TYPES[self.style][1]:
                 points.append((transMatrix*i).GetIntPos())
             
             if ARROW_TYPES[self.style][0] == 'polyline':
-                canvas.DrawLines(points, self.color)
+                canvas.DrawLines(points, color)
             elif ARROW_TYPES[self.style][0] == 'polygon':
-                canvas.DrawPolygon(points, bg = self.fill, fg = self.color)
+                canvas.DrawPolygon(points, bg = fill, fg = color)
             elif ARROW_TYPES[self.style][0] == 'fillPolygon':
-                canvas.DrawPolygon(points, bg = self.color)
+                canvas.DrawPolygon(points, bg = color)
             elif ARROW_TYPES[self.style][0] == 'line':
                 if self.style == 'crosscircle':
-                    canvas.DrawArc((x - self.size/2, y - self.size/2), (self.size, self.size), fg = self.color, bg = self.fill)
+                    canvas.DrawArc((x - self.size/2, y - self.size/2), (self.size, self.size), fg = color, bg = fill)
                 for i in xrange(0,len(points) - 1, 2):
-                    canvas.DrawLine(points[i], points[i+1], self.color)
+                    canvas.DrawLine(points[i], points[i+1], color)
         else:
             raise UMLException("UndefinedStyleArrow")
-
-    def GetDefault(self):
-        self.default
-
-    def GetPossible(self):
-        return self.possible
-
-    def GetStyle(self):
-        return self.style
-
-    def SetDefault(self, value):
-        self.default = value
-
-    def SetPossible(self, value):
-        self.possible = value
-
-    def SetStyle(self, value):
-        self.style = value
-        
-    Style = property(GetStyle, SetStyle)
-    Possible = property(GetPossible, SetPossible)
-    Default = property(GetDefault, SetDefault)

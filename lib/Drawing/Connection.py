@@ -40,7 +40,7 @@ class CConnection:
     
     def GetPointAtPosition(self, pos):
         x, y = pos
-        size = config['/Config/Styles/Selection/PointsSize']
+        size = config['/Styles/Selection/PointsSize']
         for i, point in enumerate(self.points):
             if max(abs(point[0] - x), abs(point[1]-y)) <= size //2:
                 return i + 1
@@ -215,12 +215,12 @@ class CConnection:
         self.ValidatePoints(canvas)
 
     def Paint(self, canvas, delta = (0, 0)):
-        size = config['/Config/Styles/Selection/PointsSize']
+        size = config['/Styles/Selection/PointsSize']
         self.object.Paint(canvas, self, delta)
         if self.selected is True:
             dx, dy = delta
             for index, i in enumerate(self.GetPoints(canvas)):
-                canvas.DrawRectangle((i[0] + dx - size//2, i[1] + dy - size//2), (size, size), config['/Config/Styles/Selection/PointsColor'])
+                canvas.DrawRectangle((i[0] + dx - size//2, i[1] + dy - size//2), (size, size), config['/Styles/Selection/PointsColor'])
 
     def RemovePoint(self, canvas, index):
         if 0 < index <= len(self.points):
@@ -308,8 +308,8 @@ class CConnection:
         changed = True
         for i in xrange(1, len(points) - 1):
             pnts = [CPoint(pnt) for pnt in points[i-1:i+2]]
-            if pnts[0] - pnts[1] <= config['/Config/Styles/Selection/PointsSize'] or \
-                pnts[1] - pnts[2] <= config['/Config/Styles/Selection/PointsSize']:
+            if pnts[0] - pnts[1] <= config['/Styles/Selection/PointsSize'] or \
+                pnts[1] - pnts[2] <= config['/Styles/Selection/PointsSize']:
                 self.RemovePoint(canvas, i)
                 return
             line1 = CLine(pnts[0], pnts[1])

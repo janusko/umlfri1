@@ -5,6 +5,7 @@
             <LineColor>black</LineColor>
             <FillColor>lightpink2</FillColor>
             <Fill2Color>pink</Fill2Color>
+            <ShadowColor>#505050</ShadowColor>
             <NameTextColor>yellow</NameTextColor>
             <TextColor>black</TextColor>
             <NameTextFont>Arial 10</NameTextFont>
@@ -31,11 +32,14 @@
         </Drag>
     </Styles>
     <Paths>
-        <Root><Include what="app_path" /></Root>
-        <Templates><Include path="/Config/Paths/Root" />/etc/templates/</Templates>
-        <Images><Include path="/Config/Paths/Root" />/img/</Images>
-        <Gui><Include path="/Config/Paths/Root" />/gui/</Gui>
-        <RecentFiles>~/.uml_fri/RecentFiles.xml</RecentFiles>
+        <Root type="path"><Include what="app_path" /></Root>
+        <Templates type="path"><Include path="/Paths/Root" />/etc/templates/</Templates>
+        <Images type="path"><Include path="/Paths/Root" />/img/</Images>
+        <Gui type="path"><Include path="/Paths/Root" />/gui/</Gui>
+        
+        <UserDir type="path">~/.uml_fri</UserDir>
+        <UserConfig type="path"><Include path="/Paths/UserDir" />/config.xml</UserConfig>
+        <RecentFiles type="path"><Include path="/Paths/UserDir" />/RecentFiles.xml</RecentFiles>
     </Paths>
     <Page>
         <Width type="int">797</Width>

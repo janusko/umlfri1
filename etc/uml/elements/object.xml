@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <ElementType id="Object">
     <Icon path="icons/object.png" />
     <Connections>
@@ -16,12 +17,12 @@
         <Item value="Notes" type="note" />
     </Attributes>
     <Appearance>
-        <Shadow padding="3" color="#505050">
-            <Rectangle fill="lightpink2" border="black">
+        <Shadow padding="3" color="/Styles/Element/ShadowColor">
+            <Rectangle fill="/Styles/Element/FillColor" border="/Styles/Element/LineColor">
                 <HBox>
                     <Padding padding="5">
                         <Align align="center">
-                            <TextBox text="#name" color="yellow" />
+                            <TextBox text="#name" font="/Styles/Element/NameTextFont" color="/Styles/Element/NameTextColor" />
                         </Align>
                     </Padding>
                     <Condition condition="attributes" type="empty" negate="1">
@@ -31,8 +32,8 @@
                                 <HBox>
                                     <Loop collection="attributes">
                                         <VBox>
-                                            <TextBox text="@scope" />
-                                            <TextBox text="@line" />
+                                            <TextBox text="@scope" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                            <TextBox text="@line" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
                                         </VBox>
                                     </Loop>
                                 </HBox>

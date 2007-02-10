@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <ElementType id="Note">
     <Icon path="icons/note.png" />
     <Connections>
@@ -8,11 +9,11 @@
         <Item value="Notes" type="note" propid="note" />
     </Attributes>
     <Appearance>
-        <Shadow padding="3" color="#505050">
-            <Rectangle fill="lightpink2" border="black" righttop="10 pink note">
+        <Shadow padding="3" color="/Styles/Element/ShadowColor">
+            <Rectangle fill="/Styles/Element/FillColor" border="/Styles/Element/LineColor" righttop="10 /Styles/Element/Fill2Color note">
                 <Sizer minwidth="50">
                     <Padding padding="5">
-                        <TextBox text="#note" color="yellow" />
+                        <TextBox text="#note" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
                     </Padding>
                 </Sizer>
             </Rectangle>

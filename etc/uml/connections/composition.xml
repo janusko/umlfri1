@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <ConnectionType id="Compose">
     <Icon path="icons/compose.png" />
 	<SrcArrow possible="0" default="0" />
@@ -6,10 +7,10 @@
         <Item value="Name" type="str" propid="name" />
     </Attributes>
     <Appearance>
-    	<LineStyle style="solid" color="black" />
-    	<ArrowStyle style="fdiamond" fill="blue" color="black" />
+    	<LineStyle style="solid" color="/Styles/Connection/LineColor" />
+    	<ArrowStyle style="fdiamond" fill="/Styles/Connection/ArrowFillColor" color="/Styles/Connection/ArrowColor" />
         <Label position="center">
-            <TextBox text="#name" />
+            <TextBox text="#name" font="/Styles/Connection/NameTextFont" color="/Styles/Connection/NameTextColor" />
         </Label>
     </Appearance>
 </ConnectionType>

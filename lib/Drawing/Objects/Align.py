@@ -4,7 +4,6 @@ from lib.lib import UMLException
 class CAlign(CSimpleContainer):
     def __init__(self, align):
         CSimpleContainer.__init__(self)
-        self.align = align
         self.alignx = "left"
         self.aligny = "top"
         align = align.split()
@@ -30,37 +29,39 @@ class CAlign(CSimpleContainer):
     def PaintShadow(self, canvas, pos, element, color, size = (None, None)):
         x, y = pos
         w, h = size
+        alignx, aligny = self.GetVariables(element, 'alignx', 'aligny')
         if w is None:
             w = self.GetWidth(canvas, element)
         else:
-            if self.alignx == "center":
+            if alignx == "center":
                 x += (w - self.GetChild().GetWidth(canvas, element))/2
-            elif self.alignx == "right":
+            elif alignx == "right":
                 x += w - self.GetChild().GetWidth(canvas, element)
         if h is None:
             w = self.GetHeight(canvas, element)
         else:
-            if self.aligny == "center":
+            if aligny == "center":
                 y += (h - self.GetChild().GetHeight(canvas, element))/2
-            elif self.aligny == "bottom":
+            elif aligny == "bottom":
                 y += h - self.GetChild().GetHeight(canvas, element)
         self.GetChild().PaintShadow(canvas, (x, y), element, color, (w, h))
 
     def Paint(self, canvas, pos, element, size = (None, None)):
         x, y = pos
         w, h = size
+        alignx, aligny = self.GetVariables(element, 'alignx', 'aligny')
         if w is None:
             w = self.GetWidth(canvas, element)
         else:
-            if self.alignx == "center":
+            if alignx == "center":
                 x += (w - self.GetChild().GetWidth(canvas, element))/2
-            elif self.alignx == "right":
+            elif alignx == "right":
                 x += w - self.GetChild().GetWidth(canvas, element)
         if h is None:
             w = self.GetHeight(canvas, element)
         else:
-            if self.aligny == "center":
+            if aligny == "center":
                 y += (h - self.GetChild().GetHeight(canvas, element))/2
-            elif self.aligny == "bottom":
+            elif aligny == "bottom":
                 y += h - self.GetChild().GetHeight(canvas, element)
         self.GetChild().Paint(canvas, (x, y), element, (w, h))

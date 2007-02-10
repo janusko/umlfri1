@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <ElementType id="Package">
     <Icon path="icons/package.png" />
     <Connections>
@@ -14,17 +15,17 @@
         <Item value="Notes" type="note" />
     </Attributes>
     <Appearance>
-        <Shadow padding="3" color="#505050">
-            <HBox>
+        <Shadow padding="3" color="/Styles/Element/ShadowColor">
+            <HBox expand="-1">
                 <VBox>
-                    <Rectangle fill="lightpink2" border="black">
+                    <Rectangle fill="/Styles/Element/FillColor" border="/Styles/Element/LineColor">
                         <Padding padding="5">
-                            <TextBox text="#name" color="yellow" />
+                            <TextBox text="#name" font="/Styles/Element/NameTextFont" color="/Styles/Element/NameTextColor" />
                         </Padding>
                     </Rectangle>
                     <Padding padding="8" />
                 </VBox>
-                <Rectangle fill="lightpink2" border="black">
+                <Rectangle fill="/Styles/Element/FillColor" border="/Styles/Element/LineColor">
                     <Sizer minwidth="60" minheight="60">
                         <Padding padding="5">
                             <HBox>
@@ -32,7 +33,7 @@
                                     <VBox>
                                         <Icon filename="@icon" />
                                         <Align align="left center">
-                                            <TextBox text="@name" />
+                                            <TextBox text="@name" font="/Styles/Element/NameTextFont" color="/Styles/Element/NameTextColor" />
                                         </Align>
                                     </VBox>
                                 </Loop>
