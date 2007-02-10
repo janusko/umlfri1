@@ -435,12 +435,7 @@ class CpicDrawingArea(CWidget):
             dx, dy = self.__GetDelta(x, y)
             if self.selSq is None:
                 self.picDrawingArea.window.draw_rectangle(self.DragGC, False, tmpx + dx, tmpy + dy, *self.DragRect[1])
-                self.__oldx, self.__oldy = tmpx + dx, tmpy + dy
-            #else:
-                #endX = self.DragRect[1][0]-dx
-                #endY = self.DragRect[1][1]-dy
-                #self.picDrawingArea.window.draw_rectangle(self.DragGC, False, tmpx + dx, tmpy + dy, endX, endY)
-                #self.DragRect = ((tmpx, tmpy), (endX, endY))  
+                self.__oldx, self.__oldy = tmpx + dx, tmpy + dy 
 
     def __DrawResRect(self, newPos, erase = True, draw = True):
         if erase:
