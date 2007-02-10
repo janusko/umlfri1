@@ -7,7 +7,7 @@ import os
 import os.path
 import gobject
 import zipfile
-
+from dialogs import CWarningDialog
 from common import event
 
 class CfrmOpen(common.CWindow):
@@ -56,6 +56,12 @@ class CfrmOpen(common.CWindow):
         else:
             return gtk.gdk.pixbuf_new_from_file(config['/Paths/Images']+lib.consts.DEFAULT_TEMPLATE_ICON)
     
+    def __ReloadOpenRecentList(self):
+        self.listStore.clear()
+        for name, date in self.application.GetRecentFiles().GetRecentFiles():
+            iter = self.listStore.append()
+            self.listStore.set(iter,0,name,1,date, 2, self.__GetIcon(name))
+    
     @event("fwOpenExisting", "file-activated")
     def on_fwOpenExisting_file_activated(self, widget):
         self.form.response(gtk.RESPONSE_OK)
@@ -80,10 +86,7 @@ class CfrmOpen(common.CWindow):
                                            1, self.__GetIcon(os.path.join(config['/Paths/Templates'], filename)),
                                            2, os.path.join(config['/Paths/Templates'], filename))
         
-        self.listStore.clear()
-        for name, date in self.application.GetRecentFiles().GetRecentFiles():
-            iter = self.listStore.append()
-            self.listStore.set(iter,0,name,1,date, 2, self.__GetIcon(name))
+        self.__ReloadOpenRecentList()
         
         self.form.set_transient_for(parent.form)
         try:
@@ -106,6 +109,11 @@ class CfrmOpen(common.CWindow):
                     if iter is not None:
                         filename = self.twOpenRecent.get_model().get(iter,0)[0]
                         self.application.GetRecentFiles().AddFile(filename)
-                        return filename, self.chkOpenAsCopyRecent.get_active() # recent
+                        if not os.path.exists(filename):  
+                            self.application.GetRecentFiles().RemoveFile(filename)
+                            CWarningDialog(self.form, "File is not exist").run()
+                            self.__ReloadOpenRecentList()
+                        else:
+                            return filename, self.chkOpenAsCopyRecent.get_active() # recent
         finally:
             self.form.hide()

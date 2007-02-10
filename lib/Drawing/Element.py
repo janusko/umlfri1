@@ -1,7 +1,9 @@
 from lib.config import config
+from lib.Drawing import CConnection
 
 class CElement:
-    def __init__(self, drawingArea, obj):
+    def __init__(self, drawingArea, obj, isLoad = False):
+        self.isLoad = isLoad
         self.objct = obj
         self.position = (0,0)
         self.deltaSize = (0,0)
@@ -9,7 +11,18 @@ class CElement:
         self.squares = []
         self.drawingArea = drawingArea
         self.drawingArea.AddElement(self)
+        self.__AddExistingConnections()
     
+    def __AddExistingConnections(self):
+        if not self.isLoad:
+            for i in self.objct.GetConnections():
+                if i.GetSource() is not self.objct:
+                    if self.drawingArea.HasElementObject(i.GetSource()) is not None:
+                        CConnection(self.drawingArea,i,self.drawingArea.HasElementObject(i.GetSource()),self)
+                elif i.GetDestination is not self.objct:
+                    if self.drawingArea.HasElementObject(i.GetDestination()) is not None:
+                        CConnection(self.drawingArea,i,self,self.drawingArea.HasElementObject(i.GetDestination()))
+                    
     def __AddSquare(self, x, y, posx, posy):
         size = config['/Styles/Selection/PointsSize']
         if posx == 0:

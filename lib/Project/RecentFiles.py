@@ -5,6 +5,7 @@ import xml.dom.minidom
 import datetime
 
 
+
 class CRecentFiles(object):
     
     def __init__(self):
