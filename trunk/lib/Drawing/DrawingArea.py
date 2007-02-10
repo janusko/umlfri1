@@ -21,6 +21,12 @@ class CDrawingArea:
         
         
     # Cesta v strome kde sa nachadza drawing area
+    def HasElementObject(self, object):
+        for i in self.elements:
+            if i.GetObject() is object:
+                return i
+        return None
+        
     def GetPath(self):
         return self.path
     

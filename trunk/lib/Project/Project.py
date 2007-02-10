@@ -243,7 +243,7 @@ class CProject(object):
                                 if pic.nodeType not in (xml.dom.minidom.Node.ELEMENT_NODE, xml.dom.minidom.Node.DOCUMENT_NODE):
                                     continue
                                 if pic.tagName == "element":
-                                    element = CElement(drawingarea,ListObj[pic.getAttribute("id").decode('unicode_escape')])
+                                    element = CElement(drawingarea,ListObj[pic.getAttribute("id").decode('unicode_escape')],True)
                                     element.SetPosition((int(pic.getAttribute("x").decode('unicode_escape')),int(pic.getAttribute("y").decode('unicode_escape'))))
                                     dw = int(pic.getAttribute("dw").decode('unicode_escape'))
                                     dh = int(pic.getAttribute("dh").decode('unicode_escape'))

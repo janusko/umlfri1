@@ -5,11 +5,14 @@ from lib.Math2D import CPoint, CLine, CLineVector, CPolyLine, CRectangle
 from math import sqrt, atan2, pi
 
 class CConnection:
-    def __init__(self, drawingArea, obj, source, destination, points):
+    def __init__(self, drawingArea, obj, source, destination, points = None):
         self.drawingArea = drawingArea
         self.drawingArea.AddConnection(self)
         self.object = obj
-        self.points = points
+        if points is None:
+            self.points = []
+        else:
+            self.points = points
         self.source = source
         self.destination = destination
         self.labels = {}
