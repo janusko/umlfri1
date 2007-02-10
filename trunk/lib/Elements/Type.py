@@ -80,8 +80,10 @@ class CElementType:
     def GetAttribute(self, key):
         return self.attributes[key]
     
-    def Paint(self, canvas, element):
-        pos = element.GetPosition()
+    def Paint(self, canvas, element, delta = (0, 0)):
+        dx, dy = delta
+        x, y = element.GetPosition()
+        pos = (x + dx,  y + dy)
         self.appearance.Paint(canvas, pos, element, element.GetSize(canvas))
     
     def SetAppearance(self, appearance):
