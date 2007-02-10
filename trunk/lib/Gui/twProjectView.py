@@ -183,6 +183,17 @@ class CtwProjectView(CWidget):
             raise UMLException("BadPath5")
     
     
+    def ShowElement(self,Element):
+        object = Element.GetObject()
+        for i in self.get_iters_from_path(self.twProjectView.get_model(),self.twProjectView.get_model().get_iter_root() ,object.GetPath()):
+            node = self.twProjectView.get_model().get(i,3)[0]
+            if object is node.GetObject():
+                iter = i
+                break
+        self.twProjectView.expand_to_path(self.TreeStore.get_path(iter))
+        self.twProjectView.get_selection().select_iter(iter)
+                    
+    
     def AddElement(self, element, drawingArea):
         path = drawingArea.GetPath()
         parent = self.application.Project.GetNode(path)

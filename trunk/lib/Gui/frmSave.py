@@ -40,6 +40,7 @@ class CfrmSave(common.CWindow):
                     elif filter == "UML .FRI Project templates":
                         filename += lib.consts.PROJECT_TPL_EXTENSION
                 if not os.path.isdir(filename):
+                    self.application.GetRecentFiles().AddFile(filename)
                     return filename
         finally:
             self.form.hide()

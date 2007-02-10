@@ -35,5 +35,6 @@
         <Templates><Include path="/Config/Paths/Root" />/etc/templates/</Templates>
         <Images><Include path="/Config/Paths/Root" />/img/</Images>
         <Gui><Include path="/Config/Paths/Root" />/gui/</Gui>
+        <RecentFiles>~/.uml_fri/RecentFiles.xml</RecentFiles>
     </Paths>
 </Config>

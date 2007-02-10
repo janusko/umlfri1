@@ -14,7 +14,10 @@ import lib.Gui.common
 import os.path
 
 from lib.Project import CProject
+from lib.Project import CRecentFiles
+
 from lib.Gui import CfrmMain, CfrmAbout, CfrmProperties, CfrmAttribute, CfrmOperation, CfrmOpen, CfrmSave
+
 
 class Application(lib.Gui.common.CApplication):
     windows = (CfrmMain, CfrmAbout, CfrmProperties, CfrmAttribute, CfrmOperation, CfrmOpen, CfrmSave)
@@ -25,8 +28,11 @@ class Application(lib.Gui.common.CApplication):
     
     def __init__(self):
         lib.Gui.common.CApplication.__init__(self)
-        
         self.clipboard = CClipboard()
+        self.recentFiles = CRecentFiles()
+    
+    def GetRecentFiles(self):
+        return self.recentFiles
     
     def ProjectInit(self):
         if self.project is None:
@@ -47,7 +53,13 @@ class Application(lib.Gui.common.CApplication):
         widget.show()
         return widget
     
+    def Quit(self):
+        lib.Gui.common.CApplication.Quit(self)
+        self.recentFiles.SaveRecentFiles()
+    
     Project = property(GetProject)
     Clipboard = property(GetClipboard)
+    
+    
 
 Application().Main()
