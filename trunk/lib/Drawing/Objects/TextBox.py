@@ -8,26 +8,19 @@ class CTextBox(CVisualObject):
         self.linestart = linestart
         self.color = color
         self.font = font
-    
-    def __GetValue(self, element):
-        if self.text[0] == '#':
-            return element.GetObject().GetVisualProperty(self.text[1:])
-        if self.text[0] == '@':
-            return element.__LOOPVARS__[self.text[1:]]
-        return self.text
 
     def GetHeight(self, canvas, element):
-        txt = self.__GetValue(element)
-        return canvas.GetTextSize(txt, self.font)[1]
+        txt, font = self.GetVariables(element, 'text', 'font')
+        return canvas.GetTextSize(txt, font)[1]
 
     def GetWidth(self, canvas, element):
-        txt = self.__GetValue(element)
-        return canvas.GetTextSize(txt, self.font)[0]
+        txt, font = self.GetVariables(element, 'text', 'font')
+        return canvas.GetTextSize(txt, font)[0]
 
     def PaintShadow(self, canvas, pos, element, color, size = (None, None)):
-        txt = self.__GetValue(element)
-        canvas.DrawText(pos, txt, self.font, color)
+        txt, font = self.GetVariables(element, 'text', 'font')
+        canvas.DrawText(pos, txt, font, color)
 
     def Paint(self, canvas, pos, element, size = (None, None)):
-        txt = self.__GetValue(element)
-        canvas.DrawText(pos, txt, self.font, self.color)
+        txt, color, font = self.GetVariables(element, 'text', 'color', 'font')
+        canvas.DrawText(pos, txt, font, color)

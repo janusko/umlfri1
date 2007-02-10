@@ -8,7 +8,7 @@ import datetime
 class CRecentFiles(object):
     
     def __init__(self):
-        self.filename = os.path.expanduser(config["/Config/Paths/RecentFiles"])
+        self.filename = os.path.expanduser(config["/Paths/RecentFiles"])
         
         self.files = []
         self.LoadRecentFiles()

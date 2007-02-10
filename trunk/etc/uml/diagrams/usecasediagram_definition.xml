@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <DiagramType id="Use Case diagram" umlversion="*">
     <Icon path="icons/use_case_diagram.png" />
     <Special swimlines="0" lifelines="0" />

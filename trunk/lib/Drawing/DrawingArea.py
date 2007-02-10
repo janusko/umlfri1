@@ -184,7 +184,7 @@ class CDrawingArea:
             for element in self.elements:
                     point = tuple(sum(x) for x in zip(element.GetPosition(), element.GetSize(canvas)))
                     result = tuple(max(x) for x in zip(result, point))
-            page = (config['/Config/Page/Width'], config['/Config/Page/Height'])
+            page = (config['/Page/Width'], config['/Page/Height'])
             result = (page[0] * (result[0]//page[0] + 1), page[1] * (result[1]//page[1] + 1))
             self.size = result
         return result

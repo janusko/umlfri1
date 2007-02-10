@@ -63,6 +63,7 @@ class CfrmMain(CWindow):
         self.cmdCopy.set_sensitive(False)
         self.cmdCut.set_sensitive(False)
         self.cmdPaste.set_sensitive(False)
+        self.ReloadTitle()
 
     # Diagrams
     @event("mnuViewTools", "activate")
@@ -96,6 +97,12 @@ class CfrmMain(CWindow):
                     return
         finally:
             filedlg.destroy()
+    
+    def ReloadTitle(self):
+        if self.application.GetProject() is None or self.application.GetProject().GetFileName() is None:
+            self.form.set_title('UML .FRI deasigner')
+        else:
+            self.form.set_title('UML .FRI deasigner [%s]'%self.application.GetProject().GetFileName())
 
     # Actions
     @event("form", "delete-event")
@@ -120,6 +127,7 @@ class CfrmMain(CWindow):
                 return
             self.application.ProjectInit()
             self.application.Project.LoadProject(filename, copy)
+            self.ReloadTitle()
             self.nbTabs.CloseAll()
             self.twProjectView.Redraw()
             self.mnuItems.Redraw()
@@ -167,6 +175,7 @@ class CfrmMain(CWindow):
         filename = self.application.GetWindow("frmSave").ShowDialog(self)
         if filename is not None:
             self.application.Project.SaveProject(filename)
+            self.ReloadTitle()
 
     @event("mnuDelete","activate")
     def on_mnuDelete_click(self, widget):

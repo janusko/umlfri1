@@ -60,6 +60,15 @@ class CSvg(CVisualObject):
     def GetHeight(self, canvas, element):
         return self.height * self.scale
     
+    def PaintShadow(self, canvas, pos, element, color, size = (None, None)):
+        trans = TransformMatrix.mk_translation(pos)
+        for path in self.svg:
+            if path['style'].get('fill', None) is None:
+                bgcolor = None
+            else:
+                bgcolor = color
+            canvas.DrawPath(trans*path['path'], color, bgcolor, int(float(path['style'].get('stroke-width', 1))+0.5))
+    
     def Paint(self, canvas, pos, element, size = (None, None)):
         trans = TransformMatrix.mk_translation(pos)
         for path in self.svg:

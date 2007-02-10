@@ -8,8 +8,6 @@ import os.path
 import gobject
 import zipfile
 
-
-
 from common import event
 
 class CfrmOpen(common.CWindow):
@@ -46,7 +44,7 @@ class CfrmOpen(common.CWindow):
     
     def __GetIcon(self, filename):
         if not os.path.isfile(filename):
-            return gtk.gdk.pixbuf_new_from_file(lib.consts.DEFAULT_TEMPLATE_ICON)
+            return gtk.gdk.pixbuf_new_from_file(config['/Paths/Images']+lib.consts.DEFAULT_TEMPLATE_ICON)
         f = os.tempnam()
         z = zipfile.ZipFile(filename)
         for i in z.namelist():
@@ -56,7 +54,7 @@ class CfrmOpen(common.CWindow):
                 os.unlink(f)
                 return ret
         else:
-            return gtk.gdk.pixbuf_new_from_file(lib.consts.DEFAULT_TEMPLATE_ICON)
+            return gtk.gdk.pixbuf_new_from_file(config['/Paths/Images']+lib.consts.DEFAULT_TEMPLATE_ICON)
     
     @event("fwOpenExisting", "file-activated")
     def on_fwOpenExisting_file_activated(self, widget):
@@ -75,12 +73,12 @@ class CfrmOpen(common.CWindow):
         self.fwOpenExisting.set_current_folder_uri(self.fwOpenExisting.get_current_folder_uri())
         
         self.ivOpenModel.clear()
-        for filename in os.listdir(config['/Config/Paths/Templates']):
+        for filename in os.listdir(config['/Paths/Templates']):
             if filename.endswith(lib.consts.PROJECT_TPL_EXTENSION):
                 iter = self.ivOpenModel.append()
                 self.ivOpenModel.set(iter, 0, filename[:-len(lib.consts.PROJECT_TPL_EXTENSION)],
-                                           1, self.__GetIcon(os.path.join(config['/Config/Paths/Templates'], filename)),
-                                           2, os.path.join(config['/Config/Paths/Templates'], filename))
+                                           1, self.__GetIcon(os.path.join(config['/Paths/Templates'], filename)),
+                                           2, os.path.join(config['/Paths/Templates'], filename))
         
         self.listStore.clear()
         for name, date in self.application.GetRecentFiles().GetRecentFiles():

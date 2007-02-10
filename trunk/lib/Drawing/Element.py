@@ -11,7 +11,7 @@ class CElement:
         self.drawingArea.AddElement(self)
     
     def __AddSquare(self, x, y, posx, posy):
-        size = config['/Config/Styles/Selection/PointsSize']
+        size = config['/Styles/Selection/PointsSize']
         if posx == 0:
             x = x - size // 2
             x1 = x + size
@@ -93,9 +93,9 @@ class CElement:
             self.__AddSquare(x + w   , y + h   , -1, -1)
             
             for i in self.squares:
-                canvas.DrawRectangle(i[0], i[1], None, config['/Config/Styles/Selection/PointsColor'])
+                canvas.DrawRectangle(i[0], i[1], None, config['/Styles/Selection/PointsColor'])
             
-            canvas.DrawRectangle((x, y), (w, h), fg = config['/Config/Styles/Selection/RectangleColor'], line_width = config['/Config/Styles/Selection/RectangleWidth'])
+            canvas.DrawRectangle((x, y), (w, h), fg = config['/Styles/Selection/RectangleColor'], line_width = config['/Styles/Selection/RectangleWidth'])
 
     def SetPosition(self, pos):
         self.position = pos

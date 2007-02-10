@@ -53,8 +53,8 @@ class CpicDrawingArea(CWidget):
         self.canvas = None
 
         cmap = self.picDrawingArea.window.get_colormap()
-        self.DragGC = self.picDrawingArea.window.new_gc(foreground = cmap.alloc_color(invert(config['/Config/Styles/Drag/RectangleColor'])),
-            function = gtk.gdk.XOR, line_width = config['/Config/Styles/Drag/RectangleWidth'])
+        self.DragGC = self.picDrawingArea.window.new_gc(foreground = cmap.alloc_color(invert(config['/Styles/Drag/RectangleColor'])),
+            function = gtk.gdk.XOR, line_width = config['/Styles/Drag/RectangleWidth'])
         
         self.TARGETS = [
         ('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_WIDGET, 0),
