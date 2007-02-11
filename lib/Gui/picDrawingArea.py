@@ -1,5 +1,6 @@
 import gtk, gtk.gdk, gobject, gtk.keysyms
 
+import lib.consts
 from lib.colors import invert
 from lib.config import config
 
@@ -46,6 +47,8 @@ class CpicDrawingArea(CWidget):
         self.selecting = None
         self.selElem = None
         self.selSq = None
+        self.pressedKeys = set()
+        self.scrollPos = (0, 0)
         
         self.bufview = ((0, 0), (2000, 1500))
         self.buffer = gtk.gdk.Pixmap(self.picDrawingArea.window, *self.bufview[1])
@@ -67,7 +70,14 @@ class CpicDrawingArea(CWidget):
         
         self.AdjustScrollBars()
         self.Hide()
-
+        
+        self.cursors = {None: None}
+        for name, img in (('grab', lib.consts.GRAB_CURSOR), ('grabbing', lib.consts.GRABBING_CURSOR)):
+            self.cursors[name] = gtk.gdk.Cursor(gtk.gdk.display_get_default(), gtk.gdk.pixbuf_new_from_file(config['/Paths/Images']+img), 0, 0)
+        
+    def __SetCursor(self, cursor = None):
+        self.picDrawingArea.window.set_cursor(self.cursors[cursor])
+        
     def Redraw(self):
         self.canvas = CGtkCanvas(self.picDrawingArea, self.buffer, self.application.Project.GetStorage())
 
@@ -93,7 +103,14 @@ class CpicDrawingArea(CWidget):
     def GetDrawingAreaSize(self):
         tmp = [int(max(i)) for i in zip(self.DrawingArea.GetSize(self.canvas), self.picDrawingArea.window.get_size())]
         return tuple(tmp)
-
+    
+    def GetPos(self):
+        return int(self.picHBar.get_value()), int(self.picVBar.get_value())
+        
+    def SetPos(self, pos = (0, 0)):
+        self.picHBar.set_value(pos[0])
+        self.picVBar.set_value(pos[1])
+        
     def GetAbsolutePos(self, posx, posy):
         return int(self.picHBar.get_value() + posx), int(self.picVBar.get_value() + posy)
 
@@ -165,11 +182,14 @@ class CpicDrawingArea(CWidget):
     def on_picEventBox_button_press_event(self, widget, event):
         self.picDrawingArea.grab_focus()        
         if event.button == 1:
+            if gtk.keysyms.space in self.pressedKeys:
+                self.__BeginDragMove(event)
+                return
             toolBtnSel = self.emit('get-selected')
             if toolBtnSel is not None:
                 self.__AddItem(toolBtnSel, event)
                 return
-
+            
             pos = self.GetAbsolutePos(event.x, event.y)
             self.clickPos = pos
             itemSel = self.DrawingArea.GetElementAtPosition(self.canvas, pos)
@@ -238,6 +258,7 @@ class CpicDrawingArea(CWidget):
             ElementType = self.application.Project.GetElementFactory().GetElement(toolBtnSel[1])
             ElementObject = CElementObject(ElementType)
             CElement(self.DrawingArea, ElementObject).SetPosition(pos)
+            self.AdjustScrollBars()
             self.emit('set-selected', None)
             self.emit('add-element', ElementObject, self.DrawingArea)
             self.Paint()
@@ -258,24 +279,6 @@ class CpicDrawingArea(CWidget):
                 self.__DrawNewConnection( relcenter[0], relcenter[1], False )
             else:
                 pass
-
-    @event("picEventBox", "key-press-event")
-    def on_key_press_event(self, widget, event):
-        if event.keyval == gtk.keysyms.Delete:
-            if event.state == gtk.gdk.SHIFT_MASK:
-                for sel in self.DrawingArea.GetSelected():
-                    if isinstance(sel, Element.CElement):
-                        self.emit('delete-element-from-all',sel.GetObject())
-                    else:
-                        self.DrawingArea.DeleteItem(sel)
-            else:
-                for sel in self.DrawingArea.GetSelected():
-                    self.DrawingArea.DeleteItem(sel)
-            self.Paint()
-        elif event.keyval == gtk.keysyms.Escape:
-            self.ResetAction()
-            self.emit('set-selected', None)
-
 
     @event("picEventBox", "button-release-event")
     def on_button_release_event(self, widget, event):
@@ -303,6 +306,12 @@ class CpicDrawingArea(CWidget):
                 connection, index = self.DragPoint
                 connection.InsertPoint(self.canvas, point, index)
                 self.dnd = None
+            elif self.dnd == 'move':
+                if gtk.keysyms.space in self.pressedKeys:
+                    self.__SetCursor('grab')
+                else:
+                    self.__SetCursor(None)
+                self.dnd = None
             elif self.__NewConnection is not None:
                 itemSel = self.DrawingArea.GetElementAtPosition(self.canvas, pos)
                 if itemSel is None or isinstance(itemSel, CConnection):
@@ -324,6 +333,35 @@ class CpicDrawingArea(CWidget):
             self.ResetAction()
             self.emit('set-selected', None)
             self.emit('run-dialog', 'warning', 'invalid connection')
+    
+    @event("picEventBox", "key-press-event")
+    def on_key_press_event(self, widget, event):
+        if event.keyval in self.pressedKeys:
+            return
+        self.pressedKeys.add(event.keyval)
+        if event.keyval == gtk.keysyms.Delete:
+            if event.state == gtk.gdk.SHIFT_MASK:
+                for sel in self.DrawingArea.GetSelected():
+                    if isinstance(sel, Element.CElement):
+                        self.emit('delete-element-from-all',sel.GetObject())
+                    else:
+                        self.DrawingArea.DeleteItem(sel)
+            else:
+                for sel in self.DrawingArea.GetSelected():
+                    self.DrawingArea.DeleteItem(sel)
+            self.Paint()
+        elif event.keyval == gtk.keysyms.Escape:
+            self.ResetAction()
+            self.emit('set-selected', None)
+        elif event.keyval == gtk.keysyms.space:
+            self.__SetCursor('grab')
+
+    @event("picEventBox", "key-release-event")
+    def on_key_release_event(self, widget, event):
+        if gtk.keysyms.space in self.pressedKeys:
+            if self.dnd != 'move':
+                self.__SetCursor(None)
+        self.pressedKeys.discard(event.keyval)
 
     @event("picEventBox", "motion-notify-event")
     def on_motion_notify_event(self, widget, event):
@@ -335,6 +373,8 @@ class CpicDrawingArea(CWidget):
             self.__DrawDragPoint(event.x, event.y)
         elif self.dnd == 'line':
             self.__DrawDragLine(event.x, event.y)
+        elif self.dnd == 'move':
+            self.__DrawDragMove((event.x, event.y))
         elif self.__NewConnection is not None:
             self.__DrawNewConnection(event.x, event.y)
 
@@ -415,7 +455,13 @@ class CpicDrawingArea(CWidget):
         self.DragPoint = (connection, point)
         self.__DrawDragLine(event.x, event.y, False)
         self.dnd = 'line'
-
+        
+    def __BeginDragMove(self, event):
+        self.__SetCursor('grabbing')
+        self.DragStartPos = (event.x, event.y)
+        self.scrollPos = self.GetPos()
+        self.dnd = 'move'
+        
     def __GetDelta(self, x, y):
         tmpx, tmpy = self.GetAbsolutePos(x,y)
         dx, dy = tmpx - self.DragStartPos[0], tmpy - self.DragStartPos[1]
@@ -472,6 +518,14 @@ class CpicDrawingArea(CWidget):
             self.__oldPoints = points
             self.__oldPoints2 = self.GetAbsolutePos(x, y)
             self.picDrawingArea.window.draw_lines(self.DragGC, self.__oldPoints)
+            
+    def __DrawDragMove(self, pos):
+        posx, posy = self.scrollPos
+        x1, y1 = pos
+        x2, y2 = self.DragStartPos
+        self.SetPos((posx + x1 - x2, posy + y1 - y2))
+        self.Paint(False)
+        
 
     def __DrawNewConnection(self, x, y, erase = True, draw = True):
         if x is None:
