@@ -5,20 +5,26 @@ class CVBox(CContainer):
         CContainer.__init__(self)
         self.expand = tuple(int(cell) for cell in expand.split())
     
-    def GetWidth(self, canvas, element):
+    def GetSize(self, canvas, element):
         w = 0
+        h = 0
         for i in self.childs:
-            w += i.GetWidth(canvas, element)
-        return w
+            wi, hi = i.GetSize(canvas, element)
+            w += wi
+            h = max(h, hi)
+        return w, h
 
     def PaintShadow(self, canvas, pos, element, color, size = (None, None)):
         if size[1] is None:
-            h = self.GetHeight(canvas, element)
+            h = 0
         else:
             h = size[1]
         w = []
         for i in self.childs:
-            w.append(i.GetWidth(canvas, element))
+            wi, hi = i.GetSize(canvas, element)
+            w.append(wi)
+            if size[1] is None:
+                h += hi
         if size[0] is not None and self.expand:
             ws = size[0] - sum(w)
             if ws > 0:
@@ -35,12 +41,15 @@ class CVBox(CContainer):
 
     def Paint(self, canvas, pos, element, size = (None, None)):
         if size[1] is None:
-            h = self.GetHeight(canvas, element)
+            h = 0
         else:
             h = size[1]
         w = []
         for i in self.childs:
-            w.append(i.GetWidth(canvas, element))
+            wi, hi = i.GetSize(canvas, element)
+            w.append(wi)
+            if size[1] is None:
+                h += hi
         if size[0] is not None and self.expand:
             ws = size[0] - sum(w)
             if ws > 0:

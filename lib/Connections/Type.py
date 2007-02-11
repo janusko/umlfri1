@@ -108,7 +108,7 @@ class CConnectionType(object):
             self.destArrow.Paint(canvas, tmp[-1], atan2(-X, Y), Connection)
         
         for id, lbl in enumerate(self.labels):
-            size = lbl[1].GetWidth(canvas, Connection), lbl[1].GetHeight(canvas, Connection)
+            size = lbl[1].GetSize(canvas, Connection)
             pos = Connection.GetLabelPosition(canvas, id, lbl[0], size)
             lbl[1].Paint(canvas, pos, Connection)
     

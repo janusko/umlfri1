@@ -17,19 +17,16 @@ class CLine(CVisualObject):
                 tp = 'horizontal'
         return tp
 
-    def GetHeight(self, canvas, element):
+    def GetSize(self, canvas, element):
         tp = self.__ComputeType()
         if tp == 'horizontal':
-            return 1
+            return 0, 1
         else:
-            return 0
-
-    def GetWidth(self, canvas, element):
+            return 1, 0
+    
+    def GetResizable(self):
         tp = self.__ComputeType()
-        if tp == 'vertical':
-            return 1
-        else:
-            return 0
+        return tp == 'horizontal', tp == 'vertical'
 
     def PaintShadow(self, canvas, pos, element, color, size = (None, None)):
         size = self.ComputeSize(canvas, element, size)

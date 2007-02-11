@@ -23,7 +23,7 @@ class CElement:
                     if self.drawingArea.HasElementObject(i.GetDestination()) is not None:
                         CConnection(self.drawingArea,i,self,self.drawingArea.HasElementObject(i.GetDestination()))
                     
-    def __AddSquare(self, x, y, posx, posy):
+    def __AddSquare(self, index, x, y, posx, posy):
         size = config['/Styles/Selection/PointsSize']
         if posx == 0:
             x = x - size // 2
@@ -39,7 +39,7 @@ class CElement:
             x1, x = x, x1
         if y1 < y:
             y1, y = y, y1
-        self.squares.append(((x, y), (x1 - x, y1 - y)))
+        self.squares.append((index, (x, y), (x1 - x, y1 - y)))
 
     def AreYouAtPosition(self, canvas, pos):
         x, y = pos
@@ -71,13 +71,12 @@ class CElement:
         return w / 2 + self.position[0], h / 2 + self.position[1]
     
     def GetSize(self, canvas):
-        w = self.objct.GetWidth(canvas, self) + self.deltaSize[0]
-        h = self.objct.GetHeight(canvas, self) + self.deltaSize[1]
+        w, h = self.objct.GetSize(canvas, self)
+        w, h = w + self.deltaSize[0], h + self.deltaSize[1]
         return w, h 
         
     def GetMinimalSize(self, canvas):
-        w = self.objct.GetWidth(canvas, self)
-        h = self.objct.GetHeight(canvas, self)
+        w, h = self.objct.GetSize(canvas, self)
         return w, h
         
     def GetSquare(self, canvas):
@@ -93,20 +92,24 @@ class CElement:
             x += dx
             y += dy
             w, h = self.GetSize(canvas)
+            rx, ry = self.objct.GetType().GetResizable()
             
             self.squares = []
             
-            self.__AddSquare(x       , y       ,  1,  1)
-            self.__AddSquare(x + w//2, y       ,  0,  1)
-            self.__AddSquare(x + w   , y       , -1,  1)
-            self.__AddSquare(x       , y + h//2,  1,  0)
-            self.__AddSquare(x + w   , y + h//2, -1,  0)
-            self.__AddSquare(x       , y + h   ,  1, -1)
-            self.__AddSquare(x + w//2, y + h   ,  0, -1)
-            self.__AddSquare(x + w   , y + h   , -1, -1)
+            if rx and ry:
+                self.__AddSquare(0, x       , y       ,  1,  1)
+                self.__AddSquare(2, x + w   , y       , -1,  1)
+                self.__AddSquare(5, x       , y + h   ,  1, -1)
+                self.__AddSquare(7, x + w   , y + h   , -1, -1)
+            if ry:
+                self.__AddSquare(1, x + w//2, y       ,  0,  1)
+                self.__AddSquare(6, x + w//2, y + h   ,  0, -1)
+            if rx:
+                self.__AddSquare(3, x       , y + h//2,  1,  0)
+                self.__AddSquare(4, x + w   , y + h//2, -1,  0)
             
             for i in self.squares:
-                canvas.DrawRectangle(i[0], i[1], None, config['/Styles/Selection/PointsColor'])
+                canvas.DrawRectangle(i[1], i[2], None, config['/Styles/Selection/PointsColor'])
             
             canvas.DrawRectangle((x, y), (w, h), fg = config['/Styles/Selection/RectangleColor'], line_width = config['/Styles/Selection/RectangleWidth'])
 
@@ -127,12 +130,12 @@ class CElement:
     def GetSquareAtPosition(self, pos):
         x, y = pos
         for sq in self.squares:
-            sqbx = sq[0][0]
-            sqby = sq[0][1]
-            sqex = sqbx + sq[1][0]
-            sqey = sqby + sq[1][1]
+            sqbx = sq[1][0]
+            sqby = sq[1][1]
+            sqex = sqbx + sq[2][0]
+            sqey = sqby + sq[2][1]
             if (x >= sqbx and x <= sqex and y >= sqby and y <= sqey):
-                return self.squares.index(sq)
+                return sq[0]
     
     # Zmena velkosti(pripadne pozicie) elementu
     def Resize(self, canvas, delta, selSquareIdx):

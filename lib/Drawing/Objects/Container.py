@@ -8,6 +8,16 @@ class CContainer(CVisualObject):
     def AppendChild(self, child):
         self.childs.append(child)
         child.SetParent(self)
+    
+    def GetResizable(self):
+        rx, ry = False, False
+        for i in self.childs:
+            rcx, rcy = i.GetResizable()
+            rx = rx or rcx
+            ry = ry or rcy
+            if rx == ry == True:
+                return rx, ry
+        return rx, ry
 
     def GetChild(self, index):
         return self.childs[index]
@@ -15,21 +25,14 @@ class CContainer(CVisualObject):
     def GetChilds(self):
         return self.childs
 
-    def GetHeight(self, canvas, element):
+    def GetSize(self, canvas, element):
+        w = 0
         h = 0
         for i in self.childs:
-            v = i.GetHeight(canvas, element)
-            if h < v:
-                h = v
-        return h
-
-    def GetWidth(self, canvas, element):
-        w = 0
-        for i in self.childs:
-            v = i.GetWidth(canvas, element)
-            if w < v:
-                w = v
-        return w
+            wc, hc = i.GetSize(canvas, element)
+            w = max(w, wc)
+            h = max(h, hc)
+        return w, h
     
     def PaintShadow(self, canvas, pos, element, color, size = (None, None)):
         size = self.ComputeSize(canvas, element, size)

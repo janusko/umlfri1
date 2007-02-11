@@ -20,11 +20,11 @@ class CVisualObject:
     def GetVariables(self, element, *names):
         return self.ParseVariables(element, *(getattr(self, name) for name in names))
     
-    def GetHeight(self, element):
-        return 0
-
-    def GetWidth(self, element):
-        return 0
+    def GetResizable(self):
+        return False, False
+    
+    def GetSize(self, canvas, element):
+        return 0, 0
 
     def GetParent(self):
         return self.parent
@@ -39,8 +39,10 @@ class CVisualObject:
         self.parent = parent
     
     def ComputeSize(self, canvas, element, size = (None, None)):
+        if None in size:
+            w, h = self.GetSize(canvas, element)
         if size[0] is None:
-            size = self.GetWidth(canvas, element), size[1]
+            size = w, size[1]
         if size[1] is None:
-            size = size[0], self.GetHeight(canvas, element)
+            size = size[0], h
         return size
