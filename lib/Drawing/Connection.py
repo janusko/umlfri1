@@ -18,7 +18,9 @@ class CConnection:
         self.labels = {}
         self.selected = False
         self.selpoint = None
+        self.object.AddAppears(drawingArea)
     
+   
     def Select(self):
         self.selected = True
     

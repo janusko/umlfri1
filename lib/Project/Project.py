@@ -248,7 +248,7 @@ class CProject(object):
                                     dw = int(pic.getAttribute("dw").decode('unicode_escape'))
                                     dh = int(pic.getAttribute("dh").decode('unicode_escape'))
                                     element.SetSizeRelative((dw, dh))
-                                    proNode.AddAppears(drawingarea)
+                                    #proNode.AddAppears(drawingarea)
                                 elif pic.tagName == "connection":
                                     for e in drawingarea.GetElements():
                                         if e.GetObject() is ListCon[pic.getAttribute("id").decode('unicode_escape')].GetSource():

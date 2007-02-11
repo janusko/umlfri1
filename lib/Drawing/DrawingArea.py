@@ -26,6 +26,18 @@ class CDrawingArea:
             if i.GetObject() is object:
                 return i
         return None
+    
+    def GetConnection(self, conObject):
+        for c in self.connections:
+            if c.GetObject() is conObject:
+                return c
+        return None
+    
+    def HasConnection(self,conObject):
+        for c in self.connections:
+            if c.GetObject() is conObject:
+                return True
+        return False
         
     def GetPath(self):
         return self.path
@@ -139,9 +151,11 @@ class CDrawingArea:
     
     def DeleteObject(self, object):
         self.size = None
-        for i in self.elements:
-            if i.GetObject() is object:
-                self.DeleteItem(i)
+        for o in self.elements:
+            if o.GetObject() is object:
+                for c in o.GetConnections():
+                    self.ShiftDeleteConnection(c)
+                self.DeleteItem(o)
                 return
     
     def DeleteItem(self, item):
@@ -178,7 +192,28 @@ class CDrawingArea:
                 self.selected.remove(connection)
         else:
             raise UMLException("ConnectionDoesNotExists")
-
+    
+    def DeleteConnectionObject(self, object):
+        for i in self.connections:
+            if i.GetObject() is object:
+                self.connections.remove(i)
+                return
+    
+    def ShiftDeleteConnection(self, connection):
+        self.size = None
+        if connection in self.connections:
+            obj = connection.GetObject()
+            for a in obj.GetAppears():
+                a.DeleteConnectionObject(obj)
+                
+            obj.GetSource().RemoveConnection(obj)
+            obj.GetDestination().RemoveConnection(obj)
+            #self.connections.remove(connection)
+            if connection in self.selected:
+                self.selected.remove(connection)
+        else:
+            raise UMLException("ConnectionDoesNotExists")
+    
     def GetSize(self, canvas):
         if self.size is not None:
             return self.size

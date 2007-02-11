@@ -7,6 +7,7 @@ class CConnectionObject(object):
         typeid = type.GetId()
         srcid = source.GetType().GetId()
         destid = dest.GetType().GetId()
+        self.appears = []
         ok = False
         if typeid in allowsrc:
             with, allowrecursive = allowsrc[typeid]
@@ -28,13 +29,29 @@ class CConnectionObject(object):
         self.attributes = {}
         for i in self.type.GetAttributes():
             self.SetAttribute(i, self.type.GetDefValue(i))            
+    
+    def GetAppears(self):
+        for i in self.appears:
+            yield i
+
+    def AddAppears(self, drawingArea):
+        self.appears.append(drawingArea)
+
+    def RemoveAppears(self, drawingArea):
+        self.appears.remove(drawingArea)
 
     def GetType(self):
         return self.type
     
     def SetType(self, value):
         self.type = value
-
+    
+    def GetConnectedObject(self, object):
+        if self.source is not object:
+            return self.source
+        elif self.destination is not object:
+            return self.destination
+        
     def GetDestination(self):
         return self.destination
 
