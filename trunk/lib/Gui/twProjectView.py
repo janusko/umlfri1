@@ -198,7 +198,6 @@ class CtwProjectView(CWidget):
         path = drawingArea.GetPath()
         parent = self.application.Project.GetNode(path)
         node = CProjectNode(parent, element, parent.GetPath() + "/" + element.GetName() + ":" + element.GetType().GetId())
-        node.AddAppears(drawingArea)
         self.application.Project.AddNode(node, parent)
         novy = self.TreeStore.append(self.get_iter_from_path(self.twProjectView.get_model(), self.twProjectView.get_model().get_iter_root() ,path))
         self.TreeStore.set(novy, 0, element.GetName() , 1, PixmapFromPath(self.application.Project.GetStorage(), element.GetType().GetIcon()), 2, element.GetType().GetId(),3,node)
@@ -278,25 +277,27 @@ class CtwProjectView(CWidget):
         for i in node.GetDrawingAreas():
             self.emit('close-drawing-area',i)
             
-        for i in node.GetChilds():
-            self.RemoveFromArea(i)
+        for j in node.GetChilds():
+            self.RemoveFromArea(j)
         
-        for i in node.GetAppears():
-            i.DeleteObject(node.GetObject())
+        for k in node.GetAppears():
+            k.DeleteObject(node.GetObject())
+    
     
     def DeleteElement(self, elementObject):
         iter = self.twProjectView.get_model().get_iter_root()
+        
         if elementObject is self.twProjectView.get_model().get(iter,3)[0].GetObject():
             return
         
-        for iter in self.get_iters_from_path(self.twProjectView.get_model(),self.twProjectView.get_model().get_iter_root() ,elementObject.GetPath()):
-            node = self.twProjectView.get_model().get(iter,3)[0]
+        for i in self.get_iters_from_path(self.twProjectView.get_model(),self.twProjectView.get_model().get_iter_root() ,elementObject.GetPath()):
+            node = self.twProjectView.get_model().get(i,3)[0]
             if elementObject is node.GetObject():
                 break
-        self.TreeStore.remove(iter)
+
+        self.TreeStore.remove(i)
         self.RemoveFromArea(node)
         self.application.Project.RemoveNode(node)
-    
     
     @event("mnuTreeDelete","activate")
     def on_mnuTreeDelete_activate(self, menuItem):

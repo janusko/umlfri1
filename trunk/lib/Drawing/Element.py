@@ -11,6 +11,7 @@ class CElement:
         self.squares = []
         self.drawingArea = drawingArea
         self.drawingArea.AddElement(self)
+        self.objct.AddAppears(drawingArea)
         self.__AddExistingConnections()
     
     def __AddExistingConnections(self):

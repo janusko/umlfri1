@@ -212,7 +212,6 @@ class CfrmMain(CWindow):
                     elif e.GetName() == "DiagramHaveNotThisElement":
                         return CWarningDialog(self.form, "Zly element: " + i.GetObject().GetType().GetId()).run()
                 Element.CopyFromElement(i)
-                i.GetObject().AddAppears(drawingArea)
                 drawingArea.AddToSelection(Element)
         self.picDrawingArea.Paint()        
         
@@ -308,7 +307,6 @@ class CfrmMain(CWindow):
                 elif e.GetName() == "DiagramHaveNotThisElement":
                     return CWarningDialog(self.form, "Zly element: " + node.GetObject().GetType().GetId()).run()
             
-            node.AddAppears(drawingArea)
     
     @event("picDrawingArea", "run-dialog")
     def on_run_dialog(self, widget, type, message):
@@ -321,7 +319,13 @@ class CfrmMain(CWindow):
     @event("picDrawingArea","show-element-in-treeView")
     def on_show_element_in_treeView(self, widget, Element):
         self.twProjectView.ShowElement(Element)
-        
+    
+    @event("picDrawingArea","open-specification")
+    def on_show_open_specification(self, widget, Element):
+        tmp = self.application.GetWindow('frmProperties')
+        tmp.SetParent(self.application.GetWindow('frmMain'))
+        tmp.ShowProperties('',Element)
+        self.picDrawingArea.Paint()
     
     #Z-Order 
 # 'mmShift_SendBack', 'mmShift_BringForward', 'mmShift_ToBottom', 'mmShift_ToTop'    

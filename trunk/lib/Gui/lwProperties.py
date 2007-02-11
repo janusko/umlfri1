@@ -83,7 +83,7 @@ class ClwProperties(CWidget):
                 self.listStore.remove(row)
             else:
                 self.listStore.set(row, ID_TYPE, atrtype[0], ID_NAME, str(k), ID_VALUE, "<<list>>", ID_TEXT_VISIBLE, False, ID_COMBO_VISIBLE, False, ID_BUTTON_VISIBLE, True)
-    
+        
     def Clear(self):
         self.element = None
         self.listStore.clear()
@@ -114,10 +114,11 @@ class ClwProperties(CWidget):
         if type == 'attrs':
             tmp = self.application.GetWindow('frmProperties')
             tmp.SetParent(self.application.GetWindow('frmMain'))
-            if tmp.ShowProperties('attrs',self.element):
+            if tmp.ShowProperties('attrs',self.element.GetObject()):
                 self.emit('content_update', self.element, name)
         elif type == 'opers':
             tmp = self.application.GetWindow('frmProperties')
             tmp.SetParent(self.application.GetWindow('frmMain'))
-            if tmp.ShowProperties('opers',self.element):
+            if tmp.ShowProperties('opers',self.element.GetObject()):
                 self.emit('content_update', self.element, name)
+        

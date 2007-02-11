@@ -19,7 +19,8 @@ class CpicDrawingArea(CWidget):
     name = 'picDrawingArea'
     widgets = ('picDrawingArea', 'picEventBox', 'picVBar', 'picHBar',
                 'tbDrawingArea', 'vbAll', 'nbTabs', 'pMenuShift', 
-                'pmShift_SendBack', 'pmShift_BringForward', 'pmShift_ToBottom', 'pmShift_ToTop','pmShowInProjectView')
+                'pmShift_SendBack', 'pmShift_BringForward', 'pmShift_ToBottom', 'pmShift_ToTop','pmShowInProjectView',
+                'pmOpenSpecification')
 
     __gsignals__ = {
         'get-selected':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_PYOBJECT,
@@ -37,6 +38,7 @@ class CpicDrawingArea(CWidget):
         'drop-from-treeview': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
         'zorder-change':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE,()),    
         'show-element-in-treeView': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
+        'open-specification': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
     }
 
     def __init__(self, app, wTree):
@@ -345,7 +347,7 @@ class CpicDrawingArea(CWidget):
                     if isinstance(sel, Element.CElement):
                         self.emit('delete-element-from-all',sel.GetObject())
                     else:
-                        self.DrawingArea.DeleteItem(sel)
+                        self.DrawingArea.ShiftDeleteConnection(sel)
             else:
                 for sel in self.DrawingArea.GetSelected():
                     self.DrawingArea.DeleteItem(sel)
@@ -557,7 +559,13 @@ class CpicDrawingArea(CWidget):
                 if isinstance(Element, CElement):
                     self.emit('show-element-in-treeView',Element)
                     
-    
+    @event("pmOpenSpecification","activate")
+    def on_mnuOpenSpecification_click(self, menuItem):
+        if len(tuple(self.DrawingArea.GetSelected())) == 1:
+            for Element in self.DrawingArea.GetSelected():
+                if isinstance(Element, CElement):
+                    self.emit('open-specification',Element)
+        
     # Menu na Z-Order:  
     def Shift_activate(self, actionName):
         if (actionName == 'SendBack'):
