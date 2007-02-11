@@ -21,6 +21,9 @@ class CRectangle(CSimpleContainer):
                 c = str(c[1]), trans*Path(corners.get(c[2], c[2]))
             self.corners.append(c)
         self.corners = tuple(self.corners)
+    
+    def GetResizable(self):
+        return True, True
 
     def PaintShadow(self, canvas, pos, element, color, size = (None, None)):
         size = self.ComputeSize(canvas, element, size)

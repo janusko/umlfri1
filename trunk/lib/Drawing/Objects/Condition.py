@@ -20,15 +20,10 @@ class CCondition(CSimpleContainer):
             return not ret
         return ret
 
-    def GetHeight(self, canvas, element):
+    def GetSize(self, canvas, element):
         if self.__IsTrue(element):
-            return CSimpleContainer.GetHeight(self, canvas, element)
-        return 0
-
-    def GetWidth(self, canvas, element):
-        if self.__IsTrue(element):
-            return CSimpleContainer.GetWidth(self, canvas, element)
-        return 0
+            return CSimpleContainer.GetSize(self, canvas, element)
+        return 0, 0
 
     def PaintShadow(self, canvas, pos, element, color, size = (None, None)):
         if self.__IsTrue(element):

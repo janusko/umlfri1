@@ -32,6 +32,9 @@ class CElementType:
     def GetId(self):
         return self.id
     
+    def GetResizable(self):
+        return self.appearance.GetResizable()
+    
     def GetDefValue(self, id):
         type, options = self.attributes[id]
         if len(options) > 0:
@@ -104,8 +107,5 @@ class CElementType:
         else:
             raise UMLException('VisAttrDontExists')
     
-    def GetWidth(self, canvas, element):
-        return self.appearance.GetWidth(canvas, element)
-    
-    def GetHeight(self, canvas, element):
-        return self.appearance.GetHeight(canvas, element)
+    def GetSize(self, canvas, element):
+        return self.appearance.GetSize(canvas, element)

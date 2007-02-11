@@ -54,11 +54,8 @@ class CSvg(CVisualObject):
         
         recursive(element, TransformMatrix.mk_scale(self.scale))
     
-    def GetWidth(self, canvas, element):
-        return self.width * self.scale
-    
-    def GetHeight(self, canvas, element):
-        return self.height * self.scale
+    def GetSize(self, canvas, element):
+        return self.width * self.scale, self.height * self.scale
     
     def PaintShadow(self, canvas, pos, element, color, size = (None, None)):
         trans = TransformMatrix.mk_translation(pos)

@@ -7,6 +7,9 @@ class CEllipse(CSimpleContainer):
         self.border = border
         
         self.borderwidth = int(borderwidth)
+    
+    def GetResizable(self):
+        return True, True
 
     def PaintShadow(self, canvas, pos, element, color, size = (None, None)):
         size = self.ComputeSize(canvas, element, size)

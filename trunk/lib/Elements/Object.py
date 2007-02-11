@@ -47,11 +47,8 @@ class CElementObject:
     def GetType(self):
         return self.type
     
-    def GetWidth(self, canvas, element):
-        return self.type.GetWidth(canvas, element)
-    
-    def GetHeight(self, canvas, element):
-        return self.type.GetHeight(canvas, element)
+    def GetSize(self, canvas, element):
+        return self.type.GetSize(canvas, element)
         
     def GetName(self):
         if 'Name' in self.attribs:
