@@ -41,7 +41,6 @@ class CFindInDiagram(CWindow):
                     return
             if response == gtk.RESPONSE_OK:
                 iter = self.twFindInDiagram.get_selection().get_selected()[1]
-                print iter
                 if iter is not None:
                     self.form.hide()
                     return self.emit('selected_drawingArea_and_Element',self.drawingAreas[self.twFindInDiagram.get_model().get_path(iter)[0]],self.object)

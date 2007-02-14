@@ -1,6 +1,8 @@
 import gtk
 import gobject
 import gtk.glade
+
+import sys
 from os.path import abspath
 import gettext
 
@@ -9,6 +11,7 @@ class CApplication(gobject.GObject):
     glade = None
     wins = {}
     main_window = ''
+    version = '?'
     textdomain = None
     localespath = None
     
@@ -28,6 +31,9 @@ class CApplication(gobject.GObject):
             gtk.glade.textdomain(self.textdomain)
         
         gtk.glade.set_custom_handler(self.__get_custom_handler)
+        f_globals = sys._getframe().f_back.f_globals
+        if '__version__' in f_globals:
+            self.version = f_globals['__version__']
         self.wTrees = {}
         if self.glade is not None:
             self.wTrees[abspath(self.glade)] = self.wTrees[None] = gtk.glade.XML(self.glade)
@@ -43,6 +49,9 @@ class CApplication(gobject.GObject):
             else:
                 wTree = self.wTrees[glade]
             self.wins[windowClass.name] = windowClass(self, wTree)
+            
+        self.GetRelativeFile = wTree.relative_file
+        
     
     def __get_custom_handler(self, glade, function_name, widget_name, str1, str2, int1, int2):
         if not hasattr(self, 'cw_'+function_name):
@@ -52,6 +61,9 @@ class CApplication(gobject.GObject):
         if not isinstance(ret, gtk.Widget):
             raise Exception("Return from custom widget handler function 'cw_%s' (widget '%s') must be gtk widget"%(function_name, widget_name))
         return ret
+        
+    def GetVersion(self):
+        return self.version
     
     def GetWindow(self, name):
         return self.wins[name]
