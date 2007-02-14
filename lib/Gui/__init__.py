@@ -1,4 +1,5 @@
 from frmMain import CfrmMain
+from frmSplash import CfrmSplash
 from frmAbout import CfrmAbout
 from tbToolBox import CtbToolBox
 from frmProperties import CfrmProperties

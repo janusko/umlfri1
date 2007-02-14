@@ -3,7 +3,6 @@ from Widget import CWidget
 
 class CWindow(CWidget):
     dont_delete = False
-    glade = None
     
     def __init__(self, app, wTree):
         self.form = wTree.get_widget(self.name)

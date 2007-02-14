@@ -8,6 +8,7 @@ import warnings
 warnings.simplefilter('ignore', Warning)
 
 import gtk
+import gobject
 
 from lib.Clipboard import CClipboard
 import lib.Gui.common
@@ -16,15 +17,15 @@ import os.path
 from lib.Project import CProject
 from lib.Project import CRecentFiles
 
-from lib.Gui import CfrmMain, CfrmAbout, CfrmProperties, CfrmAttribute, CfrmOperation, CfrmOpen, CfrmSave
+from lib.Gui import CfrmSplash, CfrmMain, CfrmAbout, CfrmProperties, CfrmAttribute, CfrmOperation, CfrmOpen, CfrmSave
 
 from lib.config import config
+from lib.consts import SPLASH_TIMEOUT
 
-__version__ = "1.0-beta"
-
+__version__ = '1.0-alpha'
 
 class Application(lib.Gui.common.CApplication):
-    windows = (CfrmMain, CfrmAbout, CfrmProperties, CfrmAttribute, CfrmOperation, CfrmOpen, CfrmSave)
+    windows = (CfrmSplash, CfrmMain, CfrmAbout, CfrmProperties, CfrmAttribute, CfrmOperation, CfrmOpen, CfrmSave)
     glade = os.path.join(os.path.dirname(__file__), 'gui', 'gui.glade')
     main_window = 'frmMain'
     textdomain = 'uml_fri'
@@ -36,6 +37,7 @@ class Application(lib.Gui.common.CApplication):
         lib.Gui.common.CApplication.__init__(self)
         self.clipboard = CClipboard()
         self.recentFiles = CRecentFiles()
+        gobject.timeout_add(SPLASH_TIMEOUT, self.GetWindow('frmSplash').Hide)
     
     def GetRecentFiles(self):
         return self.recentFiles

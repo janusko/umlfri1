@@ -4,9 +4,15 @@ class CWidget(gobject.GObject):
     widgets = ()
     complexWidgets = ()
     name = ''
+    glade = None
     
     def __init__(self, app, wTree):
         gobject.GObject.__init__(self)
+        if self.glade is not None:
+            if abspath(self.glade) in app.wTrees:
+                wTree = app.wTrees[abspath(self.glade)] = gtk.glade.XML(self.glade)
+            else:
+                wTree = app.wTrees[abspath(self.glade)]
         events = {}
         for fnc in dir(self):
             fnc = getattr(self, fnc)
@@ -35,3 +41,5 @@ class CWidget(gobject.GObject):
                     obj = obj.get_property(attr)
             for event, fnc in oevents:
                 obj.connect(event, fnc)
+        
+        self.GetRelativeFile = wTree.relative_file
