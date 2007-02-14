@@ -1,6 +1,12 @@
-from os.path import join, dirname, abspath, expanduser
+from os.path import join, dirname, abspath, expanduser, isdir
+import sys
+import imp
 
-ROOT_PATH = abspath(join(dirname(__file__), '..'))
+if (hasattr(sys, "frozen") or hasattr(sys, "importers") or imp.is_frozen("__main__")):
+    ROOT_PATH = abspath(join(dirname(sys.executable), '..'))
+else:
+    ROOT_PATH = abspath(join(dirname(__file__), '..'))
+
 ETC_PATH = join(ROOT_PATH, 'etc')
 
 MAIN_CONFIG_PATH = join(ETC_PATH, 'config.xml')

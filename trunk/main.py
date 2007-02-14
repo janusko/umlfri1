@@ -1,8 +1,8 @@
 #!/usr/bin/python
 
-import pygtk
+#~ import pygtk
 
-pygtk.require('2.0')
+#~ pygtk.require('2.0')
 
 import warnings
 warnings.simplefilter('ignore', Warning)
@@ -26,7 +26,7 @@ __version__ = '1.0-alpha'
 
 class Application(lib.Gui.common.CApplication):
     windows = (CfrmSplash, CfrmMain, CfrmAbout, CfrmProperties, CfrmAttribute, CfrmOperation, CfrmOpen, CfrmSave)
-    glade = os.path.join(os.path.dirname(__file__), 'gui', 'gui.glade')
+    glade = os.path.join(config['/Paths/Gui'], 'gui.glade')
     main_window = 'frmMain'
     textdomain = 'uml_fri'
     localespath = config['/Paths/Locales']
