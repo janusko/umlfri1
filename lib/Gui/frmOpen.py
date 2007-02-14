@@ -24,23 +24,23 @@ class CfrmOpen(common.CWindow):
         self.ivOpenNew.set_pixbuf_column(1)
         
         filter = gtk.FileFilter()
-        filter.set_name("UML .FRI Projects")
+        filter.set_name(_("UML .FRI Projects"))
         filter.add_pattern('*'+lib.consts.PROJECT_EXTENSION)
         self.fwOpenExisting.add_filter(filter)
         filter = gtk.FileFilter()
-        filter.set_name("UML .FRI Project templates")
+        filter.set_name(_("UML .FRI Project templates"))
         filter.add_pattern('*'+lib.consts.PROJECT_TPL_EXTENSION)
         self.fwOpenExisting.add_filter(filter)
         filter = gtk.FileFilter()
-        filter.set_name("All files")
+        filter.set_name(_("All files"))
         filter.add_pattern("*")
         self.fwOpenExisting.add_filter(filter)
         
         self.listStore = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gtk.gdk.Pixbuf)
         self.twOpenRecent.set_model(self.listStore)
         self.twOpenRecent.append_column(gtk.TreeViewColumn('', gtk.CellRendererPixbuf(), pixbuf = 2))
-        self.twOpenRecent.append_column(gtk.TreeViewColumn('File name', gtk.CellRendererText(), text = 0))
-        self.twOpenRecent.append_column(gtk.TreeViewColumn('Date', gtk.CellRendererText(), text = 1))
+        self.twOpenRecent.append_column(gtk.TreeViewColumn(_('File name'), gtk.CellRendererText(), text = 0))
+        self.twOpenRecent.append_column(gtk.TreeViewColumn(_('Date'), gtk.CellRendererText(), text = 1))
     
     def __GetIcon(self, filename):
         if not os.path.isfile(filename):
@@ -111,7 +111,7 @@ class CfrmOpen(common.CWindow):
                         self.application.GetRecentFiles().AddFile(filename)
                         if not os.path.exists(filename):  
                             self.application.GetRecentFiles().RemoveFile(filename)
-                            CWarningDialog(self.form, "File is not exist").run()
+                            CWarningDialog(self.form, _("File does not exist")).run()
                             self.__ReloadOpenRecentList()
                         else:
                             return filename, self.chkOpenAsCopyRecent.get_active() # recent

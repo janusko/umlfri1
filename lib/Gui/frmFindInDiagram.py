@@ -20,8 +20,8 @@ class CFindInDiagram(CWindow):
         self.listStore = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gtk.gdk.Pixbuf )
         self.twFindInDiagram.set_model(self.listStore)
         self.twFindInDiagram.append_column(gtk.TreeViewColumn('', gtk.CellRendererPixbuf(), pixbuf = 2))
-        self.twFindInDiagram.append_column(gtk.TreeViewColumn('Diagram name', gtk.CellRendererText(), text = 0))
-        self.twFindInDiagram.append_column(gtk.TreeViewColumn('Diagram type', gtk.CellRendererText(), text = 1))
+        self.twFindInDiagram.append_column(gtk.TreeViewColumn(_('Diagram name'), gtk.CellRendererText(), text = 0))
+        self.twFindInDiagram.append_column(gtk.TreeViewColumn(_('Diagram type'), gtk.CellRendererText(), text = 1))
         
         
     def Fill(self):

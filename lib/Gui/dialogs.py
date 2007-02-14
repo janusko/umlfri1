@@ -7,7 +7,7 @@ class CWarningDialog:
     def __init__(self, form, message):
         self.dialog = gtk.MessageDialog(form, 0, gtk.MESSAGE_INFO, gtk.BUTTONS_OK)
         self.dialog.set_markup(message)
-        self.dialog.set_title("Warning")
+        self.dialog.set_title(_("Warning"))
         
     def run(self):
         self.dialog.run()
@@ -21,7 +21,7 @@ class CQuestionDialog:
         if allow_cancel:
              self.dialog.add_buttons(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL)
         self.dialog.set_markup(message)
-        self.dialog.set_title("Question")
+        self.dialog.set_title(_("Question"))
     
     def run(self):
         tmp = self.dialog.run()

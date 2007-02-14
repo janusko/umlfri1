@@ -19,7 +19,7 @@ class ClwProperties(CWidget):
         self.listStore = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_BOOLEAN, gobject.TYPE_BOOLEAN, gobject.TYPE_BOOLEAN, gobject.TYPE_BOOLEAN, gtk.TreeModel, gobject.TYPE_STRING)
         renderer = gtk.CellRendererText()
         
-        self.Column1 = gtk.TreeViewColumn('Name')
+        self.Column1 = gtk.TreeViewColumn(_('Name'))
         self.Column1.pack_start(renderer, True)
         self.Column1.add_attribute(renderer, 'text', ID_NAME)
                  
@@ -32,7 +32,7 @@ class ClwProperties(CWidget):
         
         CWidget.__init__(self, app, wTree)
         
-        self.Column2 = gtk.TreeViewColumn('Value')
+        self.Column2 = gtk.TreeViewColumn(_('Value'))
         self.Column2.pack_start(self.StrRenderer, True)
         self.Column2.pack_start(self.ComboRenderer, True)
         self.Column2.pack_start(self.ButtonRenderer, True)

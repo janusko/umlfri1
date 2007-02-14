@@ -35,7 +35,7 @@ class CtwProjectView(CWidget):
         self.EventButton = (0,0)
         
         #spravime jeden column
-        self.Column = gtk.TreeViewColumn('Elements')
+        self.Column = gtk.TreeViewColumn(_('Elements'))
         self.twProjectView.append_column(self.Column)
         self.twProjectView.set_reorderable(True)
         

@@ -11,15 +11,15 @@ class CfrmSave(common.CWindow):
         common.CWindow.__init__(self, app, wTree)
         
         filter = gtk.FileFilter()
-        filter.set_name("UML .FRI Projects")
+        filter.set_name(_("UML .FRI Projects"))
         filter.add_pattern('*'+lib.consts.PROJECT_EXTENSION)
         self.form.add_filter(filter)
         filter = gtk.FileFilter()
-        filter.set_name("UML .FRI Project templates")
+        filter.set_name(_("UML .FRI Project templates"))
         filter.add_pattern('*'+lib.consts.PROJECT_TPL_EXTENSION)
         self.form.add_filter(filter)
         filter = gtk.FileFilter()
-        filter.set_name("All files")
+        filter.set_name(_("All files"))
         filter.add_pattern("*")
         self.form.add_filter(filter)
     
@@ -35,9 +35,9 @@ class CfrmSave(common.CWindow):
                 if filename is None:
                     continue
                 if '.' not in os.path.basename(filename):
-                    if filter == "UML .FRI Projects":
+                    if filter == _("UML .FRI Projects"):
                         filename += lib.consts.PROJECT_EXTENSION
-                    elif filter == "UML .FRI Project templates":
+                    elif filter == _("UML .FRI Project templates"):
                         filename += lib.consts.PROJECT_TPL_EXTENSION
                 if not os.path.isdir(filename):
                     self.application.GetRecentFiles().AddFile(filename)

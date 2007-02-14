@@ -81,7 +81,7 @@ class CfrmMain(CWindow):
     @event('nbTabs','export-svg-from-TabMenu')
     @event('mnuExportSvg', 'activate')
     def on_mnuExportSvg_activate(self, widget):
-        filedlg = gtk.FileChooserDialog('Choose SVG file', self.form, gtk.FILE_CHOOSER_ACTION_SAVE, (gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
+        filedlg = gtk.FileChooserDialog(_('Choose SVG file'), self.form, gtk.FILE_CHOOSER_ACTION_SAVE, (gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
         filter = gtk.FileFilter()
         filter.set_name("SVG vector images")
         filter.add_pattern('*.svg')
@@ -102,16 +102,16 @@ class CfrmMain(CWindow):
     
     def ReloadTitle(self):
         if self.application.GetProject() is None or self.application.GetProject().GetFileName() is None:
-            self.form.set_title('UML .FRI deasigner')
+            self.form.set_title(_('UML .FRI designer'))
         else:
-            self.form.set_title('UML .FRI deasigner [%s]'%self.application.GetProject().GetFileName())
+            self.form.set_title(_('UML .FRI designer [%s]')%self.application.GetProject().GetFileName())
 
     # Actions
     @event("form", "delete-event")
     @event("mnuQuit", "activate")
     def ActionQuit(self, widget, event = None):
         try:
-            if self.application.Project is not None and CQuestionDialog(self.form, 'Do you want to save project?', True).run():
+            if self.application.Project is not None and CQuestionDialog(self.form, _('Do you want to save project?'), True).run():
                 self.ActionSave(widget)
         except ECancelPressed:
             return True
@@ -123,7 +123,7 @@ class CfrmMain(CWindow):
         filename, copy = self.application.GetWindow("frmOpen").ShowDialog(self)
         if filename is not None:
             try:
-                if self.application.Project is not None and CQuestionDialog(self.form, 'Do you want to save project?', True).run():
+                if self.application.Project is not None and CQuestionDialog(self.form, _('Do you want to save project?'), True).run():
                     self.ActionSave(widget)
             except ECancelPressed:
                 return
@@ -216,9 +216,9 @@ class CfrmMain(CWindow):
                     Element = CElement(drawingArea, i.GetObject())
                 except UMLException, e:
                     if e.GetName() == "ElementAlreadyExists":
-                        return CWarningDialog(self.form, "Pozeraj sa co robis").run()
+                        return CWarningDialog(self.form, _('Unable to insert element')).run()
                     elif e.GetName() == "DiagramHaveNotThisElement":
-                        return CWarningDialog(self.form, "Zly element: " + i.GetObject().GetType().GetId()).run()
+                        return CWarningDialog(self.form, _('Wrong element: ') + i.GetObject().GetType().GetId()).run()
                 Element.CopyFromElement(i)
                 drawingArea.AddToSelection(Element)
         self.picDrawingArea.Paint()        
@@ -326,9 +326,9 @@ class CfrmMain(CWindow):
                 Element = CElement(drawingArea, node.GetObject()).SetPosition(position)
             except UMLException, e:
                 if e.GetName() == "ElementAlreadyExists":
-                    return CWarningDialog(self.form, "Pozeraj sa co robis").run()
+                    return CWarningDialog(self.form, _('Unable to insert element')).run()
                 elif e.GetName() == "DiagramHaveNotThisElement":
-                    return CWarningDialog(self.form, "Zly element: " + node.GetObject().GetType().GetId()).run()
+                    return CWarningDialog(self.form, _('Wrong element: ') + node.GetObject().GetType().GetId()).run()
             
     
     @event("picDrawingArea", "run-dialog")

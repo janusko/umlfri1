@@ -14,20 +14,20 @@ class CfrmProperties(CWindow):
         self.operModel = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
         self.connModel = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_BOOLEAN)
         
-        self.twAttributes.append_column(gtk.TreeViewColumn("Scope", gtk.CellRendererText(), text = 0))
-        self.twAttributes.append_column(gtk.TreeViewColumn("Name", gtk.CellRendererText(), text = 1))
-        self.twAttributes.append_column(gtk.TreeViewColumn("Type", gtk.CellRendererText(), text = 2))
+        self.twAttributes.append_column(gtk.TreeViewColumn(_("Scope"), gtk.CellRendererText(), text = 0))
+        self.twAttributes.append_column(gtk.TreeViewColumn(_("Name"), gtk.CellRendererText(), text = 1))
+        self.twAttributes.append_column(gtk.TreeViewColumn(_("Type"), gtk.CellRendererText(), text = 2))
         
-        self.twOperations.append_column(gtk.TreeViewColumn("Scope", gtk.CellRendererText(), text = 0))
-        self.twOperations.append_column(gtk.TreeViewColumn("Type", gtk.CellRendererText(), text = 1))
-        self.twOperations.append_column(gtk.TreeViewColumn("Name", gtk.CellRendererText(), text = 2))
-        self.twOperations.append_column(gtk.TreeViewColumn("Parameters", gtk.CellRendererText(), text = 3))
+        self.twOperations.append_column(gtk.TreeViewColumn(_("Scope"), gtk.CellRendererText(), text = 0))
+        self.twOperations.append_column(gtk.TreeViewColumn(_("Type"), gtk.CellRendererText(), text = 1))
+        self.twOperations.append_column(gtk.TreeViewColumn(_("Name"), gtk.CellRendererText(), text = 2))
+        self.twOperations.append_column(gtk.TreeViewColumn(_("Parameters"), gtk.CellRendererText(), text = 3))
         
-        self.twConnections.append_column(gtk.TreeViewColumn("Object", gtk.CellRendererText(), text = 0))
-        self.twConnections.append_column(gtk.TreeViewColumn("Connection", gtk.CellRendererText(), text = 1))
+        self.twConnections.append_column(gtk.TreeViewColumn(_("Object"), gtk.CellRendererText(), text = 0))
+        self.twConnections.append_column(gtk.TreeViewColumn(_("Connection"), gtk.CellRendererText(), text = 1))
         renderer = gtk.CellRendererToggle()
         renderer.connect('toggled', self.__fixed_toggled)
-        self.twConnections.append_column(gtk.TreeViewColumn("Visible", renderer, active = 2))
+        self.twConnections.append_column(gtk.TreeViewColumn(_("Visible"), renderer, active = 2))
         
         self.twAttributes.set_model(self.attrModel)
         self.twOperations.set_model(self.operModel)
@@ -54,7 +54,7 @@ class CfrmProperties(CWindow):
             if len(self.twConnections.get_columns()) < 3:
                 renderer = gtk.CellRendererToggle()
                 renderer.connect('toggled', self.__fixed_toggled)
-                self.twConnections.append_column(gtk.TreeViewColumn("Visible", renderer, active = 2))
+                self.twConnections.append_column(gtk.TreeViewColumn(_("Visible"), renderer, active = 2))
         else:
             isElement = False
             self.__connections = None

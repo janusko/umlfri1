@@ -54,7 +54,7 @@ class CpicDrawingArea(CWidget):
         
         self.bufview = ((0, 0), (2000, 1500))
         self.buffer = gtk.gdk.Pixmap(self.picDrawingArea.window, *self.bufview[1])
-        self.DrawingArea = CDrawingArea(None,"Start page")
+        self.DrawingArea = CDrawingArea(None,_("Start page"))
         self.canvas = None
 
         cmap = self.picDrawingArea.window.get_colormap()
@@ -334,7 +334,7 @@ class CpicDrawingArea(CWidget):
         except EConnectionRestriction:
             self.ResetAction()
             self.emit('set-selected', None)
-            self.emit('run-dialog', 'warning', 'invalid connection')
+            self.emit('run-dialog', 'warning', _('Invalid connection'))
     
     @event("picEventBox", "key-press-event")
     def on_key_press_event(self, widget, event):
