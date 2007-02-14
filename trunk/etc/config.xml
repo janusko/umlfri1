@@ -36,6 +36,7 @@
         <Templates type="path"><Include path="/Paths/Root" />/etc/templates/</Templates>
         <Images type="path"><Include path="/Paths/Root" />/img/</Images>
         <Gui type="path"><Include path="/Paths/Root" />/gui/</Gui>
+        <Locales type="path"><Include path="/Paths/Root" />/locales/</Locales>
         
         <UserDir type="path">~/.uml_fri</UserDir>
         <UserConfig type="path"><Include path="/Paths/UserDir" />/config.xml</UserConfig>

@@ -8,7 +8,7 @@
 [x] Nastavovanie fontu z XML
 [x] Presunutie konfiguracnych hodnot z const.py do /etc
 [x] Pridanie moznosti citania atributov elementov a spojeni z config.xml
-[ ] Prerobit Get* na yield, kde treba
+[x] Prerobit Get* na yield, kde treba
 [x] Drag 'n Drop pridavanie elementov zo stromu do diagramu
     [x] Automaticke pridavanie spojeni
 [x] Project tree (miroslav, frizi)
@@ -37,9 +37,9 @@
     [x] Mazanie vsetkych pozozstatkov
         [x] Mazanie cez kontextove menu v strome
         [x] Mazanie priamo z diagramu (klavesovou skratkou)
-[ ] Mazanie ciar
+[x] Mazanie ciar
     [x] Zmazanie z drawing area
-    [ ] Mazanie vsetkych pozozstatkov
+    [x] Mazanie vsetkych pozozstatkov
 [x] CProportional kontainer (janik)
 [x] CAlign kontainer (janik)
 [x] CSVG Visual object (janik)
@@ -80,7 +80,7 @@
 [ ] Zefektivnit menu
 [ ] (mozno) poprepisovat nazvy premennych/metod
 [x] Vyhodit autorov z gui (Automaticke parsovanie ABOUT :D )
-[ ] Pacicka na skrolovanie
+[x] Pacicka na skrolovanie
 ...
 [?] Easter Eggs
 [ ] Help

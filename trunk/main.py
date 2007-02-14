@@ -18,11 +18,17 @@ from lib.Project import CRecentFiles
 
 from lib.Gui import CfrmMain, CfrmAbout, CfrmProperties, CfrmAttribute, CfrmOperation, CfrmOpen, CfrmSave
 
+from lib.config import config
+
+__version__ = "1.0-beta"
+
 
 class Application(lib.Gui.common.CApplication):
     windows = (CfrmMain, CfrmAbout, CfrmProperties, CfrmAttribute, CfrmOperation, CfrmOpen, CfrmSave)
     glade = os.path.join(os.path.dirname(__file__), 'gui', 'gui.glade')
     main_window = 'frmMain'
+    textdomain = 'uml_fri'
+    localespath = config['/Paths/Locales']
     
     project = None
     
