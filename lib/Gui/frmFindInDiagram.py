@@ -37,14 +37,16 @@ class CFindInDiagram(CWindow):
         response = self.form.run()
         while True:
             if response != gtk.RESPONSE_OK:
-                    self.form.hide()
-                    return
-            if response == gtk.RESPONSE_OK:
-                iter = self.twFindInDiagram.get_selection().get_selected()[1]
-                if iter is not None:
-                    self.form.hide()
-                    return self.emit('selected_drawingArea_and_Element',self.drawingAreas[self.twFindInDiagram.get_model().get_path(iter)[0]],self.object)
-    
+                self.form.hide()
+                return
+
+            iter = self.twFindInDiagram.get_selection().get_selected()[1]
+            if iter is not None:
+                self.form.hide()
+                return self.emit('selected_drawingArea_and_Element',self.drawingAreas[self.twFindInDiagram.get_model().get_path(iter)[0]],self.object)
+            else:
+                response = self.form.run()
+                
     def hide(self):
         del self.drawingAreas
         del self.object

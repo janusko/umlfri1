@@ -68,16 +68,16 @@ class CtwProjectView(CWidget):
         for item in self.mnuTreeAddDiagram.get_children():
             self.mnuTreeAddDiagram.remove(item)
         
-        for diagram in self.application.Project.GetDiagramFactory():
-            mi = gtk.ImageMenuItem(diagram.GetId())
+        for diagram in self.application.Project.GetVersion().GetDiagrams():
+            mi = gtk.ImageMenuItem(diagram)
             
             img = gtk.Image()
-            img.set_from_pixbuf(PixmapFromPath(self.application.Project.GetStorage(), diagram.GetIcon()))
+            img.set_from_pixbuf(PixmapFromPath(self.application.Project.GetStorage(), self.application.Project.GetDiagramFactory().GetDiagram(diagram).GetIcon()))
             img.show()
             
             mi.set_image(img)
             mi.show()   
-            mi.connect("activate", self.on_mnuTreeAddDiagram_activate, diagram.GetId())
+            mi.connect("activate", self.on_mnuTreeAddDiagram_activate, diagram)
             self.mnuTreeAddDiagram.append(mi)
         
         project = self.application.Project

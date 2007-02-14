@@ -182,7 +182,15 @@ class CpicDrawingArea(CWidget):
     
     @event("picEventBox", "button-press-event")
     def on_picEventBox_button_press_event(self, widget, event):
-        self.picDrawingArea.grab_focus()        
+        self.picDrawingArea.grab_focus()  
+        
+        if event.button == 1 and event.type == gtk.gdk._2BUTTON_PRESS:
+            if len(tuple(self.DrawingArea.GetSelected())) == 1:
+                for Element in self.DrawingArea.GetSelected():
+                    if isinstance(Element, CElement):
+                        self.emit('open-specification',Element)
+                        return
+        
         if event.button == 1:
             if gtk.keysyms.space in self.pressedKeys:
                 self.__BeginDragMove(event)
@@ -252,6 +260,10 @@ class CpicDrawingArea(CWidget):
             if event.button == 3:
                 #ak je nieco vyselectovane:
                 if len( list(self.DrawingArea.GetSelectedElements()) ) > 0: 
+                    if self.DrawingArea.GetSelected() is not None and len(tuple(self.DrawingArea.GetSelected())) < 2:
+                        self.pmOpenSpecification.set_sensitive(True)
+                    else:
+                        self.pmOpenSpecification.set_sensitive(False)
                     self.pMenuShift.popup(None,None,None,event.button,event.time)
 
     def __AddItem(self, toolBtnSel, event):
