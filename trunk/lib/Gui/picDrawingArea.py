@@ -351,6 +351,7 @@ class CpicDrawingArea(CWidget):
             else:
                 for sel in self.DrawingArea.GetSelected():
                     self.DrawingArea.DeleteItem(sel)
+                    sel.GetObject().RemoveAppears(self.DrawingArea)
             self.Paint()
         elif event.keyval == gtk.keysyms.Escape:
             self.ResetAction()

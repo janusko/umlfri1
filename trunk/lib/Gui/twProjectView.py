@@ -15,14 +15,16 @@ import gtk.gdk
 
 class CtwProjectView(CWidget):
     name = 'twProjectView'
-    widgets = ('twProjectView','menuTreeElement', 'mnuTreeAddDiagram', 'mnuTreeDelete',)
+    widgets = ('twProjectView','menuTreeElement', 'mnuTreeAddDiagram', 'mnuTreeDelete', 'mnuTreeFindInDiagrams', )
     
     __gsignals__ = {
         'selected_drawing_area':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)), 
         'selected-item-tree':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )), 
         'create-diagram':   (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_STRING, )),
         'repaint':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
-        'close-drawing-area': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,))
+        'close-drawing-area': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
+        'selected_drawing_area_and_select_element': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT)), 
+        'show_frmFindInDiagram': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,gobject.TYPE_PYOBJECT,)),
     }
     
     def __init__(self, app, wTree):
@@ -163,9 +165,9 @@ class CtwProjectView(CWidget):
         return iter
         
         
-    def get_area_from_path(self, model, root, path):
+    def get_areas_iter_from_path(self, model, root, path):
         chld = root
-        
+        areas = []
         i = path.split('/')[0]
         j,k = i.split(':')
         name, type = model.get(root, 0, 2)
@@ -176,11 +178,12 @@ class CtwProjectView(CWidget):
                     chld = model.iter_nth_child(root, id)
                     name, type = model.get(chld, 0, 2)
                     
-                    if k == "=DrawingArea=":
-                        return model.get(chld, 3)[0]
+                    if k == "=DrawingArea=" and j == name:
+                        areas.append(chld)
                 root = chld
         else:
             raise UMLException("BadPath5")
+        return areas
     
     
     def ShowElement(self,Element):
@@ -188,6 +191,17 @@ class CtwProjectView(CWidget):
         for i in self.get_iters_from_path(self.twProjectView.get_model(),self.twProjectView.get_model().get_iter_root() ,object.GetPath()):
             node = self.twProjectView.get_model().get(i,3)[0]
             if object is node.GetObject():
+                iter = i
+                break
+        else:
+            return
+        self.twProjectView.expand_to_path(self.TreeStore.get_path(iter))
+        self.twProjectView.get_selection().select_iter(iter)
+    
+    def ShowDrawingArea(self, drawingArea):
+        for i in self.get_iters_from_path(self.twProjectView.get_model(),self.twProjectView.get_model().get_iter_root() ,drawingArea.GetPath()):
+            area = self.twProjectView.get_model().get(i,3)[0]
+            if area is drawingArea:
                 iter = i
                 break
         self.twProjectView.expand_to_path(self.TreeStore.get_path(iter))
@@ -210,7 +224,6 @@ class CtwProjectView(CWidget):
         if iter is None:
             iter = self.twProjectView.get_model().get_iter_root()
             self.twProjectView.get_selection().select_iter(iter)
-            
         model = self.twProjectView.get_model()
         
         if model.get(iter,2)[0] == "=DrawingArea=":
@@ -263,7 +276,6 @@ class CtwProjectView(CWidget):
             self.mnuTreeDelete.set_sensitive(len(treeView.get_model().get_path(iter)) > 1)
             self.menuTreeElement.popup(None,None,None,self.EventButton[0],self.EventButton[1])
             
-        
         if treeView.get_model().get(iter,2)[0] == "=DrawingArea=":
             return
         
@@ -316,6 +328,19 @@ class CtwProjectView(CWidget):
             node.RemoveDrawingArea(area)
             self.TreeStore.remove(iter)
             self.emit('close-drawing-area',area)
+        
+    @event("mnuTreeFindInDiagrams","activate")
+    def on_mnuTreeFindInDiagrams(self, menuItem):
+        iter = self.twProjectView.get_selection().get_selected()[1]
+        model = self.twProjectView.get_model()
+        node = model.get(iter,3)[0]
+        cnt = len(list(node.GetAppears()))
+        if cnt == 0:
+            pass
+        elif cnt == 1:
+            self.emit('selected_drawing_area_and_select_element',list(node.GetAppears())[0], node.GetObject())
+        elif cnt > 1:
+            self.emit('show_frmFindInDiagram', list(node.GetAppears()), node.GetObject())
 
 
 

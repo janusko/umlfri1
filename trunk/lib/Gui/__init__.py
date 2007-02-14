@@ -6,3 +6,4 @@ from frmAttribute import CfrmAttribute
 from frmOperation import CfrmOperation
 from frmOpen import CfrmOpen
 from frmSave import CfrmSave
+from frmFindInDiagram import CFindInDiagram

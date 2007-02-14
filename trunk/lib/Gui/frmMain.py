@@ -15,6 +15,7 @@ from mnuItems import CmnuItems
 from picDrawingArea import CpicDrawingArea
 from nbProperties import CnbProperties
 from tabs import CTabs
+from frmFindInDiagram import CFindInDiagram
 from lib.lib import UMLException
 
 class CfrmMain(CWindow):
@@ -46,7 +47,7 @@ class CfrmMain(CWindow):
         'cmdOpen', 'cmdSave', 'cmdCopy', 'cmdCut', 'cmdPaste',
         )
 
-    complexWidgets = (CtbToolBox, CtwProjectView, CmnuItems, CpicDrawingArea, CnbProperties, CTabs)
+    complexWidgets = (CtbToolBox, CtwProjectView, CmnuItems, CpicDrawingArea, CnbProperties, CTabs, CFindInDiagram)
 
     def __init__(self, app, wTree):
         CWindow.__init__(self, app, wTree)
@@ -77,6 +78,7 @@ class CfrmMain(CWindow):
         tmp.SetParent(self)
         tmp.Show()
     
+    @event('nbTabs','export-svg-from-TabMenu')
     @event('mnuExportSvg', 'activate')
     def on_mnuExportSvg_activate(self, widget):
         filedlg = gtk.FileChooserDialog('Choose SVG file', self.form, gtk.FILE_CHOOSER_ACTION_SAVE, (gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
@@ -152,6 +154,12 @@ class CfrmMain(CWindow):
             elif event.state == gtk.gdk.CONTROL_MASK:
                 self.nbTabs.NextTab()
                 self.form.emit_stop_by_name('key-press-event')
+        if event.state == gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK:
+            if event.keyval == gtk.keysyms.F4:
+                self.nbTabs.CloseAll()
+        if event.state == gtk.gdk.CONTROL_MASK:
+            if event.keyval  in (gtk.keysyms.F4, gtk.keysyms.w):
+                self.nbTabs.CloseCurrentTab()
         if event.state == gtk.gdk.MOD1_MASK:
             Keys = [gtk.keysyms._1, gtk.keysyms._2, gtk.keysyms._3, gtk.keysyms._4, gtk.keysyms._5, 
                     gtk.keysyms._6, gtk.keysyms._7, gtk.keysyms._8, gtk.keysyms._9, gtk.keysyms._0]
@@ -259,7 +267,11 @@ class CfrmMain(CWindow):
             self.picDrawingArea.SetDrawingArea(drawingArea)
             self.tbToolBox.SetButtons(drawingArea.GetType().GetId())
             self.mnuExportSvg.set_sensitive(True)
-
+    
+    @event("nbTabs","show-area-in-project")
+    def on_show_area_in_project(self, widget, drawingArea):
+        self.twProjectView.ShowDrawingArea(drawingArea)
+    
     @event("picDrawingArea", "set-selected")
     def on_picDrawingArea_set_selected(self, widget, selected):
         self.tbToolBox.SetSelected(selected)
@@ -282,7 +294,18 @@ class CfrmMain(CWindow):
     @event("twProjectView", "repaint")
     def on_repaint_picDravingArea(self, widget):
         self.picDrawingArea.Paint()
-
+    
+    @event("frmFindInDiagram","selected_drawingArea_and_Element")
+    @event("twProjectView","selected_drawing_area_and_select_element")
+    def on_select_area_and_element(self, widget, drawingArea, object):
+        self.picDrawingArea.SetDrawingArea(drawingArea)
+        self.nbTabs.AddTab(drawingArea)
+        drawingArea.AddToSelection(drawingArea.HasElementObject(object))
+        self.picDrawingArea.Paint()
+    
+    @event("twProjectView","show_frmFindInDiagram")
+    def on_show_frmFindInDiagram(self, widget, drawingAreas, object):
+        self.frmFindInDiagram.ShowDialog(drawingAreas, object)
 
     @event("nbProperties", "content-update")
     def on_nbProperties_content_update(self, widget, element, property):

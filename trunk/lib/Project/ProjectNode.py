@@ -5,7 +5,6 @@ class CProjectNode(object):
         self.parent = parent
         self.childs = []
         self.drawingareas = []
-        self.appears = []
         self.object = object
         if path is not None:
             self.object.SetPath(path)
