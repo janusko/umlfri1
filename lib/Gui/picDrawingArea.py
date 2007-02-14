@@ -525,7 +525,7 @@ class CpicDrawingArea(CWidget):
         posx, posy = self.scrollPos
         x1, y1 = pos
         x2, y2 = self.DragStartPos
-        self.SetPos((posx + x1 - x2, posy + y1 - y2))
+        self.SetPos((posx - x1 + x2, posy - y1 + y2))
         self.Paint(False)
         
 

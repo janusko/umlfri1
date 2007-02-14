@@ -109,23 +109,29 @@ class CConnection:
                 tmp = self.labels[id] = [points[-1], len(points) - 1, 1.0, 0, 0]
             elif position == 'center':
                 L = 0
-                tmp = Lo = points[0]
+                Lo = points[0]
                 for point in points[1:]:
                     L += sqrt((Lo[0] - point[0])**2 + (Lo[1] - point[1])**2)
                     Lo = point
-                Lo = points[0]
-                L1 = L/2
-                L = 0
-                for index, point in enumerate(points[1:]):
-                    LX = sqrt((Lo[0] - point[0])**2 + (Lo[1] - point[1])**2)
-                    L += LX
-                    if L > L1:
-                        L -= L1
-                        t = L / LX
-                        tmp = self.labels[id] = [self.__CalculateLabelPos(canvas, index, t, height/2, pi/2), 
-                            index, t, height/2, pi/2]
-                        break
-                    Lo = point
+                if L == 0:
+                    tmp = self.labels[id] = [points[0], 0, 0.6, height/2, pi/2]
+                else:
+                    Lo = points[0]
+                    L1 = L/2
+                    L = 0
+                    for index, point in enumerate(points[1:]):
+                        LX = sqrt((Lo[0] - point[0])**2 + (Lo[1] - point[1])**2)
+                        L += LX
+                        if L > L1:
+                            L -= L1
+                            if LX == 0:
+                                t = 0.5
+                            else:
+                                t = L / LX
+                            tmp = self.labels[id] = [self.__CalculateLabelPos(canvas, index, t, height/2, pi/2), 
+                                index, t, height/2, pi/2]
+                            break
+                        Lo = point
             else:
                 raise UMLException("UndefinedPosition")
             return tmp[0]

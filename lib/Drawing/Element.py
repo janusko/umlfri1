@@ -20,7 +20,7 @@ class CElement:
                 if i.GetSource() is not self.objct:
                     if self.drawingArea.HasElementObject(i.GetSource()) is not None:
                         CConnection(self.drawingArea,i,self.drawingArea.HasElementObject(i.GetSource()),self)
-                elif i.GetDestination is not self.objct:
+                elif i.GetDestination() is not self.objct:
                     if self.drawingArea.HasElementObject(i.GetDestination()) is not None:
                         CConnection(self.drawingArea,i,self,self.drawingArea.HasElementObject(i.GetDestination()))
                     
