@@ -60,7 +60,7 @@ class CfrmAttribute(common.CWindow):
             if self.edAtrName.get_text().strip() != '' and \
                     self.cboxAtrType.child.get_text().strip() != '':
                 break
-            msg = gtk.MessageDialog(message_format = "Fill the name and type fields", parent = self.form, type = gtk.MESSAGE_ERROR,
+            msg = gtk.MessageDialog(message_format = _("Fill the name and type fields"), parent = self.form, type = gtk.MESSAGE_ERROR,
                     buttons = gtk.BUTTONS_OK)
             msg.run()
             msg.destroy()

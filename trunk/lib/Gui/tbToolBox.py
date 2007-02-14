@@ -69,14 +69,14 @@ class CtbToolBox(CWidget):
             self.__InsertSeparator()
             for ElementName in ElementNameList:
                 ElementType = self.application.Project.GetElementFactory().GetElement(ElementName)
-                self.__InsertButton(ElementType, 'Element', ArrowButton)
+                self.__InsertButton(ElementType, _('Element'), ArrowButton)
             
         ConnectionNameList = self.DiagramType.GetConnections()
         if len(ConnectionNameList) > 0:
             self.__InsertSeparator()
             for ConnectionName in ConnectionNameList:
                 ConnectionType = self.application.Project.GetConnectionFactory().GetConnection(ConnectionName)
-                self.__InsertButton(ConnectionType, 'Connection', ArrowButton)
+                self.__InsertButton(ConnectionType, _('Connection'), ArrowButton)
                 
     def __ResetSelected(self):
         self.ArrowButton.set_active(True)
