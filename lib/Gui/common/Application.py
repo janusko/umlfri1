@@ -2,12 +2,15 @@ import gtk
 import gobject
 import gtk.glade
 from os.path import abspath
+import gettext
 
 class CApplication(gobject.GObject):
     windows = ()
     glade = None
     wins = {}
     main_window = ''
+    textdomain = None
+    localespath = None
     
     def __init__(self):
         gtk.glade.set_custom_handler(self.__get_custom_handler)
@@ -26,6 +29,19 @@ class CApplication(gobject.GObject):
             else:
                 wTree = self.wTrees[glade]
             self.wins[windowClass.name] = windowClass(self, wTree)
+        if self.textdomain is not None:
+            try:
+                translation = gettext.translation(self.textdomain, self.localespath)
+                translation.install()
+            except:
+                if isinstance(__builtins__, dict):
+                    __builtins__['_'] = lambda text: text
+                else:
+                    __builtins__._ = lambda text: text
+            
+            if self.localespath is not None:
+                gtk.glade.bindtextdomain(self.textdomain, self.localespath)
+            gtk.glade.textdomain(self.textdomain)
     
     def __get_custom_handler(self, glade, function_name, widget_name, str1, str2, int1, int2):
         if not hasattr(self, 'cw_'+function_name):
