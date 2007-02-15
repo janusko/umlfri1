@@ -9,7 +9,7 @@ import re
 from pprint import pprint
 
 languages = {
-    'sk_SK' : 'slovak'
+    'sk' : 'slovak'
 }
 
 reWinVar = re.compile('%(?P<env>[a-zA-Z][a-zA-Z0-9]*)%?')
@@ -49,7 +49,7 @@ class CGtkDllPy2Exe(Cpy2exe):
                 for file in files:
                     self.distribution.data_files.append((dir, glob.glob(os.sep.join((self.GTK_PATH, dir, file)))))
         for lang in languages:
-            self.distribution.data_files.append(('share/locale/%s/LC_MESSAGES'%lang, glob.glob('share/locale/%s/LC_MESSAGES/*.*'%lang)))
+            self.distribution.data_files.append(('share/locale/%s/LC_MESSAGES'%lang, glob.glob(self.GTK_PATH+'/share/locale/%s/LC_MESSAGES/*.*'%lang)))
 
 class CInnoPy2Exe(Cpy2exe):
     def run(self):
@@ -102,9 +102,20 @@ class CInnoPy2Exe(Cpy2exe):
             print>>f, r'Name: "%s"; MessagesFile: "compiler:%s"'%(lang, path)
         print>>f
         
+        print>>f, r"[CustomMessages]"
+        print>>f, r"OtherTasks=Other tasks:"
+        print>>f, r"ProjectFileDesc=UML .FRI Project"
+        print>>f, r"TemplateFileDesc=UML .FRI Template"
+        print>>f, "slovak.OtherTasks=Ostatn\xe9:"
+        print>>f, r"slovak.ProjectFileDesc=UML .FRI Projekt"
+        print>>f, "slovak.TemplateFileDesc=UML .FRI \x8aabl\xf3na"
+        print>>f
+        
         print>>f, r"[Tasks]"
         print>>f, r'Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked'
         print>>f, r'Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked'
+        print>>f, r'Name: "associatefrip"; Description: "{cm:AssocFileExtension,UML .FRI,frip}"; GroupDescription: "{cm:OtherTasks}"'
+        print>>f, r'Name: "associatefrit"; Description: "{cm:AssocFileExtension,UML .FRI,frit}"; GroupDescription: "{cm:OtherTasks}"'
         print>>f
         
         print>>f, r"[Files]"
@@ -129,6 +140,20 @@ class CInnoPy2Exe(Cpy2exe):
         main_exe = windows_exe_files[0]
         print>>f, r'Name: "{commondesktop}\%s"; Filename: "{app}\%s"; Tasks: desktopicon'%(name, main_exe)
         print>>f, r'Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\%s"; Filename: "{app}\%s"; Tasks: quicklaunchicon'%(name, main_exe)
+        print>>f
+        print>>f, r'[Registry]'
+        print>>f, r'Root: HKCR; Subkey: ".frip"; ValueType: string; ValueName: ""; ValueData: "uml_fri project"; Flags: uninsdeletevalue; Tasks: associatefrip'
+        print>>f, r'Root: HKCR; Subkey: "uml_fri project"; ValueType: string; ValueName: ""; ValueData: "{cm:ProjectFileDesc}"; Flags: uninsdeletekey; Tasks: associatefrip'
+        print>>f, r'Root: HKCR; Subkey: "uml_fri project\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\img\fileicon.ico"; Tasks: associatefrip'
+        print>>f, r'Root: HKCR; Subkey: "uml_fri project\shell"; ValueType: string; ValueName: ""; ValueData: "open"; Tasks: associatefrip'
+        print>>f, r'Root: HKCR; Subkey: "uml_fri project\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\bin\uml_fri.exe"" --open=""%1"""; Tasks: associatefrip'
+        print>>f, r'Root: HKCR; Subkey: ".frit"; ValueType: string; ValueName: ""; ValueData: "uml_fri template"; Flags: uninsdeletevalue; Tasks: associatefrit'
+        print>>f, r'Root: HKCR; Subkey: "uml_fri template"; ValueType: string; ValueName: ""; ValueData: "{cm:TemplateFileDesc}"; Flags: uninsdeletekey; Tasks: associatefrit'
+        print>>f, r'Root: HKCR; Subkey: "uml_fri template\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\img\fileicon.ico"; Tasks: associatefrit'
+        print>>f, r'Root: HKCR; Subkey: "uml_fri template\shell"; ValueType: string; ValueName: ""; ValueData: "new"; Tasks: associatefrit'
+        print>>f, r'Root: HKCR; Subkey: "uml_fri template\shell\new\command"; ValueType: string; ValueName: ""; ValueData: """{app}\bin\uml_fri.exe"" --new=""%1"""; Tasks: associatefrit'
+        print>>f, r'Root: HKCR; Subkey: "uml_fri template\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\bin\uml_fri.exe"" --open=""%1"""; Tasks: associatefrit'
+        
         print>>f
         print>>f, r'[Run]'
         print>>f, r'Filename: "{app}\%s"; Description: "{cm:LaunchProgram,%s}"; Flags: nowait postinstall skipifsilent'%(main_exe, name)
@@ -178,7 +203,7 @@ setup(
         ("etc/uml/elements", glob.glob("etc/uml/elements/*.xml")),
         ("etc/uml/icons", glob.glob("etc/uml/icons/*.png")),
         ("etc/uml/versions", glob.glob("etc/uml/versions/*.xml")),
-        ("img", glob.glob("img/*.png")),
+        ("img", glob.glob("img/*.png")+glob.glob("img/*.ico")),
         (".", ["ABOUT", "README", "LICENSE"])
     ]+list(get_languages('share/locale', 'uml_fri')),
     cmdclass = {"py2exe": CGtkDllAndInnoPy2Exe},

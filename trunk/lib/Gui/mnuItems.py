@@ -16,11 +16,11 @@ class CmnuItems(CWidget):
     def Redraw(self):
         for item in self.mItemAddDiagram_menu.get_children():
             self.mItemAddDiagram_menu.remove(item)
-        for diagram in self.application.Project.GetVersion().GetDiagrams():
+        for diagram in self.application.GetProject().GetVersion().GetDiagrams():
             newItem = gtk.ImageMenuItem(diagram)
             newItem.connect("activate", self.on_mnuDiagrams_activate, diagram)
             img = gtk.Image()
-            img.set_from_pixbuf(PixmapFromPath(self.application.Project.GetStorage(), self.application.Project.GetDiagramFactory().GetDiagram(diagram).GetIcon()))
+            img.set_from_pixbuf(PixmapFromPath(self.application.GetProject().GetStorage(), self.application.GetProject().GetDiagramFactory().GetDiagram(diagram).GetIcon()))
             img.show()
             newItem.set_image(img)
             self.mItemAddDiagram_menu.append(newItem)

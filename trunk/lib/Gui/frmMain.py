@@ -70,6 +70,24 @@ class CfrmMain(CWindow):
         for i in MenuItem.get_submenu().get_children():
             i.set_sensitive(value)
     
+    def LoadProject(self, filename, copy):
+        self.application.ProjectInit()
+        self.application.GetProject().LoadProject(filename, copy)
+        self.ReloadTitle()
+        self.nbTabs.CloseAll()
+        self.twProjectView.Redraw()
+        self.mnuItems.Redraw()
+        self.picDrawingArea.Redraw()
+        self.SetSensitiveMenuChilds(self.mItemEdit, True)
+        self.SetSensitiveMenuChilds(self.mItemProject, True)
+        self.SetSensitiveMenuChilds(self.mItemDiagram, True)
+        self.mnuSave.set_sensitive(True)
+        self.mnuSaveAs.set_sensitive(True)
+        self.cmdSave.set_sensitive(True)
+        self.cmdCopy.set_sensitive(True)
+        self.cmdCut.set_sensitive(True)
+        self.cmdPaste.set_sensitive(True)
+        
     # Diagrams
     @event("mnuViewTools", "activate")
     def on_mnuViewTools_activate(self, mnu):
@@ -115,7 +133,7 @@ class CfrmMain(CWindow):
     @event("mnuQuit", "activate")
     def ActionQuit(self, widget, event = None):
         try:
-            if self.application.Project is not None and CQuestionDialog(self.form, _('Do you want to save project?'), True).run():
+            if self.application.GetProject() is not None and CQuestionDialog(self.form, _('Do you want to save project?'), True).run():
                 self.ActionSave(widget)
         except ECancelPressed:
             return True
@@ -127,27 +145,11 @@ class CfrmMain(CWindow):
         filename, copy = self.application.GetWindow("frmOpen").ShowDialog(self)
         if filename is not None:
             try:
-                if self.application.Project is not None and CQuestionDialog(self.form, _('Do you want to save project?'), True).run():
+                if self.application.GetProject() is not None and CQuestionDialog(self.form, _('Do you want to save project?'), True).run():
                     self.ActionSave(widget)
             except ECancelPressed:
                 return
-            self.application.ProjectInit()
-            self.application.Project.LoadProject(filename, copy)
-            self.ReloadTitle()
-            self.nbTabs.CloseAll()
-            self.twProjectView.Redraw()
-            self.mnuItems.Redraw()
-            self.picDrawingArea.Redraw()
-            self.SetSensitiveMenuChilds(self.mItemEdit, True)
-            self.SetSensitiveMenuChilds(self.mItemProject, True)
-            self.SetSensitiveMenuChilds(self.mItemDiagram, True)
-            self.mnuSave.set_sensitive(True)
-            self.mnuSaveAs.set_sensitive(True)
-            self.cmdSave.set_sensitive(True)
-            self.cmdCopy.set_sensitive(True)
-            self.cmdCut.set_sensitive(True)
-            self.cmdPaste.set_sensitive(True)
-    
+            self.LoadProject(filename, copy)
     
     @event("form", "key-press-event")
     def on_key_press_event(self, widget, event):
@@ -177,16 +179,16 @@ class CfrmMain(CWindow):
     @event("cmdSave", "clicked")
     @event("mnuSave", "activate")
     def ActionSave(self, widget):
-        if self.application.Project.GetFileName() is None:
+        if self.application.GetProject().GetFileName() is None:
             self.ActionSaveAs(widget)
         else:
-            self.application.Project.SaveProject()
+            self.application.GetProject().SaveProject()
 
     @event("mnuSaveAs", "activate")
     def ActionSaveAs(self, widget):
         filename = self.application.GetWindow("frmSave").ShowDialog(self)
         if filename is not None:
-            self.application.Project.SaveProject(filename)
+            self.application.GetProject().SaveProject(filename)
             self.ReloadTitle()
 
     @event("mnuDelete","activate")
@@ -197,7 +199,7 @@ class CfrmMain(CWindow):
     @event("mnuCut","activate")
     def on_mnuCut_click(self, widget):
         if len(tuple(self.picDrawingArea.GetDrawingArea().GetSelected())) > 0:
-            self.application.Clipboard.SetContent(tuple(self.picDrawingArea.GetDrawingArea().GetSelected()))
+            self.application.GetClipboard().SetContent(tuple(self.picDrawingArea.GetDrawingArea().GetSelected()))
             for i in self.picDrawingArea.GetDrawingArea().GetSelected():
                 if isinstance(i, CElement):
                     self.picDrawingArea.GetDrawingArea().DeleteElement(i)
@@ -207,14 +209,14 @@ class CfrmMain(CWindow):
     @event("mnuCopy","activate")
     def on_mnuCopy_click(self, widget):
         if len(tuple(self.picDrawingArea.GetDrawingArea().GetSelected())) > 0:
-            self.application.Clipboard.SetContent(tuple(self.picDrawingArea.GetDrawingArea().GetSelected()))
+            self.application.GetClipboard().SetContent(tuple(self.picDrawingArea.GetDrawingArea().GetSelected()))
     
     @event("cmdPaste", "clicked")
     @event("mnuPaste","activate")
     def on_mnuPaste_click(self, widget):
         drawingArea = self.picDrawingArea.GetDrawingArea()
         drawingArea.DeselectAll()
-        for i in self.application.Clipboard.GetContent() or []:
+        for i in self.application.GetClipboard().GetContent() or []:
             if isinstance(i,CElement):
                 try:
                     Element = CElement(drawingArea, i.GetObject())
@@ -240,7 +242,7 @@ class CfrmMain(CWindow):
     @event("mnuItems", "create-diagram")
     @event("twProjectView","create-diagram")
     def on_mnuItems_create_diagram(self, widget, diagramId):
-        area = CDrawingArea(self.application.Project.GetDiagramFactory().GetDiagram(diagramId))
+        area = CDrawingArea(self.application.GetProject().GetDiagramFactory().GetDiagram(diagramId))
         self.twProjectView.AddDrawingArea(area)
         self.nbTabs.AddTab(area)
         self.picDrawingArea.SetDrawingArea(area)

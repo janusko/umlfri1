@@ -81,7 +81,7 @@ class CpicDrawingArea(CWidget):
         self.picDrawingArea.window.set_cursor(self.cursors[cursor])
         
     def Redraw(self):
-        self.canvas = CGtkCanvas(self.picDrawingArea, self.buffer, self.application.Project.GetStorage())
+        self.canvas = CGtkCanvas(self.picDrawingArea, self.buffer, self.application.GetProject().GetStorage())
 
     def Hide(self):
         self.vbAll.set_child_packing(self.nbTabs, True, True, 0, gtk.PACK_START)
@@ -163,7 +163,7 @@ class CpicDrawingArea(CWidget):
     def ExportSvg(self, filename):
         self.DrawingArea.DeselectAll()
         self.Paint()
-        canvas = CSvgCanvas(1000, 1000, self.canvas, self.application.Project.GetStorage())
+        canvas = CSvgCanvas(1000, 1000, self.canvas, self.application.GetProject().GetStorage())
         canvas.Clear()
         self.DrawingArea.Paint(canvas)
         canvas.WriteOut(file(filename, 'w'))
@@ -269,7 +269,7 @@ class CpicDrawingArea(CWidget):
     def __AddItem(self, toolBtnSel, event):
         pos = self.GetAbsolutePos(event.x, event.y)
         if toolBtnSel[0] == 'Element':
-            ElementType = self.application.Project.GetElementFactory().GetElement(toolBtnSel[1])
+            ElementType = self.application.GetProject().GetElementFactory().GetElement(toolBtnSel[1])
             ElementObject = CElementObject(ElementType)
             CElement(self.DrawingArea, ElementObject).SetPosition(pos)
             self.AdjustScrollBars()
@@ -286,7 +286,7 @@ class CpicDrawingArea(CWidget):
             elif isinstance(itemSel, CConnection):
                 return
             elif self.__NewConnection is None:
-                ConnectionType = self.application.Project.GetConnectionFactory().GetConnection(toolBtnSel[1])
+                ConnectionType = self.application.GetProject().GetConnectionFactory().GetConnection(toolBtnSel[1])
                 center = itemSel.GetCenter(self.canvas)
                 relcenter = self.GetRelativePos(*center)
                 self.__NewConnection = (ConnectionType, [center], itemSel)

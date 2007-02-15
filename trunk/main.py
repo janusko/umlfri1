@@ -11,7 +11,7 @@ import gtk
 import gobject
 
 from lib.Clipboard import CClipboard
-import lib.Gui.common
+from lib.Gui.common import CApplication, argument
 import os.path
 
 from lib.Project import CProject
@@ -24,20 +24,44 @@ from lib.consts import SPLASH_TIMEOUT
 
 __version__ = '1.0-alpha'
 
-class Application(lib.Gui.common.CApplication):
+class Application(CApplication):
     windows = (CfrmSplash, CfrmMain, CfrmAbout, CfrmProperties, CfrmAttribute, CfrmOperation, CfrmOpen, CfrmSave)
     glade = os.path.join(config['/Paths/Gui'], 'gui.glade')
     main_window = 'frmMain'
     textdomain = 'uml_fri'
     localespath = config['/Paths/Locales']
-    
+
     project = None
+    canopen = True
     
     def __init__(self):
-        lib.Gui.common.CApplication.__init__(self)
+        CApplication.__init__(self)
+        
         self.clipboard = CClipboard()
         self.recentFiles = CRecentFiles()
         gobject.timeout_add(SPLASH_TIMEOUT, self.GetWindow('frmSplash').Hide)
+    
+    @argument("-o", "--open", True)
+    def DoOpen(self, value):
+        "Opens selected project file"
+        if self.canopen:
+            self.GetWindow('frmMain').LoadProject(value, False)
+            self.canopen = False
+            
+    
+    @argument("-n", "--new", True)
+    def DoNew(self, value):
+        "Creates new project from template"
+        if self.canopen:
+            self.GetWindow('frmMain').LoadProject(value, True)
+            self.canopen = False
+    
+    @argument()
+    def DoArguments(self, *files):
+        "File to open"
+        if self.canopen:
+            self.GetWindow('frmMain').LoadProject(files[0], False)
+            self.canopen = False
     
     def GetRecentFiles(self):
         return self.recentFiles
@@ -62,12 +86,7 @@ class Application(lib.Gui.common.CApplication):
         return widget
     
     def Quit(self):
-        lib.Gui.common.CApplication.Quit(self)
+        CApplication.Quit(self)
         self.recentFiles.SaveRecentFiles()
-    
-    Project = property(GetProject)
-    Clipboard = property(GetClipboard)
-    
-    
 
 Application().Main()

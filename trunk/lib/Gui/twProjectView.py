@@ -68,11 +68,11 @@ class CtwProjectView(CWidget):
         for item in self.mnuTreeAddDiagram.get_children():
             self.mnuTreeAddDiagram.remove(item)
         
-        for diagram in self.application.Project.GetVersion().GetDiagrams():
+        for diagram in self.application.GetProject().GetVersion().GetDiagrams():
             mi = gtk.ImageMenuItem(diagram)
             
             img = gtk.Image()
-            img.set_from_pixbuf(PixmapFromPath(self.application.Project.GetStorage(), self.application.Project.GetDiagramFactory().GetDiagram(diagram).GetIcon()))
+            img.set_from_pixbuf(PixmapFromPath(self.application.GetProject().GetStorage(), self.application.GetProject().GetDiagramFactory().GetDiagram(diagram).GetIcon()))
             img.show()
             
             mi.set_image(img)
@@ -80,11 +80,11 @@ class CtwProjectView(CWidget):
             mi.connect("activate", self.on_mnuTreeAddDiagram_activate, diagram)
             self.mnuTreeAddDiagram.append(mi)
         
-        project = self.application.Project
+        project = self.application.GetProject()
         root = project.GetRoot()
         self.TreeStore.clear()
         parent = self.TreeStore.append(None)
-        self.TreeStore.set(parent, 0, root.GetName(), 1, PixmapFromPath(self.application.Project.GetStorage(), root.GetObject().GetType().GetIcon()), 2, root.GetType(), 3, root)
+        self.TreeStore.set(parent, 0, root.GetName(), 1, PixmapFromPath(self.application.GetProject().GetStorage(), root.GetObject().GetType().GetIcon()), 2, root.GetType(), 3, root)
         self.__DrawTree(root, parent)
     
     
@@ -92,11 +92,11 @@ class CtwProjectView(CWidget):
         
         for area in root.GetDrawingAreas():
             novy = self.TreeStore.append(parent)
-            self.TreeStore.set(novy, 0, area.GetName() , 1, PixmapFromPath(self.application.Project.GetStorage(), area.GetType().GetIcon()), 2, '=DrawingArea=',3,area)
+            self.TreeStore.set(novy, 0, area.GetName() , 1, PixmapFromPath(self.application.GetProject().GetStorage(), area.GetType().GetIcon()), 2, '=DrawingArea=',3,area)
         
         for node in root.GetChilds():
             novy = self.TreeStore.append(parent)
-            self.TreeStore.set(novy, 0, node.GetName() , 1, PixmapFromPath(self.application.Project.GetStorage(), node.GetObject().GetType().GetIcon()), 2, node.GetType(),3,node)
+            self.TreeStore.set(novy, 0, node.GetName() , 1, PixmapFromPath(self.application.GetProject().GetStorage(), node.GetObject().GetType().GetIcon()), 2, node.GetType(),3,node)
             self.__DrawTree(node, novy)
             
          
@@ -210,11 +210,11 @@ class CtwProjectView(CWidget):
     
     def AddElement(self, element, drawingArea):
         path = drawingArea.GetPath()
-        parent = self.application.Project.GetNode(path)
+        parent = self.application.GetProject().GetNode(path)
         node = CProjectNode(parent, element, parent.GetPath() + "/" + element.GetName() + ":" + element.GetType().GetId())
-        self.application.Project.AddNode(node, parent)
+        self.application.GetProject().AddNode(node, parent)
         novy = self.TreeStore.append(self.get_iter_from_path(self.twProjectView.get_model(), self.twProjectView.get_model().get_iter_root() ,path))
-        self.TreeStore.set(novy, 0, element.GetName() , 1, PixmapFromPath(self.application.Project.GetStorage(), element.GetType().GetIcon()), 2, element.GetType().GetId(),3,node)
+        self.TreeStore.set(novy, 0, element.GetName() , 1, PixmapFromPath(self.application.GetProject().GetStorage(), element.GetType().GetIcon()), 2, element.GetType().GetId(),3,node)
         
     
     
@@ -232,7 +232,7 @@ class CtwProjectView(CWidget):
         drawingArea.SetPath(node.GetPath() + "/" + drawingArea.GetName() + ":=DrawingArea=")
         node.AddDrawingArea(drawingArea)
         novy = self.TreeStore.append(iter)
-        self.TreeStore.set(novy, 0, drawingArea.GetName() , 1, PixmapFromPath(self.application.Project.GetStorage(), drawingArea.GetType().GetIcon()), 2, '=DrawingArea=',3,drawingArea)
+        self.TreeStore.set(novy, 0, drawingArea.GetName() , 1, PixmapFromPath(self.application.GetProject().GetStorage(), drawingArea.GetType().GetIcon()), 2, '=DrawingArea=',3,drawingArea)
         path = self.TreeStore.get_path(novy)
         self.twProjectView.expand_to_path(path)
         self.twProjectView.get_selection().select_iter(novy)
@@ -309,7 +309,7 @@ class CtwProjectView(CWidget):
 
         self.TreeStore.remove(i)
         self.RemoveFromArea(node)
-        self.application.Project.RemoveNode(node)
+        self.application.GetProject().RemoveNode(node)
     
     @event("mnuTreeDelete","activate")
     def on_mnuTreeDelete_activate(self, menuItem):
@@ -319,7 +319,7 @@ class CtwProjectView(CWidget):
             node = model.get(iter,3)[0]
             self.TreeStore.remove(iter)
             self.RemoveFromArea(node)
-            self.application.Project.RemoveNode(node)
+            self.application.GetProject().RemoveNode(node)
             self.emit('repaint')
         else:
             area = model.get(iter,3)[0]
