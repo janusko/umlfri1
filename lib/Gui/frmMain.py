@@ -16,6 +16,7 @@ from picDrawingArea import CpicDrawingArea
 from nbProperties import CnbProperties
 from tabs import CTabs
 from frmFindInDiagram import CFindInDiagram
+from tabStartPage import CtabStartPage
 from lib.lib import UMLException
 
 class CfrmMain(CWindow):
@@ -47,7 +48,8 @@ class CfrmMain(CWindow):
         'cmdOpen', 'cmdSave', 'cmdCopy', 'cmdCut', 'cmdPaste',
         )
 
-    complexWidgets = (CtbToolBox, CtwProjectView, CmnuItems, CpicDrawingArea, CnbProperties, CTabs, CFindInDiagram)
+    complexWidgets = (CtbToolBox, CtwProjectView, CmnuItems, CpicDrawingArea, CnbProperties, CTabs,
+                      CtabStartPage, CFindInDiagram)
 
     def __init__(self, app, wTree):
         CWindow.__init__(self, app, wTree)
