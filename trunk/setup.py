@@ -8,7 +8,9 @@ from py2exe.build_exe import py2exe as Cpy2exe
 import re
 from pprint import pprint
 
-languages = ['slovak', 'english']
+languages = {
+    'sk_SK' : 'slovak'
+}
 
 reWinVar = re.compile('%(?P<env>[a-zA-Z][a-zA-Z0-9]*)%?')
 def expandwinvars(path):
@@ -26,7 +28,7 @@ class CGtkDllPy2Exe(Cpy2exe):
     GTK_PATH = search_for_gtk()
     GTK_needed_files = ['etc/fonts', 'etc/gtk-2.0', 'etc/pango', ('lib/gtk-2.0/2.4.0/engines', 'libwimp.dll'),
                         'lib/gtk-2.0/2.4.0/immodules', 'lib/gtk-2.0/2.4.0/loaders', 'lib/pango/1.4.0/modules',
-                        'share/themes/MS-Windows/gtk-2.0', ['share/locale']]
+                        'share/themes/MS-Windows/gtk-2.0']
     def __init__(self, *args, **kw_args):
         Cpy2exe.__init__(self, *args, **kw_args)
         self.appendGtkDlls()
@@ -46,6 +48,8 @@ class CGtkDllPy2Exe(Cpy2exe):
             for dir, files in dir_files:
                 for file in files:
                     self.distribution.data_files.append((dir, glob.glob(os.sep.join((self.GTK_PATH, dir, file)))))
+        for lang in languages:
+            self.distribution.data_files.append(('share/locale/%s/LC_MESSAGES'%lang, glob.glob('share/locale/%s/LC_MESSAGES/*.*'%lang)))
 
 class CInnoPy2Exe(Cpy2exe):
     def run(self):
@@ -92,11 +96,9 @@ class CInnoPy2Exe(Cpy2exe):
         print>>f
         
         print>>f, r"[Languages]"
-        for lang in languages:
-            if lang == 'english':
-                path = "Default.isl"
-            else:
-                path = "Languages\%s.isl"%lang
+        print>>f, r'Name: "english"; MessagesFile: "compiler:Default.isl"'
+        for lang in languages.values():
+            path = "Languages\%s.isl"%lang
             print>>f, r'Name: "%s"; MessagesFile: "compiler:%s"'%(lang, path)
         print>>f
         
@@ -116,7 +118,7 @@ class CInnoPy2Exe(Cpy2exe):
                 dest = '\\'+dest
             if path[0] == '.' and path[1] in '\\/':
                 path = path[2:]
-            if not os.path.isdir(path):
+            if not os.path.isdir(os.path.join(dist_dir, path)):
                 print>>f, r'Source: "%s"; DestDir: "{app}%s"; Flags: ignoreversion'%(path, dest)
         print>>f
 
@@ -138,6 +140,11 @@ class CGtkDllAndInnoPy2Exe(CInnoPy2Exe, CGtkDllPy2Exe):
     def run(self, *args, **kw_args):
         CInnoPy2Exe.run(self, *args, **kw_args)
 
+def get_languages(path, domain):
+    for lang in languages:
+        p = os.path.join(path, lang, 'LC_MESSAGES')
+        yield (p, [os.path.join(p, domain+'.mo')])
+
 setup(
     name = "UML .FRI",
     description = "Free UML based CASE tool",
@@ -145,7 +152,7 @@ setup(
     url = "http://fri.uniza.sk/",
     download_url = "http://fri.uniza.sk/",
     author = "Faculty of Management Science and Informatics, University of Zilina",
-    license = "LICENCE",
+    license = "LICENSE",
     windows = [
         {
             "script": "main.py",
@@ -172,8 +179,7 @@ setup(
         ("etc/uml/icons", glob.glob("etc/uml/icons/*.png")),
         ("etc/uml/versions", glob.glob("etc/uml/versions/*.xml")),
         ("img", glob.glob("img/*.png")),
-        ("locale", []),
         (".", ["ABOUT", "README", "LICENSE"])
-    ],
+    ]+list(get_languages('share/locale', 'uml_fri')),
     cmdclass = {"py2exe": CGtkDllAndInnoPy2Exe},
 )
