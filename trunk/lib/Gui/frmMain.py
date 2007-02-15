@@ -54,9 +54,9 @@ class CfrmMain(CWindow):
 
         self.form.maximize()
         self.mnuExportSvg.set_sensitive(False)
-        self.mItemEdit.set_sensitive(False)
-        self.mItemProject.set_sensitive(False)
-        self.mItemDiagram.set_sensitive(False)
+        self.SetSensitiveMenuChilds(self.mItemEdit, False)
+        self.SetSensitiveMenuChilds(self.mItemProject, False)
+        self.SetSensitiveMenuChilds(self.mItemDiagram, False)
         self.mMenuShift.set_sensitive(False)
         self.mnuSave.set_sensitive(False)
         self.mnuSaveAs.set_sensitive(False)
@@ -65,7 +65,11 @@ class CfrmMain(CWindow):
         self.cmdCut.set_sensitive(False)
         self.cmdPaste.set_sensitive(False)
         self.ReloadTitle()
-
+    
+    def SetSensitiveMenuChilds(self, MenuItem, value):
+        for i in MenuItem.get_submenu().get_children():
+            i.set_sensitive(value)
+    
     # Diagrams
     @event("mnuViewTools", "activate")
     def on_mnuViewTools_activate(self, mnu):
@@ -134,9 +138,9 @@ class CfrmMain(CWindow):
             self.twProjectView.Redraw()
             self.mnuItems.Redraw()
             self.picDrawingArea.Redraw()
-            self.mItemEdit.set_sensitive(True)
-            self.mItemProject.set_sensitive(True)
-            self.mItemDiagram.set_sensitive(True)
+            self.SetSensitiveMenuChilds(self.mItemEdit, True)
+            self.SetSensitiveMenuChilds(self.mItemProject, True)
+            self.SetSensitiveMenuChilds(self.mItemDiagram, True)
             self.mnuSave.set_sensitive(True)
             self.mnuSaveAs.set_sensitive(True)
             self.cmdSave.set_sensitive(True)
