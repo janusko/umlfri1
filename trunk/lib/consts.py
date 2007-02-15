@@ -22,6 +22,7 @@ ICONS_PATH = 'icons'
 ARROW_IMAGE = 'arrow.png'
 DEFAULT_TEMPLATE_ICON = 'default_icon.png'
 SPLASH_IMAGE = 'splash.png'
+STARTPAGE_IMAGE = 'startpage.png'
 GRAB_CURSOR = 'grab.png'
 GRABBING_CURSOR = 'grabbing.png'
 
