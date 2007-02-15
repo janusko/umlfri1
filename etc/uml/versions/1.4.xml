@@ -6,5 +6,6 @@
         </Item>
         <Item value="Use Case diagram" />
         <Item value="State diagram" />
+        <Item value="Activity diagram" />
     </Diagrams>
 </Version>

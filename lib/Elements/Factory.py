@@ -68,6 +68,8 @@ class CElementFactory:
                     options = []
                     if item.hasAttribute('propid'):
                         propid = item.getAttribute('propid')
+                    if item.hasAttribute('notgenerate'):
+                        obj.SetGenerateName(not item.getAttribute('notgenerate'))
                     if item.hasChildNodes():
                         options = []
                         for opt in item.childNodes:

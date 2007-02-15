@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<DiagramType id="State diagram">
-    <Icon path="icons/state_diagram.png" />
+<DiagramType id="Activity diagram">
+    <Icon path="icons/activity_diagram.png" />
     <Special swimlines="0" lifelines="0" />
     <Elements>
         <Item value="Note" />
         <Item value="Package" />
-        <Item value="State" />
+        <Item value="Activity" />        
         <Item value="StartState" />
         <Item value="EndState" />
         <!--Item value="Decision" /-->
@@ -13,7 +13,7 @@
         <Item value="HorizontalSynchronization" />
     </Elements>
     <Connections>
-        <Item value="StateTransition" />
+        <Item value="ActivityFlow" />
         <Item value="Note Link" />
     </Connections>
 </DiagramType>

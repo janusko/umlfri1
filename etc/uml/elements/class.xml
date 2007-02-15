@@ -3,7 +3,9 @@
     <Icon path="icons/class.png" />
     <Connections>
         <Item value="Association" />
-        <Item value="Generalization" with="Class" allowrecursive="1" />
+        <Item value="Generalization" with="Class" allowrecursive="0" />
+        <Item value="Agregation" with="Class" allowrecursive="1" />
+        <Item value="Compose" with="Class" allowrecursive="0" />
     </Connections>
     <Attributes>
         <Item value="Name" type="str" propid="name" />

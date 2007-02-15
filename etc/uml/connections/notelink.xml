@@ -2,7 +2,7 @@
 <ConnectionType id="Note Link">
     <Icon path="icons/note_link.png" />
     <SrcArrow possible="0" default="0" />
-    <DestArrow possible="1" default="0" />
+    <DestArrow possible="0" default="0" />
     <Appearance>
     	<LineStyle style="dot" color="/Styles/Connection/LineColor" />
     	<ArrowStyle style="simple" fill="/Styles/Connection/ArrowFillColor" color="/Styles/Connection/ArrowColor" />

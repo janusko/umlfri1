@@ -54,7 +54,7 @@ class CConnectionArrow(object):
         self.color = color
     
     def Paint(self, canvas, pos, angle, Connection):
-        if self.possible is False:
+        if self.default is False:
             return
         transMatrix = TransformMatrix.mk_translation(pos)*TransformMatrix.mk_rotation(angle)* \
                         TransformMatrix.mk_scale(self.size)

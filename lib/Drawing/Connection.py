@@ -11,6 +11,8 @@ class CConnection:
         self.object = obj
         if points is None:
             self.points = []
+            if source is destination:
+                self.points = []
         else:
             self.points = points
         self.source = source
@@ -268,6 +270,11 @@ class CConnection:
         yield self.GetPoint(canvas, len(self.points) + 1)
     
     def GetPoint(self, canvas, index):
+        if self.source is self.destination and len(self.points) == 0:
+            topleft, bottomright = self.source.GetSquare(canvas)
+            y = bottomright[1] + 30
+            xc = (topleft[0] + bottomright[0])/2
+            self.points = [(xc - 10, y),( xc + 10, y)]
         if index == 0:
             center = self.source.GetCenter(canvas)
             if len(self.points) == 0:
