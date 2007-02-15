@@ -3,6 +3,8 @@
     <Icon path="icons/use_case_diagram.png" />
     <Special swimlines="0" lifelines="0" />
     <Elements>
+        <Item value="Note" />
+        <Item value="Package" />
         <Item value="UseCase" umlversion="*" />
         <Item value="Actor" umlversion="*" />
         <Item value="Note" umlversion="*" />

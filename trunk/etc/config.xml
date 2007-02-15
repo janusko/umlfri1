@@ -3,18 +3,19 @@
     <Styles>
         <Element>
             <LineColor>black</LineColor>
-            <FillColor>lightpink2</FillColor>
-            <Fill2Color>pink</Fill2Color>
+            <FillColor>lightyellow</FillColor>
+            <Fill2Color>lightyellow</Fill2Color>
+            <Fill3Color>black</Fill3Color>
             <ShadowColor>#505050</ShadowColor>
-            <NameTextColor>yellow</NameTextColor>
+            <NameTextColor>black</NameTextColor>
             <TextColor>black</TextColor>
             <NameTextFont>Arial 10</NameTextFont>
             <TextFont>Arial 10</TextFont>
         </Element>
         <Connection>
             <LineColor>black</LineColor>
-            <ArrowColor>lightpink2</ArrowColor>
-            <ArrowFillColor>pink</ArrowFillColor>
+            <ArrowColor>black</ArrowColor>
+            <ArrowFillColor>white</ArrowFillColor>
             <NameTextColor>yellow</NameTextColor>
             <TextColor>black</TextColor>
             <NameTextFont>Arial 10</NameTextFont>
@@ -22,13 +23,13 @@
         </Connection>
         <Selection>
             <PointsSize type="int">7</PointsSize>
-            <PointsColor>lightgreen</PointsColor>
-            <RectangleColor>yellow</RectangleColor>
-            <RectangleWidth type="int">3</RectangleWidth>
+            <PointsColor>darkgray</PointsColor>
+            <RectangleColor>blue</RectangleColor>
+            <RectangleWidth type="int">2</RectangleWidth>
         </Selection>
         <Drag>
-            <RectangleColor>blue</RectangleColor>
-            <RectangleWidth type="int">3</RectangleWidth>
+            <RectangleColor>black</RectangleColor>
+            <RectangleWidth type="int">2</RectangleWidth>
         </Drag>
     </Styles>
     <Paths>

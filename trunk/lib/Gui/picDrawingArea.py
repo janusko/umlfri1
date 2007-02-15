@@ -205,7 +205,7 @@ class CpicDrawingArea(CWidget):
             itemSel = self.DrawingArea.GetElementAtPosition(self.canvas, pos)
             if itemSel is not None: #ak som nieco trafil:              
                 if itemSel in self.DrawingArea.GetSelected(): # deselecting:
-                    if (event.state & gtk.gdk.CONTROL_MASK):
+                    if (event.state & gtk.gdk.CONTROL_MASK) or (event.state & gtk.gdk.SHIFT_MASK):
                         self.DrawingArea.RemoveFromSelection(itemSel)
                         self.Paint()
                     elif isinstance(itemSel, CConnection): #selectnuta ciara
@@ -220,7 +220,7 @@ class CpicDrawingArea(CWidget):
                         self.Paint()    
                     else: #selektnute elementy
                         self.__BeginDragRect(event)
-                elif not (event.state & gtk.gdk.CONTROL_MASK):
+                elif not (event.state & gtk.gdk.CONTROL_MASK) and not (event.state & gtk.gdk.SHIFT_MASK):
                     self.DrawingArea.DeselectAll()
                     self.DrawingArea.AddToSelection(itemSel)
                     self.pmShowInProjectView.set_sensitive(True)

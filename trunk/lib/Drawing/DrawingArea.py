@@ -207,7 +207,8 @@ class CDrawingArea:
                 a.DeleteConnectionObject(obj)
                 
             obj.GetSource().RemoveConnection(obj)
-            obj.GetDestination().RemoveConnection(obj)
+            if obj.GetSource() is not obj.GetDestination():
+                obj.GetDestination().RemoveConnection(obj)
             #self.connections.remove(connection)
             if connection in self.selected:
                 self.selected.remove(connection)

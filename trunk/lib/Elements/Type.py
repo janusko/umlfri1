@@ -9,6 +9,7 @@ class CElementType:
         self.appearance = None
         self.visAttrs = {}
         self.attributeList = []
+        self.generatename = True
     
     def AppendAttribute(self, value, type, propid = None, options = []):
         if propid is not None:
@@ -83,6 +84,12 @@ class CElementType:
     def GetAttribute(self, key):
         return self.attributes[key]
     
+    def GetGenerateName(self):
+        return self.generatename
+        
+    def SetGenerateName(self, generate):
+        self.generatename = generate
+        
     def Paint(self, canvas, element, delta = (0, 0)):
         dx, dy = delta
         x, y = element.GetPosition()

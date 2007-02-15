@@ -9,7 +9,10 @@ class CElementObject:
         self.attribs = {}
         for i in self.type.GetAttributes():
             self.SetAttribute(i, self.type.GetDefValue(i))            
-        self.SetAttribute('Name', 'New ' + type.GetId())        
+        if type.GetGenerateName():
+            self.SetAttribute('Name', 'New ' + type.GetId())
+        else:
+            self.SetAttribute('Name', '')
         self.node = lambda: None
         self.appears = []
         
@@ -142,6 +145,7 @@ class CElementObject:
         connection.Disconnect()
         
     def RemoveConnection(self, connection):
+        print 'oooooooo'
         if connection in self.connections:
             self.connections.remove(connection)
         else:
@@ -151,6 +155,8 @@ class CElementObject:
     # pomocou cprojNode zisti mena elementov na rovnakej urovni
     # ak meno uz existuje (a je rovnaky typ), objekt sa premenuje
     def Assign(self, cprojNode):
+        if not self.type.GetGenerateName():
+            return
         self.node = weakref.ref(cprojNode)
         if cprojNode.parent is not None:
             id = 1

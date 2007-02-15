@@ -49,7 +49,7 @@ class CConnectionObject(object):
     def GetConnectedObject(self, object):
         if self.source is not object:
             return self.source
-        elif self.destination is not object:
+        else:
             return self.destination
         
     def GetDestination(self):
