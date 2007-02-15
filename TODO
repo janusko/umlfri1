@@ -61,14 +61,18 @@
 [x] Visual object na ikonu
 [x] Specialna visual property CHILDREN
 [x] Zobrazovanie childov v Package
-[ ] Preklady sk_SK, en_US
+[x] Preklady sk_SK, en_US
 [x] Export do SVG
 [x] Pri spusteni zakazat menu, povolit az pri otvoreni projektu
 [x] Save on Quit
 [ ] StartPage
 [x] Recent files in xml in home directory
-[ ] Spravit exe
+[x] Spravit exe
 [x] Kontrolu, ci sa da element resizovat
+[ ] Zaobleny CRectangle
+[ ] Otoceny CRectangle
+[ ] Optravit kontrolu ciar
+[ ] Opravit resize elementu
 ...
 [x] ZOrder
 [?] Menenie kurzoru po prechode nad volaco
@@ -77,8 +81,8 @@
 [x] Load
     [x] Sablony
 [x] Napisat README
-[ ] Zefektivnit menu
-[ ] (mozno) poprepisovat nazvy premennych/metod
+[x] Zefektivnit menu
+[x] (mozno) poprepisovat nazvy premennych/metod
 [x] Vyhodit autorov z gui (Automaticke parsovanie ABOUT :D )
 [x] Pacicka na skrolovanie
 ...

@@ -28,7 +28,7 @@ class CFindInDiagram(CWindow):
         self.listStore.clear()
         for i in self.drawingAreas:
             iter = self.listStore.append()
-            self.listStore.set(iter,0,i.GetName(), 1, i.GetType().GetId(), 2, PixmapFromPath(self.application.Project.GetStorage(), i.GetType().GetIcon()))
+            self.listStore.set(iter,0,i.GetName(), 1, i.GetType().GetId(), 2, PixmapFromPath(self.application.GetProject().GetStorage(), i.GetType().GetIcon()))
     
     def ShowDialog(self, drawingAreas, object):
         self.drawingAreas = drawingAreas

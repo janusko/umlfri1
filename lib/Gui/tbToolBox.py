@@ -33,7 +33,7 @@ class CtbToolBox(CWidget):
         
     def __InsertButton(self, Type, TypeDesc, Group):
         newIconWidget = gtk.Image()
-        newIconWidget.set_from_pixbuf(PixmapFromPath(self.application.Project.GetStorage(), Type.GetIcon()))
+        newIconWidget.set_from_pixbuf(PixmapFromPath(self.application.GetProject().GetStorage(), Type.GetIcon()))
         newIconWidget.show()
         newButton = gtk.RadioToolButton(Group, None)
         newButton.set_icon_widget(newIconWidget)
@@ -56,7 +56,7 @@ class CtbToolBox(CWidget):
             self.tbToolBox.insert(ArrowButton, -1)
             return
             
-        self.DiagramType = self.application.Project.GetDiagramFactory().GetDiagram(DiagramId)
+        self.DiagramType = self.application.GetProject().GetDiagramFactory().GetDiagram(DiagramId)
         if self.DiagramType is None:
             raise Exception('tbToolBox.DiagramType is None')
         ArrowButton = self.tbToolBox.get_nth_item(0)
@@ -68,14 +68,14 @@ class CtbToolBox(CWidget):
         if len(ElementNameList) > 0:
             self.__InsertSeparator()
             for ElementName in ElementNameList:
-                ElementType = self.application.Project.GetElementFactory().GetElement(ElementName)
+                ElementType = self.application.GetProject().GetElementFactory().GetElement(ElementName)
                 self.__InsertButton(ElementType, 'Element', ArrowButton)
             
         ConnectionNameList = self.DiagramType.GetConnections()
         if len(ConnectionNameList) > 0:
             self.__InsertSeparator()
             for ConnectionName in ConnectionNameList:
-                ConnectionType = self.application.Project.GetConnectionFactory().GetConnection(ConnectionName)
+                ConnectionType = self.application.GetProject().GetConnectionFactory().GetConnection(ConnectionName)
                 self.__InsertButton(ConnectionType, 'Connection', ArrowButton)
                 
     def __ResetSelected(self):

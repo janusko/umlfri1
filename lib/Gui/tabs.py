@@ -64,7 +64,7 @@ class CTabs(CWidget):
         label1.show() 
         
         img = gtk.Image()
-        img.set_from_pixbuf(PixmapFromPath(self.application.Project.GetStorage(), drawingArea.GetType().GetIcon()))
+        img.set_from_pixbuf(PixmapFromPath(self.application.GetProject().GetStorage(), drawingArea.GetType().GetIcon()))
         img.show()
         
         hboxbut.add(img)
