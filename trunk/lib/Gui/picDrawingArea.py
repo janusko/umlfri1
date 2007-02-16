@@ -113,10 +113,10 @@ class CpicDrawingArea(CWidget):
         self.picHBar.set_value(pos[0])
         self.picVBar.set_value(pos[1])
         
-    def GetAbsolutePos(self, posx, posy):
+    def GetAbsolutePos(self, (posx, posy)):
         return int(self.picHBar.get_value() + posx), int(self.picVBar.get_value() + posy)
 
-    def GetRelativePos(self, posx, posy):
+    def GetRelativePos(self, (posx, posy)):
         return int(-self.picHBar.get_value() + posx), int(-self.picVBar.get_value() + posy)
 
     def Paint(self, changed = True):
@@ -140,11 +140,11 @@ class CpicDrawingArea(CWidget):
         if self.dnd == 'resRect':
             self.__DrawResRect((0,0), True, False)  
         elif self.dnd == 'rect':
-            self.__DrawDragRect(0,0, True, False)
+            self.__DrawDragRect((0,0), True, False)
         elif self.dnd == 'point':
-            self.__DrawDragPoint(None, None, True, False)
+            self.__DrawDragPoint((None, None), True, False)
         if self.__NewConnection is not None:
-            self.__DrawNewConnection(None, None, False)
+            self.__DrawNewConnection((None, None), False)
 
     def AdjustScrollBars(self):
         dasx, dasy = self.GetDrawingAreaSize()
@@ -200,7 +200,7 @@ class CpicDrawingArea(CWidget):
                 self.__AddItem(toolBtnSel, event)
                 return
             
-            pos = self.GetAbsolutePos(event.x, event.y)
+            pos = self.GetAbsolutePos((event.x, event.y))
             self.clickPos = pos
             itemSel = self.DrawingArea.GetElementAtPosition(self.canvas, pos)
             if itemSel is not None: #ak som nieco trafil:              
@@ -267,7 +267,7 @@ class CpicDrawingArea(CWidget):
                     self.pMenuShift.popup(None,None,None,event.button,event.time)
 
     def __AddItem(self, toolBtnSel, event):
-        pos = self.GetAbsolutePos(event.x, event.y)
+        pos = self.GetAbsolutePos((event.x, event.y))
         if toolBtnSel[0] == 'Element':
             ElementType = self.application.GetProject().GetElementFactory().GetElement(toolBtnSel[1])
             ElementObject = CElementObject(ElementType)
@@ -288,15 +288,15 @@ class CpicDrawingArea(CWidget):
             elif self.__NewConnection is None:
                 ConnectionType = self.application.GetProject().GetConnectionFactory().GetConnection(toolBtnSel[1])
                 center = itemSel.GetCenter(self.canvas)
-                relcenter = self.GetRelativePos(*center)
+                relcenter = self.GetRelativePos(center)
                 self.__NewConnection = (ConnectionType, [center], itemSel)
-                self.__DrawNewConnection( relcenter[0], relcenter[1], False )
+                self.__DrawNewConnection(relcenter, False)
             else:
                 pass
 
     @event("picEventBox", "button-release-event")
     def on_button_release_event(self, widget, event):
-        self.releasePos = self.GetAbsolutePos(event.x, event.y)
+        self.releasePos = self.GetAbsolutePos((event.x, event.y))
         try:
             pos = self.releasePos
             if self.dnd == 'resRect':
@@ -307,16 +307,16 @@ class CpicDrawingArea(CWidget):
                 self.selSq = None
                 self.dnd = None 
             elif self.dnd == 'rect':
-                delta = self.__GetDelta(event.x, event.y)
+                delta = self.__GetDelta((event.x, event.y))
                 self.DrawingArea.MoveSelection(delta, self.canvas)
                 self.dnd = None
             elif self.dnd == 'point':
-                point = self.GetAbsolutePos(event.x, event.y)
+                point = self.GetAbsolutePos((event.x, event.y))
                 connection, index = self.DragPoint
                 connection.MovePoint(self.canvas, point, index)
                 self.dnd = None
             elif self.dnd == 'line':
-                point = self.GetAbsolutePos(event.x, event.y)
+                point = self.GetAbsolutePos((event.x, event.y))
                 connection, index = self.DragPoint
                 connection.InsertPoint(self.canvas, point, index)
                 self.dnd = None
@@ -330,7 +330,7 @@ class CpicDrawingArea(CWidget):
                 itemSel = self.DrawingArea.GetElementAtPosition(self.canvas, pos)
                 if itemSel is None or isinstance(itemSel, CConnection):
                     self.__NewConnection[1].append(pos)
-                    self.__DrawNewConnection( None, None )
+                    self.__DrawNewConnection((None, None))
                 elif itemSel is not self.__NewConnection[2] or len(self.__NewConnection[1]) > 2:
                     (type, points, source), destination = self.__NewConnection, itemSel
                     obj = CConnectionObject(type, source.GetObject(), destination.GetObject())
@@ -383,20 +383,20 @@ class CpicDrawingArea(CWidget):
         if self.dnd == 'resRect':
             self.__DrawResRect((event.x, event.y), True, True)    
         elif self.dnd == 'rect':
-            self.__DrawDragRect(event.x, event.y)
+            self.__DrawDragRect((event.x, event.y))
         elif self.dnd == 'point':
-            self.__DrawDragPoint(event.x, event.y)
+            self.__DrawDragPoint((event.x, event.y))
         elif self.dnd == 'line':
             self.__DrawDragLine(event.x, event.y)
         elif self.dnd == 'move':
             self.__DrawDragMove((event.x, event.y))
         elif self.__NewConnection is not None:
-            self.__DrawNewConnection(event.x, event.y)
+            self.__DrawNewConnection((event.x, event.y))
 
     
     @event("picEventBox","drag-data-received")
     def on_drag_data_received(self, widget, drag_context, x, y, selection, targettype, timestamp):
-        position = self.GetAbsolutePos(x, y)
+        position = self.GetAbsolutePos((x, y))
         self.emit('drop-from-treeview',position)
         self.Paint()
 
@@ -449,9 +449,9 @@ class CpicDrawingArea(CWidget):
             self.selSq = self.selElem.GetSquareAtPosition(self.clickPos)
         
         if (self.selSq is None): # Neresizujem
-            self.DragStartPos = self.GetAbsolutePos(event.x, event.y)
+            self.DragStartPos = self.GetAbsolutePos((event.x, event.y))
             self.DragRect = self.DrawingArea.GetSelectSquare(self.canvas)
-            self.__DrawDragRect(event.x, event.y, False)
+            self.__DrawDragRect((event.x, event.y), False)
             self.dnd = 'rect'
         else:
             self.oldRect = (self.selElem.GetSquare(self.canvas))
@@ -460,13 +460,13 @@ class CpicDrawingArea(CWidget):
 
 
     def __BeginDragPoint(self, event, connection, point):
-        self.DragStartPos = self.GetAbsolutePos(event.x, event.y)
+        self.DragStartPos = self.GetAbsolutePos((event.x, event.y))
         self.DragPoint = (connection, point)
-        self.__DrawDragPoint(event.x, event.y, False)
+        self.__DrawDragPoint((event.x, event.y), False)
         self.dnd = 'point'
 
     def __BeginDragLine(self, event, connection, point):
-        self.DragStartPos = self.GetAbsolutePos(event.x, event.y)
+        self.DragStartPos = self.GetAbsolutePos((event.x, event.y))
         self.DragPoint = (connection, point)
         self.__DrawDragLine(event.x, event.y, False)
         self.dnd = 'line'
@@ -477,8 +477,8 @@ class CpicDrawingArea(CWidget):
         self.scrollPos = self.GetPos()
         self.dnd = 'move'
         
-    def __GetDelta(self, x, y):
-        tmpx, tmpy = self.GetAbsolutePos(x,y)
+    def __GetDelta(self, pos):
+        tmpx, tmpy = self.GetAbsolutePos(pos)
         dx, dy = tmpx - self.DragStartPos[0], tmpy - self.DragStartPos[1]
         posx, posy = self.DragRect[0]
         tmpx, tmpy = posx + dx, posy + dy
@@ -487,12 +487,12 @@ class CpicDrawingArea(CWidget):
         return int(tmpx - posx), int(tmpy - posy)
 
 
-    def __DrawDragRect(self, x, y, erase = True, draw = True):
+    def __DrawDragRect(self, (x, y), erase = True, draw = True):
         if erase:
             self.picDrawingArea.window.draw_rectangle(self.DragGC, False, self.__oldx, self.__oldy, *self.DragRect[1])
         if draw:
-            tmpx, tmpy = self.GetRelativePos(*self.DragRect[0])
-            dx, dy = self.__GetDelta(x, y)
+            tmpx, tmpy = self.GetRelativePos(self.DragRect[0])
+            dx, dy = self.__GetDelta((x, y))
             if self.selSq is None:
                 self.picDrawingArea.window.draw_rectangle(self.DragGC, False, tmpx + dx, tmpy + dy, *self.DragRect[1])
                 self.__oldx, self.__oldy = tmpx + dx, tmpy + dy 
@@ -504,20 +504,22 @@ class CpicDrawingArea(CWidget):
             dx = self.clickPos[0] - newPos[0]
             dy = self.clickPos[1] - newPos[1]
             nRect = self.selElem.GetResizedRect(self.canvas, (dx, dy), self.selSq)
+            #~ nRect = self.GetRelativePos(nRect[0]), self.GetRelativePos(nRect[1])
+            #~ print nRect
             self.picDrawingArea.window.draw_rectangle(self.DragGC, False, nRect[0][0], nRect[0][1], nRect[1][0], nRect[1][1])
             self.oldRect = nRect
 
-    def __DrawDragPoint(self, x, y, erase = True, draw = True):
+    def __DrawDragPoint(self, (x, y), erase = True, draw = True):
         if x is None:
             x, y = self.__oldPoints2
         connection, index = self.DragPoint
         prev, next = connection.GetNeighbours(index, self.canvas)
-        points = [self.GetRelativePos(*prev), (int(x), int(y)), self.GetRelativePos(*next)]
+        points = [self.GetRelativePos(prev), (int(x), int(y)), self.GetRelativePos(next)]
         if erase:
             self.picDrawingArea.window.draw_lines(self.DragGC, self.__oldPoints)
         if draw:
             self.__oldPoints = points
-            self.__oldPoints2 = self.GetAbsolutePos(x, y)
+            self.__oldPoints2 = self.GetAbsolutePos((x, y))
             self.picDrawingArea.window.draw_lines(self.DragGC, self.__oldPoints)
 
     def __DrawDragLine(self, x, y, erase = True, draw = True):
@@ -526,12 +528,12 @@ class CpicDrawingArea(CWidget):
         connection, index = self.DragPoint
         all = tuple(connection.GetPoints(self.canvas))
         prev, next = all[index], all[index + 1]
-        points = [self.GetRelativePos(*prev), (int(x), int(y)), self.GetRelativePos(*next)]
+        points = [self.GetRelativePos(prev), (int(x), int(y)), self.GetRelativePos(next)]
         if erase:
             self.picDrawingArea.window.draw_lines(self.DragGC, self.__oldPoints)
         if draw:
             self.__oldPoints = points
-            self.__oldPoints2 = self.GetAbsolutePos(x, y)
+            self.__oldPoints2 = self.GetAbsolutePos((x, y))
             self.picDrawingArea.window.draw_lines(self.DragGC, self.__oldPoints)
             
     def __DrawDragMove(self, pos):
@@ -542,12 +544,12 @@ class CpicDrawingArea(CWidget):
         self.Paint(False)
         
 
-    def __DrawNewConnection(self, x, y, erase = True, draw = True):
+    def __DrawNewConnection(self, (x, y), erase = True, draw = True):
         if x is None:
             points = self.__NewConnection[1][:]
         else:
             points = self.__NewConnection[1]
-        points = [self.GetRelativePos(*point) for point in points]
+        points = [self.GetRelativePos(point) for point in points]
         if x is not None:
             points.append((int(x), int(y)))
         if erase:
