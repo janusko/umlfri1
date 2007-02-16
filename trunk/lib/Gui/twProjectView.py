@@ -62,7 +62,9 @@ class CtwProjectView(CWidget):
         
         self.twProjectView.enable_model_drag_source(gtk.gdk.BUTTON1_MASK, self.TARGETS, gtk.gdk.ACTION_DEFAULT | gtk.gdk.ACTION_MOVE | gtk.gdk.ACTION_COPY)
         self.twProjectView.enable_model_drag_dest(self.TARGETS, gtk.gdk.ACTION_DEFAULT)
-        
+    
+    def ClearProjectView(self):
+        self.TreeStore.clear()
     
     def Redraw(self):
         for item in self.mnuTreeAddDiagram.get_children():
@@ -271,7 +273,11 @@ class CtwProjectView(CWidget):
     def on_twProjectView_change_selection(self, treeView):
         
         iter = treeView.get_selection().get_selected()[1]
-        
+        model = self.twProjectView.get_model()
+        if model.get(iter,2)[0] == "=DrawingArea=":
+            self.mnuTreeFindInDiagrams.set_sensitive(False)
+        else:
+            self.mnuTreeFindInDiagrams.set_sensitive(True)
         if self.EventButton[0] == 3:
             self.mnuTreeDelete.set_sensitive(len(treeView.get_model().get_path(iter)) > 1)
             self.menuTreeElement.popup(None,None,None,self.EventButton[0],self.EventButton[1])
