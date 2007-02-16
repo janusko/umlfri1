@@ -35,6 +35,34 @@ class CGtkCanvas(CAbstractCanvas):
         self.pango_layout = self.widget.create_pango_layout("")
         self.fonts = {}
     
+    def __SetFont(self, (family, style, size), returndesc = False):
+        underline = 'underline' in style
+        bold = 'bold' in style
+        italic = 'italic' in style
+        strikeout = 'strike' in style
+        font = [family]
+        if italic:
+            font.append('italic')
+        if bold:
+            font.append('bold')
+        font.append(str(size))
+        font = ' '.join(font)
+        if font in self.fonts:
+            fontobj = self.fonts[font]
+        else:
+            self.fonts[font] = fontobj = pango.FontDescription(font)
+        if returndesc:
+            return fontobj
+        self.pango_layout.set_font_description(fontobj)
+        
+        atlist = pango.AttrList()
+        if underline:
+            atlist.insert(pango.AttrUnderline(pango.UNDERLINE_SINGLE, 0, 10000))
+        if strikeout:
+            atlist.insert(pango.AttrStrikethrough(True, 0, 10000))
+        self.pango_layout.set_attributes(atlist)
+
+    
     def DrawArc(self, pos, size, arc = (0, 360), fg = None, bg = None, line_width = None, line_style = None):
         gc = self.window.new_gc()
         if line_width is not None:
@@ -105,11 +133,7 @@ class CGtkCanvas(CAbstractCanvas):
             self.window.draw_rectangle(gc, False, int(pos[0]), int(pos[1]), int(size[0]), int(size[1]))
     
     def DrawText(self, pos, text, font, fg):
-        if font in self.fonts:
-            fontobj = self.fonts[font]
-        else:
-            self.fonts[font] = fontobj = pango.FontDescription(font)
-        self.pango_layout.set_font_description(fontobj)
+        self.__SetFont(font)
         
         cmap = self.window.get_colormap()
         gc = self.window.new_gc(foreground = cmap.alloc_color(fg))
@@ -118,20 +142,13 @@ class CGtkCanvas(CAbstractCanvas):
         self.window.draw_layout(gc, x=int(pos[0]), y=int(pos[1]), layout=self.pango_layout)
     
     def GetTextSize(self, text, font):
-        if font in self.fonts:
-            fontobj = self.fonts[font]
-        else:
-            self.fonts[font] = fontobj = pango.FontDescription(font)
-        self.pango_layout.set_font_description(fontobj)
+        self.__SetFont(font)
         
         self.pango_layout.set_text(text)
         return int(self.pango_layout.get_size()[0]/float(pango.SCALE)), int(self.pango_layout.get_size()[1]/float(pango.SCALE))
     
     def GetFontBaseLine(self, font):
-        if font in self.fonts:
-            fontobj = self.fonts[font]
-        else:
-            self.fonts[font] = fontobj = pango.FontDescription(font)
+        fontobj = self.__SetFont(font, True)
         metrics = self.pango_ctx.get_metrics(fontobj, None)
         return metrics.get_ascent() / pango.SCALE
     

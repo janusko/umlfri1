@@ -10,7 +10,7 @@
     </Attributes>
     <Appearance>
         <Shadow padding="3" color="/Styles/Element/ShadowColor">
-            <Rectangle fill="/Styles/Element/FillColor" border="/Styles/Element/LineColor" righttop="10 /Styles/Element/Fill2Color rounded" rightbottom="10 /Styles/Element/Fill2Color rounded" lefttop="10 /Styles/Element/Fill2Color rounded" leftbottom="10 /Styles/Element/Fill2Color rounded">
+            <Rectangle fill="/Styles/Element/FillColor" border="/Styles/Element/LineColor" righttop="10 rounded" rightbottom="10 rounded" lefttop="10 rounded" leftbottom="10 rounded">
                 <Sizer minheight="50">
                     <HBox>
                         <Padding padding="5">
