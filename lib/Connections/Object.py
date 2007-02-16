@@ -2,33 +2,24 @@ from Exceptions import EConnectionRestriction
 
 class CConnectionObject(object):
     def __init__(self, type, source, dest):
-        allowsrc = dict(source.GetType().GetConnections())
-        allowdest = dict(dest.GetType().GetConnections())
-        typeid = type.GetId()
-        srcid = source.GetType().GetId()
-        destid = dest.GetType().GetId()
-        self.appears = []
-        ok = False
-        if typeid in allowsrc:
-            with, allowrecursive = allowsrc[typeid]
-            if with is None or destid in with:
-                ok = True
-            if source == dest and not allowrecursive:
-                ok = False
-        if not ok and typeid in allowdest:
-            with, allowrecursive = allowdest[typeid]
-            if with is None or srcid in with:
-                ok = True
-            if source == dest and not allowrecursive:
-                ok = False
-        if not ok:
+        if not self.__CheckConnection(type, source, dest):
             raise EConnectionRestriction
+        self.appears = []
         self.type = type
         self.SetSource(source)
         self.SetDestination(dest)
         self.attributes = {}
         for i in self.type.GetAttributes():
-            self.SetAttribute(i, self.type.GetDefValue(i))            
+            self.SetAttribute(i, self.type.GetDefValue(i))
+            
+    def __CheckConnection(self, type, source, dest):
+        allowsrc = dict(source.GetType().GetConnections())
+        allowdest = dict(dest.GetType().GetConnections())
+        typeid = type.GetId()
+        srcid = source.GetType().GetId()
+        destid = dest.GetType().GetId()
+        return True
+        
     
     def GetAppears(self):
         for i in self.appears:

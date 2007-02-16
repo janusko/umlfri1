@@ -323,6 +323,7 @@ class CpicDrawingArea(CWidget):
                     self.__SetCursor(None)
                 self.dnd = None
             elif self.__NewConnection is not None:
+                pos = self.GetAbsolutePos((event.x, event.y))
                 itemSel = self.DrawingArea.GetElementAtPosition(self.canvas, pos)
                 if itemSel is None or isinstance(itemSel, CConnection):
                     self.__NewConnection[1].append(pos)

@@ -145,7 +145,6 @@ class CElementObject:
         connection.Disconnect()
         
     def RemoveConnection(self, connection):
-        print 'oooooooo'
         if connection in self.connections:
             self.connections.remove(connection)
         else:
