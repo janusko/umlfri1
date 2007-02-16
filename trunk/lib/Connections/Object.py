@@ -2,7 +2,11 @@ from Exceptions import EConnectionRestriction
 
 class CConnectionObject(object):
     def __init__(self, type, source, dest):
-        if not self.__CheckConnection(type, source, dest):
+        if not self.__CheckRecursiveConnection(type, source, dest):
+            raise EConnectionRestriction
+        checksrc = self.__CheckConnection(type, source, dest)
+        checkdest = self.__CheckConnection(type, dest, source)
+        if not (checksrc or checkdest or (checksrc is checkdest is None)):
             raise EConnectionRestriction
         self.appears = []
         self.type = type
@@ -12,13 +16,28 @@ class CConnectionObject(object):
         for i in self.type.GetAttributes():
             self.SetAttribute(i, self.type.GetDefValue(i))
             
-    def __CheckConnection(self, type, source, dest):
-        allowsrc = dict(source.GetType().GetConnections())
-        allowdest = dict(dest.GetType().GetConnections())
+    def __CheckRecursiveConnection(self, type, source, dest):
+        if source is not dest:
+            return True
         typeid = type.GetId()
-        srcid = source.GetType().GetId()
         destid = dest.GetType().GetId()
-        return True
+        allow = dict(source.GetType().GetConnections())
+        withelem, allowrecursive = allow.get(typeid, (None, False))
+        if allowrecursive and (withelem is None or '*' in withelem  or destid in withelem):
+            return True
+        return False
+        
+    def __CheckConnection(self, type, source, dest):
+        typeid = type.GetId()
+        destid = dest.GetType().GetId()
+        allow = dict(source.GetType().GetConnections())
+        if typeid in allow:
+            withelem, allowrecursive = allow[typeid]
+            if withelem is None:
+                return None
+            elif '*' in withelem or destid in withelem:
+                return True
+        return False
         
     
     def GetAppears(self):

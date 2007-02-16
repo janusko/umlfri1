@@ -2,7 +2,7 @@
 <ElementType id="Note">
     <Icon path="icons/note.png" />
     <Connections>
-        <Item value="Note Link" />
+        <Item value="Note Link" with="*" />
     </Connections>
     <Attributes>
         <Item value="Name" type="str" propid="name" />
