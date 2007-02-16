@@ -62,7 +62,6 @@ class CRectangle(CSimpleContainer):
         else:
             corners = []
             (x, y), (w, h) = pos, size
-            print w, h
             if self.sides[0] is not None:
                 y += self.sides[0][2]
                 h -= self.sides[0][2]
@@ -73,7 +72,6 @@ class CRectangle(CSimpleContainer):
             if self.sides[3] is not None:
                 x += self.sides[3][2]
                 w -= self.sides[3][2]
-            print w, h
             positions = (x, y), (x + w, y), (x + w, y+h), (x, y+h)
             oldpos = None
             lastside = None
@@ -119,7 +117,6 @@ class CRectangle(CSimpleContainer):
         else:
             corners = []
             (x, y), (w, h) = pos, size
-            print w, h
             if self.sides[0] is not None:
                 y += self.sides[0][2]
                 h -= self.sides[0][2]
