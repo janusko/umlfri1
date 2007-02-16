@@ -7,6 +7,14 @@ from lib.consts import STARTPAGE_IMAGE
 
 from common import  event
 
+gtk.rc_parse_string("""
+    style "test"
+    {
+        bg_pixmap[NORMAL] = "<none>"
+    } widget "*.ebStartPage" style "test"
+""")
+
+
 class CtabStartPage(CWidget):
     name = 'tabStartPage'
     widgets = ('ebStartPage', 'fixStartPage')

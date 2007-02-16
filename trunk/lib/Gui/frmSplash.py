@@ -3,6 +3,13 @@ from lib.consts import SPLASH_IMAGE
 
 import gtk, gtk.gdk, pango
 
+gtk.rc_parse_string("""
+    style "test"
+    {
+        bg_pixmap[NORMAL] = "<none>"
+    } widget "frmSplash" style "test"
+""")
+
 class CfrmSplash(CWindow):
     name = 'frmSplash'
     widgets = ('fixMain', 'lblVersion', )

@@ -69,7 +69,7 @@
 [x] Recent files in xml in home directory
 [x] Spravit exe
 [x] Kontrolu, ci sa da element resizovat
-[ ] Zaobleny CRectangle
+[x] Zaobleny CRectangle
 [ ] Otoceny CRectangle
 [ ] Optravit kontrolu ciar
 [ ] Opravit resize elementu

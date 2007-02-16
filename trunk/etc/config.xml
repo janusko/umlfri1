@@ -9,6 +9,7 @@
             <ShadowColor>#505050</ShadowColor>
             <NameTextColor>black</NameTextColor>
             <TextColor>black</TextColor>
+            <ObjectNameTextFont>Arial underline 10</ObjectNameTextFont>
             <NameTextFont>Arial 10</NameTextFont>
             <TextFont>Arial 10</TextFont>
         </Element>

@@ -11,7 +11,7 @@ ETC_PATH = join(ROOT_PATH, 'etc')
 
 MAIN_CONFIG_PATH = join(ETC_PATH, 'config.xml')
 
-SPLASH_TIMEOUT = 500
+SPLASH_TIMEOUT = 5000
 
 VERSIONS_PATH = 'versions'
 DIAGRAMS_PATH = 'diagrams'

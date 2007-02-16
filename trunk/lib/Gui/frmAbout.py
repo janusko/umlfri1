@@ -1,4 +1,5 @@
 import common
+from lib.config import config
 
 class CfrmAbout(common.CWindow):
     widgets = ('labelAbout',)
@@ -13,7 +14,7 @@ class CfrmAbout(common.CWindow):
 
     def __GetAboutText(self):
         about = ''
-        lines = [line for line in file('ABOUT') if not line.strip().startswith('-')]
+        lines = [line for line in file(config['/Paths/Root']+'ABOUT') if not line.strip().startswith('-')]
                
         for line in lines:
             line = line.replace('<', '&lt;').replace('>', '&gt;')

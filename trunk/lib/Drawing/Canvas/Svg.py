@@ -21,16 +21,22 @@ class CSvgCanvas(CAbstractCanvas):
     def WriteOut(self, f):
         print>>f, '<?xml version="1.0" encoding="UTF-8" standalone="no"?>'
         print>>f, '<svg width="%d" height="%d" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">'%(self.width, self.height)
-        print>>f, '    <g id="Layer1">'
+        level = 1
         for type, params, style in self.paths:
             style = ' '.join(["%s: %s;"%s for s in style.iteritems()])
             if type == 'path':
-                print>>f, '        <path d="%s" style="%s" />'%(params, style)
+                print>>f, '    '*level+'<path d="%s" style="%s" />'%(params, style)
             elif type == 'text':
-                print>>f, '        <text x="%s" y="%s" style="%s">%s</text>'%(params[0][0], params[0][1], style, XMLEncode(params[1]))
+                print>>f, '    '*level+'<text x="%s" y="%s" style="%s">%s</text>'%(params[0][0], params[0][1], style, XMLEncode(params[1]))
             elif type == 'img':
-                print>>f, '        <image x="%s" y="%s" width="%s" height="%s" style="%s" xlink:href="data:application/octetstream;base64,%s" />'%(params[0][0], params[0][1], params[1][0], params[1][1], style, params[2].encode('base64').replace('\n', '').replace('\r', ''))
-        print>>f, '    </g>'
+                print>>f, '    '*level+'<image x="%s" y="%s" width="%s" height="%s" style="%s" xlink:href="data:application/octetstream;base64,%s" />'%(params[0][0], params[0][1], params[1][0], params[1][1], style, params[2].encode('base64').replace('\n', '').replace('\r', ''))
+            elif type == 'group':
+                if params == 'end':
+                    level -= 1
+                    print>>f, '    '*level+'</g>'
+                else:
+                    print>>f, '    '*level+'<g>'
+                    level += 1
         print>>f, '</svg>'
     
     def __createpart(self, parts, styles = {}):
@@ -57,9 +63,13 @@ class CSvgCanvas(CAbstractCanvas):
             style['stroke-miterlimit'] = '4'
             style['stroke-dasharray'] = LINE_STYLES[line_style]
         if font is not None:
-            family, size, fstyle = (font.split()+['normal'])[:3]
+            family, fstyle, size = font
             style['font-family'] = family
-            style['font-size'] = size+'pt'
+            if 'bold' in fstyle:
+                style['font-weight'] = 'bold'
+            if 'italic' in fstyle:
+                style['font-style'] = 'italic'
+            style['font-size'] = '%dpt'%size
         return style
     
     def DrawArc(self, pos, size, arc = (0, 360), fg = None, bg = None, line_width = None, line_style = None):
@@ -107,7 +117,19 @@ class CSvgCanvas(CAbstractCanvas):
         self.DrawPolygon([pos, (pos[0]+size[0], pos[1]), (pos[0]+size[0], pos[1]+size[1]), (pos[0], pos[1]+size[1])], fg, bg, line_width, line_style)
     
     def DrawText(self, pos, text, font, fg):
-        self.paths.append(('text', ((pos[0], pos[1]+self.othercanvas.GetFontBaseLine(font)), text), self.__createstyle(bg=fg, font=font)))
+        if 'underline' in font[1] or 'strike' in font[1]:
+            size = self.GetTextSize(text, font)
+            self.paths.append(('group','',{}))
+        bline = self.othercanvas.GetFontBaseLine(font)
+        self.paths.append(('text', ((pos[0], pos[1]+bline), text), self.__createstyle(bg=fg, font=font)))
+        if 'underline' in font[1]:
+            self.__createpart(PathPartLine((pos[0], pos[1]+bline+2), (pos[0]+size[0], pos[1]+bline+2)),
+                    self.__createstyle(fg))
+        if 'strike' in font[1]:
+            self.__createpart(PathPartLine((pos[0], pos[1]+bline//2), (pos[0]+size[0], pos[1]+bline//2)),
+                    self.__createstyle(fg))
+        if 'underline' in font[1] or 'strike' in font[1]:
+            self.paths.append(('group','end',{}))
     
     def GetTextSize(self, text, font):
         return self.othercanvas.GetTextSize(text, font)
