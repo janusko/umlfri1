@@ -95,12 +95,16 @@ class CTabs(CWidget):
             self.mnuTabShowInProjectView.set_sensitive(False)
             if len(self.drawingAreas) == 1:
                 self.mnuTabCloseAllDiagram.set_sensitive(False)
+            for chld in self.nbTabs.get_nth_page(0).get_children():
+                chld.show()
         else:
             self.emit("change_current_page", self.drawingAreas[page_num])
             self.mnuTabExportSVG.set_sensitive(True)
             self.mnuTabCloseDiagram.set_sensitive(True)
             self.mnuTabCloseAllDiagram.set_sensitive(True)
             self.mnuTabShowInProjectView.set_sensitive(True)
+            for chld in self.nbTabs.get_nth_page(0).get_children():
+                chld.hide()
            
     def CloseTab(self, drawingArea):
         if drawingArea in self.drawingAreas:

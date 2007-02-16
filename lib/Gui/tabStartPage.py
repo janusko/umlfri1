@@ -9,7 +9,7 @@ from common import  event
 
 class CtabStartPage(CWidget):
     name = 'tabStartPage'
-    widgets = ('ebStartPage', )
+    widgets = ('ebStartPage', 'fixStartPage')
     
     def __init__(self, app, wTree):
         CWidget.__init__(self, app, wTree)
