@@ -40,7 +40,7 @@ class CElement:
             x1, x = x, x1
         if y1 < y:
             y1, y = y, y1
-        self.squares.append((index, (x, y), (x1 - x, y1 - y)))
+        self.squares.append(((-posx, -posy), (x, y), (x1 - x, y1 - y)))
 
     def AreYouAtPosition(self, canvas, pos):
         x, y = pos
@@ -154,54 +154,23 @@ class CElement:
     # Zistenie novej polohy a velkosti pri resizingu
         # delta = relativna zmena velkosti
         # selSquareIdx = index uchytavacieho-resizovacieho bodu
-    def GetResizedRect(self, canvas, delta, selSquareIdx):
-        oldPos = self.GetPosition()
-        position = oldPos
-        oldSize = self.GetSize(canvas)
-        size = oldSize
-        minSize = self.GetMinimalSize(canvas)
+    def GetResizedRect(self, canvas, delta, mult):
+        pos = list(self.GetPosition())
+        size = list(self.GetSize(canvas))
+        minsize = self.GetMinimalSize(canvas)
         
-        if (selSquareIdx not in [3,4]):
-        # changing vertically (height)
-            if (selSquareIdx in [0, 1, 2]):
-                if (delta[1] <= 0): #zmensujem
-                    size = (size[0], size[1] + delta[1])
-                    if (size[1] < minSize[1]): #zmensujem pod minimum
-                        position = (position[0], position[1]+oldSize[1]-minSize[1])
-                        size = (size[0], minSize[1])
-                    else:
-                        position = (position[0], position[1] - delta[1])
-                else: #zvacsujem
-                    if (position[1] - delta[1] < 0):
-                        delta = (delta[0], position[1])
-                    position = (position[0], position[1] - delta[1])
-                    size = (size[0], size[1] + delta[1])
-            else: # [5,6,7]:  #position je nemenne
-                size = (size[0], size[1] - delta[1])
-                if (size[1] < minSize[1]):
-                    size = (size[0], minSize[1])
+        for i in (0, 1):
+            if mult[i] < 0:
+                if delta[i] > size[i] - minsize[i]:
+                    pos[i] += size[i] - minsize[i]
+                    size[i] = minsize[i]
+                else:
+                    pos[i] += delta[i]
+                    size[i] -= delta[i]
+            else:
+                size[i] = max(minsize[i], size[i] + mult[i] * delta[i])
                 
-        if (selSquareIdx not in [1, 6]):
-        # changing horisontally (width)
-            if (selSquareIdx in [0, 3, 5]):
-                if (delta[0] <= 0): #zmensujem
-                    size = (size[0] + delta[0], size[1])
-                    if (size[0] < minSize[0]): #zmensujem pod minimum
-                        position = (position[0]+oldSize[0]-minSize[0], position[1])
-                        size = (minSize[0], size[1])
-                    else:
-                        position = (position[0] - delta[0], position[1])
-                else: #zvacsujem
-                    if (position[0] - delta[0] < 0):
-                        delta = (position[0], delta[1])
-                    position = (position[0] - delta[0], position[1])
-                    size = (size[0] + delta[0], size[1])
-            else: # [2,4,7] #position je nemenne
-                size = (size[0] - delta[0], size[1])
-                if (size[0] < minSize[0]):
-                    size = (minSize[0], size[1])
-                    
-        return ((position), (size))
+        return pos, size
         
     def CopyFromElement(self, element):
         self.deltaSize = element.deltaSize
