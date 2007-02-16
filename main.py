@@ -35,10 +35,11 @@ class Application(CApplication):
     canopen = True
     
     def __init__(self):
+        self.recentFiles = CRecentFiles()
         CApplication.__init__(self)
         
         self.clipboard = CClipboard()
-        self.recentFiles = CRecentFiles()
+        
         gobject.timeout_add(SPLASH_TIMEOUT, self.GetWindow('frmSplash').Hide)
     
     @argument("-o", "--open", True)
@@ -69,7 +70,10 @@ class Application(CApplication):
     def ProjectInit(self):
         if self.project is None:
             self.project = CProject()
-    
+            
+    def ProjectDelete(self):
+        self.project = None
+        
     def GetProject(self):
         return self.project
     

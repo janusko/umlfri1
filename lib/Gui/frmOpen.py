@@ -75,7 +75,8 @@ class CfrmOpen(common.CWindow):
         self.form.response(gtk.RESPONSE_OK)
         
     
-    def ShowDialog(self, parent):
+    def ShowDialog(self, parent, tab = 0):
+        self.nbOpen.set_current_page(tab)
         self.fwOpenExisting.set_current_folder_uri(self.fwOpenExisting.get_current_folder_uri())
         
         self.ivOpenModel.clear()
@@ -87,8 +88,9 @@ class CfrmOpen(common.CWindow):
                                            2, os.path.join(config['/Paths/Templates'], filename))
         
         self.__ReloadOpenRecentList()
-        
         self.form.set_transient_for(parent.form)
+        self.chkOpenAsCopyExisting.set_active(False)
+        self.chkOpenAsCopyRecent.set_active(False)
         try:
             while True:
                 if self.form.run() != gtk.RESPONSE_OK:
@@ -100,20 +102,24 @@ class CfrmOpen(common.CWindow):
                         iter = self.ivOpenModel.get_iter(tmp[0])
                         return self.ivOpenModel.get(iter, 2)[0], True # template
                 elif self.nbOpen.get_current_page() == 1:
+                    copy = self.chkOpenAsCopyExisting.get_active()
                     filename = self.fwOpenExisting.get_filename()
                     if filename is not None and os.path.isfile(filename):
-                        self.application.GetRecentFiles().AddFile(filename)
-                        return filename, self.chkOpenAsCopyExisting.get_active() # existing
+                        if not copy:
+                            self.application.GetRecentFiles().AddFile(filename)
+                        return filename, copy # existing
                 else:
+                    copy = self.chkOpenAsCopyRecent.get_active()
                     iter = self.twOpenRecent.get_selection().get_selected()[1]
                     if iter is not None:
                         filename = self.twOpenRecent.get_model().get(iter,0)[0]
-                        self.application.GetRecentFiles().AddFile(filename)
+                        if not copy:
+                            self.application.GetRecentFiles().AddFile(filename)
                         if not os.path.exists(filename):  
                             self.application.GetRecentFiles().RemoveFile(filename)
                             CWarningDialog(self.form, _("File does not exist")).run()
                             self.__ReloadOpenRecentList()
                         else:
-                            return filename, self.chkOpenAsCopyRecent.get_active() # recent
+                            return filename, copy # recent
         finally:
             self.form.hide()

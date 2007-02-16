@@ -67,18 +67,39 @@ class CfrmMain(CWindow):
         self.cmdCut.set_sensitive(False)
         self.cmdPaste.set_sensitive(False)
         self.ReloadTitle()
-    
+        
+        
     def SetSensitiveMenuChilds(self, MenuItem, value):
         for i in MenuItem.get_submenu().get_children():
             i.set_sensitive(value)
     
     def LoadProject(self, filename, copy):
         self.application.ProjectInit()
-        self.application.GetProject().LoadProject(filename, copy)
+        try:
+            self.application.GetProject().LoadProject(filename, copy)
+        except Exception:
+            self.application.GetRecentFiles().RemoveFile(filename)
+            self.application.ProjectDelete()
+            self.nbTabs.CloseAll()
+            self.twProjectView.ClearProjectView()
+            self.ReloadTitle()
+            self.SetSensitiveMenuChilds(self.mItemEdit, False)
+            self.SetSensitiveMenuChilds(self.mItemProject, False)
+            self.SetSensitiveMenuChilds(self.mItemDiagram, False)
+            self.mnuSave.set_sensitive(False)
+            self.mnuSaveAs.set_sensitive(False)
+            self.cmdSave.set_sensitive(False)
+            self.cmdCopy.set_sensitive(False)
+            self.cmdCut.set_sensitive(False)
+            self.cmdPaste.set_sensitive(False)
+            self.nbProperties.Fill(None)
+            return CWarningDialog(self.form, _('Error opening file')).run()
+            
         self.ReloadTitle()
         self.nbTabs.CloseAll()
         self.twProjectView.Redraw()
         self.mnuItems.Redraw()
+        self.nbProperties.Fill(None)
         self.picDrawingArea.Redraw()
         self.SetSensitiveMenuChilds(self.mItemEdit, True)
         self.SetSensitiveMenuChilds(self.mItemProject, True)
@@ -96,6 +117,7 @@ class CfrmMain(CWindow):
         self.tbToolBox.SetVisible(mnu.get_active())
 
     # Help
+    @event("tabStartPage","open-about-dialog")
     @event("mnuAbout", "activate")
     def on_mnuAbout_activate(self, mnu):
         tmp = self.application.GetWindow('frmAbout')
@@ -140,11 +162,23 @@ class CfrmMain(CWindow):
         except ECancelPressed:
             return True
         self.application.Quit()
+    
+    @event("tabStartPage","open-file")
+    def on_open_file(self, widget, filename):
+        if filename is not None:
+            try:
+                if self.application.GetProject() is not None and CQuestionDialog(self.form, _('Do you want to save project?'), True).run():
+                    self.ActionSave(widget)
+            except ECancelPressed:
+                return
+            self.LoadProject(filename, False)
+            self.tabStartPage.Fill()
 
+    @event("tabStartPage","open-project")
     @event("cmdOpen", "clicked")
     @event("mnuOpen", "activate")
-    def ActionOpen(self, widget):
-        filename, copy = self.application.GetWindow("frmOpen").ShowDialog(self)
+    def ActionOpen(self, widget,tab = 0):
+        filename, copy = self.application.GetWindow("frmOpen").ShowDialog(self,tab)
         if filename is not None:
             try:
                 if self.application.GetProject() is not None and CQuestionDialog(self.form, _('Do you want to save project?'), True).run():
@@ -152,6 +186,7 @@ class CfrmMain(CWindow):
             except ECancelPressed:
                 return
             self.LoadProject(filename, copy)
+            self.tabStartPage.Fill()
     
     @event("form", "key-press-event")
     def on_key_press_event(self, widget, event):
@@ -183,6 +218,7 @@ class CfrmMain(CWindow):
     def ActionSave(self, widget):
         if self.application.GetProject().GetFileName() is None:
             self.ActionSaveAs(widget)
+            self.tabStartPage.Fill()
         else:
             self.application.GetProject().SaveProject()
 

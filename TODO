@@ -65,14 +65,14 @@
 [x] Export do SVG
 [x] Pri spusteni zakazat menu, povolit az pri otvoreni projektu
 [x] Save on Quit
-[ ] StartPage
+[x] StartPage
 [x] Recent files in xml in home directory
 [x] Spravit exe
 [x] Kontrolu, ci sa da element resizovat
 [x] Zaobleny CRectangle
 [ ] Otoceny CRectangle
-[ ] Optravit kontrolu ciar
-[ ] Opravit resize elementu
+[-] Optravit kontrolu ciar
+[-] Opravit resize elementu
 ...
 [x] ZOrder
 [?] Menenie kurzoru po prechode nad volaco

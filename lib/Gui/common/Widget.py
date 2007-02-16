@@ -19,12 +19,12 @@ class CWidget(gobject.GObject):
             if callable(fnc):
                 if hasattr(fnc, 'events'):
                     for event in fnc.events:
-                        obj, event = event
+                        obj, event, params = event
                         if event is None:
                             if obj == 'load':
                                 gobject.idle_add(fnc)
                         else:
-                            events.setdefault(obj, []).append((event, fnc))
+                            events.setdefault(obj, []).append((event, fnc, params))
         self.application = app
         for widgetName in self.widgets:
             setattr(self, widgetName, wTree.get_widget(widgetName))
@@ -39,7 +39,7 @@ class CWidget(gobject.GObject):
                     obj = getattr(obj, attr)
                 except AttributeError:
                     obj = obj.get_property(attr)
-            for event, fnc in oevents:
-                obj.connect(event, fnc)
+            for event, fnc, params in oevents:
+                obj.connect(event, fnc, *params)
         
         self.GetRelativeFile = wTree.relative_file
