@@ -89,9 +89,6 @@ class CElement:
         self.objct.Paint(canvas, self, delta)
         if self.selected:
             x, y = self.position
-            dx, dy = delta
-            x += dx
-            y += dy
             w, h = self.GetSize(canvas)
             rx, ry = self.objct.GetType().GetResizable()
             
@@ -109,8 +106,9 @@ class CElement:
                 self.__AddSquare(3, x       , y + h//2,  1,  0)
                 self.__AddSquare(4, x + w   , y + h//2, -1,  0)
             
+            dx, dy = delta
             for i in self.squares:
-                canvas.DrawRectangle(i[1], i[2], None, config['/Styles/Selection/PointsColor'])
+                canvas.DrawRectangle((i[1][0] + dx, i[1][1] + dy), i[2], None, config['/Styles/Selection/PointsColor'])
             
             canvas.DrawRectangle((x, y), (w, h), fg = config['/Styles/Selection/RectangleColor'], line_width = config['/Styles/Selection/RectangleWidth'])
 
