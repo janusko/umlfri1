@@ -64,9 +64,9 @@ class CSvg(CVisualObject):
                 bgcolor = None
             else:
                 bgcolor = color
-            canvas.DrawPath(trans*path['path'], color, bgcolor, int(float(path['style'].get('stroke-width', 1))+0.5))
+            canvas.DrawPath(trans*path['path'], color, bgcolor, int(float(path['style'].get('stroke-width', '1').rstrip('px'))+0.5))
     
     def Paint(self, canvas, pos, element, size = (None, None)):
         trans = TransformMatrix.mk_translation(pos)
         for path in self.svg:
-            canvas.DrawPath(trans*path['path'], path['style'].get('stroke', 'black'), path['style'].get('fill', None), int(float(path['style'].get('stroke-width', 1))+0.5))
+            canvas.DrawPath(trans*path['path'], path['style'].get('stroke', 'black'), path['style'].get('fill', None), int(float(path['style'].get('stroke-width', '1').rstrip('px'))+0.5))

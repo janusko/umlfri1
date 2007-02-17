@@ -51,6 +51,17 @@ class CElement:
         else:
             return False
     
+    def AreYouInRange(self, canvas, topleft, bottomright, all = False):
+        (x1, y1), (x2, y2) = topleft, bottomright
+        width, height = self.GetSize(canvas)
+        
+        if all:
+            return (x1 <= self.position[0] <= self.position[0] + width <= x2) and (y1 <= self.position[1] <= self.position[1] + height <= y2)
+        else:
+            return ((x1 <= self.position[0] <= x2) and (y1 <= self.position[1] <= y2)) or \
+                   ((x1 <= self.position[0] + width <= x2) and (y1 <= self.position[1] + height <= y2)) or \
+                   ((self.position[0] <= x1 <= self.position[0] + width) and (self.position[1] <= y1 <= self.position[1] + height))
+    
     def Select(self):
         self.selected = True
     
