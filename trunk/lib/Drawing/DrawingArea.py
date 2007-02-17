@@ -58,13 +58,13 @@ class CDrawingArea:
         self.size = None
         if element not in self.elements:
             if element.GetObject().GetType().GetId() not in self.typeDiagram.GetElements():
-                    raise UMLException("DiagramHaveNotThisElement")
+                raise UMLException("DiagramHaveNotThisElement", element)
             for i in self.elements:
                 if i.GetObject() is element.GetObject():
-                    raise UMLException("ElementAlreadyExists")
+                    raise UMLException("ElementAlreadyExists", element)
             self.elements.append(element)
         else:
-            raise UMLException("ElementAlreadyExists")
+            raise UMLException("ElementAlreadyExists", element)
      
     def GetSelected(self):
         selected = tuple(self.selected)
@@ -96,6 +96,11 @@ class CDrawingArea:
     def AddToSelection(self, element):
         self.selected.add(element)
         element.Select()
+    
+    def AddRangeToSelection(self, canvas, topleft, rightbottom):
+        for el in self.GetElementsInRange(canvas, topleft, rightbottom, False):
+            self.selected.add(el)
+            el.Select()
     
     def RemoveFromSelection(self, element):
         self.selected.remove(element)
@@ -136,14 +141,23 @@ class CDrawingArea:
         self.size = None
         deltax, deltay = delta
         movedCon = set()
-        for el in self.GetSelectedElements():
+        elements = set()
+        if canvas is not None:
+            for el in self.GetSelectedElements():
+                pos1, pos2 = el.GetSquare(canvas)
+                zorder = self.elements.index(el)
+                for el2 in self.GetElementsInRange(canvas, pos1, pos2, True):
+                    if self.elements.index(el2) > zorder:
+                        elements.add(el2)
+        elements |= set(self.GetSelectedElements())
+        for el in elements:
             x, y = el.GetPosition()
             el.SetPosition((x + deltax, y + deltay))
             for con in el.GetConnections():
-                if (con.GetSource() in self.selected) and (con.GetDestination() in self.selected):
+                if (con.GetSource() in elements) and (con.GetDestination() in elements):
                     if con not in movedCon:
                         con.MoveAll(delta)
-                        movedCon.add(con) 
+                        movedCon.add(con)
         if canvas is not None:
             for conn in self.connections:
                 conn.ValidatePoints(canvas)
@@ -245,6 +259,11 @@ class CDrawingArea:
             
         return None
     
+    def GetElementsInRange(self, canvas, topleft, bottomright, includeall = True):
+        for e in self.elements:
+            if e.AreYouInRange(canvas, topleft, bottomright, includeall):
+                yield e
+    
     def SetViewPort(self, view):
         self.viewport = view
         
@@ -344,3 +363,27 @@ class CDrawingArea:
                     self.elements.insert(otherElementIdx, selectedElement);
                     selectedShifted = True # uz je posunuty -> koncim a presuvam dalsi selecnuty
                 otherElementIdx -= 1
+    
+    def CutSelection(self, clipboard):
+        if self.selected:
+            clipboard.SetContent((el for el in self.selected if isinstance(el, Element.CElement)))
+            for el in list(self.selected):
+                if isinstance(el, Element.CElement):
+                    self.DeleteElement(el)
+    
+    def CopySelection(self, clipboard):
+        if self.selected:
+            clipboard.SetContent((el for el in self.selected if isinstance(el, Element.CElement)))
+    
+    def PasteSelection(self, clipboard):
+        pasted = set()
+        for i in clipboard.GetContent():
+            try:
+                el = Element.CElement(self, i.GetObject())
+            except UMLException, e:
+                for el in pasted:
+                    self.DeleteElement(el)
+                raise
+            self.AddToSelection(el)
+            el.CopyFromElement(i)
+            pasted.add(el)

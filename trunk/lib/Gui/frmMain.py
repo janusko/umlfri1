@@ -41,7 +41,7 @@ class CfrmMain(CWindow):
         'mItemHelp',
         'mnuAbout',
         #############
-        'mMenuShift',
+        'mItemElement',
         'mmShift_SendBack', 'mmShift_BringForward', 'mmShift_ToBottom', 'mmShift_ToTop',
         #############
         #toolbar
@@ -55,23 +55,61 @@ class CfrmMain(CWindow):
         CWindow.__init__(self, app, wTree)
 
         self.form.maximize()
-        self.mnuExportSvg.set_sensitive(False)
-        self.SetSensitiveMenuChilds(self.mItemEdit, False)
-        self.SetSensitiveMenuChilds(self.mItemProject, False)
-        self.SetSensitiveMenuChilds(self.mItemDiagram, False)
-        self.mMenuShift.set_sensitive(False)
-        self.mnuSave.set_sensitive(False)
-        self.mnuSaveAs.set_sensitive(False)
-        self.cmdSave.set_sensitive(False)
-        self.cmdCopy.set_sensitive(False)
-        self.cmdCut.set_sensitive(False)
-        self.cmdPaste.set_sensitive(False)
+        
+        self.__sensitivity_project = None
+        self.UpdateMenuSensitivity(project = False)
+        
         self.ReloadTitle()
         
         
     def SetSensitiveMenuChilds(self, MenuItem, value):
         for i in MenuItem.get_submenu().get_children():
             i.set_sensitive(value)
+    
+    def UpdateMenuSensitivity(self, project = None, diagram = None, element = None):
+        if self.__sensitivity_project is None:
+            self.__sensitivity_project = [True, True, True]
+        changes = 0
+        if project is not None:
+            if not project:
+                diagram = False
+            if project != self.__sensitivity_project[0]:
+                changes += 1
+            self.__sensitivity_project[0] = project
+        else:
+            project = self.__sensitivity_project[0]
+        if diagram is not None:
+            if not diagram:
+                element = False
+            if diagram != self.__sensitivity_project[1]:
+                changes += 1
+            self.__sensitivity_project[1] = diagram
+        else:
+            diagram = self.__sensitivity_project[1]
+        if element is not None:
+            if element != self.__sensitivity_project[2]:
+                changes += 1
+            self.__sensitivity_project[2] = element
+        else:
+            element = self.__sensitivity_project[2]
+        
+        if changes == 0:
+            return
+        
+        self.SetSensitiveMenuChilds(self.mItemProject, project)
+        self.SetSensitiveMenuChilds(self.mItemDiagram, diagram)
+        self.SetSensitiveMenuChilds(self.mItemElement, element)
+        self.mnuSave.set_sensitive(project)
+        self.mnuSaveAs.set_sensitive(project)
+        self.cmdSave.set_sensitive(project)
+        self.cmdCopy.set_sensitive(element)
+        self.cmdCut.set_sensitive(element)
+        self.cmdPaste.set_sensitive(diagram)
+        self.mnuSave.set_sensitive(project)
+        self.mnuCopy.set_sensitive(element)
+        self.mnuCut.set_sensitive(element)
+        self.mnuPaste.set_sensitive(diagram)
+        self.mnuDelete.set_sensitive(element)
     
     def LoadProject(self, filename, copy):
         self.application.ProjectInit()
@@ -83,15 +121,6 @@ class CfrmMain(CWindow):
             self.nbTabs.CloseAll()
             self.twProjectView.ClearProjectView()
             self.ReloadTitle()
-            self.SetSensitiveMenuChilds(self.mItemEdit, False)
-            self.SetSensitiveMenuChilds(self.mItemProject, False)
-            self.SetSensitiveMenuChilds(self.mItemDiagram, False)
-            self.mnuSave.set_sensitive(False)
-            self.mnuSaveAs.set_sensitive(False)
-            self.cmdSave.set_sensitive(False)
-            self.cmdCopy.set_sensitive(False)
-            self.cmdCut.set_sensitive(False)
-            self.cmdPaste.set_sensitive(False)
             self.nbProperties.Fill(None)
             return CWarningDialog(self.form, _('Error opening file')).run()
             
@@ -101,15 +130,7 @@ class CfrmMain(CWindow):
         self.mnuItems.Redraw()
         self.nbProperties.Fill(None)
         self.picDrawingArea.Redraw()
-        self.SetSensitiveMenuChilds(self.mItemEdit, True)
-        self.SetSensitiveMenuChilds(self.mItemProject, True)
-        self.SetSensitiveMenuChilds(self.mItemDiagram, True)
-        self.mnuSave.set_sensitive(True)
-        self.mnuSaveAs.set_sensitive(True)
-        self.cmdSave.set_sensitive(True)
-        self.cmdCopy.set_sensitive(True)
-        self.cmdCut.set_sensitive(True)
-        self.cmdPaste.set_sensitive(True)
+        self.UpdateMenuSensitivity(project = True)
         
     # Diagrams
     @event("mnuViewTools", "activate")
@@ -236,37 +257,24 @@ class CfrmMain(CWindow):
     @event("cmdCut", "clicked")
     @event("mnuCut","activate")
     def on_mnuCut_click(self, widget):
-        if len(tuple(self.picDrawingArea.GetDrawingArea().GetSelected())) > 0:
-            self.application.GetClipboard().SetContent(tuple(self.picDrawingArea.GetDrawingArea().GetSelected()))
-            for i in self.picDrawingArea.GetDrawingArea().GetSelected():
-                if isinstance(i, CElement):
-                    self.picDrawingArea.GetDrawingArea().DeleteElement(i)
-            self.picDrawingArea.Paint()
+        self.picDrawingArea.ActionCut()
     
     @event("cmdCopy", "clicked")
     @event("mnuCopy","activate")
     def on_mnuCopy_click(self, widget):
-        if len(tuple(self.picDrawingArea.GetDrawingArea().GetSelected())) > 0:
-            self.application.GetClipboard().SetContent(tuple(self.picDrawingArea.GetDrawingArea().GetSelected()))
+        self.picDrawingArea.ActionCopy()
     
     @event("cmdPaste", "clicked")
     @event("mnuPaste","activate")
     def on_mnuPaste_click(self, widget):
-        drawingArea = self.picDrawingArea.GetDrawingArea()
-        drawingArea.DeselectAll()
-        for i in self.application.GetClipboard().GetContent() or []:
-            if isinstance(i,CElement):
-                try:
-                    Element = CElement(drawingArea, i.GetObject())
-                except UMLException, e:
-                    if e.GetName() == "ElementAlreadyExists":
-                        return CWarningDialog(self.form, _('Unable to insert element')).run()
-                    elif e.GetName() == "DiagramHaveNotThisElement":
-                        return CWarningDialog(self.form, _('Wrong element: ') + i.GetObject().GetType().GetId()).run()
-                Element.CopyFromElement(i)
-                drawingArea.AddToSelection(Element)
-        self.picDrawingArea.Paint()        
-        
+        try:
+            self.picDrawingArea.ActionPaste()
+        except UMLException, e:
+            if e.GetName() == "ElementAlreadyExists":
+                return CWarningDialog(self.form, _('Unable to insert element')).run()
+            elif e.GetName() == "DiagramHaveNotThisElement":
+                return CWarningDialog(self.form, _('Wrong element: ') + e.GetParam(0).GetObject().GetType().GetId()).run()
+    
     def ActionLoadToolBar(self, widget):
         pass
 
@@ -305,12 +313,12 @@ class CfrmMain(CWindow):
         if drawingArea is None:
             self.picDrawingArea.Hide()
             self.tbToolBox.SetButtons(None)
-            self.mnuExportSvg.set_sensitive(False)
+            self.UpdateMenuSensitivity(diagram = False)
         else:
             self.picDrawingArea.Show()
             self.picDrawingArea.SetDrawingArea(drawingArea)
             self.tbToolBox.SetButtons(drawingArea.GetType().GetId())
-            self.mnuExportSvg.set_sensitive(True)
+            self.UpdateMenuSensitivity(diagram = True)
     
     @event("nbTabs","show-area-in-project")
     def on_show_area_in_project(self, widget, drawingArea):
@@ -322,8 +330,11 @@ class CfrmMain(CWindow):
 
     @event("picDrawingArea", "selected-item")
     def on_picDrawingArea_selected_item(self, widget, selected):
-        self.mMenuShift.set_sensitive(selected is not None)
-        self.nbProperties.Fill(selected)
+        self.UpdateMenuSensitivity(element = len(selected) > 0)
+        if len(selected) == 1:
+            self.nbProperties.Fill(selected[0])
+        else:
+            self.nbProperties.Fill(None)
 
     @event("picDrawingArea","delete-element-from-all")
     def on_picDrawingArea_delete_selected_item(self, widget, selected):

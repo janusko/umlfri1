@@ -36,7 +36,6 @@ class CpicDrawingArea(CWidget):
         'delete-element-from-all':(gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
             (gobject.TYPE_PYOBJECT, )),
         'drop-from-treeview': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
-        'zorder-change':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE,()),    
         'show-element-in-treeView': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
         'open-specification': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
     }
@@ -143,6 +142,8 @@ class CpicDrawingArea(CWidget):
             self.__DrawDragRect((None, None), True, False)
         elif self.dnd == 'point':
             self.__DrawDragPoint((None, None), True, False)
+        elif self.dnd == 'selection':
+            self.__DrawDragSel((None, None), True, False)
         if self.__NewConnection is not None:
             self.__DrawNewConnection((None, None), False)
 
@@ -207,6 +208,7 @@ class CpicDrawingArea(CWidget):
                     if (event.state & gtk.gdk.CONTROL_MASK) or (event.state & gtk.gdk.SHIFT_MASK):
                         self.DrawingArea.RemoveFromSelection(itemSel)
                         self.Paint()
+                        self.emit('selected-item', list(self.DrawingArea.GetSelected()))
                     elif isinstance(itemSel, CConnection): #selectnuta ciara
                         i = itemSel.GetPointAtPosition(pos)
                         if i is not None:
@@ -217,13 +219,13 @@ class CpicDrawingArea(CWidget):
                             i = itemSel.WhatPartOfYouIsAtPosition(self.canvas, pos)
                             self.__BeginDragLine(event, itemSel, i)
                         self.Paint()    
+                        self.emit('selected-item', list(self.DrawingArea.GetSelected()))
                     else: #selektnute elementy
                         self.__BeginDragRect(event)
                 elif not (event.state & gtk.gdk.CONTROL_MASK) and not (event.state & gtk.gdk.SHIFT_MASK):
                     self.DrawingArea.DeselectAll()
                     self.DrawingArea.AddToSelection(itemSel)
                     self.pmShowInProjectView.set_sensitive(True)
-                    self.emit('selected-item', itemSel)
                     if isinstance(itemSel, CConnection):
                         i = itemSel.GetPointAtPosition(pos)
                         if i is not None:
@@ -240,21 +242,19 @@ class CpicDrawingArea(CWidget):
                             self.selSq = self.selElem.GetSquareAtPosition(pos)
                         self.__BeginDragRect(event)
                     self.Paint()
+                    self.emit('selected-item', list(self.DrawingArea.GetSelected()))
                 else:
                     self.pmShowInProjectView.set_sensitive(False)
                     self.DrawingArea.AddToSelection(itemSel)
-                    self.emit('selected-item', None)
                     self.Paint()
-
-            elif self.DrawingArea.SelectedCount() > 0:
-                if not (event.state & gtk.gdk.CONTROL_MASK):
-                    self.DrawingArea.DeselectAll()
-                    self.emit('selected-item', None)
-                    self.Paint()
-                    
-            # povol / zakaz Z-Order
-            self.emit('zorder-change')
-            
+                    self.emit('selected-item', list(self.DrawingArea.GetSelected()))
+            else: # nothing under pointer
+                if self.DrawingArea.SelectedCount() > 0:
+                    if not (event.state & gtk.gdk.CONTROL_MASK):
+                        self.DrawingArea.DeselectAll()
+                        self.Paint()
+                        self.emit('selected-item', list(self.DrawingArea.GetSelected()))
+                self.__BeginDragSel(event)
         else:
             if event.button == 3:
                 #ak je nieco vyselectovane:
@@ -322,6 +322,16 @@ class CpicDrawingArea(CWidget):
                 else:
                     self.__SetCursor(None)
                 self.dnd = None
+            elif self.dnd == 'selection':
+                x1, y1 = self.DragSel
+                x2, y2 = self.GetAbsolutePos((event.x, event.y))
+                if x2 < x1:
+                    x2, x1 = x1, x2
+                if y2 < y1:
+                    y2, y1 = y1, y2
+                self.DrawingArea.AddRangeToSelection(self.canvas, (x1, y1), (x2, y2))
+                self.dnd = None
+                self.emit('selected-item', list(self.DrawingArea.GetSelected()))
             elif self.__NewConnection is not None:
                 pos = self.GetAbsolutePos((event.x, event.y))
                 itemSel = self.DrawingArea.GetElementAtPosition(self.canvas, pos)
@@ -387,6 +397,8 @@ class CpicDrawingArea(CWidget):
             self.__DrawDragLine(event.x, event.y)
         elif self.dnd == 'move':
             self.__DrawDragMove((event.x, event.y))
+        elif self.dnd == 'selection':
+            self.__DrawDragSel((event.x, event.y))
         elif self.__NewConnection is not None:
             self.__DrawNewConnection((event.x, event.y))
 
@@ -438,6 +450,11 @@ class CpicDrawingArea(CWidget):
         elif direction == gtk.gdk.SCROLL_DOWN:
             tmp.value = min(tmp.upper - tmp.page_size, tmp.value + 20)
         scrollbar.set_adjustment(tmp)
+    
+    def __BeginDragSel(self, event):
+        self.DragSel = (event.x, event.y)
+        self.__DrawDragSel((event.x, event.y), False)
+        self.dnd = 'selection'
 
     def __BeginDragRect(self, event):
         selElements = list(self.DrawingArea.GetSelectedElements())
@@ -486,6 +503,20 @@ class CpicDrawingArea(CWidget):
         tmpy = max(0, tmpy)
         return int(tmpx - posx), int(tmpy - posy)
 
+    def __DrawDragSel(self, pos, erase = True, draw = True):
+        if erase:
+            self.picDrawingArea.window.draw_rectangle(self.DragGC, False, *self.__oldsel)
+        if draw:
+            (x1, y1), (x2, y2) = self.DragSel, self.GetAbsolutePos(pos)
+            if x1 > x2:
+                x1, x2 = x2, x1
+            if y1 > y2:
+                y1, y2 = y2, y1
+            tmpx, tmpy = self.GetRelativePos((x1, y1))
+            w, h = x2 - x1, y2 - y1
+            if self.selSq is None:
+                self.__oldsel = tmpx, tmpy, w, h
+                self.picDrawingArea.window.draw_rectangle(self.DragGC, False, *self.__oldsel)
 
     def __DrawDragRect(self, pos, erase = True, draw = True):
         if erase:
@@ -590,7 +621,7 @@ class CpicDrawingArea(CWidget):
         elif (actionName == 'ToTop'):
             self.DrawingArea.ShiftElementsToTop()
         self.Paint()
-        
+    
     @event("pmShift_SendBack","activate")
     def on_pmShift_SendBack_activate(self, menuItem):
         self.Shift_activate('SendBack')
@@ -605,5 +636,17 @@ class CpicDrawingArea(CWidget):
       
     @event("pmShift_ToTop","activate")
     def on_pmShift_ToTop_activate(self, menuItem):
-        self.Shift_activate('ToTop')        
-      
+        self.Shift_activate('ToTop')
+    
+    def ActionCopy(self):
+        self.DrawingArea.CopySelection(self.application.GetClipboard())
+    
+    def ActionCut(self):
+        self.DrawingArea.CutSelection(self.application.GetClipboard())
+        self.Paint()
+        self.emit('selected-item', list(self.DrawingArea.GetSelected()))
+    
+    def ActionPaste(self):
+        self.DrawingArea.PasteSelection(self.application.GetClipboard())
+        self.Paint()
+        self.emit('selected-item', list(self.DrawingArea.GetSelected()))

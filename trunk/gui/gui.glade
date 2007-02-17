@@ -1076,7 +1076,7 @@
 			  <property name="visible">True</property>
 			  <property name="update_policy">GTK_UPDATE_CONTINUOUS</property>
 			  <property name="inverted">False</property>
-			  <property name="adjustment">2.17142857143 0 10 15 0 5</property>
+			  <property name="adjustment">0 0 10 15 0 5</property>
 			</widget>
 			<packing>
 			  <property name="left_attach">0</property>

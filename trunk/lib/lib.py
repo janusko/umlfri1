@@ -5,7 +5,16 @@ class UMLException(Exception):
     
     def GetName(self):
         return self.name
-        
+    
+    def GetParam(self, index):
+        if isinstance(self.params, (list, tuple)):
+            return self.params[index]
+        else:
+            if index == 0:
+                return self.params
+            else:
+                return None
+    
     def __str__(self):
         return self.name+" "+str(self.params)
     

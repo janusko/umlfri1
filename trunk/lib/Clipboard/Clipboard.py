@@ -1,14 +1,12 @@
-
-
 class CClipboard:
-    
     def __init__(self):
-        self.content = None
+        self.Clear()
     
+    def Clear(self):
+        self.content = []
     
     def SetContent(self, content):
-        self.content = content
-        
-        
+        self.content = [el for el in content]
+    
     def GetContent(self):
         return self.content
