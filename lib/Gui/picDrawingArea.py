@@ -136,7 +136,7 @@ class CpicDrawingArea(CWidget):
         gc = wgt.new_gc()
         wgt.draw_drawable(gc, self.buffer, posx - bposx, posy - bposy, 0, 0, sizx, sizy)
         
-        if self.dnd == 'resRect':
+        if self.dnd == 'resize':
             self.__DrawResRect((None, None), True, False)  
         elif self.dnd == 'rect':
             self.__DrawDragRect((None, None), True, False)
@@ -296,8 +296,8 @@ class CpicDrawingArea(CWidget):
     @event("picEventBox", "button-release-event")
     def on_button_release_event(self, widget, event):
         try:
-            if self.dnd == 'resRect':
-                delta = self.__GetDelta((event.x, event.y))
+            if self.dnd == 'resize':
+                delta = self.__GetDelta((event.x, event.y), True)
                 self.selElem.Resize(self.canvas, delta, self.selSq)
                 self.selElem = None
                 self.selSq = None
@@ -387,7 +387,7 @@ class CpicDrawingArea(CWidget):
 
     @event("picEventBox", "motion-notify-event")
     def on_motion_notify_event(self, widget, event):
-        if self.dnd == 'resRect':
+        if self.dnd == 'resize':
             self.__DrawResRect((event.x, event.y), True, True)    
         elif self.dnd == 'rect':
             self.__DrawDragRect((event.x, event.y))
@@ -452,7 +452,7 @@ class CpicDrawingArea(CWidget):
         scrollbar.set_adjustment(tmp)
     
     def __BeginDragSel(self, event):
-        self.DragSel = (event.x, event.y)
+        self.DragSel = self.GetAbsolutePos((event.x, event.y))
         self.__DrawDragSel((event.x, event.y), False)
         self.dnd = 'selection'
 
@@ -462,17 +462,20 @@ class CpicDrawingArea(CWidget):
         self.DragStartPos = self.GetAbsolutePos((event.x, event.y))
         if len(selElements) == 1:
             self.selSq = self.selElem.GetSquareAtPosition(self.DragStartPos)
+        else:
+            self.selSq = None
         
-        self.DragStartPos = self.GetAbsolutePos((event.x, event.y))
+        self.DragRect = (self.DrawingArea.GetSelectSquare(self.canvas))
+        self.DragPoint = list(self.DragRect[0])
         if (self.selSq is None): # Neresizujem
-            self.DragRect = self.DrawingArea.GetSelectSquare(self.canvas)
             self.__DrawDragRect((event.x, event.y), False)
             self.dnd = 'rect'
         else:
-            self.oldRect = (self.selElem.GetSquare(self.canvas))
             self.__DrawResRect((event.x, event.y), False, True)
-            self.dnd = 'resRect'
-            
+            for i in (0, 1):
+                if self.selSq[i] > 0:
+                    self.DragPoint[i] += self.DragRect[1][i]
+            self.dnd = 'resize'
 
     def __BeginDragPoint(self, event, connection, point):
         self.DragStartPos = self.GetAbsolutePos((event.x, event.y))
@@ -492,15 +495,13 @@ class CpicDrawingArea(CWidget):
         self.scrollPos = self.GetPos()
         self.dnd = 'move'
         
-    def __GetDelta(self, pos):
+    def __GetDelta(self, pos, follow = False):
         if pos == (None, None):
             return 0, 0
         tmpx, tmpy = self.GetAbsolutePos(pos)
         dx, dy = tmpx - self.DragStartPos[0], tmpy - self.DragStartPos[1]
-        posx, posy = self.DragRect[0]
-        tmpx, tmpy = posx + dx, posy + dy
-        tmpx = max(0, tmpx)
-        tmpy = max(0, tmpy)
+        posx, posy = self.DragPoint
+        tmpx, tmpy = max(0, posx + dx), max(0, posy + dy)
         return int(tmpx - posx), int(tmpy - posy)
 
     def __DrawDragSel(self, pos, erase = True, draw = True):
@@ -520,23 +521,23 @@ class CpicDrawingArea(CWidget):
 
     def __DrawDragRect(self, pos, erase = True, draw = True):
         if erase:
-            self.picDrawingArea.window.draw_rectangle(self.DragGC, False, self.__oldx, self.__oldy, *self.DragRect[1])
+            self.picDrawingArea.window.draw_rectangle(self.DragGC, False, self.__oldpos[0], self.__oldpos[1], *self.DragRect[1])
         if draw:
             tmpx, tmpy = self.GetRelativePos(self.DragRect[0])
             dx, dy = self.__GetDelta(pos)
             if self.selSq is None:
                 self.picDrawingArea.window.draw_rectangle(self.DragGC, False, tmpx + dx, tmpy + dy, *self.DragRect[1])
-                self.__oldx, self.__oldy = tmpx + dx, tmpy + dy 
+                self.__oldpos = tmpx + dx, tmpy + dy 
 
     def __DrawResRect(self, pos, erase = True, draw = True):
         if erase:
-            self.picDrawingArea.window.draw_rectangle(self.DragGC, False, self.oldRect[0][0], self.oldRect[0][1], self.oldRect[1][0], self.oldRect[1][1])
+            self.picDrawingArea.window.draw_rectangle(self.DragGC, False, self.DragRect[0][0], self.DragRect[0][1], self.DragRect[1][0], self.DragRect[1][1])
         if draw:
-            delta = self.__GetDelta(pos)
+            delta = self.__GetDelta(pos, True)
             rect = self.selElem.GetResizedRect(self.canvas, delta, self.selSq)
             rect = self.GetRelativePos(rect[0]), rect[1]
             self.picDrawingArea.window.draw_rectangle(self.DragGC, False, rect[0][0], rect[0][1], rect[1][0], rect[1][1])
-            self.oldRect = rect
+            self.DragRect = rect
 
     def __DrawDragPoint(self, (x, y), erase = True, draw = True):
         if x is None:
