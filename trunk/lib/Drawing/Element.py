@@ -121,7 +121,7 @@ class CElement:
             for i in self.squares:
                 canvas.DrawRectangle((i[1][0] + dx, i[1][1] + dy), i[2], None, config['/Styles/Selection/PointsColor'])
             
-            canvas.DrawRectangle((x, y), (w, h), fg = config['/Styles/Selection/RectangleColor'], line_width = config['/Styles/Selection/RectangleWidth'])
+            canvas.DrawRectangle((x + dx, y + dy), (w, h), fg = config['/Styles/Selection/RectangleColor'], line_width = config['/Styles/Selection/RectangleWidth'])
 
     def SetPosition(self, pos):
         self.position = pos
@@ -152,7 +152,7 @@ class CElement:
         resRect = self.GetResizedRect(canvas, delta, selSquareIdx)
         minSize = self.GetMinimalSize(canvas)
         self.position = resRect[0]
-        self.deltaSize = (resRect[1][0]-minSize[0], resRect[1][1]-minSize[1])
+        self.deltaSize = (max(0, resRect[1][0]-minSize[0]), max(0, resRect[1][1]-minSize[1]))
             
     def GetSizeRelative(self):
         return self.deltaSize
