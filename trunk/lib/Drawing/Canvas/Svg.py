@@ -117,6 +117,16 @@ class CSvgCanvas(CAbstractCanvas):
         self.DrawPolygon([pos, (pos[0]+size[0], pos[1]), (pos[0]+size[0], pos[1]+size[1]), (pos[0], pos[1]+size[1])], fg, bg, line_width, line_style)
     
     def DrawText(self, pos, text, font, fg):
+        if '\n' in text:
+            text = text.split('\n')
+            x, y = pos
+            for line in text[:-1]:
+                self.DrawText((x, y), line, font, fg)
+                y += self.GetTextSize(line, font)[1]
+            self.DrawText((x, y), text[-1], font, fg)
+            
+            return
+        
         if 'underline' in font[1] or 'strike' in font[1]:
             size = self.GetTextSize(text, font)
             self.paths.append(('group','',{}))

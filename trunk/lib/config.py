@@ -12,15 +12,11 @@ class CConfig:
             os.mkdir(self['/Paths/UserDir'])
         self.original = self.cfgs.copy()
         if os.path.isfile(self['/Paths/UserConfig']):
-            self.Load(self['/Paths/UserConfig'])
-        self.file = self['/Paths/UserConfig']
-        #~ if userconfig is not None:
-            #~ self.original = self.cfgs.copy()
-            #~ if os.path.isfile(userconfig):
-                #~ self.load(userconfig)
-            #~ self.file = userconfig
-        #~ else:
-            #~ self.file = file
+            try:
+                self.Load(self['/Paths/UserConfig'])
+            except:
+                pass
+        self.file = str(self['/Paths/UserConfig'])
     
     def __del__(self):
         self.Save()
@@ -38,7 +34,7 @@ class CConfig:
         if path is None:
             path = ''
         else:
-            path += '/'+root.tagName
+            path += '/'+str(root.tagName)
         text = ''
         for i in root.childNodes:
             if i.nodeType == i.TEXT_NODE:
@@ -53,7 +49,10 @@ class CConfig:
                 elif i.hasAttribute('path'):
                     text += self.cfgs[i.getAttribute('path')]
                     continue
-            self.cfgs[path+'/'+i.tagName] = self.Load(i, path)
+            tmp = self.Load(i, path)
+            if tmp != '':
+                self.cfgs[path+'/'+str(i.tagName)] = tmp
+        text = text.strip()
         if root.hasAttribute('type'):
             type = root.getAttribute('type')
             if type == 'int':
@@ -71,11 +70,6 @@ class CConfig:
             return text
     
     def Save(self):
-        out = {}
-        save = {'Config': out}
-        
-        f = file(self.file, 'w')
-        
         def XMLEncode(val):
             ret = repr(val)
             if isinstance(val, str):
@@ -83,6 +77,10 @@ class CConfig:
             elif isinstance(val, unicode):
                 ret = ret[2:-1]
             return ret.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('<', '&gt;').replace('"', '&quot;')
+        
+        out = {}
+        save = {'Config': out}
+        f = file(self.file, 'w')
         
         def save(root = save, level = 0):
             for part, val in root.iteritems():
@@ -98,9 +96,13 @@ class CConfig:
                 tmp = out
                 path = path.split('/')
                 for part in path[1:-1]:
-                    tmp = tmp.setdefault(part, {})
+                    tmp2 = tmp.setdefault(part, {})
+                    if not isinstance(tmp2, dict):
+                        tmp2 = tmp[part] = {}
+                    tmp = tmp2
                 tmp[path[-1]] = val
         
+        print>>f, '<?xml version="1.0" encoding="utf-8"?>'
         save()
 
 config = CConfig(consts.MAIN_CONFIG_PATH)
