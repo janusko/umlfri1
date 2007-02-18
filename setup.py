@@ -26,8 +26,8 @@ def search_for_gtk():
 
 class CGtkDllPy2Exe(Cpy2exe):
     GTK_PATH = search_for_gtk()
-    GTK_needed_files = ['etc/fonts', 'etc/gtk-2.0', 'etc/pango', ('lib/gtk-2.0/2.4.0/engines', 'libwimp.dll'),
-                        'lib/gtk-2.0/2.4.0/immodules', 'lib/gtk-2.0/2.4.0/loaders', 'lib/pango/1.4.0/modules',
+    GTK_needed_files = ['etc/fonts', 'etc/gtk-2.0', 'etc/pango', ('lib/gtk-2.0/*/engines', 'libwimp.dll'),
+                        'lib/gtk-2.0/*/immodules', 'lib/gtk-2.0/*/loaders', 'lib/pango/*/modules',
                         'share/themes/MS-Windows/gtk-2.0']
     def __init__(self, *args, **kw_args):
         Cpy2exe.__init__(self, *args, **kw_args)
@@ -47,7 +47,9 @@ class CGtkDllPy2Exe(Cpy2exe):
                 dir_files = [(files, ("*.*", "*"))]
             for dir, files in dir_files:
                 for file in files:
-                    self.distribution.data_files.append((dir, glob.glob(os.sep.join((self.GTK_PATH, dir, file)))))
+                    for found in glob.glob(os.sep.join((self.GTK_PATH, dir, file))):
+                        reldir = os.path.dirname(found)[len(self.GTK_PATH)+1:]
+                        self.distribution.data_files.append((reldir, (found, )))
         for lang in languages:
             self.distribution.data_files.append(('share/locale/%s/LC_MESSAGES'%lang, glob.glob(self.GTK_PATH+'/share/locale/%s/LC_MESSAGES/*.*'%lang)))
 
@@ -127,7 +129,7 @@ class CInnoPy2Exe(Cpy2exe):
                 dest = ''
             else:
                 dest = '\\'+dest
-            if path[0] == '.' and path[1] in '\\/':
+            if len(path) > 0 and path[0] == '.' and path[1] in '\\/':
                 path = path[2:]
             if not os.path.isdir(os.path.join(dist_dir, path)):
                 print>>f, r'Source: "%s"; DestDir: "{app}%s"; Flags: ignoreversion'%(path, dest)
