@@ -33,7 +33,7 @@ class CtabStartPage(CWidget):
         pixbuf = gtk.gdk.pixbuf_new_from_file(self.GetRelativeFile(STARTPAGE_IMAGE))
         pixmap = gtk.gdk.Pixmap(self.ebStartPage.window, 2000, 2000)
         cmap = self.ebStartPage.get_colormap()
-        gc = self.ebStartPage.window.new_gc(foreground = cmap.alloc_color("#FFFFFF"))
+        gc = self.ebStartPage.window.new_gc(foreground = cmap.alloc_color("#CDCDFF"))
         pixmap.draw_rectangle(gc, True, 0, 0, 2000, 2000)
         pixbuf.render_to_drawable(pixmap, gc, 0, 0, 0, 0, -1, -1, 0, 0, 0)
         style.bg_pixmap[gtk.STATE_NORMAL] = pixmap
