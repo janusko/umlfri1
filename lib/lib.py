@@ -34,7 +34,7 @@ def XMLEncode(val):
         ret = ret[1:-1]
     elif isinstance(val, unicode):
         ret = ret[2:-1]
-    return ret.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('<', '&gt;').replace('"', '&quot;')
+    return ret.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('<', '&gt;').replace('"', '&quot;').encode('utf8')
 
 class IDGenerator:
     def __init__(self):

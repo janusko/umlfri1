@@ -45,6 +45,9 @@ class CtabStartPage(CWidget):
         self.hand = gtk.gdk.Cursor(gtk.gdk.HAND2)
         self.default = None
         
+        for lbl in (self.lblOpenProject, self.lblCreateProject, self.lblAbout):
+            lbl.set_label(u"<span font_desc=\"Arial bold single 10\"><u>%s</u></span>"%lbl.get_label())
+        
         self.ebRecent1.set_visible_window(False)
         self.ebRecent2.set_visible_window(False)
         self.ebRecent3.set_visible_window(False)
