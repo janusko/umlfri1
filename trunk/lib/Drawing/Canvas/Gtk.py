@@ -45,7 +45,7 @@ class CGtkCanvas(CAbstractCanvas):
             font.append('italic')
         if bold:
             font.append('bold')
-        font.append(str(size))
+        font.append(str(size)+'px')
         font = ' '.join(font)
         if font in self.fonts:
             fontobj = self.fonts[font]

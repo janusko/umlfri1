@@ -77,6 +77,40 @@ class CElementType:
         elif type == 'opers':
             return []
     
+    def TypeCastAttribute(self, key, value):
+        type, options = self.attributes[key]
+        if type == 'int':
+            return int(value)
+        if type == 'enum':
+            return str(value)
+        elif type == 'float':
+            return float(value)
+        elif type == 'bool':
+            return ToBool(value)
+        elif type == 'str':
+            return str(value)
+        elif type == 'note':
+            return str(value)
+        elif type == 'attrs':
+            ret = []
+            for i in value:
+                ret.append({'name': str(i['name']), 'type': str(i['type']), 'scope': str(i['scope']),
+                            'stereotype': str(i['stereotype']), 'containment': str(i['containment']), 'initial': str(i['initial']),
+                            'doc': str(i['doc']), 'derived': ToBool(i['derived']), 'static': ToBool(i['static']),
+                            'property': ToBool(i['property']), 'const': ToBool(i['const'])
+                })
+            return ret
+        elif type == 'opers':
+            ret = []
+            for i in value:
+                ret.append({'name': str(i['name']), 'params': str(i['params']), 'abstract': ToBool(i['abstract']),
+                            'static': ToBool(i['static']), 'const': ToBool(i['const']), 'returnarray': ToBool(i['returnarray']),
+                            'pure': ToBool(i['pure']), 'synchronize': ToBool(i['synchronize']), 'isquery': ToBool(i['isquery']),
+                            'scope': str(i['scope']), 'type': str(i['type']), 'stereotype': str(i['stereotype']),
+                            'doc': str(i['doc'])
+                })
+            return ret
+    
     def GetAttributes(self):
         for i in self.attributeList:
             yield i

@@ -26,7 +26,7 @@ def ToBool(val):
     if type(val) in (str, unicode):
         return val.lower() in ('1', 'yes', 'true')
     else:
-        return val is True
+        return val == True
 
 def XMLEncode(val):
     ret = repr(val)

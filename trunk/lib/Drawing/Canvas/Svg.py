@@ -69,7 +69,7 @@ class CSvgCanvas(CAbstractCanvas):
                 style['font-weight'] = 'bold'
             if 'italic' in fstyle:
                 style['font-style'] = 'italic'
-            style['font-size'] = '%dpt'%size
+            style['font-size'] = '%dpx'%size
         return style
     
     def DrawArc(self, pos, size, arc = (0, 360), fg = None, bg = None, line_width = None, line_style = None):
