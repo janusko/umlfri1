@@ -70,7 +70,7 @@ class CfrmOperation(common.CWindow):
             self.cboxOprStereotype.child.set_text("")
     
         if 'documentation' in operation:
-            self.txtOprDocumentation.get_buffer().set_text(operation['documentation'])
+            self.txtOprDocumentation.get_buffer().set_text(operation['doc'])
         else:
             self.txtOprDocumentation.get_buffer().set_text("")
         
@@ -100,7 +100,7 @@ class CfrmOperation(common.CWindow):
             operation['type'] = self.cboxOprReturnType.child.get_text()
             operation['stereotype'] = self.cboxOprStereotype.child.get_text()
             buf = self.txtOprDocumentation.get_buffer()
-            operation['documentation'] = buf.get_text(buf.get_start_iter(), buf.get_end_iter())
+            operation['doc'] = buf.get_text(buf.get_start_iter(), buf.get_end_iter())
             
             ret = True
         self.Hide()      

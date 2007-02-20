@@ -116,8 +116,8 @@ class CElementObject:
                     o['scope'] = '#'
                 l = vi['name']
                 l += "("
-                if 'parameters' in vi and vi['parameters']:
-                    l += vi['parameters']
+                if 'params' in vi and vi['params']:
+                    l += vi['params']
                 l += ")"
                 if 'type' in vi and vi['type']:
                     l += ": "+vi['type']
@@ -139,7 +139,7 @@ class CElementObject:
         return key in self.attribs
             
     def SetAttribute(self, key, value):
-        self.attribs[key] = value
+        self.attribs[key] = self.type.TypeCastAttribute(key, value)
         
     def Disconnect(self, connection):
         connection.Disconnect()

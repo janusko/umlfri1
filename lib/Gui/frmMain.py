@@ -2,6 +2,7 @@ import pygtk
 import gtk
 from common import CWindow, event
 import common
+import lib.consts
 
 import os.path
 
@@ -116,6 +117,8 @@ class CfrmMain(CWindow):
         try:
             self.application.GetProject().LoadProject(filename, copy)
         except Exception:
+            if lib.consts.DEBUG:
+                raise
             self.application.GetRecentFiles().RemoveFile(filename)
             self.application.ProjectDelete()
             self.nbTabs.CloseAll()

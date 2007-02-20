@@ -175,7 +175,7 @@ def get_languages(path, domain):
 setup(
     name = "UML .FRI",
     description = "Free UML based CASE tool",
-    version = "0.99",
+    version = "1.0",
     url = "http://fri.uniza.sk/",
     download_url = "http://fri.uniza.sk/",
     author = "Faculty of Management Science and Informatics, University of Zilina",
