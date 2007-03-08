@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ElementType id="Actor">
+    <Icon path="icons/actor.png" />
+    <Connections>
+        <Item value="Association" />
+        <Item value="Generalization" with="UseCase" allowrecursive="0" />
+    </Connections>
+    <Attributes>
+        <Item value="Name" type="str" propid="name" />
+        <Item value="Notes" type="note" />
+    </Attributes>
+    <Appearance>
+        <HBox>
+            <Align align="center">
+                <Svg width="745" height="1000" scale="10%">
+                    <g
+                         id="layer1">
+                        <path
+                             style="fill:none;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-dashoffset:0;stroke-opacity:1"
+                             d="M 522.5,150 C 522.5,232.8 455.3,300 372.5,300 C 289.7,300 222.5,232.8 222.5,150 C 222.5,67.2 289.7,1.6653345e-14 372.5,0 C 455.3,-3.3306691e-14 522.5,67.2 522.5,150 z "
+                             id="path1307" />
+                        <path
+                             style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+                             d="M 0,1000 L 372.5,628.5 L 745,1000"
+                             id="path3055" />
+                        <path
+                             style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+                             d="M 372.5,628.5 L 372.5,300"
+                             id="path3057" />
+                        <path
+                             style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+                             d="M 100,340 L 645,340"
+                             id="path3060" />
+                    </g>
+                    <!--g
+                       id="g3972"
+                       style="stroke:black;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+                       transform="translate(2.857143,-5.714286)">
+                      <path
+                         id="path2209"
+                         d="M 120.49998,974.50016 L 369.49995,726.88474 L 369.49995,345.50006 L 126.22412,587.42318"
+                         style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:black;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+                      <path
+                         style="fill:none;stroke-width:1.01209199;stroke:black;stroke-opacity:1"
+                         d="M 528.63693,184.71422 C 528.63693,272.75492 457.18361,344.20824 369.14291,344.20824 C 281.10221,344.20824 209.6489,272.75492 209.6489,184.71422 C 209.6489,96.67352 281.10221,25.220208 369.14291,25.220208 C 457.18361,25.220208 528.63693,96.67352 528.63693,184.71422 z "
+                         id="path3966" />
+                      <path
+                         style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:black;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+                         d="M 619.49997,974.50016 L 370.5,726.88474 L 370.5,345.50006 L 613.77584,587.42318"
+                         id="path3970" />
+                    </g-->
+                </Svg>
+            </Align>
+            <Align align="center">
+                <TextBox text="#name" font="/Styles/Element/NameTextFont" color="/Styles/Element/NameTextColor" />
+            </Align>
+        </HBox>
+    </Appearance>
+</ElementType>
