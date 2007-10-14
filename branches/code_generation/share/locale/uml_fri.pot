@@ -1,0 +1,410 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-02-17 20:29+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../gui/gui.glade:10
+msgid "UML .FRI"
+msgstr ""
+
+#: ../../gui/gui.glade:37
+msgid "_File"
+msgstr ""
+
+#: ../../gui/gui.glade:88
+msgid "_Edit"
+msgstr ""
+
+#: ../../gui/gui.glade:133
+msgid "_Project"
+msgstr ""
+
+#: ../../gui/gui.glade:142 ../../gui/gui.glade:3719
+msgid "Add diagram"
+msgstr ""
+
+#: ../../gui/gui.glade:179
+msgid "_Diagram"
+msgstr ""
+
+#: ../../gui/gui.glade:189 ../../gui/gui.glade:3592
+msgid "Export diagram as SVG"
+msgstr ""
+
+#: ../../gui/gui.glade:202
+msgid "_Element"
+msgstr ""
+
+#: ../../gui/gui.glade:211
+msgid "_Z-Order"
+msgstr ""
+
+#: ../../gui/gui.glade:220 ../../gui/gui.glade:3628
+msgid "Send Back"
+msgstr ""
+
+#: ../../gui/gui.glade:241 ../../gui/gui.glade:3649
+msgid "Bring Forward"
+msgstr ""
+
+#: ../../gui/gui.glade:262 ../../gui/gui.glade:3670
+msgid "Send To Bottom"
+msgstr ""
+
+#: ../../gui/gui.glade:283 ../../gui/gui.glade:3691
+msgid "Bring To Top"
+msgstr ""
+
+#: ../../gui/gui.glade:312
+msgid "_View"
+msgstr ""
+
+#: ../../gui/gui.glade:321
+msgid "Toolbar"
+msgstr ""
+
+#: ../../gui/gui.glade:335
+msgid "_Help"
+msgstr ""
+
+#: ../../gui/gui.glade:344
+msgid "_About"
+msgstr ""
+
+#: ../../gui/gui.glade:549
+msgid "About"
+msgstr ""
+
+#: ../../gui/gui.glade:585
+msgid "Open Existing Project"
+msgstr ""
+
+#: ../../gui/gui.glade:909
+msgid "Create New Project"
+msgstr ""
+
+#: ../../gui/gui.glade:1015 ../../lib/Gui/picDrawingArea.py:56
+msgid "Start page"
+msgstr ""
+
+#: ../../gui/gui.glade:1198 ../../gui/gui.glade:1501
+msgid "Properties"
+msgstr ""
+
+#: ../../gui/gui.glade:1256
+msgid "Notes"
+msgstr ""
+
+#: ../../gui/gui.glade:1318
+msgid "About us"
+msgstr ""
+
+#: ../../gui/gui.glade:1391
+msgid "Okay, I understand"
+msgstr ""
+
+#: ../../gui/gui.glade:1425
+msgid "Donate this project"
+msgstr ""
+
+#: ../../gui/gui.glade:1670
+msgid "Attributes"
+msgstr ""
+
+#: ../../gui/gui.glade:1776
+msgid "Operations"
+msgstr ""
+
+#: ../../gui/gui.glade:1843
+msgid "Connections"
+msgstr ""
+
+#: ../../gui/gui.glade:1874
+msgid "Attribute"
+msgstr ""
+
+#: ../../gui/gui.glade:1947 ../../gui/gui.glade:2518
+msgid "Name:"
+msgstr ""
+
+#: ../../gui/gui.glade:1975
+msgid "Type:"
+msgstr ""
+
+#: ../../gui/gui.glade:2003
+msgid "Scope: "
+msgstr ""
+
+#: ../../gui/gui.glade:2031 ../../gui/gui.glade:2630
+msgid "Stereotype:"
+msgstr ""
+
+#: ../../gui/gui.glade:2059
+msgid "Containment: "
+msgstr ""
+
+#: ../../gui/gui.glade:2087
+msgid "Initial:"
+msgstr ""
+
+#: ../../gui/gui.glade:2115 ../../gui/gui.glade:2938
+msgid "Documentation:"
+msgstr ""
+
+#: ../../gui/gui.glade:2249
+msgid "Property"
+msgstr ""
+
+#: ../../gui/gui.glade:2268 ../../gui/gui.glade:2791
+msgid "Const"
+msgstr ""
+
+#: ../../gui/gui.glade:2303
+msgid "Derived"
+msgstr ""
+
+#: ../../gui/gui.glade:2322 ../../gui/gui.glade:2747
+msgid "Static"
+msgstr ""
+
+#: ../../gui/gui.glade:2417
+msgid ""
+"By Reference\n"
+"By Value\n"
+"Not Specified"
+msgstr ""
+
+#: ../../gui/gui.glade:2445
+msgid "Operation"
+msgstr ""
+
+#: ../../gui/gui.glade:2546
+msgid "Parameters:"
+msgstr ""
+
+#: ../../gui/gui.glade:2574
+msgid "Return Type:"
+msgstr ""
+
+#: ../../gui/gui.glade:2602
+msgid "Scope:"
+msgstr ""
+
+#: ../../gui/gui.glade:2769
+msgid "Abstract"
+msgstr ""
+
+#: ../../gui/gui.glade:2813
+msgid "Return Array"
+msgstr ""
+
+#: ../../gui/gui.glade:2835
+msgid "Pure"
+msgstr ""
+
+#: ../../gui/gui.glade:2857
+msgid "Synchronized"
+msgstr ""
+
+#: ../../gui/gui.glade:2879
+msgid "Is Query"
+msgstr ""
+
+#: ../../gui/gui.glade:3033
+msgid "Open Project"
+msgstr ""
+
+#: ../../gui/gui.glade:3129
+msgid "Create _New Project"
+msgstr ""
+
+#: ../../gui/gui.glade:3175 ../../gui/gui.glade:3261
+msgid "Open as _copy"
+msgstr ""
+
+#: ../../gui/gui.glade:3199
+msgid "_Open Existing Project"
+msgstr ""
+
+#: ../../gui/gui.glade:3285
+msgid "Open _Recent Project"
+msgstr ""
+
+#: ../../gui/gui.glade:3320
+msgid "Save Project As"
+msgstr ""
+
+#: ../../gui/gui.glade:3383
+msgid "Find in diagrams"
+msgstr ""
+
+#: ../../gui/gui.glade:3479
+msgid "UML.fri"
+msgstr ""
+
+#: ../../gui/gui.glade:3532
+msgid "Pages"
+msgstr ""
+
+#: ../../gui/gui.glade:3560
+msgid "Close diagram"
+msgstr ""
+
+#: ../../gui/gui.glade:3569
+msgid "Close all diagram"
+msgstr ""
+
+#: ../../gui/gui.glade:3584 ../../gui/gui.glade:3611
+msgid "Show in project view"
+msgstr ""
+
+#: ../../gui/gui.glade:3603
+msgid "Open specificetion ..."
+msgstr ""
+
+#: ../../gui/gui.glade:3619
+msgid "Z-Order"
+msgstr ""
+
+#: ../../gui/gui.glade:3753
+msgid "Delete"
+msgstr ""
+
+#: ../../gui/gui.glade:3773
+msgid "Find in diagrams ..."
+msgstr ""
+
+#: ../../lib/Gui/picDrawingArea.py:356
+msgid "Invalid connection"
+msgstr ""
+
+#: ../../lib/Gui/frmAttribute.py:63 ../../lib/Gui/frmOperation.py:84
+msgid "Fill the name and type fields"
+msgstr ""
+
+#: ../../lib/Gui/frmMain.py:125
+msgid "Error opening file"
+msgstr ""
+
+#: ../../lib/Gui/frmMain.py:151
+msgid "Choose SVG file"
+msgstr ""
+
+#: ../../lib/Gui/frmMain.py:172
+msgid "UML .FRI designer"
+msgstr ""
+
+#: ../../lib/Gui/frmMain.py:174
+#, python-format
+msgid "UML .FRI designer [%s]"
+msgstr ""
+
+#: ../../lib/Gui/frmMain.py:181 ../../lib/Gui/frmMain.py:191
+#: ../../lib/Gui/frmMain.py:205
+msgid "Do you want to save project?"
+msgstr ""
+
+#: ../../lib/Gui/frmMain.py:274 ../../lib/Gui/frmMain.py:384
+msgid "Unable to insert element"
+msgstr ""
+
+#: ../../lib/Gui/frmMain.py:276 ../../lib/Gui/frmMain.py:386
+msgid "Wrong element: "
+msgstr ""
+
+#: ../../lib/Gui/twProjectView.py:38
+msgid "Elements"
+msgstr ""
+
+#: ../../lib/Gui/lwProperties.py:22 ../../lib/Gui/frmProperties.py:18
+#: ../../lib/Gui/frmProperties.py:23
+msgid "Name"
+msgstr ""
+
+#: ../../lib/Gui/lwProperties.py:35
+msgid "Value"
+msgstr ""
+
+#: ../../lib/Gui/frmProperties.py:17 ../../lib/Gui/frmProperties.py:21
+msgid "Scope"
+msgstr ""
+
+#: ../../lib/Gui/frmProperties.py:19 ../../lib/Gui/frmProperties.py:22
+msgid "Type"
+msgstr ""
+
+#: ../../lib/Gui/frmProperties.py:24
+msgid "Parameters"
+msgstr ""
+
+#: ../../lib/Gui/frmProperties.py:26
+msgid "Object"
+msgstr ""
+
+#: ../../lib/Gui/frmProperties.py:27
+msgid "Connection"
+msgstr ""
+
+#: ../../lib/Gui/frmProperties.py:30 ../../lib/Gui/frmProperties.py:57
+msgid "Visible"
+msgstr ""
+
+#: ../../lib/Gui/frmOpen.py:27 ../../lib/Gui/frmSave.py:14
+#: ../../lib/Gui/frmSave.py:38
+msgid "UML .FRI Projects"
+msgstr ""
+
+#: ../../lib/Gui/frmOpen.py:31 ../../lib/Gui/frmSave.py:18
+#: ../../lib/Gui/frmSave.py:40
+msgid "UML .FRI Project templates"
+msgstr ""
+
+#: ../../lib/Gui/frmOpen.py:35 ../../lib/Gui/frmSave.py:22
+msgid "All files"
+msgstr ""
+
+#: ../../lib/Gui/frmOpen.py:42
+msgid "File name"
+msgstr ""
+
+#: ../../lib/Gui/frmOpen.py:43
+msgid "Date"
+msgstr ""
+
+#: ../../lib/Gui/frmOpen.py:120
+msgid "File does not exist"
+msgstr ""
+
+#: ../../lib/Gui/frmSplash.py:20
+#, python-format
+msgid "Version: %s"
+msgstr ""
+
+#: ../../lib/Gui/frmFindInDiagram.py:23
+msgid "Diagram name"
+msgstr ""
+
+#: ../../lib/Gui/frmFindInDiagram.py:24
+msgid "Diagram type"
+msgstr ""
+
+#: ../../lib/Gui/dialogs.py:10
+msgid "Warning"
+msgstr ""
+
+#: ../../lib/Gui/dialogs.py:24
+msgid "Question"
+msgstr ""

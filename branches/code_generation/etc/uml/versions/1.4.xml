@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Version id="UML 1.4">
+    <Diagrams>
+        <Item value="Class diagram">
+            <!--Restriction type="delete" value="Class" /-->
+        </Item>
+        <Item value="Use Case diagram" />
+        <Item value="State diagram" />
+        <Item value="Activity diagram" />
+    </Diagrams>
+</Version>
