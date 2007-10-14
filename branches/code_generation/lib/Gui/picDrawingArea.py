@@ -20,7 +20,7 @@ class CpicDrawingArea(CWidget):
     widgets = ('picDrawingArea', 'picEventBox', 'picVBar', 'picHBar',
                 'tbDrawingArea', 'vbAll', 'nbTabs', 'pMenuShift', 
                 'pmShift_SendBack', 'pmShift_BringForward', 'pmShift_ToBottom', 'pmShift_ToTop','pmShowInProjectView',
-                'pmOpenSpecification')
+                'pmOpenSpecification', 'pmGenerateCode')
 
     __gsignals__ = {
         'get-selected':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_PYOBJECT,
@@ -42,7 +42,8 @@ class CpicDrawingArea(CWidget):
 
     def __init__(self, app, wTree):
         CWidget.__init__(self, app, wTree)
-
+        
+        
         self.__NewConnection = None
         self.dnd = None
         self.selecting = None
@@ -96,7 +97,11 @@ class CpicDrawingArea(CWidget):
     def SetDrawingArea(self, drawingArea):
         self.DrawingArea = drawingArea
         self.Paint()
-
+    
+    def OnlySetDrawingArea(self, drawingArea):
+        self.DrawingArea = drawingArea
+        self.Paint(wg = False)
+    
     def GetWindowSize(self):
         tmpx, tmpy =  self.picDrawingArea.window.get_size()
         return (int(tmpx), (tmpy))
@@ -118,7 +123,7 @@ class CpicDrawingArea(CWidget):
     def GetRelativePos(self, (posx, posy)):
         return int(-self.picHBar.get_value() + posx), int(-self.picVBar.get_value() + posy)
 
-    def Paint(self, changed = True):
+    def Paint(self, changed = True, wg = True):
         size = self.GetWindowSize()
         posx, posy = int(self.picHBar.get_value()), int(self.picVBar.get_value())
         sizx, sizy = self.GetWindowSize()
@@ -134,10 +139,11 @@ class CpicDrawingArea(CWidget):
             self.DrawingArea.Paint(self.canvas)
         wgt = self.picDrawingArea.window
         gc = wgt.new_gc()
-        wgt.draw_drawable(gc, self.buffer, posx - bposx, posy - bposy, 0, 0, sizx, sizy)
+        if wg:
+            wgt.draw_drawable(gc, self.buffer, posx - bposx, posy - bposy, 0, 0, sizx, sizy)
         
         if self.dnd == 'resize':
-            self.__DrawResRect((None, None), True, False)  
+            self.__DrawResRect((None, None), True, False)
         elif self.dnd == 'rect':
             self.__DrawDragRect((None, None), True, False)
         elif self.dnd == 'point':
@@ -164,7 +170,8 @@ class CpicDrawingArea(CWidget):
     def ExportSvg(self, filename):
         self.DrawingArea.DeselectAll()
         self.Paint()
-        canvas = CSvgCanvas(1000, 1000, self.canvas, self.application.GetProject().GetStorage())
+        width, height = self.DrawingArea.GetSize(self.canvas)
+        canvas = CSvgCanvas(width, height, self.canvas, self.application.GetProject().GetStorage())
         canvas.Clear()
         self.DrawingArea.Paint(canvas)
         canvas.WriteOut(file(filename, 'w'))
@@ -180,6 +187,9 @@ class CpicDrawingArea(CWidget):
         for sel in self.DrawingArea.GetSelected():
             self.DrawingArea.DeleteItem(sel)
         self.Paint()
+    
+    def HasFocus(self):
+        return self.picDrawingArea.get_property('has-focus')
     
     @event("picEventBox", "button-press-event")
     def on_picEventBox_button_press_event(self, widget, event):
@@ -610,6 +620,12 @@ class CpicDrawingArea(CWidget):
             for Element in self.DrawingArea.GetSelected():
                 if isinstance(Element, CElement):
                     self.emit('open-specification',Element)
+    
+    @event("pmGenerateCode","activate")
+    def on_mnuGenerateCode_click(self, menuItem):
+        dlg = self.application.GetWindow('frmGenerateSourceCode')
+        dlg.SetParent(self.application.GetWindow('frmMain'))
+        dlg.ShowDialog(self.DrawingArea.GetSelected())
         
     # Menu na Z-Order:  
     def Shift_activate(self, actionName):

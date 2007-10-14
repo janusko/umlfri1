@@ -1,4 +1,5 @@
 from lib.lib import ToBool
+from lib.lib import UMLException
 
 class CElementType:
     def __init__(self, id):
@@ -95,20 +96,31 @@ class CElementType:
             ret = []
             for i in value:
                 ret.append({'name': str(i['name']), 'type': str(i['type']), 'scope': str(i['scope']),
-                            'stereotype': str(i['stereotype']), 'containment': str(i['containment']), 'initial': str(i['initial']),
+                            'stereotype': str(i['stereotype']), 'containment': int(i['containment']), 'initial': str(i['initial']),
                             'doc': str(i['doc']), 'derived': ToBool(i['derived']), 'static': ToBool(i['static']),
-                            'property': ToBool(i['property']), 'const': ToBool(i['const'])
+                            'property': ToBool(i['property']), 'const': ToBool(i['const']), 'getter': str(i['getter']),
+                            'setter': str(i['setter'])
                 })
             return ret
         elif type == 'opers':
             ret = []
             for i in value:
-                ret.append({'name': str(i['name']), 'params': str(i['params']), 'abstract': ToBool(i['abstract']),
+                o = {'name': str(i['name']), 'params': str(i['params']), 'abstract': ToBool(i['abstract']),
                             'static': ToBool(i['static']), 'const': ToBool(i['const']), 'returnarray': ToBool(i['returnarray']),
                             'pure': ToBool(i['pure']), 'synchronize': ToBool(i['synchronize']), 'isquery': ToBool(i['isquery']),
                             'scope': str(i['scope']), 'type': str(i['type']), 'stereotype': str(i['stereotype']),
-                            'doc': str(i['doc'])
-                })
+                            'doc': str(i['doc']), 'initial': str(i['initial'])
+                }
+                if i.has_key('overload'):
+                    o['overload'] = ToBool(i['overload'])
+                else:
+                    o['overload'] = False
+                
+                if i.has_key('override'):
+                    o['override'] = ToBool(i['override'])
+                else:
+                    o['override'] = False
+                ret.append(o)
             return ret
     
     def GetAttributes(self):
@@ -116,6 +128,8 @@ class CElementType:
             yield i
             
     def GetAttribute(self, key):
+        if not self.attributes.has_key(key):
+            return None
         return self.attributes[key]
     
     def GetGenerateName(self):
@@ -142,11 +156,15 @@ class CElementType:
     def HasVisualAttribute(self, id):
         return id in self.visAttrs.itervalues()
     
+    def HasKeyVisualAttribute(self, key):
+        return self.visAttrs.has_key(key)
+    
     def GetVisAttr(self, id):
         if id in self.visAttrs:
             return self.visAttrs[id]
         else:
             raise UMLException('VisAttrDontExists')
+    
     
     def GetSize(self, canvas, element):
         return self.appearance.GetSize(canvas, element)

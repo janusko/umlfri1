@@ -53,6 +53,16 @@ class CDiagramFactory:
                 if root.hasAttribute('lifelines'):
                     lifelines = i.getAttribute('lifelines')
                 obj.SetSpecial(swimlines, lifelines)
+            elif en == 'Attributes':
+                for item in i.childNodes:
+                    if item.nodeType not in (xml.dom.minidom.Node.ELEMENT_NODE, xml.dom.minidom.Node.DOCUMENT_NODE):
+                        continue
+                    if item.tagName != 'Item':
+                        raise UMLException("XMLError")
+                    if not item.hasAttribute('value'):
+                        raise UMLException("XMLError")
+                    
+                    obj.AppendAttribute(item.getAttribute('value'),item.getAttribute('type') )
             elif en == 'Elements':
                 for item in i.childNodes:
                     if item.nodeType not in (xml.dom.minidom.Node.ELEMENT_NODE, xml.dom.minidom.Node.DOCUMENT_NODE):

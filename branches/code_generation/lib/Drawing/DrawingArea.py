@@ -15,11 +15,23 @@ class CDrawingArea:
         self.typeDiagram = type
         self.size = None
         self.viewport = ((0, 0), (0, 0))
+        self.attributes = {}
+        if type is not None:
+            for i in type.GetAttributes():
+                self.SetAttribute(i,type.GetDefValue(i))
+            
         if name is None:
-            name = "New " + type.GetId()
-        self.name = name
+            self.SetAttribute('Name',"New " + type.GetId())
+        else:
+            self.SetAttribute('Name',name)
         
-        
+    
+    def SetAttribute(self,name, value):
+        self.attributes[name] = value
+    
+    def GetAttribute(self, name):
+        return self.attributes[name]
+    
     # Cesta v strome kde sa nachadza drawing area
     def HasElementObject(self, object):
         for i in self.elements:
@@ -49,10 +61,11 @@ class CDrawingArea:
         return self.typeDiagram
     
     def GetName(self):
-        return self.name
+        return self.GetAttribute('Name')
+
     
     def SetName(self, name):
-        self.name = name
+        self.SetAttribute('Name',name)
     
     def AddElement(self, element):
         self.size = None
@@ -244,7 +257,20 @@ class CDrawingArea:
             result = (page[0] * (result[0]//page[0] + 1), page[1] * (result[1]//page[1] + 1))
             self.size = result
         return result
-        
+    
+    def GetMinMaxSize(self, canvas):
+        result = [(1000,1000),(0,0)]
+        for connection in self.connections:
+            for point in connection.GetMiddlePoints():
+                result[0] = tuple(min(x) for x in zip(result[0], point))
+                result[1] = tuple(max(x) for x in zip(result[1], point))
+        for element in self.elements:
+                pointMin = tuple(x for x in element.GetPosition())
+                result[0] = tuple(min(x) for x in zip(result[0], pointMin))
+                pointMax = tuple(sum(x) for x in zip(element.GetPosition(), element.GetSize(canvas)))
+                result[1] = tuple(max(x) for x in zip(result[1], pointMax))
+        return tuple(result)
+
     def GetDrawable(self):
         return self.drawable        
         
@@ -271,17 +297,17 @@ class CDrawingArea:
         return self.viewport
         
     #view = ((x, y), (w, h)
-    def Paint(self, canvas):
+    def Paint(self, canvas, move = (0,0)):
         ((x, y), (w, h)) = self.viewport
         canvas.Clear()
         for e in self.elements:
             ((ex1, ey1), (ex2, ey2)) = e.GetSquare(canvas)
             if not (ex2 < x or x + w < ex1 or ey2 < y or y + w < ey1):
-                e.Paint(canvas, delta = (-x, -y))
+                e.Paint(canvas, delta = (-x + move[0], -y + move[1]))
         for c in self.connections:
             ((ex1, ey1), (ex2, ey2)) = c.GetSquare(canvas)
             if not (ex2 < x or x + w < ex1 or ey2 < y or y + w < ey1):
-                c.Paint(canvas, delta = (-x, -y))
+                c.Paint(canvas, delta = (-x + move[0], -y + move[1]))
             
     def GetElements(self):
         for e in self.elements:

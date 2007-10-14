@@ -4,6 +4,7 @@
     <Connections>
         <Item value="Association" />
         <Item value="Generalization" with="UseCase" allowrecursive="0" />
+        <Item value="Generalization" with="Actor" allowrecursive="0" />
     </Connections>
     <Attributes>
         <Item value="Name" type="str" propid="name" />

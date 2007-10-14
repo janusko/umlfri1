@@ -2,21 +2,26 @@
 <ElementType id="Class">
     <Icon path="icons/class.png" />
     <Connections>
-        <Item value="Association" />
-        <Item value="Generalization" with="Class" allowrecursive="0" />
+        <Item value="Association" allowrecursive="1"/>
+        <Item value="Generalization" with="Class" allowrecursive="1" />
         <Item value="Agregation" with="Class" allowrecursive="1" />
-        <Item value="Compose" with="Class" allowrecursive="0" />
+        <Item value="Compose" with="Class" allowrecursive="1" />
     </Connections>
     <Attributes>
         <Item value="Name" type="str" propid="name" />
-        <Item value="Scope" type="enum">
-            <Option value="public" />
+        <Item value="Scope" type="enum" propid="scope">
             <Option value="private" />
             <Option value="protected" />
+            <Option value="public" />
         </Item>
         <Item value="Attributes" type="attrs" propid="attributes" />
         <Item value="Operations" type="opers" propid="operations" />
-        <Item value="Abstract" type="bool" />
+        <Item value="Abstract" type="bool" propid="abstract"/>
+        <Item value="HideAttributes" type="bool" propid="hideAttributes" />
+        <Item value="HideOperations" type="bool" propid="hideOperations" />
+        <Item value="Stereotype" type="enum" >
+            <Option value="" />
+        </Item>
         <Item value="Notes" type="note" />
     </Attributes>
     <Appearance>
@@ -25,32 +30,60 @@
                 <HBox>
                     <Padding padding="5">
                         <Align align="center">
-                            <TextBox text="#name" font="/Styles/Element/NameTextFont" color="/Styles/Element/NameTextColor" />
+                            <HBox>
+                                <Condition condition="#abstract" type="True" negate="1">                         
+                                    <TextBox text="#name" font="/Styles/Element/NameTextFont" color="/Styles/Element/NameTextColor" />
+                                </Condition>
+                                <Condition condition="#abstract" type="True" negate="0">
+                                    <TextBox text="#name" font="/Styles/Element/NameTextFontAbstract" color="/Styles/Element/NameTextColor" />
+                                </Condition>
+                            </HBox>
                         </Align>
                     </Padding>
                     <Line type="horizontal" color="/Styles/Element/LineColor" />
                     <Padding padding="5">
-                        <HBox>
-                            <Loop collection="attributes">
-                                <VBox>
-                                    <TextBox text="@scope" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                    <TextBox text="@line" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                </VBox>
-                            </Loop>
-                        </HBox>
+                        <Condition condition="#hideAttributes" type="True" negate="1">
+                            <HBox>
+                                <Loop collection="attributes">
+                                    <VBox>
+                                        <TextBox text="@scope" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                        <Condition condition="@static" type="True" negate="0">
+                                            <TextBox text="@line" font="/Styles/Element/ObjectNameTextFont" color="/Styles/Element/TextColor" />
+                                        </Condition>
+                                        <Condition condition="@static" type="True" negate="1">
+                                            <TextBox text="@line" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                        </Condition>
+                                    </VBox>
+                                </Loop>
+                            </HBox>
+                        </Condition>
                     </Padding>
                     <Condition condition="operations" type="empty" negate="1">
                         <HBox>
                             <Line type="horizontal" color="/Styles/Element/LineColor" />
                             <Padding padding="5">
+                            <Condition condition="#hideOperations" type="True" negate="1">
                                 <HBox>
                                     <Loop collection="operations">
                                         <VBox>
                                             <TextBox text="@scope" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                            <TextBox text="@line" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                            <Condition condition="@static" type="True" negate="0">
+                                                <TextBox text="@line" font="/Styles/Element/ObjectNameTextFont" color="/Styles/Element/TextColor" />
+                                            </Condition>
+                                            <Condition condition="@static" type="True" negate="1">
+                                                <HBox>
+                                                    <Condition condition="@abstract" type="True" negate="0">
+                                                        <TextBox text="@line" font="/Styles/Element/AbstractTextFont" color="/Styles/Element/TextColor" />
+                                                    </Condition>
+                                                    <Condition condition="@abstract" type="True" negate="1">
+                                                        <TextBox text="@line" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                    </Condition>
+                                                </HBox>
+                                            </Condition>
                                         </VBox>
                                     </Loop>
                                 </HBox>
+                            </Condition>
                             </Padding>
                         </HBox>
                     </Condition>

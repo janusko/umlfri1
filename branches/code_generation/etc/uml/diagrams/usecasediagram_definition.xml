@@ -2,12 +2,15 @@
 <DiagramType id="Use Case diagram" umlversion="*">
     <Icon path="icons/use_case_diagram.png" />
     <Special swimlines="0" lifelines="0" />
+    <Attributes>
+        <Item value="Name" type="str" />
+        <Item value="Notes" type="note" />
+    </Attributes>
     <Elements>
-        <Item value="Note" />
-        <Item value="Package" />
+        <Item value="Note" umlversion="*" />
+        <Item value="Package" umlversion="*" />
         <Item value="UseCase" umlversion="*" />
         <Item value="Actor" umlversion="*" />
-        <Item value="Note" umlversion="*" />
     </Elements>
     <Connections>
         <Item value="Generalization" umlversion="*" />

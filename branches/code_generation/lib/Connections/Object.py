@@ -1,4 +1,5 @@
 from Exceptions import EConnectionRestriction
+from lib.lib import UMLException
 
 class CConnectionObject(object):
     def __init__(self, type, source, dest):
@@ -109,6 +110,19 @@ class CConnectionObject(object):
     
     def GetVisualProperty(self, key):
         return self.attributes[self.type.GetVisAttr(key)]
+
+    def GetProperty(self, key = None):
+        o = {}
+        if self.attributes.has_key('Name'):
+            o['name'] = self.attributes['Name']
+        else:
+            o['name'] = ""
+        o['type'] = self.type.GetId()
+        o['dest'] = self.GetDestination()
+        o['source'] = self.GetSource()
+        if key is not None:
+            return o[key]
+        return o
         
     Source = property(GetSource, SetSource)
     Destination = property(GetDestination, SetDestination)

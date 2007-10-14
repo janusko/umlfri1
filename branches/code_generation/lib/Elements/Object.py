@@ -10,7 +10,7 @@ class CElementObject:
         for i in self.type.GetAttributes():
             self.SetAttribute(i, self.type.GetDefValue(i))            
         if type.GetGenerateName():
-            self.SetAttribute('Name', 'New ' + type.GetId())
+            self.SetAttribute('Name', 'New' + type.GetId())
         else:
             self.SetAttribute('Name', '')
         self.node = lambda: None
@@ -35,7 +35,7 @@ class CElementObject:
         self.path = path 
     
     def GetNode(self):
-        return self.node
+        return self.node()
         
     def AddConnection(self, connection):
         if connection not in self.connections:
@@ -46,6 +46,12 @@ class CElementObject:
     def GetConnections(self):
         for c in self.connections:
             yield c
+    
+    def CountConnections(self, type = "All"):
+        if type == "All":
+            return len(self.connections)
+        else:
+            return 2
         
     def GetType(self):
         return self.type
@@ -68,7 +74,78 @@ class CElementObject:
     def GetAttributes(self):
         for attr in self.attribs:
             yield attr
+    
+    
+    def __CreateFullName(self):
+        name = self.GetName()
+        parent = self.GetNode().GetParent()
+        while parent is not None:
+            if parent.GetObject().GetType().GetId() == self.type.GetId():
+                name = parent.GetObject().GetName() + "::" + name
+            parent = parent.GetParent()
+        return name
+    
+    def GetProperty(self, key = None):
+
+        if key == "fullname":
+            return self.__CreateFullName()
+
+        if self.type.HasKeyVisualAttribute(key):
+            attr = self.type.GetVisAttr(key)
+        else:
+            attr = key
         
+        type = self.type.GetAttribute(attr)
+        if type is None:
+            return None
+        val = self.attribs[attr]
+
+        if type[0] == 'attrs':
+            v = []
+            for vi in val:
+                o = {}
+                o = vi
+                o['default'] = vi['initial']
+                if vi['getter'] != "":
+                    o['getter'] = vi['getter'].split('(')[0]
+                if vi['setter'] != "":
+                    o['setter'] = vi['setter'].split('(')[0]
+                v.append(o)
+            val = v
+        elif type[0] == 'opers':
+            v = []
+            for vi in val:
+                v.append(vi)
+            val = v
+        return val
+  
+    def ParseParams(self, params):
+        if len(params) == 0:
+            return None
+        listParams = params.split(',')
+        ret = {}
+        ret['paramsName'] = []
+        ret['paramsType'] = []
+        ret['paramsDefault'] = []
+        for i in listParams:
+            if len(i.split(':')) == 1:
+                ret['paramsType'].append("")
+                if len(i.split('=')) == 1:
+                    ret['paramsDefault'].append("")
+                    ret['paramsName'].append(i.split(':')[0])
+                else:
+                    ret['paramsDefault'].append(i.split('=')[1])
+                    ret['paramsName'].append(i.split('=')[0])
+            else:
+                ret['paramsName'].append(i.split(':')[0])
+                ret['paramsType'].append(i.split(':')[1].split('=')[0])
+                if len(i.split(':')[1].split('=')) == 1:
+                    ret['paramsDefault'].append("")
+                else:
+                    ret['paramsDefault'].append(i.split(':')[1].split('=')[1])        
+        return ret
+        
+    
     def GetVisualProperty(self, key):
         if key == 'CHILDREN':
             node = self.node()
@@ -96,11 +173,14 @@ class CElementObject:
                 elif vi['scope'] == 'protected':
                     o['scope'] = '#'
                 l = vi['name']
+                o['name'] = vi['name']
+                o['type'] = vi['type']
                 if 'type' in vi and vi['type']:
                     l += ": "+vi['type']
                 if 'initial' in vi and vi['initial']:
                     l += " = "+vi['initial']
                 o['line'] = l
+                o['static'] = vi['static']
                 v.append(o)
             val = v
         elif type[0] == 'opers':
@@ -122,6 +202,11 @@ class CElementObject:
                 if 'type' in vi and vi['type']:
                     l += ": "+vi['type']
                 o['line'] = l
+                o['type'] = vi['type']
+                o['name'] = vi['name']
+                o['params'] = vi['params']
+                o['static'] = vi['static']
+                o['abstract'] = vi['abstract']
                 v.append(o)
             val = v
         return val
@@ -171,7 +256,7 @@ class CElementObject:
                         if nName.endswith(' '):
                             nName = nName + str(id)
                         else:
-                            nName = nName + ' ' + str(id)
+                            nName = nName + str(id)
                         self.SetAttribute('Name', nName)
                         id = id + 1
                         checkNames = True #znovu prekontroluj nazvy

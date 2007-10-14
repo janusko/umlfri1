@@ -42,6 +42,12 @@ class CProjectNode(object):
 
     def GetPath(self):
         return self.object.GetPath()
+    
+    def GetShortPath(self):
+        path = ""
+        for i in self.object.GetPath().split('/'):
+            path = path + i.split(':')[0] + "/"
+        return path
 
     def SetPath(self, path):
         self.object.SetPath(path)
@@ -123,5 +129,21 @@ class CProjectNode(object):
 
     def SetParent(self, parent):
         self.parent = parent
+    
+    def GetNodeSpecifyElements(self, root, elements, recursive = True):
+        List = []
+        if root is None:
+            root = self
+        def Rekurzia(root):
+            for i in root.GetChilds():
+                if i.GetType() in elements or elements == "All":
+                    List.append(i)
+                    if recursive and i.HasChild() and i.GetType() == 'Package':
+                        Rekurzia(i)
+                    
+        Rekurzia(root)
+        for i in List:
+            yield i
+
 
     Parent = property(GetParent,SetParent)
