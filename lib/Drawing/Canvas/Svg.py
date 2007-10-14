@@ -13,8 +13,8 @@ class CSvgCanvas(CAbstractCanvas):
     def __init__(self, width, height, othercanvas, storage = None):
         self.othercanvas = othercanvas
         self.storage = storage
-        self.width = width
-        self.height = height
+        self.width = width + 10
+        self.height = height + 10
         
         self.paths = []
     
@@ -22,6 +22,7 @@ class CSvgCanvas(CAbstractCanvas):
         print>>f, '<?xml version="1.0" encoding="UTF-8" standalone="no"?>'
         print>>f, '<svg width="%d" height="%d" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">'%(self.width, self.height)
         level = 1
+        print>>f, '<rect x="0" y="0" width="%d" height="%d" fill="none" stroke-width="5" stroke="black" />'%(self.width , self.height)
         for type, params, style in self.paths:
             style = ' '.join(["%s: %s;"%s for s in style.iteritems()])
             if type == 'path':
@@ -69,7 +70,7 @@ class CSvgCanvas(CAbstractCanvas):
                 style['font-weight'] = 'bold'
             if 'italic' in fstyle:
                 style['font-style'] = 'italic'
-            style['font-size'] = '%dpx'%size
+            style['font-size'] = '%dpt'%size #self.othercanvas.RecalcFontPxSize(size)
         return style
     
     def DrawArc(self, pos, size, arc = (0, 360), fg = None, bg = None, line_width = None, line_style = None):

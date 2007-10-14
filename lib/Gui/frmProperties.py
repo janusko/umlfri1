@@ -1,23 +1,27 @@
 from common import CWindow, event
 from lib.Drawing import CElement, CConnection
 import gtk
-
 import gobject
 
 class CfrmProperties(CWindow):
-    widgets = ('nbProProperties', 'twAttributes', 'twOperations', 'twConnections', 'cmdDeleteAttribute', 'cmdDeleteOperation', 'cmdNewAttribute', 'cmdNewOperation', )
+    widgets = ('nbProProperties', 'twAttributes', 'twOperations', 'twConnections', 'cmdDeleteAttribute', 'cmdDeleteOperation', 'cmdNewAttribute', 'cmdNewOperation',
+               )
     name = 'frmProperties'
-    
+       
     def __init__(self, app, wTree):
         CWindow.__init__(self, app, wTree)
         self.attrModel = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
         self.operModel = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
         self.connModel = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_BOOLEAN)
         
+        
+        
+        #~ self.twAttributes.append_column(gtk.TreeViewColumn(_("Visible"), renderer, active = 0))
         self.twAttributes.append_column(gtk.TreeViewColumn(_("Scope"), gtk.CellRendererText(), text = 0))
         self.twAttributes.append_column(gtk.TreeViewColumn(_("Name"), gtk.CellRendererText(), text = 1))
         self.twAttributes.append_column(gtk.TreeViewColumn(_("Type"), gtk.CellRendererText(), text = 2))
         
+        #~ self.twOperations.append_column(gtk.TreeViewColumn(_("Visible"), renderer, active = 0))
         self.twOperations.append_column(gtk.TreeViewColumn(_("Scope"), gtk.CellRendererText(), text = 0))
         self.twOperations.append_column(gtk.TreeViewColumn(_("Type"), gtk.CellRendererText(), text = 1))
         self.twOperations.append_column(gtk.TreeViewColumn(_("Name"), gtk.CellRendererText(), text = 2))
@@ -78,6 +82,7 @@ class CfrmProperties(CWindow):
         else:
             self.nbProProperties.get_nth_page(0).hide()
             self.__attributes = None
+            
         if self.__elementObj.HasAttribute('Operations'):
             self.nbProProperties.get_nth_page(1).show()
             self.__operations = self.__elementObj.GetAttribute("Operations")[:]
@@ -88,6 +93,7 @@ class CfrmProperties(CWindow):
         else:
             self.nbProProperties.get_nth_page(1).hide()
             self.__operations = None
+
         #Fill connections tree
         self.connModel.clear()
         for i in self.__elementObj.GetConnections():
@@ -106,7 +112,8 @@ class CfrmProperties(CWindow):
         if response == gtk.RESPONSE_OK:
             self.__Save()
         self.Hide()
-        
+
+
         return self.__saved
     
     def __Save(self):
@@ -114,6 +121,7 @@ class CfrmProperties(CWindow):
             self.__elementObj.SetAttribute("Attributes", self.__attributes)
         if self.__operations is not None:
             self.__elementObj.SetAttribute("Operations", self.__operations)
+            self.__SetAbstractToElement()
         if self.__connections is not None:
             for i in self.__connections:
                 con = self.element.GetDrawingArea().GetConnection(i)
@@ -137,16 +145,79 @@ class CfrmProperties(CWindow):
     
     def __SetOperLine(self, iter, oper):
         self.operModel.set(iter, 0, oper['scope'], 1, oper['type'], 2, oper['name'], 3, oper['params'])
+    
+    def __RemoveOperations(self, text):
+        if text == "":
+            return
+        o = {}
+        o['name'] = text.split('(')[0]
+        o['params'] = text.split('(')[1].split(')')[0]
+        if text.split(')')[1] != "":
+            o['type'] = text.split(')')[1].split(':')[1]
+        else:
+            o['type'] = ''
+            
+        for id, i in enumerate(self.__operations):
+            if o['name'] == i['name'] and o['params'] == i['params'] and o['type'] == i['type']:
+                model = self.twOperations.get_model()
+                model.remove(model.get_iter(id))                
+                self.__operations.remove(i)
+                return
+    
+    def IsExistsOperation(self,oper):
+        return False
+    
+    def __SetAbstractToElement(self):
+        abstr = False
+        for i in self.__operations:
+            if i['pure']:
+                abstr = True
+                break
+        self.__elementObj.SetAttribute('Abstract' ,abstr)
+            
+    
+    '''Nastavuje overload override pre delphi a nastavuje aj abstraktnu triedu ak
+       ma aspon jednu cisto virtualnu metodu '''
+    def SetSpecifyProperty(self,oper):
+        if oper['pure']:
+            self.__elementObj.SetAttribute('Abstract' ,True)
+        for i in self.__operations:
+            if i['name'] == oper['name']:
+                i['overload'] = True
+                oper['overload'] = True
+                break
+        else:
+            oper['overload'] = False
         
+        if oper['abstract']:
+            for con in self.__elementObj.GetConnections():
+                if con.GetType().GetId() == "Generalization":
+                    opers = con.GetDestination().GetAttribute("Operations")
+                    for o in opers:
+                        if o['name'] == oper['name'] and o['params'] == oper['params'] and o['abstract'] and o['type'] == oper['type']:
+                            oper['override'] = True
+                            break
+                    else:
+                        oper['override'] = False
+        else:
+            oper['override'] = False
+    
+    
     @event("cmdNewAttribute", "clicked")
     def on_cmdNewAttribute_clicked(self, widget):
         attr = {}
         tmp = self.application.GetWindow('frmAttribute')
         tmp.SetParent(self)
-        if tmp.ShowFrmAttribute(attr):
+        retDlg = tmp.ShowFrmAttribute(attr)
+        if retDlg or isinstance(retDlg, dict):
             self.__attributes.append(attr)
             iter = self.attrModel.append()
             self.__SetAttrLine(iter, attr)
+            if isinstance(retDlg, dict) and isinstance(retDlg['append'], list):
+                for i in retDlg['append']:
+                    self.__operations.append(i)
+                    iter = self.operModel.append()
+                    self.__SetOperLine(iter, i)
         
     @event("cmdNewOperation", "clicked")
     def on_cmdNewOperation_clicked(self, widget):
@@ -154,6 +225,7 @@ class CfrmProperties(CWindow):
         tmp = self.application.GetWindow('frmOperation')
         tmp.SetParent(self)
         if tmp.ShowFrmOperation(oper):
+            self.SetSpecifyProperty(oper)
             self.__operations.append(oper)
             iter = self.operModel.append()
             self.__SetOperLine(iter, oper)
@@ -170,6 +242,9 @@ class CfrmProperties(CWindow):
     def on_cmdDeleteAttribute_clicked(self, widget):
         sel = self.twAttributes.get_selection()
         model, iter = sel.get_selected()
+        atr = self.__attributes[model.get_path(iter)[0]]
+        self.__RemoveOperations(atr['getter'])
+        self.__RemoveOperations(atr['setter'])
         del self.__attributes[model.get_path(iter)[0]]
         model.remove(iter)
         self.cmdDeleteAttribute.set_sensitive(False)
@@ -185,13 +260,29 @@ class CfrmProperties(CWindow):
     @event("twAttributes", "row-activated")
     def on_twAttributes_row_activated(self, widget, path, column):
         attr = self.__attributes[path[0]]
-        if self.application.GetWindow('frmAttribute').ShowFrmAttribute(attr):
+        dlg = self.application.GetWindow('frmAttribute')
+        dlg.SetParent(self)
+        retDlg = dlg.ShowFrmAttribute(attr)
+        if retDlg or isinstance(retDlg, dict):
             iter = self.attrModel.get_iter(path)
             self.__SetAttrLine(iter, attr)
+            if isinstance(retDlg, dict):
+                if isinstance(retDlg['append'],list):
+                    for i in retDlg['append']:
+                        self.__operations.append(i)
+                        iter = self.operModel.append()
+                        self.__SetOperLine(iter, i)
+                if isinstance(retDlg['remove'], list):
+                    for i in retDlg['remove']:
+                        self.__RemoveOperations(i)
     
     @event("twOperations", "row-activated")
     def on_twOperations_row_activated(self, widget, path, column):
         oper = self.__operations[path[0]]
-        if self.application.GetWindow('frmOperation').ShowFrmOperation(oper):
+        dlg = self.application.GetWindow('frmOperation')
+        dlg.SetParent(self)
+        if dlg.ShowFrmOperation(oper):
             iter = self.operModel.get_iter(path)
             self.__SetOperLine(iter, oper)
+    
+    

@@ -10,14 +10,17 @@
             <NameTextColor>black</NameTextColor>
             <TextColor>black</TextColor>
             <ObjectNameTextFont>Arial underline 10</ObjectNameTextFont>
+            <ObjectNameAbstractTextFont>Arial italic underline 10</ObjectNameAbstractTextFont>
+            <AbstractTextFont>Arial italic 10</AbstractTextFont>
             <NameTextFont>Arial 10</NameTextFont>
+            <NameTextFontAbstract>Arial italic 10</NameTextFontAbstract>
             <TextFont>Arial 10</TextFont>
         </Element>
         <Connection>
             <LineColor>black</LineColor>
             <ArrowColor>black</ArrowColor>
             <ArrowFillColor>white</ArrowFillColor>
-            <NameTextColor>yellow</NameTextColor>
+            <NameTextColor>black</NameTextColor>
             <TextColor>black</TextColor>
             <NameTextFont>Arial 10</NameTextFont>
             <TextFont>Arial 10</TextFont>

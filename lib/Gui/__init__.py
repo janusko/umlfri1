@@ -8,3 +8,7 @@ from frmOperation import CfrmOperation
 from frmOpen import CfrmOpen
 from frmSave import CfrmSave
 from frmFindInDiagram import CFindInDiagram
+from frmGenerateCode import CfrmGenerateCode
+from frmChooseFolder import CfrmChooseFolder
+from frmGenerateDocumentation import CfrmGenerateDocumentation
+from frmCreatePropertyImpl import CfrmCreatePropertyImpl

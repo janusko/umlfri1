@@ -11,13 +11,17 @@ ETC_PATH = join(ROOT_PATH, 'etc')
 
 MAIN_CONFIG_PATH = join(ETC_PATH, 'config.xml')
 
-SPLASH_TIMEOUT = 5000
+SPLASH_TIMEOUT = 2500
 
 VERSIONS_PATH = 'versions'
 DIAGRAMS_PATH = 'diagrams'
 ELEMENTS_PATH = 'elements'
 CONNECTIONS_PATH = 'connections'
-ICONS_PATH = 'icons'
+DATATYPE_PATH = '../languages/types'
+SOURCECODE_PATH = '../languages/codeTemplate'
+ICONS_PATH = join(ETC_PATH, 'uml', 'icons')
+STYLE_PATH = join(ETC_PATH, 'languages', 'style')
+TMP_IMAGES = join(ETC_PATH,'tmp_images')
 
 ARROW_IMAGE = 'arrow.png'
 DEFAULT_TEMPLATE_ICON = 'default_icon.png'

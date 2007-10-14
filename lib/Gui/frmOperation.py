@@ -1,3 +1,4 @@
+from common import event
 import common
 import gtk
 
@@ -6,9 +7,11 @@ class CfrmOperation(common.CWindow):
     widgets = ('edOprName', 'edOprParameters', 'cboxOprReturnType', 'cboxOprScope', 
               'cboxOprStereotype', 'txtOprDocumentation', 'cmdOprOK', 'cmdOprCancel',
               'cbOprAbstract', 'cbOprStatic', 'cbOprConst', 'cbOprReturnArray', 'cbOprPure',
-              'cbOprSynchronize', 'cbOprIsQuery')
+              'cbOprSynchronize', 'cbOprIsQuery', 'txtOprInitialCode', 'nbOperation')
     
     def ShowFrmOperation(self, operation = {}):
+        self.nbOperation.set_current_page(0)
+        self.FillType()
         if 'name' in operation:
             self.edOprName.set_text(operation['name'])
         else:
@@ -74,14 +77,18 @@ class CfrmOperation(common.CWindow):
         else:
             self.txtOprDocumentation.get_buffer().set_text("")
         
+        if 'initial' in operation:
+            self.txtOprInitialCode.get_buffer().set_text(operation['initial'])
+        else:
+            self.txtOprInitialCode.get_buffer().set_text("")
+        
         while True:
             response = self.form.run()
             if response != gtk.RESPONSE_OK:
                 break
-            if self.edOprName.get_text().strip() != '' and \
-                    self.cboxOprReturnType.child.get_text().strip() != '':
+            if self.edOprName.get_text().strip() != '':
                 break
-            msg = gtk.MessageDialog(message_format = _("Fill the name and type fields"), parent = self.form, type = gtk.MESSAGE_ERROR,
+            msg = gtk.MessageDialog(message_format = _("Fill the name field"), parent = self.form, type = gtk.MESSAGE_ERROR,
                     buttons = gtk.BUTTONS_OK)
             msg.run()
             msg.destroy()
@@ -101,7 +108,31 @@ class CfrmOperation(common.CWindow):
             operation['stereotype'] = self.cboxOprStereotype.child.get_text()
             buf = self.txtOprDocumentation.get_buffer()
             operation['doc'] = buf.get_text(buf.get_start_iter(), buf.get_end_iter())
-            
+            buf = self.txtOprInitialCode.get_buffer()
+            operation['initial'] = buf.get_text(buf.get_start_iter(), buf.get_end_iter())
+            #~ if not operation.has_key('visible'):
+                #~ operation['visible'] = True
             ret = True
         self.Hide()      
         return ret
+        
+    def FillType(self):
+        model = self.cboxOprReturnType.get_model()
+        model.clear()
+        self.cboxOprReturnType.set_model(model) 
+        
+        for i in self.application.GetProject().GetDataTypeFactory().GetDataType(self.application.GetProject().GetActualLanguage()).GetDataTypes(): 
+            self.cboxOprReturnType.append_text(i)
+        
+        for i in self.application.GetProject().GetDataTypeFactory().GetDataType("own").GetDataTypes():
+            self.cboxOprReturnType.append_text(i)
+
+    @event("cbOprPure","clicked")
+    def on_cbOprPure_click(self, button):
+        if self.cbOprPure.get_property('active'):
+            self.cbOprAbstract.set_property('active',True)
+    
+    @event("cbOprAbstract","clicked")
+    def on_cbOprAbstract_click(self, button):
+        if not self.cbOprAbstract.get_property('active'):
+            self.cbOprPure.set_property('active',False)

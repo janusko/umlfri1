@@ -19,6 +19,8 @@ from tabs import CTabs
 from frmFindInDiagram import CFindInDiagram
 from tabStartPage import CtabStartPage
 from lib.lib import UMLException
+from frmGenerateDocumentation import CfrmGenerateDocumentation
+from lib.Drawing.Canvas import CSvgCanvas, CGtkCanvas
 
 class CfrmMain(CWindow):
     name = 'frmMain'
@@ -26,7 +28,7 @@ class CfrmMain(CWindow):
         #menu
         #############
         'mItemFile',
-        'mnuOpen', 'mnuSave', 'mnuSaveAs', 'mnuQuit',
+        'mnuOpen', 'mnuSave', 'mnuSaveAs', 'mnuQuit', 'mnuNewProject',
         #############
         'mItemEdit',
         'mnuCut', 'mnuCopy', 'mnuPaste', 'mnuDelete',
@@ -46,11 +48,13 @@ class CfrmMain(CWindow):
         'mmShift_SendBack', 'mmShift_BringForward', 'mmShift_ToBottom', 'mmShift_ToTop',
         #############
         #toolbar
-        'cmdOpen', 'cmdSave', 'cmdCopy', 'cmdCut', 'cmdPaste',
+        'cmdOpen', 'cmdSave', 'cmdCopy', 'cmdCut', 'cmdPaste', 'cmdNewProject',
+        #Generovanie kodu
+        'mnuGenerateSourceCode', 'mnuDocumentation',
         )
 
     complexWidgets = (CtbToolBox, CtwProjectView, CmnuItems, CpicDrawingArea, CnbProperties, CTabs,
-                      CtabStartPage, CFindInDiagram)
+                      CtabStartPage, CFindInDiagram, CfrmGenerateDocumentation)
 
     def __init__(self, app, wTree):
         CWindow.__init__(self, app, wTree)
@@ -201,8 +205,22 @@ class CfrmMain(CWindow):
     @event("tabStartPage","open-project")
     @event("cmdOpen", "clicked")
     @event("mnuOpen", "activate")
-    def ActionOpen(self, widget,tab = 0):
+    def ActionOpen(self, widget,tab = 1):
         filename, copy = self.application.GetWindow("frmOpen").ShowDialog(self,tab)
+        if filename is not None:
+            try:
+                if self.application.GetProject() is not None and CQuestionDialog(self.form, _('Do you want to save project?'), True).run():
+                    self.ActionSave(widget)
+            except ECancelPressed:
+                return
+            self.LoadProject(filename, copy)
+            self.tabStartPage.Fill()
+    
+    
+    @event("cmdNewProject", "clicked")
+    @event("mnuNewProject", "activate")
+    def ActionNew(self, widget):
+        filename, copy = self.application.GetWindow("frmOpen").ShowDialog(self,0)
         if filename is not None:
             try:
                 if self.application.GetProject() is not None and CQuestionDialog(self.form, _('Do you want to save project?'), True).run():
@@ -232,7 +250,22 @@ class CfrmMain(CWindow):
                     gtk.keysyms._6, gtk.keysyms._7, gtk.keysyms._8, gtk.keysyms._9, gtk.keysyms._0]
             if event.keyval in Keys:
                 self.nbTabs.SetCurrentPage(Keys.index(event.keyval))
-
+        
+        if self.picDrawingArea.HasFocus():
+            self.form.emit_stop_by_name('key-press-event')
+            if event.keyval == gtk.keysyms.Left:
+                if event.state == gtk.gdk.CONTROL_MASK:
+                    print "Dolava"
+            elif event.keyval == gtk.keysyms.Right:
+                if event.state == gtk.gdk.CONTROL_MASK:
+                    print "Doprava"
+            elif event.keyval == gtk.keysyms.Up:
+                if event.state == gtk.gdk.CONTROL_MASK:
+                    print "Hore"
+            elif event.keyval == gtk.keysyms.Down:
+                if event.state == gtk.gdk.CONTROL_MASK:
+                    print "Dole"
+        
     @event("nbTabs","drawingArea-set-focus")
     def on_DrawingArea_set_focus(self,widget):
         self.picDrawingArea.SetFocus()
@@ -363,6 +396,7 @@ class CfrmMain(CWindow):
     
     @event("twProjectView","show_frmFindInDiagram")
     def on_show_frmFindInDiagram(self, widget, drawingAreas, object):
+        self.frmFindInDiagram.SetParent(self.application.GetWindow('frmMain'))
         self.frmFindInDiagram.ShowDialog(drawingAreas, object)
 
     @event("nbProperties", "content-update")
@@ -370,6 +404,10 @@ class CfrmMain(CWindow):
         if element.GetObject().GetType().HasVisualAttribute(property):
             self.picDrawingArea.Paint()
             self.twProjectView.UpdateElement(element.GetObject())
+    
+    @event("nbProperties","update_tree")
+    def on_nbProperties_update_tree(self, widget, elementObj):
+        self.twProjectView.UpdateElement(elementObj)
 
     @event("tbToolBox", "toggled")
     def on_tbToolBox_toggled(self, widget, ItemId, ItemType):
@@ -425,3 +463,39 @@ class CfrmMain(CWindow):
     @event("mmShift_ToTop", "activate")
     def on_mnuItems_mmShift_ToTop(self, menuItem):
         self.picDrawingArea.Shift_activate('ToTop')        
+
+    @event("mnuGenerateSourceCode", "activate")
+    def on_mnuGenerateSourceCode_activate(self, menuItem):
+        node = self.twProjectView.GetSelectedNode()
+        if node is None:
+            node = self.application.GetProject().GetRoot()
+        dlg = self.application.GetWindow('frmGenerateSourceCode')
+        dlg.SetParent(self)
+        dlg.ShowDialog(node)
+        
+    @event("mnuDocumentation", "activate")
+    def on_mnuDocumentation_activate(self, menuItem):
+        node = self.twProjectView.GetSelectedNode()
+        if node is None:
+            node = self.application.GetProject().GetRoot()
+        self.frmGenerateDocumentation.SetParent(self)
+        self.frmGenerateDocumentation.ShowDialog(node)
+        
+        
+    @event("frmGenerateDocumentation","create_svg_diagrams")
+    def on_create_svg_diagrams(self, widget, node, path):
+        tmpArea = self.picDrawingArea.GetDrawingArea()
+        allAreas = self.application.GetProject().GetNodeDrawingAreas(node)
+        for i in allAreas:
+            self.picDrawingArea.OnlySetDrawingArea(i)
+            size = i.GetMinMaxSize(self.picDrawingArea.canvas)
+            width, height = (size[1][0] - size[0][0] + 10, size[1][1] - size[0][1] + 10)
+            canvas = CSvgCanvas(width, height, self.picDrawingArea.canvas, self.application.GetProject().GetStorage())
+            canvas.Clear()
+            i.DeselectAll()
+            i.Paint(canvas,(-size[0][0] + 10,-size[0][1] +10))
+            filename = os.path.join(path,i.GetPath().replace("/","-").replace(":",'+') + ".svg")
+            index = 1
+            canvas.WriteOut(file(filename, 'w'))
+        self.picDrawingArea.OnlySetDrawingArea(tmpArea)
+    

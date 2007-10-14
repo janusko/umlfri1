@@ -11,6 +11,12 @@ class CCondition(CSimpleContainer):
     
     def __IsTrue(self, element):
         ret = True
+        if self.type == "True":
+            val, = self.GetVariables(element, 'condition')
+            if val:
+                ret = True
+            else:
+                ret = False
         if self.type == 'empty':
             if element.GetObject().GetVisualProperty(self.condition):
                 ret = False
