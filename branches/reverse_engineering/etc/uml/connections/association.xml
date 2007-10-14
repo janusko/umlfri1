@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ConnectionType id="Association">
+    <Icon path="icons/associate.png" />
+	<SrcArrow possible="1" default="0" />
+	<DestArrow possible="1" default="0" />
+    <Attributes>
+        <Item value="Name" type="str" propid="name" />
+    </Attributes>
+    <Appearance>
+    	<LineStyle style="solid" color="/Styles/Connection/LineColor" />
+    	<ArrowStyle style="simple" fill="/Styles/Connection/ArrowFillColor" color="/Styles/Connection/ArrowColor" />
+        <Label position="center">
+            <TextBox text="#name" font="/Styles/Connection/NameTextFont" color="/Styles/Connection/NameTextColor" />
+        </Label>
+    </Appearance>
+</ConnectionType>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DiagramType id="Class diagram">
+    <Icon path="icons/class_diagram.png" />
+    <Special swimlines="0" lifelines="0" />
+    <Attributes>
+        <Item value="Name" type="str" />
+        <Item value="Notes" type="note" />
+    </Attributes>
+    <Elements>
+        <Item value="Note" />
+        <Item value="Package" />
+        <Item value="Object" />
+        <Item value="Class" />
+    </Elements>
+    <Connections>
+        <Item value="Generalization" />
+        <Item value="Association" />
+        <Item value="Agregation" />
+        <Item value="Compose" />
+        <Item value="Note Link" />
+    </Connections>
+</DiagramType>
