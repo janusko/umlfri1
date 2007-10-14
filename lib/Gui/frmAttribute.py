@@ -1,4 +1,3 @@
-from dialogs import CWarningDialog
 from common import event
 import common
 import gtk
@@ -22,9 +21,7 @@ class CfrmAttribute(common.CWindow):
             self.attribute['getter'] = ""
         if not self.attribute.has_key('setter'):
             self.attribute['setter'] = ""
-        if not self.attribute.has_key('propertyName'):
-            self.attribute['propertyName'] = ""
-            
+        
         self.FillType()
         if 'name' in attribute:
             self.edAtrName.set_text(attribute['name'])
@@ -118,30 +115,24 @@ class CfrmAttribute(common.CWindow):
     
     @event("cbAtrProperty","clicked")
     def on_cbAtrProperty_activate(self, togglebutton):
-        if self.edAtrName.get_text().strip(' ') == "":
+        if self.edAtrName.get_text() == "":
             self.cbAtrProperty.set_property('active',False)
             
         if self.cbAtrProperty.get_property('active'):
-            if self.cboxAtrType.child.get_text().strip(' ') == "":
-                CWarningDialog(self.form, _('Fill the type field')).run()
-                self.cbAtrProperty.set_property('active',False)
-                return
-                
             if self.attribute['getter'] != "" or self.attribute['setter'] != "":
                 return
-            self.attribute['getter'] = "Get" + self.edAtrName.get_text()[0].upper() + self.edAtrName.get_text()[1:]  + "():" + self.cboxAtrType.child.get_text()
-            self.attribute['setter'] = "Set" + self.edAtrName.get_text()[0].upper() + self.edAtrName.get_text()[1:] + "(value:" + self.cboxAtrType.child.get_text() +")"
-
+            self.attribute['getter'] = "Get" + self.edAtrName.get_text() + "():" + self.cboxAtrType.child.get_text()
+            if self.cboxAtrType.child.get_text() != "":
+                self.attribute['setter'] = "Set" + self.edAtrName.get_text() + "(" + self.edAtrName.get_text() + ":" + self.cboxAtrType.child.get_text() +")"
+            else:
+                self.attribute['setter'] = "Set" + self.edAtrName.get_text() + "(" + self.edAtrName.get_text() + ")"
             dlg = self.application.GetWindow('frmCreateProperty')
-            dlg.SetParent(self.application.GetWindow('frmAttribute'))
-            opers = dlg.ShowDialog(self.attribute['getter'], self.attribute['setter'], self.edAtrName.get_text())
+            dlg.SetParent(self)
+            opers = dlg.ShowDialog(self.attribute['getter'], self.attribute['setter'])
             if opers[0] is not None:
                 self.attribute['getter'] = opers[1][0]
                 self.attribute['setter'] = opers[1][1]
-                self.attribute['propertyName'] = opers[1][2]
                 self.operations['append'] = opers[0]
-            else:
-                self.cbAtrProperty.set_property('active',False)
         else:
             self.operations['remove'] = []
             if self.attribute['getter'] != "":

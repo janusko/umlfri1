@@ -14,14 +14,10 @@ class CfrmProperties(CWindow):
         self.operModel = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
         self.connModel = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_BOOLEAN)
         
-        
-        
-        #~ self.twAttributes.append_column(gtk.TreeViewColumn(_("Visible"), renderer, active = 0))
         self.twAttributes.append_column(gtk.TreeViewColumn(_("Scope"), gtk.CellRendererText(), text = 0))
         self.twAttributes.append_column(gtk.TreeViewColumn(_("Name"), gtk.CellRendererText(), text = 1))
         self.twAttributes.append_column(gtk.TreeViewColumn(_("Type"), gtk.CellRendererText(), text = 2))
         
-        #~ self.twOperations.append_column(gtk.TreeViewColumn(_("Visible"), renderer, active = 0))
         self.twOperations.append_column(gtk.TreeViewColumn(_("Scope"), gtk.CellRendererText(), text = 0))
         self.twOperations.append_column(gtk.TreeViewColumn(_("Type"), gtk.CellRendererText(), text = 1))
         self.twOperations.append_column(gtk.TreeViewColumn(_("Name"), gtk.CellRendererText(), text = 2))
@@ -82,7 +78,6 @@ class CfrmProperties(CWindow):
         else:
             self.nbProProperties.get_nth_page(0).hide()
             self.__attributes = None
-            
         if self.__elementObj.HasAttribute('Operations'):
             self.nbProProperties.get_nth_page(1).show()
             self.__operations = self.__elementObj.GetAttribute("Operations")[:]
@@ -112,8 +107,7 @@ class CfrmProperties(CWindow):
         if response == gtk.RESPONSE_OK:
             self.__Save()
         self.Hide()
-
-
+        
         return self.__saved
     
     def __Save(self):
@@ -121,7 +115,6 @@ class CfrmProperties(CWindow):
             self.__elementObj.SetAttribute("Attributes", self.__attributes)
         if self.__operations is not None:
             self.__elementObj.SetAttribute("Operations", self.__operations)
-            self.__SetAbstractToElement()
         if self.__connections is not None:
             for i in self.__connections:
                 con = self.element.GetDrawingArea().GetConnection(i)
@@ -164,45 +157,6 @@ class CfrmProperties(CWindow):
                 self.__operations.remove(i)
                 return
     
-    def IsExistsOperation(self,oper):
-        return False
-    
-    def __SetAbstractToElement(self):
-        abstr = False
-        for i in self.__operations:
-            if i['pure']:
-                abstr = True
-                break
-        self.__elementObj.SetAttribute('Abstract' ,abstr)
-            
-    
-    '''Nastavuje overload override pre delphi a nastavuje aj abstraktnu triedu ak
-       ma aspon jednu cisto virtualnu metodu '''
-    def SetSpecifyProperty(self,oper):
-        if oper['pure']:
-            self.__elementObj.SetAttribute('Abstract' ,True)
-        for i in self.__operations:
-            if i['name'] == oper['name']:
-                i['overload'] = True
-                oper['overload'] = True
-                break
-        else:
-            oper['overload'] = False
-        
-        if oper['abstract']:
-            for con in self.__elementObj.GetConnections():
-                if con.GetType().GetId() == "Generalization":
-                    opers = con.GetDestination().GetAttribute("Operations")
-                    for o in opers:
-                        if o['name'] == oper['name'] and o['params'] == oper['params'] and o['abstract'] and o['type'] == oper['type']:
-                            oper['override'] = True
-                            break
-                    else:
-                        oper['override'] = False
-        else:
-            oper['override'] = False
-    
-    
     @event("cmdNewAttribute", "clicked")
     def on_cmdNewAttribute_clicked(self, widget):
         attr = {}
@@ -215,6 +169,7 @@ class CfrmProperties(CWindow):
             self.__SetAttrLine(iter, attr)
             if isinstance(retDlg, dict) and isinstance(retDlg['append'], list):
                 for i in retDlg['append']:
+                    print "VKLADAM"
                     self.__operations.append(i)
                     iter = self.operModel.append()
                     self.__SetOperLine(iter, i)
@@ -225,7 +180,6 @@ class CfrmProperties(CWindow):
         tmp = self.application.GetWindow('frmOperation')
         tmp.SetParent(self)
         if tmp.ShowFrmOperation(oper):
-            self.SetSpecifyProperty(oper)
             self.__operations.append(oper)
             iter = self.operModel.append()
             self.__SetOperLine(iter, oper)
@@ -260,9 +214,7 @@ class CfrmProperties(CWindow):
     @event("twAttributes", "row-activated")
     def on_twAttributes_row_activated(self, widget, path, column):
         attr = self.__attributes[path[0]]
-        dlg = self.application.GetWindow('frmAttribute')
-        dlg.SetParent(self)
-        retDlg = dlg.ShowFrmAttribute(attr)
+        retDlg = self.application.GetWindow('frmAttribute').ShowFrmAttribute(attr)
         if retDlg or isinstance(retDlg, dict):
             iter = self.attrModel.get_iter(path)
             self.__SetAttrLine(iter, attr)
@@ -279,9 +231,7 @@ class CfrmProperties(CWindow):
     @event("twOperations", "row-activated")
     def on_twOperations_row_activated(self, widget, path, column):
         oper = self.__operations[path[0]]
-        dlg = self.application.GetWindow('frmOperation')
-        dlg.SetParent(self)
-        if dlg.ShowFrmOperation(oper):
+        if self.application.GetWindow('frmOperation').ShowFrmOperation(oper):
             iter = self.operModel.get_iter(path)
             self.__SetOperLine(iter, oper)
     

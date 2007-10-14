@@ -21,3 +21,8 @@ class CAllowElement(CCodeContainer):
             return [False, ""]
             
         return ret
+        
+    def GetSymbol(self):
+        return ('element', self.id)
+        
+    

@@ -65,9 +65,6 @@ class CGtkCanvas(CAbstractCanvas):
             atlist.insert(pango.AttrStrikethrough(True, 0, 10000))
         self.pango_layout.set_attributes(atlist)
 
-    def DrawPoint(self, x, y):
-        gc = self.window.new_gc()
-        self.window.draw_point(gc, x, y)
     
     def DrawArc(self, pos, size, arc = (0, 360), fg = None, bg = None, line_width = None, line_style = None):
         gc = self.window.new_gc()

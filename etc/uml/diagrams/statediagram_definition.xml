@@ -2,10 +2,6 @@
 <DiagramType id="State diagram">
     <Icon path="icons/state_diagram.png" />
     <Special swimlines="0" lifelines="0" />
-    <Attributes>
-        <Item value="Name" type="str" />
-        <Item value="Notes" type="note" />
-    </Attributes>
     <Elements>
         <Item value="Note" />
         <Item value="Package" />

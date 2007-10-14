@@ -2,8 +2,9 @@
 
 class CDocumentation:
     
-    def __init__(self, name, rootNode):
+    def __init__(self, name, project, rootNode):
         self.name = name
+        self.project = project
         self.rootNode = rootNode
     
     def GetProperty(self, key):

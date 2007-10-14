@@ -24,3 +24,11 @@ class CDirectory(CCodeContainer):
         
         return ret
         
+        
+    def GetRules(self):
+        yield self.GetSymbol(), ['dir:'+self.value] + [child.GetSymbol() for child in self.childs if child.Parse()] + ['eod']
+        for rule in self.GetChildRules():
+            yield rule
+        
+    def GetTokens(self):
+        yield 'dir:'+self.value, self.value, 'dir'

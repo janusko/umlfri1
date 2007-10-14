@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Template diagram="All" language="HTML" type="Documentation">
+<Template diagram="All" language="HTML">
     <Element id="documentation">
         <Directory name="icons" value="[_0-9a-zA-Z]+" >
             <CopyFile what="icons" />
@@ -196,17 +196,13 @@
                 &lt;/head&gt; <br />
             </Indent>
             <Indent>
-                &lt;frameset rows="130,*" frameborder="0"&gt; <br />
-                    <Indent>
-                    &lt;frame name="Logo" src="Logo.html" noresize scrolling="no" &gt;<br />
-                    &lt;frameset cols="30%,70%"&gt;<br />
-                        <Indent>
-                        &lt;frame name="treeView" src="treeView.html"&gt;<br />
-                        &lt;frame name="Data" src="blank.html"&gt;<br />
-                        </Indent>
-                    &lt;/frameset&gt;<br />
-                    </Indent>
-                &lt;/frameset&gt;<br />
+                &lt;frameset rows="130,*" frameborder="0"&gt;
+                    &lt;frame name="Logo" src="Logo.html" noresize scrolling="no" &gt;
+                    &lt;frameset cols="30%,70%"&gt;
+                        &lt;frame name="treeView" src="treeView.html"&gt;
+                        &lt;frame name="Data" src="blank.html"&gt;
+                    &lt;/frameset&gt;
+                &lt;/frameset&gt;
             </Indent>
             &lt;/html&gt; <br />
         </File>

@@ -1,113 +1,86 @@
 <?xml version="1.0" ?>
-<Template diagram="Class Diagram" language="Python" type="Code">
+<Template diagram="Class Diagram" language="Python" indents="True">
+
+    <Terminal id="code-line" value="[0-9a-zA-Z_ ]+" />
+    <Terminal id="identifier" value="(?!(def|class)($|(.?[^0-9a-zA-Z_])))[a-zA-Z_][0-9a-zA-Z_]*" />
+    <Terminal id="obsah" value="[0-9a-zA-Z_]+" />
+    <Terminal id="params" value=".[^\)]*" />
+    <Rule id="code">
+        <Loop>
+            <Alternate>
+                <Flow>
+                    <Sub value="code-line" /> 
+                    <br required="Optional" />
+                </Flow>
+                <Flow>
+                    <Indent required="True">
+                        <Sub value="code" />
+                    </Indent>
+                </Flow>
+            </Alternate>
+        </Loop>
+    </Rule>
+    
     <Element id="Package">
-        <Directory name="{name}" value="[_0-9a-zA-Z]+">
+        <Directory name="#Name" value="[_0-9a-zA-Z]+">
             <Recursive>
-                <AllowElement id="All" />
+                <AllowElement id="Package" />
+                <AllowElement id="Class" />
             </Recursive>
         </Directory>
     </Element>
     <Element id="Class">
-        <File name="#name" value="[_0-9a-zA-Z]+\.py" sufix=".py">
+        <File name="#Name" value="[_0-9a-zA-Z]+\.py" sufix=".py">
             class <whitespace />
-            <Property id="#name" value="[a-z0-9A-Z]+" />
-
-            <Optional> 
-            ( 
-                <ConnectionLoop id="type" value="Generalization" separator=", "> 
-                   <Property id="@dest">
-                        <Property id="#name" value="[a-z0-9A-Z]+" />
-                    </Property>
-                </ConnectionLoop>
-           )
-            </Optional>
-
-            :<br required="True" />
-            <Indent required="True" defsize="4">
+            <Property id="#Name" value="identifier" />
                 <Optional>
-                    '''
-                    <Property id="#Notes" />
-                    <br />
-                    '''<br />
+                    ( 
+                        <ConnectionLoop id="type" value="Generalization" separator=", "> 
+                            <Property id="@dest">
+                                <Property id="#Name" value="identifier" />
+                            </Property>
+                        </ConnectionLoop>
+                    )
                 </Optional>
-                <ConnectionLoop id="type" value="Note Link" separator=", "> 
-                    <Property id="@dest">
-                        '''
-                        <Property id="#Notes" /><br />
-                        '''<br />
-                    </Property>
-                    <Property id="@source">
-                        '''<br />
-                        <Property id="#Notes" /><br />
-                        '''<br />
-                    </Property>
-                </ConnectionLoop>
-                <Recursive>
-                    <AllowElement id="Class" />
-                </Recursive>
-                
-                <PropertyLoop id="attributes">
-                    <Condition id="@static" value="True">
-                        <Property id="@name" />
-                        =
-                        <Property id="@default" value=".+" default="None" />
-                        <Optional>
-                            <br />
-                            '''
-                            <Property id="@doc" />
-                            <br />
-                            '''<br />
-                        </Optional>
-                    </Condition>
-                </PropertyLoop>
-                
-                <PropertyLoop id="operations">
-                    def <whitespace />
-                    <Property id="@name" />
-                    (self
+            :<br/>
+            <Indent required="True" defsize="4">
+            
+                <Optional>
+                    '''<br required="True"/>
+                    <Property id="#Notes" value="code"/>
+                    '''<br required="Optional" />
+                </Optional>
+                <PropertyLoop id="Attributes">
+                    <Property id="@name" value="identifier" />
+                    =
+                    <Property id="@initial" value="identifier" default="None" />
+                    <br required="Optional" />
                     <Optional>
-                        ,
-                        <PropertyLoop id="@params" separator="," parse="parseParameter">
-                            <Property id="@paramsName" />
-                            <Optional>
-                                =
-                                <Property id="@paramsDefault" />
-                            </Optional>     
-                        </PropertyLoop> 
+                        '''<br required="True" />
+                        <Property id="@doc" value="code"/>
+                        '''<br required="Optional" />
                     </Optional>
-                    ): <br required="True" />
-                    <Indent required="True">
+                </PropertyLoop>
+                <PropertyLoop id="Operations">
+                    def
+                    <Property id="@name" value="identifier" />
+                    (self, <Property id="@params" value="params" />):
+                    <br required="Optional" />
+                    <Indent required="True" defsize="4">
                         <Optional>
-                            '''
-                            <Property id="@doc" />
-                            <br />
-                            '''<br />
+                            '''<br required="True" />
+                            <Property id="@doc" value="code"/>
+                            '''<br required="Optional" />
                         </Optional>
-                        <Condition id="@name" value="__init__">
-                            <Optional default="pass">
-                                <PropertyLoop id="attributes">
-                                    <Condition id="@static" value="True" negate="1">
-                                        self.<Property id="@name" />
-                                        =
-                                        <Property id="@default" value=".+" default="None" />
-                                            <Optional>
-                                                <br />
-                                                '''
-                                                <Property id="@doc" />
-                                                <br />
-                                                '''<br />
-                                            </Optional>
-                                    </Condition>
-                                </PropertyLoop>
-                            </Optional>
-                        </Condition>
-                        <Condition id="@name" value="__init__" negate="1">
-                            <Property id="@initial" default="pass" />
-                        </Condition>
+                        <Property id="@initial" value="code"/>
                     </Indent>
-                    <br />
                 </PropertyLoop>
             </Indent>
+            <!--Indent required="True" defsize="4">
+                <PropertyLoop id="codes" separator="\n">
+                    <Property id="code" value="code-line" />
+                </PropertyLoop>
+            </Indent-->
         </File>
     </Element>
 </Template>

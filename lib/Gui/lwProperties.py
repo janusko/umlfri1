@@ -1,5 +1,4 @@
 from common import CWidget, CellRendererButton, event
-from lib.Drawing import CElement, CDrawingArea
 
 import gobject
 import gtk
@@ -13,9 +12,7 @@ class ClwProperties(CWidget):
     
     __gsignals__ = {
         'content_update':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
-            (gobject.TYPE_PYOBJECT, gobject.TYPE_STRING)),     
-        'update_tree':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
-            (gobject.TYPE_PYOBJECT,)),      
+            (gobject.TYPE_PYOBJECT, gobject.TYPE_STRING)),      
     }
     
     def __init__(self, app, wTree):
@@ -63,14 +60,8 @@ class ClwProperties(CWidget):
         self.listStore.clear()
         if Element is  None:
             return
-        if isinstance(Element, CDrawingArea):
-            object = Element
-            type = Element.GetType()
-        else:
-            object = Element.GetObject()
-            type = Element.GetObject().GetType()
-        self.__object = object
-            
+        object = Element.GetObject()
+        type = Element.GetObject().GetType()
         for k in type.GetAttributes():
             v = object.GetAttribute(k)
             row = self.listStore.append()
@@ -103,14 +94,8 @@ class ClwProperties(CWidget):
         iter = model.get_iter_from_string(path)
         model.set(iter, ID_VALUE, new_value) 
         name, = model.get(iter, ID_NAME)
-        oldValue = self.__object.GetAttribute(name)
-        self.__object.SetAttribute(name ,new_value)
-        if isinstance(self.__object, CDrawingArea):
-            self.emit('update_tree', self.__object)
-        else:
-            if name == "Name":
-                self.application.GetProject().GetDataTypeFactory().GetDataType("own").UpdateDataType(oldValue, self.__object.GetAttribute(name), self.__object.GetType().GetId())
-            self.emit('content_update', self.element, name)
+        self.element.GetObject().SetAttribute(name ,new_value)
+        self.emit('content_update', self.element, name)
         
     @event("ComboRenderer", "edited")
     def on_change_combo(self, cellrenderer, path, new_value):
@@ -118,11 +103,8 @@ class ClwProperties(CWidget):
         iter = model.get_iter_from_string(path)
         model.set(iter, ID_VALUE, new_value)
         name, = model.get(iter, ID_NAME)
-        self.__object.SetAttribute(name ,new_value)
-        if isinstance(self.__object, CDrawingArea):
-            self.emit('update_tree', self.__object)
-        else:
-            self.emit('content_update', self.element, name)
+        self.element.GetObject().SetAttribute(name ,new_value)
+        self.emit('content_update', self.element, name)
     
     @event("ButtonRenderer", "click")
     def on_change_button(self, cellrenderer, path):
@@ -132,11 +114,11 @@ class ClwProperties(CWidget):
         if type == 'attrs':
             tmp = self.application.GetWindow('frmProperties')
             tmp.SetParent(self.application.GetWindow('frmMain'))
-            if tmp.ShowProperties('attrs',self.__object):
+            if tmp.ShowProperties('attrs',self.element.GetObject()):
                 self.emit('content_update', self.element, name)
         elif type == 'opers':
             tmp = self.application.GetWindow('frmProperties')
             tmp.SetParent(self.application.GetWindow('frmMain'))
-            if tmp.ShowProperties('opers',self.__object):
+            if tmp.ShowProperties('opers',self.element.GetObject()):
                 self.emit('content_update', self.element, name)
         

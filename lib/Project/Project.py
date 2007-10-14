@@ -126,6 +126,24 @@ class CProject(object):
             root = self.root
         Rekurzia(root)
         return List
+    
+    #~ def ExportAllDiagramsToSVG(self, path, pic):
+        #~ tmpArea = pic.GetDrawingArea()
+        #~ allAreas = self.GetNodeDrawingAreas()
+        #~ for i in allAreas:
+            #~ pic.OnlySetDrawingArea(i)
+            #~ width, height = i.GetSize(pic.canvas)          
+            #~ canvas = CSvgCanvas(width, height, pic.canvas, self.Storage)
+            #~ canvas.Clear()
+            #~ i.Paint(canvas)
+            #~ filename = os.path.join(path,i.GetName() + ".svg")
+            #~ index = 1
+            #~ while os.path.exists(filename):
+                #~ filename = os.path.join(path,i.GetName() + str(index) + ".svg")
+                #~ index += 1
+            #~ canvas.WriteOut(file(filename, 'w'))
+        #~ pic.OnlySetDrawingArea(tmpArea)
+        
 
     def AddNode(self, node, parent):
         if node.GetPath().split(':')[-1] == "Class":
@@ -242,7 +260,6 @@ class CProject(object):
         # file(filename, 'w').write(f.getvalue())
     
     def LoadProject(self, filename, copy = False):
-        self.DataTypeFactory.GetDataType("own").ClearDataType()
         ListObj = {}
         ListCon = {}
         file = ZipFile(filename,"r")

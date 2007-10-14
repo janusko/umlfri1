@@ -17,7 +17,7 @@ import os.path
 from lib.Project import CProject
 from lib.Project import CRecentFiles
 
-from lib.Gui import CfrmSplash, CfrmMain, CfrmAbout, CfrmProperties, CfrmAttribute, CfrmOperation, CfrmOpen, CfrmSave, CfrmGenerateCode, CfrmChooseFolder, CfrmCreatePropertyImpl
+from lib.Gui import CfrmSplash, CfrmMain, CfrmAbout, CfrmProperties, CfrmAttribute, CfrmOperation, CfrmOpen, CfrmSave, CfrmGenerateCode, CfrmChooseFolder, CfrmGenerateDocumentation, CfrmCreatePropertyImpl, CfrmGenerateDiagrams
 
 from lib.config import config
 from lib.consts import SPLASH_TIMEOUT
@@ -25,7 +25,7 @@ from lib.consts import SPLASH_TIMEOUT
 __version__ = '1.0-beta'
 
 class Application(CApplication):
-    windows = (CfrmSplash, CfrmMain, CfrmAbout, CfrmProperties, CfrmAttribute, CfrmOperation, CfrmOpen, CfrmSave, CfrmGenerateCode, CfrmChooseFolder, CfrmCreatePropertyImpl)
+    windows = (CfrmSplash, CfrmMain, CfrmAbout, CfrmProperties, CfrmAttribute, CfrmOperation, CfrmOpen, CfrmSave, CfrmGenerateCode, CfrmChooseFolder, CfrmCreatePropertyImpl, CfrmGenerateDiagrams) #CfrmGenerateDocumentation )
     glade = os.path.join(config['/Paths/Gui'], 'gui.glade')
     main_window = 'frmMain'
     textdomain = 'uml_fri'

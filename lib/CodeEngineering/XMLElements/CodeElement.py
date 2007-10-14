@@ -23,3 +23,18 @@ class CCodeElement(CCodeContainer):
     
     def GetTemplates(self):
         return self.templates
+        
+    def GetType(self):
+        return self.id
+        
+    def GetSymbol(self):
+        return ('element', self.id)
+        
+    def GetRules(self):
+        yield '', [self.GetSymbol(), '']
+        yield self.GetSymbol(), [child.GetSymbol() for child in self.childs if child.Parse()]
+        for rule in self.GetChildRules():
+            yield rule
+        
+    def GetAction(self):
+        yield  self.GetSymbol(), self

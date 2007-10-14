@@ -1,7 +1,6 @@
 from common import CWidget
 from lib.Project import CProject, CProjectNode
 from lib.Elements import CElementFactory, CElementObject
-from lib.Connections import CConnectionObject
 from lib.Drawing import CElement
 from lib.lib import UMLException
 from lib.Drawing.Canvas.Gtk import PixmapFromPath
@@ -242,22 +241,15 @@ class CtwProjectView(CWidget):
         
     
     def UpdateElement(self, object):
-        if isinstance(object, CConnectionObject):
-            return
         if isinstance(object, CElementObject):
             for iter in self.get_iters_from_path(self.twProjectView.get_model(),self.twProjectView.get_model().get_iter_root() ,object.GetPath()):
                 node = self.twProjectView.get_model().get(iter,3)[0]
                 if object is node.GetObject():
                     break
-            node.Change() 
-        else:
-            for iter in self.get_iters_from_path(self.twProjectView.get_model(),self.twProjectView.get_model().get_iter_root() ,object.GetPath()):
-                area = self.twProjectView.get_model().get(iter,3)[0]
-                if area is object:
-                    break
+            node.Change()  
             
-        model = self.twProjectView.get_model()
-        self.TreeStore.set_value(iter, 0, object.GetName())
+            model = self.twProjectView.get_model()
+            self.TreeStore.set_value(iter, 0, object.GetName())
     
     
     @event("twProjectView","button-press-event")
@@ -279,6 +271,7 @@ class CtwProjectView(CWidget):
     
     @event("twProjectView", "cursor-changed")
     def on_twProjectView_change_selection(self, treeView):
+        
         iter = treeView.get_selection().get_selected()[1]
         model = self.twProjectView.get_model()
         if model.get(iter,2)[0] == "=DrawingArea=":
@@ -289,8 +282,8 @@ class CtwProjectView(CWidget):
             self.mnuTreeDelete.set_sensitive(len(treeView.get_model().get_path(iter)) > 1)
             self.menuTreeElement.popup(None,None,None,self.EventButton[0],self.EventButton[1])
             
-        #~ if treeView.get_model().get(iter,2)[0] == "=DrawingArea=":
-            #~ return
+        if treeView.get_model().get(iter,2)[0] == "=DrawingArea=":
+            return
         
         self.emit('selected-item-tree',treeView.get_model().get(iter,3)[0])
             

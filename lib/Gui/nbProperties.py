@@ -10,8 +10,6 @@ class CnbProperties(CWidget):
     __gsignals__ = {
         'content-update':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
             (gobject.TYPE_PYOBJECT, gobject.TYPE_STRING)),
-        'update_tree':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
-            (gobject.TYPE_PYOBJECT,)),    
     }
     
     def __init__(self, app, wTree):
@@ -23,13 +21,9 @@ class CnbProperties(CWidget):
         self.txtNotes.Fill(element)
     
     @event("lwProperties", "content-update")
-    def on_lwProperties_content_update(self, widget, element, property):    
+    def on_lwProperties_content_update(self, widget, element, property):
         self.emit("content-update", element, property)
     
     @event("txtNotes", "content-update")
     def on_txtNotes_content_update(self, widget, element, property):
         self.emit("content-update", element, property)
-
-    @event("lwProperties", "update_tree")
-    def on_lwProperties_update_tree(self, widget, elementObj):
-        self.emit("update_tree",elementObj)

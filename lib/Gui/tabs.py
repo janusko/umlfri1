@@ -72,7 +72,7 @@ class CTabs(CWidget):
         hboxbut.add(button)
         self.nbTabs.append_page(hbox,hboxbut)
         button.connect("clicked", self.on_button_click, self.nbTabs.get_nth_page(self.nbTabs.get_n_pages()-1))
-        self.drawingAreas.append(drawingArea)
+        self.drawingAreas.append(drawingArea)       
         self.SetCurrentPage(self.nbTabs.get_n_pages()-1)
        
     def on_button_click(self, widget, page):
@@ -134,7 +134,7 @@ class CTabs(CWidget):
         for i in xrange(1, len(self.drawingAreas)):
             del self.drawingAreas[1]
             self.nbTabs.remove_page(1)
-    
+   
     def on_mnuTab_activate(self, widget, diagram):
         for id, a in enumerate(self.drawingAreas):
             if diagram is a:
@@ -143,6 +143,7 @@ class CTabs(CWidget):
             return
         if self.nbTabs.get_current_page() != id:
             self.SetCurrentPage(id)
+    
     
     @event("nbTabs","button-press-event")
     def button_clicked(self, widget, event):

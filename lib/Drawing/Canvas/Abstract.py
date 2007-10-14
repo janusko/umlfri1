@@ -2,9 +2,6 @@ class CAbstractCanvas:
     def __init__(self):
         pass
     
-    def DrawPoint(self, x, y):
-        pass
-        
     def DrawArc(self, pos, size, arc = (0, 360), fg = None, bg = None, line_width = None, line_style = None):
         pass
     

@@ -13,3 +13,8 @@ class CRecursive(CCodeContainer):
             ret = self.JoinReturnValue(ret, i.Generate(element, path, fil))
             self.GetRoot().PopRecursive()            
         return ret
+        
+    def GetRules(self):
+        yield self.GetSymbol(), []
+        for child in self.childs:
+            yield self.GetSymbol(), [child.GetSymbol()]

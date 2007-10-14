@@ -110,8 +110,6 @@ class CfrmOperation(common.CWindow):
             operation['doc'] = buf.get_text(buf.get_start_iter(), buf.get_end_iter())
             buf = self.txtOprInitialCode.get_buffer()
             operation['initial'] = buf.get_text(buf.get_start_iter(), buf.get_end_iter())
-            #~ if not operation.has_key('visible'):
-                #~ operation['visible'] = True
             ret = True
         self.Hide()      
         return ret

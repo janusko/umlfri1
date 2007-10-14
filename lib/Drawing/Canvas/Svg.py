@@ -13,8 +13,8 @@ class CSvgCanvas(CAbstractCanvas):
     def __init__(self, width, height, othercanvas, storage = None):
         self.othercanvas = othercanvas
         self.storage = storage
-        self.width = width + 10
-        self.height = height + 10
+        self.width = width
+        self.height = height
         
         self.paths = []
     
@@ -22,7 +22,7 @@ class CSvgCanvas(CAbstractCanvas):
         print>>f, '<?xml version="1.0" encoding="UTF-8" standalone="no"?>'
         print>>f, '<svg width="%d" height="%d" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">'%(self.width, self.height)
         level = 1
-        print>>f, '<rect x="0" y="0" width="%d" height="%d" fill="none" stroke-width="5" stroke="black" />'%(self.width , self.height)
+        print>>f, '<rect x="0" y="0" width="%d" height="%d" fill="#E8EEF7" />'%(self.width + 10, self.height + 10)
         for type, params, style in self.paths:
             style = ' '.join(["%s: %s;"%s for s in style.iteritems()])
             if type == 'path':

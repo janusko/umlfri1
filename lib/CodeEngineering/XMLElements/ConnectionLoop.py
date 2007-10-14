@@ -40,7 +40,48 @@ class CConnectionLoop(CCodeContainer):
         
         if ret[1].find(self.separator, -1) == -1:
             ret[1] = ret[1][:-len(self.separator)]
-               
+        
+        
+        #~ item = self.__GetItemFromParentLoop()
+        #~ if item is not None:
+            #~ elementObject.__LOOPVARS__ = item 
+        
         ret[0] = retFlag
             
         return ret
+        
+    def GetRules(self):
+        yield self.GetSymbol(), []
+        sep = self.separator.strip()
+        if sep == '\\n':
+            sep = 'br'
+        if sep:
+            sep_nt = 'sep:'+CCodeContainer.GetSymbol(self)
+            yield self.GetSymbol(), [child.GetSymbol() for child in self.childs if child.Parse()] + [sep_nt]
+            yield sep_nt, []
+            yield sep_nt, [sep] + [self.GetSymbol()]
+            #~ +[child.GetSymbol() for child in self.childs if child.Parse()] + [sep_nt]
+        else:
+            yield self.GetSymbol(), [child.GetSymbol() for child in self.childs if child.Parse()] + [self.GetSymbol()]
+        for rule in self.GetChildRules():
+            yield rule
+        
+    def GetTokens(self):
+        if self.separator:
+            terminal = self.separator.strip()
+            regexp = self.separator.strip()
+            symbols = '\\\'\"{}[]().^$*+?|'
+            for sym in symbols:
+                regexp = regexp.replace(sym, '\\'+sym)
+            yield terminal, regexp, 'text' 
+            
+        
+    def GetAction(self):
+        yield self.GetSymbol(), self
+    
+
+    def GetSymbol(self):
+        return 'connection', CCodeContainer.GetSymbol(self)
+        
+    def IsLoop(self):
+        return True

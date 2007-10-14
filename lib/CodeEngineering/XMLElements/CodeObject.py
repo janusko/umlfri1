@@ -1,11 +1,23 @@
-
-class CCodeObject:
+class kk:
+    i = 0
+    @classmethod
+    def get(self):
+        self.i += 1
+        return str(self.i)
+    
+    
+class CCodeObject(object):
     def __init__(self):
         self.parent = None
+        #~ self.symbol = str(uuid.uuid1())
+        self.symbol = kk.get()
         self.indent = ""
         self.newLine = False
         self.recursive = []
         self.text = ["",""]
+        
+    def __repr__(self, indent = 0):
+        return '%s<%s "%s">\n'%('  '*indent, self.__class__.__name__, self.GetSymbol())
     
     def JoinReturnValue(self, list1, list2):
         return [list1[0] & list2[0], list1[1] + list2[1]]
@@ -79,4 +91,32 @@ class CCodeObject:
     def InRecursive(self):
         if len(self.recursive) == 0:
             return False
+        return True
+        
+    
+    def GetRules(self):
+        if False:
+            yield None
+    
+    def GetSymbol(self):
+        return self.symbol
+        
+    def GetTokens(self):
+        if False:
+            yield None
+            
+    def Walk(self):
+        yield self
+        
+    def Parse(self):
+        return True
+        
+    def GetAction(self):
+        if False:
+            yield None
+    
+    def IsLoop(self):
+        return False
+        
+    def CreateNew(self):
         return True
