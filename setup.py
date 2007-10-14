@@ -205,6 +205,9 @@ setup(
         ("etc/uml/elements", glob.glob("etc/uml/elements/*.xml")),
         ("etc/uml/icons", glob.glob("etc/uml/icons/*.png")),
         ("etc/uml/versions", glob.glob("etc/uml/versions/*.xml")),
+        ("etc/languages/types",glob.glob("etc/languages/types/*.xml")),
+        ("etc/languages/codeTemplate",glob.glob("etc/languages/codeTemplate/*.xml")),
+        ("etc/languages/style",glob.glob("etc/languages/style/*.css")),
         ("img", glob.glob("img/*.png")+glob.glob("img/*.ico")),
         (".", ["ABOUT", "README", "LICENSE"])
     ]+list(get_languages('share/locale', 'uml_fri')),

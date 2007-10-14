@@ -11,7 +11,7 @@ from picDrawingArea import CpicDrawingArea
 
 class CTabs(CWidget):
     name = 'nbTabs'
-    widgets = ('nbTabs','twProjectView', 'picDrawingArea',
+    widgets = ('nbTabs','twProjectView', 'picDrawingArea', 'lblStart',
                 #Context menu
                 'menuTreeElement',
                 'mnuTab', 'mnuTabExportSVG', 'mnuTabPages_menu', 'mnuTabCloseDiagram', 'mnuTabCloseAllDiagram',
@@ -73,13 +73,6 @@ class CTabs(CWidget):
         self.nbTabs.append_page(hbox,hboxbut)
         button.connect("clicked", self.on_button_click, self.nbTabs.get_nth_page(self.nbTabs.get_n_pages()-1))
         self.drawingAreas.append(drawingArea)
-       
-        #~ mi = gtk.RadioMenuItem(None,i.GetName())  
-        #~ mi.set_group(self.mnuTabPages_menu.get_children()[0])
-        #~ mi.set_active(True)        
-        #~ mi.show()   
-        #~ mi.connect("activate", self.on_mnuTab_activate, i)
-        #~ self.mnuTabPages_menu.append(mi)
         self.SetCurrentPage(self.nbTabs.get_n_pages()-1)
        
     def on_button_click(self, widget, page):
@@ -110,7 +103,6 @@ class CTabs(CWidget):
         if drawingArea in self.drawingAreas:
             num = self.drawingAreas.index(drawingArea)
             self.drawingAreas.remove(drawingArea)
-            #self.mnuTabPages_menu.remove(self.mnuTabPages_menu.get_children()[num])
             self.nbTabs.remove_page(num)
             
     
@@ -142,9 +134,6 @@ class CTabs(CWidget):
         for i in xrange(1, len(self.drawingAreas)):
             del self.drawingAreas[1]
             self.nbTabs.remove_page(1)
-
-
-    
     
     def on_mnuTab_activate(self, widget, diagram):
         for id, a in enumerate(self.drawingAreas):

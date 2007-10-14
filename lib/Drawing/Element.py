@@ -102,7 +102,6 @@ class CElement:
             x, y = self.position
             w, h = self.GetSize(canvas)
             rx, ry = self.objct.GetType().GetResizable()
-            
             self.squares = []
             
             if rx and ry:

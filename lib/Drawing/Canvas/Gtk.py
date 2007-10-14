@@ -2,8 +2,11 @@ from lib.lib import UMLException
 from Abstract import CAbstractCanvas
 
 import pango
+import pangocairo
 import gtk
 import gtk.gdk
+
+import os
 
 LINE_STYLES = {'solid': gtk.gdk.LINE_SOLID,
                'dot': gtk.gdk.LINE_ON_OFF_DASH,
@@ -45,7 +48,7 @@ class CGtkCanvas(CAbstractCanvas):
             font.append('italic')
         if bold:
             font.append('bold')
-        font.append(str(size)+'px')
+        font.append(str(size))
         font = ' '.join(font)
         if font in self.fonts:
             fontobj = self.fonts[font]
@@ -62,6 +65,9 @@ class CGtkCanvas(CAbstractCanvas):
             atlist.insert(pango.AttrStrikethrough(True, 0, 10000))
         self.pango_layout.set_attributes(atlist)
 
+    def DrawPoint(self, x, y):
+        gc = self.window.new_gc()
+        self.window.draw_point(gc, x, y)
     
     def DrawArc(self, pos, size, arc = (0, 360), fg = None, bg = None, line_width = None, line_style = None):
         gc = self.window.new_gc()
@@ -151,6 +157,11 @@ class CGtkCanvas(CAbstractCanvas):
         fontobj = self.__SetFont(font, True)
         metrics = self.pango_ctx.get_metrics(fontobj, None)
         return metrics.get_ascent() / pango.SCALE
+    
+    def RecalcFontPxSize(self, size):
+        if os.name in ('nt', 'ce'):
+            size = size / 72.0 * pangocairo.cairo_font_map_get_default().get_resolution()
+        return size
     
     def DrawIcon(self, pos, filename):
         if self.storage is None:

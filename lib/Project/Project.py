@@ -15,10 +15,13 @@ from lib.Elements.Factory import CElementFactory
 from lib.Diagrams.Factory import CDiagramFactory
 from lib.Connections.Factory import CConnectionFactory
 from lib.Versions.Factory import CVersionFactory
+from lib.Datatypes.Factory import CDataTypeFactory
+from lib.CodeEngineering.Factory import CLanguageFactory
 from lib.Drawing import CDrawingArea
 
+import lib
 import os.path
-from lib.consts import ROOT_PATH, VERSIONS_PATH, DIAGRAMS_PATH, ELEMENTS_PATH, CONNECTIONS_PATH
+from lib.consts import ROOT_PATH, VERSIONS_PATH, DIAGRAMS_PATH, ELEMENTS_PATH, CONNECTIONS_PATH, DATATYPE_PATH, SOURCECODE_PATH
 
 
 class CProject(object):
@@ -31,8 +34,22 @@ class CProject(object):
         self.ConnectionFactory = CConnectionFactory(self.Storage, CONNECTIONS_PATH)
         self.VersionFactory = CVersionFactory(self.Storage, VERSIONS_PATH)
         self.version = self.VersionFactory.GetVersion('UML 1.4')
-        
+        self.DataTypeFactory = CDataTypeFactory(self.Storage, DATATYPE_PATH)
+        self.ActualLanguage = self.DataTypeFactory.GetFirstLanguage()
+        self.CodeEngineering = CLanguageFactory(self.Storage,SOURCECODE_PATH)
         self.filename = None
+    
+    def GetCodeEngineering(self):
+        return self.CodeEngineering
+    
+    def GetActualLanguage(self):
+        return self.ActualLanguage
+    
+    def SetActualLanguage(self, language):
+        self.ActualLanguage = language
+    
+    def GetDataTypeFactory(self):
+        return self.DataTypeFactory
     
     def GetStorage(self):
         return self.Storage
@@ -94,8 +111,25 @@ class CProject(object):
                 return node
             stack += node.GetChilds()
         return None
+    
+    # Vrati vsetky drawingArea daneho uzla a rekurzivne aj jeho poduzlov
+    def GetNodeDrawingAreas(self, root = None):
+        List = []
+        def Rekurzia(root):
+            for i in root.GetDrawingAreas():
+                List.append(i)
+            
+            for i in root.GetChilds():
+                Rekurzia(i)
+    
+        if root is None:
+            root = self.root
+        Rekurzia(root)
+        return List
 
     def AddNode(self, node, parent):
+        if node.GetPath().split(':')[-1] == "Class":
+            self.DataTypeFactory.GetDataType("own").AddDataType(node.GetPath().split('/')[-1].split(':')[0])
         if parent is None:
             self.root = node
         else:
@@ -208,6 +242,7 @@ class CProject(object):
         # file(filename, 'w').write(f.getvalue())
     
     def LoadProject(self, filename, copy = False):
+        self.DataTypeFactory.GetDataType("own").ClearDataType()
         ListObj = {}
         ListCon = {}
         file = ZipFile(filename,"r")
