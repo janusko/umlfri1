@@ -13,7 +13,7 @@
             <Option value="protected" />
          </Item>
         <Item value="Attributes" type="attrs" propid="attributes" />
-        <Item value="Abstract" type="bool" propid="abstract"/>
+        <Item value="Abstract" type="bool" />
         <Item value="Notes" type="note" />
     </Attributes>
     <Appearance>
@@ -21,14 +21,9 @@
             <Rectangle fill="/Styles/Element/FillColor" border="/Styles/Element/LineColor">
                 <HBox>
                     <Padding padding="5">
-                        <HBox>
-                            <Condition condition="#abstract" type="True" negate="0">
-                                <TextBox text="#name" font="/Styles/Element/ObjectNameAbstractTextFont" color="/Styles/Element/NameTextColor" />
-                            </Condition>
-                            <Condition condition="#abstract" type="True" negate="1">
-                                <TextBox text="#name" font="/Styles/Element/ObjectNameTextFont" color="/Styles/Element/NameTextColor" />
-                            </Condition>
-                        </HBox>
+                        <Align align="center">
+                            <TextBox text="#name" font="/Styles/Element/ObjectNameTextFont" color="/Styles/Element/NameTextColor" />
+                        </Align>
                     </Padding>
                     <Condition condition="attributes" type="empty" negate="1">
                         <HBox>

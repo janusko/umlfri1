@@ -28,3 +28,12 @@ class CIndent(CCodeContainer):
             root.SetIndent(ind)
         
         return ret
+
+    def GetRules(self):
+        if self.required == "False":
+            yield self.GetSymbol(), [child.GetSymbol() for child in self.childs if child.Parse()]
+        else:
+            yield self.GetSymbol(), ['indent'] + [child.GetSymbol() for child in self.childs if child.Parse()] + ['dedent']
+        for rule in self.GetChildRules():
+            yield rule
+                    

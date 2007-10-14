@@ -6,7 +6,6 @@ from lib.Project.ProjectNode import CProjectNode
 import gtk
 import gobject
 import common
-import os.path
 
 
 class CfrmGenerateCode(CWindow):
@@ -34,10 +33,6 @@ class CfrmGenerateCode(CWindow):
     def __FillGenerateObject(self):
         self.Model.clear()
         if isinstance(self.packageNode, CProjectNode):
-            if self.packageNode.GetObject().GetType().GetId() == "Class":
-                self.Model.set(self.Model.append(), 0, self.chckSelectAll.get_active(), 1, self.packageNode.GetName(), 2, self.packageNode.GetType(), 3, self.packageNode.GetObject())
-                return
-            
             for i in self.packageNode.GetNodeSpecifyElements(self.packageNode, ("Class", "Package"), self.chckChildPackages.get_active()):
                 self.Model.set(self.Model.append(), 0, self.chckSelectAll.get_active(), 1, i.GetName(), 2, i.GetType(), 3, i.GetObject())
         else:
@@ -48,41 +43,28 @@ class CfrmGenerateCode(CWindow):
         self.packageNode = packageNode
         if isinstance(packageNode, CProjectNode):
             self.edtRootPackage.set_text(packageNode.GetShortPath())
-        else:
-            self.edtRootPackage.set_text("Selected elements")
-            self.packageNode = []
-            for i in packageNode:
-                self.packageNode.append(i)
         self.chckSelectAll.set_active(True)
         
         model = self.cbTargetLanguage.get_model()
         model.clear()
         self.cbTargetLanguage.set_model(model)
         for id, language in enumerate(self.application.GetProject().GetCodeEngineering()):
-            if language.GetType() == "Code":
-                self.cbTargetLanguage.append_text(language.GetLanguage())
-                if self.cbTargetLanguage.child.get_text() != "":
-                    if language.GetLanguage() == self.cbTargetLanguage.child.get_text():
-                        self.cbTargetLanguage.set_active(id)
-                elif language.GetLanguage() == self.application.GetProject().GetActualLanguage():
+            self.cbTargetLanguage.append_text(language.GetLanguage())
+            if self.cbTargetLanguage.child.get_text() != "":
+                if language.GetLanguage() == self.cbTargetLanguage.child.get_text():
                     self.cbTargetLanguage.set_active(id)
+            elif language.GetLanguage() == self.application.GetProject().GetActualLanguage():
+                self.cbTargetLanguage.set_active(id)
             
         
         self.__FillGenerateObject()
+        response = self.form.run() 
         while True:
-            response = self.form.run()
             if response != gtk.RESPONSE_OK:
                 self.form.hide()
                 return
 
             path = self.edtTargetPath.get_text()
-            if path.strip(' ') == "":
-                CWarningDialog(self.form, _('Fill the target folder field')).run()
-                continue
-            elif not os.path.isdir(path):
-                CWarningDialog(self.form, _('Path in target folder field not is directory')).run()
-                continue
-                
             if self.cbTargetLanguage.get_active() >= 0:
                 gen = CGenerator(self.application.GetProject().GetCodeEngineering().GetType(self.cbTargetLanguage.get_active_text()), path)
                 model = self.twGenerateObjects.get_model()
@@ -93,7 +75,7 @@ class CfrmGenerateCode(CWindow):
                 return
             else:
                 CWarningDialog(self.form, _('Fill the target language field')).run()
-                continue
+                response = self.form.run()
         
     @event("chckSelectAll","toggled")
     def on_chckSelectAll_toggled(self, cell):

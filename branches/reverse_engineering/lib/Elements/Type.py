@@ -105,23 +105,45 @@ class CElementType:
         elif type == 'opers':
             ret = []
             for i in value:
-                o = {'name': str(i['name']), 'params': str(i['params']), 'abstract': ToBool(i['abstract']),
+                ret.append({'name': str(i['name']), 'params': str(i['params']), 'abstract': ToBool(i['abstract']),
                             'static': ToBool(i['static']), 'const': ToBool(i['const']), 'returnarray': ToBool(i['returnarray']),
                             'pure': ToBool(i['pure']), 'synchronize': ToBool(i['synchronize']), 'isquery': ToBool(i['isquery']),
                             'scope': str(i['scope']), 'type': str(i['type']), 'stereotype': str(i['stereotype']),
                             'doc': str(i['doc']), 'initial': str(i['initial'])
-                }
-                if i.has_key('overload'):
-                    o['overload'] = ToBool(i['overload'])
-                else:
-                    o['overload'] = False
-                
-                if i.has_key('override'):
-                    o['override'] = ToBool(i['override'])
-                else:
-                    o['override'] = False
-                ret.append(o)
+                })
             return ret
+    
+    def GetBlankAttribute(self, key):
+        type, options = self.attributes[key]
+        if type == 'int':
+            return 0
+        if type == 'enum':
+            return ''
+        elif type == 'float':
+            return 0.
+        elif type == 'bool':
+            return False
+        elif type == 'str':
+            return ''
+        elif type == 'note':
+            return ''
+        elif type == 'attrs':
+            ret = {'name': '', 'type': '', 'scope': 'private',
+                    'stereotype': '', 'containment': 0, 'initial': '',
+                    'doc': '', 'derived': False, 'static': False,
+                    'property': False, 'const': False, 'getter': '',
+                    'setter': ''
+            }
+            return ret
+        elif type == 'opers':
+            ret = {'name': '', 'params': '', 'abstract': False,
+                    'static': False, 'const': False, 'returnarray': False,
+                    'pure': False, 'synchronize': False, 'isquery': False,
+                    'scope': 'private', 'type': '', 'stereotype': '',
+                    'doc': '', 'initial': ''
+            }
+            return ret
+        
     
     def GetAttributes(self):
         for i in self.attributeList:

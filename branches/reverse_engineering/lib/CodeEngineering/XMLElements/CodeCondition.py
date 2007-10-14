@@ -18,10 +18,12 @@ class CCodeCondition(CCodeContainer):
             return False
             
         condition, = self.GetVariables(elementObject, 'id')
-        list = self.value.split("|")
-        for i in list:
-            if str(condition) == i.strip(' '):
-                ret =  True
+        
+        if self.id == "@containment":
+            print "CONDITION",condition
+            
+        if str(condition) == self.value:
+            ret =  True
         
         if self.negate:
             ret = not ret

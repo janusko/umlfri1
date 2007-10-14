@@ -8,7 +8,6 @@ import common
 from lib.CodeEngineering.Generator import CGenerator
 from lib.consts import TMP_IMAGES
 import os
-import os.path
 
 class CfrmGenerateDocumentation(CWindow):
     name = 'frmGenerateDocumentation'
@@ -21,35 +20,27 @@ class CfrmGenerateDocumentation(CWindow):
     
     def __init__(self, app, wTree):
         common.CWindow.__init__(self, app, wTree)
-     
+        
+    
     def ShowDialog(self, packageNode):
-        self.edtPackage.set_text(packageNode.GetShortPath())
+        response = self.form.run() 
         while True:
-            response = self.form.run() 
             if response != gtk.RESPONSE_OK:
                 self.form.hide()
                 return
-                
-            if self.edtOutput.get_text().strip(' ') == "":
-                CWarningDialog(self.form, _('Fill the output field')).run()
-                continue
-            else:
-                if not os.path.isdir(self.edtOutput.get_text()):
-                    CWarningDialog(self.form, _('Path in output field not is directory')).run()
-                    continue 
-        
+            
             path = self.edtOutput.get_text()
+            #~ if self.cbTargetLanguage.get_active() >= 0:
             gen = CGenerator(self.application.GetProject().GetCodeEngineering().GetType("HTML"), path)
-            path = TMP_IMAGES
-            if os.path.exists(path):
-                for i in os.listdir(path):
-                    path_file = os.path.join(path,i)
-                    if os.path.isfile(path_file):
-                        os.remove(path_file)
-                os.rmdir(path)
+                #~ model = self.twGenerateObjects.get_model()
+                #~ for id in xrange(model.iter_n_children(None)):
+                    #~ if model.get_value(model.iter_nth_child(None, id),0):
+            #~ gen.GenerateElement("documentation")
+            
             os.mkdir(TMP_IMAGES)
+            path = TMP_IMAGES
             self.emit('create_svg_diagrams', self.application.GetProject().GetRoot(), path)
-            gen.GenerateDocumentation(self.edtTitle.get_text(), self.application.GetProject(), packageNode)
+            gen.GenerateDocumentation(self.edtTitle.get_text(), self.application.GetProject())
             for i in os.listdir(path):
                 path_file = os.path.join(path,i)
                 if os.path.isfile(path_file):
@@ -58,7 +49,10 @@ class CfrmGenerateDocumentation(CWindow):
                 
             self.form.hide()
             return
-            
+            #~ else:
+                #~ CWarningDialog(self.form, _('Fill the target language field')).run()
+                #~ response = self.form.run()
+
 
     @event("btnChoose","clicked")
     def on_btnChooseFolder_click(self, widget):

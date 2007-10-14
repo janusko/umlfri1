@@ -40,3 +40,11 @@ class CFile(CCodeContainer):
             return [True, ""]
 
         return ret
+        
+    def GetRules(self):
+        yield self.GetSymbol(), ['file:'+self.value] + [child.GetSymbol() for child in self.childs if child.Parse()] + ['eof']
+        for rule in self.GetChildRules():
+            yield rule
+
+    def GetTokens(self):
+        yield 'file:'+self.value, self.value, 'file'

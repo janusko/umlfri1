@@ -50,7 +50,7 @@ class CfrmMain(CWindow):
         #toolbar
         'cmdOpen', 'cmdSave', 'cmdCopy', 'cmdCut', 'cmdPaste', 'cmdNewProject',
         #Generovanie kodu
-        'mnuGenerateSourceCode', 'mnuDocumentation',
+        'mnuGenerateSourceCode', 'mnuDocumentation', 'mnuGenerateDiagrams'
         )
 
     complexWidgets = (CtbToolBox, CtwProjectView, CmnuItems, CpicDrawingArea, CnbProperties, CTabs,
@@ -250,22 +250,7 @@ class CfrmMain(CWindow):
                     gtk.keysyms._6, gtk.keysyms._7, gtk.keysyms._8, gtk.keysyms._9, gtk.keysyms._0]
             if event.keyval in Keys:
                 self.nbTabs.SetCurrentPage(Keys.index(event.keyval))
-        
-        if self.picDrawingArea.HasFocus():
-            self.form.emit_stop_by_name('key-press-event')
-            if event.keyval == gtk.keysyms.Left:
-                if event.state == gtk.gdk.CONTROL_MASK:
-                    print "Dolava"
-            elif event.keyval == gtk.keysyms.Right:
-                if event.state == gtk.gdk.CONTROL_MASK:
-                    print "Doprava"
-            elif event.keyval == gtk.keysyms.Up:
-                if event.state == gtk.gdk.CONTROL_MASK:
-                    print "Hore"
-            elif event.keyval == gtk.keysyms.Down:
-                if event.state == gtk.gdk.CONTROL_MASK:
-                    print "Dole"
-        
+
     @event("nbTabs","drawingArea-set-focus")
     def on_DrawingArea_set_focus(self,widget):
         self.picDrawingArea.SetFocus()
@@ -396,7 +381,6 @@ class CfrmMain(CWindow):
     
     @event("twProjectView","show_frmFindInDiagram")
     def on_show_frmFindInDiagram(self, widget, drawingAreas, object):
-        self.frmFindInDiagram.SetParent(self.application.GetWindow('frmMain'))
         self.frmFindInDiagram.ShowDialog(drawingAreas, object)
 
     @event("nbProperties", "content-update")
@@ -404,10 +388,6 @@ class CfrmMain(CWindow):
         if element.GetObject().GetType().HasVisualAttribute(property):
             self.picDrawingArea.Paint()
             self.twProjectView.UpdateElement(element.GetObject())
-    
-    @event("nbProperties","update_tree")
-    def on_nbProperties_update_tree(self, widget, elementObj):
-        self.twProjectView.UpdateElement(elementObj)
 
     @event("tbToolBox", "toggled")
     def on_tbToolBox_toggled(self, widget, ItemId, ItemType):
@@ -473,12 +453,21 @@ class CfrmMain(CWindow):
         dlg.SetParent(self)
         dlg.ShowDialog(node)
         
+    @event("mnuGenerateDiagrams", "activate")
+    def on_mnuGenerateDiagrams_activate(self, menuItem):
+        node = self.twProjectView.GetSelectedNode()
+        if node is None:
+            node = self.application.GetProject().GetRoot()
+        dlg = self.application.GetWindow('frmGenerateDiagrams')
+        dlg.SetParent(self)
+        dlg.ShowDialog(node)
+        
+        
     @event("mnuDocumentation", "activate")
     def on_mnuDocumentation_activate(self, menuItem):
         node = self.twProjectView.GetSelectedNode()
         if node is None:
             node = self.application.GetProject().GetRoot()
-        self.frmGenerateDocumentation.SetParent(self)
         self.frmGenerateDocumentation.ShowDialog(node)
         
         
@@ -488,12 +477,11 @@ class CfrmMain(CWindow):
         allAreas = self.application.GetProject().GetNodeDrawingAreas(node)
         for i in allAreas:
             self.picDrawingArea.OnlySetDrawingArea(i)
-            size = i.GetMinMaxSize(self.picDrawingArea.canvas)
-            width, height = (size[1][0] - size[0][0] + 10, size[1][1] - size[0][1] + 10)
+            width, height = i.GetMinSize(self.picDrawingArea.canvas)          
             canvas = CSvgCanvas(width, height, self.picDrawingArea.canvas, self.application.GetProject().GetStorage())
             canvas.Clear()
             i.DeselectAll()
-            i.Paint(canvas,(-size[0][0] + 10,-size[0][1] +10))
+            i.Paint(canvas)
             filename = os.path.join(path,i.GetPath().replace("/","-").replace(":",'+') + ".svg")
             index = 1
             canvas.WriteOut(file(filename, 'w'))

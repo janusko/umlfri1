@@ -12,3 +12,4 @@ from frmGenerateCode import CfrmGenerateCode
 from frmChooseFolder import CfrmChooseFolder
 from frmGenerateDocumentation import CfrmGenerateDocumentation
 from frmCreatePropertyImpl import CfrmCreatePropertyImpl
+from frmGenerateDiagrams import CfrmGenerateDiagrams

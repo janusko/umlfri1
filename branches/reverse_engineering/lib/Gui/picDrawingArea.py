@@ -42,8 +42,7 @@ class CpicDrawingArea(CWidget):
 
     def __init__(self, app, wTree):
         CWidget.__init__(self, app, wTree)
-        
-        
+
         self.__NewConnection = None
         self.dnd = None
         self.selecting = None
@@ -187,9 +186,6 @@ class CpicDrawingArea(CWidget):
         for sel in self.DrawingArea.GetSelected():
             self.DrawingArea.DeleteItem(sel)
         self.Paint()
-    
-    def HasFocus(self):
-        return self.picDrawingArea.get_property('has-focus')
     
     @event("picEventBox", "button-press-event")
     def on_picEventBox_button_press_event(self, widget, event):
@@ -623,9 +619,7 @@ class CpicDrawingArea(CWidget):
     
     @event("pmGenerateCode","activate")
     def on_mnuGenerateCode_click(self, menuItem):
-        dlg = self.application.GetWindow('frmGenerateSourceCode')
-        dlg.SetParent(self.application.GetWindow('frmMain'))
-        dlg.ShowDialog(self.DrawingArea.GetSelected())
+        self.application.GetWindow('frmGenerateSourceCode').ShowDialog(self.DrawingArea.GetSelected())
         
     # Menu na Z-Order:  
     def Shift_activate(self, actionName):

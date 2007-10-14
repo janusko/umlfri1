@@ -8,12 +8,6 @@ class CGenerator:
         self.type = type
         self.path = path
     
-    def GetType(self):
-        return self.type
-    
-    def SetPath(self, type):
-        self.type = type
-    
     def GetPath(self):
         return self.path
     
@@ -24,10 +18,8 @@ class CGenerator:
         template = self.type.GetElement(elementObj.GetType().GetId())
         template.Generate(self.type.GetElements(), elementObj, self.path)
     
-    def GenerateDocumentation(self, name, project, rootNode = None):
-        if rootNode is None:
-            rootNode = project.GetRoot()
-        element = CDocumentation(name, rootNode)
+    def GenerateDocumentation(self, name, project):
+        element = CDocumentation(name, project, project.GetRoot())
         template = self.type.GetElement("documentation")
         template.Generate(template, element, self.path)
         del element

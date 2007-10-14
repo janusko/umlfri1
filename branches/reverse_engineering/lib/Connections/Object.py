@@ -113,7 +113,10 @@ class CConnectionObject(object):
 
     def GetProperty(self, key = None):
         o = {}
+        #~ o['name'] = self.GetAttribute('Name')
+        print "@@@", self.attributes
         if self.attributes.has_key('Name'):
+            print "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
             o['name'] = self.attributes['Name']
         else:
             o['name'] = ""

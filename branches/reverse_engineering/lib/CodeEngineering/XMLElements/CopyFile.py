@@ -27,6 +27,7 @@ class CCopyFile(CCodeObject):
         aktual_dir = os.getcwd()
         if self.from_dir is not None:
             os.chdir(self.from_dir)
+            print "1111111111111"
             for i in glob.glob("*"):
                 self.copy_file(self.from_dir, path, i)
         os.chdir(aktual_dir)

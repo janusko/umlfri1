@@ -1,5 +1,10 @@
 <?xml version="1.0" ?>
-<Template diagram="Class Diagram" language="C++" type="Code">
+<Template diagram="Class Diagram" language="C++">
+    <Element id="Note">
+        /**<br />
+        <Property id="#Notes" newLine=" * " /><br />
+        */<br/>
+    </Element>
     <Element id="Package">
         <Directory name="{name}" value="[_0-9a-zA-Z]+">
             <Recursive>

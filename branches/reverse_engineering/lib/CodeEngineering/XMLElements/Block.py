@@ -10,12 +10,13 @@ class CBlock(CCodeContainer):
         ret = [True,""]
         for i in self.childs:
             ret = self.JoinReturnValue(ret, i.Generate(elementObject, path, fil))
-              
+        
         self.text += ret[1]
         if self.GetRoot().InRecursive():
             return [ret[0],""]
         else:
-            ret[1] = self.text
+            ret[1] = self.text + ret[1]
             self.text = ""
             return ret
+        
         

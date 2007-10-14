@@ -44,6 +44,7 @@ class CLanguageFactory:
             elif en == 'Class':
                 pass
         
+        print root.getAttribute('id')
         self.types[root.getAttribute('id')] = obj
         
         

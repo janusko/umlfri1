@@ -51,3 +51,27 @@ class CProperty(CCodeContainer):
         
         ret[1] += self.sufix
         return ret
+    
+    def GetSymbol(self):
+        if self.id in ( '@src', '@dest'):
+            return 'element', self.id+CCodeContainer.GetSymbol(self)
+        else:
+            return 'attribute', self.id+CCodeContainer.GetSymbol(self)
+            
+    def GetRules(self):
+        if not self.value:
+            yield self.GetSymbol(), [child.GetSymbol() for child in self.childs if child.Parse()]
+            for rule in self.GetChildRules():
+                yield rule
+        else:
+            yield self.GetSymbol(), [self.value]
+            
+    def GetAction(self):
+        yield self.GetSymbol(), self
+        
+    def CreateNew(self):
+        if self.id in ( '@src', '@dest'):
+            return False
+        else:
+            return True
+        
