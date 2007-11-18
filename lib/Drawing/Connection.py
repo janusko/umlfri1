@@ -21,6 +21,24 @@ class CConnection:
         self.selected = False
         self.selpoint = None
         self.object.AddAppears(drawingArea)
+        self.ClearSizeCache()
+        self.revision = 0
+    
+    def ClearSizeCache(self):
+        self.__sizecache = {}
+    
+    def CacheSize(self, obj, size):
+        line = getattr(self, '__LOOPVARS__', {}).get('line')
+        self.__sizecache[(id(obj), line)] = size
+        return size
+    
+    def GetCachedSize(self, obj):
+        if self.revision < self.object.GetRevision():
+            self.ClearSizeCache()
+            self.revision = self.object.GetRevision()
+            return None
+        line = getattr(self, '__LOOPVARS__', {}).get('line')
+        return self.__sizecache.get((id(obj), line))
     
    
     def Select(self):

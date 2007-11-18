@@ -2,6 +2,7 @@ from Exceptions import EConnectionRestriction
 
 class CConnectionObject(object):
     def __init__(self, type, source, dest):
+        self.revision = 0
         if not self.__CheckRecursiveConnection(type, source, dest):
             raise EConnectionRestriction
         checksrc = self.__CheckConnection(type, source, dest)
@@ -15,7 +16,7 @@ class CConnectionObject(object):
         self.attributes = {}
         for i in self.type.GetAttributes():
             self.SetAttribute(i, self.type.GetDefValue(i))
-            
+    
     def __CheckRecursiveConnection(self, type, source, dest):
         if source is not dest:
             return True
@@ -38,7 +39,9 @@ class CConnectionObject(object):
             elif '*' in withelem or destid in withelem:
                 return True
         return False
-        
+    
+    def GetRevision(self):
+        return self.revision
     
     def GetAppears(self):
         for i in self.appears:
@@ -99,9 +102,11 @@ class CConnectionObject(object):
             raise UMLException("BadKey")
     
     def SetAttribute(self, key, value):
+        self.revision += 1
         self.attributes[key] = value        
     
     def RemoveAttribute(self, key):
+        self.revision += 1
         if key in self.attributes:
             del self.attributes[key]
         else:

@@ -18,11 +18,14 @@ class CLoop(CSimpleContainer):
             raise UMLException("XMLError")
     
     def GetSize(self, canvas, element):
+        size = element.GetCachedSize(self)
+        if size is not None:
+            return size
         w, h = 0, 0
         o = self.__GetOrientation()
-        for item in element.GetObject().GetVisualProperty(self.collection):
+        for line, item in enumerate(element.GetObject().GetVisualProperty(self.collection)):
             for i in self.childs:
-                element.__LOOPVARS__ = item
+                element.__LOOPVARS__ = {'item': item, 'line': line}
                 wc, hc = i.GetSize(canvas, element)
                 if o == "horizontal":
                     if wc > w:
@@ -33,16 +36,16 @@ class CLoop(CSimpleContainer):
                     if hc > h:
                         h = hc
                 del element.__LOOPVARS__
-        return w, h
+        return element.CacheSize(self, (w, h))
 
     def PaintShadow(self, canvas, pos, element, color, size = (None, None)):
         size = self.ComputeSize(canvas, element, size)
         w, h = size
         x, y = pos
         o = self.__GetOrientation()
-        for item in element.GetObject().GetVisualProperty(self.collection):
+        for line, item in enumerate(element.GetObject().GetVisualProperty(self.collection)):
             for i in self.childs:
-                element.__LOOPVARS__ = item
+                element.__LOOPVARS__ = {'item': item, 'line': line}
                 wc, hc = i.GetSize(canvas, element)
                 if o == "horizontal":
                     h = hc
@@ -60,9 +63,9 @@ class CLoop(CSimpleContainer):
         w, h = size
         x, y = pos
         o = self.__GetOrientation()
-        for item in element.GetObject().GetVisualProperty(self.collection):
+        for line, item in enumerate(element.GetObject().GetVisualProperty(self.collection)):
             for i in self.childs:
-                element.__LOOPVARS__ = item
+                element.__LOOPVARS__ = {'item': item, 'line': line}
                 wc, hc = i.GetSize(canvas, element)
                 if o == "horizontal":
                     h = hc

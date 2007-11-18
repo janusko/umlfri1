@@ -10,10 +10,13 @@ class CTextBox(CVisualObject):
         self.font = font
 
     def GetSize(self, canvas, element):
+        size = element.GetCachedSize(self)
+        if size is not None:
+            return size
         txt, font = self.GetVariables(element, 'text', 'font')
         font = font.split()
         font = font[0], font[1:-1], int(font[-1])
-        return canvas.GetTextSize(txt, font)
+        return element.CacheSize(self, canvas.GetTextSize(txt, font))
 
     def PaintShadow(self, canvas, pos, element, color, size = (None, None)):
         txt, font = self.GetVariables(element, 'text', 'font')

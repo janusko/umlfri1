@@ -13,6 +13,24 @@ class CElement:
         self.drawingArea.AddElement(self)
         self.objct.AddAppears(drawingArea)
         self.__AddExistingConnections()
+        self.ClearSizeCache()
+        self.revision = 0
+    
+    def ClearSizeCache(self):
+        self.__sizecache = {}
+    
+    def CacheSize(self, obj, size):
+        line = getattr(self, '__LOOPVARS__', {}).get('line')
+        self.__sizecache[(id(obj), line)] = size
+        return size
+    
+    def GetCachedSize(self, obj):
+        if self.revision < self.objct.GetRevision():
+            self.ClearSizeCache()
+            self.revision = self.objct.GetRevision()
+            return None
+        line = getattr(self, '__LOOPVARS__', {}).get('line')
+        return self.__sizecache.get((id(obj), line))
     
     def __AddExistingConnections(self):
         if not self.isLoad:

@@ -18,11 +18,14 @@ class CLine(CVisualObject):
         return tp
 
     def GetSize(self, canvas, element):
+        size = element.GetCachedSize(self)
+        if size is not None:
+            return size
         tp = self.__ComputeType()
         if tp == 'horizontal':
-            return 0, 1
+            return element.CacheSize(self, (0, 1))
         else:
-            return 1, 0
+            return element.CacheSize(self, (1, 0))
     
     def GetResizable(self):
         tp = self.__ComputeType()

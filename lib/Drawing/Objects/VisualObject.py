@@ -11,7 +11,7 @@ class CVisualObject:
             elif val[0] == '#':
                 yield element.GetObject().GetVisualProperty(val[1:])
             elif val[0] == '@':
-                yield element.__LOOPVARS__[val[1:]]
+                yield element.__LOOPVARS__['item'][val[1:]]
             elif val[0] == '/':
                 yield config[val]
             else:
