@@ -6,8 +6,11 @@ class CPadding(CSimpleContainer):
         self.padding = int(padding)
 
     def GetSize(self, canvas, element):
+        size = element.GetCachedSize(self)
+        if size is not None:
+            return size
         w, h = CSimpleContainer.GetSize(self, canvas, element)
-        return w + 2*self.padding, h + 2*self.padding
+        return element.CacheSize(self, (w + 2*self.padding, h + 2*self.padding))
 
     def PaintShadow(self, canvas, pos, element, color, size = (None, None)):
         size = self.ComputeSize(canvas, element, size)

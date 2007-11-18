@@ -3,6 +3,7 @@ import weakref
 
 class CElementObject:
     def __init__(self, type):
+        self.revision = 0
         self.type = type
         self.path = None
         self.connections = []
@@ -15,12 +16,13 @@ class CElementObject:
             self.SetAttribute('Name', '')
         self.node = lambda: None
         self.appears = []
-        
-        
+    
+    def GetRevision(self):
+        return self.revision
+    
     def GetAppears(self):
         for i in self.appears:
             yield i
-
 
     def AddAppears(self, drawingArea):
         self.appears.append(drawingArea)
@@ -38,6 +40,7 @@ class CElementObject:
         return self.node
         
     def AddConnection(self, connection):
+        self.revision += 1
         if connection not in self.connections:
             self.connections.append(connection)
         else:
@@ -130,6 +133,7 @@ class CElementObject:
         self.type.Paint(canvas, element, delta)
 
     def RemoveAttribute(self, key):
+        self.revision += 1
         if self.attribs.has_key(key):
             del self.attribs[key]
         else:
@@ -139,12 +143,14 @@ class CElementObject:
         return key in self.attribs
             
     def SetAttribute(self, key, value):
+        self.revision += 1
         self.attribs[key] = self.type.TypeCastAttribute(key, value)
         
     def Disconnect(self, connection):
         connection.Disconnect()
         
     def RemoveConnection(self, connection):
+        self.revision += 1
         if connection in self.connections:
             self.connections.remove(connection)
         else:
@@ -156,6 +162,7 @@ class CElementObject:
     def Assign(self, cprojNode):
         if not self.type.GetGenerateName():
             return
+        self.revision += 1
         self.node = weakref.ref(cprojNode)
         if cprojNode.parent is not None:
             id = 1

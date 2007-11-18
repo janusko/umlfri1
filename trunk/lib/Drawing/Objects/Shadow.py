@@ -8,7 +8,10 @@ class CShadow(CSimpleContainer):
         self.color = color
 
     def GetSize(self, canvas, element):
-        return self.GetChild().GetSize(canvas, element)
+        size = element.GetCachedSize(self)
+        if size is not None:
+            return size
+        return element.CacheSize(self, self.GetChild().GetSize(canvas, element))
 
     def PaintShadow(self, canvas, pos, element, color, size = (None, None)):
         raise UMLException("ShadowInShadow")

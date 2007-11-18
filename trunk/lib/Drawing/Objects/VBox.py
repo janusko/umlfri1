@@ -6,13 +6,16 @@ class CVBox(CContainer):
         self.expand = tuple(int(cell) for cell in expand.split())
     
     def GetSize(self, canvas, element):
+        size = element.GetCachedSize(self)
+        if size is not None:
+            return size
         w = 0
         h = 0
         for i in self.childs:
             wi, hi = i.GetSize(canvas, element)
             w += wi
             h = max(h, hi)
-        return w, h
+        return element.CacheSize(self, (w, h))
 
     def PaintShadow(self, canvas, pos, element, color, size = (None, None)):
         if size[1] is None:

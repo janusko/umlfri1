@@ -7,8 +7,11 @@ class CIcon(CVisualObject):
         self.filename = filename
 
     def GetSize(self, canvas, element):
+        size = element.GetCachedSize(self)
+        if size is not None:
+            return size
         filename, = self.GetVariables(element, 'filename')
-        return canvas.GetIconSize(filename)
+        return element.CacheSize(self, canvas.GetIconSize(filename))
 
     def Paint(self, canvas, pos, element, size = (None, None)):
         filename, = self.GetVariables(element, 'filename')

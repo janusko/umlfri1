@@ -41,6 +41,9 @@ class CSizer(CSimpleContainer):
         return self.width is None and rx, self.height is None and ry
 
     def GetSize(self, canvas, element):
+        size = element.GetCachedSize(self)
+        if size is not None:
+            return size
         w, h = CSimpleContainer.GetSize(self, canvas, element)
         
         if self.height is not None:
@@ -57,7 +60,7 @@ class CSizer(CSimpleContainer):
         elif self.maxwidth is not None and self.maxwidth < w:
             w = self.maxwidth
         
-        return w, h
+        return element.CacheSize(self, (w, h))
 
     def PaintShadow(self, canvas, pos, element, color, size = (None, None)):
         size = self.ComputeSize(canvas, element, size)

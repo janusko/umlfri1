@@ -11,6 +11,9 @@ class CProportional(CSimpleContainer):
         self.ratio = float(int(ratio[0]))/int(ratio[1])
 
     def GetSize(self, canvas, element):
+        size = element.GetCachedSize(self)
+        if size is not None:
+            return size
         w, h = CSimpleContainer.GetSize(self, canvas, element)
         ch = int(w / self.ratio)
         cw = int(h * self.ratio)
@@ -18,4 +21,4 @@ class CProportional(CSimpleContainer):
             h = ch
         if cw > w:
             w = cw
-        return w, h
+        return element.CacheSize(self, (w, h))

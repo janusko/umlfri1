@@ -26,13 +26,16 @@ class CContainer(CVisualObject):
         return self.childs
 
     def GetSize(self, canvas, element):
+        size = element.GetCachedSize(self)
+        if size is not None:
+            return size
         w = 0
         h = 0
         for i in self.childs:
             wc, hc = i.GetSize(canvas, element)
             w = max(w, wc)
             h = max(h, hc)
-        return w, h
+        return element.CacheSize(self,(w, h))
     
     def PaintShadow(self, canvas, pos, element, color, size = (None, None)):
         size = self.ComputeSize(canvas, element, size)

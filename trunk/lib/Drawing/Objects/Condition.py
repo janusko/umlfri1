@@ -21,9 +21,12 @@ class CCondition(CSimpleContainer):
         return ret
 
     def GetSize(self, canvas, element):
+        size = element.GetCachedSize(self)
+        if size is not None:
+            return size
         if self.__IsTrue(element):
-            return CSimpleContainer.GetSize(self, canvas, element)
-        return 0, 0
+            return element.CacheSize(self, CSimpleContainer.GetSize(self, canvas, element))
+        return element.CacheSize(self, (0, 0))
 
     def PaintShadow(self, canvas, pos, element, color, size = (None, None)):
         if self.__IsTrue(element):
