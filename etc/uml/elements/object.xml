@@ -25,7 +25,7 @@
                             <TextBox text="#name" font="/Styles/Element/ObjectNameTextFont" color="/Styles/Element/NameTextColor" />
                         </Align>
                     </Padding>
-                    <Condition condition="attributes" type="empty" negate="1">
+                    <Condition condition="#attributes" type="empty" negate="1">
                         <HBox>
                             <Line type="horizontal" />
                             <Padding padding="5">

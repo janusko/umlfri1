@@ -39,7 +39,7 @@
                             </Loop>
                         </HBox>
                     </Padding>
-                    <Condition condition="operations" type="empty" negate="1">
+                    <Condition condition="#operations" type="empty" negate="1">
                         <HBox>
                             <Line type="horizontal" color="/Styles/Element/LineColor" />
                             <Padding padding="5">

@@ -16,7 +16,7 @@
                 </Padding>
             </Ellipse>
             <Align align="center center">
-                <Condition condition="name" type="empty" negate="1">
+                <Condition condition="#name" type="empty" negate="1">
                     <TextBox text="#name" font="/Styles/Element/NameTextFont" color="/Styles/Element/NameTextColor" />
                 </Condition>
             </Align>
