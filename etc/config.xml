@@ -17,10 +17,11 @@
             <LineColor>black</LineColor>
             <ArrowColor>black</ArrowColor>
             <ArrowFillColor>white</ArrowFillColor>
-            <NameTextColor>yellow</NameTextColor>
+            <NameTextColor>black</NameTextColor>
             <TextColor>black</TextColor>
             <NameTextFont>Arial 10</NameTextFont>
             <TextFont>Arial 10</TextFont>
+            <TextFill>white</TextFill>
         </Connection>
         <Selection>
             <PointsSize type="int">7</PointsSize>

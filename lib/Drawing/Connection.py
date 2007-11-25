@@ -123,10 +123,22 @@ class CConnection:
             return x - width/2, y - height/2
         else:
             points = list(self.GetPoints(canvas))
+            if position.count('+'):
+                position, offset = position.split('+', 1)
+                try:
+                    offset = int(offset)
+                except ValueError:
+                    raise UMLException('UndefinedOffset')
+            elif position.count('-'):
+                position, offset = position.split('-', 1)
+                try:
+                    offset = -int(offset)
+                except ValueError:
+                    raise UMLException('UndefinedOffset')
             if position == 'source':
                 tmp = self.labels[id] = [points[0], 0, 0.0, 0, 0]
             elif position == 'destination':
-                tmp = self.labels[id] = [points[-1], len(points) - 1, 1.0, 0, 0]
+                tmp = self.labels[id] = [points[-1], len(points) - 2, 1.0, 0, 0]
             elif position == 'center':
                 L = 0
                 Lo = points[0]
@@ -154,6 +166,16 @@ class CConnection:
                         Lo = point
             else:
                 raise UMLException("UndefinedPosition")
+            if 'offset' in locals():
+                index = tmp[1]
+                x1, y1 = points[index]
+                x2, y2 = points[index]
+                if y1 == y2:
+                    dx = 0.
+                else:
+                    dx = float(x2 - x1) / (y2 - y1)
+                if y2 > y1:
+                    pass
             return tmp[0]
     
     def GetLabelDefinedPositions(self):
