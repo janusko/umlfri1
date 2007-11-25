@@ -17,8 +17,8 @@ class CElementType:
         self.attributes[value] = (type, options)
         self.attributeList.append(value)
     
-    def AppendConnection(self, value, with, allowrecursive):
-        self.connections[value] = (with, allowrecursive)
+    def AppendConnection(self, value, withobject, allowrecursive):
+        self.connections[value] = (withobject, allowrecursive)
     
     def GetAppearance(self):
         return self.appearance

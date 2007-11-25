@@ -1,6 +1,7 @@
 from Line import CConnectionLine
 from Arrow import CConnectionArrow
 from math import atan2
+from lib.lib import UMLException
 
 class CConnectionType(object):
     def __init__(self, id, line = None, scrArrow = None, destArrow = None, icon = None):

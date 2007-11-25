@@ -1,16 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ConnectionType id="Compose">
     <Icon path="icons/compose.png" />
-	<SrcArrow possible="0" default="0" />
-	<DestArrow possible="1" default="1" />
+    <SrcArrow possible="0" default="0" />
+    <DestArrow possible="1" default="1" />
     <Attributes>
         <Item value="Name" type="str" propid="name" />
+        <Item value="Source Cardinality" type="str" propid="SCardinality" />
+        <Item value="Destination Cardinality" type="str" propid="DCardinality" />
     </Attributes>
     <Appearance>
-    	<LineStyle style="solid" color="/Styles/Connection/LineColor" />
-    	<ArrowStyle style="fdiamond" fill="/Styles/Connection/ArrowFillColor" color="/Styles/Connection/ArrowColor" />
+        <LineStyle style="solid" color="/Styles/Connection/LineColor" />
+        <ArrowStyle style="fdiamond" fill="/Styles/Connection/ArrowFillColor" color="/Styles/Connection/ArrowColor" />
         <Label position="center">
-            <TextBox text="#name" font="/Styles/Connection/NameTextFont" color="/Styles/Connection/NameTextColor" />
+            <Condition condition="#name" type="empty" negate="1">
+                <Rectangle fill="/Styles/Connection/TextFill">
+                    <TextBox text="#name" font="/Styles/Connection/NameTextFont" color="/Styles/Connection/NameTextColor" />
+                </Rectangle>
+            </Condition>
         </Label>
-    </Appearance>
+        <Label position="source">
+            <Condition condition="#SCardinality" type="empty" negate="1">
+                <Rectangle fill="/Styles/Connection/TextFill">
+                    <TextBox text="#SCardinality" font="/Styles/Connection/NameTextFont" color="/Styles/Connection/NameTextColor" />
+                </Rectangle>
+            </Condition>
+        </Label>
+        <Label position="destination">
+            <Condition condition="#DCardinality" type="empty" negate="1">
+                <Rectangle fill="/Styles/Connection/TextFill">
+                    <TextBox text="#DCardinality" font="/Styles/Connection/NameTextFont" color="/Styles/Connection/NameTextColor" />
+                </Rectangle>
+            </Condition>
+        </Label>
+</Appearance>
 </ConnectionType>
