@@ -10,7 +10,7 @@ from lib.Drawing import CDrawingArea, CElement, CConnection
 from lib.Elements import CElementObject
 from lib.Connections import CConnectionObject, EConnectionRestriction
 
-from lib.Drawing.Canvas import CGtkCanvas, CSvgCanvas
+from lib.Drawing.Canvas import CGtkCanvas, CSvgCanvas, CCairoCanvas
 from lib.Drawing import Element
 
 targets = [('document/uml', 0, gtk.TARGET_SAME_WIDGET)]
@@ -80,7 +80,7 @@ class CpicDrawingArea(CWidget):
         self.picDrawingArea.window.set_cursor(self.cursors[cursor])
         
     def Redraw(self):
-        self.canvas = CGtkCanvas(self.picDrawingArea, self.buffer, self.application.GetProject().GetStorage())
+        self.canvas = CCairoCanvas(self.picDrawingArea, self.buffer, self.application.GetProject().GetStorage())
 
     def Hide(self):
         self.vbAll.set_child_packing(self.nbTabs, True, True, 0, gtk.PACK_START)
