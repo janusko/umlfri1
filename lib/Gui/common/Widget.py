@@ -40,6 +40,7 @@ class CWidget(gobject.GObject):
                 except AttributeError:
                     obj = obj.get_property(attr)
             for event, fnc, params in oevents:
+                print objtxt
                 obj.connect(event, fnc, *params)
         
         self.GetRelativeFile = wTree.relative_file

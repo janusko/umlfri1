@@ -106,6 +106,9 @@ class CTabs(CWidget):
             for chld in self.nbTabs.get_nth_page(0).get_children():
                 chld.hide()
            
+    def IsStartPageActive(self):
+        return self.nbTabs.get_current_page() == 0
+    
     def CloseTab(self, drawingArea):
         if drawingArea in self.drawingAreas:
             num = self.drawingAreas.index(drawingArea)
