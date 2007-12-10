@@ -19,6 +19,8 @@ from tabs import CTabs
 from frmFindInDiagram import CFindInDiagram
 from tabStartPage import CtabStartPage
 from lib.lib import UMLException
+from lib.config import config
+from lib.colors import colors
 
 class CfrmMain(CWindow):
     name = 'frmMain'
@@ -38,6 +40,8 @@ class CfrmMain(CWindow):
         #############
         'mItemView',
         'mnuViewTools',
+        #############
+        'mnuOptions',
         #############
         'mItemHelp',
         'mnuAbout',
@@ -135,10 +139,53 @@ class CfrmMain(CWindow):
         self.picDrawingArea.Redraw()
         self.UpdateMenuSensitivity(project = True)
         
+    
+    def PaintAll(self):
+        if not self.nbTabs.IsStartPageActive():
+            self.picDrawingArea.Paint(True)
+    
     # Diagrams
     @event("mnuViewTools", "activate")
     def on_mnuViewTools_activate(self, mnu):
         self.tbToolBox.SetVisible(mnu.get_active())
+
+    # Preferencies
+    @event("mnuOptions", "activate")
+    def on_mnuOptions_activate(self, mnu):
+        tmp = self.application.GetWindow('frmOptions')
+        tmp.SetParent(self)
+        tmp.cbElementLine.set_color(gtk.gdk.color_parse(config['/Styles/Element/LineColor']))
+        print gtk.gdk.color_parse(config['/Styles/Element/LineColor']).to_string()
+        tmp.cbElementFill.set_color(gtk.gdk.color_parse(config['/Styles/Element/FillColor']))
+        tmp.cbElementFill2.set_color(gtk.gdk.color_parse(config['/Styles/Element/Fill2Color']))
+        tmp.cbElementFill3.set_color(gtk.gdk.color_parse(config['/Styles/Element/Fill3Color']))
+        tmp.cbElementShadow.set_color(gtk.gdk.color_parse(config['/Styles/Element/ShadowColor']))
+        tmp.cbElementNameText.set_color(gtk.gdk.color_parse(config['/Styles/Element/NameTextColor']))
+        tmp.cbElementText.set_color(gtk.gdk.color_parse(config['/Styles/Element/TextColor']))
+        tmp.cbConnectionLine.set_color(gtk.gdk.color_parse(config['/Styles/Connection/LineColor']))
+        tmp.cbConnectionArrow.set_color(gtk.gdk.color_parse(config['/Styles/Connection/ArrowColor']))
+        tmp.cbConnectionArrowFill.set_color(gtk.gdk.color_parse(config['/Styles/Connection/ArrowFillColor']))
+        tmp.cbConnectionNameText.set_color(gtk.gdk.color_parse(config['/Styles/Connection/NameTextColor']))
+        tmp.cbConnectionText.set_color(gtk.gdk.color_parse(config['/Styles/Connection/TextColor']))
+        tmp.cbSelectionPoints.set_color(gtk.gdk.color_parse(config['/Styles/Selection/PointsColor']))
+        tmp.cbSelectionRectangle.set_color(gtk.gdk.color_parse(config['/Styles/Selection/RectangleColor']))
+        tmp.cbDragRectangle.set_color(gtk.gdk.color_parse(config['/Styles/Drag/RectangleColor']))
+        tmp.fbElementNameText.set_font_name(config['/Styles/Element/NameTextFont'])
+        tmp.fbConnectionNameText.set_font_name(config['/Styles/Connection/NameTextFont'])
+        tmp.fbConnectionText.set_font_name(config['/Styles/Connection/TextFont'])
+        tmp.sbSelectionPointsSize.set_value(config['/Styles/Selection/PointsSize'])
+        tmp.sbSelectionRectangleWidth.set_value(config['/Styles/Selection/RectangleWidth'])
+        tmp.sbDragRectangleWidth.set_value(config['/Styles/Drag/RectangleWidth'])
+        tmp.txtRootPath.set_text(config['/Paths/Root'])
+        tmp.txtTemplatesPath.set_text(config['/Paths/Templates'])
+        tmp.txtImagesPath.set_text(config['/Paths/Images'])
+        tmp.txtGuiPath.set_text(config['/Paths/Gui'])
+        tmp.txtLocalesPath.set_text(config['/Paths/Locales'])
+        tmp.txtUserDirPath.set_text(config['/Paths/UserDir'])
+        tmp.txtUserConfigDirPath.set_text(config['/Paths/UserConfig'])
+        tmp.txtRecentFilesPath.set_text(config['/Paths/RecentFiles'])
+        tmp.Show()
+        self.PaintAll()
 
     # Help
     @event("tabStartPage","open-about-dialog")

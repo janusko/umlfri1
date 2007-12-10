@@ -8,3 +8,4 @@ from frmOperation import CfrmOperation
 from frmOpen import CfrmOpen
 from frmSave import CfrmSave
 from frmFindInDiagram import CFindInDiagram
+from frmOptions import CfrmOptions
