@@ -155,7 +155,6 @@ class CfrmMain(CWindow):
         tmp = self.application.GetWindow('frmOptions')
         tmp.SetParent(self)
         tmp.cbElementLine.set_color(gtk.gdk.color_parse(config['/Styles/Element/LineColor']))
-        print gtk.gdk.color_parse(config['/Styles/Element/LineColor']).to_string()
         tmp.cbElementFill.set_color(gtk.gdk.color_parse(config['/Styles/Element/FillColor']))
         tmp.cbElementFill2.set_color(gtk.gdk.color_parse(config['/Styles/Element/Fill2Color']))
         tmp.cbElementFill3.set_color(gtk.gdk.color_parse(config['/Styles/Element/Fill3Color']))
