@@ -70,22 +70,22 @@ class CfrmOptions(common.CWindow):
     @event("expSelection", "activate")
     @event("expDrag", "activate")
     def on_exapander_activate(self, widget):
-        if widget is not self.expElement:
+        if widget is self.expElement:
             #self.expElement.set_expanded(False)
             self.expConnection.set_expanded(False)
             self.expSelection.set_expanded(False)
             self.expDrag.set_expanded(False)
-        if widget is not self.expConnection:
+        if widget is self.expConnection:
             self.expElement.set_expanded(False)
             #self.expConnection.set_expanded(False)
             self.expSelection.set_expanded(False)
             self.expDrag.set_expanded(False)
-        if widget is not self.expSelection:
+        if widget is self.expSelection:
             self.expElement.set_expanded(False)
             self.expConnection.set_expanded(False)
             #self.expSelection.set_expanded(False)
             self.expDrag.set_expanded(False)
-        if widget is not self.expDrag:
+        if widget is self.expDrag:
             self.expElement.set_expanded(False)
             self.expConnection.set_expanded(False)
             self.expSelection.set_expanded(False)
