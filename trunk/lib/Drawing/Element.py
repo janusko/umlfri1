@@ -15,6 +15,7 @@ class CElement:
         self.__AddExistingConnections()
         self.ClearSizeCache()
         self.revision = 0
+        self.cfgrevision = 0
     
     def ClearSizeCache(self):
         self.__sizecache = {}
@@ -25,9 +26,10 @@ class CElement:
         return size
     
     def GetCachedSize(self, obj):
-        if self.revision < self.objct.GetRevision():
+        if self.revision < self.objct.GetRevision() or self.cfgrevision < config.GetRevision():
             self.ClearSizeCache()
             self.revision = self.objct.GetRevision()
+            self.cfgrevision = config.GetRevision()
             return None
         line = getattr(self, '__LOOPVARS__', {}).get('line')
         return self.__sizecache.get((id(obj), line))

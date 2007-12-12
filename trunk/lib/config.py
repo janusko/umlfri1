@@ -25,8 +25,13 @@ class CConfig:
         self.cfgs = {}
         self.original = self.cfgs
         self.__getitem__ = self.cfgs.__getitem__
-        self.__setitem__ = self.cfgs.__setitem__
+#        self.__setitem__ = self.cfgs.__setitem__
         self.__contains__ = self.cfgs.__contains__
+        self.revision = 0
+    
+    def __setitem__(self, path, value):
+        self.revision += 1
+        self.cfgs[path] = value
     
     def Load(self, root, path = None):
         if isinstance(root, (str, unicode)):
@@ -53,6 +58,7 @@ class CConfig:
             if tmp != '':
                 self.cfgs[path+'/'+str(i.tagName)] = tmp
         text = text.strip()
+        self.revision += 1
         if root.hasAttribute('type'):
             type = root.getAttribute('type')
             if type == 'int':
@@ -104,5 +110,8 @@ class CConfig:
         
         print>>f, '<?xml version="1.0" encoding="utf-8"?>'
         save()
+    
+    def GetRevision(self):
+        return self.revision
 
 config = CConfig(consts.MAIN_CONFIG_PATH)
