@@ -170,6 +170,7 @@ class CfrmMain(CWindow):
         tmp.cbSelectionRectangle.set_color(gtk.gdk.color_parse(config['/Styles/Selection/RectangleColor']))
         tmp.cbDragRectangle.set_color(gtk.gdk.color_parse(config['/Styles/Drag/RectangleColor']))
         tmp.fbElementNameText.set_font_name(config['/Styles/Element/NameTextFont'])
+        tmp.fbElementText.set_font_name(config['/Styles/Element/TextFont'])
         tmp.fbConnectionNameText.set_font_name(config['/Styles/Connection/NameTextFont'])
         tmp.fbConnectionText.set_font_name(config['/Styles/Connection/TextFont'])
         tmp.sbSelectionPointsSize.set_value(config['/Styles/Selection/PointsSize'])

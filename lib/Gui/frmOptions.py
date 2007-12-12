@@ -5,7 +5,7 @@ from common import event
 
 class CfrmOptions(common.CWindow):
     #widgets = ('labelOptions',)
-    widgets = ('cbElementLine', 'cbElementFill', 'cbElementFill2', 'cbElementFill3', 'cbElementShadow', 'cbElementNameText', 'cbElementText', 'fbElementNameText', 'cbConnectionLine', 'cbConnectionArrow', 'cbConnectionArrowFill', 'cbConnectionNameText', 'cbConnectionText', 'fbConnectionNameText', 'fbConnectionText', 'sbSelectionPointsSize', 'cbSelectionPoints', 'cbSelectionRectangle' ,'sbSelectionRectangleWidth', 'cbDragRectangle', 'sbDragRectangleWidth', 'txtRootPath', 'txtTemplatesPath', 'txtImagesPath', 'txtGuiPath', 'txtLocalesPath', 'txtUserDirPath', 'txtUserConfigDirPath', 'txtRecentFilesPath', 'expElement', 'expSelection', 'expConnection', 'expDrag')
+    widgets = ('cbElementLine', 'cbElementFill', 'cbElementFill2', 'cbElementFill3', 'cbElementShadow', 'cbElementNameText', 'cbElementText', 'fbElementNameText','fbElementText' ,'cbConnectionLine', 'cbConnectionArrow', 'cbConnectionArrowFill', 'cbConnectionNameText', 'cbConnectionText', 'fbConnectionNameText', 'fbConnectionText', 'sbSelectionPointsSize', 'cbSelectionPoints', 'cbSelectionRectangle' ,'sbSelectionRectangleWidth', 'cbDragRectangle', 'sbDragRectangleWidth', 'txtRootPath', 'txtTemplatesPath', 'txtImagesPath', 'txtGuiPath', 'txtLocalesPath', 'txtUserDirPath', 'txtUserConfigDirPath', 'txtRecentFilesPath', 'expElement', 'expSelection', 'expConnection', 'expDrag')
     name = 'frmOptions'
     
     def GtkColorToStr(self, color):
@@ -38,7 +38,7 @@ class CfrmOptions(common.CWindow):
             config['/Styles/Selection/RectangleColor'] = self.GtkColorToStr(self.cbSelectionRectangle.get_color())
             config['/Styles/Drag/RectangleColor'] = self.GtkColorToStr(self.cbDragRectangle.get_color())
             config['/Styles/Element/NameTextFont'] = self.fbElementNameText.get_font_name()
-            config['/Styles/Element/NameTextFont'] = self.fbElementNameText.get_font_name()
+            config['/Styles/Element/TextFont'] = self.fbElementText.get_font_name()
             config['/Styles/Connection/NameTextFont'] = self.fbConnectionNameText.get_font_name()
             config['/Styles/Connection/TextFont'] = self.fbConnectionText.get_font_name()
             config['/Styles/Selection/PointsSize'] = self.sbSelectionPointsSize.get_value_as_int()
