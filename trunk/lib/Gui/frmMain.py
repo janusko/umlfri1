@@ -36,7 +36,7 @@ class CfrmMain(CWindow):
         'mItemProject',
         #############
         'mItemDiagram',
-        'mnuExportSvg',
+        'mnuExport',
         #############
         'mItemView',
         'mnuViewTools',
@@ -196,21 +196,52 @@ class CfrmMain(CWindow):
         tmp.Show()
     
     @event('nbTabs','export-svg-from-TabMenu')
-    @event('mnuExportSvg', 'activate')
-    def on_mnuExportSvg_activate(self, widget):
-        filedlg = gtk.FileChooserDialog(_('Choose SVG file'), self.form, gtk.FILE_CHOOSER_ACTION_SAVE, (gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
-        filter = gtk.FileFilter()
-        filter.set_name("SVG vector images")
+    @event('mnuExport', 'activate')
+    def on_mnuExport_activate(self, widget):
+        filedlg = gtk.FileChooserDialog(_('Export diagram'), self.form, gtk.FILE_CHOOSER_ACTION_SAVE, (gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
+        # SVG filter
+	filter = gtk.FileFilter()
+        filter.set_name("SVG vector image")
         filter.add_pattern('*.svg')
         filedlg.add_filter(filter)
+	# PNG filter
+	filter = gtk.FileFilter()
+	filter.set_name("PNG image")
+        filter.add_pattern('*.png')
+	filedlg.add_filter(filter)
+	# PDF filter
+	filter = gtk.FileFilter()
+	filter.set_name("PDF file")
+        filter.add_pattern('*.pdf')
+	filedlg.add_filter(filter)
+	# PS filter
+	filter = gtk.FileFilter()
+	filter.set_name("PostScript")
+        filter.add_pattern('*.ps')
+	filedlg.add_filter(filter)
+	
+	tmp = None
+
         try:
             while True:
-                if filedlg.run() == gtk.RESPONSE_OK:
+                if filedlg.run() == gtk.RESPONSE_OK: 
+		    name =  filedlg.get_filter().get_name()
+			
+		    if name == "SVG vector image":
+		        tmp = 'svg'
+		    elif name == "PNG image":
+		        tmp = 'png'
+		    elif name == "PDF file":
+		        tmp = 'pdf'
+		    elif name == "PostScript":
+		        tmp = 'ps'	
+
                     filename = filedlg.get_filename()
+
                     if '.' not in os.path.basename(filename):
-                        filename += '.svg'
+                        filename += '.' + tmp
                     if not os.path.isdir(filename):
-                        self.picDrawingArea.ExportSvg(filename)
+                        self.picDrawingArea.Export(filename, tmp)
                         return
                 else:
                     return
