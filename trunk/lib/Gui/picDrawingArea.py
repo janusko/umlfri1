@@ -162,12 +162,11 @@ class CpicDrawingArea(CWidget):
         self.picVBar.set_adjustment(tmp)
     
     def Export(self, filename, export_type):
-	    
-	self.DrawingArea.DeselectAll()    
-	canvas = CCairoCanvas(self.picDrawingArea, self.buffer, self.application.GetProject().GetStorage(), export_type, filename)    
-	self.DrawingArea.Paint(canvas)
-	canvas.Finish()  
-	self.Paint()  
+        self.DrawingArea.DeselectAll()
+        canvas = CCairoCanvas(self.picDrawingArea, self.buffer, self.application.GetProject().GetStorage(), export_type, filename)
+        self.DrawingArea.Paint(canvas)
+        canvas.Finish()
+        self.Paint()
 
     def ExportSvg(self, filename):
         self.DrawingArea.DeselectAll()
