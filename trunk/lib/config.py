@@ -3,9 +3,18 @@ import consts
 import os.path
 import os
 
-class CConfig:
-    file = None
+class CConfig(object):
+    """
+    Automatic config file manager
+    """
     def __init__(self, file):
+        """
+        Initialize config manager and loads config file
+        
+        @param file: path to config file
+        @type  file: string
+        """
+        self.file = None
         self.Clear()
         self.Load(file)
         if not os.path.isdir(self['/Paths/UserDir']):
@@ -19,21 +28,67 @@ class CConfig:
         self.file = str(self['/Paths/UserConfig'])
     
     def __del__(self):
+        """
+        Automaticaly save config file on object destroy
+        """
         self.Save()
     
     def Clear(self):
+        """
+        Clears the config values
+        """
         self.cfgs = {}
         self.original = self.cfgs
-        self.__getitem__ = self.cfgs.__getitem__
-#        self.__setitem__ = self.cfgs.__setitem__
-        self.__contains__ = self.cfgs.__contains__
         self.revision = 0
     
     def __setitem__(self, path, value):
+        """
+        Set config value
+        
+        @param path: path to config value
+        @type  path: string
+        
+        @param value: value to set
+        @type  value: atomic
+        """
         self.revision += 1
         self.cfgs[path] = value
     
+    def __getitem__(self, path):
+        """
+        Get config value
+        
+        @param path: path to config value
+        @type  path: string
+        
+        @return: value at given path
+        @rtype:  atomic
+        """
+        return self.cfgs[path]
+    
+    def __contains__(self, path):
+        """
+        Determine, if given path exists in config
+        
+        @param path: path to config value
+        @type  path: string
+        
+        @return: True, if path exists
+        @rtype:  boolean
+        """
+        return path in self.cfgs
+    
     def Load(self, root, path = None):
+        """
+        Load an XML file under given path
+        
+        @param root: XML element to parse or XML file path
+        @type  root: L{Element<xml.dom.minidom.Element>} or string
+        
+        @param path: path in config to which values has to be inserted,
+            or None
+        @type  path: string
+        """
         if isinstance(root, (str, unicode)):
             root = xml.dom.minidom.parse(root).documentElement
         if path is None:
@@ -76,6 +131,9 @@ class CConfig:
             return text
     
     def Save(self):
+        """
+        Save changes to user config XML file
+        """
         def XMLEncode(val):
             ret = repr(val)
             if isinstance(val, str):
@@ -112,6 +170,13 @@ class CConfig:
         save()
     
     def GetRevision(self):
+        """
+        Get revision number of config object. Revision is initiated to
+        zero and incremented after each change
+        
+        @return: revision number
+        @rtype:  integer
+        """
         return self.revision
 
 config = CConfig(consts.MAIN_CONFIG_PATH)

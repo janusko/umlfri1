@@ -8,8 +8,20 @@ from Arrow import CConnectionArrow
 
 from lib.Drawing.Objects import ALL
 
-class CConnectionFactory:
+class CConnectionFactory(object):
+    """
+    Creates connection types from metamodel XMLs
+    """
     def __init__(self, storage, path):
+        """
+        Parse metamodel XMLs and creates connection types
+        
+        @param storage: Storage in which is file located
+        @type  storage: L{CAbstractStorage<lib.Storages.AbstractStorage.CAbstractStorage>}
+        
+        @param path: Path to directory with connection metamodel XMLs
+        @param path: string
+        """
         self.types = {}
         self.path = path
         
@@ -19,9 +31,24 @@ class CConnectionFactory:
                 self.__Load(os.path.join(self.path, file))
 
     def GetConnection(self, type):
+        """
+        Gets connection type by its name
+        
+        @param type: Name of connection type
+        @type  type: string
+        
+        @return: Connection type of given name
+        @rtype:  L{CConnectionType<Type.CConnectionType>}
+        """
         return self.types[type]
 
     def __Load(self, file_path):
+        """
+        Load an XMLs from given path
+        
+        @param file_path: Path to connections metamodel (within storage)
+        @type  file_path: string
+        """
         dom = xml.dom.minidom.parseString(self.storage.read_file(file_path))
         root = dom.documentElement
         if root.tagName != 'ConnectionType':
@@ -124,6 +151,15 @@ class CConnectionFactory:
             tmp.AppendAttribute(*attr)
     
     def __LoadAppearance(self, root):
+        """
+        Loads an appearance section of an XML file
+        
+        @param root: Appearance element
+        @type  root: L{Element<xml.dom.minidom.Element>}
+        
+        @return: Visual object representing this section
+        @rtype:  L{CVisualObject<lib.Drawing.Objects.VisualObject.CVisualObject>}
+        """
         if root.tagName not in ALL:
             raise UMLException("XMLError", root.tagName)
         cls = ALL[root.tagName]

@@ -45,7 +45,31 @@ ARROW_TYPES = {'simple': ('polyline',
               }
 
 class CConnectionArrow(object):
+    """
+    Class that represents ending arrow of an connection
+    """
     def __init__(self, default = False, possible = True, style = 'simple', color = 'black', fill = '#A5B6C7', size = 10):
+        """
+        Initialize arrow to values
+        
+        @param default: Default state of arrow (shown or hidden)
+        @type  default: boolean or string
+        
+        @param possible: True, if arrow is possible to be shown
+        @type  possible: boolean or string
+        
+        @param style: style of arrow (one of ARROW_TYPES)
+        @type  style: string
+        
+        @param color: line color of the arrow in HTML format
+        @type  color: string
+        
+        @param fill: fill color of the arrow in HTML format
+        @type  fill: string
+        
+        @param size: size of the arrow in pixels
+        @type  size: integer
+        """
         self.possible = ToBool(possible)
         self.default = ToBool(default)
         self.style = style
@@ -53,7 +77,19 @@ class CConnectionArrow(object):
         self.size = int(size)
         self.color = color
     
-    def Paint(self, canvas, pos, angle, Connection):
+    def Paint(self, canvas, pos, angle):
+        """
+        Paints arrow on the canvas
+        
+        @param canvas: Arrow will be painted on this canvas
+        @type  canvas: L{CAbstractCanvas<lib.Drawing.Canvas.Abstract.CAbstractCanvas>}
+        
+        @param pos: Position of the center of the arrow
+        @type  pos: (integer, integer)
+        
+        @param angle: Rotation angle of arrow in radians
+        @type  angle: float
+        """
         if self.default is False:
             return
         transMatrix = TransformMatrix.mk_translation(pos)*TransformMatrix.mk_rotation(angle)* \
