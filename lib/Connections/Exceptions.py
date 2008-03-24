@@ -1,4 +1,4 @@
 class EConnectionRestriction(Exception):
-    pass
-    
-
+    """
+    Raised when connection restriction is broken
+    """

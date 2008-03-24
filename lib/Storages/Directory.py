@@ -1,7 +1,9 @@
 import os.path
 import os
 
-class CDirectory:
+from AbstractStorage import CAbstractStorage
+
+class CDirectory(CAbstractStorage):
     def __init__(self, path):
         self.path = path
     

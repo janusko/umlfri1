@@ -552,6 +552,16 @@ colors = {"aliceblue": "#f0f8ff",
 "yellow3": "#cdcd00", 
 "yellow4": "#8b8b00", 
 "yellowgreen": "#9acd32"}
+"""HTML color aliases"""
 
 def invert(color):
+    """
+    Calculate inverted color for guven color
+    
+    @param color: color to invert
+    @type  color: string
+    
+    @return: inverted color
+    @rtype:  string
+    """
     return "#%06x"%(0xFFFFFF-int(colors.get(color, color)[1:], 16))
