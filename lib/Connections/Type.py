@@ -270,13 +270,13 @@ class CConnectionType(object):
     
     def GetAttributes(self):
         """
-        Get list of all attributes type
+        Get list of all attribute names
         
-        @return: type with options enumeration included
-        @rtype: iterator over (string, list of strings) pairs
+        @return: attribute enumeration
+        @rtype: iterator over strings
         """
         for i in self.attributeList:
-            yield (i[0], list(i[1]))
+            yield i
     
     def GetVisAttr(self, id):
         """
