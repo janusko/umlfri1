@@ -5,6 +5,7 @@
 	<DestArrow possible="1" default="1" />
     <Attributes>
         <Item value="Name" type="str" propid="name" />
+        <Item value="Notes" type="note" />
     </Attributes>
     <Appearance>
     	<LineStyle style="solid" color="/Styles/Connection/LineColor" />
