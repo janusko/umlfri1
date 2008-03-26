@@ -31,8 +31,6 @@ class CtxtNotes(CWidget):
                 if cnt > 0:
                     self.element = None
                     raise UMLException("TooMuchNotes")
-                if v is None:
-                    v = ''
                 self.txtNotes.get_buffer().set_text(v)
                 self.txtNotes.set_sensitive(True)
                 self.attr = k
