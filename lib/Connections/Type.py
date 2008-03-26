@@ -80,6 +80,11 @@ class CConnectionType(object):
                 return ""
             else:
                 return str(temp)
+        elif type == 'note':
+            if temp is None:
+                return ""
+            else:
+                return str(temp)
         elif type == 'attrs':
             return []
         elif type == 'opers':
