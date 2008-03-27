@@ -23,7 +23,13 @@ class CConnectionObject(object):
         self.appears = []
         self.type = type
         self.SetSource(source)
-        self.SetDestination(dest)
+        try:
+            self.SetDestination(dest)
+        except:
+            if self.source is not None:
+                self.source.RemoveConnection(self)
+            self.source = None
+            raise
         self.attributes = {}
         for i in self.type.GetAttributes():
             self.SetAttribute(i, self.type.GetDefValue(i))
