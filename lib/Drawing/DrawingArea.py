@@ -15,10 +15,23 @@ class CDrawingArea:
         self.typeDiagram = type
         self.size = None
         self.viewport = ((0, 0), (0, 0))
+        self.scrollingPos = [0, 0]                  #position of dravig area (needed for scrollBars)
         if name is None:
             name = "New " + type.GetId()
         self.name = name
         
+        
+    def GetHScrollingPos(self):
+        return self.scrollingPos[0]
+    
+    def GetVScrollingPos(self):
+        return self.scrollingPos[1]
+    
+    def SetHScrollingPos(self, value):
+        self.scrollingPos[0] = value
+    
+    def SetVScrollingPos(self, value):
+        self.scrollingPos[1] = value
         
     # Cesta v strome kde sa nachadza drawing area
     def HasElementObject(self, object):

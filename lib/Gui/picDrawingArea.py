@@ -49,7 +49,7 @@ class CpicDrawingArea(CWidget):
         self.selElem = None
         self.selSq = None
         self.pressedKeys = set()
-        self.scrollPos = (0, 0)
+        #self.scrollPos = (0, 0)
         
         self.bufview = ((0, 0), (2000, 1500))
         self.buffer = gtk.gdk.Pixmap(self.picDrawingArea.window, *self.bufview[1])
@@ -109,18 +109,26 @@ class CpicDrawingArea(CWidget):
         return int(self.picHBar.get_value()), int(self.picVBar.get_value())
         
     def SetPos(self, pos = (0, 0)):
+        self.DrawingArea.SetHScrollingPos(pos[0])
+        self.DrawingArea.SetVScrollingPos(pos[1])
         self.picHBar.set_value(pos[0])
         self.picVBar.set_value(pos[1])
         
     def GetAbsolutePos(self, (posx, posy)):
-        return int(self.picHBar.get_value() + posx), int(self.picVBar.get_value() + posy)
+        #return int(self.picHBar.get_value() + posx), int(self.picVBar.get_value() + posy)
+        return int(self.GetPos()[0] + posx), int(self.GetPos()[1] + posy)
 
     def GetRelativePos(self, (posx, posy)):
-        return int(-self.picHBar.get_value() + posx), int(-self.picVBar.get_value() + posy)
+        #return int(-self.picHBar.get_value() + posx), int(-self.picVBar.get_value() + posy)
+        return int(-self.GetPos()[0] + posx), int(-self.GetPos()[1] + posy)
 
     def Paint(self, changed = True):
         size = self.GetWindowSize()
-        posx, posy = int(self.picHBar.get_value()), int(self.picVBar.get_value())
+        self.AdjustScrollBars()
+        self.picHBar.set_value(self.DrawingArea.GetHScrollingPos())
+        self.picVBar.set_value(self.DrawingArea.GetVScrollingPos())
+        #posx, posy = int(self.picHBar.get_value()), int(self.picVBar.get_value())
+        posx, posy = int(self.GetPos()[0]), int(self.GetPos()[1])
         sizx, sizy = self.GetWindowSize()
         ((bposx, bposy), (bsizx, bsizy)) = self.bufview
         if posx < bposx or bposx + bsizx < posx + sizx or \
@@ -426,10 +434,12 @@ class CpicDrawingArea(CWidget):
 
     @event("picVBar", "value-changed")
     def on_picVBar_value_changed(self, widget):
+        self.DrawingArea.SetVScrollingPos(int(self.picVBar.get_value()))
         self.Paint(False)
 
     @event("picHBar", "value-changed")
     def on_picHBar_value_changed(self, widget):
+        self.DrawingArea.SetHScrollingPos(int(self.picHBar.get_value()))
         self.Paint(False)
 
     @event("picDrawingArea", "size-allocate")
@@ -499,7 +509,7 @@ class CpicDrawingArea(CWidget):
     def __BeginDragMove(self, event):
         self.__SetCursor('grabbing')
         self.DragStartPos = (event.x, event.y)
-        self.scrollPos = self.GetPos()
+        #self.scrollPos = self.GetPos()
         self.dnd = 'move'
         
     def __GetDelta(self, pos, follow = False):
@@ -574,7 +584,8 @@ class CpicDrawingArea(CWidget):
             self.picDrawingArea.window.draw_lines(self.DragGC, self.__oldPoints)
             
     def __DrawDragMove(self, pos):
-        posx, posy = self.scrollPos
+        #posx, posy = self.scrollPos
+        posx, posy = self.DrawingArea.GetHScrollingPos(), self.DrawingArea.GetVScrollingPos()
         x1, y1 = pos
         x2, y2 = self.DragStartPos
         self.SetPos((posx - x1 + x2, posy - y1 + y2))
