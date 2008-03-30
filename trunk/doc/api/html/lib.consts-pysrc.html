@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>lib.consts</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="lib-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://umlfri.kst.fri.uniza.sk/">UML .FRI</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="lib-module.html">Package&nbsp;lib</a> ::
+        Module&nbsp;consts
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="lib.consts-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="lib.consts-module.html">Module lib.consts</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt id="link-0" class="py-name" targets="Module lib.Math2D.path=lib.Math2D.path-module.html"><a title="lib.Math2D.path" class="py-name" href="#" onclick="return doclink('link-0', 'path', 'link-0');">path</a></tt> <tt class="py-keyword">import</tt> <tt class="py-name">join</tt><tt class="py-op">,</tt> <tt class="py-name">dirname</tt><tt class="py-op">,</tt> <tt class="py-name">abspath</tt><tt class="py-op">,</tt> <tt class="py-name">expanduser</tt><tt class="py-op">,</tt> <tt class="py-name">isdir</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">sys</tt> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">imp</tt> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"> </tt>
+<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"><tt class="py-keyword">if</tt> <tt class="py-op">(</tt><tt class="py-name">hasattr</tt><tt class="py-op">(</tt><tt class="py-name">sys</tt><tt class="py-op">,</tt> <tt class="py-string">"frozen"</tt><tt class="py-op">)</tt> <tt class="py-keyword">or</tt> <tt class="py-name">hasattr</tt><tt class="py-op">(</tt><tt class="py-name">sys</tt><tt class="py-op">,</tt> <tt class="py-string">"importers"</tt><tt class="py-op">)</tt> <tt class="py-keyword">or</tt> <tt class="py-name">imp</tt><tt class="py-op">.</tt><tt class="py-name">is_frozen</tt><tt class="py-op">(</tt><tt class="py-string">"__main__"</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line">    <tt id="link-1" class="py-name" targets="Variable lib.consts.ROOT_PATH=lib.consts-module.html#ROOT_PATH"><a title="lib.consts.ROOT_PATH" class="py-name" href="#" onclick="return doclink('link-1', 'ROOT_PATH', 'link-1');">ROOT_PATH</a></tt> <tt class="py-op">=</tt> <tt class="py-name">abspath</tt><tt class="py-op">(</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-name">dirname</tt><tt class="py-op">(</tt><tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">executable</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-string">'..'</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"><tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line">    <tt id="link-2" class="py-name"><a title="lib.consts.ROOT_PATH" class="py-name" href="#" onclick="return doclink('link-2', 'ROOT_PATH', 'link-1');">ROOT_PATH</a></tt> <tt class="py-op">=</tt> <tt class="py-name">abspath</tt><tt class="py-op">(</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-name">dirname</tt><tt class="py-op">(</tt><tt class="py-name">__file__</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-string">'..'</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line"> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line"><tt id="link-3" class="py-name" targets="Variable lib.consts.ETC_PATH=lib.consts-module.html#ETC_PATH"><a title="lib.consts.ETC_PATH" class="py-name" href="#" onclick="return doclink('link-3', 'ETC_PATH', 'link-3');">ETC_PATH</a></tt> <tt class="py-op">=</tt> <tt class="py-name">join</tt><tt class="py-op">(</tt><tt id="link-4" class="py-name"><a title="lib.consts.ROOT_PATH" class="py-name" href="#" onclick="return doclink('link-4', 'ROOT_PATH', 'link-1');">ROOT_PATH</a></tt><tt class="py-op">,</tt> <tt class="py-string">'etc'</tt><tt class="py-op">)</tt> </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line"> </tt>
+<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line"><tt id="link-5" class="py-name" targets="Variable lib.consts.MAIN_CONFIG_PATH=lib.consts-module.html#MAIN_CONFIG_PATH"><a title="lib.consts.MAIN_CONFIG_PATH" class="py-name" href="#" onclick="return doclink('link-5', 'MAIN_CONFIG_PATH', 'link-5');">MAIN_CONFIG_PATH</a></tt> <tt class="py-op">=</tt> <tt class="py-name">join</tt><tt class="py-op">(</tt><tt id="link-6" class="py-name"><a title="lib.consts.ETC_PATH" class="py-name" href="#" onclick="return doclink('link-6', 'ETC_PATH', 'link-3');">ETC_PATH</a></tt><tt class="py-op">,</tt> <tt class="py-string">'config.xml'</tt><tt class="py-op">)</tt> </tt>
+<a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line"> </tt>
+<a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line"><tt id="link-7" class="py-name" targets="Variable lib.consts.SPLASH_TIMEOUT=lib.consts-module.html#SPLASH_TIMEOUT"><a title="lib.consts.SPLASH_TIMEOUT" class="py-name" href="#" onclick="return doclink('link-7', 'SPLASH_TIMEOUT', 'link-7');">SPLASH_TIMEOUT</a></tt> <tt class="py-op">=</tt> <tt class="py-number">3000</tt> </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line"> </tt>
+<a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line"><tt id="link-8" class="py-name" targets="Variable lib.consts.VERSIONS_PATH=lib.consts-module.html#VERSIONS_PATH"><a title="lib.consts.VERSIONS_PATH" class="py-name" href="#" onclick="return doclink('link-8', 'VERSIONS_PATH', 'link-8');">VERSIONS_PATH</a></tt> <tt class="py-op">=</tt> <tt class="py-string">'versions'</tt> </tt>
+<a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line"><tt id="link-9" class="py-name" targets="Variable lib.consts.DIAGRAMS_PATH=lib.consts-module.html#DIAGRAMS_PATH"><a title="lib.consts.DIAGRAMS_PATH" class="py-name" href="#" onclick="return doclink('link-9', 'DIAGRAMS_PATH', 'link-9');">DIAGRAMS_PATH</a></tt> <tt class="py-op">=</tt> <tt class="py-string">'diagrams'</tt> </tt>
+<a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line"><tt id="link-10" class="py-name" targets="Variable lib.consts.ELEMENTS_PATH=lib.consts-module.html#ELEMENTS_PATH"><a title="lib.consts.ELEMENTS_PATH" class="py-name" href="#" onclick="return doclink('link-10', 'ELEMENTS_PATH', 'link-10');">ELEMENTS_PATH</a></tt> <tt class="py-op">=</tt> <tt class="py-string">'elements'</tt> </tt>
+<a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line"><tt id="link-11" class="py-name" targets="Variable lib.consts.CONNECTIONS_PATH=lib.consts-module.html#CONNECTIONS_PATH"><a title="lib.consts.CONNECTIONS_PATH" class="py-name" href="#" onclick="return doclink('link-11', 'CONNECTIONS_PATH', 'link-11');">CONNECTIONS_PATH</a></tt> <tt class="py-op">=</tt> <tt class="py-string">'connections'</tt> </tt>
+<a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line"><tt id="link-12" class="py-name" targets="Variable lib.consts.ICONS_PATH=lib.consts-module.html#ICONS_PATH"><a title="lib.consts.ICONS_PATH" class="py-name" href="#" onclick="return doclink('link-12', 'ICONS_PATH', 'link-12');">ICONS_PATH</a></tt> <tt class="py-op">=</tt> <tt class="py-string">'icons'</tt> </tt>
+<a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line"> </tt>
+<a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line"><tt id="link-13" class="py-name" targets="Variable lib.consts.ARROW_IMAGE=lib.consts-module.html#ARROW_IMAGE"><a title="lib.consts.ARROW_IMAGE" class="py-name" href="#" onclick="return doclink('link-13', 'ARROW_IMAGE', 'link-13');">ARROW_IMAGE</a></tt> <tt class="py-op">=</tt> <tt class="py-string">'arrow.png'</tt> </tt>
+<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line"> </tt>
+<a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line"><tt id="link-14" class="py-name" targets="Variable lib.consts.DEFAULT_TEMPLATE_ICON=lib.consts-module.html#DEFAULT_TEMPLATE_ICON"><a title="lib.consts.DEFAULT_TEMPLATE_ICON" class="py-name" href="#" onclick="return doclink('link-14', 'DEFAULT_TEMPLATE_ICON', 'link-14');">DEFAULT_TEMPLATE_ICON</a></tt> <tt class="py-op">=</tt> <tt class="py-string">'default_icon.png'</tt> </tt>
+<a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line"><tt id="link-15" class="py-name" targets="Variable lib.consts.SPLASH_IMAGE=lib.consts-module.html#SPLASH_IMAGE"><a title="lib.consts.SPLASH_IMAGE" class="py-name" href="#" onclick="return doclink('link-15', 'SPLASH_IMAGE', 'link-15');">SPLASH_IMAGE</a></tt> <tt class="py-op">=</tt> <tt class="py-string">'splash.png'</tt> </tt>
+<a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line"><tt id="link-16" class="py-name" targets="Variable lib.consts.STARTPAGE_IMAGE=lib.consts-module.html#STARTPAGE_IMAGE"><a title="lib.consts.STARTPAGE_IMAGE" class="py-name" href="#" onclick="return doclink('link-16', 'STARTPAGE_IMAGE', 'link-16');">STARTPAGE_IMAGE</a></tt> <tt class="py-op">=</tt> <tt class="py-string">'startpage.png'</tt> </tt>
+<a name="L27"></a><tt class="py-lineno">27</tt>  <tt class="py-line"><tt id="link-17" class="py-name" targets="Variable lib.consts.GRAB_CURSOR=lib.consts-module.html#GRAB_CURSOR"><a title="lib.consts.GRAB_CURSOR" class="py-name" href="#" onclick="return doclink('link-17', 'GRAB_CURSOR', 'link-17');">GRAB_CURSOR</a></tt> <tt class="py-op">=</tt> <tt class="py-string">'grab.png'</tt> </tt>
+<a name="L28"></a><tt class="py-lineno">28</tt>  <tt class="py-line"><tt id="link-18" class="py-name" targets="Variable lib.consts.GRABBING_CURSOR=lib.consts-module.html#GRABBING_CURSOR"><a title="lib.consts.GRABBING_CURSOR" class="py-name" href="#" onclick="return doclink('link-18', 'GRABBING_CURSOR', 'link-18');">GRABBING_CURSOR</a></tt> <tt class="py-op">=</tt> <tt class="py-string">'grabbing.png'</tt> </tt>
+<a name="L29"></a><tt class="py-lineno">29</tt>  <tt class="py-line"> </tt>
+<a name="L30"></a><tt class="py-lineno">30</tt>  <tt class="py-line"><tt id="link-19" class="py-name" targets="Variable lib.consts.PROJECT_EXTENSION=lib.consts-module.html#PROJECT_EXTENSION"><a title="lib.consts.PROJECT_EXTENSION" class="py-name" href="#" onclick="return doclink('link-19', 'PROJECT_EXTENSION', 'link-19');">PROJECT_EXTENSION</a></tt> <tt class="py-op">=</tt> <tt class="py-string">'.frip'</tt> </tt>
+<a name="L31"></a><tt class="py-lineno">31</tt>  <tt class="py-line"><tt id="link-20" class="py-name" targets="Variable lib.consts.PROJECT_TPL_EXTENSION=lib.consts-module.html#PROJECT_TPL_EXTENSION"><a title="lib.consts.PROJECT_TPL_EXTENSION" class="py-name" href="#" onclick="return doclink('link-20', 'PROJECT_TPL_EXTENSION', 'link-20');">PROJECT_TPL_EXTENSION</a></tt> <tt class="py-op">=</tt> <tt class="py-string">'.frit'</tt> </tt>
+<a name="L32"></a><tt class="py-lineno">32</tt>  <tt class="py-line"> </tt>
+<a name="L33"></a><tt class="py-lineno">33</tt>  <tt class="py-line"><tt id="link-21" class="py-name" targets="Variable lib.consts.DEBUG=lib.consts-module.html#DEBUG"><a title="lib.consts.DEBUG" class="py-name" href="#" onclick="return doclink('link-21', 'DEBUG', 'link-21');">DEBUG</a></tt><tt class="py-op">=</tt><tt class="py-name">True</tt> </tt>
+<a name="L34"></a><tt class="py-lineno">34</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="lib-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://umlfri.kst.fri.uniza.sk/">UML .FRI</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sun Mar 30 19:33:55 2008
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

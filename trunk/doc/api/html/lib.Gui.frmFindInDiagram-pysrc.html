@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>lib.Gui.frmFindInDiagram</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="lib-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://umlfri.kst.fri.uniza.sk/">UML .FRI</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="lib-module.html">Package&nbsp;lib</a> ::
+        <a href="lib.Gui-module.html">Package&nbsp;Gui</a> ::
+        Module&nbsp;frmFindInDiagram
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="lib.Gui.frmFindInDiagram-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="lib.Gui.frmFindInDiagram-module.html">Module lib.Gui.frmFindInDiagram</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-0" class="py-name" targets="Package lib.Gui.common=lib.Gui.common-module.html"><a title="lib.Gui.common" class="py-name" href="#" onclick="return doclink('link-0', 'common', 'link-0');">common</a></tt> <tt class="py-keyword">import</tt> <tt id="link-1" class="py-name" targets="Class lib.Gui.common.Window.CWindow=lib.Gui.common.Window.CWindow-class.html"><a title="lib.Gui.common.Window.CWindow" class="py-name" href="#" onclick="return doclink('link-1', 'CWindow', 'link-1');">CWindow</a></tt><tt class="py-op">,</tt> <tt id="link-2" class="py-name" targets="Function lib.Gui.common.Event.event()=lib.Gui.common.Event-module.html#event"><a title="lib.Gui.common.Event.event" class="py-name" href="#" onclick="return doclink('link-2', 'event', 'link-2');">event</a></tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-3" class="py-name" targets="Package lib=lib-module.html,Module lib.lib=lib.lib-module.html"><a title="lib
+lib.lib" class="py-name" href="#" onclick="return doclink('link-3', 'lib', 'link-3');">lib</a></tt><tt class="py-op">.</tt><tt id="link-4" class="py-name" targets="Package lib.Drawing=lib.Drawing-module.html"><a title="lib.Drawing" class="py-name" href="#" onclick="return doclink('link-4', 'Drawing', 'link-4');">Drawing</a></tt><tt class="py-op">.</tt><tt id="link-5" class="py-name" targets="Package lib.Drawing.Canvas=lib.Drawing.Canvas-module.html"><a title="lib.Drawing.Canvas" class="py-name" href="#" onclick="return doclink('link-5', 'Canvas', 'link-5');">Canvas</a></tt><tt class="py-op">.</tt><tt id="link-6" class="py-name" targets="Module lib.Drawing.Canvas.Gtk=lib.Drawing.Canvas.Gtk-module.html"><a title="lib.Drawing.Canvas.Gtk" class="py-name" href="#" onclick="return doclink('link-6', 'Gtk', 'link-6');">Gtk</a></tt> <tt class="py-keyword">import</tt> <tt id="link-7" class="py-name" targets="Function lib.Drawing.Canvas.Cairo.PixmapFromPath()=lib.Drawing.Canvas.Cairo-module.html#PixmapFromPath,Function lib.Drawing.Canvas.Gtk.PixmapFromPath()=lib.Drawing.Canvas.Gtk-module.html#PixmapFromPath"><a title="lib.Drawing.Canvas.Cairo.PixmapFromPath
+lib.Drawing.Canvas.Gtk.PixmapFromPath" class="py-name" href="#" onclick="return doclink('link-7', 'PixmapFromPath', 'link-7');">PixmapFromPath</a></tt> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">gtk</tt> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">gobject</tt> </tt>
+<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt id="link-8" class="py-name"><a title="lib.Gui.common" class="py-name" href="#" onclick="return doclink('link-8', 'common', 'link-0');">common</a></tt> </tt>
+<a name="CFindInDiagram"></a><div id="CFindInDiagram-def"><a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt> <a class="py-toggle" href="#" id="CFindInDiagram-toggle" onclick="return toggle('CFindInDiagram');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="lib.Gui.frmFindInDiagram.CFindInDiagram-class.html">CFindInDiagram</a><tt class="py-op">(</tt><tt class="py-base-class">CWindow</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CFindInDiagram-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="CFindInDiagram-expanded"><a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line">    <tt id="link-9" class="py-name" targets="Variable lib.Gui.common.Widget.CWidget.name=lib.Gui.common.Widget.CWidget-class.html#name,Variable lib.Gui.frmAbout.CfrmAbout.name=lib.Gui.frmAbout.CfrmAbout-class.html#name,Variable lib.Gui.frmAttribute.CfrmAttribute.name=lib.Gui.frmAttribute.CfrmAttribute-class.html#name,Variable lib.Gui.frmFindInDiagram.CFindInDiagram.name=lib.Gui.frmFindInDiagram.CFindInDiagram-class.html#name,Variable lib.Gui.frmMain.CfrmMain.name=lib.Gui.frmMain.CfrmMain-class.html#name,Variable lib.Gui.frmOpen.CfrmOpen.name=lib.Gui.frmOpen.CfrmOpen-class.html#name,Variable lib.Gui.frmOperation.CfrmOperation.name=lib.Gui.frmOperation.CfrmOperation-class.html#name,Variable lib.Gui.frmOptions.CfrmOptions.name=lib.Gui.frmOptions.CfrmOptions-class.html#name,Variable lib.Gui.frmProperties.CfrmProperties.name=lib.Gui.frmProperties.CfrmProperties-class.html#name,Variable lib.Gui.frmSave.CfrmSave.name=lib.Gui.frmSave.CfrmSave-class.html#name,Variable lib.Gui.frmSplash.CfrmSplash.name=lib.Gui.frmSplash.CfrmSplash-class.html#name,Variable lib.Gui.lwProperties.ClwProperties.name=lib.Gui.lwProperties.ClwProperties-class.html#name,Variable lib.Gui.mnuItems.CmnuItems.name=lib.Gui.mnuItems.CmnuItems-class.html#name,Variable lib.Gui.nbProperties.CnbProperties.name=lib.Gui.nbProperties.CnbProperties-class.html#name,Variable lib.Gui.picDrawingArea.CpicDrawingArea.name=lib.Gui.picDrawingArea.CpicDrawingArea-class.html#name,Variable lib.Gui.tabStartPage.CtabStartPage.name=lib.Gui.tabStartPage.CtabStartPage-class.html#name,Variable lib.Gui.tabs.CTabs.name=lib.Gui.tabs.CTabs-class.html#name,Variable lib.Gui.tbToolBox.CtbToolBox.name=lib.Gui.tbToolBox.CtbToolBox-class.html#name,Variable lib.Gui.twProjectView.CtwProjectView.name=lib.Gui.twProjectView.CtwProjectView-class.html#name,Variable lib.Gui.txtNotes.CtxtNotes.name=lib.Gui.txtNotes.CtxtNotes-class.html#name"><a title="lib.Gui.common.Widget.CWidget.name
+lib.Gui.frmAbout.CfrmAbout.name
+lib.Gui.frmAttribute.CfrmAttribute.name
+lib.Gui.frmFindInDiagram.CFindInDiagram.name
+lib.Gui.frmMain.CfrmMain.name
+lib.Gui.frmOpen.CfrmOpen.name
+lib.Gui.frmOperation.CfrmOperation.name
+lib.Gui.frmOptions.CfrmOptions.name
+lib.Gui.frmProperties.CfrmProperties.name
+lib.Gui.frmSave.CfrmSave.name
+lib.Gui.frmSplash.CfrmSplash.name
+lib.Gui.lwProperties.ClwProperties.name
+lib.Gui.mnuItems.CmnuItems.name
+lib.Gui.nbProperties.CnbProperties.name
+lib.Gui.picDrawingArea.CpicDrawingArea.name
+lib.Gui.tabStartPage.CtabStartPage.name
+lib.Gui.tabs.CTabs.name
+lib.Gui.tbToolBox.CtbToolBox.name
+lib.Gui.twProjectView.CtwProjectView.name
+lib.Gui.txtNotes.CtxtNotes.name" class="py-name" href="#" onclick="return doclink('link-9', 'name', 'link-9');">name</a></tt> <tt class="py-op">=</tt> <tt class="py-string">'frmFindInDiagram'</tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line">     </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line">    <tt id="link-10" class="py-name" targets="Variable lib.Gui.common.Widget.CWidget.widgets=lib.Gui.common.Widget.CWidget-class.html#widgets,Variable lib.Gui.frmAbout.CfrmAbout.widgets=lib.Gui.frmAbout.CfrmAbout-class.html#widgets,Variable lib.Gui.frmAttribute.CfrmAttribute.widgets=lib.Gui.frmAttribute.CfrmAttribute-class.html#widgets,Variable lib.Gui.frmFindInDiagram.CFindInDiagram.widgets=lib.Gui.frmFindInDiagram.CFindInDiagram-class.html#widgets,Variable lib.Gui.frmMain.CfrmMain.widgets=lib.Gui.frmMain.CfrmMain-class.html#widgets,Variable lib.Gui.frmOpen.CfrmOpen.widgets=lib.Gui.frmOpen.CfrmOpen-class.html#widgets,Variable lib.Gui.frmOperation.CfrmOperation.widgets=lib.Gui.frmOperation.CfrmOperation-class.html#widgets,Variable lib.Gui.frmOptions.CfrmOptions.widgets=lib.Gui.frmOptions.CfrmOptions-class.html#widgets,Variable lib.Gui.frmProperties.CfrmProperties.widgets=lib.Gui.frmProperties.CfrmProperties-class.html#widgets,Variable lib.Gui.frmSplash.CfrmSplash.widgets=lib.Gui.frmSplash.CfrmSplash-class.html#widgets,Variable lib.Gui.lwProperties.ClwProperties.widgets=lib.Gui.lwProperties.ClwProperties-class.html#widgets,Variable lib.Gui.mnuItems.CmnuItems.widgets=lib.Gui.mnuItems.CmnuItems-class.html#widgets,Variable lib.Gui.picDrawingArea.CpicDrawingArea.widgets=lib.Gui.picDrawingArea.CpicDrawingArea-class.html#widgets,Variable lib.Gui.tabStartPage.CtabStartPage.widgets=lib.Gui.tabStartPage.CtabStartPage-class.html#widgets,Variable lib.Gui.tabs.CTabs.widgets=lib.Gui.tabs.CTabs-class.html#widgets,Variable lib.Gui.tbToolBox.CtbToolBox.widgets=lib.Gui.tbToolBox.CtbToolBox-class.html#widgets,Variable lib.Gui.twProjectView.CtwProjectView.widgets=lib.Gui.twProjectView.CtwProjectView-class.html#widgets,Variable lib.Gui.txtNotes.CtxtNotes.widgets=lib.Gui.txtNotes.CtxtNotes-class.html#widgets"><a title="lib.Gui.common.Widget.CWidget.widgets
+lib.Gui.frmAbout.CfrmAbout.widgets
+lib.Gui.frmAttribute.CfrmAttribute.widgets
+lib.Gui.frmFindInDiagram.CFindInDiagram.widgets
+lib.Gui.frmMain.CfrmMain.widgets
+lib.Gui.frmOpen.CfrmOpen.widgets
+lib.Gui.frmOperation.CfrmOperation.widgets
+lib.Gui.frmOptions.CfrmOptions.widgets
+lib.Gui.frmProperties.CfrmProperties.widgets
+lib.Gui.frmSplash.CfrmSplash.widgets
+lib.Gui.lwProperties.ClwProperties.widgets
+lib.Gui.mnuItems.CmnuItems.widgets
+lib.Gui.picDrawingArea.CpicDrawingArea.widgets
+lib.Gui.tabStartPage.CtabStartPage.widgets
+lib.Gui.tabs.CTabs.widgets
+lib.Gui.tbToolBox.CtbToolBox.widgets
+lib.Gui.twProjectView.CtwProjectView.widgets
+lib.Gui.txtNotes.CtxtNotes.widgets" class="py-name" href="#" onclick="return doclink('link-10', 'widgets', 'link-10');">widgets</a></tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-string">"twFindInDiagram"</tt><tt class="py-op">,</tt> <tt class="py-op">)</tt> </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line">     </tt>
+<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line">    <tt id="link-11" class="py-name" targets="Variable lib.Gui.frmFindInDiagram.CFindInDiagram.__gsignals__=lib.Gui.frmFindInDiagram.CFindInDiagram-class.html#__gsignals__,Variable lib.Gui.lwProperties.ClwProperties.__gsignals__=lib.Gui.lwProperties.ClwProperties-class.html#__gsignals__,Variable lib.Gui.mnuItems.CmnuItems.__gsignals__=lib.Gui.mnuItems.CmnuItems-class.html#__gsignals__,Variable lib.Gui.nbProperties.CnbProperties.__gsignals__=lib.Gui.nbProperties.CnbProperties-class.html#__gsignals__,Variable lib.Gui.picDrawingArea.CpicDrawingArea.__gsignals__=lib.Gui.picDrawingArea.CpicDrawingArea-class.html#__gsignals__,Variable lib.Gui.tabStartPage.CtabStartPage.__gsignals__=lib.Gui.tabStartPage.CtabStartPage-class.html#__gsignals__,Variable lib.Gui.tabs.CTabs.__gsignals__=lib.Gui.tabs.CTabs-class.html#__gsignals__,Variable lib.Gui.tbToolBox.CtbToolBox.__gsignals__=lib.Gui.tbToolBox.CtbToolBox-class.html#__gsignals__,Variable lib.Gui.twProjectView.CtwProjectView.__gsignals__=lib.Gui.twProjectView.CtwProjectView-class.html#__gsignals__,Variable lib.Gui.txtNotes.CtxtNotes.__gsignals__=lib.Gui.txtNotes.CtxtNotes-class.html#__gsignals__"><a title="lib.Gui.frmFindInDiagram.CFindInDiagram.__gsignals__
+lib.Gui.lwProperties.ClwProperties.__gsignals__
+lib.Gui.mnuItems.CmnuItems.__gsignals__
+lib.Gui.nbProperties.CnbProperties.__gsignals__
+lib.Gui.picDrawingArea.CpicDrawingArea.__gsignals__
+lib.Gui.tabStartPage.CtabStartPage.__gsignals__
+lib.Gui.tabs.CTabs.__gsignals__
+lib.Gui.tbToolBox.CtbToolBox.__gsignals__
+lib.Gui.twProjectView.CtwProjectView.__gsignals__
+lib.Gui.txtNotes.CtxtNotes.__gsignals__" class="py-name" href="#" onclick="return doclink('link-11', '__gsignals__', 'link-11');">__gsignals__</a></tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt> </tt>
+<a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line">        <tt class="py-string">'selected_drawingArea_and_Element'</tt><tt class="py-op">:</tt> <tt class="py-op">(</tt><tt class="py-name">gobject</tt><tt class="py-op">.</tt><tt class="py-name">SIGNAL_RUN_LAST</tt><tt class="py-op">,</tt> <tt class="py-name">gobject</tt><tt class="py-op">.</tt><tt class="py-name">TYPE_NONE</tt><tt class="py-op">,</tt> <tt class="py-op">(</tt><tt class="py-name">gobject</tt><tt class="py-op">.</tt><tt class="py-name">TYPE_PYOBJECT</tt><tt class="py-op">,</tt> <tt class="py-name">gobject</tt><tt class="py-op">.</tt><tt class="py-name">TYPE_PYOBJECT</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">,</tt>  </tt>
+<a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line">    <tt class="py-op">}</tt> </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line">     </tt>
+<a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line">     </tt>
+<a name="CFindInDiagram.__init__"></a><div id="CFindInDiagram.__init__-def"><a name="L17"></a><tt class="py-lineno">17</tt> <a class="py-toggle" href="#" id="CFindInDiagram.__init__-toggle" onclick="return toggle('CFindInDiagram.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Gui.frmFindInDiagram.CFindInDiagram-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">app</tt><tt class="py-op">,</tt> <tt class="py-param">wTree</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CFindInDiagram.__init__-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="CFindInDiagram.__init__-expanded"><a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line">        <tt id="link-12" class="py-name"><a title="lib.Gui.common" class="py-name" href="#" onclick="return doclink('link-12', 'common', 'link-0');">common</a></tt><tt class="py-op">.</tt><tt id="link-13" class="py-name"><a title="lib.Gui.common.Window.CWindow" class="py-name" href="#" onclick="return doclink('link-13', 'CWindow', 'link-1');">CWindow</a></tt><tt class="py-op">.</tt><tt id="link-14" class="py-name" targets="Method lib.Clipboard.Clipboard.CClipboard.__init__()=lib.Clipboard.Clipboard.CClipboard-class.html#__init__,Method lib.Connections.Arrow.CConnectionArrow.__init__()=lib.Connections.Arrow.CConnectionArrow-class.html#__init__,Method lib.Connections.Factory.CConnectionFactory.__init__()=lib.Connections.Factory.CConnectionFactory-class.html#__init__,Method lib.Connections.Line.CConnectionLine.__init__()=lib.Connections.Line.CConnectionLine-class.html#__init__,Method lib.Connections.Object.CConnectionObject.__init__()=lib.Connections.Object.CConnectionObject-class.html#__init__,Method lib.Connections.Type.CConnectionType.__init__()=lib.Connections.Type.CConnectionType-class.html#__init__,Method lib.Diagrams.Factory.CDiagramFactory.__init__()=lib.Diagrams.Factory.CDiagramFactory-class.html#__init__,Method lib.Diagrams.Type.CDiagramType.__init__()=lib.Diagrams.Type.CDiagramType-class.html#__init__,Method lib.Drawing.Canvas.Abstract.CAbstractCanvas.__init__()=lib.Drawing.Canvas.Abstract.CAbstractCanvas-class.html#__init__,Method lib.Drawing.Canvas.Cairo.CCairoCanvas.__init__()=lib.Drawing.Canvas.Cairo.CCairoCanvas-class.html#__init__,Method lib.Drawing.Canvas.Gtk.CGtkCanvas.__init__()=lib.Drawing.Canvas.Gtk.CGtkCanvas-class.html#__init__,Method lib.Drawing.Canvas.Svg.CSvgCanvas.__init__()=lib.Drawing.Canvas.Svg.CSvgCanvas-class.html#__init__,Method lib.Drawing.Connection.CConnection.__init__()=lib.Drawing.Connection.CConnection-class.html#__init__,Method lib.Drawing.DrawingArea.CDrawingArea.__init__()=lib.Drawing.DrawingArea.CDrawingArea-class.html#__init__,Method lib.Drawing.Element.CElement.__init__()=lib.Drawing.Element.CElement-class.html#__init__,Method lib.Drawing.Objects.Align.CAlign.__init__()=lib.Drawing.Objects.Align.CAlign-class.html#__init__,Method lib.Drawing.Objects.Condition.CCondition.__init__()=lib.Drawing.Objects.Condition.CCondition-class.html#__init__,Method lib.Drawing.Objects.Container.CContainer.__init__()=lib.Drawing.Objects.Container.CContainer-class.html#__init__,Method lib.Drawing.Objects.Ellipse.CEllipse.__init__()=lib.Drawing.Objects.Ellipse.CEllipse-class.html#__init__,Method lib.Drawing.Objects.HBox.CHBox.__init__()=lib.Drawing.Objects.HBox.CHBox-class.html#__init__,Method lib.Drawing.Objects.Icon.CIcon.__init__()=lib.Drawing.Objects.Icon.CIcon-class.html#__init__,Method lib.Drawing.Objects.Line.CLine.__init__()=lib.Drawing.Objects.Line.CLine-class.html#__init__,Method lib.Drawing.Objects.Loop.CLoop.__init__()=lib.Drawing.Objects.Loop.CLoop-class.html#__init__,Method lib.Drawing.Objects.Padding.CPadding.__init__()=lib.Drawing.Objects.Padding.CPadding-class.html#__init__,Method lib.Drawing.Objects.Proportional.CProportional.__init__()=lib.Drawing.Objects.Proportional.CProportional-class.html#__init__,Method lib.Drawing.Objects.Rectangle.CRectangle.__init__()=lib.Drawing.Objects.Rectangle.CRectangle-class.html#__init__,Method lib.Drawing.Objects.Shadow.CShadow.__init__()=lib.Drawing.Objects.Shadow.CShadow-class.html#__init__,Method lib.Drawing.Objects.Sizer.CSizer.__init__()=lib.Drawing.Objects.Sizer.CSizer-class.html#__init__,Method lib.Drawing.Objects.Svg.CSvg.__init__()=lib.Drawing.Objects.Svg.CSvg-class.html#__init__,Method lib.Drawing.Objects.TextBox.CTextBox.__init__()=lib.Drawing.Objects.TextBox.CTextBox-class.html#__init__,Method lib.Drawing.Objects.VBox.CVBox.__init__()=lib.Drawing.Objects.VBox.CVBox-class.html#__init__,Method lib.Drawing.Objects.VisualObject.CVisualObject.__init__()=lib.Drawing.Objects.VisualObject.CVisualObject-class.html#__init__,Method lib.Elements.Factory.CElementFactory.__init__()=lib.Elements.Factory.CElementFactory-class.html#__init__,Method lib.Elements.Object.CElementObject.__init__()=lib.Elements.Object.CElementObject-class.html#__init__,Method lib.Elements.Type.CElementType.__init__()=lib.Elements.Type.CElementType-class.html#__init__,Method lib.Gui.common.Application.CApplication.__init__()=lib.Gui.common.Application.CApplication-class.html#__init__,Method lib.Gui.common.CellRendererButton'.CellRendererButton.__init__()=lib.Gui.common.CellRendererButton%27.CellRendererButton-class.html#__init__,Method lib.Gui.common.Widget.CWidget.__init__()=lib.Gui.common.Widget.CWidget-class.html#__init__,Method lib.Gui.common.Window.CWindow.__init__()=lib.Gui.common.Window.CWindow-class.html#__init__,Method lib.Gui.dialogs.CQuestionDialog.__init__()=lib.Gui.dialogs.CQuestionDialog-class.html#__init__,Method lib.Gui.dialogs.CWarningDialog.__init__()=lib.Gui.dialogs.CWarningDialog-class.html#__init__,Method lib.Gui.frmFindInDiagram.CFindInDiagram.__init__()=lib.Gui.frmFindInDiagram.CFindInDiagram-class.html#__init__,Method lib.Gui.frmMain.CfrmMain.__init__()=lib.Gui.frmMain.CfrmMain-class.html#__init__,Method lib.Gui.frmOpen.CfrmOpen.__init__()=lib.Gui.frmOpen.CfrmOpen-class.html#__init__,Method lib.Gui.frmProperties.CfrmProperties.__init__()=lib.Gui.frmProperties.CfrmProperties-class.html#__init__,Method lib.Gui.frmSave.CfrmSave.__init__()=lib.Gui.frmSave.CfrmSave-class.html#__init__,Method lib.Gui.frmSplash.CfrmSplash.__init__()=lib.Gui.frmSplash.CfrmSplash-class.html#__init__,Method lib.Gui.lwProperties.ClwProperties.__init__()=lib.Gui.lwProperties.ClwProperties-class.html#__init__,Method lib.Gui.nbProperties.CnbProperties.__init__()=lib.Gui.nbProperties.CnbProperties-class.html#__init__,Method lib.Gui.picDrawingArea.CpicDrawingArea.__init__()=lib.Gui.picDrawingArea.CpicDrawingArea-class.html#__init__,Method lib.Gui.tabStartPage.CtabStartPage.__init__()=lib.Gui.tabStartPage.CtabStartPage-class.html#__init__,Method lib.Gui.tabs.CTabs.__init__()=lib.Gui.tabs.CTabs-class.html#__init__,Method lib.Gui.tbToolBox.CtbToolBox.__init__()=lib.Gui.tbToolBox.CtbToolBox-class.html#__init__,Method lib.Gui.twProjectView.CtwProjectView.__init__()=lib.Gui.twProjectView.CtwProjectView-class.html#__init__,Method lib.Gui.txtNotes.CtxtNotes.__init__()=lib.Gui.txtNotes.CtxtNotes-class.html#__init__,Method lib.Math2D.geometry.CLine.__init__()=lib.Math2D.geometry.CLine-class.html#__init__,Method lib.Math2D.geometry.CLineVector.__init__()=lib.Math2D.geometry.CLineVector-class.html#__init__,Method lib.Math2D.geometry.CPoint.__init__()=lib.Math2D.geometry.CPoint-class.html#__init__,Method lib.Math2D.geometry.CPolyLine.__init__()=lib.Math2D.geometry.CPolyLine-class.html#__init__,Method lib.Math2D.geometry.CPolygon.__init__()=lib.Math2D.geometry.CPolygon-class.html#__init__,Method lib.Math2D.geometry.CRectangle.__init__()=lib.Math2D.geometry.CRectangle-class.html#__init__,Method lib.Math2D.path.Path.__init__()=lib.Math2D.path.Path-class.html#__init__,Method lib.Math2D.path.PathPartArc.__init__()=lib.Math2D.path.PathPartArc-class.html#__init__,Method lib.Math2D.path.PathPartBezier.__init__()=lib.Math2D.path.PathPartBezier-class.html#__init__,Method lib.Math2D.path.PathPartLine.__init__()=lib.Math2D.path.PathPartLine-class.html#__init__,Method lib.Math2D.path.PathPartMove.__init__()=lib.Math2D.path.PathPartMove-class.html#__init__,Method lib.Math2D.path.PathSingle.__init__()=lib.Math2D.path.PathSingle-class.html#__init__,Method lib.Math2D.transform_matrix.Matrix.__init__()=lib.Math2D.transform_matrix.Matrix-class.html#__init__,Method lib.Math2D.transform_matrix.PointMatrix.__init__()=lib.Math2D.transform_matrix.PointMatrix-class.html#__init__,Method lib.Math2D.transform_matrix.TransformMatrix.__init__()=lib.Math2D.transform_matrix.TransformMatrix-class.html#__init__,Method lib.Project.Project.CProject.__init__()=lib.Project.Project.CProject-class.html#__init__,Method lib.Project.ProjectNode.CProjectNode.__init__()=lib.Project.ProjectNode.CProjectNode-class.html#__init__,Method lib.Project.RecentFiles.CRecentFiles.__init__()=lib.Project.RecentFiles.CRecentFiles-class.html#__init__,Method lib.Storages.AbstractStorage.CAbstractStorage.__init__()=lib.Storages.AbstractStorage.CAbstractStorage-class.html#__init__,Method lib.Storages.Directory.CDirectory.__init__()=lib.Storages.Directory.CDirectory-class.html#__init__,Method lib.Versions.Factory.CVersionFactory.__init__()=lib.Versions.Factory.CVersionFactory-class.html#__init__,Method lib.Versions.Type.CVersionType.__init__()=lib.Versions.Type.CVersionType-class.html#__init__,Method lib.config.CConfig.__init__()=lib.config.CConfig-class.html#__init__,Method lib.debug.DebugAttribute.__init__()=lib.debug.DebugAttribute-class.html#__init__,Method lib.lib.IDGenerator.__init__()=lib.lib.IDGenerator-class.html#__init__,Method lib.lib.UMLException.__init__()=lib.lib.UMLException-class.html#__init__"><a title="lib.Clipboard.Clipboard.CClipboard.__init__
+lib.Connections.Arrow.CConnectionArrow.__init__
+lib.Connections.Factory.CConnectionFactory.__init__
+lib.Connections.Line.CConnectionLine.__init__
+lib.Connections.Object.CConnectionObject.__init__
+lib.Connections.Type.CConnectionType.__init__
+lib.Diagrams.Factory.CDiagramFactory.__init__
+lib.Diagrams.Type.CDiagramType.__init__
+lib.Drawing.Canvas.Abstract.CAbstractCanvas.__init__
+lib.Drawing.Canvas.Cairo.CCairoCanvas.__init__
+lib.Drawing.Canvas.Gtk.CGtkCanvas.__init__
+lib.Drawing.Canvas.Svg.CSvgCanvas.__init__
+lib.Drawing.Connection.CConnection.__init__
+lib.Drawing.DrawingArea.CDrawingArea.__init__
+lib.Drawing.Element.CElement.__init__
+lib.Drawing.Objects.Align.CAlign.__init__
+lib.Drawing.Objects.Condition.CCondition.__init__
+lib.Drawing.Objects.Container.CContainer.__init__
+lib.Drawing.Objects.Ellipse.CEllipse.__init__
+lib.Drawing.Objects.HBox.CHBox.__init__
+lib.Drawing.Objects.Icon.CIcon.__init__
+lib.Drawing.Objects.Line.CLine.__init__
+lib.Drawing.Objects.Loop.CLoop.__init__
+lib.Drawing.Objects.Padding.CPadding.__init__
+lib.Drawing.Objects.Proportional.CProportional.__init__
+lib.Drawing.Objects.Rectangle.CRectangle.__init__
+lib.Drawing.Objects.Shadow.CShadow.__init__
+lib.Drawing.Objects.Sizer.CSizer.__init__
+lib.Drawing.Objects.Svg.CSvg.__init__
+lib.Drawing.Objects.TextBox.CTextBox.__init__
+lib.Drawing.Objects.VBox.CVBox.__init__
+lib.Drawing.Objects.VisualObject.CVisualObject.__init__
+lib.Elements.Factory.CElementFactory.__init__
+lib.Elements.Object.CElementObject.__init__
+lib.Elements.Type.CElementType.__init__
+lib.Gui.common.Application.CApplication.__init__
+lib.Gui.common.CellRendererButton'.CellRendererButton.__init__
+lib.Gui.common.Widget.CWidget.__init__
+lib.Gui.common.Window.CWindow.__init__
+lib.Gui.dialogs.CQuestionDialog.__init__
+lib.Gui.dialogs.CWarningDialog.__init__
+lib.Gui.frmFindInDiagram.CFindInDiagram.__init__
+lib.Gui.frmMain.CfrmMain.__init__
+lib.Gui.frmOpen.CfrmOpen.__init__
+lib.Gui.frmProperties.CfrmProperties.__init__
+lib.Gui.frmSave.CfrmSave.__init__
+lib.Gui.frmSplash.CfrmSplash.__init__
+lib.Gui.lwProperties.ClwProperties.__init__
+lib.Gui.nbProperties.CnbProperties.__init__
+lib.Gui.picDrawingArea.CpicDrawingArea.__init__
+lib.Gui.tabStartPage.CtabStartPage.__init__
+lib.Gui.tabs.CTabs.__init__
+lib.Gui.tbToolBox.CtbToolBox.__init__
+lib.Gui.twProjectView.CtwProjectView.__init__
+lib.Gui.txtNotes.CtxtNotes.__init__
+lib.Math2D.geometry.CLine.__init__
+lib.Math2D.geometry.CLineVector.__init__
+lib.Math2D.geometry.CPoint.__init__
+lib.Math2D.geometry.CPolyLine.__init__
+lib.Math2D.geometry.CPolygon.__init__
+lib.Math2D.geometry.CRectangle.__init__
+lib.Math2D.path.Path.__init__
+lib.Math2D.path.PathPartArc.__init__
+lib.Math2D.path.PathPartBezier.__init__
+lib.Math2D.path.PathPartLine.__init__
+lib.Math2D.path.PathPartMove.__init__
+lib.Math2D.path.PathSingle.__init__
+lib.Math2D.transform_matrix.Matrix.__init__
+lib.Math2D.transform_matrix.PointMatrix.__init__
+lib.Math2D.transform_matrix.TransformMatrix.__init__
+lib.Project.Project.CProject.__init__
+lib.Project.ProjectNode.CProjectNode.__init__
+lib.Project.RecentFiles.CRecentFiles.__init__
+lib.Storages.AbstractStorage.CAbstractStorage.__init__
+lib.Storages.Directory.CDirectory.__init__
+lib.Versions.Factory.CVersionFactory.__init__
+lib.Versions.Type.CVersionType.__init__
+lib.config.CConfig.__init__
+lib.debug.DebugAttribute.__init__
+lib.lib.IDGenerator.__init__
+lib.lib.UMLException.__init__" class="py-name" href="#" onclick="return doclink('link-14', '__init__', 'link-14');">__init__</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">,</tt> <tt class="py-name">app</tt><tt class="py-op">,</tt> <tt class="py-name">wTree</tt><tt class="py-op">)</tt> </tt>
+<a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line">         </tt>
+<a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">listStore</tt> <tt class="py-op">=</tt> <tt class="py-name">gtk</tt><tt class="py-op">.</tt><tt class="py-name">ListStore</tt><tt class="py-op">(</tt><tt class="py-name">gobject</tt><tt class="py-op">.</tt><tt class="py-name">TYPE_STRING</tt><tt class="py-op">,</tt> <tt class="py-name">gobject</tt><tt class="py-op">.</tt><tt class="py-name">TYPE_STRING</tt><tt class="py-op">,</tt> <tt class="py-name">gtk</tt><tt class="py-op">.</tt><tt class="py-name">gdk</tt><tt class="py-op">.</tt><tt class="py-name">Pixbuf</tt> <tt class="py-op">)</tt> </tt>
+<a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">twFindInDiagram</tt><tt class="py-op">.</tt><tt class="py-name">set_model</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">listStore</tt><tt class="py-op">)</tt> </tt>
+<a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">twFindInDiagram</tt><tt class="py-op">.</tt><tt class="py-name">append_column</tt><tt class="py-op">(</tt><tt class="py-name">gtk</tt><tt class="py-op">.</tt><tt class="py-name">TreeViewColumn</tt><tt class="py-op">(</tt><tt class="py-string">''</tt><tt class="py-op">,</tt> <tt class="py-name">gtk</tt><tt class="py-op">.</tt><tt class="py-name">CellRendererPixbuf</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">pixbuf</tt> <tt class="py-op">=</tt> <tt class="py-number">2</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">twFindInDiagram</tt><tt class="py-op">.</tt><tt class="py-name">append_column</tt><tt class="py-op">(</tt><tt class="py-name">gtk</tt><tt class="py-op">.</tt><tt class="py-name">TreeViewColumn</tt><tt class="py-op">(</tt><tt class="py-name">_</tt><tt class="py-op">(</tt><tt class="py-string">'Diagram name'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">gtk</tt><tt class="py-op">.</tt><tt class="py-name">CellRendererText</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">text</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">twFindInDiagram</tt><tt class="py-op">.</tt><tt class="py-name">append_column</tt><tt class="py-op">(</tt><tt class="py-name">gtk</tt><tt class="py-op">.</tt><tt class="py-name">TreeViewColumn</tt><tt class="py-op">(</tt><tt class="py-name">_</tt><tt class="py-op">(</tt><tt class="py-string">'Diagram type'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">gtk</tt><tt class="py-op">.</tt><tt class="py-name">CellRendererText</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">text</tt> <tt class="py-op">=</tt> <tt class="py-number">1</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line">         </tt>
+<a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line">         </tt>
+<a name="CFindInDiagram.Fill"></a><div id="CFindInDiagram.Fill-def"><a name="L27"></a><tt class="py-lineno">27</tt> <a class="py-toggle" href="#" id="CFindInDiagram.Fill-toggle" onclick="return toggle('CFindInDiagram.Fill');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Gui.frmFindInDiagram.CFindInDiagram-class.html#Fill">Fill</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CFindInDiagram.Fill-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="CFindInDiagram.Fill-expanded"><a name="L28"></a><tt class="py-lineno">28</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">listStore</tt><tt class="py-op">.</tt><tt class="py-name">clear</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L29"></a><tt class="py-lineno">29</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">i</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">drawingAreas</tt><tt class="py-op">:</tt> </tt>
+<a name="L30"></a><tt class="py-lineno">30</tt>  <tt class="py-line">            <tt class="py-name">iter</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">listStore</tt><tt class="py-op">.</tt><tt id="link-15" class="py-name" targets="Method lib.Math2D.path.PathSingle.append()=lib.Math2D.path.PathSingle-class.html#append"><a title="lib.Math2D.path.PathSingle.append" class="py-name" href="#" onclick="return doclink('link-15', 'append', 'link-15');">append</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L31"></a><tt class="py-lineno">31</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">listStore</tt><tt class="py-op">.</tt><tt class="py-name">set</tt><tt class="py-op">(</tt><tt class="py-name">iter</tt><tt class="py-op">,</tt><tt class="py-number">0</tt><tt class="py-op">,</tt><tt class="py-name">i</tt><tt class="py-op">.</tt><tt id="link-16" class="py-name" targets="Method lib.Drawing.DrawingArea.CDrawingArea.GetName()=lib.Drawing.DrawingArea.CDrawingArea-class.html#GetName,Method lib.Elements.Object.CElementObject.GetName()=lib.Elements.Object.CElementObject-class.html#GetName,Method lib.Project.ProjectNode.CProjectNode.GetName()=lib.Project.ProjectNode.CProjectNode-class.html#GetName,Method lib.lib.UMLException.GetName()=lib.lib.UMLException-class.html#GetName"><a title="lib.Drawing.DrawingArea.CDrawingArea.GetName
+lib.Elements.Object.CElementObject.GetName
+lib.Project.ProjectNode.CProjectNode.GetName
+lib.lib.UMLException.GetName" class="py-name" href="#" onclick="return doclink('link-16', 'GetName', 'link-16');">GetName</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-number">1</tt><tt class="py-op">,</tt> <tt class="py-name">i</tt><tt class="py-op">.</tt><tt id="link-17" class="py-name" targets="Method lib.Connections.Object.CConnectionObject.GetType()=lib.Connections.Object.CConnectionObject-class.html#GetType,Method lib.Drawing.DrawingArea.CDrawingArea.GetType()=lib.Drawing.DrawingArea.CDrawingArea-class.html#GetType,Method lib.Elements.Object.CElementObject.GetType()=lib.Elements.Object.CElementObject-class.html#GetType,Method lib.Math2D.path.PathSingle.GetType()=lib.Math2D.path.PathSingle-class.html#GetType,Method lib.Project.ProjectNode.CProjectNode.GetType()=lib.Project.ProjectNode.CProjectNode-class.html#GetType"><a title="lib.Connections.Object.CConnectionObject.GetType
+lib.Drawing.DrawingArea.CDrawingArea.GetType
+lib.Elements.Object.CElementObject.GetType
+lib.Math2D.path.PathSingle.GetType
+lib.Project.ProjectNode.CProjectNode.GetType" class="py-name" href="#" onclick="return doclink('link-17', 'GetType', 'link-17');">GetType</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-18" class="py-name" targets="Method lib.Connections.Type.CConnectionType.GetId()=lib.Connections.Type.CConnectionType-class.html#GetId,Method lib.Diagrams.Type.CDiagramType.GetId()=lib.Diagrams.Type.CDiagramType-class.html#GetId,Method lib.Elements.Type.CElementType.GetId()=lib.Elements.Type.CElementType-class.html#GetId,Method lib.Versions.Type.CVersionType.GetId()=lib.Versions.Type.CVersionType-class.html#GetId"><a title="lib.Connections.Type.CConnectionType.GetId
+lib.Diagrams.Type.CDiagramType.GetId
+lib.Elements.Type.CElementType.GetId
+lib.Versions.Type.CVersionType.GetId" class="py-name" href="#" onclick="return doclink('link-18', 'GetId', 'link-18');">GetId</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-number">2</tt><tt class="py-op">,</tt> <tt id="link-19" class="py-name"><a title="lib.Drawing.Canvas.Cairo.PixmapFromPath
+lib.Drawing.Canvas.Gtk.PixmapFromPath" class="py-name" href="#" onclick="return doclink('link-19', 'PixmapFromPath', 'link-7');">PixmapFromPath</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">application</tt><tt class="py-op">.</tt><tt class="py-name">GetProject</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-20" class="py-name" targets="Method lib.Project.Project.CProject.GetStorage()=lib.Project.Project.CProject-class.html#GetStorage"><a title="lib.Project.Project.CProject.GetStorage" class="py-name" href="#" onclick="return doclink('link-20', 'GetStorage', 'link-20');">GetStorage</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">i</tt><tt class="py-op">.</tt><tt id="link-21" class="py-name"><a title="lib.Connections.Object.CConnectionObject.GetType
+lib.Drawing.DrawingArea.CDrawingArea.GetType
+lib.Elements.Object.CElementObject.GetType
+lib.Math2D.path.PathSingle.GetType
+lib.Project.ProjectNode.CProjectNode.GetType" class="py-name" href="#" onclick="return doclink('link-21', 'GetType', 'link-17');">GetType</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-22" class="py-name" targets="Method lib.Connections.Type.CConnectionType.GetIcon()=lib.Connections.Type.CConnectionType-class.html#GetIcon,Method lib.Diagrams.Type.CDiagramType.GetIcon()=lib.Diagrams.Type.CDiagramType-class.html#GetIcon,Method lib.Elements.Type.CElementType.GetIcon()=lib.Elements.Type.CElementType-class.html#GetIcon"><a title="lib.Connections.Type.CConnectionType.GetIcon
+lib.Diagrams.Type.CDiagramType.GetIcon
+lib.Elements.Type.CElementType.GetIcon" class="py-name" href="#" onclick="return doclink('link-22', 'GetIcon', 'link-22');">GetIcon</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L32"></a><tt class="py-lineno">32</tt>  <tt class="py-line">     </tt>
+<a name="CFindInDiagram.ShowDialog"></a><div id="CFindInDiagram.ShowDialog-def"><a name="L33"></a><tt class="py-lineno">33</tt> <a class="py-toggle" href="#" id="CFindInDiagram.ShowDialog-toggle" onclick="return toggle('CFindInDiagram.ShowDialog');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Gui.frmFindInDiagram.CFindInDiagram-class.html#ShowDialog">ShowDialog</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">drawingAreas</tt><tt class="py-op">,</tt> <tt class="py-param">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CFindInDiagram.ShowDialog-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="CFindInDiagram.ShowDialog-expanded"><a name="L34"></a><tt class="py-lineno">34</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">drawingAreas</tt> <tt class="py-op">=</tt> <tt class="py-name">drawingAreas</tt> </tt>
+<a name="L35"></a><tt class="py-lineno">35</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">object</tt> <tt class="py-op">=</tt> <tt class="py-name">object</tt> </tt>
+<a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-23" class="py-name" targets="Method lib.Gui.frmFindInDiagram.CFindInDiagram.Fill()=lib.Gui.frmFindInDiagram.CFindInDiagram-class.html#Fill,Method lib.Gui.lwProperties.ClwProperties.Fill()=lib.Gui.lwProperties.ClwProperties-class.html#Fill,Method lib.Gui.nbProperties.CnbProperties.Fill()=lib.Gui.nbProperties.CnbProperties-class.html#Fill,Method lib.Gui.tabStartPage.CtabStartPage.Fill()=lib.Gui.tabStartPage.CtabStartPage-class.html#Fill,Method lib.Gui.txtNotes.CtxtNotes.Fill()=lib.Gui.txtNotes.CtxtNotes-class.html#Fill"><a title="lib.Gui.frmFindInDiagram.CFindInDiagram.Fill
+lib.Gui.lwProperties.ClwProperties.Fill
+lib.Gui.nbProperties.CnbProperties.Fill
+lib.Gui.tabStartPage.CtabStartPage.Fill
+lib.Gui.txtNotes.CtxtNotes.Fill" class="py-name" href="#" onclick="return doclink('link-23', 'Fill', 'link-23');">Fill</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L37"></a><tt class="py-lineno">37</tt>  <tt class="py-line">        <tt class="py-name">response</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">form</tt><tt class="py-op">.</tt><tt id="link-24" class="py-name" targets="Method lib.Gui.dialogs.CQuestionDialog.run()=lib.Gui.dialogs.CQuestionDialog-class.html#run,Method lib.Gui.dialogs.CWarningDialog.run()=lib.Gui.dialogs.CWarningDialog-class.html#run"><a title="lib.Gui.dialogs.CQuestionDialog.run
+lib.Gui.dialogs.CWarningDialog.run" class="py-name" href="#" onclick="return doclink('link-24', 'run', 'link-24');">run</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L38"></a><tt class="py-lineno">38</tt>  <tt class="py-line">        <tt class="py-keyword">while</tt> <tt class="py-name">True</tt><tt class="py-op">:</tt> </tt>
+<a name="L39"></a><tt class="py-lineno">39</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">response</tt> <tt class="py-op">!=</tt> <tt class="py-name">gtk</tt><tt class="py-op">.</tt><tt class="py-name">RESPONSE_OK</tt><tt class="py-op">:</tt> </tt>
+<a name="L40"></a><tt class="py-lineno">40</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">form</tt><tt class="py-op">.</tt><tt id="link-25" class="py-name" targets="Method lib.Gui.frmFindInDiagram.CFindInDiagram.hide()=lib.Gui.frmFindInDiagram.CFindInDiagram-class.html#hide"><a title="lib.Gui.frmFindInDiagram.CFindInDiagram.hide" class="py-name" href="#" onclick="return doclink('link-25', 'hide', 'link-25');">hide</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L41"></a><tt class="py-lineno">41</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> </tt>
+<a name="L42"></a><tt class="py-lineno">42</tt>  <tt class="py-line"> </tt>
+<a name="L43"></a><tt class="py-lineno">43</tt>  <tt class="py-line">            <tt class="py-name">iter</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">twFindInDiagram</tt><tt class="py-op">.</tt><tt class="py-name">get_selection</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">get_selected</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> </tt>
+<a name="L44"></a><tt class="py-lineno">44</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">iter</tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L45"></a><tt class="py-lineno">45</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">form</tt><tt class="py-op">.</tt><tt id="link-26" class="py-name"><a title="lib.Gui.frmFindInDiagram.CFindInDiagram.hide" class="py-name" href="#" onclick="return doclink('link-26', 'hide', 'link-25');">hide</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L46"></a><tt class="py-lineno">46</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">emit</tt><tt class="py-op">(</tt><tt class="py-string">'selected_drawingArea_and_Element'</tt><tt class="py-op">,</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">drawingAreas</tt><tt class="py-op">[</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">twFindInDiagram</tt><tt class="py-op">.</tt><tt class="py-name">get_model</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">get_path</tt><tt class="py-op">(</tt><tt class="py-name">iter</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">]</tt><tt class="py-op">,</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">object</tt><tt class="py-op">)</tt> </tt>
+<a name="L47"></a><tt class="py-lineno">47</tt>  <tt class="py-line">            <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L48"></a><tt class="py-lineno">48</tt>  <tt class="py-line">                <tt class="py-name">response</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">form</tt><tt class="py-op">.</tt><tt id="link-27" class="py-name"><a title="lib.Gui.dialogs.CQuestionDialog.run
+lib.Gui.dialogs.CWarningDialog.run" class="py-name" href="#" onclick="return doclink('link-27', 'run', 'link-24');">run</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L49"></a><tt class="py-lineno">49</tt>  <tt class="py-line">                 </tt>
+<a name="CFindInDiagram.hide"></a><div id="CFindInDiagram.hide-def"><a name="L50"></a><tt class="py-lineno">50</tt> <a class="py-toggle" href="#" id="CFindInDiagram.hide-toggle" onclick="return toggle('CFindInDiagram.hide');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Gui.frmFindInDiagram.CFindInDiagram-class.html#hide">hide</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CFindInDiagram.hide-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="CFindInDiagram.hide-expanded"><a name="L51"></a><tt class="py-lineno">51</tt>  <tt class="py-line">        <tt class="py-keyword">del</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">drawingAreas</tt> </tt>
+<a name="L52"></a><tt class="py-lineno">52</tt>  <tt class="py-line">        <tt class="py-keyword">del</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">object</tt> </tt>
+<a name="L53"></a><tt class="py-lineno">53</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-28" class="py-name" targets="Method lib.Gui.common.Window.CWindow.Hide()=lib.Gui.common.Window.CWindow-class.html#Hide,Method lib.Gui.picDrawingArea.CpicDrawingArea.Hide()=lib.Gui.picDrawingArea.CpicDrawingArea-class.html#Hide,Method lib.Gui.tbToolBox.CtbToolBox.Hide()=lib.Gui.tbToolBox.CtbToolBox-class.html#Hide"><a title="lib.Gui.common.Window.CWindow.Hide
+lib.Gui.picDrawingArea.CpicDrawingArea.Hide
+lib.Gui.tbToolBox.CtbToolBox.Hide" class="py-name" href="#" onclick="return doclink('link-28', 'Hide', 'link-28');">Hide</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L54"></a><tt class="py-lineno">54</tt>  <tt class="py-line">     </tt>
+<a name="L55"></a><tt class="py-lineno">55</tt>  <tt class="py-line">    <tt class="py-decorator">@</tt><tt class="py-decorator">event</tt><tt class="py-op">(</tt><tt class="py-string">"twFindInDiagram"</tt><tt class="py-op">,</tt> <tt class="py-string">"row-activated"</tt><tt class="py-op">)</tt> </tt>
+<a name="CFindInDiagram.on_twFindInDiagram_doubleclick"></a><div id="CFindInDiagram.on_twFindInDiagram_doubleclick-def"><a name="L56"></a><tt class="py-lineno">56</tt> <a class="py-toggle" href="#" id="CFindInDiagram.on_twFindInDiagram_doubleclick-toggle" onclick="return toggle('CFindInDiagram.on_twFindInDiagram_doubleclick');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Gui.frmFindInDiagram.CFindInDiagram-class.html#on_twFindInDiagram_doubleclick">on_twFindInDiagram_doubleclick</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">treeView</tt><tt class="py-op">,</tt> <tt class="py-param">path</tt><tt class="py-op">,</tt> <tt class="py-param">column</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CFindInDiagram.on_twFindInDiagram_doubleclick-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="CFindInDiagram.on_twFindInDiagram_doubleclick-expanded"><a name="L57"></a><tt class="py-lineno">57</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">emit</tt><tt class="py-op">(</tt><tt class="py-string">'selected_drawingArea_and_Element'</tt><tt class="py-op">,</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">drawingAreas</tt><tt class="py-op">[</tt><tt id="link-29" class="py-name" targets="Module lib.Math2D.path=lib.Math2D.path-module.html"><a title="lib.Math2D.path" class="py-name" href="#" onclick="return doclink('link-29', 'path', 'link-29');">path</a></tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">]</tt><tt class="py-op">,</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">object</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L58"></a><tt class="py-lineno">58</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="lib-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://umlfri.kst.fri.uniza.sk/">UML .FRI</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sun Mar 30 19:33:56 2008
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

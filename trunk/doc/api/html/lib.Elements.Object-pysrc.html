@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>lib.Elements.Object</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="lib-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://umlfri.kst.fri.uniza.sk/">UML .FRI</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="lib-module.html">Package&nbsp;lib</a> ::
+        <a href="lib.Elements-module.html">Package&nbsp;Elements</a> ::
+        Module&nbsp;Object
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="lib.Elements.Object-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="lib.Elements.Object-module.html">Module lib.Elements.Object</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-0" class="py-name" targets="Package lib=lib-module.html,Module lib.lib=lib.lib-module.html"><a title="lib
+lib.lib" class="py-name" href="#" onclick="return doclink('link-0', 'lib', 'link-0');">lib</a></tt><tt class="py-op">.</tt><tt id="link-1" class="py-name"><a title="lib
+lib.lib" class="py-name" href="#" onclick="return doclink('link-1', 'lib', 'link-0');">lib</a></tt> <tt class="py-keyword">import</tt> <tt id="link-2" class="py-name" targets="Class lib.lib.UMLException=lib.lib.UMLException-class.html"><a title="lib.lib.UMLException" class="py-name" href="#" onclick="return doclink('link-2', 'UMLException', 'link-2');">UMLException</a></tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">weakref</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"> </tt>
+<a name="CElementObject"></a><div id="CElementObject-def"><a name="L4"></a><tt class="py-lineno">  4</tt> <a class="py-toggle" href="#" id="CElementObject-toggle" onclick="return toggle('CElementObject');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="lib.Elements.Object.CElementObject-class.html">CElementObject</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CElementObject-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="CElementObject-expanded"><a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line">    <tt class="py-docstring">"""</tt> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-docstring">    Object that represents logical element and its properties</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="CElementObject.__init__"></a><div id="CElementObject.__init__-def"><a name="L8"></a><tt class="py-lineno">  8</tt> <a class="py-toggle" href="#" id="CElementObject.__init__-toggle" onclick="return toggle('CElementObject.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Elements.Object.CElementObject-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">type</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CElementObject.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CElementObject.__init__-expanded"><a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line">        <tt class="py-docstring">"""</tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-docstring">        Initialize element object and set it into default state</tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-docstring">        </tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-docstring">        @param type: Type of the new element</tt> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt class="py-docstring">        @type  type: L{CElementType&lt;Type.CElementType&gt;}</tt> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">revision</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">type</tt> <tt class="py-op">=</tt> <tt class="py-name">type</tt> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-3" class="py-name" targets="Module lib.Math2D.path=lib.Math2D.path-module.html"><a title="lib.Math2D.path" class="py-name" href="#" onclick="return doclink('link-3', 'path', 'link-3');">path</a></tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">connections</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">attribs</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">i</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">type</tt><tt class="py-op">.</tt><tt id="link-4" class="py-name" targets="Method lib.Connections.Object.CConnectionObject.GetAttributes()=lib.Connections.Object.CConnectionObject-class.html#GetAttributes,Method lib.Connections.Type.CConnectionType.GetAttributes()=lib.Connections.Type.CConnectionType-class.html#GetAttributes,Method lib.Elements.Object.CElementObject.GetAttributes()=lib.Elements.Object.CElementObject-class.html#GetAttributes,Method lib.Elements.Type.CElementType.GetAttributes()=lib.Elements.Type.CElementType-class.html#GetAttributes"><a title="lib.Connections.Object.CConnectionObject.GetAttributes
+lib.Connections.Type.CConnectionType.GetAttributes
+lib.Elements.Object.CElementObject.GetAttributes
+lib.Elements.Type.CElementType.GetAttributes" class="py-name" href="#" onclick="return doclink('link-4', 'GetAttributes', 'link-4');">GetAttributes</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-5" class="py-name" targets="Method lib.Connections.Object.CConnectionObject.SetAttribute()=lib.Connections.Object.CConnectionObject-class.html#SetAttribute,Method lib.Elements.Object.CElementObject.SetAttribute()=lib.Elements.Object.CElementObject-class.html#SetAttribute"><a title="lib.Connections.Object.CConnectionObject.SetAttribute
+lib.Elements.Object.CElementObject.SetAttribute" class="py-name" href="#" onclick="return doclink('link-5', 'SetAttribute', 'link-5');">SetAttribute</a></tt><tt class="py-op">(</tt><tt class="py-name">i</tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">type</tt><tt class="py-op">.</tt><tt id="link-6" class="py-name" targets="Method lib.Connections.Type.CConnectionType.GetDefValue()=lib.Connections.Type.CConnectionType-class.html#GetDefValue,Method lib.Elements.Type.CElementType.GetDefValue()=lib.Elements.Type.CElementType-class.html#GetDefValue"><a title="lib.Connections.Type.CConnectionType.GetDefValue
+lib.Elements.Type.CElementType.GetDefValue" class="py-name" href="#" onclick="return doclink('link-6', 'GetDefValue', 'link-6');">GetDefValue</a></tt><tt class="py-op">(</tt><tt class="py-name">i</tt><tt class="py-op">)</tt><tt class="py-op">)</tt>             </tt>
+<a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">type</tt><tt class="py-op">.</tt><tt id="link-7" class="py-name" targets="Method lib.Elements.Type.CElementType.GetGenerateName()=lib.Elements.Type.CElementType-class.html#GetGenerateName"><a title="lib.Elements.Type.CElementType.GetGenerateName" class="py-name" href="#" onclick="return doclink('link-7', 'GetGenerateName', 'link-7');">GetGenerateName</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-8" class="py-name"><a title="lib.Connections.Object.CConnectionObject.SetAttribute
+lib.Elements.Object.CElementObject.SetAttribute" class="py-name" href="#" onclick="return doclink('link-8', 'SetAttribute', 'link-5');">SetAttribute</a></tt><tt class="py-op">(</tt><tt class="py-string">'Name'</tt><tt class="py-op">,</tt> <tt class="py-string">'New '</tt> <tt class="py-op">+</tt> <tt class="py-name">type</tt><tt class="py-op">.</tt><tt id="link-9" class="py-name" targets="Method lib.Connections.Type.CConnectionType.GetId()=lib.Connections.Type.CConnectionType-class.html#GetId,Method lib.Diagrams.Type.CDiagramType.GetId()=lib.Diagrams.Type.CDiagramType-class.html#GetId,Method lib.Elements.Type.CElementType.GetId()=lib.Elements.Type.CElementType-class.html#GetId,Method lib.Versions.Type.CVersionType.GetId()=lib.Versions.Type.CVersionType-class.html#GetId"><a title="lib.Connections.Type.CConnectionType.GetId
+lib.Diagrams.Type.CDiagramType.GetId
+lib.Elements.Type.CElementType.GetId
+lib.Versions.Type.CVersionType.GetId" class="py-name" href="#" onclick="return doclink('link-9', 'GetId', 'link-9');">GetId</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-10" class="py-name"><a title="lib.Connections.Object.CConnectionObject.SetAttribute
+lib.Elements.Object.CElementObject.SetAttribute" class="py-name" href="#" onclick="return doclink('link-10', 'SetAttribute', 'link-5');">SetAttribute</a></tt><tt class="py-op">(</tt><tt class="py-string">'Name'</tt><tt class="py-op">,</tt> <tt class="py-string">''</tt><tt class="py-op">)</tt> </tt>
+<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">node</tt> <tt class="py-op">=</tt> <tt class="py-keyword">lambda</tt><tt class="py-op">:</tt> <tt class="py-name">None</tt> </tt>
+<a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">appears</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+</div><a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line">     </tt>
+<a name="CElementObject.GetRevision"></a><div id="CElementObject.GetRevision-def"><a name="L29"></a><tt class="py-lineno"> 29</tt> <a class="py-toggle" href="#" id="CElementObject.GetRevision-toggle" onclick="return toggle('CElementObject.GetRevision');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Elements.Object.CElementObject-class.html#GetRevision">GetRevision</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CElementObject.GetRevision-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CElementObject.GetRevision-expanded"><a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line">        <tt class="py-docstring">"""</tt> </tt>
+<a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line"><tt class="py-docstring">        Get revision of this object. Revision is incremented after each</tt> </tt>
+<a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line"><tt class="py-docstring">        object state chage</tt> </tt>
+<a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line"><tt class="py-docstring">        </tt> </tt>
+<a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line"><tt class="py-docstring">        @return: Object revision</tt> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line"><tt class="py-docstring">        @rtype:  integer</tt> </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">revision</tt> </tt>
+</div><a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line">     </tt>
+<a name="CElementObject.GetAppears"></a><div id="CElementObject.GetAppears-def"><a name="L39"></a><tt class="py-lineno"> 39</tt> <a class="py-toggle" href="#" id="CElementObject.GetAppears-toggle" onclick="return toggle('CElementObject.GetAppears');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Elements.Object.CElementObject-class.html#GetAppears">GetAppears</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CElementObject.GetAppears-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CElementObject.GetAppears-expanded"><a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line">        <tt class="py-docstring">"""</tt> </tt>
+<a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line"><tt class="py-docstring">        Get list of object appearances on drawing areas</tt> </tt>
+<a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line"><tt class="py-docstring">        </tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line"><tt class="py-docstring">        @return: list of drawing areas</tt> </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line"><tt class="py-docstring">        @rtype:  iterator over L{CDrawingArea&lt;lib.Drawing.DrawingArea.CDrawingArea&gt;}</tt> </tt>
+<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">i</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">appears</tt><tt class="py-op">:</tt> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line">            <tt class="py-keyword">yield</tt> <tt class="py-name">i</tt> </tt>
+</div><a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line"> </tt>
+<a name="CElementObject.AddAppears"></a><div id="CElementObject.AddAppears-def"><a name="L49"></a><tt class="py-lineno"> 49</tt> <a class="py-toggle" href="#" id="CElementObject.AddAppears-toggle" onclick="return toggle('CElementObject.AddAppears');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Elements.Object.CElementObject-class.html#AddAppears">AddAppears</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">drawingArea</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CElementObject.AddAppears-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CElementObject.AddAppears-expanded"><a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line">        <tt class="py-docstring">"""</tt> </tt>
+<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line"><tt class="py-docstring">        Add element appearance</tt> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line"><tt class="py-docstring">        </tt> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line"><tt class="py-docstring">        @param drawingArea: Drawing area on which element appears</tt> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line"><tt class="py-docstring">        @type  drawingArea: L{CDrawingArea&lt;lib.Drawing.DrawingArea.CDrawingArea&gt;}</tt> </tt>
+<a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">appears</tt><tt class="py-op">.</tt><tt id="link-11" class="py-name" targets="Method lib.Math2D.path.PathSingle.append()=lib.Math2D.path.PathSingle-class.html#append"><a title="lib.Math2D.path.PathSingle.append" class="py-name" href="#" onclick="return doclink('link-11', 'append', 'link-11');">append</a></tt><tt class="py-op">(</tt><tt class="py-name">drawingArea</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line"> </tt>
+<a name="CElementObject.RemoveAppears"></a><div id="CElementObject.RemoveAppears-def"><a name="L58"></a><tt class="py-lineno"> 58</tt> <a class="py-toggle" href="#" id="CElementObject.RemoveAppears-toggle" onclick="return toggle('CElementObject.RemoveAppears');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Elements.Object.CElementObject-class.html#RemoveAppears">RemoveAppears</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">drawingArea</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CElementObject.RemoveAppears-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CElementObject.RemoveAppears-expanded"><a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line">        <tt class="py-docstring">"""</tt> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line"><tt class="py-docstring">        Remove element appearance</tt> </tt>
+<a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line"><tt class="py-docstring">        </tt> </tt>
+<a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line"><tt class="py-docstring">        @param drawingArea: Drawing area on which element was appearing</tt> </tt>
+<a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line"><tt class="py-docstring">        @type  drawingArea: L{CDrawingArea&lt;lib.Drawing.DrawingArea.CDrawingArea&gt;}</tt> </tt>
+<a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line"><tt class="py-docstring">        </tt> </tt>
+<a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line"><tt class="py-docstring">        @raise ValueError: if given drawing area is not found</tt> </tt>
+<a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">appears</tt><tt class="py-op">.</tt><tt class="py-name">remove</tt><tt class="py-op">(</tt><tt class="py-name">drawingArea</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line">     </tt>
+<a name="CElementObject.GetPath"></a><div id="CElementObject.GetPath-def"><a name="L69"></a><tt class="py-lineno"> 69</tt> <a class="py-toggle" href="#" id="CElementObject.GetPath-toggle" onclick="return toggle('CElementObject.GetPath');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Elements.Object.CElementObject-class.html#GetPath">GetPath</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CElementObject.GetPath-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CElementObject.GetPath-expanded"><a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line">        <tt class="py-docstring">"""</tt> </tt>
+<a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line"><tt class="py-docstring">        Get path of this element object in the project</tt> </tt>
+<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line"><tt class="py-docstring">        </tt> </tt>
+<a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line"><tt class="py-docstring">        @return: Element object path</tt> </tt>
+<a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line"><tt class="py-docstring">        @rtype:  string</tt> </tt>
+<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-12" class="py-name"><a title="lib.Math2D.path" class="py-name" href="#" onclick="return doclink('link-12', 'path', 'link-3');">path</a></tt> </tt>
+</div><a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line">     </tt>
+<a name="CElementObject.SetPath"></a><div id="CElementObject.SetPath-def"><a name="L78"></a><tt class="py-lineno"> 78</tt> <a class="py-toggle" href="#" id="CElementObject.SetPath-toggle" onclick="return toggle('CElementObject.SetPath');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Elements.Object.CElementObject-class.html#SetPath">SetPath</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">path</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CElementObject.SetPath-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CElementObject.SetPath-expanded"><a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line">        <tt class="py-docstring">"""</tt> </tt>
+<a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line"><tt class="py-docstring">        Set path of this element object in the project</tt> </tt>
+<a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line"><tt class="py-docstring">        </tt> </tt>
+<a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line"><tt class="py-docstring">        @param path: Element object path</tt> </tt>
+<a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line"><tt class="py-docstring">        @type  path:  string</tt> </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-13" class="py-name"><a title="lib.Math2D.path" class="py-name" href="#" onclick="return doclink('link-13', 'path', 'link-3');">path</a></tt> <tt class="py-op">=</tt> <tt id="link-14" class="py-name"><a title="lib.Math2D.path" class="py-name" href="#" onclick="return doclink('link-14', 'path', 'link-3');">path</a></tt>  </tt>
+</div><a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line">     </tt>
+<a name="CElementObject.GetNode"></a><div id="CElementObject.GetNode-def"><a name="L87"></a><tt class="py-lineno"> 87</tt> <a class="py-toggle" href="#" id="CElementObject.GetNode-toggle" onclick="return toggle('CElementObject.GetNode');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Elements.Object.CElementObject-class.html#GetNode">GetNode</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CElementObject.GetNode-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CElementObject.GetNode-expanded"><a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">node</tt> </tt>
+</div><a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line">         </tt>
+<a name="CElementObject.AddConnection"></a><div id="CElementObject.AddConnection-def"><a name="L90"></a><tt class="py-lineno"> 90</tt> <a class="py-toggle" href="#" id="CElementObject.AddConnection-toggle" onclick="return toggle('CElementObject.AddConnection');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Elements.Object.CElementObject-class.html#AddConnection">AddConnection</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">connection</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CElementObject.AddConnection-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CElementObject.AddConnection-expanded"><a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">revision</tt> <tt class="py-op">+=</tt> <tt class="py-number">1</tt> </tt>
+<a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">connection</tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">connections</tt><tt class="py-op">:</tt> </tt>
+<a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">connections</tt><tt class="py-op">.</tt><tt id="link-15" class="py-name"><a title="lib.Math2D.path.PathSingle.append" class="py-name" href="#" onclick="return doclink('link-15', 'append', 'link-11');">append</a></tt><tt class="py-op">(</tt><tt class="py-name">connection</tt><tt class="py-op">)</tt> </tt>
+<a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line">            <tt class="py-keyword">pass</tt> </tt>
+</div><a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line">             </tt>
+<a name="CElementObject.GetConnections"></a><div id="CElementObject.GetConnections-def"><a name="L97"></a><tt class="py-lineno"> 97</tt> <a class="py-toggle" href="#" id="CElementObject.GetConnections-toggle" onclick="return toggle('CElementObject.GetConnections');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Elements.Object.CElementObject-class.html#GetConnections">GetConnections</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CElementObject.GetConnections-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CElementObject.GetConnections-expanded"><a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">c</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">connections</tt><tt class="py-op">:</tt> </tt>
+<a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line">            <tt class="py-keyword">yield</tt> <tt class="py-name">c</tt> </tt>
+</div><a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line">         </tt>
+<a name="CElementObject.GetType"></a><div id="CElementObject.GetType-def"><a name="L101"></a><tt class="py-lineno">101</tt> <a class="py-toggle" href="#" id="CElementObject.GetType-toggle" onclick="return toggle('CElementObject.GetType');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Elements.Object.CElementObject-class.html#GetType">GetType</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CElementObject.GetType-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CElementObject.GetType-expanded"><a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">type</tt> </tt>
+</div><a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line">     </tt>
+<a name="CElementObject.GetSize"></a><div id="CElementObject.GetSize-def"><a name="L104"></a><tt class="py-lineno">104</tt> <a class="py-toggle" href="#" id="CElementObject.GetSize-toggle" onclick="return toggle('CElementObject.GetSize');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Elements.Object.CElementObject-class.html#GetSize">GetSize</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">canvas</tt><tt class="py-op">,</tt> <tt class="py-param">element</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CElementObject.GetSize-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CElementObject.GetSize-expanded"><a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">type</tt><tt class="py-op">.</tt><tt id="link-16" class="py-name" targets="Method lib.Drawing.DrawingArea.CDrawingArea.GetSize()=lib.Drawing.DrawingArea.CDrawingArea-class.html#GetSize,Method lib.Drawing.Element.CElement.GetSize()=lib.Drawing.Element.CElement-class.html#GetSize,Method lib.Drawing.Objects.Condition.CCondition.GetSize()=lib.Drawing.Objects.Condition.CCondition-class.html#GetSize,Method lib.Drawing.Objects.Container.CContainer.GetSize()=lib.Drawing.Objects.Container.CContainer-class.html#GetSize,Method lib.Drawing.Objects.HBox.CHBox.GetSize()=lib.Drawing.Objects.HBox.CHBox-class.html#GetSize,Method lib.Drawing.Objects.Icon.CIcon.GetSize()=lib.Drawing.Objects.Icon.CIcon-class.html#GetSize,Method lib.Drawing.Objects.Line.CLine.GetSize()=lib.Drawing.Objects.Line.CLine-class.html#GetSize,Method lib.Drawing.Objects.Loop.CLoop.GetSize()=lib.Drawing.Objects.Loop.CLoop-class.html#GetSize,Method lib.Drawing.Objects.Padding.CPadding.GetSize()=lib.Drawing.Objects.Padding.CPadding-class.html#GetSize,Method lib.Drawing.Objects.Proportional.CProportional.GetSize()=lib.Drawing.Objects.Proportional.CProportional-class.html#GetSize,Method lib.Drawing.Objects.Shadow.CShadow.GetSize()=lib.Drawing.Objects.Shadow.CShadow-class.html#GetSize,Method lib.Drawing.Objects.Sizer.CSizer.GetSize()=lib.Drawing.Objects.Sizer.CSizer-class.html#GetSize,Method lib.Drawing.Objects.Svg.CSvg.GetSize()=lib.Drawing.Objects.Svg.CSvg-class.html#GetSize,Method lib.Drawing.Objects.TextBox.CTextBox.GetSize()=lib.Drawing.Objects.TextBox.CTextBox-class.html#GetSize,Method lib.Drawing.Objects.VBox.CVBox.GetSize()=lib.Drawing.Objects.VBox.CVBox-class.html#GetSize,Method lib.Drawing.Objects.VisualObject.CVisualObject.GetSize()=lib.Drawing.Objects.VisualObject.CVisualObject-class.html#GetSize,Method lib.Elements.Object.CElementObject.GetSize()=lib.Elements.Object.CElementObject-class.html#GetSize,Method lib.Elements.Type.CElementType.GetSize()=lib.Elements.Type.CElementType-class.html#GetSize"><a title="lib.Drawing.DrawingArea.CDrawingArea.GetSize
+lib.Drawing.Element.CElement.GetSize
+lib.Drawing.Objects.Condition.CCondition.GetSize
+lib.Drawing.Objects.Container.CContainer.GetSize
+lib.Drawing.Objects.HBox.CHBox.GetSize
+lib.Drawing.Objects.Icon.CIcon.GetSize
+lib.Drawing.Objects.Line.CLine.GetSize
+lib.Drawing.Objects.Loop.CLoop.GetSize
+lib.Drawing.Objects.Padding.CPadding.GetSize
+lib.Drawing.Objects.Proportional.CProportional.GetSize
+lib.Drawing.Objects.Shadow.CShadow.GetSize
+lib.Drawing.Objects.Sizer.CSizer.GetSize
+lib.Drawing.Objects.Svg.CSvg.GetSize
+lib.Drawing.Objects.TextBox.CTextBox.GetSize
+lib.Drawing.Objects.VBox.CVBox.GetSize
+lib.Drawing.Objects.VisualObject.CVisualObject.GetSize
+lib.Elements.Object.CElementObject.GetSize
+lib.Elements.Type.CElementType.GetSize" class="py-name" href="#" onclick="return doclink('link-16', 'GetSize', 'link-16');">GetSize</a></tt><tt class="py-op">(</tt><tt class="py-name">canvas</tt><tt class="py-op">,</tt> <tt class="py-name">element</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line">         </tt>
+<a name="CElementObject.GetName"></a><div id="CElementObject.GetName-def"><a name="L107"></a><tt class="py-lineno">107</tt> <a class="py-toggle" href="#" id="CElementObject.GetName-toggle" onclick="return toggle('CElementObject.GetName');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Elements.Object.CElementObject-class.html#GetName">GetName</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CElementObject.GetName-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CElementObject.GetName-expanded"><a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-string">'Name'</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">attribs</tt><tt class="py-op">:</tt> </tt>
+<a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">attribs</tt><tt class="py-op">[</tt><tt class="py-string">'Name'</tt><tt class="py-op">]</tt> </tt>
+<a name="L110"></a><tt class="py-lineno">110</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L111"></a><tt class="py-lineno">111</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt id="link-17" class="py-name"><a title="lib.lib.UMLException" class="py-name" href="#" onclick="return doclink('link-17', 'UMLException', 'link-2');">UMLException</a></tt><tt class="py-op">(</tt><tt class="py-string">"KeyError"</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line"> </tt>
+<a name="CElementObject.GetAttribute"></a><div id="CElementObject.GetAttribute-def"><a name="L113"></a><tt class="py-lineno">113</tt> <a class="py-toggle" href="#" id="CElementObject.GetAttribute-toggle" onclick="return toggle('CElementObject.GetAttribute');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Elements.Object.CElementObject-class.html#GetAttribute">GetAttribute</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">key</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CElementObject.GetAttribute-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CElementObject.GetAttribute-expanded"><a name="L114"></a><tt class="py-lineno">114</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">key</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">attribs</tt><tt class="py-op">:</tt> </tt>
+<a name="L115"></a><tt class="py-lineno">115</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">attribs</tt><tt class="py-op">[</tt><tt class="py-name">key</tt><tt class="py-op">]</tt> </tt>
+<a name="L116"></a><tt class="py-lineno">116</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L117"></a><tt class="py-lineno">117</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">None</tt> </tt>
+</div><a name="L118"></a><tt class="py-lineno">118</tt>  <tt class="py-line">     </tt>
+<a name="CElementObject.GetAttributes"></a><div id="CElementObject.GetAttributes-def"><a name="L119"></a><tt class="py-lineno">119</tt> <a class="py-toggle" href="#" id="CElementObject.GetAttributes-toggle" onclick="return toggle('CElementObject.GetAttributes');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Elements.Object.CElementObject-class.html#GetAttributes">GetAttributes</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CElementObject.GetAttributes-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CElementObject.GetAttributes-expanded"><a name="L120"></a><tt class="py-lineno">120</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">attr</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">attribs</tt><tt class="py-op">:</tt> </tt>
+<a name="L121"></a><tt class="py-lineno">121</tt>  <tt class="py-line">            <tt class="py-keyword">yield</tt> <tt class="py-name">attr</tt> </tt>
+</div><a name="L122"></a><tt class="py-lineno">122</tt>  <tt class="py-line">         </tt>
+<a name="CElementObject.GetVisualProperty"></a><div id="CElementObject.GetVisualProperty-def"><a name="L123"></a><tt class="py-lineno">123</tt> <a class="py-toggle" href="#" id="CElementObject.GetVisualProperty-toggle" onclick="return toggle('CElementObject.GetVisualProperty');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Elements.Object.CElementObject-class.html#GetVisualProperty">GetVisualProperty</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">key</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CElementObject.GetVisualProperty-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CElementObject.GetVisualProperty-expanded"><a name="L124"></a><tt class="py-lineno">124</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">key</tt> <tt class="py-op">==</tt> <tt class="py-string">'CHILDREN'</tt><tt class="py-op">:</tt> </tt>
+<a name="L125"></a><tt class="py-lineno">125</tt>  <tt class="py-line">            <tt class="py-name">node</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">node</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L126"></a><tt class="py-lineno">126</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">node</tt> <tt class="py-keyword">is</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L127"></a><tt class="py-lineno">127</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L128"></a><tt class="py-lineno">128</tt>  <tt class="py-line">            <tt class="py-name">v</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L129"></a><tt class="py-lineno">129</tt>  <tt class="py-line">            <tt class="py-keyword">for</tt> <tt class="py-name">vi</tt> <tt class="py-keyword">in</tt> <tt class="py-name">node</tt><tt class="py-op">.</tt><tt id="link-18" class="py-name" targets="Method lib.Drawing.Objects.Container.CContainer.GetChilds()=lib.Drawing.Objects.Container.CContainer-class.html#GetChilds,Method lib.Project.ProjectNode.CProjectNode.GetChilds()=lib.Project.ProjectNode.CProjectNode-class.html#GetChilds"><a title="lib.Drawing.Objects.Container.CContainer.GetChilds
+lib.Project.ProjectNode.CProjectNode.GetChilds" class="py-name" href="#" onclick="return doclink('link-18', 'GetChilds', 'link-18');">GetChilds</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L130"></a><tt class="py-lineno">130</tt>  <tt class="py-line">                <tt class="py-name">o</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+<a name="L131"></a><tt class="py-lineno">131</tt>  <tt class="py-line">                <tt class="py-name">o</tt><tt class="py-op">[</tt><tt class="py-string">'icon'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">vi</tt><tt class="py-op">.</tt><tt id="link-19" class="py-name" targets="Method lib.Drawing.Connection.CConnection.GetObject()=lib.Drawing.Connection.CConnection-class.html#GetObject,Method lib.Drawing.Element.CElement.GetObject()=lib.Drawing.Element.CElement-class.html#GetObject,Method lib.Project.ProjectNode.CProjectNode.GetObject()=lib.Project.ProjectNode.CProjectNode-class.html#GetObject"><a title="lib.Drawing.Connection.CConnection.GetObject
+lib.Drawing.Element.CElement.GetObject
+lib.Project.ProjectNode.CProjectNode.GetObject" class="py-name" href="#" onclick="return doclink('link-19', 'GetObject', 'link-19');">GetObject</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-20" class="py-name" targets="Method lib.Connections.Object.CConnectionObject.GetType()=lib.Connections.Object.CConnectionObject-class.html#GetType,Method lib.Drawing.DrawingArea.CDrawingArea.GetType()=lib.Drawing.DrawingArea.CDrawingArea-class.html#GetType,Method lib.Elements.Object.CElementObject.GetType()=lib.Elements.Object.CElementObject-class.html#GetType,Method lib.Math2D.path.PathSingle.GetType()=lib.Math2D.path.PathSingle-class.html#GetType,Method lib.Project.ProjectNode.CProjectNode.GetType()=lib.Project.ProjectNode.CProjectNode-class.html#GetType"><a title="lib.Connections.Object.CConnectionObject.GetType
+lib.Drawing.DrawingArea.CDrawingArea.GetType
+lib.Elements.Object.CElementObject.GetType
+lib.Math2D.path.PathSingle.GetType
+lib.Project.ProjectNode.CProjectNode.GetType" class="py-name" href="#" onclick="return doclink('link-20', 'GetType', 'link-20');">GetType</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-21" class="py-name" targets="Method lib.Connections.Type.CConnectionType.GetIcon()=lib.Connections.Type.CConnectionType-class.html#GetIcon,Method lib.Diagrams.Type.CDiagramType.GetIcon()=lib.Diagrams.Type.CDiagramType-class.html#GetIcon,Method lib.Elements.Type.CElementType.GetIcon()=lib.Elements.Type.CElementType-class.html#GetIcon"><a title="lib.Connections.Type.CConnectionType.GetIcon
+lib.Diagrams.Type.CDiagramType.GetIcon
+lib.Elements.Type.CElementType.GetIcon" class="py-name" href="#" onclick="return doclink('link-21', 'GetIcon', 'link-21');">GetIcon</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L132"></a><tt class="py-lineno">132</tt>  <tt class="py-line">                <tt class="py-name">o</tt><tt class="py-op">[</tt><tt class="py-string">'name'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">vi</tt><tt class="py-op">.</tt><tt id="link-22" class="py-name"><a title="lib.Drawing.Connection.CConnection.GetObject
+lib.Drawing.Element.CElement.GetObject
+lib.Project.ProjectNode.CProjectNode.GetObject" class="py-name" href="#" onclick="return doclink('link-22', 'GetObject', 'link-19');">GetObject</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-23" class="py-name" targets="Method lib.Drawing.DrawingArea.CDrawingArea.GetName()=lib.Drawing.DrawingArea.CDrawingArea-class.html#GetName,Method lib.Elements.Object.CElementObject.GetName()=lib.Elements.Object.CElementObject-class.html#GetName,Method lib.Project.ProjectNode.CProjectNode.GetName()=lib.Project.ProjectNode.CProjectNode-class.html#GetName,Method lib.lib.UMLException.GetName()=lib.lib.UMLException-class.html#GetName"><a title="lib.Drawing.DrawingArea.CDrawingArea.GetName
+lib.Elements.Object.CElementObject.GetName
+lib.Project.ProjectNode.CProjectNode.GetName
+lib.lib.UMLException.GetName" class="py-name" href="#" onclick="return doclink('link-23', 'GetName', 'link-23');">GetName</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L133"></a><tt class="py-lineno">133</tt>  <tt class="py-line">                <tt class="py-name">v</tt><tt class="py-op">.</tt><tt id="link-24" class="py-name"><a title="lib.Math2D.path.PathSingle.append" class="py-name" href="#" onclick="return doclink('link-24', 'append', 'link-11');">append</a></tt><tt class="py-op">(</tt><tt class="py-name">o</tt><tt class="py-op">)</tt> </tt>
+<a name="L134"></a><tt class="py-lineno">134</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">v</tt> </tt>
+<a name="L135"></a><tt class="py-lineno">135</tt>  <tt class="py-line">        <tt class="py-name">attr</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">type</tt><tt class="py-op">.</tt><tt id="link-25" class="py-name" targets="Method lib.Connections.Type.CConnectionType.GetVisAttr()=lib.Connections.Type.CConnectionType-class.html#GetVisAttr,Method lib.Elements.Type.CElementType.GetVisAttr()=lib.Elements.Type.CElementType-class.html#GetVisAttr"><a title="lib.Connections.Type.CConnectionType.GetVisAttr
+lib.Elements.Type.CElementType.GetVisAttr" class="py-name" href="#" onclick="return doclink('link-25', 'GetVisAttr', 'link-25');">GetVisAttr</a></tt><tt class="py-op">(</tt><tt class="py-name">key</tt><tt class="py-op">)</tt> </tt>
+<a name="L136"></a><tt class="py-lineno">136</tt>  <tt class="py-line">        <tt class="py-name">type</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">type</tt><tt class="py-op">.</tt><tt id="link-26" class="py-name" targets="Method lib.Connections.Object.CConnectionObject.GetAttribute()=lib.Connections.Object.CConnectionObject-class.html#GetAttribute,Method lib.Connections.Type.CConnectionType.GetAttribute()=lib.Connections.Type.CConnectionType-class.html#GetAttribute,Method lib.Elements.Object.CElementObject.GetAttribute()=lib.Elements.Object.CElementObject-class.html#GetAttribute,Method lib.Elements.Type.CElementType.GetAttribute()=lib.Elements.Type.CElementType-class.html#GetAttribute"><a title="lib.Connections.Object.CConnectionObject.GetAttribute
+lib.Connections.Type.CConnectionType.GetAttribute
+lib.Elements.Object.CElementObject.GetAttribute
+lib.Elements.Type.CElementType.GetAttribute" class="py-name" href="#" onclick="return doclink('link-26', 'GetAttribute', 'link-26');">GetAttribute</a></tt><tt class="py-op">(</tt><tt class="py-name">attr</tt><tt class="py-op">)</tt> </tt>
+<a name="L137"></a><tt class="py-lineno">137</tt>  <tt class="py-line">        <tt class="py-name">val</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">attribs</tt><tt class="py-op">[</tt><tt class="py-name">attr</tt><tt class="py-op">]</tt> </tt>
+<a name="L138"></a><tt class="py-lineno">138</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">type</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> <tt class="py-op">==</tt> <tt class="py-string">'attrs'</tt><tt class="py-op">:</tt> </tt>
+<a name="L139"></a><tt class="py-lineno">139</tt>  <tt class="py-line">            <tt class="py-name">v</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L140"></a><tt class="py-lineno">140</tt>  <tt class="py-line">            <tt class="py-keyword">for</tt> <tt class="py-name">vi</tt> <tt class="py-keyword">in</tt> <tt class="py-name">val</tt><tt class="py-op">:</tt> </tt>
+<a name="L141"></a><tt class="py-lineno">141</tt>  <tt class="py-line">                <tt class="py-name">s</tt> <tt class="py-op">=</tt> <tt class="py-string">''</tt> </tt>
+<a name="L142"></a><tt class="py-lineno">142</tt>  <tt class="py-line">                <tt class="py-name">o</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+<a name="L143"></a><tt class="py-lineno">143</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">vi</tt><tt class="py-op">[</tt><tt class="py-string">'scope'</tt><tt class="py-op">]</tt> <tt class="py-op">==</tt> <tt class="py-string">'private'</tt><tt class="py-op">:</tt> </tt>
+<a name="L144"></a><tt class="py-lineno">144</tt>  <tt class="py-line">                    <tt class="py-name">o</tt><tt class="py-op">[</tt><tt class="py-string">'scope'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-string">'-'</tt> </tt>
+<a name="L145"></a><tt class="py-lineno">145</tt>  <tt class="py-line">                <tt class="py-keyword">elif</tt> <tt class="py-name">vi</tt><tt class="py-op">[</tt><tt class="py-string">'scope'</tt><tt class="py-op">]</tt> <tt class="py-op">==</tt> <tt class="py-string">'public'</tt><tt class="py-op">:</tt> </tt>
+<a name="L146"></a><tt class="py-lineno">146</tt>  <tt class="py-line">                    <tt class="py-name">o</tt><tt class="py-op">[</tt><tt class="py-string">'scope'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-string">'+'</tt> </tt>
+<a name="L147"></a><tt class="py-lineno">147</tt>  <tt class="py-line">                <tt class="py-keyword">elif</tt> <tt class="py-name">vi</tt><tt class="py-op">[</tt><tt class="py-string">'scope'</tt><tt class="py-op">]</tt> <tt class="py-op">==</tt> <tt class="py-string">'protected'</tt><tt class="py-op">:</tt> </tt>
+<a name="L148"></a><tt class="py-lineno">148</tt>  <tt class="py-line">                    <tt class="py-name">o</tt><tt class="py-op">[</tt><tt class="py-string">'scope'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-string">'#'</tt> </tt>
+<a name="L149"></a><tt class="py-lineno">149</tt>  <tt class="py-line">                <tt class="py-name">l</tt> <tt class="py-op">=</tt> <tt class="py-name">vi</tt><tt class="py-op">[</tt><tt class="py-string">'name'</tt><tt class="py-op">]</tt> </tt>
+<a name="L150"></a><tt class="py-lineno">150</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-string">'type'</tt> <tt class="py-keyword">in</tt> <tt class="py-name">vi</tt> <tt class="py-keyword">and</tt> <tt class="py-name">vi</tt><tt class="py-op">[</tt><tt class="py-string">'type'</tt><tt class="py-op">]</tt><tt class="py-op">:</tt> </tt>
+<a name="L151"></a><tt class="py-lineno">151</tt>  <tt class="py-line">                    <tt class="py-name">l</tt> <tt class="py-op">+=</tt> <tt class="py-string">": "</tt><tt class="py-op">+</tt><tt class="py-name">vi</tt><tt class="py-op">[</tt><tt class="py-string">'type'</tt><tt class="py-op">]</tt> </tt>
+<a name="L152"></a><tt class="py-lineno">152</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-string">'initial'</tt> <tt class="py-keyword">in</tt> <tt class="py-name">vi</tt> <tt class="py-keyword">and</tt> <tt class="py-name">vi</tt><tt class="py-op">[</tt><tt class="py-string">'initial'</tt><tt class="py-op">]</tt><tt class="py-op">:</tt> </tt>
+<a name="L153"></a><tt class="py-lineno">153</tt>  <tt class="py-line">                    <tt class="py-name">l</tt> <tt class="py-op">+=</tt> <tt class="py-string">" = "</tt><tt class="py-op">+</tt><tt class="py-name">vi</tt><tt class="py-op">[</tt><tt class="py-string">'initial'</tt><tt class="py-op">]</tt> </tt>
+<a name="L154"></a><tt class="py-lineno">154</tt>  <tt class="py-line">                <tt class="py-name">o</tt><tt class="py-op">[</tt><tt class="py-string">'line'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">l</tt> </tt>
+<a name="L155"></a><tt class="py-lineno">155</tt>  <tt class="py-line">                <tt class="py-name">v</tt><tt class="py-op">.</tt><tt id="link-27" class="py-name"><a title="lib.Math2D.path.PathSingle.append" class="py-name" href="#" onclick="return doclink('link-27', 'append', 'link-11');">append</a></tt><tt class="py-op">(</tt><tt class="py-name">o</tt><tt class="py-op">)</tt> </tt>
+<a name="L156"></a><tt class="py-lineno">156</tt>  <tt class="py-line">            <tt class="py-name">val</tt> <tt class="py-op">=</tt> <tt class="py-name">v</tt> </tt>
+<a name="L157"></a><tt class="py-lineno">157</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-name">type</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> <tt class="py-op">==</tt> <tt class="py-string">'opers'</tt><tt class="py-op">:</tt> </tt>
+<a name="L158"></a><tt class="py-lineno">158</tt>  <tt class="py-line">            <tt class="py-name">v</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L159"></a><tt class="py-lineno">159</tt>  <tt class="py-line">            <tt class="py-keyword">for</tt> <tt class="py-name">vi</tt> <tt class="py-keyword">in</tt> <tt class="py-name">val</tt><tt class="py-op">:</tt> </tt>
+<a name="L160"></a><tt class="py-lineno">160</tt>  <tt class="py-line">                <tt class="py-name">s</tt> <tt class="py-op">=</tt> <tt class="py-string">''</tt> </tt>
+<a name="L161"></a><tt class="py-lineno">161</tt>  <tt class="py-line">                <tt class="py-name">o</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+<a name="L162"></a><tt class="py-lineno">162</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">vi</tt><tt class="py-op">[</tt><tt class="py-string">'scope'</tt><tt class="py-op">]</tt> <tt class="py-op">==</tt> <tt class="py-string">'private'</tt><tt class="py-op">:</tt> </tt>
+<a name="L163"></a><tt class="py-lineno">163</tt>  <tt class="py-line">                    <tt class="py-name">o</tt><tt class="py-op">[</tt><tt class="py-string">'scope'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-string">'-'</tt> </tt>
+<a name="L164"></a><tt class="py-lineno">164</tt>  <tt class="py-line">                <tt class="py-keyword">elif</tt> <tt class="py-name">vi</tt><tt class="py-op">[</tt><tt class="py-string">'scope'</tt><tt class="py-op">]</tt> <tt class="py-op">==</tt> <tt class="py-string">'public'</tt><tt class="py-op">:</tt> </tt>
+<a name="L165"></a><tt class="py-lineno">165</tt>  <tt class="py-line">                    <tt class="py-name">o</tt><tt class="py-op">[</tt><tt class="py-string">'scope'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-string">'+'</tt> </tt>
+<a name="L166"></a><tt class="py-lineno">166</tt>  <tt class="py-line">                <tt class="py-keyword">elif</tt> <tt class="py-name">vi</tt><tt class="py-op">[</tt><tt class="py-string">'scope'</tt><tt class="py-op">]</tt> <tt class="py-op">==</tt> <tt class="py-string">'protected'</tt><tt class="py-op">:</tt> </tt>
+<a name="L167"></a><tt class="py-lineno">167</tt>  <tt class="py-line">                    <tt class="py-name">o</tt><tt class="py-op">[</tt><tt class="py-string">'scope'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-string">'#'</tt> </tt>
+<a name="L168"></a><tt class="py-lineno">168</tt>  <tt class="py-line">                <tt class="py-name">l</tt> <tt class="py-op">=</tt> <tt class="py-name">vi</tt><tt class="py-op">[</tt><tt class="py-string">'name'</tt><tt class="py-op">]</tt> </tt>
+<a name="L169"></a><tt class="py-lineno">169</tt>  <tt class="py-line">                <tt class="py-name">l</tt> <tt class="py-op">+=</tt> <tt class="py-string">"("</tt> </tt>
+<a name="L170"></a><tt class="py-lineno">170</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-string">'params'</tt> <tt class="py-keyword">in</tt> <tt class="py-name">vi</tt> <tt class="py-keyword">and</tt> <tt class="py-name">vi</tt><tt class="py-op">[</tt><tt class="py-string">'params'</tt><tt class="py-op">]</tt><tt class="py-op">:</tt> </tt>
+<a name="L171"></a><tt class="py-lineno">171</tt>  <tt class="py-line">                    <tt class="py-name">l</tt> <tt class="py-op">+=</tt> <tt class="py-name">vi</tt><tt class="py-op">[</tt><tt class="py-string">'params'</tt><tt class="py-op">]</tt> </tt>
+<a name="L172"></a><tt class="py-lineno">172</tt>  <tt class="py-line">                <tt class="py-name">l</tt> <tt class="py-op">+=</tt> <tt class="py-string">")"</tt> </tt>
+<a name="L173"></a><tt class="py-lineno">173</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-string">'type'</tt> <tt class="py-keyword">in</tt> <tt class="py-name">vi</tt> <tt class="py-keyword">and</tt> <tt class="py-name">vi</tt><tt class="py-op">[</tt><tt class="py-string">'type'</tt><tt class="py-op">]</tt><tt class="py-op">:</tt> </tt>
+<a name="L174"></a><tt class="py-lineno">174</tt>  <tt class="py-line">                    <tt class="py-name">l</tt> <tt class="py-op">+=</tt> <tt class="py-string">": "</tt><tt class="py-op">+</tt><tt class="py-name">vi</tt><tt class="py-op">[</tt><tt class="py-string">'type'</tt><tt class="py-op">]</tt> </tt>
+<a name="L175"></a><tt class="py-lineno">175</tt>  <tt class="py-line">                <tt class="py-name">o</tt><tt class="py-op">[</tt><tt class="py-string">'line'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">l</tt> </tt>
+<a name="L176"></a><tt class="py-lineno">176</tt>  <tt class="py-line">                <tt class="py-name">v</tt><tt class="py-op">.</tt><tt id="link-28" class="py-name"><a title="lib.Math2D.path.PathSingle.append" class="py-name" href="#" onclick="return doclink('link-28', 'append', 'link-11');">append</a></tt><tt class="py-op">(</tt><tt class="py-name">o</tt><tt class="py-op">)</tt> </tt>
+<a name="L177"></a><tt class="py-lineno">177</tt>  <tt class="py-line">            <tt class="py-name">val</tt> <tt class="py-op">=</tt> <tt class="py-name">v</tt> </tt>
+<a name="L178"></a><tt class="py-lineno">178</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">val</tt> </tt>
+</div><a name="L179"></a><tt class="py-lineno">179</tt>  <tt class="py-line"> </tt>
+<a name="CElementObject.Paint"></a><div id="CElementObject.Paint-def"><a name="L180"></a><tt class="py-lineno">180</tt> <a class="py-toggle" href="#" id="CElementObject.Paint-toggle" onclick="return toggle('CElementObject.Paint');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Elements.Object.CElementObject-class.html#Paint">Paint</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">canvas</tt><tt class="py-op">,</tt> <tt class="py-param">element</tt><tt class="py-op">,</tt> <tt class="py-param">delta</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-number">0</tt><tt class="py-op">,</tt> <tt class="py-number">0</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CElementObject.Paint-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CElementObject.Paint-expanded"><a name="L181"></a><tt class="py-lineno">181</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">type</tt><tt class="py-op">.</tt><tt id="link-29" class="py-name" targets="Method lib.Connections.Arrow.CConnectionArrow.Paint()=lib.Connections.Arrow.CConnectionArrow-class.html#Paint,Method lib.Connections.Line.CConnectionLine.Paint()=lib.Connections.Line.CConnectionLine-class.html#Paint,Method lib.Connections.Object.CConnectionObject.Paint()=lib.Connections.Object.CConnectionObject-class.html#Paint,Method lib.Connections.Type.CConnectionType.Paint()=lib.Connections.Type.CConnectionType-class.html#Paint,Method lib.Drawing.Connection.CConnection.Paint()=lib.Drawing.Connection.CConnection-class.html#Paint,Method lib.Drawing.DrawingArea.CDrawingArea.Paint()=lib.Drawing.DrawingArea.CDrawingArea-class.html#Paint,Method lib.Drawing.Element.CElement.Paint()=lib.Drawing.Element.CElement-class.html#Paint,Method lib.Drawing.Objects.Align.CAlign.Paint()=lib.Drawing.Objects.Align.CAlign-class.html#Paint,Method lib.Drawing.Objects.Condition.CCondition.Paint()=lib.Drawing.Objects.Condition.CCondition-class.html#Paint,Method lib.Drawing.Objects.Container.CContainer.Paint()=lib.Drawing.Objects.Container.CContainer-class.html#Paint,Method lib.Drawing.Objects.Ellipse.CEllipse.Paint()=lib.Drawing.Objects.Ellipse.CEllipse-class.html#Paint,Method lib.Drawing.Objects.HBox.CHBox.Paint()=lib.Drawing.Objects.HBox.CHBox-class.html#Paint,Method lib.Drawing.Objects.Icon.CIcon.Paint()=lib.Drawing.Objects.Icon.CIcon-class.html#Paint,Method lib.Drawing.Objects.Line.CLine.Paint()=lib.Drawing.Objects.Line.CLine-class.html#Paint,Method lib.Drawing.Objects.Loop.CLoop.Paint()=lib.Drawing.Objects.Loop.CLoop-class.html#Paint,Method lib.Drawing.Objects.Padding.CPadding.Paint()=lib.Drawing.Objects.Padding.CPadding-class.html#Paint,Method lib.Drawing.Objects.Rectangle.CRectangle.Paint()=lib.Drawing.Objects.Rectangle.CRectangle-class.html#Paint,Method lib.Drawing.Objects.Shadow.CShadow.Paint()=lib.Drawing.Objects.Shadow.CShadow-class.html#Paint,Method lib.Drawing.Objects.Sizer.CSizer.Paint()=lib.Drawing.Objects.Sizer.CSizer-class.html#Paint,Method lib.Drawing.Objects.Svg.CSvg.Paint()=lib.Drawing.Objects.Svg.CSvg-class.html#Paint,Method lib.Drawing.Objects.TextBox.CTextBox.Paint()=lib.Drawing.Objects.TextBox.CTextBox-class.html#Paint,Method lib.Drawing.Objects.VBox.CVBox.Paint()=lib.Drawing.Objects.VBox.CVBox-class.html#Paint,Method lib.Drawing.Objects.VisualObject.CVisualObject.Paint()=lib.Drawing.Objects.VisualObject.CVisualObject-class.html#Paint,Method lib.Elements.Object.CElementObject.Paint()=lib.Elements.Object.CElementObject-class.html#Paint,Method lib.Elements.Type.CElementType.Paint()=lib.Elements.Type.CElementType-class.html#Paint,Method lib.Gui.picDrawingArea.CpicDrawingArea.Paint()=lib.Gui.picDrawingArea.CpicDrawingArea-class.html#Paint"><a title="lib.Connections.Arrow.CConnectionArrow.Paint
+lib.Connections.Line.CConnectionLine.Paint
+lib.Connections.Object.CConnectionObject.Paint
+lib.Connections.Type.CConnectionType.Paint
+lib.Drawing.Connection.CConnection.Paint
+lib.Drawing.DrawingArea.CDrawingArea.Paint
+lib.Drawing.Element.CElement.Paint
+lib.Drawing.Objects.Align.CAlign.Paint
+lib.Drawing.Objects.Condition.CCondition.Paint
+lib.Drawing.Objects.Container.CContainer.Paint
+lib.Drawing.Objects.Ellipse.CEllipse.Paint
+lib.Drawing.Objects.HBox.CHBox.Paint
+lib.Drawing.Objects.Icon.CIcon.Paint
+lib.Drawing.Objects.Line.CLine.Paint
+lib.Drawing.Objects.Loop.CLoop.Paint
+lib.Drawing.Objects.Padding.CPadding.Paint
+lib.Drawing.Objects.Rectangle.CRectangle.Paint
+lib.Drawing.Objects.Shadow.CShadow.Paint
+lib.Drawing.Objects.Sizer.CSizer.Paint
+lib.Drawing.Objects.Svg.CSvg.Paint
+lib.Drawing.Objects.TextBox.CTextBox.Paint
+lib.Drawing.Objects.VBox.CVBox.Paint
+lib.Drawing.Objects.VisualObject.CVisualObject.Paint
+lib.Elements.Object.CElementObject.Paint
+lib.Elements.Type.CElementType.Paint
+lib.Gui.picDrawingArea.CpicDrawingArea.Paint" class="py-name" href="#" onclick="return doclink('link-29', 'Paint', 'link-29');">Paint</a></tt><tt class="py-op">(</tt><tt class="py-name">canvas</tt><tt class="py-op">,</tt> <tt class="py-name">element</tt><tt class="py-op">,</tt> <tt class="py-name">delta</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L182"></a><tt class="py-lineno">182</tt>  <tt class="py-line"> </tt>
+<a name="CElementObject.RemoveAttribute"></a><div id="CElementObject.RemoveAttribute-def"><a name="L183"></a><tt class="py-lineno">183</tt> <a class="py-toggle" href="#" id="CElementObject.RemoveAttribute-toggle" onclick="return toggle('CElementObject.RemoveAttribute');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Elements.Object.CElementObject-class.html#RemoveAttribute">RemoveAttribute</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">key</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CElementObject.RemoveAttribute-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CElementObject.RemoveAttribute-expanded"><a name="L184"></a><tt class="py-lineno">184</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">revision</tt> <tt class="py-op">+=</tt> <tt class="py-number">1</tt> </tt>
+<a name="L185"></a><tt class="py-lineno">185</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">attribs</tt><tt class="py-op">.</tt><tt class="py-name">has_key</tt><tt class="py-op">(</tt><tt class="py-name">key</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L186"></a><tt class="py-lineno">186</tt>  <tt class="py-line">            <tt class="py-keyword">del</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">attribs</tt><tt class="py-op">[</tt><tt class="py-name">key</tt><tt class="py-op">]</tt> </tt>
+<a name="L187"></a><tt class="py-lineno">187</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L188"></a><tt class="py-lineno">188</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt id="link-30" class="py-name"><a title="lib.lib.UMLException" class="py-name" href="#" onclick="return doclink('link-30', 'UMLException', 'link-2');">UMLException</a></tt><tt class="py-op">(</tt><tt class="py-string">"KeyError"</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L189"></a><tt class="py-lineno">189</tt>  <tt class="py-line">     </tt>
+<a name="CElementObject.HasAttribute"></a><div id="CElementObject.HasAttribute-def"><a name="L190"></a><tt class="py-lineno">190</tt> <a class="py-toggle" href="#" id="CElementObject.HasAttribute-toggle" onclick="return toggle('CElementObject.HasAttribute');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Elements.Object.CElementObject-class.html#HasAttribute">HasAttribute</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">key</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CElementObject.HasAttribute-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CElementObject.HasAttribute-expanded"><a name="L191"></a><tt class="py-lineno">191</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">key</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">attribs</tt> </tt>
+</div><a name="L192"></a><tt class="py-lineno">192</tt>  <tt class="py-line">             </tt>
+<a name="CElementObject.SetAttribute"></a><div id="CElementObject.SetAttribute-def"><a name="L193"></a><tt class="py-lineno">193</tt> <a class="py-toggle" href="#" id="CElementObject.SetAttribute-toggle" onclick="return toggle('CElementObject.SetAttribute');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Elements.Object.CElementObject-class.html#SetAttribute">SetAttribute</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">key</tt><tt class="py-op">,</tt> <tt class="py-param">value</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CElementObject.SetAttribute-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CElementObject.SetAttribute-expanded"><a name="L194"></a><tt class="py-lineno">194</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">revision</tt> <tt class="py-op">+=</tt> <tt class="py-number">1</tt> </tt>
+<a name="L195"></a><tt class="py-lineno">195</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">attribs</tt><tt class="py-op">[</tt><tt class="py-name">key</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">type</tt><tt class="py-op">.</tt><tt id="link-31" class="py-name" targets="Method lib.Elements.Type.CElementType.TypeCastAttribute()=lib.Elements.Type.CElementType-class.html#TypeCastAttribute"><a title="lib.Elements.Type.CElementType.TypeCastAttribute" class="py-name" href="#" onclick="return doclink('link-31', 'TypeCastAttribute', 'link-31');">TypeCastAttribute</a></tt><tt class="py-op">(</tt><tt class="py-name">key</tt><tt class="py-op">,</tt> <tt class="py-name">value</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L196"></a><tt class="py-lineno">196</tt>  <tt class="py-line">         </tt>
+<a name="CElementObject.Disconnect"></a><div id="CElementObject.Disconnect-def"><a name="L197"></a><tt class="py-lineno">197</tt> <a class="py-toggle" href="#" id="CElementObject.Disconnect-toggle" onclick="return toggle('CElementObject.Disconnect');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Elements.Object.CElementObject-class.html#Disconnect">Disconnect</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">connection</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CElementObject.Disconnect-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CElementObject.Disconnect-expanded"><a name="L198"></a><tt class="py-lineno">198</tt>  <tt class="py-line">        <tt class="py-name">connection</tt><tt class="py-op">.</tt><tt id="link-32" class="py-name" targets="Method lib.Connections.Object.CConnectionObject.Disconnect()=lib.Connections.Object.CConnectionObject-class.html#Disconnect,Method lib.Elements.Object.CElementObject.Disconnect()=lib.Elements.Object.CElementObject-class.html#Disconnect"><a title="lib.Connections.Object.CConnectionObject.Disconnect
+lib.Elements.Object.CElementObject.Disconnect" class="py-name" href="#" onclick="return doclink('link-32', 'Disconnect', 'link-32');">Disconnect</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L199"></a><tt class="py-lineno">199</tt>  <tt class="py-line">         </tt>
+<a name="CElementObject.RemoveConnection"></a><div id="CElementObject.RemoveConnection-def"><a name="L200"></a><tt class="py-lineno">200</tt> <a class="py-toggle" href="#" id="CElementObject.RemoveConnection-toggle" onclick="return toggle('CElementObject.RemoveConnection');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Elements.Object.CElementObject-class.html#RemoveConnection">RemoveConnection</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">connection</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CElementObject.RemoveConnection-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CElementObject.RemoveConnection-expanded"><a name="L201"></a><tt class="py-lineno">201</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">revision</tt> <tt class="py-op">+=</tt> <tt class="py-number">1</tt> </tt>
+<a name="L202"></a><tt class="py-lineno">202</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">connection</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">connections</tt><tt class="py-op">:</tt> </tt>
+<a name="L203"></a><tt class="py-lineno">203</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">connections</tt><tt class="py-op">.</tt><tt class="py-name">remove</tt><tt class="py-op">(</tt><tt class="py-name">connection</tt><tt class="py-op">)</tt> </tt>
+<a name="L204"></a><tt class="py-lineno">204</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L205"></a><tt class="py-lineno">205</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt id="link-33" class="py-name"><a title="lib.lib.UMLException" class="py-name" href="#" onclick="return doclink('link-33', 'UMLException', 'link-2');">UMLException</a></tt><tt class="py-op">(</tt><tt class="py-string">"ConnectionNotFound"</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L206"></a><tt class="py-lineno">206</tt>  <tt class="py-line">      </tt>
+<a name="L207"></a><tt class="py-lineno">207</tt>  <tt class="py-line">    <tt class="py-comment"># Automaticke generovanie mena elementu </tt> </tt>
+<a name="L208"></a><tt class="py-lineno">208</tt>  <tt class="py-line"><tt class="py-comment"></tt>    <tt class="py-comment"># pomocou cprojNode zisti mena elementov na rovnakej urovni</tt> </tt>
+<a name="L209"></a><tt class="py-lineno">209</tt>  <tt class="py-line"><tt class="py-comment"></tt>    <tt class="py-comment"># ak meno uz existuje (a je rovnaky typ), objekt sa premenuje</tt> </tt>
+<a name="CElementObject.Assign"></a><div id="CElementObject.Assign-def"><a name="L210"></a><tt class="py-lineno">210</tt> <a class="py-toggle" href="#" id="CElementObject.Assign-toggle" onclick="return toggle('CElementObject.Assign');">-</a><tt class="py-line"><tt class="py-comment"></tt>    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Elements.Object.CElementObject-class.html#Assign">Assign</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">cprojNode</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CElementObject.Assign-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CElementObject.Assign-expanded"><a name="L211"></a><tt class="py-lineno">211</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">type</tt><tt class="py-op">.</tt><tt id="link-34" class="py-name"><a title="lib.Elements.Type.CElementType.GetGenerateName" class="py-name" href="#" onclick="return doclink('link-34', 'GetGenerateName', 'link-7');">GetGenerateName</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L212"></a><tt class="py-lineno">212</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> </tt>
+<a name="L213"></a><tt class="py-lineno">213</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">revision</tt> <tt class="py-op">+=</tt> <tt class="py-number">1</tt> </tt>
+<a name="L214"></a><tt class="py-lineno">214</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">node</tt> <tt class="py-op">=</tt> <tt class="py-name">weakref</tt><tt class="py-op">.</tt><tt class="py-name">ref</tt><tt class="py-op">(</tt><tt class="py-name">cprojNode</tt><tt class="py-op">)</tt> </tt>
+<a name="L215"></a><tt class="py-lineno">215</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">cprojNode</tt><tt class="py-op">.</tt><tt class="py-name">parent</tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L216"></a><tt class="py-lineno">216</tt>  <tt class="py-line">            <tt id="link-35" class="py-name" targets="Method lib.lib.IDGenerator.id()=lib.lib.IDGenerator-class.html#id"><a title="lib.lib.IDGenerator.id" class="py-name" href="#" onclick="return doclink('link-35', 'id', 'link-35');">id</a></tt> <tt class="py-op">=</tt> <tt class="py-number">1</tt> </tt>
+<a name="L217"></a><tt class="py-lineno">217</tt>  <tt class="py-line">            <tt class="py-comment"># zisti nazvy / typy deti, porovnaj a pripadne sa premenuj</tt> </tt>
+<a name="L218"></a><tt class="py-lineno">218</tt>  <tt class="py-line"><tt class="py-comment"></tt>            <tt class="py-name">checkNames</tt> <tt class="py-op">=</tt> <tt class="py-name">True</tt> </tt>
+<a name="L219"></a><tt class="py-lineno">219</tt>  <tt class="py-line">            <tt class="py-keyword">while</tt> <tt class="py-name">checkNames</tt> <tt class="py-op">:</tt> </tt>
+<a name="L220"></a><tt class="py-lineno">220</tt>  <tt class="py-line">                <tt class="py-name">checkNames</tt> <tt class="py-op">=</tt> <tt class="py-name">False</tt> </tt>
+<a name="L221"></a><tt class="py-lineno">221</tt>  <tt class="py-line">                <tt class="py-keyword">for</tt> <tt class="py-name">child</tt> <tt class="py-keyword">in</tt> <tt class="py-name">cprojNode</tt><tt class="py-op">.</tt><tt class="py-name">parent</tt><tt class="py-op">.</tt><tt class="py-name">childs</tt><tt class="py-op">:</tt> </tt>
+<a name="L222"></a><tt class="py-lineno">222</tt>  <tt class="py-line">                    <tt class="py-keyword">if</tt> <tt class="py-name">child</tt><tt class="py-op">.</tt><tt id="link-36" class="py-name"><a title="lib.Drawing.DrawingArea.CDrawingArea.GetName
+lib.Elements.Object.CElementObject.GetName
+lib.Project.ProjectNode.CProjectNode.GetName
+lib.lib.UMLException.GetName" class="py-name" href="#" onclick="return doclink('link-36', 'GetName', 'link-23');">GetName</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-37" class="py-name"><a title="lib.Drawing.DrawingArea.CDrawingArea.GetName
+lib.Elements.Object.CElementObject.GetName
+lib.Project.ProjectNode.CProjectNode.GetName
+lib.lib.UMLException.GetName" class="py-name" href="#" onclick="return doclink('link-37', 'GetName', 'link-23');">GetName</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-keyword">and</tt> <tt class="py-name">child</tt><tt class="py-op">.</tt><tt id="link-38" class="py-name"><a title="lib.Drawing.Connection.CConnection.GetObject
+lib.Drawing.Element.CElement.GetObject
+lib.Project.ProjectNode.CProjectNode.GetObject" class="py-name" href="#" onclick="return doclink('link-38', 'GetObject', 'link-19');">GetObject</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-39" class="py-name"><a title="lib.Connections.Object.CConnectionObject.GetType
+lib.Drawing.DrawingArea.CDrawingArea.GetType
+lib.Elements.Object.CElementObject.GetType
+lib.Math2D.path.PathSingle.GetType
+lib.Project.ProjectNode.CProjectNode.GetType" class="py-name" href="#" onclick="return doclink('link-39', 'GetType', 'link-20');">GetType</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-keyword">is</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-40" class="py-name"><a title="lib.Connections.Object.CConnectionObject.GetType
+lib.Drawing.DrawingArea.CDrawingArea.GetType
+lib.Elements.Object.CElementObject.GetType
+lib.Math2D.path.PathSingle.GetType
+lib.Project.ProjectNode.CProjectNode.GetType" class="py-name" href="#" onclick="return doclink('link-40', 'GetType', 'link-20');">GetType</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L223"></a><tt class="py-lineno">223</tt>  <tt class="py-line">                        <tt class="py-name">nName</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-41" class="py-name"><a title="lib.Drawing.DrawingArea.CDrawingArea.GetName
+lib.Elements.Object.CElementObject.GetName
+lib.Project.ProjectNode.CProjectNode.GetName
+lib.lib.UMLException.GetName" class="py-name" href="#" onclick="return doclink('link-41', 'GetName', 'link-23');">GetName</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L224"></a><tt class="py-lineno">224</tt>  <tt class="py-line">                        <tt class="py-keyword">while</tt> <tt class="py-name">nName</tt><tt class="py-op">[</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt class="py-name">isdigit</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> <tt class="py-comment"># useknem cisla</tt> </tt>
+<a name="L225"></a><tt class="py-lineno">225</tt>  <tt class="py-line">                            <tt class="py-name">nName</tt> <tt class="py-op">=</tt> <tt class="py-name">nName</tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> </tt>
+<a name="L226"></a><tt class="py-lineno">226</tt>  <tt class="py-line">                        <tt class="py-keyword">if</tt> <tt class="py-name">nName</tt><tt class="py-op">.</tt><tt class="py-name">endswith</tt><tt class="py-op">(</tt><tt class="py-string">' '</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L227"></a><tt class="py-lineno">227</tt>  <tt class="py-line">                            <tt class="py-name">nName</tt> <tt class="py-op">=</tt> <tt class="py-name">nName</tt> <tt class="py-op">+</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt id="link-42" class="py-name"><a title="lib.lib.IDGenerator.id" class="py-name" href="#" onclick="return doclink('link-42', 'id', 'link-35');">id</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L228"></a><tt class="py-lineno">228</tt>  <tt class="py-line">                        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L229"></a><tt class="py-lineno">229</tt>  <tt class="py-line">                            <tt class="py-name">nName</tt> <tt class="py-op">=</tt> <tt class="py-name">nName</tt> <tt class="py-op">+</tt> <tt class="py-string">' '</tt> <tt class="py-op">+</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt id="link-43" class="py-name"><a title="lib.lib.IDGenerator.id" class="py-name" href="#" onclick="return doclink('link-43', 'id', 'link-35');">id</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L230"></a><tt class="py-lineno">230</tt>  <tt class="py-line">                        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-44" class="py-name"><a title="lib.Connections.Object.CConnectionObject.SetAttribute
+lib.Elements.Object.CElementObject.SetAttribute" class="py-name" href="#" onclick="return doclink('link-44', 'SetAttribute', 'link-5');">SetAttribute</a></tt><tt class="py-op">(</tt><tt class="py-string">'Name'</tt><tt class="py-op">,</tt> <tt class="py-name">nName</tt><tt class="py-op">)</tt> </tt>
+<a name="L231"></a><tt class="py-lineno">231</tt>  <tt class="py-line">                        <tt id="link-45" class="py-name"><a title="lib.lib.IDGenerator.id" class="py-name" href="#" onclick="return doclink('link-45', 'id', 'link-35');">id</a></tt> <tt class="py-op">=</tt> <tt id="link-46" class="py-name"><a title="lib.lib.IDGenerator.id" class="py-name" href="#" onclick="return doclink('link-46', 'id', 'link-35');">id</a></tt> <tt class="py-op">+</tt> <tt class="py-number">1</tt> </tt>
+<a name="L232"></a><tt class="py-lineno">232</tt>  <tt class="py-line">                        <tt class="py-name">checkNames</tt> <tt class="py-op">=</tt> <tt class="py-name">True</tt> <tt class="py-comment">#znovu prekontroluj nazvy</tt> </tt>
+<a name="L233"></a><tt class="py-lineno">233</tt>  <tt class="py-line">            <tt class="py-name">cprojNode</tt><tt class="py-op">.</tt><tt id="link-47" class="py-name" targets="Method lib.Project.ProjectNode.CProjectNode.Change()=lib.Project.ProjectNode.CProjectNode-class.html#Change"><a title="lib.Project.ProjectNode.CProjectNode.Change" class="py-name" href="#" onclick="return doclink('link-47', 'Change', 'link-47');">Change</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L234"></a><tt class="py-lineno">234</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="lib-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://umlfri.kst.fri.uniza.sk/">UML .FRI</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sun Mar 30 19:33:54 2008
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

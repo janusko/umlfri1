@@ -6,8 +6,20 @@ from Type import CElementType
 
 from lib.Drawing.Objects import ALL
 
-class CElementFactory:
+class CElementFactory(object):
+    """
+    Factory, that creates element type objects
+    """
     def __init__(self, storage, path):
+        """
+        Create the element factory
+        
+        @param storage: Storage in which is file located
+        @type  storage: L{CAbstractStorage<lib.Storages.AbstractStorage.CAbstractStorage>}
+        
+        @param path: Path to directory with connection metamodel XMLs
+        @type path: string
+        """
         self.types = {}
         self.path = path
         
@@ -17,9 +29,21 @@ class CElementFactory:
                 self.__Load(os.path.join(self.path, file))
 
     def GetElement(self, type):
+        """
+        Get element type by name
+        
+        @param type: Element type name
+        @type  type: string
+        """
         return self.types[type]
 
     def __Load(self, file_path):
+        """
+        Load an XMLs from given path
+        
+        @param file_path: Path to connections metamodel (within storage)
+        @type  file_path: string
+        """
         dom = xml.dom.minidom.parseString(self.storage.read_file(file_path))
         root = dom.documentElement
         if root.tagName != 'ElementType':
@@ -95,6 +119,15 @@ class CElementFactory:
         self.types[root.getAttribute('id')] = obj
     
     def __LoadAppearance(self, root):
+        """
+        Loads an appearance section of an XML file
+        
+        @param root: Appearance element
+        @type  root: L{Element<xml.dom.minidom.Element>}
+        
+        @return: Visual object representing this section
+        @rtype:  L{CVisualObject<lib.Drawing.Objects.VisualObject.CVisualObject>}
+        """
         if root.tagName not in ALL:
             raise UMLException("XMLError", root.tagName)
         cls = ALL[root.tagName]
