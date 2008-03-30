@@ -1,8 +1,17 @@
 from lib.lib import UMLException
 import weakref
 
-class CElementObject:
+class CElementObject(object):
+    """
+    Object that represents logical element and its properties
+    """
     def __init__(self, type):
+        """
+        Initialize element object and set it into default state
+        
+        @param type: Type of the new element
+        @type  type: L{CElementType<Type.CElementType>}
+        """
         self.revision = 0
         self.type = type
         self.path = None
@@ -18,22 +27,61 @@ class CElementObject:
         self.appears = []
     
     def GetRevision(self):
+        """
+        Get revision of this object. Revision is incremented after each
+        object state chage
+        
+        @return: Object revision
+        @rtype:  integer
+        """
         return self.revision
     
     def GetAppears(self):
+        """
+        Get list of object appearances on drawing areas
+        
+        @return: list of drawing areas
+        @rtype:  iterator over L{CDrawingArea<lib.Drawing.DrawingArea.CDrawingArea>}
+        """
         for i in self.appears:
             yield i
 
     def AddAppears(self, drawingArea):
+        """
+        Add element appearance
+        
+        @param drawingArea: Drawing area on which element appears
+        @type  drawingArea: L{CDrawingArea<lib.Drawing.DrawingArea.CDrawingArea>}
+        """
         self.appears.append(drawingArea)
 
     def RemoveAppears(self, drawingArea):
+        """
+        Remove element appearance
+        
+        @param drawingArea: Drawing area on which element was appearing
+        @type  drawingArea: L{CDrawingArea<lib.Drawing.DrawingArea.CDrawingArea>}
+        
+        @raise ValueError: if given drawing area is not found
+        """
         self.appears.remove(drawingArea)
     
     def GetPath(self):
+        """
+        Get path of this element object in the project
+        
+        @return: Element object path
+        @rtype:  string
+        """
         return self.path
     
     def SetPath(self, path):
+        """
+        Set path of this element object in the project
+        
+        @param path: Element object path
+        @type  path:  string
+        """
         self.path = path 
     
     def GetNode(self):

@@ -1,0 +1,767 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>lib.Math2D.geometry</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="lib-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://umlfri.kst.fri.uniza.sk/">UML .FRI</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="lib-module.html">Package&nbsp;lib</a> ::
+        <a href="lib.Math2D-module.html">Package&nbsp;Math2D</a> ::
+        Module&nbsp;geometry
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="lib.Math2D.geometry-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="lib.Math2D.geometry-module.html">Module lib.Math2D.geometry</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-0" class="py-name" targets="Module lib.Math2D.exceptions=lib.Math2D.exceptions-module.html"><a title="lib.Math2D.exceptions" class="py-name" href="#" onclick="return doclink('link-0', 'exceptions', 'link-0');">exceptions</a></tt> <tt class="py-keyword">import</tt> <tt id="link-1" class="py-name" targets="Class lib.Math2D.exceptions.MathException=lib.Math2D.exceptions.MathException-class.html"><a title="lib.Math2D.exceptions.MathException" class="py-name" href="#" onclick="return doclink('link-1', 'MathException', 'link-1');">MathException</a></tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">math</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"> </tt>
+<a name="CPoint"></a><div id="CPoint-def"><a name="L4"></a><tt class="py-lineno">  4</tt> <a class="py-toggle" href="#" id="CPoint-toggle" onclick="return toggle('CPoint');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="lib.Math2D.geometry.CPoint-class.html">CPoint</a><tt class="py-op">:</tt> </tt>
+</div><div id="CPoint-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="CPoint-expanded"><a name="CPoint.__init__"></a><div id="CPoint.__init__-def"><a name="L5"></a><tt class="py-lineno">  5</tt> <a class="py-toggle" href="#" id="CPoint.__init__-toggle" onclick="return toggle('CPoint.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Math2D.geometry.CPoint-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">point</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CPoint.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CPoint.__init__-expanded"><a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">point</tt> <tt class="py-op">=</tt> <tt class="py-name">point</tt> </tt>
+</div><a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line">         </tt>
+<a name="CPoint.GetPos"></a><div id="CPoint.GetPos-def"><a name="L8"></a><tt class="py-lineno">  8</tt> <a class="py-toggle" href="#" id="CPoint.GetPos-toggle" onclick="return toggle('CPoint.GetPos');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Math2D.geometry.CPoint-class.html#GetPos">GetPos</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CPoint.GetPos-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CPoint.GetPos-expanded"><a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">point</tt> </tt>
+</div><a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line">         </tt>
+<a name="CPoint.GetIntPos"></a><div id="CPoint.GetIntPos-def"><a name="L11"></a><tt class="py-lineno"> 11</tt> <a class="py-toggle" href="#" id="CPoint.GetIntPos-toggle" onclick="return toggle('CPoint.GetIntPos');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Math2D.geometry.CPoint-class.html#GetIntPos">GetIntPos</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CPoint.GetIntPos-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CPoint.GetIntPos-expanded"><a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">point</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">point</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line">         </tt>
+<a name="CPoint.__hash__"></a><div id="CPoint.__hash__-def"><a name="L14"></a><tt class="py-lineno"> 14</tt> <a class="py-toggle" href="#" id="CPoint.__hash__-toggle" onclick="return toggle('CPoint.__hash__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Math2D.geometry.CPoint-class.html#__hash__">__hash__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CPoint.__hash__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CPoint.__hash__-expanded"><a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">hash</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">point</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line">         </tt>
+<a name="CPoint.__sub__"></a><div id="CPoint.__sub__-def"><a name="L17"></a><tt class="py-lineno"> 17</tt> <a class="py-toggle" href="#" id="CPoint.__sub__-toggle" onclick="return toggle('CPoint.__sub__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Math2D.geometry.CPoint-class.html#__sub__">__sub__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">other</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CPoint.__sub__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CPoint.__sub__-expanded"><a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt class="py-name">other</tt><tt class="py-op">,</tt> <tt id="link-2" class="py-name" targets="Class lib.Math2D.geometry.CPoint=lib.Math2D.geometry.CPoint-class.html"><a title="lib.Math2D.geometry.CPoint" class="py-name" href="#" onclick="return doclink('link-2', 'CPoint', 'link-2');">CPoint</a></tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line">            <tt class="py-name">x1</tt><tt class="py-op">,</tt> <tt class="py-name">y1</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">point</tt> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line">            <tt class="py-name">x2</tt><tt class="py-op">,</tt> <tt class="py-name">y2</tt> <tt class="py-op">=</tt> <tt class="py-name">other</tt><tt class="py-op">.</tt><tt id="link-3" class="py-name" targets="Method lib.Gui.picDrawingArea.CpicDrawingArea.GetPos()=lib.Gui.picDrawingArea.CpicDrawingArea-class.html#GetPos,Method lib.Math2D.geometry.CLine.GetPos()=lib.Math2D.geometry.CLine-class.html#GetPos,Method lib.Math2D.geometry.CPoint.GetPos()=lib.Math2D.geometry.CPoint-class.html#GetPos,Method lib.Math2D.geometry.CPolyLine.GetPos()=lib.Math2D.geometry.CPolyLine-class.html#GetPos,Method lib.Math2D.geometry.CPolygon.GetPos()=lib.Math2D.geometry.CPolygon-class.html#GetPos,Method lib.Math2D.transform_matrix.PointMatrix.GetPos()=lib.Math2D.transform_matrix.PointMatrix-class.html#GetPos"><a title="lib.Gui.picDrawingArea.CpicDrawingArea.GetPos
+lib.Math2D.geometry.CLine.GetPos
+lib.Math2D.geometry.CPoint.GetPos
+lib.Math2D.geometry.CPolyLine.GetPos
+lib.Math2D.geometry.CPolygon.GetPos
+lib.Math2D.transform_matrix.PointMatrix.GetPos" class="py-name" href="#" onclick="return doclink('link-3', 'GetPos', 'link-3');">GetPos</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">math</tt><tt class="py-op">.</tt><tt class="py-name">sqrt</tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">x1</tt> <tt class="py-op">-</tt> <tt class="py-name">x2</tt><tt class="py-op">)</tt><tt class="py-op">**</tt><tt class="py-number">2</tt> <tt class="py-op">+</tt> <tt class="py-op">(</tt><tt class="py-name">y1</tt> <tt class="py-op">-</tt> <tt class="py-name">y2</tt><tt class="py-op">)</tt><tt class="py-op">**</tt><tt class="py-number">2</tt><tt class="py-op">)</tt> </tt>
+<a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">NotImplemented</tt> </tt>
+</div><a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line">             </tt>
+<a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line">    <tt class="py-name">__rsub__</tt> <tt class="py-op">=</tt> <tt id="link-4" class="py-name" targets="Method lib.Math2D.geometry.CLine.__sub__()=lib.Math2D.geometry.CLine-class.html#__sub__,Method lib.Math2D.geometry.CPoint.__sub__()=lib.Math2D.geometry.CPoint-class.html#__sub__"><a title="lib.Math2D.geometry.CLine.__sub__
+lib.Math2D.geometry.CPoint.__sub__" class="py-name" href="#" onclick="return doclink('link-4', '__sub__', 'link-4');">__sub__</a></tt> </tt>
+<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line">     </tt>
+<a name="CPoint.__eq__"></a><div id="CPoint.__eq__-def"><a name="L27"></a><tt class="py-lineno"> 27</tt> <a class="py-toggle" href="#" id="CPoint.__eq__-toggle" onclick="return toggle('CPoint.__eq__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Math2D.geometry.CPoint-class.html#__eq__">__eq__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">other</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CPoint.__eq__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CPoint.__eq__-expanded"><a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">point</tt> <tt class="py-op">==</tt> <tt class="py-name">other</tt><tt class="py-op">.</tt><tt id="link-5" class="py-name"><a title="lib.Gui.picDrawingArea.CpicDrawingArea.GetPos
+lib.Math2D.geometry.CLine.GetPos
+lib.Math2D.geometry.CPoint.GetPos
+lib.Math2D.geometry.CPolyLine.GetPos
+lib.Math2D.geometry.CPolygon.GetPos
+lib.Math2D.transform_matrix.PointMatrix.GetPos" class="py-name" href="#" onclick="return doclink('link-5', 'GetPos', 'link-3');">GetPos</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line">         </tt>
+<a name="CPoint.__ne__"></a><div id="CPoint.__ne__-def"><a name="L30"></a><tt class="py-lineno"> 30</tt> <a class="py-toggle" href="#" id="CPoint.__ne__-toggle" onclick="return toggle('CPoint.__ne__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Math2D.geometry.CPoint-class.html#__ne__">__ne__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">other</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CPoint.__ne__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CPoint.__ne__-expanded"><a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">point</tt> <tt class="py-op">!=</tt> <tt class="py-name">other</tt><tt class="py-op">.</tt><tt id="link-6" class="py-name"><a title="lib.Gui.picDrawingArea.CpicDrawingArea.GetPos
+lib.Math2D.geometry.CLine.GetPos
+lib.Math2D.geometry.CPoint.GetPos
+lib.Math2D.geometry.CPolyLine.GetPos
+lib.Math2D.geometry.CPolygon.GetPos
+lib.Math2D.transform_matrix.PointMatrix.GetPos" class="py-name" href="#" onclick="return doclink('link-6', 'GetPos', 'link-3');">GetPos</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line">         </tt>
+<a name="CPoint.__lt__"></a><div id="CPoint.__lt__-def"><a name="L33"></a><tt class="py-lineno"> 33</tt> <a class="py-toggle" href="#" id="CPoint.__lt__-toggle" onclick="return toggle('CPoint.__lt__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Math2D.geometry.CPoint-class.html#__lt__">__lt__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">other</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CPoint.__lt__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CPoint.__lt__-expanded"><a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line">        <tt class="py-name">x1</tt><tt class="py-op">,</tt> <tt class="py-name">y1</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-7" class="py-name"><a title="lib.Gui.picDrawingArea.CpicDrawingArea.GetPos
+lib.Math2D.geometry.CLine.GetPos
+lib.Math2D.geometry.CPoint.GetPos
+lib.Math2D.geometry.CPolyLine.GetPos
+lib.Math2D.geometry.CPolygon.GetPos
+lib.Math2D.transform_matrix.PointMatrix.GetPos" class="py-name" href="#" onclick="return doclink('link-7', 'GetPos', 'link-3');">GetPos</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line">        <tt class="py-name">x2</tt><tt class="py-op">,</tt> <tt class="py-name">y2</tt> <tt class="py-op">=</tt> <tt class="py-name">other</tt><tt class="py-op">.</tt><tt id="link-8" class="py-name"><a title="lib.Gui.picDrawingArea.CpicDrawingArea.GetPos
+lib.Math2D.geometry.CLine.GetPos
+lib.Math2D.geometry.CPoint.GetPos
+lib.Math2D.geometry.CPolyLine.GetPos
+lib.Math2D.geometry.CPolygon.GetPos
+lib.Math2D.transform_matrix.PointMatrix.GetPos" class="py-name" href="#" onclick="return doclink('link-8', 'GetPos', 'link-3');">GetPos</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">x1</tt> <tt class="py-op">&lt;</tt> <tt class="py-name">x2</tt> <tt class="py-keyword">and</tt> <tt class="py-name">y1</tt> <tt class="py-op">&lt;</tt> <tt class="py-name">y2</tt> </tt>
+</div><a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line">         </tt>
+<a name="CPoint.__le__"></a><div id="CPoint.__le__-def"><a name="L38"></a><tt class="py-lineno"> 38</tt> <a class="py-toggle" href="#" id="CPoint.__le__-toggle" onclick="return toggle('CPoint.__le__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Math2D.geometry.CPoint-class.html#__le__">__le__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">other</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CPoint.__le__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CPoint.__le__-expanded"><a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line">        <tt class="py-name">x1</tt><tt class="py-op">,</tt> <tt class="py-name">y1</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-9" class="py-name"><a title="lib.Gui.picDrawingArea.CpicDrawingArea.GetPos
+lib.Math2D.geometry.CLine.GetPos
+lib.Math2D.geometry.CPoint.GetPos
+lib.Math2D.geometry.CPolyLine.GetPos
+lib.Math2D.geometry.CPolygon.GetPos
+lib.Math2D.transform_matrix.PointMatrix.GetPos" class="py-name" href="#" onclick="return doclink('link-9', 'GetPos', 'link-3');">GetPos</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line">        <tt class="py-name">x2</tt><tt class="py-op">,</tt> <tt class="py-name">y2</tt> <tt class="py-op">=</tt> <tt class="py-name">other</tt><tt class="py-op">.</tt><tt id="link-10" class="py-name"><a title="lib.Gui.picDrawingArea.CpicDrawingArea.GetPos
+lib.Math2D.geometry.CLine.GetPos
+lib.Math2D.geometry.CPoint.GetPos
+lib.Math2D.geometry.CPolyLine.GetPos
+lib.Math2D.geometry.CPolygon.GetPos
+lib.Math2D.transform_matrix.PointMatrix.GetPos" class="py-name" href="#" onclick="return doclink('link-10', 'GetPos', 'link-3');">GetPos</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">x1</tt> <tt class="py-op">&lt;=</tt> <tt class="py-name">x2</tt> <tt class="py-keyword">and</tt> <tt class="py-name">y1</tt> <tt class="py-op">&lt;=</tt> <tt class="py-name">y2</tt> </tt>
+</div><a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line">         </tt>
+<a name="CPoint.__gt__"></a><div id="CPoint.__gt__-def"><a name="L43"></a><tt class="py-lineno"> 43</tt> <a class="py-toggle" href="#" id="CPoint.__gt__-toggle" onclick="return toggle('CPoint.__gt__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Math2D.geometry.CPoint-class.html#__gt__">__gt__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">other</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CPoint.__gt__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CPoint.__gt__-expanded"><a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">other</tt> <tt class="py-op">&lt;</tt> <tt class="py-name">self</tt> </tt>
+</div><a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line"> </tt>
+<a name="CPoint.__ge__"></a><div id="CPoint.__ge__-def"><a name="L46"></a><tt class="py-lineno"> 46</tt> <a class="py-toggle" href="#" id="CPoint.__ge__-toggle" onclick="return toggle('CPoint.__ge__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Math2D.geometry.CPoint-class.html#__ge__">__ge__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">other</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CPoint.__ge__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CPoint.__ge__-expanded"><a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">other</tt> <tt class="py-op">&lt;=</tt> <tt class="py-name">self</tt> </tt>
+</div><a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line">         </tt>
+<a name="CPoint.__repr__"></a><div id="CPoint.__repr__-def"><a name="L49"></a><tt class="py-lineno"> 49</tt> <a class="py-toggle" href="#" id="CPoint.__repr__-toggle" onclick="return toggle('CPoint.__repr__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Math2D.geometry.CPoint-class.html#__repr__">__repr__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CPoint.__repr__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CPoint.__repr__-expanded"><a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">repr</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">point</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line"> </tt>
+<a name="CLine"></a><div id="CLine-def"><a name="L52"></a><tt class="py-lineno"> 52</tt> <a class="py-toggle" href="#" id="CLine-toggle" onclick="return toggle('CLine');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="lib.Math2D.geometry.CLine-class.html">CLine</a><tt class="py-op">:</tt> </tt>
+</div><div id="CLine-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="CLine-expanded"><a name="CLine.__init__"></a><div id="CLine.__init__-def"><a name="L53"></a><tt class="py-lineno"> 53</tt> <a class="py-toggle" href="#" id="CLine.__init__-toggle" onclick="return toggle('CLine.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Math2D.geometry.CLine-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">start</tt><tt class="py-op">,</tt> <tt class="py-param">end</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CLine.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CLine.__init__-expanded"><a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt class="py-name">start</tt><tt class="py-op">,</tt> <tt id="link-11" class="py-name"><a title="lib.Math2D.geometry.CPoint" class="py-name" href="#" onclick="return doclink('link-11', 'CPoint', 'link-2');">CPoint</a></tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line">            <tt class="py-name">start</tt> <tt class="py-op">=</tt> <tt id="link-12" class="py-name"><a title="lib.Math2D.geometry.CPoint" class="py-name" href="#" onclick="return doclink('link-12', 'CPoint', 'link-2');">CPoint</a></tt><tt class="py-op">(</tt><tt class="py-name">start</tt><tt class="py-op">)</tt> </tt>
+<a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt class="py-name">end</tt><tt class="py-op">,</tt> <tt id="link-13" class="py-name"><a title="lib.Math2D.geometry.CPoint" class="py-name" href="#" onclick="return doclink('link-13', 'CPoint', 'link-2');">CPoint</a></tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line">            <tt class="py-name">end</tt> <tt class="py-op">=</tt> <tt id="link-14" class="py-name"><a title="lib.Math2D.geometry.CPoint" class="py-name" href="#" onclick="return doclink('link-14', 'CPoint', 'link-2');">CPoint</a></tt><tt class="py-op">(</tt><tt class="py-name">end</tt><tt class="py-op">)</tt> </tt>
+<a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">start</tt> <tt class="py-op">=</tt> <tt class="py-name">start</tt> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">end</tt> <tt class="py-op">=</tt> <tt class="py-name">end</tt> </tt>
+</div><a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line">         </tt>
+<a name="CLine.GetStart"></a><div id="CLine.GetStart-def"><a name="L61"></a><tt class="py-lineno"> 61</tt> <a class="py-toggle" href="#" id="CLine.GetStart-toggle" onclick="return toggle('CLine.GetStart');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Math2D.geometry.CLine-class.html#GetStart">GetStart</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CLine.GetStart-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CLine.GetStart-expanded"><a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">start</tt> </tt>
+</div><a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line">         </tt>
+<a name="CLine.GetEnd"></a><div id="CLine.GetEnd-def"><a name="L64"></a><tt class="py-lineno"> 64</tt> <a class="py-toggle" href="#" id="CLine.GetEnd-toggle" onclick="return toggle('CLine.GetEnd');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Math2D.geometry.CLine-class.html#GetEnd">GetEnd</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CLine.GetEnd-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CLine.GetEnd-expanded"><a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">end</tt> </tt>
+</div><a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line">         </tt>
+<a name="CLine.GetPos"></a><div id="CLine.GetPos-def"><a name="L67"></a><tt class="py-lineno"> 67</tt> <a class="py-toggle" href="#" id="CLine.GetPos-toggle" onclick="return toggle('CLine.GetPos');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Math2D.geometry.CLine-class.html#GetPos">GetPos</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CLine.GetPos-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CLine.GetPos-expanded"><a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-15" class="py-name" targets="Method lib.Math2D.geometry.CLine.GetStart()=lib.Math2D.geometry.CLine-class.html#GetStart"><a title="lib.Math2D.geometry.CLine.GetStart" class="py-name" href="#" onclick="return doclink('link-15', 'GetStart', 'link-15');">GetStart</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-16" class="py-name"><a title="lib.Gui.picDrawingArea.CpicDrawingArea.GetPos
+lib.Math2D.geometry.CLine.GetPos
+lib.Math2D.geometry.CPoint.GetPos
+lib.Math2D.geometry.CPolyLine.GetPos
+lib.Math2D.geometry.CPolygon.GetPos
+lib.Math2D.transform_matrix.PointMatrix.GetPos" class="py-name" href="#" onclick="return doclink('link-16', 'GetPos', 'link-3');">GetPos</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-17" class="py-name" targets="Method lib.Math2D.geometry.CLine.GetEnd()=lib.Math2D.geometry.CLine-class.html#GetEnd"><a title="lib.Math2D.geometry.CLine.GetEnd" class="py-name" href="#" onclick="return doclink('link-17', 'GetEnd', 'link-17');">GetEnd</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-18" class="py-name"><a title="lib.Gui.picDrawingArea.CpicDrawingArea.GetPos
+lib.Math2D.geometry.CLine.GetPos
+lib.Math2D.geometry.CPoint.GetPos
+lib.Math2D.geometry.CPolyLine.GetPos
+lib.Math2D.geometry.CPolygon.GetPos
+lib.Math2D.transform_matrix.PointMatrix.GetPos" class="py-name" href="#" onclick="return doclink('link-18', 'GetPos', 'link-3');">GetPos</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line">         </tt>
+<a name="CLine.Angle"></a><div id="CLine.Angle-def"><a name="L70"></a><tt class="py-lineno"> 70</tt> <a class="py-toggle" href="#" id="CLine.Angle-toggle" onclick="return toggle('CLine.Angle');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Math2D.geometry.CLine-class.html#Angle">Angle</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CLine.Angle-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CLine.Angle-expanded"><a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line">        <tt class="py-op">(</tt><tt class="py-name">x1</tt><tt class="py-op">,</tt> <tt class="py-name">y1</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-op">(</tt><tt class="py-name">x2</tt><tt class="py-op">,</tt> <tt class="py-name">y2</tt><tt class="py-op">)</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-19" class="py-name"><a title="lib.Gui.picDrawingArea.CpicDrawingArea.GetPos
+lib.Math2D.geometry.CLine.GetPos
+lib.Math2D.geometry.CPoint.GetPos
+lib.Math2D.geometry.CPolyLine.GetPos
+lib.Math2D.geometry.CPolygon.GetPos
+lib.Math2D.transform_matrix.PointMatrix.GetPos" class="py-name" href="#" onclick="return doclink('link-19', 'GetPos', 'link-3');">GetPos</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">math</tt><tt class="py-op">.</tt><tt class="py-name">atan2</tt><tt class="py-op">(</tt><tt class="py-name">y2</tt> <tt class="py-op">-</tt> <tt class="py-name">y1</tt><tt class="py-op">,</tt> <tt class="py-name">x2</tt> <tt class="py-op">-</tt> <tt class="py-name">x1</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line">         </tt>
+<a name="CLine.Scale"></a><div id="CLine.Scale-def"><a name="L74"></a><tt class="py-lineno"> 74</tt> <a class="py-toggle" href="#" id="CLine.Scale-toggle" onclick="return toggle('CLine.Scale');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Math2D.geometry.CLine-class.html#Scale">Scale</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">factor</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CLine.Scale-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CLine.Scale-expanded"><a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line">        <tt class="py-op">(</tt><tt class="py-name">Ax</tt><tt class="py-op">,</tt> <tt class="py-name">Ay</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-op">(</tt><tt class="py-name">Bx</tt><tt class="py-op">,</tt> <tt class="py-name">By</tt><tt class="py-op">)</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-20" class="py-name"><a title="lib.Gui.picDrawingArea.CpicDrawingArea.GetPos
+lib.Math2D.geometry.CLine.GetPos
+lib.Math2D.geometry.CPoint.GetPos
+lib.Math2D.geometry.CPolyLine.GetPos
+lib.Math2D.geometry.CPolygon.GetPos
+lib.Math2D.transform_matrix.PointMatrix.GetPos" class="py-name" href="#" onclick="return doclink('link-20', 'GetPos', 'link-3');">GetPos</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-21" class="py-name" targets="Class lib.Drawing.Objects.Line.CLine=lib.Drawing.Objects.Line.CLine-class.html,Class lib.Math2D.geometry.CLine=lib.Math2D.geometry.CLine-class.html"><a title="lib.Drawing.Objects.Line.CLine
+lib.Math2D.geometry.CLine" class="py-name" href="#" onclick="return doclink('link-21', 'CLine', 'link-21');">CLine</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-22" class="py-name"><a title="lib.Math2D.geometry.CLine.GetStart" class="py-name" href="#" onclick="return doclink('link-22', 'GetStart', 'link-15');">GetStart</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-op">(</tt><tt class="py-name">Ax</tt> <tt class="py-op">+</tt> <tt class="py-op">(</tt><tt class="py-name">Bx</tt> <tt class="py-op">-</tt> <tt class="py-name">Ax</tt><tt class="py-op">)</tt><tt class="py-op">*</tt><tt class="py-name">factor</tt><tt class="py-op">,</tt> <tt class="py-name">Ay</tt> <tt class="py-op">+</tt> <tt class="py-op">(</tt><tt class="py-name">By</tt> <tt class="py-op">-</tt> <tt class="py-name">Ay</tt><tt class="py-op">)</tt><tt class="py-op">*</tt><tt class="py-name">factor</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line"> </tt>
+<a name="CLine.Nearest"></a><div id="CLine.Nearest-def"><a name="L78"></a><tt class="py-lineno"> 78</tt> <a class="py-toggle" href="#" id="CLine.Nearest-toggle" onclick="return toggle('CLine.Nearest');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Math2D.geometry.CLine-class.html#Nearest">Nearest</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">point</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CLine.Nearest-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CLine.Nearest-expanded"><a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line">        <tt class="py-op">(</tt><tt class="py-name">Ax</tt><tt class="py-op">,</tt> <tt class="py-name">Ay</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-op">(</tt><tt class="py-name">Bx</tt><tt class="py-op">,</tt> <tt class="py-name">By</tt><tt class="py-op">)</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-23" class="py-name"><a title="lib.Gui.picDrawingArea.CpicDrawingArea.GetPos
+lib.Math2D.geometry.CLine.GetPos
+lib.Math2D.geometry.CPoint.GetPos
+lib.Math2D.geometry.CPolyLine.GetPos
+lib.Math2D.geometry.CPolygon.GetPos
+lib.Math2D.transform_matrix.PointMatrix.GetPos" class="py-name" href="#" onclick="return doclink('link-23', 'GetPos', 'link-3');">GetPos</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line">        <tt class="py-name">Cx</tt><tt class="py-op">,</tt> <tt class="py-name">Cy</tt> <tt class="py-op">=</tt> <tt class="py-name">point</tt><tt class="py-op">.</tt><tt id="link-24" class="py-name"><a title="lib.Gui.picDrawingArea.CpicDrawingArea.GetPos
+lib.Math2D.geometry.CLine.GetPos
+lib.Math2D.geometry.CPoint.GetPos
+lib.Math2D.geometry.CPolyLine.GetPos
+lib.Math2D.geometry.CPolygon.GetPos
+lib.Math2D.transform_matrix.PointMatrix.GetPos" class="py-name" href="#" onclick="return doclink('link-24', 'GetPos', 'link-3');">GetPos</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line">        <tt class="py-name">D</tt> <tt class="py-op">=</tt> <tt class="py-name">float</tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">Bx</tt> <tt class="py-op">-</tt> <tt class="py-name">Ax</tt><tt class="py-op">)</tt><tt class="py-op">**</tt><tt class="py-number">2</tt> <tt class="py-op">+</tt> <tt class="py-op">(</tt><tt class="py-name">By</tt> <tt class="py-op">-</tt> <tt class="py-name">Ay</tt><tt class="py-op">)</tt><tt class="py-op">**</tt><tt class="py-number">2</tt><tt class="py-op">)</tt> </tt>
+<a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">D</tt> <tt class="py-op">==</tt> <tt class="py-number">0</tt><tt class="py-op">:</tt> </tt>
+<a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-25" class="py-name"><a title="lib.Math2D.geometry.CLine.GetStart" class="py-name" href="#" onclick="return doclink('link-25', 'GetStart', 'link-15');">GetStart</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-26" class="py-name"><a title="lib.Math2D.geometry.CLine.GetStart" class="py-name" href="#" onclick="return doclink('link-26', 'GetStart', 'link-15');">GetStart</a></tt> <tt class="py-op">-</tt> <tt class="py-name">point</tt><tt class="py-op">,</tt> <tt class="py-name">math</tt><tt class="py-op">.</tt><tt class="py-name">atan2</tt><tt class="py-op">(</tt><tt class="py-name">Cy</tt> <tt class="py-op">-</tt> <tt class="py-name">Ay</tt><tt class="py-op">,</tt> <tt class="py-name">Cx</tt> <tt class="py-op">-</tt> <tt class="py-name">Ax</tt><tt class="py-op">)</tt> </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line">        <tt class="py-name">t1</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-name">Cx</tt> <tt class="py-op">-</tt> <tt class="py-name">Ax</tt><tt class="py-op">)</tt><tt class="py-op">*</tt><tt class="py-op">(</tt><tt class="py-name">Bx</tt> <tt class="py-op">-</tt> <tt class="py-name">Ax</tt><tt class="py-op">)</tt> <tt class="py-op">-</tt> <tt class="py-op">(</tt><tt class="py-name">Cy</tt> <tt class="py-op">-</tt> <tt class="py-name">Ay</tt><tt class="py-op">)</tt><tt class="py-op">*</tt><tt class="py-op">(</tt><tt class="py-name">Ay</tt> <tt class="py-op">-</tt> <tt class="py-name">By</tt><tt class="py-op">)</tt> </tt>
+<a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line">        <tt class="py-name">t2</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-name">Bx</tt> <tt class="py-op">-</tt> <tt class="py-name">Ax</tt><tt class="py-op">)</tt><tt class="py-op">*</tt><tt class="py-op">(</tt><tt class="py-name">Cy</tt> <tt class="py-op">-</tt> <tt class="py-name">Ay</tt><tt class="py-op">)</tt> <tt class="py-op">-</tt> <tt class="py-op">(</tt><tt class="py-name">Cx</tt> <tt class="py-op">-</tt> <tt class="py-name">Ax</tt><tt class="py-op">)</tt><tt class="py-op">*</tt><tt class="py-op">(</tt><tt class="py-name">By</tt> <tt class="py-op">-</tt> <tt class="py-name">Ay</tt><tt class="py-op">)</tt> </tt>
+<a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">t1</tt> <tt class="py-op">&lt;=</tt> <tt class="py-number">0</tt><tt class="py-op">:</tt> </tt>
+<a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line">            <tt class="py-name">angle</tt> <tt class="py-op">=</tt> <tt class="py-name">math</tt><tt class="py-op">.</tt><tt class="py-name">atan2</tt><tt class="py-op">(</tt><tt class="py-name">Cy</tt> <tt class="py-op">-</tt> <tt class="py-name">Ay</tt><tt class="py-op">,</tt> <tt class="py-name">Cx</tt> <tt class="py-op">-</tt> <tt class="py-name">Ax</tt><tt class="py-op">)</tt> <tt class="py-op">-</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-27" class="py-name" targets="Method lib.Math2D.geometry.CLine.Angle()=lib.Math2D.geometry.CLine-class.html#Angle"><a title="lib.Math2D.geometry.CLine.Angle" class="py-name" href="#" onclick="return doclink('link-27', 'Angle', 'link-27');">Angle</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-28" class="py-name"><a title="lib.Math2D.geometry.CLine.GetStart" class="py-name" href="#" onclick="return doclink('link-28', 'GetStart', 'link-15');">GetStart</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-29" class="py-name"><a title="lib.Math2D.geometry.CLine.GetStart" class="py-name" href="#" onclick="return doclink('link-29', 'GetStart', 'link-15');">GetStart</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">-</tt> <tt class="py-name">point</tt><tt class="py-op">,</tt> <tt class="py-name">angle</tt> </tt>
+<a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-number">0</tt> <tt class="py-op">&lt;</tt> <tt class="py-name">t1</tt> <tt class="py-op">&lt;</tt> <tt class="py-name">D</tt><tt class="py-op">:</tt> </tt>
+<a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line">            <tt class="py-name">pos</tt> <tt class="py-op">=</tt> <tt id="link-30" class="py-name"><a title="lib.Math2D.geometry.CPoint" class="py-name" href="#" onclick="return doclink('link-30', 'CPoint', 'link-2');">CPoint</a></tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">Ax</tt> <tt class="py-op">+</tt> <tt class="py-op">(</tt><tt class="py-name">Bx</tt> <tt class="py-op">-</tt> <tt class="py-name">Ax</tt><tt class="py-op">)</tt><tt class="py-op">*</tt><tt class="py-name">t1</tt><tt class="py-op">/</tt><tt class="py-name">D</tt><tt class="py-op">,</tt> <tt class="py-name">Ay</tt> <tt class="py-op">+</tt> <tt class="py-op">(</tt><tt class="py-name">By</tt> <tt class="py-op">-</tt> <tt class="py-name">Ay</tt><tt class="py-op">)</tt><tt class="py-op">*</tt><tt class="py-name">t1</tt><tt class="py-op">/</tt><tt class="py-name">D</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">t2</tt> <tt class="py-op">&gt;=</tt> <tt class="py-number">0</tt><tt class="py-op">:</tt> </tt>
+<a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line">                <tt class="py-name">angle</tt> <tt class="py-op">=</tt> <tt class="py-name">math</tt><tt class="py-op">.</tt><tt class="py-name">atan2</tt><tt class="py-op">(</tt><tt class="py-name">Cy</tt> <tt class="py-op">-</tt> <tt class="py-name">By</tt><tt class="py-op">,</tt> <tt class="py-name">Cx</tt> <tt class="py-op">-</tt> <tt class="py-name">Bx</tt><tt class="py-op">)</tt> <tt class="py-op">-</tt> <tt class="py-name">math</tt><tt class="py-op">.</tt><tt class="py-name">pi</tt><tt class="py-op">/</tt><tt class="py-number">2</tt> </tt>
+<a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line">            <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line">                <tt class="py-name">angle</tt> <tt class="py-op">=</tt> <tt class="py-name">math</tt><tt class="py-op">.</tt><tt class="py-name">atan2</tt><tt class="py-op">(</tt><tt class="py-name">Cy</tt> <tt class="py-op">-</tt> <tt class="py-name">By</tt><tt class="py-op">,</tt> <tt class="py-name">Cx</tt> <tt class="py-op">-</tt> <tt class="py-name">Bx</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-name">math</tt><tt class="py-op">.</tt><tt class="py-name">pi</tt><tt class="py-op">/</tt><tt class="py-number">2</tt> </tt>
+<a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">pos</tt><tt class="py-op">,</tt> <tt class="py-name">pos</tt> <tt class="py-op">-</tt> <tt class="py-name">point</tt><tt class="py-op">,</tt> <tt class="py-name">angle</tt> </tt>
+<a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line">            <tt class="py-name">angle</tt> <tt class="py-op">=</tt> <tt class="py-name">math</tt><tt class="py-op">.</tt><tt class="py-name">atan2</tt><tt class="py-op">(</tt><tt class="py-name">Cy</tt> <tt class="py-op">-</tt> <tt class="py-name">By</tt><tt class="py-op">,</tt> <tt class="py-name">Cx</tt> <tt class="py-op">-</tt> <tt class="py-name">Bx</tt><tt class="py-op">)</tt> <tt class="py-op">-</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-31" class="py-name"><a title="lib.Math2D.geometry.CLine.Angle" class="py-name" href="#" onclick="return doclink('link-31', 'Angle', 'link-27');">Angle</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-32" class="py-name"><a title="lib.Math2D.geometry.CLine.GetEnd" class="py-name" href="#" onclick="return doclink('link-32', 'GetEnd', 'link-17');">GetEnd</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-33" class="py-name"><a title="lib.Math2D.geometry.CLine.GetEnd" class="py-name" href="#" onclick="return doclink('link-33', 'GetEnd', 'link-17');">GetEnd</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">-</tt> <tt class="py-name">point</tt><tt class="py-op">,</tt> <tt class="py-name">angle</tt> </tt>
+</div><a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line">     </tt>
+<a name="CLine.__repr__"></a><div id="CLine.__repr__-def"><a name="L100"></a><tt class="py-lineno">100</tt> <a class="py-toggle" href="#" id="CLine.__repr__-toggle" onclick="return toggle('CLine.__repr__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Math2D.geometry.CLine-class.html#__repr__">__repr__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CLine.__repr__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CLine.__repr__-expanded"><a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-string">'['</tt> <tt class="py-op">+</tt> <tt class="py-name">repr</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">start</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-string">' '</tt> <tt class="py-op">+</tt> <tt class="py-name">repr</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">end</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-string">']'</tt> </tt>
+</div><a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line">         </tt>
+<a name="CLine.__abs__"></a><div id="CLine.__abs__-def"><a name="L103"></a><tt class="py-lineno">103</tt> <a class="py-toggle" href="#" id="CLine.__abs__-toggle" onclick="return toggle('CLine.__abs__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Math2D.geometry.CLine-class.html#__abs__">__abs__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CLine.__abs__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CLine.__abs__-expanded"><a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-34" class="py-name"><a title="lib.Math2D.geometry.CLine.GetStart" class="py-name" href="#" onclick="return doclink('link-34', 'GetStart', 'link-15');">GetStart</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">-</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-35" class="py-name"><a title="lib.Math2D.geometry.CLine.GetEnd" class="py-name" href="#" onclick="return doclink('link-35', 'GetEnd', 'link-17');">GetEnd</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line">         </tt>
+<a name="CLine.__mul__"></a><div id="CLine.__mul__-def"><a name="L106"></a><tt class="py-lineno">106</tt> <a class="py-toggle" href="#" id="CLine.__mul__-toggle" onclick="return toggle('CLine.__mul__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Math2D.geometry.CLine-class.html#__mul__">__mul__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">other</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CLine.__mul__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CLine.__mul__-expanded"><a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt class="py-name">other</tt><tt class="py-op">,</tt> <tt id="link-36" class="py-name"><a title="lib.Math2D.geometry.CPoint" class="py-name" href="#" onclick="return doclink('link-36', 'CPoint', 'link-2');">CPoint</a></tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">self</tt> <tt class="py-op">-</tt> <tt class="py-name">other</tt> <tt class="py-op">==</tt> <tt class="py-number">0</tt><tt class="py-op">:</tt> </tt>
+<a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-op">[</tt><tt class="py-name">other</tt><tt class="py-op">]</tt> </tt>
+<a name="L110"></a><tt class="py-lineno">110</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L111"></a><tt class="py-lineno">111</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt class="py-name">other</tt><tt class="py-op">,</tt> <tt id="link-37" class="py-name"><a title="lib.Drawing.Objects.Line.CLine
+lib.Math2D.geometry.CLine" class="py-name" href="#" onclick="return doclink('link-37', 'CLine', 'link-21');">CLine</a></tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line">            <tt class="py-op">(</tt><tt class="py-name">ax1</tt><tt class="py-op">,</tt> <tt class="py-name">ay1</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-op">(</tt><tt class="py-name">ax2</tt><tt class="py-op">,</tt> <tt class="py-name">ay2</tt><tt class="py-op">)</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-38" class="py-name"><a title="lib.Gui.picDrawingArea.CpicDrawingArea.GetPos
+lib.Math2D.geometry.CLine.GetPos
+lib.Math2D.geometry.CPoint.GetPos
+lib.Math2D.geometry.CPolyLine.GetPos
+lib.Math2D.geometry.CPolygon.GetPos
+lib.Math2D.transform_matrix.PointMatrix.GetPos" class="py-name" href="#" onclick="return doclink('link-38', 'GetPos', 'link-3');">GetPos</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L113"></a><tt class="py-lineno">113</tt>  <tt class="py-line">            <tt class="py-op">(</tt><tt class="py-name">bx1</tt><tt class="py-op">,</tt> <tt class="py-name">by1</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-op">(</tt><tt class="py-name">bx2</tt><tt class="py-op">,</tt> <tt class="py-name">by2</tt><tt class="py-op">)</tt> <tt class="py-op">=</tt> <tt class="py-name">other</tt><tt class="py-op">.</tt><tt id="link-39" class="py-name"><a title="lib.Gui.picDrawingArea.CpicDrawingArea.GetPos
+lib.Math2D.geometry.CLine.GetPos
+lib.Math2D.geometry.CPoint.GetPos
+lib.Math2D.geometry.CPolyLine.GetPos
+lib.Math2D.geometry.CPolygon.GetPos
+lib.Math2D.transform_matrix.PointMatrix.GetPos" class="py-name" href="#" onclick="return doclink('link-39', 'GetPos', 'link-3');">GetPos</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L114"></a><tt class="py-lineno">114</tt>  <tt class="py-line">            <tt class="py-name">D</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">ay2</tt> <tt class="py-op">-</tt> <tt class="py-name">ay1</tt><tt class="py-op">)</tt><tt class="py-op">*</tt><tt class="py-op">(</tt><tt class="py-name">bx2</tt> <tt class="py-op">-</tt> <tt class="py-name">bx1</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">by1</tt> <tt class="py-op">-</tt> <tt class="py-name">by2</tt><tt class="py-op">)</tt><tt class="py-op">*</tt><tt class="py-op">(</tt><tt class="py-name">ax2</tt> <tt class="py-op">-</tt> <tt class="py-name">ax1</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L115"></a><tt class="py-lineno">115</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">D</tt> <tt class="py-op">==</tt> <tt class="py-number">0</tt><tt class="py-op">:</tt> </tt>
+<a name="L116"></a><tt class="py-lineno">116</tt>  <tt class="py-line">                <tt class="py-name">result</tt> <tt class="py-op">=</tt> <tt class="py-name">set</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L117"></a><tt class="py-lineno">117</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">self</tt> <tt class="py-op">-</tt> <tt class="py-name">other</tt><tt class="py-op">.</tt><tt id="link-40" class="py-name"><a title="lib.Math2D.geometry.CLine.GetStart" class="py-name" href="#" onclick="return doclink('link-40', 'GetStart', 'link-15');">GetStart</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-number">0</tt><tt class="py-op">:</tt> </tt>
+<a name="L118"></a><tt class="py-lineno">118</tt>  <tt class="py-line">                    <tt class="py-name">result</tt><tt class="py-op">.</tt><tt class="py-name">add</tt><tt class="py-op">(</tt><tt class="py-name">other</tt><tt class="py-op">.</tt><tt id="link-41" class="py-name"><a title="lib.Math2D.geometry.CLine.GetStart" class="py-name" href="#" onclick="return doclink('link-41', 'GetStart', 'link-15');">GetStart</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L119"></a><tt class="py-lineno">119</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">self</tt> <tt class="py-op">-</tt> <tt class="py-name">other</tt><tt class="py-op">.</tt><tt id="link-42" class="py-name"><a title="lib.Math2D.geometry.CLine.GetEnd" class="py-name" href="#" onclick="return doclink('link-42', 'GetEnd', 'link-17');">GetEnd</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-number">0</tt><tt class="py-op">:</tt> </tt>
+<a name="L120"></a><tt class="py-lineno">120</tt>  <tt class="py-line">                    <tt class="py-name">result</tt><tt class="py-op">.</tt><tt class="py-name">add</tt><tt class="py-op">(</tt><tt class="py-name">other</tt><tt class="py-op">.</tt><tt id="link-43" class="py-name"><a title="lib.Math2D.geometry.CLine.GetEnd" class="py-name" href="#" onclick="return doclink('link-43', 'GetEnd', 'link-17');">GetEnd</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L121"></a><tt class="py-lineno">121</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">other</tt> <tt class="py-op">-</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-44" class="py-name"><a title="lib.Math2D.geometry.CLine.GetStart" class="py-name" href="#" onclick="return doclink('link-44', 'GetStart', 'link-15');">GetStart</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-number">0</tt><tt class="py-op">:</tt> </tt>
+<a name="L122"></a><tt class="py-lineno">122</tt>  <tt class="py-line">                    <tt class="py-name">result</tt><tt class="py-op">.</tt><tt class="py-name">add</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-45" class="py-name"><a title="lib.Math2D.geometry.CLine.GetStart" class="py-name" href="#" onclick="return doclink('link-45', 'GetStart', 'link-15');">GetStart</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L123"></a><tt class="py-lineno">123</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">other</tt> <tt class="py-op">-</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-46" class="py-name"><a title="lib.Math2D.geometry.CLine.GetEnd" class="py-name" href="#" onclick="return doclink('link-46', 'GetEnd', 'link-17');">GetEnd</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-number">0</tt><tt class="py-op">:</tt> </tt>
+<a name="L124"></a><tt class="py-lineno">124</tt>  <tt class="py-line">                    <tt class="py-name">result</tt><tt class="py-op">.</tt><tt class="py-name">add</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-47" class="py-name"><a title="lib.Math2D.geometry.CLine.GetEnd" class="py-name" href="#" onclick="return doclink('link-47', 'GetEnd', 'link-17');">GetEnd</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L125"></a><tt class="py-lineno">125</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-name">list</tt><tt class="py-op">(</tt><tt class="py-name">result</tt><tt class="py-op">)</tt> </tt>
+<a name="L126"></a><tt class="py-lineno">126</tt>  <tt class="py-line">            <tt class="py-name">t1D</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">bx2</tt><tt class="py-op">*</tt><tt class="py-op">(</tt><tt class="py-name">by1</tt> <tt class="py-op">-</tt> <tt class="py-name">ay1</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-op">(</tt><tt class="py-name">bx1</tt><tt class="py-op">*</tt><tt class="py-op">(</tt><tt class="py-name">ay1</tt> <tt class="py-op">-</tt> <tt class="py-name">by2</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-op">(</tt><tt class="py-name">ax1</tt><tt class="py-op">*</tt><tt class="py-op">(</tt><tt class="py-name">by2</tt> <tt class="py-op">-</tt> <tt class="py-name">by1</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L127"></a><tt class="py-lineno">127</tt>  <tt class="py-line">            <tt class="py-name">t2D</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">ax2</tt><tt class="py-op">*</tt><tt class="py-op">(</tt><tt class="py-name">by1</tt> <tt class="py-op">-</tt> <tt class="py-name">ay1</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-op">(</tt><tt class="py-name">ax1</tt><tt class="py-op">*</tt><tt class="py-op">(</tt><tt class="py-name">ay2</tt> <tt class="py-op">-</tt> <tt class="py-name">by1</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-op">(</tt><tt class="py-name">bx1</tt><tt class="py-op">*</tt><tt class="py-op">(</tt><tt class="py-name">ay1</tt> <tt class="py-op">-</tt> <tt class="py-name">ay2</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L128"></a><tt class="py-lineno">128</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-op">(</tt><tt class="py-number">0</tt> <tt class="py-op">&lt;=</tt> <tt class="py-name">t1D</tt> <tt class="py-op">&lt;=</tt> <tt class="py-name">D</tt> <tt class="py-keyword">and</tt> <tt class="py-number">0</tt> <tt class="py-op">&lt;=</tt> <tt class="py-name">t2D</tt> <tt class="py-op">&lt;=</tt> <tt class="py-name">D</tt><tt class="py-op">)</tt> <tt class="py-keyword">or</tt> \ </tt>
+<a name="L129"></a><tt class="py-lineno">129</tt>  <tt class="py-line">                <tt class="py-op">(</tt><tt class="py-name">D</tt> <tt class="py-op">&lt;=</tt> <tt class="py-name">t1D</tt> <tt class="py-op">&lt;=</tt> <tt class="py-number">0</tt> <tt class="py-keyword">and</tt> <tt class="py-name">D</tt> <tt class="py-op">&lt;=</tt> <tt class="py-name">t2D</tt> <tt class="py-op">&lt;=</tt> <tt class="py-number">0</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L130"></a><tt class="py-lineno">130</tt>  <tt class="py-line">                <tt class="py-name">t1</tt> <tt class="py-op">=</tt> <tt class="py-name">float</tt><tt class="py-op">(</tt><tt class="py-name">t1D</tt><tt class="py-op">)</tt> <tt class="py-op">/</tt> <tt class="py-name">D</tt> </tt>
+<a name="L131"></a><tt class="py-lineno">131</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-op">[</tt><tt id="link-48" class="py-name"><a title="lib.Math2D.geometry.CPoint" class="py-name" href="#" onclick="return doclink('link-48', 'CPoint', 'link-2');">CPoint</a></tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">ax1</tt> <tt class="py-op">+</tt> <tt class="py-op">(</tt><tt class="py-name">ax2</tt> <tt class="py-op">-</tt> <tt class="py-name">ax1</tt><tt class="py-op">)</tt><tt class="py-op">*</tt><tt class="py-name">t1</tt><tt class="py-op">,</tt> <tt class="py-name">ay1</tt> <tt class="py-op">+</tt> <tt class="py-op">(</tt><tt class="py-name">ay2</tt> <tt class="py-op">-</tt> <tt class="py-name">ay1</tt><tt class="py-op">)</tt><tt class="py-op">*</tt><tt class="py-name">t1</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> </tt>
+<a name="L132"></a><tt class="py-lineno">132</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L133"></a><tt class="py-lineno">133</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L134"></a><tt class="py-lineno">134</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">NotImplemented</tt> </tt>
+</div><a name="L135"></a><tt class="py-lineno">135</tt>  <tt class="py-line">     </tt>
+<a name="L136"></a><tt class="py-lineno">136</tt>  <tt class="py-line">    <tt id="link-49" class="py-name" targets="Method lib.Math2D.path.Path.__rmul__()=lib.Math2D.path.Path-class.html#__rmul__,Method lib.Math2D.path.PathPartArc.__rmul__()=lib.Math2D.path.PathPartArc-class.html#__rmul__,Method lib.Math2D.path.PathPartBezier.__rmul__()=lib.Math2D.path.PathPartBezier-class.html#__rmul__,Method lib.Math2D.path.PathPartLine.__rmul__()=lib.Math2D.path.PathPartLine-class.html#__rmul__,Method lib.Math2D.path.PathPartMove.__rmul__()=lib.Math2D.path.PathPartMove-class.html#__rmul__,Method lib.Math2D.path.PathSingle.__rmul__()=lib.Math2D.path.PathSingle-class.html#__rmul__"><a title="lib.Math2D.path.Path.__rmul__
+lib.Math2D.path.PathPartArc.__rmul__
+lib.Math2D.path.PathPartBezier.__rmul__
+lib.Math2D.path.PathPartLine.__rmul__
+lib.Math2D.path.PathPartMove.__rmul__
+lib.Math2D.path.PathSingle.__rmul__" class="py-name" href="#" onclick="return doclink('link-49', '__rmul__', 'link-49');">__rmul__</a></tt> <tt class="py-op">=</tt> <tt id="link-50" class="py-name" targets="Method lib.Math2D.geometry.CLine.__mul__()=lib.Math2D.geometry.CLine-class.html#__mul__,Method lib.Math2D.geometry.CPolyLine.__mul__()=lib.Math2D.geometry.CPolyLine-class.html#__mul__,Method lib.Math2D.geometry.CRectangle.__mul__()=lib.Math2D.geometry.CRectangle-class.html#__mul__,Method lib.Math2D.transform_matrix.Matrix.__mul__()=lib.Math2D.transform_matrix.Matrix-class.html#__mul__,Method lib.Math2D.transform_matrix.PointMatrix.__mul__()=lib.Math2D.transform_matrix.PointMatrix-class.html#__mul__,Method lib.Math2D.transform_matrix.TransformMatrix.__mul__()=lib.Math2D.transform_matrix.TransformMatrix-class.html#__mul__"><a title="lib.Math2D.geometry.CLine.__mul__
+lib.Math2D.geometry.CPolyLine.__mul__
+lib.Math2D.geometry.CRectangle.__mul__
+lib.Math2D.transform_matrix.Matrix.__mul__
+lib.Math2D.transform_matrix.PointMatrix.__mul__
+lib.Math2D.transform_matrix.TransformMatrix.__mul__" class="py-name" href="#" onclick="return doclink('link-50', '__mul__', 'link-50');">__mul__</a></tt> </tt>
+<a name="L137"></a><tt class="py-lineno">137</tt>  <tt class="py-line">     </tt>
+<a name="CLine.__sub__"></a><div id="CLine.__sub__-def"><a name="L138"></a><tt class="py-lineno">138</tt> <a class="py-toggle" href="#" id="CLine.__sub__-toggle" onclick="return toggle('CLine.__sub__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Math2D.geometry.CLine-class.html#__sub__">__sub__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">other</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CLine.__sub__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CLine.__sub__-expanded"><a name="L139"></a><tt class="py-lineno">139</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt class="py-name">other</tt><tt class="py-op">,</tt> <tt id="link-51" class="py-name"><a title="lib.Math2D.geometry.CPoint" class="py-name" href="#" onclick="return doclink('link-51', 'CPoint', 'link-2');">CPoint</a></tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L140"></a><tt class="py-lineno">140</tt>  <tt class="py-line">            <tt class="py-op">(</tt><tt class="py-name">x1</tt><tt class="py-op">,</tt> <tt class="py-name">y1</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-op">(</tt><tt class="py-name">x2</tt><tt class="py-op">,</tt> <tt class="py-name">y2</tt><tt class="py-op">)</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-52" class="py-name"><a title="lib.Gui.picDrawingArea.CpicDrawingArea.GetPos
+lib.Math2D.geometry.CLine.GetPos
+lib.Math2D.geometry.CPoint.GetPos
+lib.Math2D.geometry.CPolyLine.GetPos
+lib.Math2D.geometry.CPolygon.GetPos
+lib.Math2D.transform_matrix.PointMatrix.GetPos" class="py-name" href="#" onclick="return doclink('link-52', 'GetPos', 'link-3');">GetPos</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L141"></a><tt class="py-lineno">141</tt>  <tt class="py-line">            <tt class="py-name">x</tt><tt class="py-op">,</tt> <tt class="py-name">y</tt> <tt class="py-op">=</tt> <tt class="py-name">other</tt><tt class="py-op">.</tt><tt id="link-53" class="py-name"><a title="lib.Gui.picDrawingArea.CpicDrawingArea.GetPos
+lib.Math2D.geometry.CLine.GetPos
+lib.Math2D.geometry.CPoint.GetPos
+lib.Math2D.geometry.CPolyLine.GetPos
+lib.Math2D.geometry.CPolygon.GetPos
+lib.Math2D.transform_matrix.PointMatrix.GetPos" class="py-name" href="#" onclick="return doclink('link-53', 'GetPos', 'link-3');">GetPos</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L142"></a><tt class="py-lineno">142</tt>  <tt class="py-line">            <tt class="py-name">A</tt> <tt class="py-op">=</tt> <tt class="py-name">y2</tt> <tt class="py-op">-</tt> <tt class="py-name">y1</tt> </tt>
+<a name="L143"></a><tt class="py-lineno">143</tt>  <tt class="py-line">            <tt class="py-name">B</tt> <tt class="py-op">=</tt> <tt class="py-name">x1</tt> <tt class="py-op">-</tt> <tt class="py-name">x2</tt> </tt>
+<a name="L144"></a><tt class="py-lineno">144</tt>  <tt class="py-line">            <tt class="py-name">C</tt> <tt class="py-op">=</tt> <tt class="py-name">x2</tt><tt class="py-op">*</tt><tt class="py-name">y1</tt> <tt class="py-op">-</tt> <tt class="py-name">x1</tt><tt class="py-op">*</tt><tt class="py-name">y2</tt> </tt>
+<a name="L145"></a><tt class="py-lineno">145</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">A</tt> <tt class="py-op">==</tt> <tt class="py-number">0</tt> <tt class="py-keyword">and</tt> <tt class="py-name">B</tt> <tt class="py-op">==</tt> <tt class="py-number">0</tt><tt class="py-op">:</tt> </tt>
+<a name="L146"></a><tt class="py-lineno">146</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-name">math</tt><tt class="py-op">.</tt><tt class="py-name">sqrt</tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">x2</tt> <tt class="py-op">-</tt> <tt class="py-name">x</tt><tt class="py-op">)</tt><tt class="py-op">**</tt><tt class="py-number">2</tt> <tt class="py-op">+</tt> <tt class="py-op">(</tt><tt class="py-name">y2</tt> <tt class="py-op">-</tt> <tt class="py-name">y</tt><tt class="py-op">)</tt><tt class="py-op">**</tt><tt class="py-number">2</tt><tt class="py-op">)</tt> </tt>
+<a name="L147"></a><tt class="py-lineno">147</tt>  <tt class="py-line">            <tt class="py-name">T</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-op">-</tt><tt class="py-name">B</tt><tt class="py-op">*</tt><tt class="py-name">x2</tt> <tt class="py-op">+</tt> <tt class="py-name">A</tt><tt class="py-op">*</tt><tt class="py-name">y2</tt> <tt class="py-op">-</tt> <tt class="py-name">A</tt><tt class="py-op">*</tt><tt class="py-name">y</tt> <tt class="py-op">+</tt> <tt class="py-name">B</tt><tt class="py-op">*</tt><tt class="py-name">x</tt><tt class="py-op">)</tt><tt class="py-op">/</tt><tt class="py-op">(</tt><tt class="py-name">A</tt><tt class="py-op">**</tt><tt class="py-number">2</tt> <tt class="py-op">+</tt> <tt class="py-name">B</tt><tt class="py-op">**</tt><tt class="py-number">2</tt><tt class="py-op">)</tt> </tt>
+<a name="L148"></a><tt class="py-lineno">148</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">T</tt> <tt class="py-op">&lt;</tt> <tt class="py-number">0</tt><tt class="py-op">:</tt> </tt>
+<a name="L149"></a><tt class="py-lineno">149</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-name">math</tt><tt class="py-op">.</tt><tt class="py-name">sqrt</tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">x2</tt> <tt class="py-op">-</tt> <tt class="py-name">x</tt><tt class="py-op">)</tt><tt class="py-op">**</tt><tt class="py-number">2</tt> <tt class="py-op">+</tt> <tt class="py-op">(</tt><tt class="py-name">y2</tt> <tt class="py-op">-</tt> <tt class="py-name">y</tt><tt class="py-op">)</tt><tt class="py-op">**</tt><tt class="py-number">2</tt><tt class="py-op">)</tt> </tt>
+<a name="L150"></a><tt class="py-lineno">150</tt>  <tt class="py-line">            <tt class="py-keyword">elif</tt> <tt class="py-name">T</tt> <tt class="py-op">&gt;</tt> <tt class="py-number">1</tt><tt class="py-op">:</tt> </tt>
+<a name="L151"></a><tt class="py-lineno">151</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-name">math</tt><tt class="py-op">.</tt><tt class="py-name">sqrt</tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">x1</tt> <tt class="py-op">-</tt> <tt class="py-name">x</tt><tt class="py-op">)</tt><tt class="py-op">**</tt><tt class="py-number">2</tt> <tt class="py-op">+</tt> <tt class="py-op">(</tt><tt class="py-name">y1</tt> <tt class="py-op">-</tt> <tt class="py-name">y</tt><tt class="py-op">)</tt><tt class="py-op">**</tt><tt class="py-number">2</tt><tt class="py-op">)</tt> </tt>
+<a name="L152"></a><tt class="py-lineno">152</tt>  <tt class="py-line">            <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L153"></a><tt class="py-lineno">153</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-name">abs</tt><tt class="py-op">(</tt><tt class="py-name">A</tt><tt class="py-op">*</tt><tt class="py-name">x</tt> <tt class="py-op">+</tt> <tt class="py-name">B</tt><tt class="py-op">*</tt><tt class="py-name">y</tt> <tt class="py-op">+</tt> <tt class="py-name">C</tt><tt class="py-op">)</tt><tt class="py-op">/</tt><tt class="py-name">math</tt><tt class="py-op">.</tt><tt class="py-name">sqrt</tt><tt class="py-op">(</tt><tt class="py-name">A</tt><tt class="py-op">**</tt><tt class="py-number">2</tt> <tt class="py-op">+</tt> <tt class="py-name">B</tt><tt class="py-op">**</tt><tt class="py-number">2</tt><tt class="py-op">)</tt> </tt>
+<a name="L154"></a><tt class="py-lineno">154</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt class="py-name">other</tt><tt class="py-op">,</tt> <tt id="link-54" class="py-name"><a title="lib.Drawing.Objects.Line.CLine
+lib.Math2D.geometry.CLine" class="py-name" href="#" onclick="return doclink('link-54', 'CLine', 'link-21');">CLine</a></tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L155"></a><tt class="py-lineno">155</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">self</tt> <tt class="py-op">*</tt> <tt class="py-name">other</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L156"></a><tt class="py-lineno">156</tt>  <tt class="py-line">                    <tt class="py-keyword">return</tt> <tt class="py-number">0</tt> </tt>
+<a name="L157"></a><tt class="py-lineno">157</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">min</tt><tt class="py-op">(</tt><tt class="py-name">self</tt> <tt class="py-op">-</tt> <tt class="py-name">other</tt><tt class="py-op">.</tt><tt id="link-55" class="py-name"><a title="lib.Math2D.geometry.CLine.GetStart" class="py-name" href="#" onclick="return doclink('link-55', 'GetStart', 'link-15');">GetStart</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">self</tt> <tt class="py-op">-</tt> <tt class="py-name">other</tt><tt class="py-op">.</tt><tt id="link-56" class="py-name"><a title="lib.Math2D.geometry.CLine.GetEnd" class="py-name" href="#" onclick="return doclink('link-56', 'GetEnd', 'link-17');">GetEnd</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">other</tt> <tt class="py-op">-</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-57" class="py-name"><a title="lib.Math2D.geometry.CLine.GetStart" class="py-name" href="#" onclick="return doclink('link-57', 'GetStart', 'link-15');">GetStart</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">other</tt> <tt class="py-op">-</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-58" class="py-name"><a title="lib.Math2D.geometry.CLine.GetEnd" class="py-name" href="#" onclick="return doclink('link-58', 'GetEnd', 'link-17');">GetEnd</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L158"></a><tt class="py-lineno">158</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L159"></a><tt class="py-lineno">159</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">NotImplemented</tt> </tt>
+</div><a name="L160"></a><tt class="py-lineno">160</tt>  <tt class="py-line">         </tt>
+<a name="L161"></a><tt class="py-lineno">161</tt>  <tt class="py-line">    <tt class="py-name">__rsub__</tt> <tt class="py-op">=</tt> <tt id="link-59" class="py-name"><a title="lib.Math2D.geometry.CLine.__sub__
+lib.Math2D.geometry.CPoint.__sub__" class="py-name" href="#" onclick="return doclink('link-59', '__sub__', 'link-4');">__sub__</a></tt> </tt>
+<a name="L162"></a><tt class="py-lineno">162</tt>  <tt class="py-line">     </tt>
+<a name="CLine.__eq__"></a><div id="CLine.__eq__-def"><a name="L163"></a><tt class="py-lineno">163</tt> <a class="py-toggle" href="#" id="CLine.__eq__-toggle" onclick="return toggle('CLine.__eq__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Math2D.geometry.CLine-class.html#__eq__">__eq__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">other</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CLine.__eq__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CLine.__eq__-expanded"><a name="L164"></a><tt class="py-lineno">164</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">start</tt> <tt class="py-op">==</tt> <tt class="py-name">other</tt><tt class="py-op">.</tt><tt id="link-60" class="py-name"><a title="lib.Math2D.geometry.CLine.GetStart" class="py-name" href="#" onclick="return doclink('link-60', 'GetStart', 'link-15');">GetStart</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-keyword">and</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">end</tt> <tt class="py-op">==</tt> <tt class="py-name">other</tt><tt class="py-op">.</tt><tt id="link-61" class="py-name"><a title="lib.Math2D.geometry.CLine.GetEnd" class="py-name" href="#" onclick="return doclink('link-61', 'GetEnd', 'link-17');">GetEnd</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> <tt class="py-keyword">or</tt> \ </tt>
+<a name="L165"></a><tt class="py-lineno">165</tt>  <tt class="py-line">            <tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">start</tt> <tt class="py-op">==</tt> <tt class="py-name">other</tt><tt class="py-op">.</tt><tt id="link-62" class="py-name"><a title="lib.Math2D.geometry.CLine.GetEnd" class="py-name" href="#" onclick="return doclink('link-62', 'GetEnd', 'link-17');">GetEnd</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-keyword">and</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">end</tt> <tt class="py-op">==</tt><tt class="py-name">other</tt><tt class="py-op">.</tt><tt id="link-63" class="py-name"><a title="lib.Math2D.geometry.CLine.GetStart" class="py-name" href="#" onclick="return doclink('link-63', 'GetStart', 'link-15');">GetStart</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L166"></a><tt class="py-lineno">166</tt>  <tt class="py-line">             </tt>
+<a name="CLineVector"></a><div id="CLineVector-def"><a name="L167"></a><tt class="py-lineno">167</tt> <a class="py-toggle" href="#" id="CLineVector-toggle" onclick="return toggle('CLineVector');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="lib.Math2D.geometry.CLineVector-class.html">CLineVector</a><tt class="py-op">(</tt><tt class="py-base-class">CLine</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CLineVector-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="CLineVector-expanded"><a name="CLineVector.__init__"></a><div id="CLineVector.__init__-def"><a name="L168"></a><tt class="py-lineno">168</tt> <a class="py-toggle" href="#" id="CLineVector.__init__-toggle" onclick="return toggle('CLineVector.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Math2D.geometry.CLineVector-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">start</tt><tt class="py-op">,</tt> <tt class="py-param">alpha</tt><tt class="py-op">,</tt> <tt class="py-param">length</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CLineVector.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CLineVector.__init__-expanded"><a name="L169"></a><tt class="py-lineno">169</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt class="py-name">start</tt><tt class="py-op">,</tt> <tt id="link-64" class="py-name"><a title="lib.Math2D.geometry.CPoint" class="py-name" href="#" onclick="return doclink('link-64', 'CPoint', 'link-2');">CPoint</a></tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L170"></a><tt class="py-lineno">170</tt>  <tt class="py-line">            <tt class="py-name">start</tt> <tt class="py-op">=</tt> <tt id="link-65" class="py-name"><a title="lib.Math2D.geometry.CPoint" class="py-name" href="#" onclick="return doclink('link-65', 'CPoint', 'link-2');">CPoint</a></tt><tt class="py-op">(</tt><tt class="py-name">start</tt><tt class="py-op">)</tt> </tt>
+<a name="L171"></a><tt class="py-lineno">171</tt>  <tt class="py-line">        <tt class="py-name">x</tt><tt class="py-op">,</tt> <tt class="py-name">y</tt> <tt class="py-op">=</tt> <tt class="py-name">start</tt><tt class="py-op">.</tt><tt id="link-66" class="py-name"><a title="lib.Gui.picDrawingArea.CpicDrawingArea.GetPos
+lib.Math2D.geometry.CLine.GetPos
+lib.Math2D.geometry.CPoint.GetPos
+lib.Math2D.geometry.CPolyLine.GetPos
+lib.Math2D.geometry.CPolygon.GetPos
+lib.Math2D.transform_matrix.PointMatrix.GetPos" class="py-name" href="#" onclick="return doclink('link-66', 'GetPos', 'link-3');">GetPos</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L172"></a><tt class="py-lineno">172</tt>  <tt class="py-line">        <tt class="py-name">end</tt> <tt class="py-op">=</tt> <tt id="link-67" class="py-name"><a title="lib.Math2D.geometry.CPoint" class="py-name" href="#" onclick="return doclink('link-67', 'CPoint', 'link-2');">CPoint</a></tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">x</tt> <tt class="py-op">+</tt> <tt class="py-name">math</tt><tt class="py-op">.</tt><tt class="py-name">cos</tt><tt class="py-op">(</tt><tt class="py-name">alpha</tt><tt class="py-op">)</tt><tt class="py-op">*</tt><tt class="py-name">length</tt><tt class="py-op">,</tt> <tt class="py-name">y</tt> <tt class="py-op">+</tt> <tt class="py-name">math</tt><tt class="py-op">.</tt><tt class="py-name">sin</tt><tt class="py-op">(</tt><tt class="py-name">alpha</tt><tt class="py-op">)</tt><tt class="py-op">*</tt><tt class="py-name">length</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L173"></a><tt class="py-lineno">173</tt>  <tt class="py-line">        <tt id="link-68" class="py-name"><a title="lib.Drawing.Objects.Line.CLine
+lib.Math2D.geometry.CLine" class="py-name" href="#" onclick="return doclink('link-68', 'CLine', 'link-21');">CLine</a></tt><tt class="py-op">.</tt><tt id="link-69" class="py-name" targets="Method lib.Clipboard.Clipboard.CClipboard.__init__()=lib.Clipboard.Clipboard.CClipboard-class.html#__init__,Method lib.Connections.Arrow.CConnectionArrow.__init__()=lib.Connections.Arrow.CConnectionArrow-class.html#__init__,Method lib.Connections.Factory.CConnectionFactory.__init__()=lib.Connections.Factory.CConnectionFactory-class.html#__init__,Method lib.Connections.Line.CConnectionLine.__init__()=lib.Connections.Line.CConnectionLine-class.html#__init__,Method lib.Connections.Object.CConnectionObject.__init__()=lib.Connections.Object.CConnectionObject-class.html#__init__,Method lib.Connections.Type.CConnectionType.__init__()=lib.Connections.Type.CConnectionType-class.html#__init__,Method lib.Diagrams.Factory.CDiagramFactory.__init__()=lib.Diagrams.Factory.CDiagramFactory-class.html#__init__,Method lib.Diagrams.Type.CDiagramType.__init__()=lib.Diagrams.Type.CDiagramType-class.html#__init__,Method lib.Drawing.Canvas.Abstract.CAbstractCanvas.__init__()=lib.Drawing.Canvas.Abstract.CAbstractCanvas-class.html#__init__,Method lib.Drawing.Canvas.Cairo.CCairoCanvas.__init__()=lib.Drawing.Canvas.Cairo.CCairoCanvas-class.html#__init__,Method lib.Drawing.Canvas.Gtk.CGtkCanvas.__init__()=lib.Drawing.Canvas.Gtk.CGtkCanvas-class.html#__init__,Method lib.Drawing.Canvas.Svg.CSvgCanvas.__init__()=lib.Drawing.Canvas.Svg.CSvgCanvas-class.html#__init__,Method lib.Drawing.Connection.CConnection.__init__()=lib.Drawing.Connection.CConnection-class.html#__init__,Method lib.Drawing.DrawingArea.CDrawingArea.__init__()=lib.Drawing.DrawingArea.CDrawingArea-class.html#__init__,Method lib.Drawing.Element.CElement.__init__()=lib.Drawing.Element.CElement-class.html#__init__,Method lib.Drawing.Objects.Align.CAlign.__init__()=lib.Drawing.Objects.Align.CAlign-class.html#__init__,Method lib.Drawing.Objects.Condition.CCondition.__init__()=lib.Drawing.Objects.Condition.CCondition-class.html#__init__,Method lib.Drawing.Objects.Container.CContainer.__init__()=lib.Drawing.Objects.Container.CContainer-class.html#__init__,Method lib.Drawing.Objects.Ellipse.CEllipse.__init__()=lib.Drawing.Objects.Ellipse.CEllipse-class.html#__init__,Method lib.Drawing.Objects.HBox.CHBox.__init__()=lib.Drawing.Objects.HBox.CHBox-class.html#__init__,Method lib.Drawing.Objects.Icon.CIcon.__init__()=lib.Drawing.Objects.Icon.CIcon-class.html#__init__,Method lib.Drawing.Objects.Line.CLine.__init__()=lib.Drawing.Objects.Line.CLine-class.html#__init__,Method lib.Drawing.Objects.Loop.CLoop.__init__()=lib.Drawing.Objects.Loop.CLoop-class.html#__init__,Method lib.Drawing.Objects.Padding.CPadding.__init__()=lib.Drawing.Objects.Padding.CPadding-class.html#__init__,Method lib.Drawing.Objects.Proportional.CProportional.__init__()=lib.Drawing.Objects.Proportional.CProportional-class.html#__init__,Method lib.Drawing.Objects.Rectangle.CRectangle.__init__()=lib.Drawing.Objects.Rectangle.CRectangle-class.html#__init__,Method lib.Drawing.Objects.Shadow.CShadow.__init__()=lib.Drawing.Objects.Shadow.CShadow-class.html#__init__,Method lib.Drawing.Objects.Sizer.CSizer.__init__()=lib.Drawing.Objects.Sizer.CSizer-class.html#__init__,Method lib.Drawing.Objects.Svg.CSvg.__init__()=lib.Drawing.Objects.Svg.CSvg-class.html#__init__,Method lib.Drawing.Objects.TextBox.CTextBox.__init__()=lib.Drawing.Objects.TextBox.CTextBox-class.html#__init__,Method lib.Drawing.Objects.VBox.CVBox.__init__()=lib.Drawing.Objects.VBox.CVBox-class.html#__init__,Method lib.Drawing.Objects.VisualObject.CVisualObject.__init__()=lib.Drawing.Objects.VisualObject.CVisualObject-class.html#__init__,Method lib.Elements.Factory.CElementFactory.__init__()=lib.Elements.Factory.CElementFactory-class.html#__init__,Method lib.Elements.Object.CElementObject.__init__()=lib.Elements.Object.CElementObject-class.html#__init__,Method lib.Elements.Type.CElementType.__init__()=lib.Elements.Type.CElementType-class.html#__init__,Method lib.Gui.common.Application.CApplication.__init__()=lib.Gui.common.Application.CApplication-class.html#__init__,Method lib.Gui.common.CellRendererButton'.CellRendererButton.__init__()=lib.Gui.common.CellRendererButton%27.CellRendererButton-class.html#__init__,Method lib.Gui.common.Widget.CWidget.__init__()=lib.Gui.common.Widget.CWidget-class.html#__init__,Method lib.Gui.common.Window.CWindow.__init__()=lib.Gui.common.Window.CWindow-class.html#__init__,Method lib.Gui.dialogs.CQuestionDialog.__init__()=lib.Gui.dialogs.CQuestionDialog-class.html#__init__,Method lib.Gui.dialogs.CWarningDialog.__init__()=lib.Gui.dialogs.CWarningDialog-class.html#__init__,Method lib.Gui.frmFindInDiagram.CFindInDiagram.__init__()=lib.Gui.frmFindInDiagram.CFindInDiagram-class.html#__init__,Method lib.Gui.frmMain.CfrmMain.__init__()=lib.Gui.frmMain.CfrmMain-class.html#__init__,Method lib.Gui.frmOpen.CfrmOpen.__init__()=lib.Gui.frmOpen.CfrmOpen-class.html#__init__,Method lib.Gui.frmProperties.CfrmProperties.__init__()=lib.Gui.frmProperties.CfrmProperties-class.html#__init__,Method lib.Gui.frmSave.CfrmSave.__init__()=lib.Gui.frmSave.CfrmSave-class.html#__init__,Method lib.Gui.frmSplash.CfrmSplash.__init__()=lib.Gui.frmSplash.CfrmSplash-class.html#__init__,Method lib.Gui.lwProperties.ClwProperties.__init__()=lib.Gui.lwProperties.ClwProperties-class.html#__init__,Method lib.Gui.nbProperties.CnbProperties.__init__()=lib.Gui.nbProperties.CnbProperties-class.html#__init__,Method lib.Gui.picDrawingArea.CpicDrawingArea.__init__()=lib.Gui.picDrawingArea.CpicDrawingArea-class.html#__init__,Method lib.Gui.tabStartPage.CtabStartPage.__init__()=lib.Gui.tabStartPage.CtabStartPage-class.html#__init__,Method lib.Gui.tabs.CTabs.__init__()=lib.Gui.tabs.CTabs-class.html#__init__,Method lib.Gui.tbToolBox.CtbToolBox.__init__()=lib.Gui.tbToolBox.CtbToolBox-class.html#__init__,Method lib.Gui.twProjectView.CtwProjectView.__init__()=lib.Gui.twProjectView.CtwProjectView-class.html#__init__,Method lib.Gui.txtNotes.CtxtNotes.__init__()=lib.Gui.txtNotes.CtxtNotes-class.html#__init__,Method lib.Math2D.geometry.CLine.__init__()=lib.Math2D.geometry.CLine-class.html#__init__,Method lib.Math2D.geometry.CLineVector.__init__()=lib.Math2D.geometry.CLineVector-class.html#__init__,Method lib.Math2D.geometry.CPoint.__init__()=lib.Math2D.geometry.CPoint-class.html#__init__,Method lib.Math2D.geometry.CPolyLine.__init__()=lib.Math2D.geometry.CPolyLine-class.html#__init__,Method lib.Math2D.geometry.CPolygon.__init__()=lib.Math2D.geometry.CPolygon-class.html#__init__,Method lib.Math2D.geometry.CRectangle.__init__()=lib.Math2D.geometry.CRectangle-class.html#__init__,Method lib.Math2D.path.Path.__init__()=lib.Math2D.path.Path-class.html#__init__,Method lib.Math2D.path.PathPartArc.__init__()=lib.Math2D.path.PathPartArc-class.html#__init__,Method lib.Math2D.path.PathPartBezier.__init__()=lib.Math2D.path.PathPartBezier-class.html#__init__,Method lib.Math2D.path.PathPartLine.__init__()=lib.Math2D.path.PathPartLine-class.html#__init__,Method lib.Math2D.path.PathPartMove.__init__()=lib.Math2D.path.PathPartMove-class.html#__init__,Method lib.Math2D.path.PathSingle.__init__()=lib.Math2D.path.PathSingle-class.html#__init__,Method lib.Math2D.transform_matrix.Matrix.__init__()=lib.Math2D.transform_matrix.Matrix-class.html#__init__,Method lib.Math2D.transform_matrix.PointMatrix.__init__()=lib.Math2D.transform_matrix.PointMatrix-class.html#__init__,Method lib.Math2D.transform_matrix.TransformMatrix.__init__()=lib.Math2D.transform_matrix.TransformMatrix-class.html#__init__,Method lib.Project.Project.CProject.__init__()=lib.Project.Project.CProject-class.html#__init__,Method lib.Project.ProjectNode.CProjectNode.__init__()=lib.Project.ProjectNode.CProjectNode-class.html#__init__,Method lib.Project.RecentFiles.CRecentFiles.__init__()=lib.Project.RecentFiles.CRecentFiles-class.html#__init__,Method lib.Storages.AbstractStorage.CAbstractStorage.__init__()=lib.Storages.AbstractStorage.CAbstractStorage-class.html#__init__,Method lib.Storages.Directory.CDirectory.__init__()=lib.Storages.Directory.CDirectory-class.html#__init__,Method lib.Versions.Factory.CVersionFactory.__init__()=lib.Versions.Factory.CVersionFactory-class.html#__init__,Method lib.Versions.Type.CVersionType.__init__()=lib.Versions.Type.CVersionType-class.html#__init__,Method lib.config.CConfig.__init__()=lib.config.CConfig-class.html#__init__,Method lib.debug.DebugAttribute.__init__()=lib.debug.DebugAttribute-class.html#__init__,Method lib.lib.IDGenerator.__init__()=lib.lib.IDGenerator-class.html#__init__,Method lib.lib.UMLException.__init__()=lib.lib.UMLException-class.html#__init__"><a title="lib.Clipboard.Clipboard.CClipboard.__init__
+lib.Connections.Arrow.CConnectionArrow.__init__
+lib.Connections.Factory.CConnectionFactory.__init__
+lib.Connections.Line.CConnectionLine.__init__
+lib.Connections.Object.CConnectionObject.__init__
+lib.Connections.Type.CConnectionType.__init__
+lib.Diagrams.Factory.CDiagramFactory.__init__
+lib.Diagrams.Type.CDiagramType.__init__
+lib.Drawing.Canvas.Abstract.CAbstractCanvas.__init__
+lib.Drawing.Canvas.Cairo.CCairoCanvas.__init__
+lib.Drawing.Canvas.Gtk.CGtkCanvas.__init__
+lib.Drawing.Canvas.Svg.CSvgCanvas.__init__
+lib.Drawing.Connection.CConnection.__init__
+lib.Drawing.DrawingArea.CDrawingArea.__init__
+lib.Drawing.Element.CElement.__init__
+lib.Drawing.Objects.Align.CAlign.__init__
+lib.Drawing.Objects.Condition.CCondition.__init__
+lib.Drawing.Objects.Container.CContainer.__init__
+lib.Drawing.Objects.Ellipse.CEllipse.__init__
+lib.Drawing.Objects.HBox.CHBox.__init__
+lib.Drawing.Objects.Icon.CIcon.__init__
+lib.Drawing.Objects.Line.CLine.__init__
+lib.Drawing.Objects.Loop.CLoop.__init__
+lib.Drawing.Objects.Padding.CPadding.__init__
+lib.Drawing.Objects.Proportional.CProportional.__init__
+lib.Drawing.Objects.Rectangle.CRectangle.__init__
+lib.Drawing.Objects.Shadow.CShadow.__init__
+lib.Drawing.Objects.Sizer.CSizer.__init__
+lib.Drawing.Objects.Svg.CSvg.__init__
+lib.Drawing.Objects.TextBox.CTextBox.__init__
+lib.Drawing.Objects.VBox.CVBox.__init__
+lib.Drawing.Objects.VisualObject.CVisualObject.__init__
+lib.Elements.Factory.CElementFactory.__init__
+lib.Elements.Object.CElementObject.__init__
+lib.Elements.Type.CElementType.__init__
+lib.Gui.common.Application.CApplication.__init__
+lib.Gui.common.CellRendererButton'.CellRendererButton.__init__
+lib.Gui.common.Widget.CWidget.__init__
+lib.Gui.common.Window.CWindow.__init__
+lib.Gui.dialogs.CQuestionDialog.__init__
+lib.Gui.dialogs.CWarningDialog.__init__
+lib.Gui.frmFindInDiagram.CFindInDiagram.__init__
+lib.Gui.frmMain.CfrmMain.__init__
+lib.Gui.frmOpen.CfrmOpen.__init__
+lib.Gui.frmProperties.CfrmProperties.__init__
+lib.Gui.frmSave.CfrmSave.__init__
+lib.Gui.frmSplash.CfrmSplash.__init__
+lib.Gui.lwProperties.ClwProperties.__init__
+lib.Gui.nbProperties.CnbProperties.__init__
+lib.Gui.picDrawingArea.CpicDrawingArea.__init__
+lib.Gui.tabStartPage.CtabStartPage.__init__
+lib.Gui.tabs.CTabs.__init__
+lib.Gui.tbToolBox.CtbToolBox.__init__
+lib.Gui.twProjectView.CtwProjectView.__init__
+lib.Gui.txtNotes.CtxtNotes.__init__
+lib.Math2D.geometry.CLine.__init__
+lib.Math2D.geometry.CLineVector.__init__
+lib.Math2D.geometry.CPoint.__init__
+lib.Math2D.geometry.CPolyLine.__init__
+lib.Math2D.geometry.CPolygon.__init__
+lib.Math2D.geometry.CRectangle.__init__
+lib.Math2D.path.Path.__init__
+lib.Math2D.path.PathPartArc.__init__
+lib.Math2D.path.PathPartBezier.__init__
+lib.Math2D.path.PathPartLine.__init__
+lib.Math2D.path.PathPartMove.__init__
+lib.Math2D.path.PathSingle.__init__
+lib.Math2D.transform_matrix.Matrix.__init__
+lib.Math2D.transform_matrix.PointMatrix.__init__
+lib.Math2D.transform_matrix.TransformMatrix.__init__
+lib.Project.Project.CProject.__init__
+lib.Project.ProjectNode.CProjectNode.__init__
+lib.Project.RecentFiles.CRecentFiles.__init__
+lib.Storages.AbstractStorage.CAbstractStorage.__init__
+lib.Storages.Directory.CDirectory.__init__
+lib.Versions.Factory.CVersionFactory.__init__
+lib.Versions.Type.CVersionType.__init__
+lib.config.CConfig.__init__
+lib.debug.DebugAttribute.__init__
+lib.lib.IDGenerator.__init__
+lib.lib.UMLException.__init__" class="py-name" href="#" onclick="return doclink('link-69', '__init__', 'link-69');">__init__</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">,</tt> <tt class="py-name">start</tt><tt class="py-op">,</tt> <tt class="py-name">end</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L174"></a><tt class="py-lineno">174</tt>  <tt class="py-line">     </tt>
+<a name="CPolyLine"></a><div id="CPolyLine-def"><a name="L175"></a><tt class="py-lineno">175</tt> <a class="py-toggle" href="#" id="CPolyLine-toggle" onclick="return toggle('CPolyLine');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="lib.Math2D.geometry.CPolyLine-class.html">CPolyLine</a><tt class="py-op">:</tt> </tt>
+</div><div id="CPolyLine-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="CPolyLine-expanded"><a name="CPolyLine.__init__"></a><div id="CPolyLine.__init__-def"><a name="L176"></a><tt class="py-lineno">176</tt> <a class="py-toggle" href="#" id="CPolyLine.__init__-toggle" onclick="return toggle('CPolyLine.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Math2D.geometry.CPolyLine-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">points</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CPolyLine.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CPolyLine.__init__-expanded"><a name="L177"></a><tt class="py-lineno">177</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">points</tt><tt class="py-op">)</tt> <tt class="py-op">&lt;</tt> <tt class="py-number">2</tt><tt class="py-op">:</tt> </tt>
+<a name="L178"></a><tt class="py-lineno">178</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt id="link-70" class="py-name"><a title="lib.Math2D.exceptions.MathException" class="py-name" href="#" onclick="return doclink('link-70', 'MathException', 'link-1');">MathException</a></tt> </tt>
+<a name="L179"></a><tt class="py-lineno">179</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">lines</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L180"></a><tt class="py-lineno">180</tt>  <tt class="py-line">        <tt class="py-name">start</tt> <tt class="py-op">=</tt> <tt class="py-name">points</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> </tt>
+<a name="L181"></a><tt class="py-lineno">181</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">end</tt> <tt class="py-keyword">in</tt> <tt class="py-name">points</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">:</tt><tt class="py-op">]</tt><tt class="py-op">:</tt> </tt>
+<a name="L182"></a><tt class="py-lineno">182</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">lines</tt><tt class="py-op">.</tt><tt id="link-71" class="py-name" targets="Method lib.Math2D.path.PathSingle.append()=lib.Math2D.path.PathSingle-class.html#append"><a title="lib.Math2D.path.PathSingle.append" class="py-name" href="#" onclick="return doclink('link-71', 'append', 'link-71');">append</a></tt><tt class="py-op">(</tt><tt id="link-72" class="py-name"><a title="lib.Drawing.Objects.Line.CLine
+lib.Math2D.geometry.CLine" class="py-name" href="#" onclick="return doclink('link-72', 'CLine', 'link-21');">CLine</a></tt><tt class="py-op">(</tt><tt class="py-name">start</tt><tt class="py-op">,</tt> <tt class="py-name">end</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L183"></a><tt class="py-lineno">183</tt>  <tt class="py-line">            <tt class="py-name">start</tt> <tt class="py-op">=</tt> <tt class="py-name">end</tt> </tt>
+</div><a name="L184"></a><tt class="py-lineno">184</tt>  <tt class="py-line">             </tt>
+<a name="CPolyLine.GetLine"></a><div id="CPolyLine.GetLine-def"><a name="L185"></a><tt class="py-lineno">185</tt> <a class="py-toggle" href="#" id="CPolyLine.GetLine-toggle" onclick="return toggle('CPolyLine.GetLine');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Math2D.geometry.CPolyLine-class.html#GetLine">GetLine</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">index</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CPolyLine.GetLine-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CPolyLine.GetLine-expanded"><a name="L186"></a><tt class="py-lineno">186</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">lines</tt><tt class="py-op">[</tt><tt class="py-name">index</tt><tt class="py-op">]</tt> </tt>
+</div><a name="L187"></a><tt class="py-lineno">187</tt>  <tt class="py-line">         </tt>
+<a name="CPolyLine.GetLines"></a><div id="CPolyLine.GetLines-def"><a name="L188"></a><tt class="py-lineno">188</tt> <a class="py-toggle" href="#" id="CPolyLine.GetLines-toggle" onclick="return toggle('CPolyLine.GetLines');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Math2D.geometry.CPolyLine-class.html#GetLines">GetLines</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CPolyLine.GetLines-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CPolyLine.GetLines-expanded"><a name="L189"></a><tt class="py-lineno">189</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">line</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">lines</tt><tt class="py-op">:</tt> </tt>
+<a name="L190"></a><tt class="py-lineno">190</tt>  <tt class="py-line">            <tt class="py-keyword">yield</tt> <tt class="py-name">line</tt> </tt>
+</div><a name="L191"></a><tt class="py-lineno">191</tt>  <tt class="py-line">             </tt>
+<a name="CPolyLine.GetPos"></a><div id="CPolyLine.GetPos-def"><a name="L192"></a><tt class="py-lineno">192</tt> <a class="py-toggle" href="#" id="CPolyLine.GetPos-toggle" onclick="return toggle('CPolyLine.GetPos');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Math2D.geometry.CPolyLine-class.html#GetPos">GetPos</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CPolyLine.GetPos-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CPolyLine.GetPos-expanded"><a name="L193"></a><tt class="py-lineno">193</tt>  <tt class="py-line">        <tt class="py-name">result</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">lines</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-73" class="py-name"><a title="lib.Math2D.geometry.CLine.GetStart" class="py-name" href="#" onclick="return doclink('link-73', 'GetStart', 'link-15');">GetStart</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-74" class="py-name"><a title="lib.Gui.picDrawingArea.CpicDrawingArea.GetPos
+lib.Math2D.geometry.CLine.GetPos
+lib.Math2D.geometry.CPoint.GetPos
+lib.Math2D.geometry.CPolyLine.GetPos
+lib.Math2D.geometry.CPolygon.GetPos
+lib.Math2D.transform_matrix.PointMatrix.GetPos" class="py-name" href="#" onclick="return doclink('link-74', 'GetPos', 'link-3');">GetPos</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> </tt>
+<a name="L194"></a><tt class="py-lineno">194</tt>  <tt class="py-line">        <tt class="py-name">result</tt><tt class="py-op">.</tt><tt id="link-75" class="py-name" targets="Method lib.Math2D.path.PathSingle.extend()=lib.Math2D.path.PathSingle-class.html#extend"><a title="lib.Math2D.path.PathSingle.extend" class="py-name" href="#" onclick="return doclink('link-75', 'extend', 'link-75');">extend</a></tt><tt class="py-op">(</tt><tt class="py-op">[</tt><tt class="py-name">line</tt><tt class="py-op">.</tt><tt id="link-76" class="py-name"><a title="lib.Math2D.geometry.CLine.GetEnd" class="py-name" href="#" onclick="return doclink('link-76', 'GetEnd', 'link-17');">GetEnd</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-77" class="py-name"><a title="lib.Gui.picDrawingArea.CpicDrawingArea.GetPos
+lib.Math2D.geometry.CLine.GetPos
+lib.Math2D.geometry.CPoint.GetPos
+lib.Math2D.geometry.CPolyLine.GetPos
+lib.Math2D.geometry.CPolygon.GetPos
+lib.Math2D.transform_matrix.PointMatrix.GetPos" class="py-name" href="#" onclick="return doclink('link-77', 'GetPos', 'link-3');">GetPos</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-keyword">for</tt> <tt class="py-name">line</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">lines</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L195"></a><tt class="py-lineno">195</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">result</tt> </tt>
+</div><a name="L196"></a><tt class="py-lineno">196</tt>  <tt class="py-line">         </tt>
+<a name="CPolyLine.Nearest"></a><div id="CPolyLine.Nearest-def"><a name="L197"></a><tt class="py-lineno">197</tt> <a class="py-toggle" href="#" id="CPolyLine.Nearest-toggle" onclick="return toggle('CPolyLine.Nearest');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Math2D.geometry.CPolyLine-class.html#Nearest">Nearest</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">point</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CPolyLine.Nearest-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CPolyLine.Nearest-expanded"><a name="L198"></a><tt class="py-lineno">198</tt>  <tt class="py-line">        <tt class="py-name">result</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L199"></a><tt class="py-lineno">199</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">index</tt><tt class="py-op">,</tt> <tt class="py-name">line</tt> <tt class="py-keyword">in</tt> <tt class="py-name">enumerate</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">lines</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L200"></a><tt class="py-lineno">200</tt>  <tt class="py-line">            <tt class="py-name">nearest</tt><tt class="py-op">,</tt> <tt class="py-name">dist</tt><tt class="py-op">,</tt> <tt class="py-name">angle</tt> <tt class="py-op">=</tt> <tt class="py-name">line</tt><tt class="py-op">.</tt><tt id="link-78" class="py-name" targets="Method lib.Math2D.geometry.CLine.Nearest()=lib.Math2D.geometry.CLine-class.html#Nearest,Method lib.Math2D.geometry.CPolyLine.Nearest()=lib.Math2D.geometry.CPolyLine-class.html#Nearest"><a title="lib.Math2D.geometry.CLine.Nearest
+lib.Math2D.geometry.CPolyLine.Nearest" class="py-name" href="#" onclick="return doclink('link-78', 'Nearest', 'link-78');">Nearest</a></tt><tt class="py-op">(</tt><tt class="py-name">point</tt><tt class="py-op">)</tt> </tt>
+<a name="L201"></a><tt class="py-lineno">201</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">result</tt> <tt class="py-keyword">is</tt> <tt class="py-name">None</tt> <tt class="py-keyword">or</tt> <tt class="py-name">dist</tt> <tt class="py-op">&lt;</tt> <tt class="py-name">result</tt><tt class="py-op">[</tt><tt class="py-number">2</tt><tt class="py-op">]</tt><tt class="py-op">:</tt> </tt>
+<a name="L202"></a><tt class="py-lineno">202</tt>  <tt class="py-line">                <tt class="py-name">result</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-name">index</tt><tt class="py-op">,</tt> <tt class="py-name">nearest</tt><tt class="py-op">,</tt> <tt class="py-name">dist</tt><tt class="py-op">,</tt> <tt class="py-name">angle</tt><tt class="py-op">)</tt> </tt>
+<a name="L203"></a><tt class="py-lineno">203</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">result</tt> </tt>
+</div><a name="L204"></a><tt class="py-lineno">204</tt>  <tt class="py-line">         </tt>
+<a name="CPolyLine.__repr__"></a><div id="CPolyLine.__repr__-def"><a name="L205"></a><tt class="py-lineno">205</tt> <a class="py-toggle" href="#" id="CPolyLine.__repr__-toggle" onclick="return toggle('CPolyLine.__repr__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Math2D.geometry.CPolyLine-class.html#__repr__">__repr__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CPolyLine.__repr__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CPolyLine.__repr__-expanded"><a name="L206"></a><tt class="py-lineno">206</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">repr</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">lines</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L207"></a><tt class="py-lineno">207</tt>  <tt class="py-line">         </tt>
+<a name="CPolyLine.__abs__"></a><div id="CPolyLine.__abs__-def"><a name="L208"></a><tt class="py-lineno">208</tt> <a class="py-toggle" href="#" id="CPolyLine.__abs__-toggle" onclick="return toggle('CPolyLine.__abs__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Math2D.geometry.CPolyLine-class.html#__abs__">__abs__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CPolyLine.__abs__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CPolyLine.__abs__-expanded"><a name="L209"></a><tt class="py-lineno">209</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">sum</tt><tt class="py-op">(</tt><tt class="py-op">[</tt><tt class="py-name">abs</tt><tt class="py-op">(</tt><tt class="py-name">line</tt><tt class="py-op">)</tt> <tt class="py-keyword">for</tt> <tt class="py-name">line</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">lines</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L210"></a><tt class="py-lineno">210</tt>  <tt class="py-line">             </tt>
+<a name="CPolyLine.__mul__"></a><div id="CPolyLine.__mul__-def"><a name="L211"></a><tt class="py-lineno">211</tt> <a class="py-toggle" href="#" id="CPolyLine.__mul__-toggle" onclick="return toggle('CPolyLine.__mul__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Math2D.geometry.CPolyLine-class.html#__mul__">__mul__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">other</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CPolyLine.__mul__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CPolyLine.__mul__-expanded"><a name="L212"></a><tt class="py-lineno">212</tt>  <tt class="py-line">        <tt class="py-name">result</tt> <tt class="py-op">=</tt> <tt class="py-name">set</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L213"></a><tt class="py-lineno">213</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">line</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">lines</tt><tt class="py-op">:</tt> </tt>
+<a name="L214"></a><tt class="py-lineno">214</tt>  <tt class="py-line">            <tt class="py-name">result</tt> <tt class="py-op">|=</tt> <tt class="py-name">set</tt><tt class="py-op">(</tt><tt class="py-name">line</tt> <tt class="py-op">*</tt> <tt class="py-name">other</tt><tt class="py-op">)</tt> </tt>
+<a name="L215"></a><tt class="py-lineno">215</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">list</tt><tt class="py-op">(</tt><tt class="py-name">result</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L216"></a><tt class="py-lineno">216</tt>  <tt class="py-line">         </tt>
+<a name="L217"></a><tt class="py-lineno">217</tt>  <tt class="py-line">    <tt id="link-79" class="py-name"><a title="lib.Math2D.path.Path.__rmul__
+lib.Math2D.path.PathPartArc.__rmul__
+lib.Math2D.path.PathPartBezier.__rmul__
+lib.Math2D.path.PathPartLine.__rmul__
+lib.Math2D.path.PathPartMove.__rmul__
+lib.Math2D.path.PathSingle.__rmul__" class="py-name" href="#" onclick="return doclink('link-79', '__rmul__', 'link-49');">__rmul__</a></tt> <tt class="py-op">=</tt> <tt id="link-80" class="py-name"><a title="lib.Math2D.geometry.CLine.__mul__
+lib.Math2D.geometry.CPolyLine.__mul__
+lib.Math2D.geometry.CRectangle.__mul__
+lib.Math2D.transform_matrix.Matrix.__mul__
+lib.Math2D.transform_matrix.PointMatrix.__mul__
+lib.Math2D.transform_matrix.TransformMatrix.__mul__" class="py-name" href="#" onclick="return doclink('link-80', '__mul__', 'link-50');">__mul__</a></tt> </tt>
+</div><a name="L218"></a><tt class="py-lineno">218</tt>  <tt class="py-line">     </tt>
+<a name="CPolygon"></a><div id="CPolygon-def"><a name="L219"></a><tt class="py-lineno">219</tt> <a class="py-toggle" href="#" id="CPolygon-toggle" onclick="return toggle('CPolygon');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="lib.Math2D.geometry.CPolygon-class.html">CPolygon</a><tt class="py-op">(</tt><tt class="py-base-class">CPolyLine</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CPolygon-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="CPolygon-expanded"><a name="CPolygon.__init__"></a><div id="CPolygon.__init__-def"><a name="L220"></a><tt class="py-lineno">220</tt> <a class="py-toggle" href="#" id="CPolygon.__init__-toggle" onclick="return toggle('CPolygon.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Math2D.geometry.CPolygon-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">points</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CPolygon.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CPolygon.__init__-expanded"><a name="L221"></a><tt class="py-lineno">221</tt>  <tt class="py-line">        <tt id="link-81" class="py-name" targets="Class lib.Math2D.geometry.CPolyLine=lib.Math2D.geometry.CPolyLine-class.html"><a title="lib.Math2D.geometry.CPolyLine" class="py-name" href="#" onclick="return doclink('link-81', 'CPolyLine', 'link-81');">CPolyLine</a></tt><tt class="py-op">.</tt><tt id="link-82" class="py-name"><a title="lib.Clipboard.Clipboard.CClipboard.__init__
+lib.Connections.Arrow.CConnectionArrow.__init__
+lib.Connections.Factory.CConnectionFactory.__init__
+lib.Connections.Line.CConnectionLine.__init__
+lib.Connections.Object.CConnectionObject.__init__
+lib.Connections.Type.CConnectionType.__init__
+lib.Diagrams.Factory.CDiagramFactory.__init__
+lib.Diagrams.Type.CDiagramType.__init__
+lib.Drawing.Canvas.Abstract.CAbstractCanvas.__init__
+lib.Drawing.Canvas.Cairo.CCairoCanvas.__init__
+lib.Drawing.Canvas.Gtk.CGtkCanvas.__init__
+lib.Drawing.Canvas.Svg.CSvgCanvas.__init__
+lib.Drawing.Connection.CConnection.__init__
+lib.Drawing.DrawingArea.CDrawingArea.__init__
+lib.Drawing.Element.CElement.__init__
+lib.Drawing.Objects.Align.CAlign.__init__
+lib.Drawing.Objects.Condition.CCondition.__init__
+lib.Drawing.Objects.Container.CContainer.__init__
+lib.Drawing.Objects.Ellipse.CEllipse.__init__
+lib.Drawing.Objects.HBox.CHBox.__init__
+lib.Drawing.Objects.Icon.CIcon.__init__
+lib.Drawing.Objects.Line.CLine.__init__
+lib.Drawing.Objects.Loop.CLoop.__init__
+lib.Drawing.Objects.Padding.CPadding.__init__
+lib.Drawing.Objects.Proportional.CProportional.__init__
+lib.Drawing.Objects.Rectangle.CRectangle.__init__
+lib.Drawing.Objects.Shadow.CShadow.__init__
+lib.Drawing.Objects.Sizer.CSizer.__init__
+lib.Drawing.Objects.Svg.CSvg.__init__
+lib.Drawing.Objects.TextBox.CTextBox.__init__
+lib.Drawing.Objects.VBox.CVBox.__init__
+lib.Drawing.Objects.VisualObject.CVisualObject.__init__
+lib.Elements.Factory.CElementFactory.__init__
+lib.Elements.Object.CElementObject.__init__
+lib.Elements.Type.CElementType.__init__
+lib.Gui.common.Application.CApplication.__init__
+lib.Gui.common.CellRendererButton'.CellRendererButton.__init__
+lib.Gui.common.Widget.CWidget.__init__
+lib.Gui.common.Window.CWindow.__init__
+lib.Gui.dialogs.CQuestionDialog.__init__
+lib.Gui.dialogs.CWarningDialog.__init__
+lib.Gui.frmFindInDiagram.CFindInDiagram.__init__
+lib.Gui.frmMain.CfrmMain.__init__
+lib.Gui.frmOpen.CfrmOpen.__init__
+lib.Gui.frmProperties.CfrmProperties.__init__
+lib.Gui.frmSave.CfrmSave.__init__
+lib.Gui.frmSplash.CfrmSplash.__init__
+lib.Gui.lwProperties.ClwProperties.__init__
+lib.Gui.nbProperties.CnbProperties.__init__
+lib.Gui.picDrawingArea.CpicDrawingArea.__init__
+lib.Gui.tabStartPage.CtabStartPage.__init__
+lib.Gui.tabs.CTabs.__init__
+lib.Gui.tbToolBox.CtbToolBox.__init__
+lib.Gui.twProjectView.CtwProjectView.__init__
+lib.Gui.txtNotes.CtxtNotes.__init__
+lib.Math2D.geometry.CLine.__init__
+lib.Math2D.geometry.CLineVector.__init__
+lib.Math2D.geometry.CPoint.__init__
+lib.Math2D.geometry.CPolyLine.__init__
+lib.Math2D.geometry.CPolygon.__init__
+lib.Math2D.geometry.CRectangle.__init__
+lib.Math2D.path.Path.__init__
+lib.Math2D.path.PathPartArc.__init__
+lib.Math2D.path.PathPartBezier.__init__
+lib.Math2D.path.PathPartLine.__init__
+lib.Math2D.path.PathPartMove.__init__
+lib.Math2D.path.PathSingle.__init__
+lib.Math2D.transform_matrix.Matrix.__init__
+lib.Math2D.transform_matrix.PointMatrix.__init__
+lib.Math2D.transform_matrix.TransformMatrix.__init__
+lib.Project.Project.CProject.__init__
+lib.Project.ProjectNode.CProjectNode.__init__
+lib.Project.RecentFiles.CRecentFiles.__init__
+lib.Storages.AbstractStorage.CAbstractStorage.__init__
+lib.Storages.Directory.CDirectory.__init__
+lib.Versions.Factory.CVersionFactory.__init__
+lib.Versions.Type.CVersionType.__init__
+lib.config.CConfig.__init__
+lib.debug.DebugAttribute.__init__
+lib.lib.IDGenerator.__init__
+lib.lib.UMLException.__init__" class="py-name" href="#" onclick="return doclink('link-82', '__init__', 'link-69');">__init__</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">,</tt> <tt class="py-name">points</tt><tt class="py-op">)</tt> </tt>
+<a name="L222"></a><tt class="py-lineno">222</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">lines</tt><tt class="py-op">.</tt><tt id="link-83" class="py-name"><a title="lib.Math2D.path.PathSingle.append" class="py-name" href="#" onclick="return doclink('link-83', 'append', 'link-71');">append</a></tt><tt class="py-op">(</tt><tt id="link-84" class="py-name"><a title="lib.Drawing.Objects.Line.CLine
+lib.Math2D.geometry.CLine" class="py-name" href="#" onclick="return doclink('link-84', 'CLine', 'link-21');">CLine</a></tt><tt class="py-op">(</tt><tt class="py-name">points</tt><tt class="py-op">[</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">points</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L223"></a><tt class="py-lineno">223</tt>  <tt class="py-line">         </tt>
+<a name="CPolygon.GetPos"></a><div id="CPolygon.GetPos-def"><a name="L224"></a><tt class="py-lineno">224</tt> <a class="py-toggle" href="#" id="CPolygon.GetPos-toggle" onclick="return toggle('CPolygon.GetPos');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Math2D.geometry.CPolygon-class.html#GetPos">GetPos</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CPolygon.GetPos-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CPolygon.GetPos-expanded"><a name="L225"></a><tt class="py-lineno">225</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-op">[</tt><tt class="py-name">line</tt><tt class="py-op">.</tt><tt id="link-85" class="py-name"><a title="lib.Math2D.geometry.CLine.GetStart" class="py-name" href="#" onclick="return doclink('link-85', 'GetStart', 'link-15');">GetStart</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-86" class="py-name"><a title="lib.Gui.picDrawingArea.CpicDrawingArea.GetPos
+lib.Math2D.geometry.CLine.GetPos
+lib.Math2D.geometry.CPoint.GetPos
+lib.Math2D.geometry.CPolyLine.GetPos
+lib.Math2D.geometry.CPolygon.GetPos
+lib.Math2D.transform_matrix.PointMatrix.GetPos" class="py-name" href="#" onclick="return doclink('link-86', 'GetPos', 'link-3');">GetPos</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-keyword">for</tt> <tt class="py-name">line</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">lines</tt><tt class="py-op">]</tt> </tt>
+</div></div><a name="L226"></a><tt class="py-lineno">226</tt>  <tt class="py-line">         </tt>
+<a name="CRectangle"></a><div id="CRectangle-def"><a name="L227"></a><tt class="py-lineno">227</tt> <a class="py-toggle" href="#" id="CRectangle-toggle" onclick="return toggle('CRectangle');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="lib.Math2D.geometry.CRectangle-class.html">CRectangle</a><tt class="py-op">(</tt><tt class="py-base-class">CPolygon</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CRectangle-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="CRectangle-expanded"><a name="CRectangle.__init__"></a><div id="CRectangle.__init__-def"><a name="L228"></a><tt class="py-lineno">228</tt> <a class="py-toggle" href="#" id="CRectangle.__init__-toggle" onclick="return toggle('CRectangle.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Math2D.geometry.CRectangle-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">topLeft</tt><tt class="py-op">,</tt> <tt class="py-param">bottomRight</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CRectangle.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CRectangle.__init__-expanded"><a name="L229"></a><tt class="py-lineno">229</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt class="py-name">topLeft</tt><tt class="py-op">,</tt> <tt id="link-87" class="py-name"><a title="lib.Math2D.geometry.CPoint" class="py-name" href="#" onclick="return doclink('link-87', 'CPoint', 'link-2');">CPoint</a></tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L230"></a><tt class="py-lineno">230</tt>  <tt class="py-line">            <tt class="py-op">(</tt><tt class="py-name">x1</tt><tt class="py-op">,</tt> <tt class="py-name">y1</tt><tt class="py-op">)</tt> <tt class="py-op">=</tt> <tt class="py-name">topLeft</tt><tt class="py-op">.</tt><tt id="link-88" class="py-name"><a title="lib.Gui.picDrawingArea.CpicDrawingArea.GetPos
+lib.Math2D.geometry.CLine.GetPos
+lib.Math2D.geometry.CPoint.GetPos
+lib.Math2D.geometry.CPolyLine.GetPos
+lib.Math2D.geometry.CPolygon.GetPos
+lib.Math2D.transform_matrix.PointMatrix.GetPos" class="py-name" href="#" onclick="return doclink('link-88', 'GetPos', 'link-3');">GetPos</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L231"></a><tt class="py-lineno">231</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L232"></a><tt class="py-lineno">232</tt>  <tt class="py-line">            <tt class="py-name">x1</tt><tt class="py-op">,</tt> <tt class="py-name">y1</tt> <tt class="py-op">=</tt> <tt class="py-name">topLeft</tt> </tt>
+<a name="L233"></a><tt class="py-lineno">233</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt class="py-name">bottomRight</tt><tt class="py-op">,</tt> <tt id="link-89" class="py-name"><a title="lib.Math2D.geometry.CPoint" class="py-name" href="#" onclick="return doclink('link-89', 'CPoint', 'link-2');">CPoint</a></tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L234"></a><tt class="py-lineno">234</tt>  <tt class="py-line">            <tt class="py-op">(</tt><tt class="py-name">x2</tt><tt class="py-op">,</tt> <tt class="py-name">y2</tt><tt class="py-op">)</tt> <tt class="py-op">=</tt> <tt class="py-name">bottomRight</tt><tt class="py-op">.</tt><tt id="link-90" class="py-name"><a title="lib.Gui.picDrawingArea.CpicDrawingArea.GetPos
+lib.Math2D.geometry.CLine.GetPos
+lib.Math2D.geometry.CPoint.GetPos
+lib.Math2D.geometry.CPolyLine.GetPos
+lib.Math2D.geometry.CPolygon.GetPos
+lib.Math2D.transform_matrix.PointMatrix.GetPos" class="py-name" href="#" onclick="return doclink('link-90', 'GetPos', 'link-3');">GetPos</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L235"></a><tt class="py-lineno">235</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L236"></a><tt class="py-lineno">236</tt>  <tt class="py-line">            <tt class="py-name">x2</tt><tt class="py-op">,</tt> <tt class="py-name">y2</tt> <tt class="py-op">=</tt> <tt class="py-name">bottomRight</tt> </tt>
+<a name="L237"></a><tt class="py-lineno">237</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">x1</tt> <tt class="py-op">&gt;</tt> <tt class="py-name">x2</tt><tt class="py-op">:</tt> </tt>
+<a name="L238"></a><tt class="py-lineno">238</tt>  <tt class="py-line">            <tt class="py-name">x1</tt><tt class="py-op">,</tt> <tt class="py-name">x2</tt> <tt class="py-op">=</tt> <tt class="py-name">x2</tt><tt class="py-op">,</tt> <tt class="py-name">x1</tt> </tt>
+<a name="L239"></a><tt class="py-lineno">239</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">y1</tt> <tt class="py-op">&gt;</tt> <tt class="py-name">y2</tt><tt class="py-op">:</tt> </tt>
+<a name="L240"></a><tt class="py-lineno">240</tt>  <tt class="py-line">            <tt class="py-name">y1</tt><tt class="py-op">,</tt> <tt class="py-name">y2</tt> <tt class="py-op">=</tt> <tt class="py-name">y2</tt><tt class="py-op">,</tt> <tt class="py-name">y1</tt> </tt>
+<a name="L241"></a><tt class="py-lineno">241</tt>  <tt class="py-line">        <tt id="link-91" class="py-name" targets="Class lib.Math2D.geometry.CPolygon=lib.Math2D.geometry.CPolygon-class.html"><a title="lib.Math2D.geometry.CPolygon" class="py-name" href="#" onclick="return doclink('link-91', 'CPolygon', 'link-91');">CPolygon</a></tt><tt class="py-op">.</tt><tt id="link-92" class="py-name"><a title="lib.Clipboard.Clipboard.CClipboard.__init__
+lib.Connections.Arrow.CConnectionArrow.__init__
+lib.Connections.Factory.CConnectionFactory.__init__
+lib.Connections.Line.CConnectionLine.__init__
+lib.Connections.Object.CConnectionObject.__init__
+lib.Connections.Type.CConnectionType.__init__
+lib.Diagrams.Factory.CDiagramFactory.__init__
+lib.Diagrams.Type.CDiagramType.__init__
+lib.Drawing.Canvas.Abstract.CAbstractCanvas.__init__
+lib.Drawing.Canvas.Cairo.CCairoCanvas.__init__
+lib.Drawing.Canvas.Gtk.CGtkCanvas.__init__
+lib.Drawing.Canvas.Svg.CSvgCanvas.__init__
+lib.Drawing.Connection.CConnection.__init__
+lib.Drawing.DrawingArea.CDrawingArea.__init__
+lib.Drawing.Element.CElement.__init__
+lib.Drawing.Objects.Align.CAlign.__init__
+lib.Drawing.Objects.Condition.CCondition.__init__
+lib.Drawing.Objects.Container.CContainer.__init__
+lib.Drawing.Objects.Ellipse.CEllipse.__init__
+lib.Drawing.Objects.HBox.CHBox.__init__
+lib.Drawing.Objects.Icon.CIcon.__init__
+lib.Drawing.Objects.Line.CLine.__init__
+lib.Drawing.Objects.Loop.CLoop.__init__
+lib.Drawing.Objects.Padding.CPadding.__init__
+lib.Drawing.Objects.Proportional.CProportional.__init__
+lib.Drawing.Objects.Rectangle.CRectangle.__init__
+lib.Drawing.Objects.Shadow.CShadow.__init__
+lib.Drawing.Objects.Sizer.CSizer.__init__
+lib.Drawing.Objects.Svg.CSvg.__init__
+lib.Drawing.Objects.TextBox.CTextBox.__init__
+lib.Drawing.Objects.VBox.CVBox.__init__
+lib.Drawing.Objects.VisualObject.CVisualObject.__init__
+lib.Elements.Factory.CElementFactory.__init__
+lib.Elements.Object.CElementObject.__init__
+lib.Elements.Type.CElementType.__init__
+lib.Gui.common.Application.CApplication.__init__
+lib.Gui.common.CellRendererButton'.CellRendererButton.__init__
+lib.Gui.common.Widget.CWidget.__init__
+lib.Gui.common.Window.CWindow.__init__
+lib.Gui.dialogs.CQuestionDialog.__init__
+lib.Gui.dialogs.CWarningDialog.__init__
+lib.Gui.frmFindInDiagram.CFindInDiagram.__init__
+lib.Gui.frmMain.CfrmMain.__init__
+lib.Gui.frmOpen.CfrmOpen.__init__
+lib.Gui.frmProperties.CfrmProperties.__init__
+lib.Gui.frmSave.CfrmSave.__init__
+lib.Gui.frmSplash.CfrmSplash.__init__
+lib.Gui.lwProperties.ClwProperties.__init__
+lib.Gui.nbProperties.CnbProperties.__init__
+lib.Gui.picDrawingArea.CpicDrawingArea.__init__
+lib.Gui.tabStartPage.CtabStartPage.__init__
+lib.Gui.tabs.CTabs.__init__
+lib.Gui.tbToolBox.CtbToolBox.__init__
+lib.Gui.twProjectView.CtwProjectView.__init__
+lib.Gui.txtNotes.CtxtNotes.__init__
+lib.Math2D.geometry.CLine.__init__
+lib.Math2D.geometry.CLineVector.__init__
+lib.Math2D.geometry.CPoint.__init__
+lib.Math2D.geometry.CPolyLine.__init__
+lib.Math2D.geometry.CPolygon.__init__
+lib.Math2D.geometry.CRectangle.__init__
+lib.Math2D.path.Path.__init__
+lib.Math2D.path.PathPartArc.__init__
+lib.Math2D.path.PathPartBezier.__init__
+lib.Math2D.path.PathPartLine.__init__
+lib.Math2D.path.PathPartMove.__init__
+lib.Math2D.path.PathSingle.__init__
+lib.Math2D.transform_matrix.Matrix.__init__
+lib.Math2D.transform_matrix.PointMatrix.__init__
+lib.Math2D.transform_matrix.TransformMatrix.__init__
+lib.Project.Project.CProject.__init__
+lib.Project.ProjectNode.CProjectNode.__init__
+lib.Project.RecentFiles.CRecentFiles.__init__
+lib.Storages.AbstractStorage.CAbstractStorage.__init__
+lib.Storages.Directory.CDirectory.__init__
+lib.Versions.Factory.CVersionFactory.__init__
+lib.Versions.Type.CVersionType.__init__
+lib.config.CConfig.__init__
+lib.debug.DebugAttribute.__init__
+lib.lib.IDGenerator.__init__
+lib.lib.UMLException.__init__" class="py-name" href="#" onclick="return doclink('link-92', '__init__', 'link-69');">__init__</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">,</tt> <tt class="py-op">(</tt><tt id="link-93" class="py-name"><a title="lib.Math2D.geometry.CPoint" class="py-name" href="#" onclick="return doclink('link-93', 'CPoint', 'link-2');">CPoint</a></tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">x1</tt><tt class="py-op">,</tt> <tt class="py-name">y1</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt id="link-94" class="py-name"><a title="lib.Math2D.geometry.CPoint" class="py-name" href="#" onclick="return doclink('link-94', 'CPoint', 'link-2');">CPoint</a></tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">x2</tt><tt class="py-op">,</tt> <tt class="py-name">y1</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt id="link-95" class="py-name"><a title="lib.Math2D.geometry.CPoint" class="py-name" href="#" onclick="return doclink('link-95', 'CPoint', 'link-2');">CPoint</a></tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">x2</tt><tt class="py-op">,</tt> <tt class="py-name">y2</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt id="link-96" class="py-name"><a title="lib.Math2D.geometry.CPoint" class="py-name" href="#" onclick="return doclink('link-96', 'CPoint', 'link-2');">CPoint</a></tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">x1</tt><tt class="py-op">,</tt> <tt class="py-name">y2</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L242"></a><tt class="py-lineno">242</tt>  <tt class="py-line">         </tt>
+<a name="CRectangle.GetTopLeft"></a><div id="CRectangle.GetTopLeft-def"><a name="L243"></a><tt class="py-lineno">243</tt> <a class="py-toggle" href="#" id="CRectangle.GetTopLeft-toggle" onclick="return toggle('CRectangle.GetTopLeft');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Math2D.geometry.CRectangle-class.html#GetTopLeft">GetTopLeft</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CRectangle.GetTopLeft-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CRectangle.GetTopLeft-expanded"><a name="L244"></a><tt class="py-lineno">244</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">lines</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-97" class="py-name"><a title="lib.Math2D.geometry.CLine.GetStart" class="py-name" href="#" onclick="return doclink('link-97', 'GetStart', 'link-15');">GetStart</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L245"></a><tt class="py-lineno">245</tt>  <tt class="py-line">         </tt>
+<a name="CRectangle.GetBottomRight"></a><div id="CRectangle.GetBottomRight-def"><a name="L246"></a><tt class="py-lineno">246</tt> <a class="py-toggle" href="#" id="CRectangle.GetBottomRight-toggle" onclick="return toggle('CRectangle.GetBottomRight');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Math2D.geometry.CRectangle-class.html#GetBottomRight">GetBottomRight</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CRectangle.GetBottomRight-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CRectangle.GetBottomRight-expanded"><a name="L247"></a><tt class="py-lineno">247</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">lines</tt><tt class="py-op">[</tt><tt class="py-number">2</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-98" class="py-name"><a title="lib.Math2D.geometry.CLine.GetStart" class="py-name" href="#" onclick="return doclink('link-98', 'GetStart', 'link-15');">GetStart</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L248"></a><tt class="py-lineno">248</tt>  <tt class="py-line">         </tt>
+<a name="CRectangle.__mul__"></a><div id="CRectangle.__mul__-def"><a name="L249"></a><tt class="py-lineno">249</tt> <a class="py-toggle" href="#" id="CRectangle.__mul__-toggle" onclick="return toggle('CRectangle.__mul__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="lib.Math2D.geometry.CRectangle-class.html#__mul__">__mul__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">other</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CRectangle.__mul__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="CRectangle.__mul__-expanded"><a name="L250"></a><tt class="py-lineno">250</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt class="py-name">other</tt><tt class="py-op">,</tt> <tt id="link-99" class="py-name" targets="Class lib.Drawing.Objects.Rectangle.CRectangle=lib.Drawing.Objects.Rectangle.CRectangle-class.html,Class lib.Math2D.geometry.CRectangle=lib.Math2D.geometry.CRectangle-class.html"><a title="lib.Drawing.Objects.Rectangle.CRectangle
+lib.Math2D.geometry.CRectangle" class="py-name" href="#" onclick="return doclink('link-99', 'CRectangle', 'link-99');">CRectangle</a></tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L251"></a><tt class="py-lineno">251</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-100" class="py-name" targets="Method lib.Math2D.geometry.CRectangle.GetTopLeft()=lib.Math2D.geometry.CRectangle-class.html#GetTopLeft"><a title="lib.Math2D.geometry.CRectangle.GetTopLeft" class="py-name" href="#" onclick="return doclink('link-100', 'GetTopLeft', 'link-100');">GetTopLeft</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">&lt;=</tt> <tt class="py-name">other</tt><tt class="py-op">.</tt><tt id="link-101" class="py-name"><a title="lib.Math2D.geometry.CRectangle.GetTopLeft" class="py-name" href="#" onclick="return doclink('link-101', 'GetTopLeft', 'link-100');">GetTopLeft</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-keyword">and</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-102" class="py-name" targets="Method lib.Math2D.geometry.CRectangle.GetBottomRight()=lib.Math2D.geometry.CRectangle-class.html#GetBottomRight"><a title="lib.Math2D.geometry.CRectangle.GetBottomRight" class="py-name" href="#" onclick="return doclink('link-102', 'GetBottomRight', 'link-102');">GetBottomRight</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">&gt;=</tt> <tt class="py-name">other</tt><tt class="py-op">.</tt><tt id="link-103" class="py-name"><a title="lib.Math2D.geometry.CRectangle.GetBottomRight" class="py-name" href="#" onclick="return doclink('link-103', 'GetBottomRight', 'link-102');">GetBottomRight</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L252"></a><tt class="py-lineno">252</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-op">[</tt><tt class="py-name">other</tt><tt class="py-op">.</tt><tt id="link-104" class="py-name"><a title="lib.Math2D.geometry.CRectangle.GetTopLeft" class="py-name" href="#" onclick="return doclink('link-104', 'GetTopLeft', 'link-100');">GetTopLeft</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">other</tt><tt class="py-op">.</tt><tt id="link-105" class="py-name"><a title="lib.Math2D.geometry.CRectangle.GetBottomRight" class="py-name" href="#" onclick="return doclink('link-105', 'GetBottomRight', 'link-102');">GetBottomRight</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> </tt>
+<a name="L253"></a><tt class="py-lineno">253</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-106" class="py-name"><a title="lib.Math2D.geometry.CRectangle.GetTopLeft" class="py-name" href="#" onclick="return doclink('link-106', 'GetTopLeft', 'link-100');">GetTopLeft</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">&gt;=</tt> <tt class="py-name">other</tt><tt class="py-op">.</tt><tt id="link-107" class="py-name"><a title="lib.Math2D.geometry.CRectangle.GetTopLeft" class="py-name" href="#" onclick="return doclink('link-107', 'GetTopLeft', 'link-100');">GetTopLeft</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-keyword">and</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-108" class="py-name"><a title="lib.Math2D.geometry.CRectangle.GetBottomRight" class="py-name" href="#" onclick="return doclink('link-108', 'GetBottomRight', 'link-102');">GetBottomRight</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">&lt;=</tt> <tt class="py-name">other</tt><tt class="py-op">.</tt><tt id="link-109" class="py-name"><a title="lib.Math2D.geometry.CRectangle.GetBottomRight" class="py-name" href="#" onclick="return doclink('link-109', 'GetBottomRight', 'link-102');">GetBottomRight</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L254"></a><tt class="py-lineno">254</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-op">[</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-110" class="py-name"><a title="lib.Math2D.geometry.CRectangle.GetTopLeft" class="py-name" href="#" onclick="return doclink('link-110', 'GetTopLeft', 'link-100');">GetTopLeft</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-111" class="py-name"><a title="lib.Math2D.geometry.CRectangle.GetBottomRight" class="py-name" href="#" onclick="return doclink('link-111', 'GetBottomRight', 'link-102');">GetBottomRight</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> </tt>
+<a name="L255"></a><tt class="py-lineno">255</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-112" class="py-name"><a title="lib.Math2D.geometry.CPolygon" class="py-name" href="#" onclick="return doclink('link-112', 'CPolygon', 'link-91');">CPolygon</a></tt><tt class="py-op">.</tt><tt id="link-113" class="py-name"><a title="lib.Math2D.geometry.CLine.__mul__
+lib.Math2D.geometry.CPolyLine.__mul__
+lib.Math2D.geometry.CRectangle.__mul__
+lib.Math2D.transform_matrix.Matrix.__mul__
+lib.Math2D.transform_matrix.PointMatrix.__mul__
+lib.Math2D.transform_matrix.TransformMatrix.__mul__" class="py-name" href="#" onclick="return doclink('link-113', '__mul__', 'link-50');">__mul__</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">,</tt> <tt class="py-name">other</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L256"></a><tt class="py-lineno">256</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="lib-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://umlfri.kst.fri.uniza.sk/">UML .FRI</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sun Mar 30 19:33:54 2008
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

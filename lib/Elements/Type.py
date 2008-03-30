@@ -1,6 +1,6 @@
 from lib.lib import ToBool
 
-class CElementType:
+class CElementType(object):
     def __init__(self, id):
         self.icon = None
         self.id = id

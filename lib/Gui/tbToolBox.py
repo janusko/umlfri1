@@ -64,14 +64,14 @@ class CtbToolBox(CWidget):
             self.tbToolBox.remove(button)
         self.tbToolBox.insert(ArrowButton, -1)
         
-        ElementNameList = self.DiagramType.GetElements()
+        ElementNameList = list(self.DiagramType.GetElements())
         if len(ElementNameList) > 0:
             self.__InsertSeparator()
             for ElementName in ElementNameList:
                 ElementType = self.application.GetProject().GetElementFactory().GetElement(ElementName)
                 self.__InsertButton(ElementType, 'Element', ArrowButton)
             
-        ConnectionNameList = self.DiagramType.GetConnections()
+        ConnectionNameList = list(self.DiagramType.GetConnections())
         if len(ConnectionNameList) > 0:
             self.__InsertSeparator()
             for ConnectionName in ConnectionNameList:

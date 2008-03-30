@@ -20,7 +20,7 @@ class CConnectionFactory(object):
         @type  storage: L{CAbstractStorage<lib.Storages.AbstractStorage.CAbstractStorage>}
         
         @param path: Path to directory with connection metamodel XMLs
-        @param path: string
+        @type path: string
         """
         self.types = {}
         self.path = path
