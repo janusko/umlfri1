@@ -1,0 +1,65 @@
+﻿Konvencie písania zdrojového kódu v projekte UML .FRI
+
+Obsah
+
+    1. Úvod
+    2. Nastavenie textového editora
+    3. Identifikátory
+    4. "Docstrings"
+    5. Komentáre
+    6. Čomu sa pri písaní vyhnúť
+    7. Umiestnenie hodnot konstant
+    8. Adresarova struktura projektu
+
+1. Úvod
+
+    Motto: Zdrojový kód je čítaný podstatne častejšie, ako písaný. (Guido van Rossum)
+    
+    Táto príručka (ďalej len príručka) zhŕňa pravidlá písania zdrojových textov v projekte UML .FRI (ďalej len projekt). Základnými východiskovým dokumentami sú PEP 8 Style Guide for Python Code a PEP 257 Docstring Conventions. Čitatelia príručky a všetci prispievatielia do projektu by sa mali s týmito dokumentami oboznámiť aj keď príručka najdôležitejšie časti explicitne zdôrazňuje a niektoré pozmeňuje.
+    V všeobecnosti v projekte platí, dúfame v zajraničnú podporu užívateľov aj vývojárov, takže používame anglický jazyk vo všetkých súboroch zdrojového kódu.
+    
+2. Nastavenie textového editora
+    
+    Skôr, ako začnete editovať ktorýkoľvek súbor so zdrojovým kódom projektu, prekontrolujte si predovšetkým nasledujúce nastavenia textového editora:
+    
+    A) Znak konca riadkov
+        V celom projekte sa štandardne používa ako koniec riadku znak ASCII #10 LF. (Znak používaný v systémoch rodiny UNIX). Táto kontrola je potrebná predovšetkým, ak text editujete v prostredí Windows a MacOS.
+    
+    B) Znak používaný pri odsadení
+        V celom projekte sú na odsadenie bloku textu použité 4 medzery. Zamiešanie znakov tabulátora pri odsadení môže spôsobiť chyby pri preklade.
+
+3. Identifikatory
+    
+    Identifikátory tried metód aj objektov zodpovedajú norme UML. To znamená, že pomenovanie triedy začína veľkým písmenom, vo všetkých ostatných prípadoch malým. Ak je zložené z viacerých slov, každé nasledujúce slovo začína veľkým písmenom a medzi slová sa nevkladá žiadny znak.
+    Používajte celoslovné a viacslovné identifikátory namiesto skratiek a akronymov. Jednoznakové identifikátory sú prípustné iba ako lokálne premenné metódy použité na malom úseku (premenná riadiaca cyklus).
+
+4. "Docstrings"
+    
+    Dokumentačné reťazce "Docstrings". Pri ich písaní vychádzajte z dokumetnu PEP 257 Docstring Conventions. Ich úlohou je dokumentovať interface triedy, metódy, modulu - ako ich použiť, nie ako sú implementované.
+
+5. Komentáre
+    
+    Sú určené na vysvetlenie jednotlicých krokov implementácie. Môžu dokumentovať účel lokálnych premenných metódy. Vo všeobecnosti platí, že lepšie je viac komentárov ako menej, ale taktiež, že všetkého veľa škodí. Jednoduché príkazy netreba dokumentovať. Ukážka prehnanej dokumentácie:
+    
+    i = 0              # initiate counter of occurence
+    while condition:   # as long as condition applies
+        i += 1         # increase counter by one
+        ...
+    
+    Radšej dokumentujte účel bloku kódu ako celku.
+
+6. Čomu sa pri písaní vyhnúť
+    
+    Pri písaní zdrojového kódu si prosím spomeňte na všetky dobré zásady objektovo-orientovaného programovania.
+    Zásadne nepoužívajte zoznamy (list) a n-tice (tuple) na ukladanie informácií tam, kde je možné použiť objekty vhodnejšie navrhnútých tried. Odkaz na atribút je podstatne modulárnejší ako viazať informáciu na index, čím znemožníte budúce rozšírenie celej časti programu.
+
+7. Umiestnenie hodnôt konštánt
+    
+    Vo všeobecnosti rozlišujeme 3 druhy definovania konštánt.
+    A) literálové konštanty - na mieste použitia je napísaná konkrétna hodnota.
+        length = 2 * pi * diameter
+        Používa sa pri matematických vzorcoch, výpočtoch. Jej zmena nemá VÔBEC žiadny zmysel, jednine ak zmena pravidiel geometrie.
+    B) definované v súbore lib/consts.py
+        Sem patria konštanty, ktoré sú použité na viacerých miestach v programe, definujú správanie sa programu, ich zmena môže nastať, ale iba výnimočne. Ich zmenu však určite nebude robiť užívateľ. Tieto konštanty zapisujte vo formáte "ALL_CAPS".
+    C) definované v metamodele
+        Tieto koštanty definujú predovšetkým vizualizáciu modelu. Niektoré z nich môže užívateľ zmeniť, resp prekryť v dialógu nastavení, prípadne zmeniť ručne. Ich zmena nebude mať vplyv na beh programu.
