@@ -95,6 +95,9 @@ class CpicDrawingArea(CWidget):
 
     def SetDrawingArea(self, drawingArea):
         self.DrawingArea = drawingArea
+        self.AdjustScrollBars()
+        self.picHBar.set_value(self.DrawingArea.GetHScrollingPos())
+        self.picVBar.set_value(self.DrawingArea.GetVScrollingPos())
         self.Paint()
 
     def GetWindowSize(self):
@@ -109,8 +112,8 @@ class CpicDrawingArea(CWidget):
         return int(self.picHBar.get_value()), int(self.picVBar.get_value())
         
     def SetPos(self, pos = (0, 0)):
-        self.DrawingArea.SetHScrollingPos(pos[0])
-        self.DrawingArea.SetVScrollingPos(pos[1])
+        #self.DrawingArea.SetHScrollingPos(pos[0])
+        #self.DrawingArea.SetVScrollingPos(pos[1])
         self.picHBar.set_value(pos[0])
         self.picVBar.set_value(pos[1])
         
@@ -124,9 +127,6 @@ class CpicDrawingArea(CWidget):
 
     def Paint(self, changed = True):
         size = self.GetWindowSize()
-        self.AdjustScrollBars()
-        self.picHBar.set_value(self.DrawingArea.GetHScrollingPos())
-        self.picVBar.set_value(self.DrawingArea.GetVScrollingPos())
         #posx, posy = int(self.picHBar.get_value()), int(self.picVBar.get_value())
         posx, posy = int(self.GetPos()[0]), int(self.GetPos()[1])
         sizx, sizy = self.GetWindowSize()
@@ -510,6 +510,8 @@ class CpicDrawingArea(CWidget):
         self.__SetCursor('grabbing')
         self.DragStartPos = (event.x, event.y)
         #self.scrollPos = self.GetPos()
+        self.DrawingArea.SetHScrollingPos(self.GetPos()[0])
+        self.DrawingArea.SetVScrollingPos(self.GetPos()[1])
         self.dnd = 'move'
         
     def __GetDelta(self, pos, follow = False):
