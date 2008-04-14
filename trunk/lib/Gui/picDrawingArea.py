@@ -94,8 +94,13 @@ class CpicDrawingArea(CWidget):
         return self.DrawingArea
 
     def SetDrawingArea(self, drawingArea):
+        #set actual scrolling position before change drawing area
+        self.DrawingArea.SetVScrollingPos(int(self.picVBar.get_value()))
+        self.DrawingArea.SetHScrollingPos(int(self.picHBar.get_value()))
+        #change drawing area
         self.DrawingArea = drawingArea
         self.AdjustScrollBars()
+        #load srolling position of new drawing area
         self.picHBar.set_value(self.DrawingArea.GetHScrollingPos())
         self.picVBar.set_value(self.DrawingArea.GetVScrollingPos())
         self.Paint()
@@ -112,23 +117,18 @@ class CpicDrawingArea(CWidget):
         return int(self.picHBar.get_value()), int(self.picVBar.get_value())
         
     def SetPos(self, pos = (0, 0)):
-        #self.DrawingArea.SetHScrollingPos(pos[0])
-        #self.DrawingArea.SetVScrollingPos(pos[1])
         self.picHBar.set_value(pos[0])
         self.picVBar.set_value(pos[1])
         
     def GetAbsolutePos(self, (posx, posy)):
-        #return int(self.picHBar.get_value() + posx), int(self.picVBar.get_value() + posy)
-        return int(self.GetPos()[0] + posx), int(self.GetPos()[1] + posy)
+        return int(self.picHBar.get_value() + posx), int(self.picVBar.get_value() + posy)
 
     def GetRelativePos(self, (posx, posy)):
-        #return int(-self.picHBar.get_value() + posx), int(-self.picVBar.get_value() + posy)
-        return int(-self.GetPos()[0] + posx), int(-self.GetPos()[1] + posy)
+        return int(-self.picHBar.get_value() + posx), int(-self.picVBar.get_value() + posy)
 
     def Paint(self, changed = True):
         size = self.GetWindowSize()
-        #posx, posy = int(self.picHBar.get_value()), int(self.picVBar.get_value())
-        posx, posy = int(self.GetPos()[0]), int(self.GetPos()[1])
+        posx, posy = int(self.picHBar.get_value()), int(self.picVBar.get_value())
         sizx, sizy = self.GetWindowSize()
         ((bposx, bposy), (bsizx, bsizy)) = self.bufview
         if posx < bposx or bposx + bsizx < posx + sizx or \
@@ -434,12 +434,10 @@ class CpicDrawingArea(CWidget):
 
     @event("picVBar", "value-changed")
     def on_picVBar_value_changed(self, widget):
-        self.DrawingArea.SetVScrollingPos(int(self.picVBar.get_value()))
         self.Paint(False)
 
     @event("picHBar", "value-changed")
     def on_picHBar_value_changed(self, widget):
-        self.DrawingArea.SetHScrollingPos(int(self.picHBar.get_value()))
         self.Paint(False)
 
     @event("picDrawingArea", "size-allocate")
