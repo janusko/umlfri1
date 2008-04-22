@@ -15,8 +15,8 @@ Obsah
 
     Motto: Zdrojový kód je čítaný podstatne častejšie, ako písaný. (Guido van Rossum)
     
-    Táto príručka (ďalej len príručka) zhŕňa pravidlá písania zdrojových textov v projekte UML .FRI (ďalej len projekt). Základnými východiskovým dokumentami sú PEP 8 Style Guide for Python Code a PEP 257 Docstring Conventions. Čitatelia príručky a všetci prispievatielia do projektu by sa mali s týmito dokumentami oboznámiť aj keď príručka najdôležitejšie časti explicitne zdôrazňuje a niektoré pozmeňuje.
-    V všeobecnosti v projekte platí, dúfame v zajraničnú podporu užívateľov aj vývojárov, takže používame anglický jazyk vo všetkých súboroch zdrojového kódu.
+    Táto príručka (ďalej len príručka) zhŕňa pravidlá písania zdrojových textov v projekte UML .FRI (ďalej len projekt). Základnými východiskovým dokumentami sú PEP 8 Style Guide for Python Code a manuál k Epytext markup language. Čitatelia príručky a všetci prispievatielia do projektu by sa mali s týmito dokumentami oboznámiť aj keď príručka najdôležitejšie časti explicitne zdôrazňuje a niektoré pozmeňuje.
+    Vo všeobecnosti v projekte platí, dúfame v zajraničnú podporu užívateľov aj vývojárov, takže používame anglický jazyk vo všetkých súboroch zdrojového kódu.
     
 2. Nastavenie textového editora
     
@@ -30,16 +30,53 @@ Obsah
 
 3. Identifikatory
     
-    Identifikátory tried metód aj objektov zodpovedajú norme UML. To znamená, že pomenovanie triedy začína veľkým písmenom, vo všetkých ostatných prípadoch malým. Ak je zložené z viacerých slov, každé nasledujúce slovo začína veľkým písmenom a medzi slová sa nevkladá žiadny znak.
-    Používajte celoslovné a viacslovné identifikátory namiesto skratiek a akronymov. Jednoznakové identifikátory sú prípustné iba ako lokálne premenné metódy použité na malom úseku (premenná riadiaca cyklus).
+    Pre názvy identifikátorov používajte anglické názvy!
+    Identifikátory tried metód aj objektov vychádzajú z normy UML s drobnými úpravami. Preto sa používajú celoslovné pomenovania, v prípade viacslovných názvov sa medzi slová nevkladá žiadny znak, iba každé slovo začína veľkým písmenom nasledované malými.
+    Názvy tried, metód a property majú prvý znak veľké písmeno, premenné a parametre metód malé. Každá trieda má prefix v názve identifikátora "C" a nachádza sa v samostatnom súbore pomenovanom rovnako ako trieda bez použitého prefixu s malým prvým písmenom.
+    Pre názvy identifikátorov zásadne nepouživájte skratky a akronymi. Jednoznakové identifikátory sú prípustné iba ako lokálne premenné metódy použité na malom úseku (do 10 riadkov) napr. premenná riadiaca cyklus.
 
 4. "Docstrings"
     
-    Dokumentačné reťazce "Docstrings". Pri ich písaní vychádzajte z dokumetnu PEP 257 Docstring Conventions. Ich úlohou je dokumentovať interface triedy, metódy, modulu - ako ich použiť, nie ako sú implementované.
+    Pri písaní dokumentačných reťazcov "docstrings" používajte zásadne anglický jazyk! Využívajte syntax značkovacieho jazyka Epytext. Kompletná dokumetácia epytextu je v prílohe.
+    Dokumentovať možno aj samotný modul (súbor) a to tak, že docstring umiestnite úplne na začiatok súboru pred všetky ostatné príkazy (aj pred importy) s nulovým počiatočným odsadením. Pred týmto docstringom môžu byť iba riadky s komentármi.
+    
+    Zhrnutie najdôležitejších častí:
+    
+    - Text je členený na odstavce; skupiny riadkov s rovnakým odsadením, oddelené prázdnymi riadkami od ďalších odstavcov.
+    - V bežnom odstavci sa nezachová pôvodné formátovanie (riadkovanie, medzery medzi slovami), použije sa proporčné písmo - rovnako ako pri html.
+    - Ak má nasledujúci odstavec vačšie odsadenie ako predošlí, bude mať zvýšené odsadenie aj vo výslednom dokumente.
+    - Citovaný odstavec (zachované formátovanie riadkov a medzier, neproporčné písmo) musí byť uvedený predošlým odstavcom ukončeným dvomi dvojbodkami "::", ktoré sa zobrazia ako jedna. Odsadenie je sa zobrazí ako relatívne k uvádzajúcemu odstavcu.
+    - Odstavce začíanjúce pomlčkou budú intepretované ako zoznam s odrážkami. Musia mať vačšie odsadenie ako predchádzajúci neodrážkovaný odstavec.
+    - Ak odstavce začínajú radovou číslovkou, budú interpretované ako číslovaný zoznam. Odsadenie rovnako ako pri odrážkach.
+    - Zoznamy je možné do seba vnárať.
+    - Ak odstavec začína ">>> " bude zobrazený ako citovaný a okrem toho so zvýrazneným syntaxom a v rámčeku.
+    - Nadpis možno vytvoriť podčiarknutím textu na nasledujúcom riadku, podčiarknutie presne pasuje pod text. Na podčiarknutie sa používa: 1. stupeň: "=", 2. stupeň: "-", 3. stupeň: "~".
+    - Syntax x{...} kde x je veľké písmeno mení formátovanie textu, ktorú uzatvára. Môže byť vnorené a rozdelené na viac riadkov.
+        - B = bold
+        - I = italics
+        - C = code, neproporčné písmo
+        - U = url
+        - S = symbol
+        - a iné
+    - Polia dokumetujú špecifické vlastnosti dokumentovavného objektu. Vždy musia byť až na konci docstringu. Označené sú "@" zaktorým nasleduje pomenovanie poľa, voliteľne argument oddelený medzerou a ukončené sú ":". Nasleduje odstavec alebo niekoľko odstavcov rovnakého odsadenia, ktoré dokumentujú pole.
+        napr:
+        """
+        ...
+        
+        @param x: description of parameter x
+        @type x: description of x's type
+        
+        @return: description of return 
+            value
+            
+            further description of
+            return value
+        """
+
 
 5. Komentáre
     
-    Sú určené na vysvetlenie jednotlicých krokov implementácie. Môžu dokumentovať účel lokálnych premenných metódy. Vo všeobecnosti platí, že lepšie je viac komentárov ako menej, ale taktiež, že všetkého veľa škodí. Jednoduché príkazy netreba dokumentovať. Ukážka prehnanej dokumentácie:
+    Komentáre píšte zásadne v anglickom jazyku! Sú určené na vysvetlenie jednotlicých krokov implementácie. Môžu dokumentovať účel lokálnych premenných metódy. Vo všeobecnosti platí, že lepšie je viac komentárov ako menej, ale taktiež, že všetkého veľa škodí. Jednoduché príkazy netreba dokumentovať kažfý zvlášť. Ukážka prehnanej dokumentácie:
     
     i = 0              # initiate counter of occurence
     while condition:   # as long as condition applies
@@ -62,4 +99,4 @@ Obsah
     B) definované v súbore lib/consts.py
         Sem patria konštanty, ktoré sú použité na viacerých miestach v programe, definujú správanie sa programu, ich zmena môže nastať, ale iba výnimočne. Ich zmenu však určite nebude robiť užívateľ. Tieto konštanty zapisujte vo formáte "ALL_CAPS".
     C) definované v metamodele
-        Tieto koštanty definujú predovšetkým vizualizáciu modelu. Niektoré z nich môže užívateľ zmeniť, resp prekryť v dialógu nastavení, prípadne zmeniť ručne. Ich zmena nebude mať vplyv na beh programu.
+        Tieto konštanty definujú predovšetkým vizualizáciu modelu. Niektoré z nich môže užívateľ zmeniť, resp prekryť v dialógu nastavení, prípadne zmeniť ručne. Ich zmena nebude mať vplyv na beh programu.
