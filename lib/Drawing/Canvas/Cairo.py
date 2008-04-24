@@ -51,51 +51,17 @@ def HexToRGB(hexcolor):
 class CCairoCanvas(CAbstractCanvas):
 
 
-    def __init__(self, widget, window = None, storage = None, surface_type = None, filename = None):
+    def __init__(self, widget, window = None, storage = None):
 
         self.widget = widget
-        self.surface_type = surface_type
-        self.filename = filename
+        
 
         if window is None:
             self.window = widget.window
         else:
             self.window = window
 
-        if self.surface_type == 'pdf':
-            if not cairo.HAS_PDF_SURFACE:
-                raise UMLException ('cairo: no PDF support')
-            self.surface = cairo.PDFSurface (self.filename, *self.window.get_size())
-
-        elif self.surface_type == 'svg':
-            if not cairo.HAS_SVG_SURFACE:
-                raise UMLException ('cairo: no SVG support')
-            self.surface = cairo.SVGSurface (self.filename, *self.window.get_size())
-
-        elif self.surface_type == 'png':
-            if not cairo.HAS_PNG_FUNCTIONS:
-                raise UMLException ('cairo: no PNG support')
-            self.surface = cairo.ImageSurface (cairo.FORMAT_ARGB32,*self.window.get_size())
-
-        elif self.surface_type == 'ps':
-            if not cairo.HAS_PS_SURFACE:
-                raise UMLException ('cairo: no PS support')
-            self.surface = cairo.PSSurface (self.filename, *self.window.get_size())
-            cairo.PSSurface.dsc_comment(self.surface,"%%Title: uml.FRI diagram export");
-
-        elif self.surface_type == None:
-            # drawing on gtk canvas
-            pass
-
-        else :
-            raise UMLException('unknown export surface or format')
-
-
-        if self.surface_type is not None:
-            self.cairo_context= cairo.Context (self.surface)
-
-        else:
-            self.cairo_context = self.window.cairo_create()
+        self.cairo_context = self.window.cairo_create()
 
         self.alpha = 1.0
         self.storage = storage
@@ -347,11 +313,6 @@ class CCairoCanvas(CAbstractCanvas):
         gc = self.widget.get_style().white_gc
         self.window.draw_rectangle(gc, True, 0, 0, *self.window.get_size())
 
-    #finish operations, if writing to a file (exporting diagram)
-    def Finish(self):
-        if self.surface_type == 'png':
-            self.surface.write_to_png (self.filename)
-        self.surface.finish()
 
 
 if __name__ == "__main__":

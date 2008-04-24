@@ -400,3 +400,14 @@ class CDrawingArea:
             self.AddToSelection(el)
             el.CopyFromElement(i)
             pasted.add(el)
+    
+    def GetExpSquare(self, canvas):
+        x, y = 0, 0
+        for el in self.elements:
+            posX, posY = el.GetPosition()
+            w, h = el.GetSize(canvas)
+            if posX + w > x:
+                x = posX + w
+            if posY + h > y:
+                y = posY + h
+        return (x, y)
