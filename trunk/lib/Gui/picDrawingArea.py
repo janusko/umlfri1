@@ -10,7 +10,7 @@ from lib.Drawing import CDrawingArea, CElement, CConnection
 from lib.Elements import CElementObject
 from lib.Connections import CConnectionObject, EConnectionRestriction
 
-from lib.Drawing.Canvas import CGtkCanvas, CSvgCanvas, CCairoCanvas
+from lib.Drawing.Canvas import CGtkCanvas, CSvgCanvas, CCairoCanvas, CExportCanvas
 from lib.Drawing import Element
 
 targets = [('document/uml', 0, gtk.TARGET_SAME_WIDGET)]
@@ -171,10 +171,13 @@ class CpicDrawingArea(CWidget):
     
     def Export(self, filename, export_type):
         self.DrawingArea.DeselectAll()
-        canvas = CCairoCanvas(self.picDrawingArea, self.buffer, self.application.GetProject().GetStorage(), export_type, filename)
+        #what u see export(only currently visible area will be exported): sizeX, sizeY = self.GetWindowSize() 
+        sizeX, sizeY = self.DrawingArea.GetExpSquare(self.canvas)
+        canvas = CExportCanvas(self.application.GetProject().GetStorage(), export_type, filename, sizeX+10, sizeY+10)
         self.DrawingArea.Paint(canvas)
         canvas.Finish()
-        self.Paint()
+        self.Paint()    
+
 
     def ExportSvg(self, filename):
         self.DrawingArea.DeselectAll()

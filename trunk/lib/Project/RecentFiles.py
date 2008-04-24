@@ -44,7 +44,8 @@ class CRecentFiles(object):
             if file.nodeType not in (xml.dom.minidom.Node.ELEMENT_NODE, xml.dom.minidom.Node.DOCUMENT_NODE):
                 continue
             if file.tagName == 'File':
-                self.files.append((file.getAttribute("name").decode('unicode_escape'),file.getAttribute("date").decode('unicode_escape')))
+                if os.path.exists(file.getAttribute("name").decode('unicode_escape')):
+                    self.files.append((file.getAttribute("name").decode('unicode_escape'),file.getAttribute("date").decode('unicode_escape')))
 
     def SaveRecentFiles(self):
         f = file(self.filename,"w")
