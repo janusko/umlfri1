@@ -193,10 +193,13 @@ class CpicDrawingArea(CWidget):
                 index = sel.GetSelectedPoint()
                 if index is not None and (sel.GetSource() != sel.GetDestination() or len(tuple(sel.GetMiddlePoints())) > 2):
                     sel.RemovePoint(self.canvas, index)
+                    self.DrawingArea.DeselectAll()
                     self.Paint()
                     return
         for sel in self.DrawingArea.GetSelected():
             self.DrawingArea.DeleteItem(sel)
+        self.DrawingArea.DeselectAll()
+        self.emit('selected-item', list(self.DrawingArea.GetSelected()))
         self.Paint()
     
     @event("picEventBox", "button-press-event")
@@ -389,6 +392,7 @@ class CpicDrawingArea(CWidget):
                 for sel in self.DrawingArea.GetSelected():
                     self.DrawingArea.DeleteItem(sel)
                     sel.GetObject().RemoveAppears(self.DrawingArea)
+            self.emit('selected-item', list(self.DrawingArea.GetSelected()))
             self.Paint()
         elif event.keyval == gtk.keysyms.Escape:
             self.ResetAction()
