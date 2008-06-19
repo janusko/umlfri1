@@ -273,6 +273,8 @@ class CtwProjectView(CWidget):
     def on_twProjectView_change_selection(self, treeView):
         
         iter = treeView.get_selection().get_selected()[1]
+        if iter is None:
+            return
         model = self.twProjectView.get_model()
         if model.get(iter,2)[0] == "=DrawingArea=":
             self.mnuTreeFindInDiagrams.set_sensitive(False)
