@@ -11,7 +11,11 @@
     	<LineStyle style="solid" color="/Styles/Connection/LineColor" />
     	<ArrowStyle style="simple" fill="/Styles/Connection/ArrowFillColor" color="/Styles/Connection/ArrowColor" />
         <Label position="center">
-            <TextBox text="#name" font="/Styles/Connection/NameTextFont" color="/Styles/Connection/NameTextColor" />
+            <Condition condition="#name" type="empty" negate="1">
+                <Rectangle fill="/Styles/Connection/TextFill">
+                    <TextBox text="#name" font="/Styles/Connection/NameTextFont" color="/Styles/Connection/NameTextColor" />
+                </Rectangle>
+            </Condition>
         </Label>
     </Appearance>
 </ConnectionType>
