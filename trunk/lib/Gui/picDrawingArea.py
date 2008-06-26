@@ -173,8 +173,8 @@ class CpicDrawingArea(CWidget):
         self.DrawingArea.DeselectAll()
         #what u see export(only currently visible area will be exported): sizeX, sizeY = self.GetWindowSize() 
         sizeX, sizeY = self.DrawingArea.GetExpSquare(self.canvas)
-        canvas = CExportCanvas(self.application.GetProject().GetStorage(), export_type, filename, sizeX+10, sizeY+10)
-        self.DrawingArea.Paint(canvas)
+        canvas = CExportCanvas(self.application.GetProject().GetStorage(), export_type, filename, sizeX, sizeY)
+        self.DrawingArea.PaintFull(canvas)
         canvas.Finish()
         self.Paint()    
 

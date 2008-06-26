@@ -15,7 +15,7 @@ class CDrawingArea:
         self.typeDiagram = type
         self.size = None
         self.viewport = ((0, 0), (0, 0))
-        self.scrollingPos = [0, 0]                  #position of dravig area (needed for scrollBars)
+        self.scrollingPos = [0, 0]                  #position of drawing area (needed for scrollBars)
         if name is None:
             name = "New " + type.GetId()
         self.name = name
@@ -296,6 +296,13 @@ class CDrawingArea:
             if not (ex2 < x or x + w < ex1 or ey2 < y or y + w < ey1):
                 c.Paint(canvas, delta = (-x, -y))
             
+    def PaintFull(self, canvas):
+        canvas.Clear()
+        for e in self.elements:
+            e.Paint(canvas)
+        for c in self.connections:
+            c.Paint(canvas)
+    
     def GetElements(self):
         for e in self.elements:
             yield e
@@ -400,14 +407,24 @@ class CDrawingArea:
             self.AddToSelection(el)
             el.CopyFromElement(i)
             pasted.add(el)
-    
+
     def GetExpSquare(self, canvas):
-        x, y = 0, 0
+        x_max, y_max,x_min, y_min,  = 0, 0,  101, 101
         for el in self.elements:
             posX, posY = el.GetPosition()
             w, h = el.GetSize(canvas)
-            if posX + w > x:
-                x = posX + w
-            if posY + h > y:
-                y = posY + h
-        return (x, y)
+            
+            if posX + w > x_max:
+                x_max = posX + w
+            if posY + h > y_max:
+                y_max = posY + h
+        
+            if posX < x_min:
+                x_min = posX
+            if posY < y_min:
+                y_min = posY
+            if x_min > 100 : 
+                x_min = 100
+            if y_min > 100 : 
+                y_min = 100
+        return (x_max +x_min, y_max + y_min)
