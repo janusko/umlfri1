@@ -106,7 +106,7 @@ class CDiagramFactory(object):
 
         obj = CDiagramType(root.get('id'))
         
-        for element in root.iterchildren():
+        for element in root.getchildren():
             if element.tag == METAMODEL_NAMESPACE+'Icon':
                 obj.SetIcon(element.get('path'))
                 
@@ -116,12 +116,12 @@ class CDiagramFactory(object):
                 obj.SetSpecial(swimlines, lifelines)
                 
             elif element.tag == METAMODEL_NAMESPACE+'Elements':
-                for item in element.iterchildren():
+                for item in element.getchildren():
                     value = item.get('value')
                     obj.AppendElement(value)
                     
             elif element.tag == METAMODEL_NAMESPACE+'Connections':
-                for item in element.iterchildren():
+                for item in element.getchildren():
                     value = item.get('value')
                     obj.AppendConnection(value)
         
