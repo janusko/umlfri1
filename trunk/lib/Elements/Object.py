@@ -38,33 +38,33 @@ class CElementObject(object):
     
     def GetAppears(self):
         """
-        Get list of object appearances on drawing areas
+        Get list of object appearances on diagrams
         
-        @return: list of drawing areas
-        @rtype:  iterator over L{CDrawingArea<lib.Drawing.DrawingArea.CDrawingArea>}
+        @return: list of diagrams
+        @rtype:  iterator over L{CDiagram<lib.Drawing.Diagram.CDiagram>}
         """
         for i in self.appears:
             yield i
 
-    def AddAppears(self, drawingArea):
+    def AddAppears(self, diagram):
         """
         Add element appearance
         
-        @param drawingArea: Drawing area on which element appears
-        @type  drawingArea: L{CDrawingArea<lib.Drawing.DrawingArea.CDrawingArea>}
+        @param diagram: Diagram on which element appears
+        @type  diagram: L{CDiagram<lib.Drawing.Diagram.CDiagram>}
         """
-        self.appears.append(drawingArea)
+        self.appears.append(diagram)
 
-    def RemoveAppears(self, drawingArea):
+    def RemoveAppears(self, diagram):
         """
         Remove element appearance
         
-        @param drawingArea: Drawing area on which element was appearing
-        @type  drawingArea: L{CDrawingArea<lib.Drawing.DrawingArea.CDrawingArea>}
+        @param diagram: Diagram on which element was appearing
+        @type  diagram: L{CDiagram<lib.Drawing.Diagram.CDiagram>}
         
-        @raise ValueError: if given drawing area is not found
+        @raise ValueError: if given diagram is not found
         """
-        self.appears.remove(drawingArea)
+        self.appears.remove(diagram)
     
     def GetPath(self):
         """

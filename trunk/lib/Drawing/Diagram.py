@@ -6,7 +6,7 @@ from lib.Math2D import CRectangle
 from lib.Math2D import CPoint
 
 
-class CDrawingArea:
+class CDiagram:
     def __init__(self, type, name = None): #  name = "untitled"
         self.elements = []
         self.connections = []
@@ -15,7 +15,7 @@ class CDrawingArea:
         self.typeDiagram = type
         self.size = None
         self.viewport = ((0, 0), (0, 0))
-        self.scrollingPos = [0, 0]                  #position of drawing area (needed for scrollBars)
+        self.scrollingPos = [0, 0]                  #position on diagram (needed for scrollBars)
         if name is None:
             name = "New " + type.GetId()
         self.name = name
@@ -33,7 +33,7 @@ class CDrawingArea:
     def SetVScrollingPos(self, value):
         self.scrollingPos[1] = value
         
-    # Cesta v strome kde sa nachadza drawing area
+    # Cesta v strome kde sa nachadza diagram
     def HasElementObject(self, object):
         for i in self.elements:
             if i.GetObject() is object:
@@ -315,14 +315,14 @@ class CDrawingArea:
     # pomocou cprojNode zisti mena diagramov na rovnakej urovni
     # ak meno uz existuje (a je rovnaky typ), area sa premenuje
     def Assign(self, cprojNode):
-        if cprojNode.drawingareas != []:
+        if cprojNode.diagrams != []:
             id = 1
             # zisti nazvy / typy diagramov, porovnaj a pripadne sa premenuj
             checkNames = True
             while checkNames :
                 checkNames = False
                 nName = self.GetName()
-                for drArea in cprojNode.drawingareas:
+                for drArea in cprojNode.diagrams:
                     if drArea.GetName() == self.GetName() and drArea.GetType() is self.GetType():
                         while nName[-1].isdigit(): # useknem cisla
                             nName = nName[:-1]

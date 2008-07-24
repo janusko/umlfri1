@@ -1,3 +1,3 @@
 from Connection import CConnection
-from DrawingArea import CDrawingArea
+from Diagram import CDiagram
 from Element import CElement

@@ -93,7 +93,7 @@ class CfrmProperties(CWindow):
         for i in self.__elementObj.GetConnections():
             obj = i.GetConnectedObject(self.__elementObj)
             if isElement:
-                self.connModel.set(self.connModel.append(), 0, obj.GetName(), 1, i.GetType().GetId(), 2, self.element.GetDrawingArea().HasConnection(i))
+                self.connModel.set(self.connModel.append(), 0, obj.GetName(), 1, i.GetType().GetId(), 2, self.element.GetDiagram().HasConnection(i))
             else:
                 self.connModel.set(self.connModel.append(), 0, obj.GetName(), 1, i.GetType().GetId())
         
@@ -116,19 +116,19 @@ class CfrmProperties(CWindow):
             self.__elementObj.SetAttribute("Operations", self.__operations)
         if self.__connections is not None:
             for i in self.__connections:
-                con = self.element.GetDrawingArea().GetConnection(i)
+                con = self.element.GetDiagram().GetConnection(i)
                 if con is not None:
-                    self.element.GetDrawingArea().DeleteConnection(con)
+                    self.element.GetDiagram().DeleteConnection(con)
                 else:
-                    area = self.element.GetDrawingArea()
+                    diagram = self.element.GetDiagram()
                     if i.GetSource() is not self.__elementObj:
-                        sour = area.HasElementObject(i.GetSource())
+                        sour = diagram.HasElementObject(i.GetSource())
                         if sour is not None:
-                            CConnection(area,i,sour,self.element)
+                            CConnection(diagram,i,sour,self.element)
                     elif i.GetDestination is not self.__elementObj:
-                        dest = area.HasElementObject(i.GetDestination())
+                        dest = diagram.HasElementObject(i.GetDestination())
                         if dest is not None:
-                            CConnection(area,i,self.element,dest)
+                            CConnection(diagram,i,self.element,dest)
             self.__connections = []
         self.__saved = True
     
