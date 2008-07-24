@@ -18,12 +18,12 @@ class CtwProjectView(CWidget):
     widgets = ('twProjectView','menuTreeElement', 'mnuTreeAddDiagram', 'mnuTreeDelete', 'mnuTreeFindInDiagrams', )
     
     __gsignals__ = {
-        'selected_drawing_area':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)), 
+        'selected_diagram':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)), 
         'selected-item-tree':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )), 
         'create-diagram':   (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_STRING, )),
         'repaint':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
-        'close-drawing-area': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
-        'selected_drawing_area_and_select_element': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT)), 
+        'close-diagram': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
+        'selected_diagram_and_select_element': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT)), 
         'show_frmFindInDiagram': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,gobject.TYPE_PYOBJECT,)),
     }
     
@@ -92,9 +92,9 @@ class CtwProjectView(CWidget):
     
     def __DrawTree(self, root, parent):
         
-        for area in root.GetDrawingAreas():
+        for diagram in root.GetDiagrams():
             novy = self.TreeStore.append(parent)
-            self.TreeStore.set(novy, 0, area.GetName() , 1, PixmapFromPath(self.application.GetProject().GetStorage(), area.GetType().GetIcon()), 2, '=DrawingArea=',3,area)
+            self.TreeStore.set(novy, 0, diagram.GetName() , 1, PixmapFromPath(self.application.GetProject().GetStorage(), diagram.GetType().GetIcon()), 2, '=Diagram=',3,diagram)
         
         for node in root.GetChilds():
             novy = self.TreeStore.append(parent)
@@ -120,7 +120,7 @@ class CtwProjectView(CWidget):
                     chld = model.iter_nth_child(root, id)
                     name, type = model.get(chld, 0, 2)
                     
-                    if k == "=DrawingArea=":
+                    if k == "=Diagram=":
                         return root
                         
                     if name == j and type == k:
@@ -151,7 +151,7 @@ class CtwProjectView(CWidget):
                     chld = model.iter_nth_child(root, id)
                     name, type = model.get(chld, 0, 2)
                     
-                    if k == "=DrawingArea=":
+                    if k == "=Diagram=":
                         iter.append(root) 
                     
                     if name == j and type == k:
@@ -167,9 +167,9 @@ class CtwProjectView(CWidget):
         return iter
         
         
-    def get_areas_iter_from_path(self, model, root, path):
+    def get_diagrams_iter_from_path(self, model, root, path):
         chld = root
-        areas = []
+        diagrams = []
         i = path.split('/')[0]
         j,k = i.split(':')
         name, type = model.get(root, 0, 2)
@@ -180,12 +180,12 @@ class CtwProjectView(CWidget):
                     chld = model.iter_nth_child(root, id)
                     name, type = model.get(chld, 0, 2)
                     
-                    if k == "=DrawingArea=" and j == name:
-                        areas.append(chld)
+                    if k == "=Diagram=" and j == name:
+                        diagrams.append(chld)
                 root = chld
         else:
             raise UMLException("BadPath5")
-        return areas
+        return diagrams
     
     
     def ShowElement(self,Element):
@@ -200,18 +200,18 @@ class CtwProjectView(CWidget):
         self.twProjectView.expand_to_path(self.TreeStore.get_path(iter))
         self.twProjectView.get_selection().select_iter(iter)
     
-    def ShowDrawingArea(self, drawingArea):
-        for i in self.get_iters_from_path(self.twProjectView.get_model(),self.twProjectView.get_model().get_iter_root() ,drawingArea.GetPath()):
-            area = self.twProjectView.get_model().get(i,3)[0]
-            if area is drawingArea:
+    def ShowDiagram(self, diagram):
+        for i in self.get_iters_from_path(self.twProjectView.get_model(),self.twProjectView.get_model().get_iter_root() ,diagram.GetPath()):
+            diagram = self.twProjectView.get_model().get(i,3)[0]
+            if diagram is diagram:
                 iter = i
                 break
         self.twProjectView.expand_to_path(self.TreeStore.get_path(iter))
         self.twProjectView.get_selection().select_iter(iter)
                     
     
-    def AddElement(self, element, drawingArea):
-        path = drawingArea.GetPath()
+    def AddElement(self, element, diagram):
+        path = diagram.GetPath()
         parent = self.application.GetProject().GetNode(path)
         node = CProjectNode(parent, element, parent.GetPath() + "/" + element.GetName() + ":" + element.GetType().GetId())
         self.application.GetProject().AddNode(node, parent)
@@ -220,7 +220,7 @@ class CtwProjectView(CWidget):
         
     
     
-    def AddDrawingArea(self, drawingArea):
+    def AddDiagram(self, diagram):
         
         iter = self.twProjectView.get_selection().get_selected()[1]
         if iter is None:
@@ -228,13 +228,13 @@ class CtwProjectView(CWidget):
             self.twProjectView.get_selection().select_iter(iter)
         model = self.twProjectView.get_model()
         
-        if model.get(iter,2)[0] == "=DrawingArea=":
+        if model.get(iter,2)[0] == "=Diagram=":
             iter = model.iter_parent(iter)
         node = model.get(iter,3)[0]
-        drawingArea.SetPath(node.GetPath() + "/" + drawingArea.GetName() + ":=DrawingArea=")
-        node.AddDrawingArea(drawingArea)
+        diagram.SetPath(node.GetPath() + "/" + diagram.GetName() + ":=Diagram=")
+        node.AddDiagram(diagram)
         novy = self.TreeStore.append(iter)
-        self.TreeStore.set(novy, 0, drawingArea.GetName() , 1, PixmapFromPath(self.application.GetProject().GetStorage(), drawingArea.GetType().GetIcon()), 2, '=DrawingArea=',3,drawingArea)
+        self.TreeStore.set(novy, 0, diagram.GetName() , 1, PixmapFromPath(self.application.GetProject().GetStorage(), diagram.GetType().GetIcon()), 2, '=Diagram=',3,diagram)
         path = self.TreeStore.get_path(novy)
         self.twProjectView.expand_to_path(path)
         self.twProjectView.get_selection().select_iter(novy)
@@ -262,12 +262,12 @@ class CtwProjectView(CWidget):
     def on_twProjectView_set_selected(self, treeView, path, column):
         model = self.twProjectView.get_model()
         iter =  model.get_iter(path)
-        if model.get(iter,2)[0] == "=DrawingArea=":
-            area = model.get(iter,3)[0]
-            if area is None:
+        if model.get(iter,2)[0] == "=Diagram=":
+            diagram = model.get(iter,3)[0]
+            if diagram is None:
                 raise UMLException("None")
             else:
-                self.emit('selected_drawing_area',area)
+                self.emit('selected_diagram',diagram)
     
     @event("twProjectView", "cursor-changed")
     def on_twProjectView_change_selection(self, treeView):
@@ -276,7 +276,7 @@ class CtwProjectView(CWidget):
         if iter is None:
             return
         model = self.twProjectView.get_model()
-        if model.get(iter,2)[0] == "=DrawingArea=":
+        if model.get(iter,2)[0] == "=Diagram=":
             self.mnuTreeFindInDiagrams.set_sensitive(False)
         else:
             self.mnuTreeFindInDiagrams.set_sensitive(True)
@@ -284,7 +284,7 @@ class CtwProjectView(CWidget):
             self.mnuTreeDelete.set_sensitive(len(treeView.get_model().get_path(iter)) > 1)
             self.menuTreeElement.popup(None,None,None,self.EventButton[0],self.EventButton[1])
             
-        if treeView.get_model().get(iter,2)[0] == "=DrawingArea=":
+        if treeView.get_model().get(iter,2)[0] == "=Diagram=":
             return
         
         self.emit('selected-item-tree',treeView.get_model().get(iter,3)[0])
@@ -294,8 +294,8 @@ class CtwProjectView(CWidget):
         self.emit('create-diagram', diagramId)
     
     def RemoveFromArea(self,node):
-        for i in node.GetDrawingAreas():
-            self.emit('close-drawing-area',i)
+        for i in node.GetDiagrams():
+            self.emit('close-diagram',i)
             
         for j in node.GetChilds():
             self.RemoveFromArea(j)
@@ -323,19 +323,19 @@ class CtwProjectView(CWidget):
     def on_mnuTreeDelete_activate(self, menuItem):
         iter = self.twProjectView.get_selection().get_selected()[1]
         model = self.twProjectView.get_model()
-        if model.get(iter,2)[0] != "=DrawingArea=":
+        if model.get(iter,2)[0] != "=Diagram=":
             node = model.get(iter,3)[0]
             self.TreeStore.remove(iter)
             self.RemoveFromArea(node)
             self.application.GetProject().RemoveNode(node)
             self.emit('repaint')
         else:
-            area = model.get(iter,3)[0]
+            diagram = model.get(iter,3)[0]
             itr = model.iter_parent(iter)
             node = model.get(itr,3)[0]
-            node.RemoveDrawingArea(area)
+            node.RemoveDiagram(diagram)
             self.TreeStore.remove(iter)
-            self.emit('close-drawing-area',area)
+            self.emit('close-diagram',diagram)
         
     @event("mnuTreeFindInDiagrams","activate")
     def on_mnuTreeFindInDiagrams(self, menuItem):
@@ -346,7 +346,7 @@ class CtwProjectView(CWidget):
         if cnt == 0:
             pass
         elif cnt == 1:
-            self.emit('selected_drawing_area_and_select_element',list(node.GetAppears())[0], node.GetObject())
+            self.emit('selected_diagram_and_select_element',list(node.GetAppears())[0], node.GetObject())
         elif cnt > 1:
             self.emit('show_frmFindInDiagram', list(node.GetAppears()), node.GetObject())
 
@@ -384,41 +384,41 @@ class CtwProjectView(CWidget):
     
     def IterCopy(self, treeview, model, iter_to_copy, target_iter, pos):
         
-        if treeview.get_model().get(iter_to_copy,2)[0] == "=DrawingArea=":
+        if treeview.get_model().get(iter_to_copy,2)[0] == "=Diagram=":
             node_to_copy = treeview.get_model().get(treeview.get_model().iter_parent(iter_to_copy),3)[0]
         else:
             node_to_copy = treeview.get_model().get(iter_to_copy,3)[0]
-        if treeview.get_model().get(target_iter,2)[0] == "=DrawingArea=":
+        if treeview.get_model().get(target_iter,2)[0] == "=Diagram=":
             target_node = treeview.get_model().get(treeview.get_model().iter_parent(target_iter),3)[0]
         else:
             target_node = treeview.get_model().get(target_iter,3)[0]
         
         if (pos == gtk.TREE_VIEW_DROP_INTO_OR_BEFORE) or (pos == gtk.TREE_VIEW_DROP_INTO_OR_AFTER):
-            if treeview.get_model().get(target_iter,2)[0] == "=DrawingArea=":
-                raise UMLException("MoveElementToDrawingArea")
-            elif treeview.get_model().get(iter_to_copy,2)[0] == "=DrawingArea=":
-                node_to_copy.MoveDrawingAreaToNewNode(target_node,treeview.get_model().get(iter_to_copy,3)[0])
+            if treeview.get_model().get(target_iter,2)[0] == "=Diagram=":
+                raise UMLException("MoveElementToDiagram")
+            elif treeview.get_model().get(iter_to_copy,2)[0] == "=Diagram=":
+                node_to_copy.MoveDiagramToNewNode(target_node,treeview.get_model().get(iter_to_copy,3)[0])
             else:
                 node_to_copy.MoveNode(target_node)
             new_iter = model.prepend(target_iter, None)
         
         elif pos == gtk.TREE_VIEW_DROP_BEFORE:
-            if treeview.get_model().get(iter_to_copy,2)[0] == "=DrawingArea=":
+            if treeview.get_model().get(iter_to_copy,2)[0] == "=Diagram=":
                 if target_node.GetParent() is not None:
                     target_node = target_node.GetParent()
-                node_to_copy.MoveDrawingAreaToNewNode(target_node,treeview.get_model().get(iter_to_copy,3)[0])
-            elif treeview.get_model().get(target_iter,2)[0] == "=DrawingArea=":
+                node_to_copy.MoveDiagramToNewNode(target_node,treeview.get_model().get(iter_to_copy,3)[0])
+            elif treeview.get_model().get(target_iter,2)[0] == "=Diagram=":
                 node_to_copy.MoveNode(target_node)
             else:
                 node_to_copy.MoveNode(target_node.GetParent())
             new_iter = model.insert_before(None, target_iter)
         
         elif pos == gtk.TREE_VIEW_DROP_AFTER:
-            if treeview.get_model().get(iter_to_copy,2)[0] == "=DrawingArea=":
+            if treeview.get_model().get(iter_to_copy,2)[0] == "=Diagram=":
                 if target_node.GetParent() is not None:
                     target_node = target_node.GetParent()
-                node_to_copy.MoveDrawingAreaToNewNode(target_node,treeview.get_model().get(iter_to_copy,3)[0])
-            elif treeview.get_model().get(target_iter,2)[0] == "=DrawingArea=":
+                node_to_copy.MoveDiagramToNewNode(target_node,treeview.get_model().get(iter_to_copy,3)[0])
+            elif treeview.get_model().get(target_iter,2)[0] == "=Diagram=":
                 node_to_copy.MoveNode(target_node)
             else:
                 node_to_copy.MoveNode(target_node.GetParent())
@@ -445,7 +445,7 @@ class CtwProjectView(CWidget):
                 try:
                     self.IterCopy(widget, model, iter_to_copy, target_iter, pos)
                 except UMLException, e:
-                    if e.GetName() == "MoveElementToDrawingArea":
+                    if e.GetName() == "MoveElementToDiagram":
                         context.finish(False, False, etime)
                         return
                 context.finish(True, True, etime)

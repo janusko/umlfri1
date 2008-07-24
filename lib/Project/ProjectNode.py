@@ -4,7 +4,7 @@ class CProjectNode(object):
     def __init__(self, parent = None, object = None, path = None):
         self.parent = parent
         self.childs = []
-        self.drawingareas = []
+        self.diagrams = []
         self.object = object
         if path is not None:
             self.object.SetPath(path)
@@ -18,8 +18,8 @@ class CProjectNode(object):
 
 
         self.SetPath(parentPath + self.GetName() + ":" + self.GetType())
-        for i in self.drawingareas:
-            i.SetPath(self.GetPath() + "/" +  i.GetName() + ":=DrawingArea=")
+        for i in self.diagrams:
+            i.SetPath(self.GetPath() + "/" +  i.GetName() + ":=Diagram=")
             
         for i in self.childs:
             i.Change()
@@ -28,17 +28,17 @@ class CProjectNode(object):
     def GetAppears(self):
         return self.GetObject().GetAppears()
 
-    def AddAppears(self, drawingArea):
-        self.GetObject().AddAppears(drawingArea)
+    def AddAppears(self, diagram):
+        self.GetObject().AddAppears(diagram)
 
-    def RemoveAppears(self, drawingArea):
-        self.GetObject().RemoveAppears(drawingArea)
+    def RemoveAppears(self, diagram):
+        self.GetObject().RemoveAppears(diagram)
 
-    def GetDrawingAreas(self):
-        return self.drawingareas
+    def GetDiagrams(self):
+        return self.diagrams
 
-    def HasDrawingArea(self):
-        return len(self.drawingareas) > 0
+    def HasDiagram(self):
+        return len(self.diagrams) > 0
 
     def GetPath(self):
         return self.object.GetPath()
@@ -63,15 +63,15 @@ class CProjectNode(object):
             raise UMLException("ExistsChild")
 
 
-    def AddDrawingArea(self, area):
-        if area not in self.drawingareas:
-            area.Assign(self) # vygenerovanie nazvu
-            self.drawingareas.append(area)
+    def AddDiagram(self, diagram):
+        if diagram not in self.diagrams:
+            diagram.Assign(self) # vygenerovanie nazvu
+            self.diagrams.append(diagram)
     
-    def MoveDrawingAreaToNewNode(self, newNode, area):
-        self.RemoveDrawingArea(area)
-        #newNode.AddDrawingArea(area)
-        newNode.drawingareas.append(area)
+    def MoveDiagramToNewNode(self, newNode, diagram):
+        self.RemoveDiagram(diagram)
+        #newNode.AddDiagram(diagram)
+        newNode.diagrams.append(diagram)
     
     def MoveNode(self, parentNode):
         self.parent.RemoveChild(self)
@@ -79,8 +79,8 @@ class CProjectNode(object):
         parentNode.AddChild(self)
         self.SetPath(parentNode.GetPath() + "/" + self.GetPath().split('/')[-1])
     
-    def FindDrawingArea(self, name):
-        for i in self.drawingareas:
+    def FindDiagram(self, name):
+        for i in self.diagrams:
             if i.GetName() == name:
                 return i
         return None
@@ -115,9 +115,9 @@ class CProjectNode(object):
         else:
             raise UMLException("ChildNotExists")
 
-    def RemoveDrawingArea(self, area):
-        if area in self.drawingareas:
-            self.drawingareas.remove(area)
+    def RemoveDiagram(self, diagram):
+        if diagram in self.diagrams:
+            self.diagrams.remove(diagram)
         else:
             raise UMLException("AreaNotExists")
 

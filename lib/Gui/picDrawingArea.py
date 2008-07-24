@@ -5,7 +5,7 @@ from lib.colors import invert
 from lib.config import config
 
 from common import CWidget, event
-from lib.Drawing import CDrawingArea, CElement, CConnection
+from lib.Drawing import CDiagram, CElement, CConnection
 
 from lib.Elements import CElementObject
 from lib.Connections import CConnectionObject, EConnectionRestriction
@@ -53,7 +53,7 @@ class CpicDrawingArea(CWidget):
         
         self.bufview = ((0, 0), (2000, 1500))
         self.buffer = gtk.gdk.Pixmap(self.picDrawingArea.window, *self.bufview[1])
-        self.DrawingArea = CDrawingArea(None,_("Start page"))
+        self.Diagram = CDiagram(None,_("Start page"))
         self.canvas = None
 
         cmap = self.picDrawingArea.window.get_colormap()
@@ -90,27 +90,27 @@ class CpicDrawingArea(CWidget):
         self.vbAll.set_child_packing(self.nbTabs, False, True, 0, gtk.PACK_START)
         self.tbDrawingArea.show()
 
-    def GetDrawingArea(self):
-        return self.DrawingArea
+    def GetDiagram(self):
+        return self.Diagram
 
-    def SetDrawingArea(self, drawingArea):
-        #set actual scrolling position before change drawing area
-        self.DrawingArea.SetVScrollingPos(int(self.picVBar.get_value()))
-        self.DrawingArea.SetHScrollingPos(int(self.picHBar.get_value()))
-        #change drawing area
-        self.DrawingArea = drawingArea
+    def SetDiagram(self, diagram):
+        #set actual scrolling position before change diagram
+        self.Diagram.SetVScrollingPos(int(self.picVBar.get_value()))
+        self.Diagram.SetHScrollingPos(int(self.picHBar.get_value()))
+        #change diagram
+        self.Diagram = diagram
         self.AdjustScrollBars()
-        #load srolling position of new drawing area
-        self.picHBar.set_value(self.DrawingArea.GetHScrollingPos())
-        self.picVBar.set_value(self.DrawingArea.GetVScrollingPos())
+        #load srolling position of new diagram
+        self.picHBar.set_value(self.Diagram.GetHScrollingPos())
+        self.picVBar.set_value(self.Diagram.GetVScrollingPos())
         self.Paint()
 
     def GetWindowSize(self):
         tmpx, tmpy =  self.picDrawingArea.window.get_size()
         return (int(tmpx), (tmpy))
 
-    def GetDrawingAreaSize(self):
-        tmp = [int(max(i)) for i in zip(self.DrawingArea.GetSize(self.canvas), self.picDrawingArea.window.get_size())]
+    def GetDiagramSize(self):
+        tmp = [int(max(i)) for i in zip(self.Diagram.GetSize(self.canvas), self.picDrawingArea.window.get_size())]
         return tuple(tmp)
     
     def GetPos(self):
@@ -138,8 +138,8 @@ class CpicDrawingArea(CWidget):
             self.bufview = ((bposx, bposy), (bsizx, bsizy))
             changed = True
         if changed:
-            self.DrawingArea.SetViewPort(self.bufview)
-            self.DrawingArea.Paint(self.canvas)
+            self.Diagram.SetViewPort(self.bufview)
+            self.Diagram.Paint(self.canvas)
         wgt = self.picDrawingArea.window
         gc = wgt.new_gc()
         wgt.draw_drawable(gc, self.buffer, posx - bposx, posy - bposy, 0, 0, sizx, sizy)
@@ -156,7 +156,7 @@ class CpicDrawingArea(CWidget):
             self.__DrawNewConnection((None, None), False)
 
     def AdjustScrollBars(self):
-        dasx, dasy = self.GetDrawingAreaSize()
+        dasx, dasy = self.GetDiagramSize()
         wisx, wisy = self.GetWindowSize()
 
         tmp = self.picHBar.get_adjustment()
@@ -170,36 +170,36 @@ class CpicDrawingArea(CWidget):
         self.picVBar.set_adjustment(tmp)
     
     def Export(self, filename, export_type):
-        self.DrawingArea.DeselectAll()
+        self.Diagram.DeselectAll()
         #what u see export(only currently visible area will be exported): sizeX, sizeY = self.GetWindowSize() 
-        sizeX, sizeY = self.DrawingArea.GetExpSquare(self.canvas)
+        sizeX, sizeY = self.Diagram.GetExpSquare(self.canvas)
         canvas = CExportCanvas(self.application.GetProject().GetStorage(), export_type, filename, sizeX, sizeY)
-        self.DrawingArea.PaintFull(canvas)
+        self.Diagram.PaintFull(canvas)
         canvas.Finish()
         self.Paint()    
 
 
     def ExportSvg(self, filename):
-        self.DrawingArea.DeselectAll()
+        self.Diagram.DeselectAll()
         self.Paint()
         canvas = CSvgCanvas(1000, 1000, self.canvas, self.application.GetProject().GetStorage())
         canvas.Clear()
-        self.DrawingArea.Paint(canvas)
+        self.Diagram.Paint(canvas)
         canvas.WriteOut(file(filename, 'w'))
     
     def DeleteElements(self):
-        for sel in self.DrawingArea.GetSelected():
+        for sel in self.Diagram.GetSelected():
             if isinstance(sel, CConnection):
                 index = sel.GetSelectedPoint()
                 if index is not None and (sel.GetSource() != sel.GetDestination() or len(tuple(sel.GetMiddlePoints())) > 2):
                     sel.RemovePoint(self.canvas, index)
-                    self.DrawingArea.DeselectAll()
+                    self.Diagram.DeselectAll()
                     self.Paint()
                     return
-        for sel in self.DrawingArea.GetSelected():
-            self.DrawingArea.DeleteItem(sel)
-        self.DrawingArea.DeselectAll()
-        self.emit('selected-item', list(self.DrawingArea.GetSelected()))
+        for sel in self.Diagram.GetSelected():
+            self.Diagram.DeleteItem(sel)
+        self.Diagram.DeselectAll()
+        self.emit('selected-item', list(self.Diagram.GetSelected()))
         self.Paint()
     
     @event("picEventBox", "button-press-event")
@@ -207,8 +207,8 @@ class CpicDrawingArea(CWidget):
         self.picDrawingArea.grab_focus()  
         
         if event.button == 1 and event.type == gtk.gdk._2BUTTON_PRESS:
-            if len(tuple(self.DrawingArea.GetSelected())) == 1:
-                for Element in self.DrawingArea.GetSelected():
+            if len(tuple(self.Diagram.GetSelected())) == 1:
+                for Element in self.Diagram.GetSelected():
                     if isinstance(Element, CElement):
                         self.emit('open-specification',Element)
                         return
@@ -223,13 +223,13 @@ class CpicDrawingArea(CWidget):
                 return
             
             pos = self.GetAbsolutePos((event.x, event.y))
-            itemSel = self.DrawingArea.GetElementAtPosition(self.canvas, pos)
+            itemSel = self.Diagram.GetElementAtPosition(self.canvas, pos)
             if itemSel is not None: #ak som nieco trafil:              
-                if itemSel in self.DrawingArea.GetSelected(): # deselecting:
+                if itemSel in self.Diagram.GetSelected(): # deselecting:
                     if (event.state & gtk.gdk.CONTROL_MASK) or (event.state & gtk.gdk.SHIFT_MASK):
-                        self.DrawingArea.RemoveFromSelection(itemSel)
+                        self.Diagram.RemoveFromSelection(itemSel)
                         self.Paint()
-                        self.emit('selected-item', list(self.DrawingArea.GetSelected()))
+                        self.emit('selected-item', list(self.Diagram.GetSelected()))
                     elif isinstance(itemSel, CConnection): #selectnuta ciara
                         i = itemSel.GetPointAtPosition(pos)
                         if i is not None:
@@ -240,12 +240,12 @@ class CpicDrawingArea(CWidget):
                             i = itemSel.WhatPartOfYouIsAtPosition(self.canvas, pos)
                             self.__BeginDragLine(event, itemSel, i)
                         self.Paint()    
-                        self.emit('selected-item', list(self.DrawingArea.GetSelected()))
+                        self.emit('selected-item', list(self.Diagram.GetSelected()))
                     else: #selektnute elementy
                         self.__BeginDragRect(event)
                 elif not (event.state & gtk.gdk.CONTROL_MASK) and not (event.state & gtk.gdk.SHIFT_MASK):
-                    self.DrawingArea.DeselectAll()
-                    self.DrawingArea.AddToSelection(itemSel)
+                    self.Diagram.DeselectAll()
+                    self.Diagram.AddToSelection(itemSel)
                     self.pmShowInProjectView.set_sensitive(True)
                     if isinstance(itemSel, CConnection):
                         i = itemSel.GetPointAtPosition(pos)
@@ -257,30 +257,30 @@ class CpicDrawingArea(CWidget):
                             i = itemSel.WhatPartOfYouIsAtPosition(self.canvas, pos)
                             self.__BeginDragLine(event, itemSel, i)
                     else:
-                        selElements = list(self.DrawingArea.GetSelectedElements())
+                        selElements = list(self.Diagram.GetSelectedElements())
                         self.selElem = selElements[0]
                         if len(selElements) == 1:
                             self.selSq = self.selElem.GetSquareAtPosition(pos)
                         self.__BeginDragRect(event)
                     self.Paint()
-                    self.emit('selected-item', list(self.DrawingArea.GetSelected()))
+                    self.emit('selected-item', list(self.Diagram.GetSelected()))
                 else:
                     self.pmShowInProjectView.set_sensitive(False)
-                    self.DrawingArea.AddToSelection(itemSel)
+                    self.Diagram.AddToSelection(itemSel)
                     self.Paint()
-                    self.emit('selected-item', list(self.DrawingArea.GetSelected()))
+                    self.emit('selected-item', list(self.Diagram.GetSelected()))
             else: # nothing under pointer
-                if self.DrawingArea.SelectedCount() > 0:
+                if self.Diagram.SelectedCount() > 0:
                     if not (event.state & gtk.gdk.CONTROL_MASK):
-                        self.DrawingArea.DeselectAll()
+                        self.Diagram.DeselectAll()
                         self.Paint()
-                        self.emit('selected-item', list(self.DrawingArea.GetSelected()))
+                        self.emit('selected-item', list(self.Diagram.GetSelected()))
                 self.__BeginDragSel(event)
         else:
             if event.button == 3:
                 #ak je nieco vyselectovane:
-                if len( list(self.DrawingArea.GetSelectedElements()) ) > 0: 
-                    if self.DrawingArea.GetSelected() is not None and len(tuple(self.DrawingArea.GetSelected())) < 2:
+                if len( list(self.Diagram.GetSelectedElements()) ) > 0: 
+                    if self.Diagram.GetSelected() is not None and len(tuple(self.Diagram.GetSelected())) < 2:
                         self.pmOpenSpecification.set_sensitive(True)
                     else:
                         self.pmOpenSpecification.set_sensitive(False)
@@ -291,14 +291,14 @@ class CpicDrawingArea(CWidget):
         if toolBtnSel[0] == 'Element':
             ElementType = self.application.GetProject().GetElementFactory().GetElement(toolBtnSel[1])
             ElementObject = CElementObject(ElementType)
-            CElement(self.DrawingArea, ElementObject).SetPosition(pos)
+            CElement(self.Diagram, ElementObject).SetPosition(pos)
             self.AdjustScrollBars()
             self.emit('set-selected', None)
-            self.emit('add-element', ElementObject, self.DrawingArea)
+            self.emit('add-element', ElementObject, self.Diagram)
             self.Paint()
 
         elif toolBtnSel[0] == 'Connection':
-            itemSel = self.DrawingArea.GetElementAtPosition(self.canvas, pos)
+            itemSel = self.Diagram.GetElementAtPosition(self.canvas, pos)
 
             if itemSel is None:
                 if self.__NewConnection is not None:
@@ -325,7 +325,7 @@ class CpicDrawingArea(CWidget):
                 self.dnd = None 
             elif self.dnd == 'rect':
                 delta = self.__GetDelta((event.x, event.y))
-                self.DrawingArea.MoveSelection(delta, self.canvas)
+                self.Diagram.MoveSelection(delta, self.canvas)
                 self.dnd = None
             elif self.dnd == 'point':
                 point = self.GetAbsolutePos((event.x, event.y))
@@ -350,19 +350,19 @@ class CpicDrawingArea(CWidget):
                     x2, x1 = x1, x2
                 if y2 < y1:
                     y2, y1 = y1, y2
-                self.DrawingArea.AddRangeToSelection(self.canvas, (x1, y1), (x2, y2))
+                self.Diagram.AddRangeToSelection(self.canvas, (x1, y1), (x2, y2))
                 self.dnd = None
-                self.emit('selected-item', list(self.DrawingArea.GetSelected()))
+                self.emit('selected-item', list(self.Diagram.GetSelected()))
             elif self.__NewConnection is not None:
                 pos = self.GetAbsolutePos((event.x, event.y))
-                itemSel = self.DrawingArea.GetElementAtPosition(self.canvas, pos)
+                itemSel = self.Diagram.GetElementAtPosition(self.canvas, pos)
                 if itemSel is None or isinstance(itemSel, CConnection):
                     self.__NewConnection[1].append(pos)
                     self.__DrawNewConnection((None, None))
                 elif itemSel is not self.__NewConnection[2] or len(self.__NewConnection[1]) > 2:
                     (type, points, source), destination = self.__NewConnection, itemSel
                     obj = CConnectionObject(type, source.GetObject(), destination.GetObject())
-                    x = CConnection(self.DrawingArea, obj, source, destination, points[1:])
+                    x = CConnection(self.Diagram, obj, source, destination, points[1:])
                     self.__NewConnection = None
                     self.emit('set-selected', None)
                 else:
@@ -383,16 +383,16 @@ class CpicDrawingArea(CWidget):
         self.pressedKeys.add(event.keyval)
         if event.keyval == gtk.keysyms.Delete:
             if event.state == gtk.gdk.SHIFT_MASK:
-                for sel in self.DrawingArea.GetSelected():
+                for sel in self.Diagram.GetSelected():
                     if isinstance(sel, Element.CElement):
                         self.emit('delete-element-from-all',sel.GetObject())
                     else:
-                        self.DrawingArea.ShiftDeleteConnection(sel)
+                        self.Diagram.ShiftDeleteConnection(sel)
             else:
-                for sel in self.DrawingArea.GetSelected():
-                    self.DrawingArea.DeleteItem(sel)
-                    sel.GetObject().RemoveAppears(self.DrawingArea)
-            self.emit('selected-item', list(self.DrawingArea.GetSelected()))
+                for sel in self.Diagram.GetSelected():
+                    self.Diagram.DeleteItem(sel)
+                    sel.GetObject().RemoveAppears(self.Diagram)
+            self.emit('selected-item', list(self.Diagram.GetSelected()))
             self.Paint()
         elif event.keyval == gtk.keysyms.Escape:
             self.ResetAction()
@@ -479,7 +479,7 @@ class CpicDrawingArea(CWidget):
         self.dnd = 'selection'
 
     def __BeginDragRect(self, event):
-        selElements = list(self.DrawingArea.GetSelectedElements())
+        selElements = list(self.Diagram.GetSelectedElements())
         self.selElem = selElements[0]
         self.DragStartPos = self.GetAbsolutePos((event.x, event.y))
         if len(selElements) == 1:
@@ -487,7 +487,7 @@ class CpicDrawingArea(CWidget):
         else:
             self.selSq = None
         
-        self.DragRect = (self.DrawingArea.GetSelectSquare(self.canvas))
+        self.DragRect = (self.Diagram.GetSelectSquare(self.canvas))
         self.DragPoint = list(self.DragRect[0])
         if (self.selSq is None): # Neresizujem
             self.__DrawDragRect((event.x, event.y), False)
@@ -515,8 +515,8 @@ class CpicDrawingArea(CWidget):
         self.__SetCursor('grabbing')
         self.DragStartPos = (event.x, event.y)
         #self.scrollPos = self.GetPos()
-        self.DrawingArea.SetHScrollingPos(self.GetPos()[0])
-        self.DrawingArea.SetVScrollingPos(self.GetPos()[1])
+        self.Diagram.SetHScrollingPos(self.GetPos()[0])
+        self.Diagram.SetVScrollingPos(self.GetPos()[1])
         self.dnd = 'move'
         
     def __GetDelta(self, pos, follow = False):
@@ -592,7 +592,7 @@ class CpicDrawingArea(CWidget):
             
     def __DrawDragMove(self, pos):
         #posx, posy = self.scrollPos
-        posx, posy = self.DrawingArea.GetHScrollingPos(), self.DrawingArea.GetVScrollingPos()
+        posx, posy = self.Diagram.GetHScrollingPos(), self.Diagram.GetVScrollingPos()
         x1, y1 = pos
         x2, y2 = self.DragStartPos
         self.SetPos((posx - x1 + x2, posy - y1 + y2))
@@ -624,28 +624,28 @@ class CpicDrawingArea(CWidget):
    
     @event("pmShowInProjectView","activate")
     def on_mnuShowInProjectView_click(self, menuItem):
-        if len(tuple(self.DrawingArea.GetSelected())) == 1:
-            for Element in self.DrawingArea.GetSelected():
+        if len(tuple(self.Diagram.GetSelected())) == 1:
+            for Element in self.Diagram.GetSelected():
                 if isinstance(Element, CElement):
                     self.emit('show-element-in-treeView',Element)
                     
     @event("pmOpenSpecification","activate")
     def on_mnuOpenSpecification_click(self, menuItem):
-        if len(tuple(self.DrawingArea.GetSelected())) == 1:
-            for Element in self.DrawingArea.GetSelected():
+        if len(tuple(self.Diagram.GetSelected())) == 1:
+            for Element in self.Diagram.GetSelected():
                 if isinstance(Element, CElement):
                     self.emit('open-specification',Element)
         
     # Menu na Z-Order:  
     def Shift_activate(self, actionName):
         if (actionName == 'SendBack'):
-            self.DrawingArea.ShiftElementsBack(self.canvas)
+            self.Diagram.ShiftElementsBack(self.canvas)
         elif (actionName == 'BringForward'):
-            self.DrawingArea.ShiftElementsForward(self.canvas)
+            self.Diagram.ShiftElementsForward(self.canvas)
         elif (actionName == 'ToBottom'):
-            self.DrawingArea.ShiftElementsToBottom()
+            self.Diagram.ShiftElementsToBottom()
         elif (actionName == 'ToTop'):
-            self.DrawingArea.ShiftElementsToTop()
+            self.Diagram.ShiftElementsToTop()
         self.Paint()
     
     @event("pmShift_SendBack","activate")
@@ -665,14 +665,14 @@ class CpicDrawingArea(CWidget):
         self.Shift_activate('ToTop')
     
     def ActionCopy(self):
-        self.DrawingArea.CopySelection(self.application.GetClipboard())
+        self.Diagram.CopySelection(self.application.GetClipboard())
     
     def ActionCut(self):
-        self.DrawingArea.CutSelection(self.application.GetClipboard())
+        self.Diagram.CutSelection(self.application.GetClipboard())
         self.Paint()
-        self.emit('selected-item', list(self.DrawingArea.GetSelected()))
+        self.emit('selected-item', list(self.Diagram.GetSelected()))
     
     def ActionPaste(self):
-        self.DrawingArea.PasteSelection(self.application.GetClipboard())
+        self.Diagram.PasteSelection(self.application.GetClipboard())
         self.Paint()
-        self.emit('selected-item', list(self.DrawingArea.GetSelected()))
+        self.emit('selected-item', list(self.Diagram.GetSelected()))

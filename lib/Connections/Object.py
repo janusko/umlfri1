@@ -107,32 +107,32 @@ class CConnectionObject(object):
     
     def GetAppears(self):
         """
-        Gets all drawing areas, this connection appers on
+        Gets all diagrams, this connection appers on
         
-        @rtype:  iterator over L{CDrawingArea<lib.Drawing.DrawingArea.CDrawingArea>}
+        @rtype:  iterator over L{CDiagram<lib.Drawing.Diagram.CDiagram>}
         """
         for i in self.appears:
             yield i
 
-    def AddAppears(self, drawingArea):
+    def AddAppears(self, diagram):
         """
-        Add drawing area, connection is appeared on
+        Add diagram, connection is appeared on
         
-        @param drawingArea: Drawing area
-        @type  drawingArea: L{CDrawingArea<lib.Drawing.DrawingArea.CDrawingArea>}
+        @param diagram: Diagram
+        @type  diagram: L{CDiagram<lib.Drawing.Diagram.CDiagram>}
         """
-        self.appears.append(drawingArea)
+        self.appears.append(diagram)
 
-    def RemoveAppears(self, drawingArea):
+    def RemoveAppears(self, diagram):
         """
-        Remove drawing area, connection was appeared on, from the list
+        Remove diagram, connection was appeared on, from the list
         
-        @param drawingArea: Drawing area
-        @type  drawingArea: L{CDrawingArea<lib.Drawing.DrawingArea.CDrawingArea>}
+        @param diagram: Diagram
+        @type  diagram: L{CDiagram<lib.Drawing.Diagram.CDiagram>}
         
-        @raise ValueError: if given drawing area is not found
+        @raise ValueError: if given diagram is not found
         """
-        self.appears.remove(drawingArea)
+        self.appears.remove(diagram)
 
     def GetType(self):
         """

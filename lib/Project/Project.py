@@ -13,7 +13,7 @@ from lib.Elements.Factory import CElementFactory
 from lib.Diagrams.Factory import CDiagramFactory
 from lib.Connections.Factory import CConnectionFactory
 from lib.Versions.Factory import CVersionFactory
-from lib.Drawing import CDrawingArea
+from lib.Drawing import CDiagram
 import os.path
 from lib.consts import ROOT_PATH, VERSIONS_PATH, DIAGRAMS_PATH, ELEMENTS_PATH, CONNECTIONS_PATH
 import xml.dom.minidom
@@ -97,7 +97,7 @@ class CProject(object):
     def GetNode(self, path):
         node = self.root
         
-        #e.g. path = Project:Package/New Class diagram:=DrawingArea=
+        #e.g. path = Project:Package/New Class diagram:=Diagram=
         k = path.split('/')[0]
         i,j = k.split(':')
         
@@ -107,7 +107,7 @@ class CProject(object):
         if i == self.root.GetName() and j == self.root.GetType():
             for i in path.split('/')[1:]:
                 j, k  = i.split(':')
-                if k == "=DrawingArea=":
+                if k == "=Diagram=":
                     return node
                 else:
                     node = node.GetChild(j, k)
@@ -193,8 +193,8 @@ class CProject(object):
                     savetree(chld, level+4)
                 print>>f, '  '*level+'  </childs>'
             print>>f, '  '*level+'  <drawingareas>'
-            if node.HasDrawingArea():
-                for area in node.GetDrawingAreas():
+            if node.HasDiagram():
+                for area in node.GetDiagrams():
                     print>>f, '  '*level+'    <drawingarea name="%s" type="%s">'%(XMLEncode(area.GetName()), XMLEncode(area.GetType().GetId()))
                     for e in area.GetElements():
                         pos = e.GetPosition()
@@ -267,9 +267,9 @@ class CProject(object):
                         if area.nodeType not in (xml.dom.minidom.Node.ELEMENT_NODE, xml.dom.minidom.Node.DOCUMENT_NODE):
                             continue
                         if area.tagName == 'drawingarea':
-                            drawingarea = CDrawingArea(self.DiagramFactory.GetDiagram(area.getAttribute("type").decode('unicode_escape')),area.getAttribute("name").decode('unicode_escape'))
-                            drawingarea.SetPath(parentNode.GetPath() + "/" + drawingarea.GetName() + ":=DrawingArea=")
-                            parentNode.AddDrawingArea(drawingarea)
+                            drawingarea = CDiagram(self.DiagramFactory.GetDiagram(area.getAttribute("type").decode('unicode_escape')),area.getAttribute("name").decode('unicode_escape'))
+                            drawingarea.SetPath(parentNode.GetPath() + "/" + drawingarea.GetName() + ":=Diagram=")
+                            parentNode.AddDiagram(drawingarea)
                             for pic in area.childNodes:
                                 if pic.nodeType not in (xml.dom.minidom.Node.ELEMENT_NODE, xml.dom.minidom.Node.DOCUMENT_NODE):
                                     continue

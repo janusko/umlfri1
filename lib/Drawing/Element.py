@@ -2,16 +2,16 @@ from lib.config import config
 from lib.Drawing import CConnection
 
 class CElement:
-    def __init__(self, drawingArea, obj, isLoad = False):
+    def __init__(self, diagram, obj, isLoad = False):
         self.isLoad = isLoad
         self.objct = obj
         self.position = (0,0)
         self.deltaSize = (0,0)
         self.selected = False
         self.squares = []
-        self.drawingArea = drawingArea
-        self.drawingArea.AddElement(self)
-        self.objct.AddAppears(drawingArea)
+        self.diagram = diagram
+        self.diagram.AddElement(self)
+        self.objct.AddAppears(diagram)
         self.__AddExistingConnections()
         self.ClearSizeCache()
         self.revision = 0
@@ -38,11 +38,11 @@ class CElement:
         if not self.isLoad:
             for i in self.objct.GetConnections():
                 if i.GetSource() is not self.objct:
-                    if self.drawingArea.HasElementObject(i.GetSource()) is not None:
-                        CConnection(self.drawingArea,i,self.drawingArea.HasElementObject(i.GetSource()),self)
+                    if self.diagram.HasElementObject(i.GetSource()) is not None:
+                        CConnection(self.diagram,i,self.diagram.HasElementObject(i.GetSource()),self)
                 elif i.GetDestination() is not self.objct:
-                    if self.drawingArea.HasElementObject(i.GetDestination()) is not None:
-                        CConnection(self.drawingArea,i,self,self.drawingArea.HasElementObject(i.GetDestination()))
+                    if self.diagram.HasElementObject(i.GetDestination()) is not None:
+                        CConnection(self.diagram,i,self,self.diagram.HasElementObject(i.GetDestination()))
                     
     def __AddSquare(self, index, x, y, posx, posy):
         size = config['/Styles/Selection/PointsSize']
@@ -146,12 +146,12 @@ class CElement:
     def SetPosition(self, pos):
         self.position = pos
         
-    def GetDrawingArea(self):
-        return self.drawingArea
+    def GetDiagram(self):
+        return self.diagram
         
     def GetConnections(self):
         for c1 in self.GetObject().GetConnections(): #ConnectionObject
-            for c2 in self.drawingArea.GetConnections(): # Connection
+            for c2 in self.diagram.GetConnections(): # Connection
                 if c2.GetObject() is c1:
                     yield c2
 

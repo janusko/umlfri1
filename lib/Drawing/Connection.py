@@ -5,9 +5,9 @@ from lib.Math2D import CPoint, CLine, CLineVector, CPolyLine, CRectangle
 from math import sqrt, atan2, pi
 
 class CConnection:
-    def __init__(self, drawingArea, obj, source, destination, points = None):
-        self.drawingArea = drawingArea
-        self.drawingArea.AddConnection(self)
+    def __init__(self, diagram, obj, source, destination, points = None):
+        self.diagram = diagram
+        self.diagram.AddConnection(self)
         self.object = obj
         if points is None:
             self.points = []
@@ -20,7 +20,7 @@ class CConnection:
         self.labels = {}
         self.selected = False
         self.selpoint = None
-        self.object.AddAppears(drawingArea)
+        self.object.AddAppears(diagram)
         self.ClearSizeCache()
         self.revision = 0
         self.cfgrevision = 0
@@ -340,8 +340,8 @@ class CConnection:
         for point in self.points:
             yield point
 
-    def GetDrawingArea(self):
-        return self.drawingArea
+    def GetDiagram(self):
+        return self.diagram
         
     def __ComputeIntersect(self, canvas, element, center, point):
         topLeft, bottomRight = element.GetSquare(canvas)

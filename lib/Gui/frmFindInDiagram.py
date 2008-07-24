@@ -10,7 +10,7 @@ class CFindInDiagram(CWindow):
     widgets = ("twFindInDiagram", )
     
     __gsignals__ = {
-        'selected_drawingArea_and_Element': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT)), 
+        'selected_diagram_and_Element': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT)), 
     }
     
     
@@ -26,12 +26,12 @@ class CFindInDiagram(CWindow):
         
     def Fill(self):
         self.listStore.clear()
-        for i in self.drawingAreas:
+        for i in self.diagrams:
             iter = self.listStore.append()
             self.listStore.set(iter,0,i.GetName(), 1, i.GetType().GetId(), 2, PixmapFromPath(self.application.GetProject().GetStorage(), i.GetType().GetIcon()))
     
-    def ShowDialog(self, drawingAreas, object):
-        self.drawingAreas = drawingAreas
+    def ShowDialog(self, diagrams, object):
+        self.diagrams = diagrams
         self.object = object
         self.Fill()
         response = self.form.run()
@@ -43,17 +43,17 @@ class CFindInDiagram(CWindow):
             iter = self.twFindInDiagram.get_selection().get_selected()[1]
             if iter is not None:
                 self.form.hide()
-                return self.emit('selected_drawingArea_and_Element',self.drawingAreas[self.twFindInDiagram.get_model().get_path(iter)[0]],self.object)
+                return self.emit('selected_diagram_and_Element',self.diagrams[self.twFindInDiagram.get_model().get_path(iter)[0]],self.object)
             else:
                 response = self.form.run()
                 
     def hide(self):
-        del self.drawingAreas
+        del self.diagrams
         del self.object
         self.Hide()
     
     @event("twFindInDiagram", "row-activated")
     def on_twFindInDiagram_doubleclick(self, treeView, path, column):
-        self.emit('selected_drawingArea_and_Element',self.drawingAreas[path[0]],self.object)
+        self.emit('selected_diagram_and_Element',self.diagrams[path[0]],self.object)
         
     

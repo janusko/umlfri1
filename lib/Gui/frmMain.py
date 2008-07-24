@@ -9,7 +9,7 @@ import os.path
 from lib.Drawing import CElement
 from lib.Elements import CElementObject
 from dialogs import CWarningDialog, CQuestionDialog, ECancelPressed
-from lib.Drawing import CDrawingArea
+from lib.Drawing import CDiagram
 from tbToolBox import CtbToolBox
 from twProjectView import CtwProjectView
 from mnuItems import CmnuItems
@@ -310,8 +310,8 @@ class CfrmMain(CWindow):
             if event.keyval in Keys:
                 self.nbTabs.SetCurrentPage(Keys.index(event.keyval))
 
-    @event("nbTabs","drawingArea-set-focus")
-    def on_DrawingArea_set_focus(self,widget):
+    @event("nbTabs","drawing-area-set-focus")
+    def on_drawing_area_set_focus(self,widget):
         self.picDrawingArea.SetFocus()
     
     @event("cmdSave", "clicked")
@@ -360,18 +360,18 @@ class CfrmMain(CWindow):
 
     # Moje vlastne signale
     @event("picDrawingArea", "add-element")
-    def on_add_element(self, widget, Element, drawingArea):
-        self.twProjectView.AddElement(Element, drawingArea)
+    def on_add_element(self, widget, Element, diagram):
+        self.twProjectView.AddElement(Element, diagram)
 
 
 
     @event("mnuItems", "create-diagram")
     @event("twProjectView","create-diagram")
     def on_mnuItems_create_diagram(self, widget, diagramId):
-        area = CDrawingArea(self.application.GetProject().GetDiagramFactory().GetDiagram(diagramId))
-        self.twProjectView.AddDrawingArea(area)
-        self.nbTabs.AddTab(area)
-        self.picDrawingArea.SetDrawingArea(area)
+        diagram = CDiagram(self.application.GetProject().GetDiagramFactory().GetDiagram(diagramId))
+        self.twProjectView.AddDiagram(diagram)
+        self.nbTabs.AddTab(diagram)
+        self.picDrawingArea.SetDiagram(diagram)
         self.tbToolBox.SetButtons(diagramId)
 
     @event("picDrawingArea", "get-selected")
@@ -379,30 +379,30 @@ class CfrmMain(CWindow):
         return self.tbToolBox.GetSelected()
 
 
-    @event("twProjectView", "selected_drawing_area")
-    def on_select_drawing_area(self, widget, drawingArea):
-        self.nbTabs.AddTab(drawingArea)
-        self.picDrawingArea.SetDrawingArea(drawingArea)
+    @event("twProjectView", "selected_diagram")
+    def on_select_diagram(self, widget, diagram):
+        self.nbTabs.AddTab(diagram)
+        self.picDrawingArea.SetDiagram(diagram)
 
-    @event("twProjectView", "close-drawing-area")
-    def on_remove_drawing_area(self, widget, drawingArea):
-        self.nbTabs.CloseTab(drawingArea)
+    @event("twProjectView", "close-diagram")
+    def on_remove_diagram(self, widget, diagram):
+        self.nbTabs.CloseTab(diagram)
 
     @event("nbTabs", "change_current_page")
-    def on_change_drawing_area(self, widget, drawingArea):
-        if drawingArea is None:
+    def on_change_diagram(self, widget, diagram):
+        if diagram is None:
             self.picDrawingArea.Hide()
             self.tbToolBox.SetButtons(None)
             self.UpdateMenuSensitivity(diagram = False)
         else:
             self.picDrawingArea.Show()
-            self.picDrawingArea.SetDrawingArea(drawingArea)
-            self.tbToolBox.SetButtons(drawingArea.GetType().GetId())
+            self.picDrawingArea.SetDiagram(diagram)
+            self.tbToolBox.SetButtons(diagram.GetType().GetId())
             self.UpdateMenuSensitivity(diagram = True)
     
-    @event("nbTabs","show-area-in-project")
-    def on_show_area_in_project(self, widget, drawingArea):
-        self.twProjectView.ShowDrawingArea(drawingArea)
+    @event("nbTabs","show-diagram-in-project")
+    def on_show_diagram_in_project(self, widget, diagram):
+        self.twProjectView.ShowDiagram(diagram)
     
     @event("picDrawingArea", "set-selected")
     def on_picDrawingArea_set_selected(self, widget, selected):
@@ -422,7 +422,7 @@ class CfrmMain(CWindow):
 
     @event("twProjectView", "selected-item-tree")
     def on_twTreeView_selected_item(self, widget, selected):
-        self.picDrawingArea.DrawingArea.DeselectAll()
+        self.picDrawingArea.Diagram.DeselectAll()
         self.picDrawingArea.Paint()
         self.nbProperties.Fill(selected)
 
@@ -430,17 +430,17 @@ class CfrmMain(CWindow):
     def on_repaint_picDravingArea(self, widget):
         self.picDrawingArea.Paint()
     
-    @event("frmFindInDiagram","selected_drawingArea_and_Element")
-    @event("twProjectView","selected_drawing_area_and_select_element")
-    def on_select_area_and_element(self, widget, drawingArea, object):
-        self.picDrawingArea.SetDrawingArea(drawingArea)
-        self.nbTabs.AddTab(drawingArea)
-        drawingArea.AddToSelection(drawingArea.HasElementObject(object))
+    @event("frmFindInDiagram","selected_diagram_and_Element")
+    @event("twProjectView","selected_diagram_and_select_element")
+    def on_select_diagram_and_element(self, widget, diagram, object):
+        self.picDrawingArea.SetDiagram(diagram)
+        self.nbTabs.AddTab(diagram)
+        diagram.AddToSelection(diagram.HasElementObject(object))
         self.picDrawingArea.Paint()
     
     @event("twProjectView","show_frmFindInDiagram")
-    def on_show_frmFindInDiagram(self, widget, drawingAreas, object):
-        self.frmFindInDiagram.ShowDialog(drawingAreas, object)
+    def on_show_frmFindInDiagram(self, widget, diagrams, object):
+        self.frmFindInDiagram.ShowDialog(diagrams, object)
 
     @event("nbProperties", "content-update")
     def on_nbProperties_content_update(self, widget, element, property):
@@ -456,9 +456,9 @@ class CfrmMain(CWindow):
     def on_drop_from_treeview(self, widget, position):
         node = self.twProjectView.GetSelectedNode()
         if node is not None:
-            drawingArea = self.picDrawingArea.GetDrawingArea()
+            diagram = self.picDrawingArea.GetDiagram()
             try:
-                Element = CElement(drawingArea, node.GetObject()).SetPosition(position)
+                Element = CElement(diagram, node.GetObject()).SetPosition(position)
             except UMLException, e:
                 if e.GetName() == "ElementAlreadyExists":
                     return CWarningDialog(self.form, _('Unable to insert element')).run()
