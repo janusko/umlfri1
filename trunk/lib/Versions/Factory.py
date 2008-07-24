@@ -67,8 +67,8 @@ class CVersionFactory:
         version = CVersionType(root.get('id'))
         
         #Iterate over the descendants of root element (only element with tag=Item)
-        for diagram in root.iterchildren():
-            for element in diagram.iterchildren():
+        for diagram in root.getchildren():
+            for element in diagram.getchildren():
                 diagName = element.get('value')
                 #version.AddRestrictions(diagName, None)
                 version.AddDiagram(diagName)

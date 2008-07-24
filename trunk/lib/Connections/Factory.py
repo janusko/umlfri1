@@ -100,7 +100,7 @@ class CConnectionFactory(object):
         icon = None
         labels = []
         attrs = []
-        for element in root.iterchildren():
+        for element in root.getchildren():
             if element.tag == METAMODEL_NAMESPACE+'Icon':
                 icon = element.get('path')
             elif element.tag == METAMODEL_NAMESPACE+'SrcArrow':
@@ -110,16 +110,16 @@ class CConnectionFactory(object):
                 darr['possible'] = element.get('possible')
                 darr['default'] = element.get('default')
             elif element.tag == METAMODEL_NAMESPACE+'Attributes':
-                for item in element.iterchildren():
+                for item in element.getchildren():
                     value = item.get('value')
                     type = item.get('type')
                     propid = item.get('propid')
                     options = []
-                    for opt in item.iterchildren():
+                    for opt in item.getchildren():
                         options.append(opt.get('value'))
                     attrs.append((value, type, propid, options))
             elif element.tag == METAMODEL_NAMESPACE+'Appearance':
-                for subelem in element.iterchildren():
+                for subelem in element.getchildren():
                     if subelem.tag == METAMODEL_NAMESPACE+'LineStyle':
                         ls['color'] = subelem.get('color')
                         ls['style'] = subelem.get('style')
@@ -133,7 +133,7 @@ class CConnectionFactory(object):
                             darr['size'] = sarr['size'] = subelem.get('size')
                     elif subelem.tag == METAMODEL_NAMESPACE+'Label':
                         tmp = None
-                        for k in subelem.iterchildren():
+                        for k in subelem.getchildren():
                             tmp = k
                         labels.append((subelem.get('position'), self.__LoadAppearance(tmp)))
 
@@ -167,6 +167,6 @@ class CConnectionFactory(object):
         if hasattr(obj, "LoadXml"):
             obj.LoadXml(root)
         else:
-            for child in root.iterchildren():
+            for child in root.getchildren():
                 obj.AppendChild(self.__LoadAppearance(child))
         return obj

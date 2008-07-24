@@ -85,11 +85,11 @@ class CElementFactory(object):
 
         obj = CElementType(root.get('id'))
         
-        for element in root.iterchildren():
+        for element in root.getchildren():
             if element.tag == METAMODEL_NAMESPACE+'Icon':
                 obj.SetIcon(element.get('path'))
             elif element.tag == METAMODEL_NAMESPACE+'Connections':
-                for item in element.iterchildren():
+                for item in element.getchildren():
                     value = item.get('value')
                     with_what = None
                     allow_recursive = False
@@ -99,19 +99,19 @@ class CElementFactory(object):
                         allow_recursive = item.get('allowrecursive').lower() in ('1', 'true', 'yes')
                     obj.AppendConnection(value, with_what, allow_recursive)
             elif element.tag == METAMODEL_NAMESPACE+'Attributes':
-                for item in element.iterchildren():
+                for item in element.getchildren():
                     value = item.get('value')
                     type = item.get('type')
                     propid = item.get('propid')
                     if item.get('notgenerate') != None:
                         obj.SetGenerateName(not item.get('notgenerate'))
                     options = []
-                    for opt in item.iterchildren():
+                    for opt in item.getchildren():
                         options.append(opt.get('value'))
                     obj.AppendAttribute(value, type, propid, options)
             elif element.tag == METAMODEL_NAMESPACE+'Appearance':
                 tmp = None
-                for j in element.iterchildren():
+                for j in element.getchildren():
                     tmp = j
                 obj.SetAppearance(self.__LoadAppearance(tmp))
             else:
@@ -139,6 +139,6 @@ class CElementFactory(object):
         if hasattr(obj, "LoadXml"):
             obj.LoadXml(root)
         else:
-            for child in root.iterchildren():
+            for child in root.getchildren():
                 obj.AppendChild(self.__LoadAppearance(child))
         return obj

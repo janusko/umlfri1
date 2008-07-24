@@ -73,7 +73,7 @@ class CRecentFiles(object):
             if not xmlschema.validate(root):
                 raise UMLException("XMLError", xmlschema.error_log.last_error)
 
-        for file in root.iterchildren():
+        for file in root.getchildren():
             if os.path.exists(file.get("name").decode('unicode_escape')):
                 self.files.append((file.get("name").decode('unicode_escape'),file.get("date").decode('unicode_escape')))
 
