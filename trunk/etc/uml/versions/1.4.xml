@@ -1,9 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Version id="UML 1.4">
+<?xml version="1.0" encoding="UTF-8"?>
+<Version id="UML 1.4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd ..\share\schema\metamodel.xsd" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
     <Diagrams>
-        <Item value="Class diagram">
-            <!--Restriction type="delete" value="Class" /-->
-        </Item>
+        <Item value="Class diagram" />
         <Item value="Use Case diagram" />
         <Item value="State diagram" />
         <Item value="Activity diagram" />

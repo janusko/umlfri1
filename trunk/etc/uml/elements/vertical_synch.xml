@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ElementType id="VerticalSynchronization">
+<ElementType id="VerticalSynchronization" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd ..\share\schema\metamodel.xsd" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
     <Icon path="icons/vertical_line.png" />
     <Connections>
         <Item value="StateTransition" />
     </Connections>
     <Attributes>
-        <Item value="Name" type="str" propid="name" notgenerate="True" />
+        <Item value="Name" type="str" propid="name" notgenerate="true" />
         <Item value="Notes" type="note" />
     </Attributes>
     <Appearance>

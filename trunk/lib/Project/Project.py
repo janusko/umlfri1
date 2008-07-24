@@ -2,10 +2,8 @@ from lib.lib import UMLException, XMLEncode, IDGenerator
 from ProjectNode import CProjectNode
 from cStringIO import StringIO
 from zipfile import ZipFile, ZIP_STORED, ZIP_DEFLATED
-import xml.dom.minidom
 from lib.lib import UMLException
 from lib.Storages import open_storage
-
 from lib.Drawing import CElement
 from lib.Drawing import CConnection
 from lib.Elements.Type import CElementType
@@ -16,9 +14,41 @@ from lib.Diagrams.Factory import CDiagramFactory
 from lib.Connections.Factory import CConnectionFactory
 from lib.Versions.Factory import CVersionFactory
 from lib.Drawing import CDrawingArea
-
 import os.path
 from lib.consts import ROOT_PATH, VERSIONS_PATH, DIAGRAMS_PATH, ELEMENTS_PATH, CONNECTIONS_PATH
+import xml.dom.minidom
+from lib.config import config
+
+#try to import necessary lybraries for XML parsing
+try:
+    from lxml import etree
+    HAVE_LXML = True
+    #print("running with lxml.etree")
+except ImportError:
+    HAVE_LXML = False
+    try:
+        # Python 2.5
+        import xml.etree.cElementTree as etree
+        #print("running with cElementTree on Python 2.5+")
+    except ImportError:
+        try:
+            # Python 2.5
+            import xml.etree.ElementTree as etree
+            #print("running with ElementTree on Python 2.5+")
+        except ImportError:
+            try:
+                # normal cElementTree install
+                import cElementTree as etree
+                #print("running with cElementTree")
+            except ImportError:
+                # normal ElementTree install
+                import elementtree.ElementTree as etree
+                #print("running with ElementTree")
+
+#if lxml.etree is imported successfully, we use xml validation with xsd schema
+if HAVE_LXML:
+    xmlschema_doc = etree.parse(os.path.join(config['/Paths/Schema'], "metamodel.xsd"))
+    xmlschema = etree.XMLSchema(xmlschema_doc)
 
 
 class CProject(object):
@@ -67,6 +97,7 @@ class CProject(object):
     def GetNode(self, path):
         node = self.root
         
+        #e.g. path = Project:Package/New Class diagram:=DrawingArea=
         k = path.split('/')[0]
         i,j = k.split(':')
         
@@ -183,7 +214,7 @@ class CProject(object):
         
         elements, connections = self.searchCE(self.root)
         print>>f, '<?xml version="1.0" encoding="utf-8"?>'
-        print>>f, '<umlproject>'
+        print>>f, '<umlproject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://umlfri.kst.fri.uniza.sk/xmlschema/umlproject.xsd ..\share\schema\umlproject.xsd" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/umlproject.xsd">'
         print>>f, '  <objects>'
         for object in elements:
             print>>f, '    <object type="%s" id="%d">'%(XMLEncode(object.GetType().GetId()), id(object))

@@ -1,5 +1,6 @@
 from VisualObject import CVisualObject
 from lib.Math2D import TransformMatrix, Path
+from lib.consts import METAMODEL_NAMESPACE
 
 class CSvg(CVisualObject):
     def __init__(self, width, height, scale="1"):
@@ -33,23 +34,20 @@ class CSvg(CVisualObject):
     
     def __getattrs(self, node):
         ret = {}
-        for attr in xrange(node.attributes.length):
-            attr = node.attributes.item(attr)
-            ret[attr.name] = node.getAttribute(attr.name)
+        for attr in node.attrib.items():
+            ret[attr[0]] = attr[1]
         return ret
     
     def LoadXml(self, element):
         def recursive(parent, transform):
-            for node in parent.childNodes:
-                if node.nodeType not in (node.ELEMENT_NODE, node.DOCUMENT_NODE):
-                    continue
+            for node in parent.iterchildren():
                 attrs = self.__getattrs(node)
                 if 'transform' in attrs:
                     transform = transform*self.__parsetransform(attrs['transform'])
-                if node.tagName == 'path':
+                if node.tag == METAMODEL_NAMESPACE+'path':
                     self.svg.append({'style': self.__parsestyle(attrs.get('style', {})),
-                                     'path': transform*Path(attrs.get('d', ''))})
-                elif node.tagName == 'g':
+                                    'path': transform*Path(attrs.get('d', ''))})
+                elif node.tag == METAMODEL_NAMESPACE+'g':
                     recursive(node, transform)
         
         recursive(element, TransformMatrix.mk_scale(self.scale))

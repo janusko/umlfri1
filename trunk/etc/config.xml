@@ -40,7 +40,7 @@
         <Images type="path"><Include path="/Paths/Root" />/img/</Images>
         <Gui type="path"><Include path="/Paths/Root" />/gui/</Gui>
         <Locales type="path"><Include path="/Paths/Root" />/share/locale/</Locales>
-        
+        <Schema type="path"><Include path="/Paths/Root" />/share/schema/</Schema>
         <UserDir type="path">~/.uml_fri</UserDir>
         <UserConfig type="path"><Include path="/Paths/UserDir" />/config.xml</UserConfig>
         <RecentFiles type="path"><Include path="/Paths/UserDir" />/RecentFiles.xml</RecentFiles>

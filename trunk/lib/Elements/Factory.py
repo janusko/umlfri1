@@ -1,10 +1,42 @@
-import xml.dom.minidom
 import os
 import os.path
 from lib.lib import UMLException
 from Type import CElementType
-
+from lib.config import config
+from lib.consts import METAMODEL_NAMESPACE
 from lib.Drawing.Objects import ALL
+
+#try to import necessary lybraries for XML parsing
+try:
+    from lxml import etree
+    HAVE_LXML = True
+    #print("running with lxml.etree")
+except ImportError:
+    HAVE_LXML = False
+    try:
+        # Python 2.5
+        import xml.etree.cElementTree as etree
+        #print("running with cElementTree on Python 2.5+")
+    except ImportError:
+        try:
+            # Python 2.5
+            import xml.etree.ElementTree as etree
+            #print("running with ElementTree on Python 2.5+")
+        except ImportError:
+            try:
+                # normal cElementTree install
+                import cElementTree as etree
+                #print("running with cElementTree")
+            except ImportError:
+                # normal ElementTree install
+                import elementtree.ElementTree as etree
+                #print("running with ElementTree")
+               
+#if lxml.etree is imported successfully, we use xml validation with xsd schema
+if HAVE_LXML:
+    xmlschema_doc = etree.parse(os.path.join(config['/Paths/Schema'], "metamodel.xsd"))
+    xmlschema = etree.XMLSchema(xmlschema_doc)
+
 
 class CElementFactory(object):
     """
@@ -44,79 +76,48 @@ class CElementFactory(object):
         @param file_path: Path to connections metamodel (within storage)
         @type  file_path: string
         """
-        dom = xml.dom.minidom.parseString(self.storage.read_file(file_path))
-        root = dom.documentElement
-        if root.tagName != 'ElementType':
-            raise UMLException("XMLError", root.tagName)
-        if not root.hasAttribute('id'):
-            raise UMLException("XMLError", ('ElementType', 'id'))
-        obj = CElementType(root.getAttribute('id'))
+        root = etree.XML(self.storage.read_file(file_path))
+        #xml (version) file is validate with xsd schema (metamodel.xsd)
+        if HAVE_LXML:
+            if not xmlschema.validate(root):
+                #print(xmlschema.error_log)
+                raise UMLException("XMLError", xmlschema.error_log.last_error)
+
+        obj = CElementType(root.get('id'))
         
-        for i in root.childNodes:
-            if i.nodeType not in (xml.dom.minidom.Node.ELEMENT_NODE, xml.dom.minidom.Node.DOCUMENT_NODE):
-                continue
-            en = i.tagName
-            if en == 'Icon':
-                if not i.hasAttribute('path'):
-                    raise UMLException("XMLError", ('Icon', 'path'))
-                obj.SetIcon(i.getAttribute('path'))
-            elif en == 'Connections':
-                for item in i.childNodes:
-                    if item.nodeType not in (xml.dom.minidom.Node.ELEMENT_NODE, xml.dom.minidom.Node.DOCUMENT_NODE):
-                        continue
-                    if item.tagName != 'Item':
-                        raise UMLException("XMLError", item.tagName)
-                    if not item.hasAttribute('value'):
-                        raise UMLException("XMLError", ('Item', 'value'))
-                    value = item.getAttribute('value')
+        for element in root.iterchildren():
+            if element.tag == METAMODEL_NAMESPACE+'Icon':
+                obj.SetIcon(element.get('path'))
+            elif element.tag == METAMODEL_NAMESPACE+'Connections':
+                for item in element.iterchildren():
+                    value = item.get('value')
                     with_what = None
                     allow_recursive = False
-                    if item.hasAttribute('with'):
-                        with_what = item.getAttribute('with').split(',')
-                    if item.hasAttribute('allowrecursive'):
-                        allow_recursive = item.getAttribute('allowrecursive').lower() in ('1', 'true', 'yes')
+                    if item.get('with') != None:
+                        with_what = item.get('with').split(',')
+                    if item.get('allowrecursive') != None:
+                        allow_recursive = item.get('allowrecursive').lower() in ('1', 'true', 'yes')
                     obj.AppendConnection(value, with_what, allow_recursive)
-            elif en == 'Attributes':
-                for item in i.childNodes:
-                    if item.nodeType not in (xml.dom.minidom.Node.ELEMENT_NODE, xml.dom.minidom.Node.DOCUMENT_NODE):
-                        continue
-                    if item.tagName != 'Item':
-                        raise UMLException("XMLError", item.tagName)
-                    if not item.hasAttribute('value'):
-                        raise UMLException("XMLError", ('Item', 'value'))
-                    value = item.getAttribute('value')
-                    if not item.hasAttribute('type'):
-                        raise UMLException("XMLError", ('Item', 'type'))
-                    type = item.getAttribute('type')
-                    propid = None
+            elif element.tag == METAMODEL_NAMESPACE+'Attributes':
+                for item in element.iterchildren():
+                    value = item.get('value')
+                    type = item.get('type')
+                    propid = item.get('propid')
+                    if item.get('notgenerate') != None:
+                        obj.SetGenerateName(not item.get('notgenerate'))
                     options = []
-                    if item.hasAttribute('propid'):
-                        propid = item.getAttribute('propid')
-                    if item.hasAttribute('notgenerate'):
-                        obj.SetGenerateName(not item.getAttribute('notgenerate'))
-                    if item.hasChildNodes():
-                        options = []
-                        for opt in item.childNodes:
-                            if opt.nodeType not in (xml.dom.minidom.Node.ELEMENT_NODE, xml.dom.minidom.Node.DOCUMENT_NODE):
-                                continue
-                            if opt.tagName != 'Option':
-                                raise UMLException("XMLError", opt.tagName)
-                            if not opt.hasAttribute('value'):
-                                raise UMLException("XMLError", ('Option', 'value'))
-                            options.append(opt.getAttribute('value'))
+                    for opt in item.iterchildren():
+                        options.append(opt.get('value'))
                     obj.AppendAttribute(value, type, propid, options)
-            elif en == 'Appearance':
+            elif element.tag == METAMODEL_NAMESPACE+'Appearance':
                 tmp = None
-                for j in i.childNodes:
-                    if j.nodeType == xml.dom.minidom.Node.ELEMENT_NODE:
-                        if tmp is not None:
-                            raise UMLException("XMLError", 'Appearance')
-                        tmp = j
+                for j in element.iterchildren():
+                    tmp = j
                 obj.SetAppearance(self.__LoadAppearance(tmp))
             else:
                 raise UMLException('XMLError', en)
         
-        self.types[root.getAttribute('id')] = obj
+        self.types[root.get('id')] = obj
     
     def __LoadAppearance(self, root):
         """
@@ -128,18 +129,16 @@ class CElementFactory(object):
         @return: Visual object representing this section
         @rtype:  L{CVisualObject<lib.Drawing.Objects.VisualObject.CVisualObject>}
         """
-        if root.tagName not in ALL:
-            raise UMLException("XMLError", root.tagName)
-        cls = ALL[root.tagName]
+        if root.tag.split("}")[1] not in ALL:
+            raise UMLException("XMLError", root.tag)
+        cls = ALL[root.tag.split("}")[1]]
         params = {}
-        for i in root.attributes.values():
-            params[str(i.name)] = i.nodeValue
+        for attr in root.attrib.items():    #return e.g. attr == ('id', '1') => attr[0] == 'id', attr[1] == '1'
+            params[attr[0]] = attr[1]
         obj = cls(**params)
         if hasattr(obj, "LoadXml"):
             obj.LoadXml(root)
         else:
-            for child in root.childNodes:
-                if child.nodeType not in (xml.dom.minidom.Node.ELEMENT_NODE, xml.dom.minidom.Node.DOCUMENT_NODE):
-                    continue
+            for child in root.iterchildren():
                 obj.AppendChild(self.__LoadAppearance(child))
         return obj
