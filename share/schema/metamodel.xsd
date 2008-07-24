@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2008 sp1 (http://www.altova.com) by BlueWay (Banana) -->
+<!-- (c) UML.FRI -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" targetNamespace="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="ElementType">
+		<xs:annotation>
+			<xs:documentation>Element object in UML .FRI metamodel</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Icon">
+					<xs:complexType>
+						<xs:attribute name="path" type="xs:string"/>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Connections">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Item" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:attribute name="value" type="xs:string"/>
+									<xs:attribute name="allowrecursive" type="xs:string"/>
+									<xs:attribute name="with" type="xs:string"/>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Attributes" type="AttributesType" minOccurs="0"/>
+				<xs:element name="Appearance" type="SimpleObjectContainer"/>
+			</xs:sequence>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="SimpleObjectContainer">
+		<xs:annotation>
+			<xs:documentation>Simple container for Visual Objects</xs:documentation>
+		</xs:annotation>
+		<xs:group ref="ObjectContainerContent" minOccurs="0"/>
+	</xs:complexType>
+	<xs:complexType name="ObjectContainer">
+		<xs:annotation>
+			<xs:documentation>Complex container for Visual Objects</xs:documentation>
+		</xs:annotation>
+		<xs:group ref="ObjectContainerContent" minOccurs="0" maxOccurs="unbounded"/>
+	</xs:complexType>
+	<xs:group name="ObjectContainerContent">
+		<xs:choice>
+			<xs:element name="Align" type="AlignType"/>
+			<xs:element name="Condition" type="ConditionType"/>
+			<xs:element name="Ellipse" type="EllipseType"/>
+			<xs:element name="HBox" type="HBoxType"/>
+			<xs:element name="Icon" type="IconType"/>
+			<xs:element name="Line" type="LineType"/>
+			<xs:element name="Loop" type="LoopType"/>
+			<xs:element name="Padding" type="PaddingType"/>
+			<xs:element name="Proportional" type="ProportionalType"/>
+			<xs:element name="Rectangle" type="RectangleType"/>
+			<xs:element name="Shadow" type="ShadowType"/>
+			<xs:element name="Sizer" type="SizerType"/>
+			<xs:element name="Svg" type="SvgType"/>
+			<xs:element name="TextBox" type="TextBoxType"/>
+			<xs:element name="VBox" type="VBoxType"/>
+		</xs:choice>
+	</xs:group>
+	<xs:complexType name="AlignType">
+		<xs:complexContent>
+			<xs:extension base="SimpleObjectContainer">
+				<xs:attribute name="align" type="xs:string" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ConditionType">
+		<xs:complexContent>
+			<xs:extension base="SimpleObjectContainer">
+				<xs:attribute name="condition" type="xs:string" use="required"/>
+				<xs:attribute name="type" type="xs:string" use="required"/>
+				<xs:attribute name="negate" type="xs:string" default="0"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="EllipseType">
+		<xs:complexContent>
+			<xs:extension base="SimpleObjectContainer">
+				<xs:attribute name="fill" type="xs:string"/>
+				<xs:attribute name="border" type="xs:string" default="white"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="IconType">
+		<xs:attribute name="filename" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="LineType">
+		<xs:attribute name="type" default="auto">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="horizontal"/>
+					<xs:enumeration value="vertical"/>
+					<xs:enumeration value="auto"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="color" type="xs:string"/>
+	</xs:complexType>
+	<xs:complexType name="LoopType">
+		<xs:complexContent>
+			<xs:extension base="SimpleObjectContainer">
+				<xs:attribute name="collection" type="xs:string" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="PaddingType">
+		<xs:complexContent>
+			<xs:extension base="SimpleObjectContainer">
+				<xs:attribute name="padding" type="xs:int" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ProportionalType">
+		<xs:complexContent>
+			<xs:extension base="SimpleObjectContainer">
+				<xs:attribute name="ratio" type="xs:string" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="RectangleType">
+		<xs:complexContent>
+			<xs:extension base="SimpleObjectContainer">
+				<xs:attribute name="fill" type="xs:string"/>
+				<xs:attribute name="border" type="xs:string" default="white"/>
+				<xs:attribute name="lefttop" type="xs:string"/>
+				<xs:attribute name="righttop" type="xs:string"/>
+				<xs:attribute name="leftbottom" type="xs:string"/>
+				<xs:attribute name="rightbottom" type="xs:string"/>
+				<xs:attribute name="left" type="xs:string"/>
+				<xs:attribute name="right" type="xs:string"/>
+				<xs:attribute name="top" type="xs:string"/>
+				<xs:attribute name="bottom" type="xs:string"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ShadowType">
+		<xs:complexContent>
+			<xs:extension base="SimpleObjectContainer">
+				<xs:attribute name="padding" type="xs:string" use="required"/>
+				<xs:attribute name="color" use="required">
+					<xs:simpleType>
+						<xs:restriction base="xs:string"/>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="SizerType">
+		<xs:complexContent>
+			<xs:extension base="SimpleObjectContainer">
+				<xs:attribute name="minwidth" type="xs:int"/>
+				<xs:attribute name="minheight" type="xs:int"/>
+				<xs:attribute name="maxwidth" type="xs:int"/>
+				<xs:attribute name="maxheight" type="xs:int"/>
+				<xs:attribute name="width" type="xs:int"/>
+				<xs:attribute name="height" type="xs:int"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="SvgType">
+		<xs:complexContent>
+			<xs:extension base="SvgContainerType">
+				<xs:attribute name="width" type="xs:int" use="required"/>
+				<xs:attribute name="height" type="xs:int" use="required"/>
+				<xs:attribute name="scale">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:pattern value="0\.[0-9]+"/>
+							<xs:pattern value="[0-9]{1,3}%"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="TextBoxType">
+		<xs:attribute name="text" type="xs:string" use="required"/>
+		<xs:attribute name="linestart" type="xs:string"/>
+		<xs:attribute name="color" type="xs:string" default="black"/>
+		<xs:attribute name="font" type="xs:string" default="Arial 10"/>
+	</xs:complexType>
+	<xs:complexType name="VBoxType">
+		<xs:complexContent>
+			<xs:extension base="ObjectContainer">
+				<xs:attribute name="expand" type="xs:string"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="HBoxType">
+		<xs:complexContent>
+			<xs:extension base="ObjectContainer">
+				<xs:attribute name="expand" type="xs:string"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="Version">
+		<xs:annotation>
+			<xs:documentation>Version of UML.FRI</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Diagrams">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Item" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:attribute name="value" type="xs:string"/>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ConnectionType">
+		<xs:annotation>
+			<xs:documentation>Description of diagram connection</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Icon" type="ElementIconType"/>
+				<xs:element name="SrcArrow" type="ArrowType"/>
+				<xs:element name="DestArrow" type="ArrowType"/>
+				<xs:element name="Attributes" type="AttributesType" minOccurs="0"/>
+				<xs:element name="Appearance">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="LineStyle">
+								<xs:complexType>
+									<xs:attribute name="style" use="required">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:enumeration value="solid"/>
+												<xs:enumeration value="dot"/>
+												<xs:enumeration value="doubledot"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+									<xs:attribute name="color" type="xs:string" use="required"/>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="ArrowStyle">
+								<xs:complexType>
+									<xs:attribute name="style" use="required">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:enumeration value="simple"/>
+												<xs:enumeration value="triangle"/>
+												<xs:enumeration value="ftriagle"/>
+												<xs:enumeration value="diamond"/>
+												<xs:enumeration value="fdiamond"/>
+												<xs:enumeration value="crosscircle"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+									<xs:attribute name="fill" type="xs:string" use="required"/>
+									<xs:attribute name="color" type="xs:string" use="required"/>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="Label" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:complexContent>
+										<xs:extension base="SimpleObjectContainer">
+											<xs:attribute name="position" use="required">
+												<xs:simpleType>
+													<xs:restriction base="xs:string">
+														<xs:pattern value="(source|destination|center)([+\-][0-9]+)?"/>
+													</xs:restriction>
+												</xs:simpleType>
+											</xs:attribute>
+										</xs:extension>
+									</xs:complexContent>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="id" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="DiagramType">
+		<xs:annotation>
+			<xs:documentation>Diagram object in UML.FRI</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Icon" type="ElementIconType"/>
+				<xs:element name="Special" type="ElementSpecialType"/>
+				<xs:element name="Elements">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Item" type="ElementItemType" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Connections">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Item" type="ElementItemType" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="umlversion" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="AttributesType">
+		<xs:sequence>
+			<xs:element name="Item" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Option" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:attribute name="value" type="xs:string"/>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="notgenerate" type="xs:boolean"/>
+					<xs:attribute name="value" type="xs:string"/>
+					<xs:attribute name="type">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="str"/>
+								<xs:enumeration value="int"/>
+								<xs:enumeration value="enum"/>
+								<xs:enumeration value="bool"/>
+								<xs:enumeration value="note"/>
+								<xs:enumeration value="attrs"/>
+								<xs:enumeration value="opers"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attribute name="propid" type="xs:string"/>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ArrowType">
+		<xs:attribute name="possible" type="xs:boolean" use="required"/>
+		<xs:attribute name="default" type="xs:boolean" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ElementIconType">
+		<xs:attribute name="path" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ElementSpecialType">
+		<xs:attribute name="swimlines" type="xs:boolean" use="required"/>
+		<xs:attribute name="lifelines" type="xs:boolean" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ElementItemType">
+		<xs:attribute name="value" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="SvgContainerType">
+		<xs:group ref="SvgContent" maxOccurs="unbounded"/>
+	</xs:complexType>
+	<xs:group name="SvgContent">
+		<xs:choice>
+			<xs:element name="path">
+				<xs:complexType>
+					<xs:attribute name="id" type="xs:string"/>
+					<xs:attribute name="d" type="xs:string"/>
+					<xs:attribute name="style" type="xs:string"/>
+					<xs:attribute name="transform" type="xs:string"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="g">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="SvgContainerType">
+							<xs:attribute name="id" type="xs:string" use="optional"/>
+							<xs:attribute name="style" type="xs:string"/>
+							<xs:attribute name="transform" type="xs:string"/>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+	</xs:group>
+</xs:schema>

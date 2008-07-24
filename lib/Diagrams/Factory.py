@@ -1,8 +1,40 @@
-import xml.dom.minidom
 import os
 import os.path
 from lib.lib import UMLException
 from Type import CDiagramType
+from lib.config import config
+from lib.consts import METAMODEL_NAMESPACE
+
+#try to import necessary lybraries for XML parsing
+try:
+    from lxml import etree
+    HAVE_LXML = True
+    #print("running with lxml.etree")
+except ImportError:
+    HAVE_LXML = False
+    try:
+        # Python 2.5
+        import xml.etree.cElementTree as etree
+        #print("running with cElementTree on Python 2.5+")
+    except ImportError:
+        try:
+            # Python 2.5
+            import xml.etree.ElementTree as etree
+            #print("running with ElementTree on Python 2.5+")
+        except ImportError:
+            try:
+                # normal cElementTree install
+                import cElementTree as etree
+                #print("running with cElementTree")
+            except ImportError:
+                # normal ElementTree install
+                import elementtree.ElementTree as etree
+                #print("running with ElementTree")
+               
+#if lxml.etree is imported successfully, we use xml validation with xsd schema
+if HAVE_LXML:
+    xmlschema_doc = etree.parse(os.path.join(config['/Paths/Schema'], "metamodel.xsd"))
+    xmlschema = etree.XMLSchema(xmlschema_doc)
 
 class CDiagramFactory(object):
     """
@@ -64,54 +96,34 @@ class CDiagramFactory(object):
         @param file_path: Path to connections metamodel (within storage)
         @type  file_path: string
         """
-        dom = xml.dom.minidom.parseString(self.storage.read_file(file_path))
-        root = dom.documentElement
-        if root.tagName != 'DiagramType':
-            raise UMLException("XMLError")
-        if not root.hasAttribute('id'):
-            raise UMLException("XMLError")
         
-        obj = CDiagramType(root.getAttribute('id'))
+        root = etree.XML(self.storage.read_file(file_path))
+        #xml (version) file is validate with xsd schema (metamodel.xsd)
+        if HAVE_LXML:
+            if not xmlschema.validate(root):
+                #print(xmlschema.error_log)
+                raise UMLException("XMLError", xmlschema.error_log.last_error)
+
+        obj = CDiagramType(root.get('id'))
         
-        for i in root.childNodes:
-            if i.nodeType not in (xml.dom.minidom.Node.ELEMENT_NODE, xml.dom.minidom.Node.DOCUMENT_NODE):
-                continue
-            en = i.tagName
-            if en == 'Icon':
-                if not i.hasAttribute('path'):
-                    raise UMLException("XMLError", ('Icon', 'path'))
-                obj.SetIcon(i.getAttribute('path'))
-            elif en == 'Special':
-                swimlines = False
-                lifelines = False
-                if root.hasAttribute('swimlines'):
-                    swimlines = i.getAttribute('swimlines')
-                if root.hasAttribute('lifelines'):
-                    lifelines = i.getAttribute('lifelines')
+        for element in root.iterchildren():
+            if element.tag == METAMODEL_NAMESPACE+'Icon':
+                obj.SetIcon(element.get('path'))
+                
+            elif element.tag == METAMODEL_NAMESPACE+'Special':
+                swimlines = element.get('swimlines')
+                lifelines = element.get('lifelines')
                 obj.SetSpecial(swimlines, lifelines)
-            elif en == 'Elements':
-                for item in i.childNodes:
-                    if item.nodeType not in (xml.dom.minidom.Node.ELEMENT_NODE, xml.dom.minidom.Node.DOCUMENT_NODE):
-                        continue
-                    if item.tagName != 'Item':
-                        raise UMLException("XMLError")
-                    if not item.hasAttribute('value'):
-                        raise UMLException("XMLError")
-                    
-                    value = item.getAttribute('value')
+                
+            elif element.tag == METAMODEL_NAMESPACE+'Elements':
+                for item in element.iterchildren():
+                    value = item.get('value')
                     obj.AppendElement(value)
                     
-            elif en == 'Connections':
-                for item in i.childNodes:
-                    if item.nodeType not in (xml.dom.minidom.Node.ELEMENT_NODE, xml.dom.minidom.Node.DOCUMENT_NODE):
-                        continue
-                    if item.tagName != 'Item':
-                        raise UMLException("XMLError")
-                    if not item.hasAttribute('value'):
-                        raise UMLException("XMLError")
-                    
-                    value = item.getAttribute('value')
+            elif element.tag == METAMODEL_NAMESPACE+'Connections':
+                for item in element.iterchildren():
+                    value = item.get('value')
                     obj.AppendConnection(value)
         
-        self.types[root.getAttribute('id')] = obj
+        self.types[root.get('id')] = obj
     
