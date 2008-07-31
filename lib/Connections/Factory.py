@@ -81,15 +81,12 @@ class CConnectionFactory(object):
         @param file_path: Path to connections metamodel (within storage)
         @type  file_path: string
         """
-        #dom = xml.dom.minidom.parseString(self.storage.read_file(file_path))
-        #root = dom.documentElement
         
         root = etree.XML(self.storage.read_file(file_path))
 
         #xml (version) file is validate with xsd schema (metamodel.xsd)
         if HAVE_LXML:
             if not xmlschema.validate(root):
-                #print(xmlschema.error_log)
                 raise UMLException("XMLError", xmlschema.error_log.last_error)
 
         id = root.get('id')
@@ -100,7 +97,7 @@ class CConnectionFactory(object):
         icon = None
         labels = []
         attrs = []
-        for element in root.getchildren():
+        for element in root:
             if element.tag == METAMODEL_NAMESPACE+'Icon':
                 icon = element.get('path')
             elif element.tag == METAMODEL_NAMESPACE+'SrcArrow':
@@ -110,16 +107,16 @@ class CConnectionFactory(object):
                 darr['possible'] = element.get('possible')
                 darr['default'] = element.get('default')
             elif element.tag == METAMODEL_NAMESPACE+'Attributes':
-                for item in element.getchildren():
+                for item in element:
                     value = item.get('value')
                     type = item.get('type')
                     propid = item.get('propid')
                     options = []
-                    for opt in item.getchildren():
+                    for opt in item:
                         options.append(opt.get('value'))
                     attrs.append((value, type, propid, options))
             elif element.tag == METAMODEL_NAMESPACE+'Appearance':
-                for subelem in element.getchildren():
+                for subelem in element:
                     if subelem.tag == METAMODEL_NAMESPACE+'LineStyle':
                         ls['color'] = subelem.get('color')
                         ls['style'] = subelem.get('style')
@@ -133,7 +130,7 @@ class CConnectionFactory(object):
                             darr['size'] = sarr['size'] = subelem.get('size')
                     elif subelem.tag == METAMODEL_NAMESPACE+'Label':
                         tmp = None
-                        for k in subelem.getchildren():
+                        for k in subelem:
                             tmp = k
                         labels.append((subelem.get('position'), self.__LoadAppearance(tmp)))
 
@@ -150,12 +147,12 @@ class CConnectionFactory(object):
         Loads an appearance section of an XML file
         
         @param root: Appearance element
-        @type  root: L{Element<xml.dom.minidom.Element>}
+        @type  root: L{Element<lxml.etree.Element>}
         
         @return: Visual object representing this section
         @rtype:  L{CVisualObject<lib.Drawing.Objects.VisualObject.CVisualObject>}
         """
-        #this condition is not necessary, I thing
+
         if root.tag.split("}")[1] not in ALL:
             raise UMLException("XMLError", root.tag)
         
@@ -167,6 +164,6 @@ class CConnectionFactory(object):
         if hasattr(obj, "LoadXml"):
             obj.LoadXml(root)
         else:
-            for child in root.getchildren():
+            for child in root:
                 obj.AppendChild(self.__LoadAppearance(child))
         return obj

@@ -15,21 +15,17 @@ except ImportError:
     try:
         # Python 2.5
         import xml.etree.cElementTree as etree
-        #print("running with cElementTree on Python 2.5+")
     except ImportError:
         try:
             # Python 2.5
             import xml.etree.ElementTree as etree
-            #print("running with ElementTree on Python 2.5+")
         except ImportError:
             try:
                 # normal cElementTree install
                 import cElementTree as etree
-                #print("running with cElementTree")
             except ImportError:
                 # normal ElementTree install
                 import elementtree.ElementTree as etree
-                #print("running with ElementTree")
                
 #if lxml.etree is imported successfully, we use xml validation with xsd schema
 if HAVE_LXML:
@@ -101,12 +97,11 @@ class CDiagramFactory(object):
         #xml (version) file is validate with xsd schema (metamodel.xsd)
         if HAVE_LXML:
             if not xmlschema.validate(root):
-                #print(xmlschema.error_log)
                 raise UMLException("XMLError", xmlschema.error_log.last_error)
 
         obj = CDiagramType(root.get('id'))
         
-        for element in root.getchildren():
+        for element in root:
             if element.tag == METAMODEL_NAMESPACE+'Icon':
                 obj.SetIcon(element.get('path'))
                 
@@ -116,12 +111,12 @@ class CDiagramFactory(object):
                 obj.SetSpecial(swimlines, lifelines)
                 
             elif element.tag == METAMODEL_NAMESPACE+'Elements':
-                for item in element.getchildren():
+                for item in element:
                     value = item.get('value')
                     obj.AppendElement(value)
                     
             elif element.tag == METAMODEL_NAMESPACE+'Connections':
-                for item in element.getchildren():
+                for item in element:
                     value = item.get('value')
                     obj.AppendConnection(value)
         

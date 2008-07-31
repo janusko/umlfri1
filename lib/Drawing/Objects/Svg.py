@@ -40,7 +40,7 @@ class CSvg(CVisualObject):
     
     def LoadXml(self, element):
         def recursive(parent, transform):
-            for node in parent.getchildren():
+            for node in parent:
                 attrs = self.__getattrs(node)
                 if 'transform' in attrs:
                     transform = transform*self.__parsetransform(attrs['transform'])

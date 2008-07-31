@@ -112,6 +112,7 @@ class CConfig(object):
             tmp = self.Load(i, path)
             if tmp != '':
                 self.cfgs[path+'/'+str(i.tagName)] = tmp
+
         text = text.strip()
         self.revision += 1
         if root.hasAttribute('type'):
