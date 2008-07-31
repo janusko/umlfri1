@@ -85,9 +85,21 @@ class CElementObject(object):
         self.path = path 
     
     def GetNode(self):
+        """
+        Get the project node which is associated with this element object
+        
+        @return: project node of this element
+        @rtype:  L{CProjectNode<lib.Project.Node.CProjectNode>}
+        """
         return self.node
         
     def AddConnection(self, connection):
+        """
+        Add the connection object connected to this element object
+        
+        @param connection: connected connection
+        @type  connection: L{CConnectionObject<lib.Connections.Object.CConnectionObject>}
+        """
         self.revision += 1
         if connection not in self.connections:
             self.connections.append(connection)
@@ -95,6 +107,12 @@ class CElementObject(object):
             pass
             
     def GetConnections(self):
+        """
+        Get list of connections connected to this object
+        
+        @return: List of connected connections
+        @rtype:  iterator over L{CConnectionObject<lib.Connections.Object.CConnectionObject>}(s)
+        """
         for c in self.connections:
             yield c
         
