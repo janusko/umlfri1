@@ -15,8 +15,7 @@ from lib.Connections.Factory import CConnectionFactory
 from lib.Versions.Factory import CVersionFactory
 from lib.Drawing import CDiagram
 import os.path
-from lib.consts import ROOT_PATH, VERSIONS_PATH, DIAGRAMS_PATH, ELEMENTS_PATH, CONNECTIONS_PATH
-import xml.dom.minidom
+from lib.consts import ROOT_PATH, VERSIONS_PATH, DIAGRAMS_PATH, ELEMENTS_PATH, CONNECTIONS_PATH, UMLPROJECT_NAMESPACE
 from lib.config import config
 
 #try to import necessary lybraries for XML parsing
@@ -47,7 +46,7 @@ except ImportError:
 
 #if lxml.etree is imported successfully, we use xml validation with xsd schema
 if HAVE_LXML:
-    xmlschema_doc = etree.parse(os.path.join(config['/Paths/Schema'], "metamodel.xsd"))
+    xmlschema_doc = etree.parse(os.path.join(config['/Paths/Schema'], "umlproject.xsd"))
     xmlschema = etree.XMLSchema(xmlschema_doc)
 
 
@@ -162,10 +161,10 @@ class CProject(object):
             filename = self.filename
         else:
             self.filename = filename
-        f = StringIO()
+
         id = IDGenerator()
         
-        def saveattr(object, level):
+        def saveattr(object, element):
             if isinstance(object, dict):
                 attrs = object.iteritems()
             else:
@@ -176,67 +175,82 @@ class CProject(object):
                 else:
                     value = object.GetAttribute(attr)
                 if not isinstance(value, list):
-                    print>>f, '  '*level+'<property name="%s" value="%s" />'%(XMLEncode(attr), XMLEncode(value))
+                    propertyNode = etree.Element(UMLPROJECT_NAMESPACE+'property', name=unicode(attr), value=unicode(value))
                 else:
-                    print>>f, '  '*level+'<property name="%s" type="list">'%XMLEncode(attr)
+                    propertyNode = etree.Element(UMLPROJECT_NAMESPACE+'property', name=unicode(attr), type="list")
                     for item in value:
-                        print>>f, '  '*level+'  <item>'
-                        saveattr(item, level+2)
-                        print>>f, '  '*level+'  </item>'
-                    print>>f, '  '*level+'</property>'
+                        itemNode = etree.Element(UMLPROJECT_NAMESPACE+'item')
+                        saveattr(item, itemNode)
+                        propertyNode.append(itemNode)
+                element.append(propertyNode)
         
-        def savetree(node, level):
-            print>>f, '  '*level+'<node id="%d">'%id(node.GetObject())
+        def savetree(node, element):
+            nodeNode = etree.Element(UMLPROJECT_NAMESPACE+'node', id=unicode(id(node.GetObject())))
             if node.HasChild():
-                print>>f, '  '*level+'  <childs>'
+                childsNode = etree.Element(UMLPROJECT_NAMESPACE+'childs')
                 for chld in node.GetChilds():
-                    savetree(chld, level+4)
-                print>>f, '  '*level+'  </childs>'
-            print>>f, '  '*level+'  <drawingareas>'
+                    savetree(chld, childsNode)
+                nodeNode.append(childsNode)
+                
+            diagramsNode = etree.Element(UMLPROJECT_NAMESPACE+'diagrams')
             if node.HasDiagram():
                 for area in node.GetDiagrams():
-                    print>>f, '  '*level+'    <drawingarea name="%s" type="%s">'%(XMLEncode(area.GetName()), XMLEncode(area.GetType().GetId()))
+                    diagramNode = etree.Element(UMLPROJECT_NAMESPACE+'diagram', name=area.GetName(), type=unicode(area.GetType().GetId()))
                     for e in area.GetElements():
                         pos = e.GetPosition()
                         dw, dh = e.GetSizeRelative()
-                        print>>f, '  '*level+'    <element id="%d" x="%d" y="%d" dw="%d" dh="%d"/>'%(id(e.GetObject()), pos[0], pos[1], dw, dh)
+                        elementNode = etree.Element(UMLPROJECT_NAMESPACE+'element', id=unicode(id(e.GetObject())), x=unicode(pos[0]), y=unicode(pos[1]), dw=unicode(dw), dh=unicode(dh))
+                        diagramNode.append(elementNode)
+
                     for c in area.GetConnections():
-                        print>>f, '  '*level+'    <connection id="%d">'%(id(c.GetObject()))
+                        connectionNode = etree.Element(UMLPROJECT_NAMESPACE+'connection', id=unicode(id(c.GetObject())))
                         for pos in c.GetMiddlePoints():
-                            print>>f, '  '*level+'      <point x="%d" y="%d" />'%pos
+                            pointNode = etree.Element(UMLPROJECT_NAMESPACE+'point', x=unicode(pos[0]), y=unicode(pos[1]))
+                            connectionNode.append(pointNode)
+
                         for num, (index, t, dist, angle) in enumerate(c.GetLabelDefinedPositions()):
                             if index is not None:
-                                print>>f, '  '*level+'      <label num="%d" index="%d" section="%f" distance="%d" angle="%f" />'%(num, index, t, dist, angle)
-                        print>>f, '  '*level+'    </connection>'
-                    print>>f, '  '*level+'    </drawingarea>'
-            print>>f, '  '*level+'  </drawingareas>'
-            print>>f, '  '*level+'</node>'
+                                labelNode = etree.Element(UMLPROJECT_NAMESPACE+'label', num=unicode(num), index=unicode(index), section=unicode(t), distance=unicode(dist), angle=unicode(angle))
+                                connectionNode.append(labelNode)
+
+                        diagramNode.append(connectionNode)
+                    diagramsNode.append(diagramNode)
+            nodeNode.append(diagramsNode)
+            element.append(nodeNode)
         
         elements, connections = self.searchCE(self.root)
-        print>>f, '<?xml version="1.0" encoding="utf-8"?>'
-        print>>f, '<umlproject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://umlfri.kst.fri.uniza.sk/xmlschema/umlproject.xsd ..\share\schema\umlproject.xsd" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/umlproject.xsd">'
-        print>>f, '  <objects>'
+        
+        rootNode = etree.XML('<umlproject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://umlfri.kst.fri.uniza.sk/xmlschema/umlproject.xsd ..\share\schema\umlproject.xsd" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/umlproject.xsd"></umlproject>')
+        
+        objectsNode = etree.Element(UMLPROJECT_NAMESPACE+'objects')
+        connectionsNode = etree.Element(UMLPROJECT_NAMESPACE+'connections')
+        projtreeNode = etree.Element(UMLPROJECT_NAMESPACE+'projecttree')
+        
         for object in elements:
-            print>>f, '    <object type="%s" id="%d">'%(XMLEncode(object.GetType().GetId()), id(object))
-            saveattr(object, 3)
-            print>>f, '    </object>'
-        print>>f, '  </objects>'
-        print>>f, '  <connections>'
+            objectNode = etree.Element(UMLPROJECT_NAMESPACE+'object', type=unicode(object.GetType().GetId()), id=unicode(id(object)))
+            saveattr(object, objectNode)
+            objectsNode.append(objectNode)
+            
+        rootNode.append(objectsNode)
+        
         for connection in connections:
-            print>>f, '    <connection type="%s" id="%d" source="%d" destination="%d">'%(XMLEncode(connection.GetType().GetId()), id(connection), id(connection.GetSource()), id(connection.GetDestination()))
-            saveattr(connection, 3)
-            print>>f, '    </connection>'
-        print>>f, '  </connections>'
-        print>>f, '  <projecttree>'
-        savetree(self.root, 2)
-        print>>f, '  </projecttree>'
-        print>>f, '</umlproject>'
+            connectionNode = etree.Element(UMLPROJECT_NAMESPACE+'connection', type=unicode(connection.GetType().GetId()), id=unicode(id(connection)), source=unicode(id(connection.GetSource())), destination=unicode(id(connection.GetDestination())))
+            saveattr(connection, connectionNode)
+            connectionsNode.append(connectionNode)
+            
+        rootNode.append(connectionsNode)
+        savetree(self.root, projtreeNode)
+        rootNode.append(projtreeNode)
         
+        #xml tree is validate with xsd schema (recentfile.xsd)
+        if HAVE_LXML:
+            if not xmlschema.validate(rootNode):
+                raise UMLException("XMLError", xmlschema.error_log.last_error)
+
+        #save Recent File Tree into ZIP file
         out = ZipFile(filename, 'w', ZIP_DEFLATED)
-        out.writestr('content.xml', f.getvalue())
+        out.writestr('content.xml', etree.tostring(rootNode, encoding='utf-8', xml_declaration=True, pretty_print=True))
         out.close()
-        
-        # file(filename, 'w').write(f.getvalue())
     
     def LoadProject(self, filename, copy = False):
         ListObj = {}
@@ -251,109 +265,85 @@ class CProject(object):
         data = file.read('content.xml')
         
         def CreateTree(root, parentNode):
-            for i in root.childNodes:
-                if i.nodeType not in (xml.dom.minidom.Node.ELEMENT_NODE, xml.dom.minidom.Node.DOCUMENT_NODE):
-                    continue
-                if i.tagName == 'childs':
-                    for node in i.childNodes:
-                        if node.nodeType not in (xml.dom.minidom.Node.ELEMENT_NODE, xml.dom.minidom.Node.DOCUMENT_NODE):
-                            continue
-                        proNode = CProjectNode(parentNode,ListObj[node.getAttribute("id").decode('unicode_escape')],parentNode.GetPath() + "/" + ListObj[node.getAttribute("id").decode('unicode_escape')].GetName() + ":" + ListObj[node.getAttribute("id").decode('unicode_escape')].GetType().GetId())
+            for elem in root:
+                if elem.tag == UMLPROJECT_NAMESPACE+'childs':
+                    for node in elem:
+                        proNode = CProjectNode(parentNode,ListObj[node.get("id").decode('unicode_escape')],parentNode.GetPath() + "/" + ListObj[node.get("id").decode('unicode_escape')].GetName() + ":" + ListObj[node.get("id").decode('unicode_escape')].GetType().GetId())
                         self.AddNode(proNode,parentNode)
                         CreateTree(node,proNode)
-                        
-                elif i.tagName == 'drawingareas':
-                    for area in i.childNodes:
-                        if area.nodeType not in (xml.dom.minidom.Node.ELEMENT_NODE, xml.dom.minidom.Node.DOCUMENT_NODE):
-                            continue
-                        if area.tagName == 'drawingarea':
-                            drawingarea = CDiagram(self.DiagramFactory.GetDiagram(area.getAttribute("type").decode('unicode_escape')),area.getAttribute("name").decode('unicode_escape'))
-                            drawingarea.SetPath(parentNode.GetPath() + "/" + drawingarea.GetName() + ":=Diagram=")
-                            parentNode.AddDiagram(drawingarea)
-                            for pic in area.childNodes:
-                                if pic.nodeType not in (xml.dom.minidom.Node.ELEMENT_NODE, xml.dom.minidom.Node.DOCUMENT_NODE):
-                                    continue
-                                if pic.tagName == "element":
-                                    element = CElement(drawingarea,ListObj[pic.getAttribute("id").decode('unicode_escape')],True)
-                                    element.SetPosition((int(pic.getAttribute("x").decode('unicode_escape')),int(pic.getAttribute("y").decode('unicode_escape'))))
-                                    dw = int(pic.getAttribute("dw").decode('unicode_escape'))
-                                    dh = int(pic.getAttribute("dh").decode('unicode_escape'))
+
+                elif elem.tag == UMLPROJECT_NAMESPACE+'diagrams':
+                    for area in elem:
+                        if area.tag == UMLPROJECT_NAMESPACE+'diagram':
+                            diagram = CDiagram(self.DiagramFactory.GetDiagram(area.get("type").decode('unicode_escape')),area.get("name").decode('unicode_escape'))
+                            diagram.SetPath(parentNode.GetPath() + "/" + diagram.GetName() + ":=Diagram=")
+                            parentNode.AddDiagram(diagram)
+                            for pic in area:
+                                if pic.tag == UMLPROJECT_NAMESPACE+"element":
+                                    element = CElement(diagram,ListObj[pic.get("id").decode('unicode_escape')],True)
+                                    element.SetPosition((int(pic.get("x").decode('unicode_escape')),int(pic.get("y").decode('unicode_escape'))))
+                                    dw = int(pic.get("dw").decode('unicode_escape'))
+                                    dh = int(pic.get("dh").decode('unicode_escape'))
                                     element.SetSizeRelative((dw, dh))
-                                    #proNode.AddAppears(drawingarea)
-                                elif pic.tagName == "connection":
-                                    for e in drawingarea.GetElements():
-                                        if e.GetObject() is ListCon[pic.getAttribute("id").decode('unicode_escape')].GetSource():
+                                elif pic.tag == UMLPROJECT_NAMESPACE+"connection":
+                                    for e in diagram.GetElements():
+                                        if e.GetObject() is ListCon[pic.get("id").decode('unicode_escape')].GetSource():
                                             source = e
-                                        if e.GetObject() is ListCon[pic.getAttribute("id").decode('unicode_escape')].GetDestination():
+                                        if e.GetObject() is ListCon[pic.get("id").decode('unicode_escape')].GetDestination():
                                             destination = e
-                                    conect = CConnection(drawingarea,ListCon[pic.getAttribute("id").decode('unicode_escape')],source,destination,[])
-                                    for propCon in pic.childNodes:
-                                        if propCon.nodeType not in (xml.dom.minidom.Node.ELEMENT_NODE, xml.dom.minidom.Node.DOCUMENT_NODE):
-                                            continue
-                                        if propCon.tagName == "point":
-                                            conect.AddPoint((int(propCon.getAttribute("x").decode('unicode_escape')),int(propCon.getAttribute("y").decode('unicode_escape'))))
-                                        elif propCon.tagName == "label":
-                                            conect.SetLabelPosition(int(propCon.getAttribute("num").decode('unicode_escape')),
-                                                int(propCon.getAttribute("index").decode('unicode_escape')),
-                                                float(propCon.getAttribute("section").decode('unicode_escape')),
-                                                int(propCon.getAttribute("distance").decode('unicode_escape')),
-                                                float(propCon.getAttribute("angle").decode('unicode_escape')))
-            
-        dom = xml.dom.minidom.parseString(data)
-        root = dom.documentElement
-        if root.tagName != 'umlproject':
-            raise UMLException("XMLError", root.tagName)
-        
-        for i in root.childNodes:
-            if i.nodeType not in (xml.dom.minidom.Node.ELEMENT_NODE, xml.dom.minidom.Node.DOCUMENT_NODE):
-                continue
-            en = i.tagName
-            if en == 'objects':
-                for j in i.childNodes:
-                    if j.nodeType not in (xml.dom.minidom.Node.ELEMENT_NODE, xml.dom.minidom.Node.DOCUMENT_NODE):
-                        continue
-                    if j.tagName == 'object':
-                        id = j.getAttribute("id").decode('unicode_escape')
-                        object = CElementObject(self.ElementFactory.GetElement(j.getAttribute("type").decode('unicode_escape')))
-                        
-                        for property in j.childNodes:
-                            if property.nodeType not in (xml.dom.minidom.Node.ELEMENT_NODE, xml.dom.minidom.Node.DOCUMENT_NODE):
-                                continue
-                            if property.hasAttribute("value"):
-                                object.SetAttribute(property.getAttribute("name").decode('unicode_escape'),property.getAttribute("value").decode('unicode_escape'))
-                            elif property.hasAttribute("type"):
+                                    conect = CConnection(diagram,ListCon[pic.get("id").decode('unicode_escape')],source,destination,[])
+                                    for propCon in pic:
+                                        if propCon.tag == UMLPROJECT_NAMESPACE+"point":
+                                            conect.AddPoint((int(propCon.get("x").decode('unicode_escape')),int(propCon.get("y").decode('unicode_escape'))))
+                                        elif propCon.tag == UMLPROJECT_NAMESPACE+"label":
+                                            conect.SetLabelPosition(int(propCon.get("num").decode('unicode_escape')),
+                                                int(propCon.get("index").decode('unicode_escape')),
+                                                float(propCon.get("section").decode('unicode_escape')),
+                                                int(propCon.get("distance").decode('unicode_escape')),
+                                                float(propCon.get("angle").decode('unicode_escape')))
+
+        root = etree.XML(data)
+
+        #xml (version) file is validate with xsd schema (metamodel.xsd)
+        if HAVE_LXML:
+            if not xmlschema.validate(root):
+                raise UMLException("XMLError", xmlschema.error_log.last_error)
+
+        for element in root:
+            if element.tag == UMLPROJECT_NAMESPACE+'objects':
+                for subelem in element:
+                    if subelem.tag == UMLPROJECT_NAMESPACE+'object':
+                        id = subelem.get("id").decode('unicode_escape')
+                        object = CElementObject(self.ElementFactory.GetElement(subelem.get("type").decode('unicode_escape')))
+
+                        for property in subelem:
+                            if property.get("value") is not None:
+                                object.SetAttribute(property.get("name").decode('unicode_escape'),property.get("value").decode('unicode_escape'))
+                            elif property.get("type") is not None:
                                 attributes = []
-                                for item in property.childNodes:
+                                for item in property:
                                     atrib = {}
-                                    for attribute in item.childNodes:
-                                        if attribute.nodeType not in (xml.dom.minidom.Node.ELEMENT_NODE, xml.dom.minidom.Node.DOCUMENT_NODE):
-                                            continue
-                                        atrib[attribute.getAttribute("name").decode('unicode_escape')] = attribute.getAttribute("value").decode('unicode_escape')
+                                    for attribute in item:
+                                        atrib[attribute.get("name").decode('unicode_escape')] = attribute.get("value").decode('unicode_escape')
                                     if len(atrib) > 0:
                                         attributes.append(atrib)
-                                object.SetAttribute(property.getAttribute("name").decode('unicode_escape'),attributes)
+                                object.SetAttribute(property.get("name").decode('unicode_escape'),attributes)
                         ListObj[id] = object
-                        
-            elif en == 'connections':
-                for connection in i.childNodes:
-                    if connection.nodeType not in (xml.dom.minidom.Node.ELEMENT_NODE, xml.dom.minidom.Node.DOCUMENT_NODE):
-                        continue
-                    if connection.tagName == 'connection':
-                        id = connection.getAttribute("id").decode('unicode_escape')
-                        con = CConnectionObject(self.ConnectionFactory.GetConnection(connection.getAttribute("type").decode('unicode_escape')),ListObj[connection.getAttribute("source").decode('unicode_escape')],ListObj[connection.getAttribute("destination").decode('unicode_escape')])
-                        for propCon in connection.childNodes:
-                            if propCon.nodeType not in (xml.dom.minidom.Node.ELEMENT_NODE, xml.dom.minidom.Node.DOCUMENT_NODE):
-                                continue
-                            con.SetAttribute(propCon.getAttribute("name").decode('unicode_escape'),propCon.getAttribute("value").decode('unicode_escape'))
+
+            elif element.tag == UMLPROJECT_NAMESPACE+'connections':
+                for connection in element:
+                    if connection.tag == UMLPROJECT_NAMESPACE+'connection':
+                        id = connection.get("id").decode('unicode_escape')
+                        con = CConnectionObject(self.ConnectionFactory.GetConnection(connection.get("type").decode('unicode_escape')),ListObj[connection.get("source").decode('unicode_escape')],ListObj[connection.get("destination").decode('unicode_escape')])
+                        for propCon in connection:
+                            con.SetAttribute(propCon.get("name").decode('unicode_escape'),propCon.get("value").decode('unicode_escape'))
                         ListCon[id] = con
-            elif en == 'projecttree':
-                for j in i.childNodes:
-                    if j.nodeType not in (xml.dom.minidom.Node.ELEMENT_NODE, xml.dom.minidom.Node.DOCUMENT_NODE):
-                        continue
-                    if j.tagName == 'node':
-                        proNode = CProjectNode(None,ListObj[j.getAttribute("id").decode('unicode_escape')],ListObj[j.getAttribute("id").decode('unicode_escape')].GetName() + ":" + ListObj[j.getAttribute("id").decode('unicode_escape')].GetType().GetId())
+            elif element.tag == UMLPROJECT_NAMESPACE+'projecttree':
+                for subelem in element:
+                    if subelem.tag == UMLPROJECT_NAMESPACE+'node':
+                        proNode = CProjectNode(None,ListObj[subelem.get("id").decode('unicode_escape')],ListObj[subelem.get("id").decode('unicode_escape')].GetName() + ":" + ListObj[subelem.get("id").decode('unicode_escape')].GetType().GetId())
                         self.SetRoot(proNode)
-                        CreateTree(j,proNode)
+                        CreateTree(subelem,proNode)
                         
         
     Root = property(GetRoot, SetRoot)

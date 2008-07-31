@@ -2,32 +2,28 @@ from lib.lib import UMLException, XMLEncode
 import os.path
 from lib.config import config
 import datetime
+from lib.consts import RECENTFILES_NAMESPACE
 
 #try to import necessary lybraries for XML parsing
 try:
     from lxml import etree
     HAVE_LXML = True
-    #print("running with lxml.etree")
 except ImportError:
     HAVE_LXML = False
     try:
         # Python 2.5
         import xml.etree.cElementTree as etree
-        #print("running with cElementTree on Python 2.5+")
     except ImportError:
         try:
             # Python 2.5
             import xml.etree.ElementTree as etree
-            #print("running with ElementTree on Python 2.5+")
         except ImportError:
             try:
                 # normal cElementTree install
                 import cElementTree as etree
-                #print("running with cElementTree")
             except ImportError:
                 # normal ElementTree install
                 import elementtree.ElementTree as etree
-                #print("running with ElementTree")
 
                     
 #if lxml.etree is imported successfully, we use xml validation with xsd schema
@@ -68,7 +64,7 @@ class CRecentFiles(object):
             return
         
         root = tree.getroot()
-        #xml (version) file is validate with xsd schema (recentfile.xsd)
+        #xml (recentfiles.xml) file is validate with xsd schema (recentfile.xsd)
         if HAVE_LXML:
             if not xmlschema.validate(root):
                 raise UMLException("XMLError", xmlschema.error_log.last_error)
@@ -78,11 +74,16 @@ class CRecentFiles(object):
                 self.files.append((file.get("name").decode('unicode_escape'),file.get("date").decode('unicode_escape')))
 
     def SaveRecentFiles(self):
-        f = file(self.filename,"w")
-        print>>f, '<?xml version="1.0"?>'
-        print>>f, '<RecentFiles xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://umlfri.kst.fri.uniza.sk/xmlschema/recentfiles.xsd ..\share\schema\recentfiles.xsd" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/recentfiles.xsd">'
+        root = etree.XML('<RecentFiles xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://umlfri.kst.fri.uniza.sk/xmlschema/recentfiles.xsd ..\share\schema\recentfiles.xsd" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/recentfiles.xsd"></RecentFiles>')
+        
         for name, date in self.files:
-            print>>f, '  <File name="%s" date="%s" />'%(XMLEncode(name),XMLEncode(date))
-        print>>f,'</RecentFiles>'
-        f.close()
+            root.append(etree.Element(RECENTFILES_NAMESPACE+"File", name=name, date=date))  #namespace {xxx} is required
+
+        #xml tree is validate with xsd schema (recentfile.xsd)
+        if HAVE_LXML:
+            if not xmlschema.validate(root):
+                raise UMLException("XMLError", xmlschema.error_log.last_error)
+        
+        #save Recent File Tree
+        etree.ElementTree(root).write(self.filename, encoding='utf-8', xml_declaration=True, pretty_print=True)
         

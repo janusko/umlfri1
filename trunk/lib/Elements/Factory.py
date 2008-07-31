@@ -10,27 +10,22 @@ from lib.Drawing.Objects import ALL
 try:
     from lxml import etree
     HAVE_LXML = True
-    #print("running with lxml.etree")
 except ImportError:
     HAVE_LXML = False
     try:
         # Python 2.5
         import xml.etree.cElementTree as etree
-        #print("running with cElementTree on Python 2.5+")
     except ImportError:
         try:
             # Python 2.5
             import xml.etree.ElementTree as etree
-            #print("running with ElementTree on Python 2.5+")
         except ImportError:
             try:
                 # normal cElementTree install
                 import cElementTree as etree
-                #print("running with cElementTree")
             except ImportError:
                 # normal ElementTree install
                 import elementtree.ElementTree as etree
-                #print("running with ElementTree")
                
 #if lxml.etree is imported successfully, we use xml validation with xsd schema
 if HAVE_LXML:
@@ -80,16 +75,15 @@ class CElementFactory(object):
         #xml (version) file is validate with xsd schema (metamodel.xsd)
         if HAVE_LXML:
             if not xmlschema.validate(root):
-                #print(xmlschema.error_log)
                 raise UMLException("XMLError", xmlschema.error_log.last_error)
 
         obj = CElementType(root.get('id'))
         
-        for element in root.getchildren():
+        for element in root:
             if element.tag == METAMODEL_NAMESPACE+'Icon':
                 obj.SetIcon(element.get('path'))
             elif element.tag == METAMODEL_NAMESPACE+'Connections':
-                for item in element.getchildren():
+                for item in element:
                     value = item.get('value')
                     with_what = None
                     allow_recursive = False
@@ -99,19 +93,19 @@ class CElementFactory(object):
                         allow_recursive = item.get('allowrecursive').lower() in ('1', 'true', 'yes')
                     obj.AppendConnection(value, with_what, allow_recursive)
             elif element.tag == METAMODEL_NAMESPACE+'Attributes':
-                for item in element.getchildren():
+                for item in element:
                     value = item.get('value')
                     type = item.get('type')
                     propid = item.get('propid')
                     if item.get('notgenerate') != None:
                         obj.SetGenerateName(not item.get('notgenerate'))
                     options = []
-                    for opt in item.getchildren():
+                    for opt in item:
                         options.append(opt.get('value'))
                     obj.AppendAttribute(value, type, propid, options)
             elif element.tag == METAMODEL_NAMESPACE+'Appearance':
                 tmp = None
-                for j in element.getchildren():
+                for j in element:
                     tmp = j
                 obj.SetAppearance(self.__LoadAppearance(tmp))
             else:
@@ -124,7 +118,7 @@ class CElementFactory(object):
         Loads an appearance section of an XML file
         
         @param root: Appearance element
-        @type  root: L{Element<xml.dom.minidom.Element>}
+        @type  root: L{Element<lxml.etree.Element>}
         
         @return: Visual object representing this section
         @rtype:  L{CVisualObject<lib.Drawing.Objects.VisualObject.CVisualObject>}
@@ -139,6 +133,6 @@ class CElementFactory(object):
         if hasattr(obj, "LoadXml"):
             obj.LoadXml(root)
         else:
-            for child in root.getchildren():
+            for child in root:
                 obj.AppendChild(self.__LoadAppearance(child))
         return obj
