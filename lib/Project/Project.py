@@ -250,7 +250,7 @@ class CProject(object):
         #save Recent File Tree into ZIP file
         out = ZipFile(filename, 'w', ZIP_DEFLATED)
         #out.writestr('content.xml', etree.tostring(rootNode, encoding='utf-8', xml_declaration=True, pretty_print=True))
-        out.writestr('content.xml', etree.tostring(rootNode, encoding='utf-8'))
+        out.writestr('content.xml', '<?xml version="1.0" encoding="utf-8"?>\n'+etree.tostring(rootNode, encoding='utf-8'))
         out.close()
     
     def LoadProject(self, filename, copy = False):
