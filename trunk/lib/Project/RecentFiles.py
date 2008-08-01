@@ -85,5 +85,8 @@ class CRecentFiles(object):
                 raise UMLException("XMLError", xmlschema.error_log.last_error)
         
         #save Recent File Tree
-        etree.ElementTree(root).write(self.filename, encoding='utf-8', xml_declaration=True, pretty_print=True)
+        #etree.ElementTree(root).write(self.filename, encoding='utf-8', xml_declaration=True, pretty_print=True)
+        f = open(self.filename, 'w')
+        f.write('<?xml version="1.0" encoding="utf-8"?>\n'+etree.tostring(root, encoding='utf-8'))
+        f.close()
         
