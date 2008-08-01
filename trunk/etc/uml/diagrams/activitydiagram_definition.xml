@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<DiagramType id="Activity diagram" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd ..\share\schema\metamodel.xsd" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+<DiagramType id="Activity diagram" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
     <Icon path="icons/activity_diagram.png" />
     <Special swimlines="0" lifelines="0" />
     <Elements>
