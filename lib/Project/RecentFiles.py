@@ -74,7 +74,7 @@ class CRecentFiles(object):
                 self.files.append((file.get("name").decode('unicode_escape'),file.get("date").decode('unicode_escape')))
 
     def SaveRecentFiles(self):
-        root = etree.XML('<RecentFiles xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://umlfri.kst.fri.uniza.sk/xmlschema/recentfiles.xsd ..\share\schema\recentfiles.xsd" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/recentfiles.xsd"></RecentFiles>')
+        root = etree.XML('<RecentFiles xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/recentfiles.xsd"></RecentFiles>')
         
         for name, date in self.files:
             root.append(etree.Element(RECENTFILES_NAMESPACE+"File", name=name, date=date))  #namespace {xxx} is required

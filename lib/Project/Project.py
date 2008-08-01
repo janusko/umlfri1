@@ -220,7 +220,7 @@ class CProject(object):
         
         elements, connections = self.searchCE(self.root)
         
-        rootNode = etree.XML('<umlproject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://umlfri.kst.fri.uniza.sk/xmlschema/umlproject.xsd ..\share\schema\umlproject.xsd" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/umlproject.xsd"></umlproject>')
+        rootNode = etree.XML('<umlproject xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/umlproject.xsd"></umlproject>')
         
         objectsNode = etree.Element(UMLPROJECT_NAMESPACE+'objects')
         connectionsNode = etree.Element(UMLPROJECT_NAMESPACE+'connections')
