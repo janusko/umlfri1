@@ -1,14 +1,14 @@
 from SimpleContainer import CSimpleContainer
-from lib.lib import UMLException
+from lib.Exceptions.UserException import *
 
 class CSizer(CSimpleContainer):
     def __init__(self, minwidth = None, minheight = None, maxwidth = None, maxheight = None, width = None, height = None):
         CSimpleContainer.__init__(self)
         
         if (minwidth is not None or maxwidth is not None) and width is not None:
-            raise UMLException("XMLError", ("sizer", "width"))
+            raise XMLError("sizer", "width")
         if (minheight is not None or maxheight is not None) and height is not None:
-            raise UMLException("XMLError", ("sizer", "height"))
+            raise XMLError("sizer", "height")
         
         if minwidth is None:
             self.minwidth = None

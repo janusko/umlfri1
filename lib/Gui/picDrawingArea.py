@@ -8,7 +8,8 @@ from common import CWidget, event
 from lib.Drawing import CDiagram, CElement, CConnection
 
 from lib.Elements import CElementObject
-from lib.Connections import CConnectionObject, EConnectionRestriction
+from lib.Connections import CConnectionObject
+from lib.Exceptions.UserException import *
 
 from lib.Drawing.Canvas import CGtkCanvas, CSvgCanvas, CCairoCanvas, CExportCanvas
 from lib.Drawing import Element
@@ -371,7 +372,7 @@ class CpicDrawingArea(CWidget):
                 return
             self.AdjustScrollBars()
             self.Paint()
-        except EConnectionRestriction:
+        except ConnectionRestrictionError:
             self.ResetAction()
             self.emit('set-selected', None)
             self.emit('run-dialog', 'warning', _('Invalid connection'))

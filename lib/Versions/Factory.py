@@ -1,7 +1,7 @@
 import os
 import os.path
 
-from lib.lib import UMLException
+from lib.Exceptions.DevException import *
 from Type import CVersionType
 from lib.config import config
 
@@ -49,14 +49,14 @@ class CVersionFactory:
         if self.types.has_key(verName):
             return self.types[verName]
         else:
-            raise UMLException("Version not found")
+            raise FactoryError("Version not found")
 
     def __Load(self, file_path):
         root = etree.XML(self.storage.read_file(file_path))
         #xml (version) file is validate with xsd schema (metamodel.xsd)
         if HAVE_LXML:
             if not xmlschema.validate(root):
-                raise UMLException("XMLError", xmlschema.error_log.last_error)
+                raise FactoryError("XMLError", xmlschema.error_log.last_error)
                 
         version = CVersionType(root.get('id'))
         

@@ -1,5 +1,5 @@
 from SimpleContainer import CSimpleContainer
-from lib.lib import UMLException
+from lib.Exceptions.UserException import *
 
 class CShadow(CSimpleContainer):
     def __init__(self, padding, color):
@@ -14,7 +14,7 @@ class CShadow(CSimpleContainer):
         return element.CacheSize(self, self.GetChild().GetSize(canvas, element))
 
     def PaintShadow(self, canvas, pos, element, color, size = (None, None)):
-        raise UMLException("ShadowInShadow")
+        raise DrawingError("ShadowInShadow")
 
     def Paint(self, canvas, pos, element, size = (None, None)):
         size = self.ComputeSize(canvas, element, size)

@@ -1,4 +1,4 @@
-from lib.lib import UMLException
+from lib.Exceptions.UserException import *
 from Abstract import CAbstractCanvas
 
 import pango
@@ -154,14 +154,14 @@ class CGtkCanvas(CAbstractCanvas):
     
     def DrawIcon(self, pos, filename):
         if self.storage is None:
-            raise UMLException('storage')
+            raise DrawingError('storage')
         pixmap = PixmapFromPath(self.storage, filename)
         gc = self.window.new_gc()
         self.window.draw_pixbuf(gc, pixmap, 0, 0, pos[0], pos[1])
     
     def GetIconSize(self, filename):
         if self.storage is None:
-            raise UMLException('storage')
+            raise DrawingError('storage')
         pixmap = PixmapFromPath(self.storage, filename)
         return pixmap.get_width(), pixmap.get_height()
     

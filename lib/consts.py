@@ -35,4 +35,6 @@ UMLPROJECT_NAMESPACE = '{http://umlfri.kst.fri.uniza.sk/xmlschema/umlproject.xsd
 RECENTFILES_NAMESPACE = '{http://umlfri.kst.fri.uniza.sk/xmlschema/recentfiles.xsd}'
 CONFIG_NAMESPACE = '{http://umlfri.kst.fri.uniza.sk/xmlschema/config.xsd}'
 
-DEBUG=True
+WEB = 'http://umlfri.kst.fri.uniza.sk/'
+MAIL = 'projekt@umlfri.kst.fri.uniza.sk'
+DEBUG=False

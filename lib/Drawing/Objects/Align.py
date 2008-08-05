@@ -1,5 +1,5 @@
 from SimpleContainer import CSimpleContainer
-from lib.lib import UMLException
+from lib.Exceptions.UserException import *
 
 class CAlign(CSimpleContainer):
     def __init__(self, align):
@@ -8,7 +8,7 @@ class CAlign(CSimpleContainer):
         self.aligny = None
         align = align.split()
         if len(align) > 2:
-            raise UMLException("XMLError", ("Align", "align"))
+            raise XMLError("Align", "align")
         if align == ['center', 'center']:
             self.alignx, self.aligny = align
         elif 'center' in align:

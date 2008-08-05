@@ -2,7 +2,7 @@ from common import CWidget
 from lib.Project import CProject, CProjectNode
 from lib.Elements import CElementFactory, CElementObject
 from lib.Drawing import CElement
-from lib.lib import UMLException
+from lib.Exceptions.UserException import *
 from lib.Drawing.Canvas.Gtk import PixmapFromPath
 
 from common import  event
@@ -129,7 +129,7 @@ class CtwProjectView(CWidget):
                 root = chld
             return root
         else:
-            raise UMLException("BadPath4")
+            raise ProjectError("BadPath4")
 
 
     def get_iters_from_path(self, model, root, path):
@@ -163,7 +163,7 @@ class CtwProjectView(CWidget):
             rekurzia(root,path.split('/',1)[1])                        
 
         else:
-            raise UMLException("BadPath4")
+            raise ProjectError("BadPath4")
         return iter
         
         
@@ -184,7 +184,7 @@ class CtwProjectView(CWidget):
                         diagrams.append(chld)
                 root = chld
         else:
-            raise UMLException("BadPath5")
+            raise ProjectError("BadPath5")
         return diagrams
     
     
@@ -265,7 +265,7 @@ class CtwProjectView(CWidget):
         if model.get(iter,2)[0] == "=Diagram=":
             diagram = model.get(iter,3)[0]
             if diagram is None:
-                raise UMLException("None")
+                raise ProjectError("Diagram is None.")
             else:
                 self.emit('selected_diagram',diagram)
     
@@ -395,7 +395,7 @@ class CtwProjectView(CWidget):
         
         if (pos == gtk.TREE_VIEW_DROP_INTO_OR_BEFORE) or (pos == gtk.TREE_VIEW_DROP_INTO_OR_AFTER):
             if treeview.get_model().get(target_iter,2)[0] == "=Diagram=":
-                raise UMLException("MoveElementToDiagram")
+                raise ProjectError("MoveElementToDiagram")
             elif treeview.get_model().get(iter_to_copy,2)[0] == "=Diagram=":
                 node_to_copy.MoveDiagramToNewNode(target_node,treeview.get_model().get(iter_to_copy,3)[0])
             else:
@@ -444,7 +444,7 @@ class CtwProjectView(CWidget):
             if self.CheckSanity(model, iter_to_copy, target_iter):
                 try:
                     self.IterCopy(widget, model, iter_to_copy, target_iter, pos)
-                except UMLException, e:
+                except ProjectError, e:
                     if e.GetName() == "MoveElementToDiagram":
                         context.finish(False, False, etime)
                         return

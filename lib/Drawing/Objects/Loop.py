@@ -1,7 +1,7 @@
 from SimpleContainer import CSimpleContainer
 from HBox import CHBox
 from VBox import CVBox
-from lib.lib import UMLException
+from lib.Exceptions.UserException import *
 
 class CLoop(CSimpleContainer):
     def __init__(self, collection):
@@ -15,7 +15,7 @@ class CLoop(CSimpleContainer):
         elif isinstance(parent, CVBox):
             return "vertical"
         else:
-            raise UMLException("XMLError")
+            raise XMLError("Orientation.")
     
     def GetSize(self, canvas, element):
         size = element.GetCachedSize(self)

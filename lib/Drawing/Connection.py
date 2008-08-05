@@ -1,4 +1,4 @@
-from lib.lib import UMLException
+from lib.Exceptions.UserException import *
 from lib.config import config
 from lib.Connections.Object import CConnectionObject
 from lib.Math2D import CPoint, CLine, CLineVector, CPolyLine, CRectangle
@@ -57,7 +57,7 @@ class CConnection:
         if 0 < index <= len(self.points):
             self.selpoint = index
         else:
-            raise UMLException("PointNotExists")
+            raise ConnectionError("PointNotExists")
             
     def DeselectPoint(self):
         self.selpoint = None
@@ -91,7 +91,7 @@ class CConnection:
         
     def GetNeighbours(self, index, canvas):
         if not (0 < index  <= len(self.points)):
-            raise UMLException("PointNotExists")
+            raise ConnectionError("PointNotExists")
         if index == 1:
             previous = self.source.GetCenter(canvas)
         else:
@@ -130,13 +130,13 @@ class CConnection:
                 try:
                     offset = int(offset)
                 except ValueError:
-                    raise UMLException('UndefinedOffset')
+                    raise ConnectionError('UndefinedOffset')
             elif position.count('-'):
                 position, offset = position.split('-', 1)
                 try:
                     offset = -int(offset)
                 except ValueError:
-                    raise UMLException('UndefinedOffset')
+                    raise ConnectionError('UndefinedOffset')
             if position == 'source':
                 tmp = self.labels[id] = [points[0], 0, 0.0, 0, 0]
             elif position == 'destination':
@@ -167,7 +167,7 @@ class CConnection:
                             break
                         Lo = point
             else:
-                raise UMLException("UndefinedPosition")
+                raise ConnectionError("UndefinedPosition")
             if 'offset' in locals():
                 index = tmp[1]
                 x1, y1 = points[index]
@@ -226,7 +226,7 @@ class CConnection:
                 self.labels[id] = [None, idx, t, dist, angle]
             self.points.insert(index, point)
         else:
-            raise UMLException("PointNotExists")
+            raise ConnectionError("PointNotExists")
         self.ValidatePoints(canvas)
     
     def AddPoint(self, point):
@@ -266,7 +266,7 @@ class CConnection:
                 if index == idx or index  == idx + 1:
                     self.labels[id][0] = None
         else:
-            raise UMLException("PointNotExists")
+            raise ConnectionError("PointNotExists")
         self.ValidatePoints(canvas)
 
     def Paint(self, canvas, delta = (0, 0)):
@@ -300,7 +300,7 @@ class CConnection:
             if index  == self.selpoint:
                 self.selpoint = None
         else:
-            raise UMLException("PointNotExists")
+            raise ConnectionError("PointNotExists")
         self.ValidatePoints(canvas)
     
     def GetPoints(self, canvas):
@@ -334,7 +334,7 @@ class CConnection:
                 point = self.points[-1]
             return self.__ComputeIntersect(canvas, self.destination, center, point)
         else:
-            raise UMLException("PointNotExists")
+            raise ConnectionError("PointNotExists")
         
     def GetMiddlePoints(self):
         for point in self.points:

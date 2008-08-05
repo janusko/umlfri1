@@ -1,6 +1,6 @@
 import os
 import os.path
-from lib.lib import UMLException
+from lib.Exceptions.DevException import *
 from Type import CConnectionType
 from Line import CConnectionLine
 from Arrow import CConnectionArrow
@@ -87,7 +87,7 @@ class CConnectionFactory(object):
         #xml (version) file is validate with xsd schema (metamodel.xsd)
         if HAVE_LXML:
             if not xmlschema.validate(root):
-                raise UMLException("XMLError", xmlschema.error_log.last_error)
+                raise FactoryError("XMLError", xmlschema.error_log.last_error)
 
         id = root.get('id')
         
@@ -154,7 +154,7 @@ class CConnectionFactory(object):
         """
 
         if root.tag.split("}")[1] not in ALL:
-            raise UMLException("XMLError", root.tag)
+            raise FactoryError("XMLError", root.tag)
         
         cls = ALL[root.tag.split("}")[1]]
         params = {}

@@ -18,7 +18,6 @@ from nbProperties import CnbProperties
 from tabs import CTabs
 from frmFindInDiagram import CFindInDiagram
 from tabStartPage import CtabStartPage
-from lib.lib import UMLException
 from lib.config import config
 from lib.colors import colors
 
@@ -45,6 +44,7 @@ class CfrmMain(CWindow):
         #############
         'mItemHelp',
         'mnuAbout',
+        'mnuWebsite',
         #############
         'mItemElement',
         'mmShift_SendBack', 'mmShift_BringForward', 'mmShift_ToBottom', 'mmShift_ToTop',
@@ -194,6 +194,13 @@ class CfrmMain(CWindow):
         tmp = self.application.GetWindow('frmAbout')
         tmp.SetParent(self)
         tmp.Show()
+	
+	
+    @event("mnuWebsite", "activate")
+    def on_mnuWebsite_activate(self, mnu):
+        from webbrowser import open_new
+	open_new(lib.consts.WEB)
+
     
     @event('nbTabs','export-svg-from-TabMenu')
     @event('mnuExport', 'activate')
@@ -246,6 +253,7 @@ class CfrmMain(CWindow):
                     return
         finally:
             filedlg.destroy()
+
     
     def ReloadTitle(self):
         if self.application.GetProject() is None or self.application.GetProject().GetFileName() is None:
@@ -349,10 +357,10 @@ class CfrmMain(CWindow):
     def on_mnuPaste_click(self, widget):
         try:
             self.picDrawingArea.ActionPaste()
-        except UMLException, e:
-            if e.GetName() == "ElementAlreadyExists":
+        except UserException, e:
+            if e.GetName() == "Element already exists":
                 return CWarningDialog(self.form, _('Unable to insert element')).run()
-            elif e.GetName() == "DiagramHaveNotThisElement":
+            elif e.GetName() == "Diagram has not this element":
                 return CWarningDialog(self.form, _('Wrong element: ') + e.GetParam(0).GetObject().GetType().GetId()).run()
     
     def ActionLoadToolBar(self, widget):
@@ -459,8 +467,8 @@ class CfrmMain(CWindow):
             diagram = self.picDrawingArea.GetDiagram()
             try:
                 Element = CElement(diagram, node.GetObject()).SetPosition(position)
-            except UMLException, e:
-                if e.GetName() == "ElementAlreadyExists":
+            except UserException, e:
+                if e.GetName() == "Element already exists":
                     return CWarningDialog(self.form, _('Unable to insert element')).run()
                 elif e.GetName() == "DiagramHaveNotThisElement":
                     return CWarningDialog(self.form, _('Wrong element: ') + node.GetObject().GetType().GetId()).run()

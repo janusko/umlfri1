@@ -1,4 +1,4 @@
-from lib.lib import UMLException
+from lib.Exceptions.UserException import *
 from Abstract import CAbstractCanvas
 import math
 import pango
@@ -41,7 +41,7 @@ def HexToRGB(hexcolor):
     hexcolor = hexcolor.strip()
     hexcolor = hexcolor[1:]
     if len(hexcolor) != 6:
-        raise UMLException('invalid hex color, use #RRGGBB format or color name')
+        raise DrawingError('Invalid hex color, use #RRGGBB format or color name.')
     r, g, b = hexcolor[:2], hexcolor[2:4], hexcolor[4:]
     r, g, b = [int(n, 16) for n in (r, g, b)]
     return (float(r)/255, float(g)/255, float(b)/255)
@@ -66,27 +66,27 @@ class CExportCanvas(CAbstractCanvas):
 
         if self.surface_type == 'pdf':
             if not cairo.HAS_PDF_SURFACE:
-                raise UMLException ('cairo: no PDF support')
+                raise ExportError ('cairo: no PDF support')
             self.surface = cairo.PDFSurface (self.filename, self.sizeX, self.sizeY)
 
         elif self.surface_type == 'svg':
             if not cairo.HAS_SVG_SURFACE:
-                raise UMLException ('cairo: no SVG support')
+                raise ExportError ('cairo: no SVG support')
             self.surface = cairo.SVGSurface (self.filename, self.sizeX, self.sizeY)
 
         elif self.surface_type == 'png' or  self.surface_type == None:
             if not cairo.HAS_PNG_FUNCTIONS:
-                raise UMLException ('cairo: no PNG support')
+                raise ExportError ('cairo: no PNG support')
             self.surface = cairo.ImageSurface (cairo.FORMAT_ARGB32,self.sizeX, self.sizeY)
 
         elif self.surface_type == 'ps':
             if not cairo.HAS_PS_SURFACE:
-                raise UMLException ('cairo: no PS support')
+                raise ExportError ('cairo: no PS support')
             self.surface = cairo.PSSurface (self.filename, self.sizeX, self.sizeY)
             cairo.PSSurface.dsc_comment(self.surface,"%%Title: uml.FRI diagram export");
 
         else :
-            raise UMLException('unknown export surface or format')
+            raise ExportError('unknown export surface or format')
 
 
         self.cairo_context= cairo.Context (self.surface)
@@ -314,7 +314,7 @@ class CExportCanvas(CAbstractCanvas):
 
     def DrawIcon(self, pos, filename):
         if self.storage is None:
-            raise UMLException('storage')
+            raise DrawingError('storage')
         pixmap = PixmapFromPath(self.storage, filename)
         self.cr.save()
         self.cr.set_source_surface (pixmap, pos[0], pos[1])
@@ -324,7 +324,7 @@ class CExportCanvas(CAbstractCanvas):
 
     def GetIconSize(self, filename):
         if self.storage is None:
-            raise UMLException('storage')
+            raise DrawingError('storage')
         pixmap = PixmapFromPath(self.storage, filename)
         return pixmap.get_width(), pixmap.get_height()
 

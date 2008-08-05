@@ -1,7 +1,7 @@
 import lib.consts
 import lib.debug
 import gobject
-
+from lib.Exceptions import *
 def event(obj, *args):
     """
         event(obj, event)
@@ -16,20 +16,28 @@ def event(obj, *args):
             event = None
             params = args
         if not hasattr(fnc, 'events'):
-            if lib.consts.DEBUG == True:
-                def tmp2(*args, **kw_args):
+
+            def tmp2(self, *args, **kw_args):
+                if lib.consts.DEBUG == True:
                     try:
-                        return fnc(*args, **kw_args)
+                        return fnc(self, *args, **kw_args)
+                    except :
+                        Traceback.display_traceback(self.application)
+                else:
+                    try:
+                        return fnc(self, *args, **kw_args)
+                    except UserException:
+                        Traceback.display_usr_exc()
                     except:
-                        lib.debug.display_exc()
-                        raise
-                fncx = tmp2
-            else:
-                fncx = fnc
+                        Traceback.display_traceback(self.application)
+
+            fncx = tmp2
+            #else:
+                #fncx = fnc
             fncx.events = []
         else:
             fncx = fnc
         fncx.events.append((obj, event, params))
         return fncx
-    
+
     return tmp

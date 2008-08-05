@@ -1,4 +1,4 @@
-from lib.lib import UMLException
+from lib.Exceptions.UserException import *
 
 class CProjectNode(object):
     def __init__(self, parent = None, object = None, path = None):
@@ -60,7 +60,7 @@ class CProjectNode(object):
             self.childs.append(child)
             child.parent = self
         else:
-            raise UMLException("ExistsChild")
+            raise ProjectError("ExistsChild")
 
 
     def AddDiagram(self, diagram):
@@ -97,7 +97,7 @@ class CProjectNode(object):
         if index <= len(self.childs) - 1:
             return self.childs[index]
         else:
-            raise UMLException("NodeNotExists")
+            raise ProjectError("NodeNotExists")
 
     def GetChilds(self):
         for i in self.childs:
@@ -113,13 +113,13 @@ class CProjectNode(object):
         if child in self.childs:
             self.childs.remove(child)
         else:
-            raise UMLException("ChildNotExists")
+            raise ProjectError("ChildNotExists")
 
     def RemoveDiagram(self, diagram):
         if diagram in self.diagrams:
             self.diagrams.remove(diagram)
         else:
-            raise UMLException("AreaNotExists")
+            raise ProjectError("AreaNotExists")
 
     def SetParent(self, parent):
         self.parent = parent

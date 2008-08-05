@@ -1,6 +1,6 @@
 import os
 import os.path
-from lib.lib import UMLException
+from lib.Exceptions.DevException import *
 from Type import CDiagramType
 from lib.config import config
 from lib.consts import METAMODEL_NAMESPACE
@@ -65,7 +65,7 @@ class CDiagramFactory(object):
         if self.types.has_key(type):
             return self.types[type]
         else:
-            raise UMLException("KeyError")
+            raise FactoryError("KeyError")
     
     def Reload(self):
         """
@@ -97,7 +97,7 @@ class CDiagramFactory(object):
         #xml (version) file is validate with xsd schema (metamodel.xsd)
         if HAVE_LXML:
             if not xmlschema.validate(root):
-                raise UMLException("XMLError", xmlschema.error_log.last_error)
+                raise FactoryError("XMLError", xmlschema.error_log.last_error)
 
         obj = CDiagramType(root.get('id'))
         
