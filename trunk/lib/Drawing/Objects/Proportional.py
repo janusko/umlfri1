@@ -1,5 +1,5 @@
 from SimpleContainer import CSimpleContainer
-from lib.lib import UMLException
+from lib.Exceptions.UserException import *
 
 class CProportional(CSimpleContainer):
     def __init__(self, ratio):
@@ -7,7 +7,7 @@ class CProportional(CSimpleContainer):
         self.strratio = ratio
         ratio = ratio.split(':')
         if len(ratio) != 2:
-            raise UMLException("XMLError", ("Proportional", "ratio"))
+            raise XMLError("Proportional", "ratio")
         self.ratio = float(int(ratio[0]))/int(ratio[1])
 
     def GetSize(self, canvas, element):

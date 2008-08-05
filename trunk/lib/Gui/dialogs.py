@@ -31,3 +31,16 @@ class CQuestionDialog:
     
     def __del__(self):
         self.dialog.destroy()
+
+class CExceptionDialog:
+    def __init__(self, form, message):
+        self.dialog = gtk.MessageDialog(form, 0, gtk.MESSAGE_WARNING, gtk.BUTTONS_OK)
+        self.dialog.set_markup(message)
+	self.dialog.set_keep_above(True)
+        self.dialog.set_title(_("Exception"))
+        
+    def run(self):
+        self.dialog.run()
+    
+    def __del__(self):
+        self.dialog.destroy()

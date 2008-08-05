@@ -1,4 +1,4 @@
-from lib.lib import UMLException
+from lib.Exceptions.UserException import *
 from Abstract import CAbstractCanvas
 import math
 import pango
@@ -41,7 +41,7 @@ def HexToRGB(hexcolor):
     hexcolor = hexcolor.strip()
     hexcolor = hexcolor[1:]
     if len(hexcolor) != 6:
-        raise UMLException('invalid hex color, use #RRGGBB format or color name')
+        raise DrawingError('Invalid hex color, use #RRGGBB format or color name.')
     r, g, b = hexcolor[:2], hexcolor[2:4], hexcolor[4:]
     r, g, b = [int(n, 16) for n in (r, g, b)]
     return (float(r)/255, float(g)/255, float(b)/255)
@@ -294,7 +294,7 @@ class CCairoCanvas(CAbstractCanvas):
 
     def DrawIcon(self, pos, filename):
         if self.storage is None:
-            raise UMLException('storage')
+            raise DrawingError('storage')
         pixmap = PixmapFromPath(self.storage, filename)
         self.cr.save()
         self.cr.set_source_surface (pixmap, pos[0], pos[1])
@@ -304,7 +304,7 @@ class CCairoCanvas(CAbstractCanvas):
 
     def GetIconSize(self, filename):
         if self.storage is None:
-            raise UMLException('storage')
+            raise DrawingError('storage')
         pixmap = PixmapFromPath(self.storage, filename)
         return pixmap.get_width(), pixmap.get_height()
 

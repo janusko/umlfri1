@@ -1,7 +1,7 @@
 from Line import CConnectionLine
 from Arrow import CConnectionArrow
 from math import atan2
-from lib.lib import UMLException
+from lib.Exceptions.UserException import *
 
 class CConnectionType(object):
     """
@@ -136,7 +136,7 @@ class CConnectionType(object):
                 del self.labels[id]
                 return
         else:
-            raise UMLException("LabelNotExists")
+            raise ConnectionError("LabelNotExists")
     
     def GetIcon(self):
         """
@@ -271,7 +271,7 @@ class CConnectionType(object):
         if key in self.attributes:
             return self.attributes[key]
         else:
-            raise UMLException("BadKey")
+            raise ConnectionError("BadKey")
     
     def GetAttributes(self):
         """
@@ -296,7 +296,7 @@ class CConnectionType(object):
         if id in self.visAttrs:
             return self.visAttrs[id]
         else:
-            raise UMLException('VisAttrDontExists')
+            raise ConnectionError('VisAttrDontExists')
     
     ID = property(GetId)
     Icon = property(GetIcon, SetIcon)

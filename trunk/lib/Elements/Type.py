@@ -1,4 +1,5 @@
 from lib.lib import ToBool
+from lib.Exceptions.UserException import *
 
 class CElementType(object):
     def __init__(self, id):
@@ -49,7 +50,7 @@ class CElementType(object):
                 return int(temp)
         if type == 'enum':
             if temp is None:
-                raise UMLException("ListNoOptions")
+                raise ElementAttributeError("ListNoOptions")
             else:
                 return str(temp)
         elif type == 'float':
@@ -146,7 +147,7 @@ class CElementType(object):
         if id in self.visAttrs:
             return self.visAttrs[id]
         else:
-            raise UMLException('VisAttrDontExists')
+            raise ElementAttributeError('VisAttrDontExists')
     
     def GetSize(self, canvas, element):
         return self.appearance.GetSize(canvas, element)

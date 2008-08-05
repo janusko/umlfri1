@@ -1,6 +1,6 @@
 import os
 import os.path
-from lib.lib import UMLException
+from lib.Exceptions.DevException import *
 from Type import CElementType
 from lib.config import config
 from lib.consts import METAMODEL_NAMESPACE
@@ -75,7 +75,7 @@ class CElementFactory(object):
         #xml (version) file is validate with xsd schema (metamodel.xsd)
         if HAVE_LXML:
             if not xmlschema.validate(root):
-                raise UMLException("XMLError", xmlschema.error_log.last_error)
+                raise FactoryError("XMLError", xmlschema.error_log.last_error)
 
         obj = CElementType(root.get('id'))
         
@@ -109,7 +109,7 @@ class CElementFactory(object):
                     tmp = j
                 obj.SetAppearance(self.__LoadAppearance(tmp))
             else:
-                raise UMLException('XMLError', en)
+                raise FactoryError('XMLError', en)
         
         self.types[root.get('id')] = obj
     
@@ -124,7 +124,7 @@ class CElementFactory(object):
         @rtype:  L{CVisualObject<lib.Drawing.Objects.VisualObject.CVisualObject>}
         """
         if root.tag.split("}")[1] not in ALL:
-            raise UMLException("XMLError", root.tag)
+            raise FactoryError("XMLError", root.tag)
         cls = ALL[root.tag.split("}")[1]]
         params = {}
         for attr in root.attrib.items():    #return e.g. attr == ('id', '1') => attr[0] == 'id', attr[1] == '1'

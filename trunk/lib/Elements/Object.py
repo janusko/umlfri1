@@ -1,4 +1,4 @@
-from lib.lib import UMLException
+from lib.Exceptions.UserException import *
 import weakref
 
 class CElementObject(object):
@@ -126,7 +126,7 @@ class CElementObject(object):
         if 'Name' in self.attribs:
             return self.attribs['Name']
         else:
-            raise UMLException("KeyError")
+            raise ElementAttributeError("KeyError")
 
     def GetAttribute(self, key):
         if key in self.attribs:
@@ -203,7 +203,7 @@ class CElementObject(object):
         if self.attribs.has_key(key):
             del self.attribs[key]
         else:
-            raise UMLException("KeyError")
+            raise ElementAttributeError("KeyError")
     
     def HasAttribute(self, key):
         return key in self.attribs
@@ -220,7 +220,7 @@ class CElementObject(object):
         if connection in self.connections:
             self.connections.remove(connection)
         else:
-            raise UMLException("ConnectionNotFound")
+            raise ConnectionError("ConnectionNotFound")
      
     # Automaticke generovanie mena elementu 
     # pomocou cprojNode zisti mena elementov na rovnakej urovni

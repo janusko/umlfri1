@@ -1,5 +1,5 @@
 from common import CWidget, event
-from lib.lib import UMLException
+from lib.Exceptions.UserException import *
 import gobject
 
 class CtxtNotes(CWidget):
@@ -30,7 +30,7 @@ class CtxtNotes(CWidget):
             if atrtype[0] == 'note':
                 if cnt > 0:
                     self.element = None
-                    raise UMLException("TooMuchNotes")
+                    raise ProjectError("TooMuchNotes")
                 self.txtNotes.get_buffer().set_text(v)
                 self.txtNotes.set_sensitive(True)
                 self.attr = k

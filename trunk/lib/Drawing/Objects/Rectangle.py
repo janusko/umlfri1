@@ -1,7 +1,7 @@
 from SimpleContainer import CSimpleContainer
 from lib.Math2D import Path, PathPartLine, PathPartMove, TransformMatrix
 import math
-from lib.lib import UMLException
+from lib.Exceptions.UserException import *
 
 corners = {
     'rounded': 'M 0,1 C 0,0.446 0.446,0 1,0',
@@ -41,16 +41,16 @@ class CRectangle(CSimpleContainer):
         self.sides = tuple(self.sides)
         if top is not None:
             if lefttop is not None or righttop is not None:
-                raise UMLException("XMLError", ("Rectangle", "top"))
+                raise XMLError("Rectangle", "top")
         if bottom is not None:
             if leftbottom is not None or rightbottom is not None:
-                raise UMLException("XMLError", ("Rectangle", "bottom"))
+                raise XMLError("Rectangle", "bottom")
         if left is not None:
             if lefttop is not None or leftbottom is not None:
-                raise UMLException("XMLError", ("Rectangle", "left"))
+                raise XMLError("Rectangle", "left")
         if right is not None:
             if righttop is not None or rightbottom is not None:
-                raise UMLException("XMLError", ("Rectangle", "right"))
+                raise XMLError("Rectangle", "right")
     
     def GetResizable(self):
         return True, True

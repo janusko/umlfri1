@@ -1,4 +1,5 @@
-from lib.lib import UMLException
+from lib.Exceptions.UserException import *
+from lib.Exceptions.UMLException import UMLException
 from lib.config import config
 import Connection, Element
 import lib.Math2D
@@ -71,13 +72,13 @@ class CDiagram:
         self.size = None
         if element not in self.elements:
             if element.GetObject().GetType().GetId() not in self.typeDiagram.GetElements():
-                raise UMLException("DiagramHaveNotThisElement", element)
+                raise DrawingError("DiagramHaveNotThisElement", element)
             for i in self.elements:
                 if i.GetObject() is element.GetObject():
-                    raise UMLException("ElementAlreadyExists", element)
+                    raise DrawingError("ElementAlreadyExists", element)
             self.elements.append(element)
         else:
-            raise UMLException("ElementAlreadyExists", element)
+            raise DrawingError("ElementAlreadyExists", element)
      
     def GetSelected(self):
         selected = tuple(self.selected)
@@ -101,7 +102,7 @@ class CDiagram:
         if connection not in self.connections:
             self.connections.append(connection)
         else:
-            raise UMLException("ConnectionAlreadyExists")
+            raise DrawingError("ConnectionAlreadyExists")
             
     def SelectedCount(self):
         return len(self.selected)
@@ -192,7 +193,7 @@ class CDiagram:
         elif isinstance(item, Element.CElement):
             self.DeleteElement(item)
         else:
-            raise UMLException("UnknownItemClass")
+            raise DrawingError("UnknownItemClass")
         
         
     def DeleteElement(self, element):
@@ -209,7 +210,7 @@ class CDiagram:
             for con in deleted:
                 self.DeleteConnection(con)
         else:
-            raise UMLException("ElementDoesNotExists")
+            raise DrawingError("ElementDoesNotExists")
         
     def DeleteConnection(self, connection):
         self.size = None
@@ -218,7 +219,7 @@ class CDiagram:
             if connection in self.selected:
                 self.selected.remove(connection)
         else:
-            raise UMLException("ConnectionDoesNotExists")
+            raise DrawingError("ConnectionDoesNotExists")
     
     def DeleteConnectionObject(self, object):
         for i in self.connections:
@@ -240,7 +241,7 @@ class CDiagram:
             if connection in self.selected:
                 self.selected.remove(connection)
         else:
-            raise UMLException("ConnectionDoesNotExists")
+            raise DrawingError("ConnectionDoesNotExists")
     
     def GetSize(self, canvas):
         if self.size is not None:

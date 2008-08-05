@@ -117,6 +117,7 @@ class CApplication(gobject.GObject):
         self.wTrees = {}
         if self.glade is not None:
             self.wTrees[abspath(self.glade)] = self.wTrees[None] = gtk.glade.XML(self.glade)
+        
         for windowClass in self.windows:
             if windowClass.glade is None:
                 glade = None

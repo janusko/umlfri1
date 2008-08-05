@@ -1,4 +1,5 @@
-from lib.lib import UMLException, XMLEncode
+from lib.lib import XMLEncode
+from lib.Exceptions.UserException import *
 import os.path
 from lib.config import config
 import datetime
@@ -67,7 +68,7 @@ class CRecentFiles(object):
         #xml (recentfiles.xml) file is validate with xsd schema (recentfile.xsd)
         if HAVE_LXML:
             if not xmlschema.validate(root):
-                raise UMLException("XMLError", xmlschema.error_log.last_error)
+                raise XMLError(xmlschema.error_log.last_error)
 
         for file in root.getchildren():
             if os.path.exists(file.get("name").decode('unicode_escape')):
@@ -82,7 +83,7 @@ class CRecentFiles(object):
         #xml tree is validate with xsd schema (recentfile.xsd)
         if HAVE_LXML:
             if not xmlschema.validate(root):
-                raise UMLException("XMLError", xmlschema.error_log.last_error)
+                raise XMLError(xmlschema.error_log.last_error)
         
         #save Recent File Tree
         #etree.ElementTree(root).write(self.filename, encoding='utf-8', xml_declaration=True, pretty_print=True)

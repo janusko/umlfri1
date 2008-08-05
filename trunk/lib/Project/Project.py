@@ -1,8 +1,8 @@
-from lib.lib import UMLException, XMLEncode, IDGenerator
+from lib.lib import XMLEncode, IDGenerator
 from ProjectNode import CProjectNode
 from cStringIO import StringIO
 from zipfile import ZipFile, ZIP_STORED, ZIP_DEFLATED
-from lib.lib import UMLException
+from lib.Exceptions.UserException import *
 from lib.Storages import open_storage
 from lib.Drawing import CElement
 from lib.Drawing import CConnection
@@ -111,9 +111,9 @@ class CProject(object):
                 else:
                     node = node.GetChild(j, k)
                 if node is None:
-                    raise UMLException("BadPath")
+                    raise ProjectError("BadPath")
             return node
-        raise UMLException("BadPath3")
+        raise ProjectError("BadPath3")
     
     
     def Find(self, name):
@@ -245,7 +245,7 @@ class CProject(object):
         #xml tree is validate with xsd schema (recentfile.xsd)
         if HAVE_LXML:
             if not xmlschema.validate(rootNode):
-                raise UMLException("XMLError", xmlschema.error_log.last_error)
+                raise XMLError(xmlschema.error_log.last_error)
 
         #save Recent File Tree into ZIP file
         out = ZipFile(filename, 'w', ZIP_DEFLATED)
@@ -308,7 +308,7 @@ class CProject(object):
         #xml (version) file is validate with xsd schema (metamodel.xsd)
         if HAVE_LXML:
             if not xmlschema.validate(root):
-                raise UMLException("XMLError", xmlschema.error_log.last_error)
+                raise XMLError(xmlschema.error_log.last_error)
 
         for element in root:
             if element.tag == UMLPROJECT_NAMESPACE+'objects':

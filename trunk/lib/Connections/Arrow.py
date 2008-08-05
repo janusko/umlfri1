@@ -1,4 +1,5 @@
-from lib.lib import ToBool,UMLException
+from lib.lib import ToBool
+from lib.Exceptions.UserException import *
 from lib.config import config
 
 from lib.Math2D import TransformMatrix, PointMatrix
@@ -120,4 +121,4 @@ class CConnectionArrow(object):
                 for i in xrange(0,len(points) - 1, 2):
                     canvas.DrawLine(points[i], points[i+1], color)
         else:
-            raise UMLException("UndefinedStyleArrow")
+            raise ConnectionError("UndefinedStyleArrow")

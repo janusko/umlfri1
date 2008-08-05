@@ -1,4 +1,4 @@
-from Exceptions import EConnectionRestriction
+from lib.Exceptions.UserException import *
 
 class CConnectionObject(object):
     """
@@ -85,14 +85,14 @@ class CConnectionObject(object):
         """
         Do all validations
         
-        @raise EConnectionRestriction: if there is something wrong
+        @raise ConnectionRestrictionError: if there is something wrong
         """
         if not self.__CheckRecursiveConnection():
-            raise EConnectionRestriction
+            raise ConnectionRestrictionError
         checksrc = self.__CheckConnection(False)
         checkdest = self.__CheckConnection(True)
         if not (checksrc or checkdest or (checksrc is checkdest is None)):
-            raise EConnectionRestriction
+            raise ConnectionRestrictionError
     
     def GetRevision(self):
         """
