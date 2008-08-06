@@ -1,4 +1,5 @@
-#! /usr/bin/python
+#!/usr/bin/python
+
 import os.path
 import uu
 import sys
