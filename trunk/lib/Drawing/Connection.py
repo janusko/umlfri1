@@ -634,11 +634,11 @@ class CConnection:
         lenold = len(points)
         changed = True
         for i in xrange(1, len(points) - 1):
-            if not self.ValidPoint(points[i-1:i+2]):
+            if not self.ValidPoint(canvas, points[i-1:i+2]):
                 self.RemovePoint(canvas, i)
                 return
     
-    def ValidPoint(self, points):
+    def ValidPoint(self, canvas, points):
         '''
         Check whether is middle point of the three at a valid position.
         
@@ -648,6 +648,10 @@ class CConnection:
             than /Styles/Selection/PointsSize  in config.xml
             - Lines from 1st to 2nd and from 2nd to 3rd point must form angle 
             sharper than (pi - /Styles/Connection/MinimalAngle)
+        
+        @param canvas: Canvas on which its being drawn
+        @type  canvas: L{CCairoCanvas<CCairoCanvas>}
+
         
         @param points: list of three points [(x1, y1), (x2, y2), (x3, y3)]. 
         The middle point defined by (x2, y2) is to be examined
@@ -660,11 +664,11 @@ class CConnection:
         pointSize = config['/Styles/Selection/PointsSize']
         minAngle = config['/Styles/Connection/MinimalAngle']
         
-        line1 = CLine(self.GetPoint(canvas, index), point)
-        line2 = CLine(point, self.GetPoint(canvas, index + 1))
+        line1 = CLine(points[0], points[1])
+        line2 = CLine(points[1], points[2])
         
         return ( abs(line1) > pointSize and abs(line2) > pointSize and
-            minAngle < (line1.Angle() - line.Angle()) % (2 * pi) < \
+            minAngle < (line1.Angle() - line2.Angle()) % (2 * pi) < \
             2 * pi - minAngle )
                 
     def RecalculateLabels(self):
