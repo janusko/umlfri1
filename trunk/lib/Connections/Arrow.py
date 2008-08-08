@@ -1,6 +1,7 @@
 from lib.lib import ToBool
 from lib.Exceptions.UserException import *
 from lib.config import config
+from math import pi
 
 from lib.Math2D import TransformMatrix, PointMatrix
 
@@ -80,7 +81,7 @@ class CConnectionArrow(object):
     
     def Paint(self, canvas, pos, angle):
         """
-        Paints arrow on the canvas
+        Paint arrow on the canvas
         
         @param canvas: Arrow will be painted on this canvas
         @type  canvas: L{CAbstractCanvas<lib.Drawing.Canvas.Abstract.CAbstractCanvas>}
@@ -93,6 +94,12 @@ class CConnectionArrow(object):
         """
         if self.default is False:
             return
+        
+        steps = config['/Styles/Connection/ArrowAngleSteps']
+        step = 2 * pi / steps
+        angle = step * ( (angle // step + (1 if angle % step / step > .5 
+                          else 0)) % steps )
+        
         transMatrix = TransformMatrix.mk_translation(pos)*TransformMatrix.mk_rotation(angle)* \
                         TransformMatrix.mk_scale(self.size)
         x, y = pos

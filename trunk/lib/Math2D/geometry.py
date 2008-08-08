@@ -80,7 +80,7 @@ class CLine:
         Cx, Cy = point.GetPos()
         D = float((Bx - Ax)**2 + (By - Ay)**2)
         if D == 0:
-            return self.GetStart(), self.GetStart - point, math.atan2(Cy - Ay, Cx - Ax)
+            return self.GetStart(), self.GetStart() - point, math.atan2(Cy - Ay, Cx - Ax)
         t1 = (Cx - Ax)*(Bx - Ax) - (Cy - Ay)*(Ay - By)
         t2 = (Bx - Ax)*(Cy - Ay) - (Cx - Ax)*(By - Ay)
         if t1 <= 0:
