@@ -78,11 +78,13 @@
 										<xs:element name="LineColor" type="xs:string"/>
 										<xs:element name="ArrowColor" type="xs:string"/>
 										<xs:element name="ArrowFillColor" type="xs:string"/>
+                                        <xs:element name="ArrowAngleSteps" type="xs:int"/>
 										<xs:element name="NameTextColor" type="xs:string"/>
 										<xs:element name="TextColor" type="xs:string"/>
 										<xs:element name="NameTextFont" type="xs:string"/>
 										<xs:element name="TextFont" type="xs:string"/>
 										<xs:element name="TextFill" type="xs:string"/>
+                                        <xs:element name="MinimalAngle" type="xs:float"/>
 									</xs:all>
 								</xs:complexType>
 							</xs:element>
