@@ -1,12 +1,83 @@
-import xml.dom.minidom
 import consts
 import os.path
 import os
+import colors
+# TODO: recursive imports
+# from lib.Exceptions.DevException import *
+
+#try to import necessary lybraries for XML parsing
+try:
+    from lxml import etree
+    HAVE_LXML = True
+except ImportError:
+    HAVE_LXML = False
+    try:
+        # Python 2.5
+        import xml.etree.cElementTree as etree
+    except ImportError:
+        try:
+            # Python 2.5
+            import xml.etree.ElementTree as etree
+        except ImportError:
+            try:
+                # normal cElementTree install
+                import cElementTree as etree
+            except ImportError:
+                # normal ElementTree install
+                import elementtree.ElementTree as etree
+
+def path_type(val):
+    val = val.replace(u'\xFF', consts.ROOT_PATH)
+    val = os.path.abspath(os.path.expanduser(val))
+    if os.path.isdir(val):
+        val += os.sep
+    return val
+
+def color_type(val):
+    return colors.colors.get(val, val)
+
+types = {
+    "/Styles/Element/LineColor": color_type,
+    "/Styles/Element/FillColor": color_type,
+    "/Styles/Element/Fill2Color": color_type,
+    "/Styles/Element/Fill3Color": color_type,
+    "/Styles/Element/ShadowColor": color_type,
+    "/Styles/Element/NameTextColor": color_type,
+    "/Styles/Element/TextColor": color_type,
+    "/Styles/Connection/ArrowAngleSteps": int,
+    "/Styles/Connection/MinimalAngle": float,
+    "/Styles/Connection/LineColor": color_type,
+    "/Styles/Connection/ArrowColor": color_type,
+    "/Styles/Connection/ArrowFillColor": color_type,
+    "/Styles/Connection/NameTextColor": color_type,
+    "/Styles/Connection/TextColor": color_type,
+    "/Styles/Connection/TextFill": color_type,
+    "/Styles/Selection/PointsSize": int,
+    "/Styles/Selection/RectangleWidth": int,
+    "/Styles/Selection/PointsColor": color_type,
+    "/Styles/Selection/RectangleColor": color_type,
+    "/Styles/Drag/RectangleWidth": int,
+    "/Styles/Drag/RectangleColor": color_type,
+    "/Paths/Root": path_type,
+    "/Paths/Templates": path_type,
+    "/Paths/Images": path_type,
+    "/Paths/Gui": path_type,
+    "/Paths/Locales": path_type,
+    "/Paths/Schema": path_type,
+    "/Paths/UserDir": path_type,
+    "/Paths/UserConfig": path_type,
+    "/Paths/RecentFiles": path_type,
+    "/Page/Width": int,
+    "/Page/Height": int,
+}
 
 class CConfig(object):
     """
     Automatic config file manager
     """
+    
+    CONFIG_NAMESPACE = 'http://umlfri.kst.fri.uniza.sk/xmlschema/config.xsd'
+    
     def __init__(self, file):
         """
         Initialize config manager and loads config file
@@ -15,30 +86,46 @@ class CConfig(object):
         @type  file: string
         """
         self.file = None
+        self.original = {}
         self.Clear()
-        self.Load(file)
+        
+        tree = etree.XML(open(file).read().replace('&apppath;', '&#xFF;'))
+        if HAVE_LXML:
+            xmlschema_path = path_type(tree.find('./{'+self.CONFIG_NAMESPACE+'}Paths/{'+self.CONFIG_NAMESPACE+'}Schema').text)
+            if xmlschema_path:
+                xmlschema_doc = etree.parse(os.path.join(xmlschema_path, "config.xsd"))
+                self.xmlschema = etree.XMLSchema(xmlschema_doc)
+                if not self.xmlschema.validate(tree):
+                    raise Exception, ("XMLError", self.xmlschema.error_log.last_error)
+            else:
+                raise Exception, ("XMLError", "Schema path is not found in config file")
+        
+        self.original = self.__Load(tree)
+        self.cfgs = self.original.copy()
+        
+        k = self.original.keys()
+        k.sort()
+        
         if not os.path.isdir(self['/Paths/UserDir']):
             os.mkdir(self['/Paths/UserDir'])
-        self.original = self.cfgs.copy()
-        if os.path.isfile(self['/Paths/UserConfig']):
-            try:
-                self.Load(self['/Paths/UserConfig'])
-            except:
-                pass
-        self.file = str(self['/Paths/UserConfig'])
+        
+        self.file = self['/Paths/UserConfig']
+        if os.path.isfile(self.file):
+            tree = etree.XML(open(self.file).read().replace('&apppath;', '&#xFF;'))
+            # TODO: User config validation
+            self.cfgs.update(self.__Load(tree))
     
     def __del__(self):
         """
         Automaticaly save config file on object destroy
         """
-        self.Save()
+        self.__Save()
     
     def Clear(self):
         """
         Clears the config values
         """
         self.cfgs = {}
-        self.original = self.cfgs
         self.revision = 0
     
     def __setitem__(self, path, value):
@@ -78,60 +165,30 @@ class CConfig(object):
         """
         return path in self.cfgs
     
-    def Load(self, root, path = None):
+    def __Load(self, root):
         """
         Load an XML file under given path
         
-        @param root: XML element to parse or XML file path
-        @type  root: L{Element<xml.dom.minidom.Element>} or string
-        
-        @param path: path in config to which values has to be inserted,
-            or None
-        @type  path: string
+        @param root: XML element to parse
+        @type  root: L{Element<xml.etree.ElementTree.Element>}
         """
-        if isinstance(root, (str, unicode)):
-            root = xml.dom.minidom.parse(root).documentElement
-        if path is None:
-            path = ''
-        else:
-            path += '/'+str(root.tagName)
-        text = ''
-        for i in root.childNodes:
-            if i.nodeType == i.TEXT_NODE:
-                text += i.data.decode('unicode_escape')
-            if i.nodeType not in (i.ELEMENT_NODE, i.DOCUMENT_NODE):
-                continue
-            if i.tagName == 'Include':
-                if i.hasAttribute('what'):
-                    if i.getAttribute('what') == 'app_path':
-                        text += consts.ROOT_PATH
-                        continue
-                elif i.hasAttribute('path'):
-                    text += self.cfgs[i.getAttribute('path')]
-                    continue
-            tmp = self.Load(i, path)
-            if tmp != '':
-                self.cfgs[path+'/'+str(i.tagName)] = tmp
-
-        text = text.strip()
-        self.revision += 1
-        if root.hasAttribute('type'):
-            type = root.getAttribute('type')
-            if type == 'int':
-                text = int(text)
-            elif type == 'float':
-                text = float(text)
-            elif type == 'bool':
-                text = text.lower() in ('0', 'f', 'no', 'false')
-            elif type == 'path':
-                text = os.path.abspath(os.path.expanduser(text))
-                if os.path.isdir(text):
-                    text += os.sep
-            return text
-        else:
-            return text
+        
+        ret = {}
+        def recursive(root, path):
+            for child in root:
+                name = path+child.tag.split('}')[1]
+                if len(child):
+                    recursive(child, name+'/')
+                elif child.text is None:
+                    ret[name] = types.get(name, unicode)('')
+                else:
+                    ret[name] = types.get(name, unicode)(child.text)
+        
+        recursive(root, '/')
+        
+        return ret
     
-    def Save(self):
+    def __Save(self):
         """
         Save changes to user config XML file
         """
@@ -150,7 +207,10 @@ class CConfig(object):
         def save(root = save, level = 0):
             for part, val in root.iteritems():
                 if isinstance(val, dict):
-                    print>>f, ' '*(level*4)+'<%s>'%part
+                    if level == 0:
+                        print>>f, ' '*(level*4)+'<%s xmlns="%s">'%(part, self.CONFIG_NAMESPACE)
+                    else:
+                        print>>f, ' '*(level*4)+'<%s>'%part
                     save(val, level+1)
                     print>>f, ' '*(level*4)+'</%s>'%part
                 else:
@@ -169,7 +229,7 @@ class CConfig(object):
         
         print>>f, '<?xml version="1.0" encoding="utf-8"?>'
         save()
-    
+   
     def GetRevision(self):
         """
         Get revision number of config object. Revision is initiated to

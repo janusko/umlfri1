@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2008 (http://www.altova.com) by Papi Raton (Pirate Bay) -->
 <!-- (c) UML.FRI -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/config.xsd" targetNamespace="http://umlfri.kst.fri.uniza.sk/xmlschema/config.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:element name="Config">
@@ -78,13 +79,13 @@
 										<xs:element name="LineColor" type="xs:string"/>
 										<xs:element name="ArrowColor" type="xs:string"/>
 										<xs:element name="ArrowFillColor" type="xs:string"/>
-                                        <xs:element name="ArrowAngleSteps" type="xs:int"/>
+										<xs:element name="ArrowAngleSteps" type="xs:int"/>
 										<xs:element name="NameTextColor" type="xs:string"/>
 										<xs:element name="TextColor" type="xs:string"/>
 										<xs:element name="NameTextFont" type="xs:string"/>
 										<xs:element name="TextFont" type="xs:string"/>
 										<xs:element name="TextFill" type="xs:string"/>
-                                        <xs:element name="MinimalAngle" type="xs:float"/>
+										<xs:element name="MinimalAngle" type="xs:float"/>
 									</xs:all>
 								</xs:complexType>
 							</xs:element>
@@ -112,102 +113,15 @@
 				<xs:element name="Paths">
 					<xs:complexType>
 						<xs:all>
-							<xs:element name="Root">
-								<xs:complexType mixed="true">
-									<xs:sequence>
-										<xs:element name="Include" minOccurs="0">
-											<xs:complexType>
-												<xs:attribute name="what" type="xs:string"/>
-												<xs:attribute name="path" type="xs:string"/>
-											</xs:complexType>
-										</xs:element>
-									</xs:sequence>
-								</xs:complexType>
-							</xs:element>
-							<xs:element name="Templates">
-								<xs:complexType mixed="true">
-									<xs:sequence>
-										<xs:element name="Include" minOccurs="0">
-											<xs:complexType>
-												<xs:attribute name="wath" type="xs:string"/>
-												<xs:attribute name="path" type="xs:string"/>
-											</xs:complexType>
-										</xs:element>
-									</xs:sequence>
-								</xs:complexType>
-							</xs:element>
-							<xs:element name="Images">
-								<xs:complexType mixed="true">
-									<xs:sequence>
-										<xs:element name="Include" minOccurs="0">
-											<xs:complexType>
-												<xs:attribute name="wath" type="xs:string"/>
-												<xs:attribute name="path" type="xs:string"/>
-											</xs:complexType>
-										</xs:element>
-									</xs:sequence>
-								</xs:complexType>
-							</xs:element>
-							<xs:element name="Gui">
-								<xs:complexType mixed="true">
-									<xs:sequence>
-										<xs:element name="Include" minOccurs="0">
-											<xs:complexType>
-												<xs:attribute name="wath" type="xs:string"/>
-												<xs:attribute name="path" type="xs:string"/>
-											</xs:complexType>
-										</xs:element>
-									</xs:sequence>
-								</xs:complexType>
-							</xs:element>
-							<xs:element name="Locales">
-								<xs:complexType mixed="true">
-									<xs:sequence>
-										<xs:element name="Include" minOccurs="0">
-											<xs:complexType>
-												<xs:attribute name="wath" type="xs:string"/>
-												<xs:attribute name="path" type="xs:string"/>
-											</xs:complexType>
-										</xs:element>
-									</xs:sequence>
-								</xs:complexType>
-							</xs:element>
-							<xs:element name="UserDir">
-								<xs:complexType mixed="true">
-									<xs:sequence>
-										<xs:element name="Include" minOccurs="0">
-											<xs:complexType>
-												<xs:attribute name="wath" type="xs:string"/>
-												<xs:attribute name="path" type="xs:string"/>
-											</xs:complexType>
-										</xs:element>
-									</xs:sequence>
-								</xs:complexType>
-							</xs:element>
-							<xs:element name="UserConfig">
-								<xs:complexType mixed="true">
-									<xs:sequence>
-										<xs:element name="Include" minOccurs="0">
-											<xs:complexType>
-												<xs:attribute name="wath" type="xs:string"/>
-												<xs:attribute name="path" type="xs:string"/>
-											</xs:complexType>
-										</xs:element>
-									</xs:sequence>
-								</xs:complexType>
-							</xs:element>
-							<xs:element name="RecentFiles">
-								<xs:complexType mixed="true">
-									<xs:sequence>
-										<xs:element name="Include" minOccurs="0">
-											<xs:complexType>
-												<xs:attribute name="wath"/>
-												<xs:attribute name="path" type="xs:string"/>
-											</xs:complexType>
-										</xs:element>
-									</xs:sequence>
-								</xs:complexType>
-							</xs:element>
+							<xs:element name="Root" type="xs:string"/>
+							<xs:element name="Templates" type="xs:string"/>
+							<xs:element name="Images" type="xs:string"/>
+							<xs:element name="Gui" type="xs:string"/>
+							<xs:element name="Locales" type="xs:string"/>
+							<xs:element name="Schema" type="xs:string"/>
+							<xs:element name="UserDir" type="xs:string"/>
+							<xs:element name="UserConfig" type="xs:string"/>
+							<xs:element name="RecentFiles" type="xs:string"/>
 						</xs:all>
 					</xs:complexType>
 				</xs:element>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://umlfri.kst.fri.uniza.sk/xmlschema/config.xsd ..\share\schema\config.xsd" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/config.xsd">
+<Config xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/config.xsd">
     <Styles>
         <Element>
             <LineColor>black</LineColor>
@@ -17,38 +17,38 @@
             <LineColor>black</LineColor>
             <ArrowColor>black</ArrowColor>
             <ArrowFillColor>white</ArrowFillColor>
-            <ArrowAngleSteps type="int">128</ArrowAngleSteps>
+            <ArrowAngleSteps>128</ArrowAngleSteps>
             <NameTextColor>black</NameTextColor>
             <TextColor>black</TextColor>
             <NameTextFont>Arial 10</NameTextFont>
             <TextFont>Arial 10</TextFont>
             <TextFill>white</TextFill>
-            <MinimalAngle type="float">0.1</MinimalAngle>
+            <MinimalAngle>0.1</MinimalAngle>
         </Connection>
         <Selection>
-            <PointsSize type="int">7</PointsSize>
+            <PointsSize>7</PointsSize>
             <PointsColor>darkgray</PointsColor>
             <RectangleColor>blue</RectangleColor>
-            <RectangleWidth type="int">2</RectangleWidth>
+            <RectangleWidth>2</RectangleWidth>
         </Selection>
         <Drag>
             <RectangleColor>black</RectangleColor>
-            <RectangleWidth type="int">2</RectangleWidth>
+            <RectangleWidth>2</RectangleWidth>
         </Drag>
     </Styles>
     <Paths>
-        <Root type="path"><Include what="app_path" /></Root>
-        <Templates type="path"><Include path="/Paths/Root" />/etc/templates/</Templates>
-        <Images type="path"><Include path="/Paths/Root" />/img/</Images>
-        <Gui type="path"><Include path="/Paths/Root" />/gui/</Gui>
-        <Locales type="path"><Include path="/Paths/Root" />/share/locale/</Locales>
-        <Schema type="path"><Include path="/Paths/Root" />/share/schema/</Schema>
-        <UserDir type="path">~/.uml_fri</UserDir>
-        <UserConfig type="path"><Include path="/Paths/UserDir" />/config.xml</UserConfig>
-        <RecentFiles type="path"><Include path="/Paths/UserDir" />/RecentFiles.xml</RecentFiles>
+        <Root>&apppath;</Root>
+        <Templates>&apppath;/etc/templates/</Templates>
+        <Images>&apppath;/img/</Images>
+        <Gui>&apppath;/gui/</Gui>
+        <Locales>&apppath;/share/locale/</Locales>
+        <Schema>&apppath;/share/schema/</Schema>
+        <UserDir>~/.uml_fri</UserDir>
+        <UserConfig>~/.uml_fri/config.xml</UserConfig>
+        <RecentFiles>~/.uml_fri/RecentFiles.xml</RecentFiles>
     </Paths>
     <Page>
-        <Width type="int">797</Width>
-        <Height type="int">1123</Height>
+        <Width>797</Width>
+        <Height>1123</Height>
     </Page>
 </Config>

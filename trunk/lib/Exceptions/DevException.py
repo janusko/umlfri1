@@ -10,3 +10,6 @@ class DevException(UMLException):
 
 class FactoryError(DevException):
     pass
+
+class ConfigError(DevException):
+    pass
