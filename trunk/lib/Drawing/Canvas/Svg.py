@@ -1,7 +1,7 @@
 from Abstract import CAbstractCanvas
 from lib.Math2D import Path, PathSingle, PathPartArc, PathPartBezier, PathPartLine, PathPartMove, PathPart
 import math
-import Gtk
+import GtkPlus
 from lib.lib import XMLEncode
 from lib.colors import colors
 
