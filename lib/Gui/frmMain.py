@@ -38,7 +38,8 @@ class CfrmMain(CWindow):
         'mnuExport',
         #############
         'mItemView',
-        'mnuViewTools',
+        'mnuViewTools', 'mnuViewCommands',
+        'hndCommandBar',
         #############
         'mnuOptions',
         #############
@@ -148,6 +149,13 @@ class CfrmMain(CWindow):
     @event("mnuViewTools", "activate")
     def on_mnuViewTools_activate(self, mnu):
         self.tbToolBox.SetVisible(mnu.get_active())
+    
+    @event("mnuViewCommands", "activate")
+    def on_mnuViewCommands_activate(self, mnu):
+        if mnu.get_active():
+            self.hndCommandBar.show()
+        else:
+            self.hndCommandBar.hide()
 
     # Preferencies
     @event("mnuOptions", "activate")
