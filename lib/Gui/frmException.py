@@ -1,11 +1,10 @@
 import sys, os
-from platform import *
+import platform
 import gtk
 import pango
 import lib.consts
 from common import CWindow
 import traceback
-import uu
 from lib.config import config
 from lib.Gui.dialogs import CWarningDialog
 
@@ -78,7 +77,7 @@ class CfrmException(CWindow):
                                 path = config['/Paths/UserDir'] + TEMP_FILE
                                 self.project.SaveProject(path)
                                 in_file = open(path, 'r')
-                                uu.encode(in_file, log_file)
+                                log_file.write(in_file.read().encode('uu_codec'))
                                 in_file.close()
                                 os.remove(path)
 
@@ -150,10 +149,10 @@ class CfrmException(CWindow):
  
         iter = buff.get_iter_at_offset(0)
         buff.insert_with_tags_by_name(iter, _("\nmachine:\t\t"), "bold")
-        buff.insert_with_tags_by_name(iter, machine(), "mono")
+        buff.insert_with_tags_by_name(iter, platform.machine(), "mono")
         buff.insert_with_tags_by_name(iter, _("\narchitecture:\t\t"), "bold")
-        buff.insert_with_tags_by_name(iter, architecture()[0], "mono")
-        ver =  str(python_version_tuple()[0]) +'.'+ str(python_version_tuple()[1])+'.'+ str(python_version_tuple()[2])
+        buff.insert_with_tags_by_name(iter, platform.architecture()[0], "mono")
+        ver =  str(platform.python_version_tuple()[0]) +'.'+ str(platform.python_version_tuple()[1])+'.'+ str(platform.python_version_tuple()[2])
         buff.insert_with_tags_by_name(iter, _("\npython version:\t\t"), "bold")
         buff.insert_with_tags_by_name(iter, ver, "mono")
         ver =  str(gtk.gtk_version[0])+'.'+ str(gtk.gtk_version[1])+'.'+ str(gtk.gtk_version[2])
@@ -163,7 +162,7 @@ class CfrmException(CWindow):
         buff.insert_with_tags_by_name(iter, _("\npygtk version:\t\t"), "bold")
         buff.insert_with_tags_by_name(iter, ver, "mono")
         buff.insert_with_tags_by_name(iter, _("\nplatform:\t\t"), "bold")
-        buff.insert_with_tags_by_name(iter, platform(), "mono")
+        buff.insert_with_tags_by_name(iter, platform.platform(), "mono")
 
 
 

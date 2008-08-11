@@ -5,7 +5,7 @@ import gobject
 
 from common import  event
 from lib.Drawing import CDiagram
-from lib.Drawing.Canvas.Gtk import PixmapFromPath
+from lib.Drawing.Canvas.GtkPlus import PixmapFromPath
 from twProjectView import CtwProjectView
 
 class CTabs(CWidget):

@@ -1,7 +1,7 @@
 from common import CWidget, event
 
 import gtk, gobject
-from lib.Drawing.Canvas.Gtk import PixmapFromPath
+from lib.Drawing.Canvas.GtkPlus import PixmapFromPath
 
 from lib.config import config
 from lib.consts import ARROW_IMAGE
