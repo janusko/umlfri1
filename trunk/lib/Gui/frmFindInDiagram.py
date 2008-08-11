@@ -1,5 +1,5 @@
 from common import CWindow, event
-from lib.Drawing.Canvas.Gtk import PixmapFromPath
+from lib.Drawing.Canvas.GtkPlus import PixmapFromPath
 import gtk
 import gobject
 import common

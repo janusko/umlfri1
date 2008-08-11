@@ -3,7 +3,7 @@ from lib.Project import CProject, CProjectNode
 from lib.Elements import CElementFactory, CElementObject
 from lib.Drawing import CElement
 from lib.Exceptions.UserException import *
-from lib.Drawing.Canvas.Gtk import PixmapFromPath
+from lib.Drawing.Canvas.GtkPlus import PixmapFromPath
 
 from common import  event
 import common

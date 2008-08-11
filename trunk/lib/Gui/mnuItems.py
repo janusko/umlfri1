@@ -1,6 +1,6 @@
 import gtk, gobject
 
-from lib.Drawing.Canvas.Gtk import PixmapFromPath
+from lib.Drawing.Canvas.GtkPlus import PixmapFromPath
 
 from common import CWidget, event
 
