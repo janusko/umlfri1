@@ -74,7 +74,19 @@ class CTabs(CWidget):
         self.diagrams.append(diagram)
        
         self.SetCurrentPage(self.nbTabs.get_n_pages()-1)
-       
+    
+    def Show(self):
+        self.nbTabs.show()
+    
+    def Hide(self):
+        self.nbTabs.hide()
+    
+    def SetVisible(self, value):
+        if value:
+            self.Show()
+        else:
+            self.Hide()
+    
     def on_button_click(self, widget, page):
         self.CloseTab(self.diagrams[self.nbTabs.page_num(page)])
 

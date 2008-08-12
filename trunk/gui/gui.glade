@@ -12,7 +12,7 @@
       <widget class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
         <child>
-          <widget class="GtkMenuBar" id="menubar1">
+          <widget class="GtkMenuBar" id="mnuMenubar">
             <property name="visible">True</property>
             <child>
               <widget class="GtkMenuItem" id="mItemFile">
@@ -266,6 +266,22 @@
                         <property name="label" translatable="yes">Commandbar</property>
                         <property name="use_underline">True</property>
                         <property name="active">True</property>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkSeparatorMenuItem" id="separatormenuitem2">
+                        <property name="visible">True</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkCheckMenuItem" id="mnuFullscreen">
+                        <property name="visible">True</property>
+                        <property name="sensitive">False</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="label" translatable="yes">Fullscreen</property>
+                        <property name="use_underline">True</property>
+                        <accelerator key="Return" modifiers="GDK_MOD1_MASK" signal="activate"/>
                       </widget>
                     </child>
                   </widget>
@@ -747,9 +763,6 @@
                         <property name="n_rows">2</property>
                         <property name="n_columns">2</property>
                         <child>
-                          <placeholder/>
-                        </child>
-                        <child>
                           <widget class="GtkVScrollbar" id="picVBar">
                             <property name="visible">True</property>
                             <property name="adjustment">0 0 0 15 0 0</property>
@@ -786,6 +799,30 @@
                             </child>
                           </widget>
                         </child>
+                        <child>
+                          <widget class="GtkButton" id="cmdCloseFullscreen">
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="response_id">0</property>
+                            <child>
+                              <widget class="GtkImage" id="image1">
+                                <property name="visible">True</property>
+                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="stock">gtk-close</property>
+                                <property name="icon_size">1</property>
+                              </widget>
+                            </child>
+                          </widget>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="right_attach">2</property>
+                            <property name="top_attach">1</property>
+                            <property name="bottom_attach">2</property>
+                            <property name="x_options">GTK_FILL</property>
+                            <property name="y_options">GTK_FILL</property>
+                          </packing>
+                        </child>
                       </widget>
                       <packing>
                         <property name="position">1</property>
@@ -798,7 +835,7 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkVPaned" id="vpaned1">
+                  <widget class="GtkVPaned" id="vpaRight">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="position">200</property>
@@ -904,7 +941,7 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkStatusbar" id="statusbar1">
+          <widget class="GtkStatusbar" id="sbStatus">
             <property name="visible">True</property>
           </widget>
           <packing>

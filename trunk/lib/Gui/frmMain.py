@@ -52,6 +52,9 @@ class CfrmMain(CWindow):
         #############
         #toolbar
         'cmdOpen', 'cmdSave', 'cmdCopy', 'cmdCut', 'cmdPaste',
+        #############
+        #fullscreen
+        'mnuMenubar', 'mnuFullscreen', 'cmdCloseFullscreen', 'vpaRight', 'sbStatus'
         )
 
     complexWidgets = (CtbToolBox, CtwProjectView, CmnuItems, CpicDrawingArea, CnbProperties, CTabs,
@@ -147,15 +150,39 @@ class CfrmMain(CWindow):
     
     # Diagrams
     @event("mnuViewTools", "activate")
-    def on_mnuViewTools_activate(self, mnu):
-        self.tbToolBox.SetVisible(mnu.get_active())
+    def ActionViewTools(self, *args):
+        self.tbToolBox.SetVisible(self.mnuViewTools.get_active())
     
     @event("mnuViewCommands", "activate")
-    def on_mnuViewCommands_activate(self, mnu):
-        if mnu.get_active():
+    def ActionViewCommands(self, *args):
+        if self.mnuViewCommands.get_active():
             self.hndCommandBar.show()
         else:
             self.hndCommandBar.hide()
+    
+    @event("cmdCloseFullscreen", "clicked")
+    def ActionExitFullscreen(self, *args):
+        self.mnuFullscreen.set_active(False)
+        self.ActionFullscreen(*args)
+    
+    @event("mnuFullscreen", "activate")
+    def ActionFullscreen(self, *args):
+        if self.mnuFullscreen.get_active():
+            self.mnuMenubar.hide()
+            self.hndCommandBar.hide()
+            self.sbStatus.hide()
+            self.cmdCloseFullscreen.show()
+            self.nbTabs.Hide()
+            self.vpaRight.hide()
+            self.form.window.fullscreen()
+        else:
+            self.mnuMenubar.show()
+            self.ActionViewCommands()
+            self.sbStatus.show()
+            self.cmdCloseFullscreen.hide()
+            self.nbTabs.Show()
+            self.vpaRight.show()
+            self.form.window.unfullscreen()
 
     # Preferencies
     @event("mnuOptions", "activate")
@@ -202,12 +229,11 @@ class CfrmMain(CWindow):
         tmp = self.application.GetWindow('frmAbout')
         tmp.SetParent(self)
         tmp.Show()
-	
-	
+    
     @event("mnuWebsite", "activate")
     def on_mnuWebsite_activate(self, mnu):
         from webbrowser import open_new
-	open_new(lib.consts.WEB)
+        open_new(lib.consts.WEB)
 
     
     @event('nbTabs','export-svg-from-TabMenu')
@@ -407,6 +433,7 @@ class CfrmMain(CWindow):
     @event("nbTabs", "change_current_page")
     def on_change_diagram(self, widget, diagram):
         if diagram is None:
+            self.mnuFullscreen.set_sensitive(False)
             self.picDrawingArea.Hide()
             self.tbToolBox.SetButtons(None)
             self.UpdateMenuSensitivity(diagram = False)
@@ -415,6 +442,7 @@ class CfrmMain(CWindow):
             self.picDrawingArea.SetDiagram(diagram)
             self.tbToolBox.SetButtons(diagram.GetType().GetId())
             self.UpdateMenuSensitivity(diagram = True)
+            self.mnuFullscreen.set_sensitive(True)
     
     @event("nbTabs","show-diagram-in-project")
     def on_show_diagram_in_project(self, widget, diagram):
