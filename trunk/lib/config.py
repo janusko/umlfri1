@@ -77,6 +77,7 @@ class CConfig(object):
     """
     
     CONFIG_NAMESPACE = 'http://umlfri.kst.fri.uniza.sk/xmlschema/config.xsd'
+    USERCONFIG_NAMESPACE = 'http://umlfri.kst.fri.uniza.sk/xmlschema/userconfig.xsd'
     
     def __init__(self, file):
         """
@@ -89,16 +90,15 @@ class CConfig(object):
         self.original = {}
         self.Clear()
         
-        tree = etree.XML(open(file).read().replace('&apppath;', '&#xFF;'))
+        tree = etree.XML(open(file).read())
         if HAVE_LXML:
             xmlschema_path = path_type(tree.find('./{'+self.CONFIG_NAMESPACE+'}Paths/{'+self.CONFIG_NAMESPACE+'}Schema').text)
-            if xmlschema_path:
-                xmlschema_doc = etree.parse(os.path.join(xmlschema_path, "config.xsd"))
-                self.xmlschema = etree.XMLSchema(xmlschema_doc)
-                if not self.xmlschema.validate(tree):
-                    raise Exception, ("XMLError", self.xmlschema.error_log.last_error)
-            else:
+            if not xmlschema_path:
                 raise Exception, ("XMLError", "Schema path is not found in config file")
+            xmlschema_doc = etree.parse(os.path.join(xmlschema_path, "config.xsd"))
+            xmlschema = etree.XMLSchema(xmlschema_doc)
+            if not xmlschema.validate(tree):
+                raise Exception, ("XMLError", xmlschema.error_log.last_error)
         
         self.original = self.__Load(tree)
         self.cfgs = self.original.copy()
@@ -111,8 +111,11 @@ class CConfig(object):
         
         self.file = self['/Paths/UserConfig']
         if os.path.isfile(self.file):
-            tree = etree.XML(open(self.file).read().replace('&apppath;', '&#xFF;'))
-            # TODO: User config validation
+            tree = etree.XML(open(self.file).read())
+            xmlschema_doc = etree.parse(os.path.join(xmlschema_path, "userconfig.xsd"))
+            xmlschema = etree.XMLSchema(xmlschema_doc)
+            if not xmlschema.validate(tree):
+                raise Exception, ("XMLError", xmlschema.error_log.last_error)
             self.cfgs.update(self.__Load(tree))
     
     def __del__(self):
@@ -208,7 +211,7 @@ class CConfig(object):
             for part, val in root.iteritems():
                 if isinstance(val, dict):
                     if level == 0:
-                        print>>f, ' '*(level*4)+'<%s xmlns="%s">'%(part, self.CONFIG_NAMESPACE)
+                        print>>f, ' '*(level*4)+'<%s xmlns="%s">'%(part, self.USERCONFIG_NAMESPACE)
                     else:
                         print>>f, ' '*(level*4)+'<%s>'%part
                     save(val, level+1)
