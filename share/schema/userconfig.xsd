@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- (c) UML.FRI -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/config.xsd" targetNamespace="http://umlfri.kst.fri.uniza.sk/xmlschema/config.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
-	<xs:element name="UserConfig">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/userconfig.xsd" targetNamespace="http://umlfri.kst.fri.uniza.sk/xmlschema/userconfig.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="Config">
 		<xs:annotation>
 			<xs:documentation>Scheme for XML Configuration file</xs:documentation>
 		</xs:annotation>
