@@ -112,10 +112,11 @@ class CConfig(object):
         self.file = self['/Paths/UserConfig']
         if os.path.isfile(self.file):
             tree = etree.XML(open(self.file).read())
-            xmlschema_doc = etree.parse(os.path.join(xmlschema_path, "userconfig.xsd"))
-            xmlschema = etree.XMLSchema(xmlschema_doc)
-            if not xmlschema.validate(tree):
-                raise Exception, ("XMLError", xmlschema.error_log.last_error)
+            if HAVE_LXML:
+                xmlschema_doc = etree.parse(os.path.join(xmlschema_path, "userconfig.xsd"))
+                xmlschema = etree.XMLSchema(xmlschema_doc)
+                if not xmlschema.validate(tree):
+                    raise Exception, ("XMLError", xmlschema.error_log.last_error)
             self.cfgs.update(self.__Load(tree))
     
     def __del__(self):
