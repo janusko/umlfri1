@@ -1,7 +1,8 @@
 import lib.consts
 import lib.debug
 import gobject
-from lib.Exceptions import *
+from lib.Exceptions import UserException
+from lib.Gui.showExceptions import displayTraceback, displayUsrExc
 def event(obj, *args):
     """
         event(obj, event)
@@ -22,14 +23,14 @@ def event(obj, *args):
                     try:
                         return fnc(self, *args, **kw_args)
                     except :
-                        Traceback.display_traceback(self.application)
+                        displayTraceback(self.application)
                 else:
                     try:
                         return fnc(self, *args, **kw_args)
                     except UserException:
-                        Traceback.display_usr_exc()
+                        displayUsrExc()
                     except:
-                        Traceback.display_traceback(self.application)
+                        displayTraceback(self.application)
 
             fncx = tmp2
             #else:
