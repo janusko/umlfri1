@@ -91,6 +91,7 @@ class Application(CApplication):
     
     def Quit(self):
         CApplication.Quit(self)
+        config.Save()
         self.recentFiles.SaveRecentFiles()
 
 Application().Main()

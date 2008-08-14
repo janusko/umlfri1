@@ -113,16 +113,13 @@ class CConfig(object):
             tree = etree.XML(open(self.file).read())
             if HAVE_LXML:
                 xmlschema_doc = etree.parse(os.path.join(xmlschema_path, "userconfig.xsd"))
-                xmlschema = etree.XMLSchema(xmlschema_doc)
-                if not xmlschema.validate(tree):
-                    raise ConfigError, ("XMLError", xmlschema.error_log.last_error)
+
+                self.xmlschema = etree.XMLSchema(xmlschema_doc)
+                if not self.xmlschema.validate(tree):
+                    raise ConfigError, ("XMLError", self.xmlschema.error_log.last_error)
+
             self.cfgs.update(self.__Load(tree))
-    
-    def __del__(self):
-        """
-        Automaticaly save config file on object destroy
-        """
-        self.__Save()
+
     
     def Clear(self):
         """
@@ -191,33 +188,22 @@ class CConfig(object):
         
         return ret
     
-    def __Save(self):
+    def Save(self):
         """
         Save changes to user config XML file
         """
-        def XMLEncode(val):
-            ret = repr(val)
-            if isinstance(val, str):
-                ret = ret[1:-1]
-            elif isinstance(val, unicode):
-                ret = ret[2:-1]
-            return ret.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('<', '&gt;').replace('"', '&quot;')
-        
         out = {}
         save = {'Config': out}
         f = file(self.file, 'w')
         
-        def save(root = save, level = 0):
+        def save(root = save['Config'], node = None, level = 1):
             for part, val in root.iteritems():
+                newNode = etree.Element('{%s}%s'%(self.USERCONFIG_NAMESPACE, part))
                 if isinstance(val, dict):
-                    if level == 0:
-                        print>>f, ' '*(level*4)+'<%s xmlns="%s">'%(part, self.USERCONFIG_NAMESPACE)
-                    else:
-                        print>>f, ' '*(level*4)+'<%s>'%part
-                    save(val, level+1)
-                    print>>f, ' '*(level*4)+'</%s>'%part
+                    save(val, newNode, level+1)
                 else:
-                    print>>f, ' '*(level*4)+'<%s>%s</%s>'%(part, XMLEncode(val), part)
+                    newNode.text = val
+                node.append(newNode)
         
         for path, val in self.cfgs.iteritems():
             if val != self.original.get(path, None):
@@ -230,8 +216,16 @@ class CConfig(object):
                     tmp = tmp2
                 tmp[path[-1]] = val
         
+        rootNode = etree.XML('<Config xmlns="%s"></Config>'%self.USERCONFIG_NAMESPACE)
+        save(node = rootNode)
+        
+        #xml tree is validate with xsd schema (recentfile.xsd)
+        if HAVE_LXML:
+            if not self.xmlschema.validate(rootNode):
+                raise ConfigError, ("XMLError", self.xmlschema.error_log.last_error)
+        
         print>>f, '<?xml version="1.0" encoding="utf-8"?>'
-        save()
+        print>>f, etree.tostring(rootNode, encoding='utf-8')
    
     def GetRevision(self):
         """
