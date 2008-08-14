@@ -23,8 +23,8 @@ class CfrmException(CWindow):
         self.chbtnIncludeProject.connect("toggled", self.OnChbtnIncludeProjectToogled, None)
         self.lblMail.set_label("<span background='white'><b>"+ lib.consts.MAIL + "</b></span>")
         self.project = None
-        self.append_project = False
-        print 
+        self.append_project = True
+
         
     def OnChbtnIncludeProjectToogled(self, widget, event, data=None):
         if self.append_project == False:
@@ -54,12 +54,12 @@ class CfrmException(CWindow):
 
                     if not os.path.isdir(filename):
                         log_file = open(filename, 'w')
-                        log_file.write(_('#UML.fri ERROR LOG:'))
+                        log_file.write('#UML.fri ERROR LOG:')
                         buff = self.tviewErrorLog.get_buffer()
                         s, e = buff.get_bounds()
                         log_file.write(buff.get_text(s,e))
 
-                        log_file.write(_('\n\n#SYSTEM INFORMATION:'))
+                        log_file.write('\n\n#SYSTEM INFORMATION:')
                         buff = self.tviewSysInfo.get_buffer()
                         s, e = buff.get_bounds()
                         log_file.write(buff.get_text(s,e))
@@ -68,12 +68,12 @@ class CfrmException(CWindow):
                         s, e = buff.get_bounds()
                         text  = buff.get_text(s,e)
                         if len(text) > 0:
-                            log_file.write(_('\n\n#USER COMMENTS:\n'))
+                            log_file.write('\n\n#USER COMMENTS:\n')
                             log_file.write(text)
 
                         if self.append_project == True:
                             if self.project is not None:
-                                log_file.write(_('\n\n#INCLUDED PROJECT:\n'))
+                                log_file.write('\n\n#INCLUDED PROJECT:\n')
                                 path = config['/Paths/UserDir'] + TEMP_FILE
                                 self.project.SaveProject(path)
                                 in_file = open(path, 'r')
@@ -84,7 +84,7 @@ class CfrmException(CWindow):
 
                         log_file.close()
                         filedlg.destroy()
-                        CWarningDialog(None, 'File successfully saved as:\n\n' + filename).run()
+                        CWarningDialog(None, _('File successfully saved as:\n\n') + filename).run()
                         return
                 else:
                     filedlg.destroy()

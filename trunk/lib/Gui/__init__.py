@@ -10,3 +10,4 @@ from frmSave import CfrmSave
 from frmFindInDiagram import CFindInDiagram
 from frmOptions import CfrmOptions
 from frmException import CfrmException
+from showExceptions import displayTraceback, displayUsrExc
