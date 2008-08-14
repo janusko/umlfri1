@@ -2,8 +2,7 @@ import consts
 import os.path
 import os
 import colors
-# TODO: recursive imports
-# from lib.Exceptions.DevException import *
+from Exceptions.DevException import *
 
 #try to import necessary lybraries for XML parsing
 try:
@@ -98,7 +97,7 @@ class CConfig(object):
             xmlschema_doc = etree.parse(os.path.join(xmlschema_path, "config.xsd"))
             xmlschema = etree.XMLSchema(xmlschema_doc)
             if not xmlschema.validate(tree):
-                raise Exception, ("XMLError", xmlschema.error_log.last_error)
+                raise ConfigError, ("XMLError", xmlschema.error_log.last_error)
         
         self.original = self.__Load(tree)
         self.cfgs = self.original.copy()
@@ -116,7 +115,7 @@ class CConfig(object):
                 xmlschema_doc = etree.parse(os.path.join(xmlschema_path, "userconfig.xsd"))
                 xmlschema = etree.XMLSchema(xmlschema_doc)
                 if not xmlschema.validate(tree):
-                    raise Exception, ("XMLError", xmlschema.error_log.last_error)
+                    raise ConfigError, ("XMLError", xmlschema.error_log.last_error)
             self.cfgs.update(self.__Load(tree))
     
     def __del__(self):
