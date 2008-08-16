@@ -1,46 +1,25 @@
 from lib.config import config
 from lib.Drawing import CConnection
+from VisibleObject import CVisibleObject
 
-class CElement:
+class CElement(CVisibleObject):
     def __init__(self, diagram, obj, isLoad = False):
+        super(CElement, self).__init__()
         self.isLoad = isLoad
-        self.objct = obj
-        self.position = (0,0)
-        self.deltaSize = (0,0)
-        self.selected = False
+        self.object = obj
         self.squares = []
         self.diagram = diagram
         self.diagram.AddElement(self)
-        self.objct.AddAppears(diagram)
+        self.object.AddAppears(diagram)
         self.__AddExistingConnections()
-        self.ClearSizeCache()
-        self.revision = 0
-        self.cfgrevision = 0
-    
-    def ClearSizeCache(self):
-        self.__sizecache = {}
-    
-    def CacheSize(self, obj, size):
-        line = getattr(self, '__LOOPVARS__', {}).get('line')
-        self.__sizecache[(id(obj), line)] = size
-        return size
-    
-    def GetCachedSize(self, obj):
-        if self.revision < self.objct.GetRevision() or self.cfgrevision < config.GetRevision():
-            self.ClearSizeCache()
-            self.revision = self.objct.GetRevision()
-            self.cfgrevision = config.GetRevision()
-            return None
-        line = getattr(self, '__LOOPVARS__', {}).get('line')
-        return self.__sizecache.get((id(obj), line))
     
     def __AddExistingConnections(self):
         if not self.isLoad:
-            for i in self.objct.GetConnections():
-                if i.GetSource() is not self.objct:
+            for i in self.object.GetConnections():
+                if i.GetSource() is not self.object:
                     if self.diagram.HasElementObject(i.GetSource()) is not None:
                         CConnection(self.diagram,i,self.diagram.HasElementObject(i.GetSource()),self)
-                elif i.GetDestination() is not self.objct:
+                elif i.GetDestination() is not self.object:
                     if self.diagram.HasElementObject(i.GetDestination()) is not None:
                         CConnection(self.diagram,i,self,self.diagram.HasElementObject(i.GetDestination()))
                     
@@ -61,67 +40,17 @@ class CElement:
         if y1 < y:
             y1, y = y, y1
         self.squares.append(((-posx, -posy), (x, y), (x1 - x, y1 - y)))
-
-    def AreYouAtPosition(self, canvas, pos):
-        x, y = pos
-        width, height = self.GetSize(canvas)
-        
-        if  (self.position[0] <= x <= self.position[0] + width) and (self.position[1] <= y <= self.position[1] + height):
-            return True
-        else:
-            return False
-    
-    def AreYouInRange(self, canvas, topleft, bottomright, all = False):
-        (x1, y1), (x2, y2) = topleft, bottomright
-        width, height = self.GetSize(canvas)
-        
-        if all:
-            return (x1 <= self.position[0] <= self.position[0] + width <= x2) and (y1 <= self.position[1] <= self.position[1] + height <= y2)
-        else:
-            return ((x1 <= self.position[0] <= x2) and (y1 <= self.position[1] <= y2)) or \
-                   ((x1 <= self.position[0] + width <= x2) and (y1 <= self.position[1] + height <= y2)) or \
-                   ((self.position[0] <= x1 <= self.position[0] + width) and (self.position[1] <= y1 <= self.position[1] + height))
-    
-    def Select(self):
-        self.selected = True
     
     def Deselect(self):
-        self.selected = False
+        super(CElement, self).Deselect()
         self.squares = []
-    
-    def GetSelected(self):
-        return self.selected
-        
-    def GetObject(self):
-        return self.objct
-
-    def GetPosition(self):
-        return self.position
-        
-    def GetCenter(self, canvas):
-        w, h = self.GetSize(canvas)
-        return w / 2 + self.position[0], h / 2 + self.position[1]
-    
-    def GetSize(self, canvas):
-        w, h = self.objct.GetSize(canvas, self)
-        w, h = w + self.deltaSize[0], h + self.deltaSize[1]
-        return w, h 
-        
-    def GetMinimalSize(self, canvas):
-        w, h = self.objct.GetSize(canvas, self)
-        return w, h
-        
-    def GetSquare(self, canvas):
-        x, y = self.GetPosition()
-        w, h = self.GetSize(canvas)
-        return ((x, y), (x + w, y + h))
 
     def Paint(self, canvas, delta = (0, 0)):
-        self.objct.Paint(canvas, self, delta)
+        self.object.Paint(canvas, self, delta)
         if self.selected:
             x, y = self.position
             w, h = self.GetSize(canvas)
-            rx, ry = self.objct.GetType().GetResizable()
+            rx, ry = self.object.GetType().GetResizable()
             
             self.squares = []
             
@@ -143,12 +72,6 @@ class CElement:
             
             canvas.DrawRectangle((x + dx, y + dy), (w, h), fg = config['/Styles/Selection/RectangleColor'], line_width = config['/Styles/Selection/RectangleWidth'])
 
-    def SetPosition(self, pos):
-        self.position = pos
-        
-    def GetDiagram(self):
-        return self.diagram
-        
     def GetConnections(self):
         for c1 in self.GetObject().GetConnections(): #ConnectionObject
             for c2 in self.diagram.GetConnections(): # Connection

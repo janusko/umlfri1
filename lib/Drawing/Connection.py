@@ -1,10 +1,14 @@
 from lib.Exceptions.UserException import *
 from lib.config import config
-from lib.Connections.Object import CConnectionObject
+#from lib.Connections.Object import CConnectionObject
 from lib.Math2D import CPoint, CLine, CLineVector, CPolyLine, CRectangle
 from math import sqrt, atan2, pi
+from CacheableObject import CCacheableObject
+from SelectableObject import CSelectableObject
+from ConLabelInfo import CConLabelInfo
+from lib.consts import LABELS_CLICKABLE
 
-class CConnection:
+class CConnection(CCacheableObject, CSelectableObject):
     '''Graphical representation of connection
     
     In the program you have to distinguish between logical connection and its
@@ -70,40 +74,16 @@ class CConnection:
         self.source = source
         self.destination = destination
         self.labels = {}
-        self.selected = False
         self.selpoint = None
         self.object.AddAppears(diagram)
-        self.ClearSizeCache()
-        self.revision = 0
-        self.cfgrevision = 0
-    
-    def ClearSizeCache(self):
-        self.__sizecache = {}
-    
-    def CacheSize(self, obj, size):
-        line = getattr(self, '__LOOPVARS__', {}).get('line')
-        self.__sizecache[(id(obj), line)] = size
-        return size
-    
-    def GetCachedSize(self, obj):
-        if self.revision < self.object.GetRevision() or self.cfgrevision < config.GetRevision():
-            self.ClearSizeCache()
-            self.revision = self.object.GetRevision()
-            self.cfgrevision = config.GetRevision()
-            return None
-        line = getattr(self, '__LOOPVARS__', {}).get('line')
-        return self.__sizecache.get((id(obj), line))
-    
+        super(CConnection, self).__init__()
    
-    def Select(self):
-        self.selected = True
-    
     def Deselect(self):
-        self.selected = False
-        self.selpoint = None
-        
-    def GetSelelected(self):
-        return self.selected
+        '''Execute L{CSelectableObject.Deselect<CSelectableObject.Deselect>} 
+        and L{self.DeselectPoint<self.DeselectPoint>}
+        '''
+        super(CConnection, self).Deselect()
+        self.DeselectPoint()
         
     def SelectPoint(self, index):
         '''set self.selpoint to index if index within range
@@ -203,8 +183,6 @@ class CConnection:
         '''get positions of neighbouring points to point 
         selected by index.
         
-        @attention: Indexing starts with 1 (in this case).
-
         @param canvas: Canvas on which its being drawn
         @type  canvas: L{CCairoCanvas<CCairoCanvas>}
 
@@ -222,13 +200,6 @@ class CConnection:
             next = self.points[index]
         return previous, next
         
-    def __CalculateLabelPos(self, canvas, index, t, dist, angle):
-        line = CLine(self.GetPoint(canvas, index), self.GetPoint(canvas, index + 1))
-        lineang = line.Angle()
-        scaled = line.Scale(t)
-        newline = CLineVector(scaled.GetEnd(), angle + lineang,  dist)
-        return newline.GetEnd().GetPos()
-        
     def GetObject(self):
         '''Get object of logical connection
         
@@ -237,7 +208,7 @@ class CConnection:
         '''
         return self.object
     
-    def GetLabelPosition(self, canvas, id, position, size):
+    def GetLabelPosition(self, canvas, id, logicalLabelInfo):
         '''
         Get absolute (x,y) position of label defined by id
         
@@ -251,97 +222,48 @@ class CConnection:
         @param id: identifier of label
         @type  id: whatever hasheable
         
-        @param position: default position of label - valid value
+        @param logicalLabelInfo: (defaultPosition, logicalLabel)
+        @type logicalLabelInfo: tuple
+        
+        @param defaultPosition: default position of label - valid value
         @type  position: str
         
-        @param size: logical size of label (width, height)
-        @type  size: tuple
+        @param logicalLabel: reference to logical representation of label.
+        @type logicalLabel: L{CVisualObject
+        <lib.Drawing.Objects.VisualObject.CVisualObject>}
         '''
-        width, height = size
         if id in self.labels:
-            pnt, idx, t, dist, angle = self.labels[id]
-            if pnt is None:
-                self.labels[id][0] = pnt = self.__CalculateLabelPos(canvas, idx, t, dist, angle)
-            x, y = pnt
-            return x - width/2, y - height/2
+            self.labels[id].SetLogicalLabel(logicalLabelInfo[1])
+            
         else:
-            points = list(self.GetPoints(canvas))
-            if position.count('+'):
-                position, offset = position.split('+', 1)
-                try:
-                    offset = int(offset)
-                except ValueError:
-                    raise ConnectionError('UndefinedOffset')
-            elif position.count('-'):
-                position, offset = position.split('-', 1)
-                try:
-                    offset = -int(offset)
-                except ValueError:
-                    raise ConnectionError('UndefinedOffset')
-            if position == 'source':
-                tmp = self.labels[id] = [points[0], 0, 0.0, 0, 0]
-            elif position == 'destination':
-                tmp = self.labels[id] = [points[-1], len(points) - 2, 1.0, 0, 0]
-            elif position == 'center':
-                L = 0
-                Lo = points[0]
-                for point in points[1:]:
-                    L += sqrt((Lo[0] - point[0])**2 + (Lo[1] - point[1])**2)
-                    Lo = point
-                if L == 0:
-                    tmp = self.labels[id] = [points[0], 0, 0.6, height/2, pi/2]
-                else:
-                    Lo = points[0]
-                    L1 = L/2
-                    L = 0
-                    for index, point in enumerate(points[1:]):
-                        LX = sqrt((Lo[0] - point[0])**2 + (Lo[1] - point[1])**2)
-                        L += LX
-                        if L > L1:
-                            L -= L1
-                            if LX == 0:
-                                t = 0.5
-                            else:
-                                t = L / LX
-                            tmp = self.labels[id] = [self.__CalculateLabelPos(canvas, index, t, height/2, pi/2), 
-                                index, t, height/2, pi/2]
-                            break
-                        Lo = point
-            else:
-                raise ConnectionError("UndefinedPosition")
-            if 'offset' in locals():
-                index = tmp[1]
-                x1, y1 = points[index]
-                x2, y2 = points[index]
-                if y1 == y2:
-                    dx = 0.
-                else:
-                    dx = float(x2 - x1) / (y2 - y1)
-                if y2 > y1:
-                    pass
-            return tmp[0]
-    
-    def GetLabelDefinedPositions(self):
-        for id, lbl in self.GetObject().GetType().GetLabels():
-            yield self.labels.get(id, (None, None, None, None, None))[1:]
-    
-    def SetLabelPosition(self, label, index, t, dist, angle):
-        self.labels[label] = [None, index, t, dist, angle]
+            self.labels[id] = CConLabelInfo(self, canvas, 
+                logicalLabel = logicalLabelInfo[1])
+            self.labels[id].SetToDefaultPosition(canvas, logicalLabelInfo[0])
         
-    def SetLabelPositionXY(self, label, pos, canvas):
-        polyline = CPolyLine(tuple(self.GetPoints()))
-        point = CPoint(pos)
-        index, point, dist, angle = polyline.Nearest(point)
-        line = polyline.GetLine(index)
-        (Sx, Sy), (Ex, Ey) = line.GetPos()
-        Px, Py = point.GetPos()
-        if Sx != Ex:
-            t = (Px - Sx) / (Ex - Sx)
-        elif Sy != Ey:
-            t = (Py - Sy) / (Ey - Sy)
-        else:
-            t = 0
-        self.labels[label] = [pos, index, t, dist, angle]
+        return self.labels[id].GetPosition(canvas)
+    
+    def GetAllLabelPositions(self):
+        '''Yield information about positions of all labels, generator
+        
+        Used to gather information to be saved to .frip file
+        
+        @return: yielding information stored in dictionary - responsibility for
+        contents is on L{CConLabelInfo.GetSaveInfo<CConLabelInfo.GetSaveInfo>}
+        @rtype: dict
+        '''
+        for label in  self.labels.values():
+            yield label.GetSaveInfo()
+    
+    def RestoreLabelPosition(self, id, info):
+        '''Reset position of label, add new respecitvely using info
+        
+        @param id: identification of label - how to recognize it
+        @type  id: int
+        
+        @param info: dictionary with parameters to restore label position
+        @type  info: dict
+        '''
+        self.labels[id] = CConLabelInfo(self, None, **info)
         
     def InsertPoint(self, canvas, point, index = None):
         '''
@@ -368,31 +290,38 @@ class CConnection:
         
         @raise IndexError: if 0 > index or len(self.points) < index
         '''
-        if index is None:
-            self.points.append(point)
+        if index < 0 or index > len(self.points):
+            raise IndexError('index out of range') 
+        
+        prevPoint = self.GetPoint(canvas, index)
+        nextPoint = self.GetPoint(canvas, index + 1)
+        
+        if not self.ValidPoint([prevPoint, point, nextPoint]):
             return
-        if 0 <= index  <= len(self.points):
-            prevpoint = self.GetPoint(canvas, index)
-            nextpoint = self.GetPoint(canvas, index + 1)
-            len1 = abs(CLine(prevpoint, point))
-            len2 = abs(CLine(point, nextpoint))
-            for id in self.labels:
-                pnt, idx, t, dist, angle = self.labels[id]
-                if idx < index:
-                    continue
-                elif idx == index:
-                    if len1 >= (len1 + len2)*t:
-                        t = (len1 + len2)*t / len1
-                    else:
-                        t = ((len1 + len2)*t - len1)/len2
-                        idx += 1
+        
+        line1 = CLine(prevPoint, point)
+        line2 = CLine(point, nextPoint)
+        len1 = abs(line1)
+        len2 = abs(line2)
+        changed = []
+            
+        for label in self.labels.values():
+            if label.idx == index:
+                if len1 >= (len1 + len2) * label.pos:
+                    label.pos = (len1 + len2) * label.pos / len1
                 else:
-                    idx += 1
-                self.labels[id] = [None, idx, t, dist, angle]
-            self.points.insert(index, point)
-        else:
-            raise ConnectionError("PointNotExists")
+                    label.pos = ((len1 + len2) * label.pos - len1) / len2
+                    label.idx += 1
+                changed.append(label)
+            elif label.idx > index:
+                label.idx += 1
+        
+        self.points.insert(index, point)
         self.ValidatePoints(canvas)
+        
+        for label in changed:
+            label.RecalculateAbsolutePosition(canvas) # adjust (x, y) to new position
+            label.RecalculateRelativePosition(canvas) # make sure, that label is bound to closest segment
     
     def AddPoint(self, point):
         '''
@@ -419,6 +348,10 @@ class CConnection:
 
         @rtype: L{CConLabelInfo<CConLabelInfo>} / int / NoneType
         '''
+        if LABELS_CLICKABLE:
+            for label in self.labels.values():
+                if label.AreYouAtPosition(canvas, point):
+                    return label
         points = list(self.GetPoints(canvas))
         point = CPoint(point)
         point1 = points[0]
@@ -449,17 +382,13 @@ class CConnection:
         @param delta: (dx, dy) distance to move
         @type  delta: tuple
         '''
-        deltax, deltay = delta
-        points = []
-        for x, y in self.points:
-            points.append((x+deltax, y+deltay))
-        for id in self.labels:
-            if self.labels[id][0] is not None:
-                x, y = self.labels[id][0]
-                self.labels[id][0] = (x+deltax, y+deltay)
-        self.points = points
+        self.points = map(
+            lambda x: (x[0] + delta[0], x[1] + delta[1]), 
+            self.points)
+        for label in self.labels.values():
+            label.MoveWithOthers(delta)
         
-    def MovePoint(self, canvas, point, index):
+    def MovePoint(self, canvas, pos, index):
         '''
         Change position of point defined by index to to new position pos
         
@@ -474,15 +403,21 @@ class CConnection:
         
         @raise IndexError: if index <= 0 or index > len(self.points)
         '''
-        if 0 < index <= len(self.points):
-            self.points[index - 1] = point
-            for id in self.labels:
-                pnt, idx, t, dist, angle = self.labels[id]
-                if index == idx or index  == idx + 1:
-                    self.labels[id][0] = None
+        
+        if index <= 0 or index > len(self.points):
+            raise IndexError('Out of range')
+        
+        prevPoint = self.GetPoint(canvas, index - 1)
+        nextPoint = self.GetPoint(canvas, index + 1)
+
+        if self.ValidPoint([prevPoint, pos, nextPoint]):
+            for label in self.labels.values():
+                if label.idx in (index - 1, index):
+                    label.RecalculateAbsolutePosition(canvas)
+                    label.RecalculateRelativePosition(canvas)
+            self.ValidatePoints(canvas)
         else:
-            raise ConnectionError("PointNotExists")
-        self.ValidatePoints(canvas)
+            self.RemovePoint(canvas, index)
 
     def Paint(self, canvas, delta = (0, 0)):
         '''
@@ -506,7 +441,7 @@ class CConnection:
             for index, i in enumerate(self.GetPoints(canvas)):
                 canvas.DrawRectangle((i[0] + dx - size//2, i[1] + dy - size//2), (size, size), config['/Styles/Selection/PointsColor'])
 
-    def RemovePoint(self, canvas, index):
+    def RemovePoint(self, canvas, index, runValidation = True):
         '''
         Delete point from polyline and colapse two neighbouring segments of 
         polyline
@@ -516,33 +451,46 @@ class CConnection:
         
         @param canvas: Canvas on which its being drawn
         @type  canvas: L{CCairoCanvas<CCairoCanvas>}
+        
+        @param runValidation: if True then at the end executes 
+        L{self.ValidatePoints<self.ValidatePoints>}
+        @type  runValidation: bool
 
-        @raise IndexError: if index < 0 or index > len(self.points)
+        @raise IndexError: if index <= 0 or index > len(self.points)
         '''
-        if 0 < index <= len(self.points):
-            prevpoint = self.GetPoint(canvas, index - 1)
-            point = self.GetPoint(canvas, index )
-            nextpoint = self.GetPoint(canvas, index + 1)
-            len1 = abs(CLine(prevpoint, point))
-            len2 = abs(CLine(point, nextpoint))
-            for id in self.labels:
-                pnt, idx, t, dist, angle = self.labels[id]
-                if idx < index - 1:
-                    continue
-                elif idx == index - 1:
-                    t = (len1*t) / (len1 + len2)
-                elif idx == index:
-                    t = (len1 + len2*t) / (len1 + len2)
-                    idx -= 1
-                else:
-                    idx -= 1
-                self.labels[id] = [None, idx, t, dist, angle]
-            self.points.pop(index - 1)
-            if index  == self.selpoint:
-                self.selpoint = None
-        else:
-            raise ConnectionError("PointNotExists")
-        self.ValidatePoints(canvas)
+        if index <= 0 or index > len(self.points):
+            raise IndexError('Out of range')
+        
+        prevpoint = self.GetPoint(canvas, index - 1)
+        point = self.GetPoint(canvas, index)
+        nextpoint = self.GetPoint(canvas, index + 1)
+        len1 = abs(CLine(prevpoint, point))
+        len2 = abs(CLine(point, nextpoint))
+        changed = []
+        
+        for label in self.labels.values():
+            if label.idx == index - 1:
+                label.pos = (len1 * label.pos) / (len1 + len2)
+                changed.append(label)
+            elif label.idx == index:
+                label.pos = (len1 + len2 * label.pos) / (len1 + len2)
+                label.idx -= 1
+                changed.append(label)
+            elif label.idx > index:
+                label.idx -= 1
+        del self.points[index - 1]
+        
+        if index  == self.selpoint:
+            self.selpoint = None
+        elif self.selpoint > index:
+            self.selpoint -= 1
+
+        for label in changed:
+            label.RecalculateAbsolutePosition(canvas)
+            label.RecalculateRelativePosition(canvas)
+        
+        if runValidation:
+            self.ValidatePoints(canvas)
     
     def GetPoints(self, canvas):
         '''
@@ -574,16 +522,18 @@ class CConnection:
                 point = self.destination.GetCenter(canvas)
             else:
                 point = self.points[0]
-            return self.__ComputeIntersect(canvas, self.source, center, point)
+            result = self.__ComputeIntersect(canvas, self.source, center, point)
+            return int(result[0]), int(result[1])
         elif index - 1 < len(self.points):
-            return self.points[index - 1]
+            return int(self.points[index - 1][0]), int(self.points[index - 1][1])
         elif index - 1 == len(self.points) :
             center = self.destination.GetCenter(canvas)
             if len(self.points) == 0:
                 point = self.source.GetCenter(canvas)
             else:
                 point = self.points[-1]
-            return self.__ComputeIntersect(canvas, self.destination, center, point)
+            result = self.__ComputeIntersect(canvas, self.destination, center, point)
+            return int(result[0]), int(result[1])
         else:
             raise ConnectionError("PointNotExists")
         
@@ -630,15 +580,17 @@ class CConnection:
         @param canvas: Canvas on which its being drawn
         @type  canvas: L{CCairoCanvas<CCairoCanvas>}
         '''
+        
+        i = 1
         points = list(self.GetPoints(canvas))
-        lenold = len(points)
-        changed = True
-        for i in xrange(1, len(points) - 1):
-            if not self.ValidPoint(canvas, points[i-1:i+2]):
-                self.RemovePoint(canvas, i)
-                return
-    
-    def ValidPoint(self, canvas, points):
+        while i + 1 < len(points):
+            if self.ValidPoint(points[i - 1 : i + 2]):
+                i += 1
+            else:
+                self.RemovePoint(canvas, i, False)
+                del points[i]
+
+    def ValidPoint(self, points):
         '''
         Check whether is middle point of the three at a valid position.
         
@@ -670,8 +622,6 @@ class CConnection:
         return ( abs(line1) > pointSize and abs(line2) > pointSize and
             minAngle < (line1.Angle() - line2.Angle()) % (2 * pi) < \
             2 * pi - minAngle )
-                
-    def RecalculateLabels(self):
-        for id in self.labels:
-            self.labels[id][0] = None
 
+if __name__ == '__main__':
+    pass

@@ -245,7 +245,7 @@ class CConnectionType(object):
         
         for id, lbl in enumerate(self.labels):
             size = lbl[1].GetSize(canvas, connection)
-            pos = connection.GetLabelPosition(canvas, id, lbl[0], size)
+            pos = connection.GetLabelPosition(canvas, id, lbl)
             lbl[1].Paint(canvas, pos, connection)
     
     def GetLabels(self):

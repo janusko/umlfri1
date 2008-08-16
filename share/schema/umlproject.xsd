@@ -177,9 +177,11 @@
 			<xs:documentation>type of Label</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="num" type="xs:integer" use="required"/>
-		<xs:attribute name="index" type="xs:integer" use="required"/>
-		<xs:attribute name="section" type="xs:float" use="required"/>
-		<xs:attribute name="distance" type="xs:integer" use="required"/>
+        <xs:attribute name="x" type="xs:float" use="required"/>
+        <xs:attribute name="y" type="xs:float" use="required"/>
+		<xs:attribute name="idx" type="xs:integer" use="required"/>
+		<xs:attribute name="pos" type="xs:float" use="required"/>
+		<xs:attribute name="dist" type="xs:float" use="required"/>
 		<xs:attribute name="angle" type="xs:float" use="required"/>
 	</xs:complexType>
 </xs:schema>

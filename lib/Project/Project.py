@@ -208,10 +208,10 @@ class CProject(object):
                             pointNode = etree.Element(UMLPROJECT_NAMESPACE+'point', x=unicode(pos[0]), y=unicode(pos[1]))
                             connectionNode.append(pointNode)
 
-                        for num, (index, t, dist, angle) in enumerate(c.GetLabelDefinedPositions()):
-                            if index is not None:
-                                labelNode = etree.Element(UMLPROJECT_NAMESPACE+'label', num=unicode(num), index=unicode(index), section=unicode(t), distance=unicode(dist), angle=unicode(angle))
-                                connectionNode.append(labelNode)
+                        for num, info in enumerate(c.GetAllLabelPositions()):
+                            connectionNode.append(etree.Element(UMLPROJECT_NAMESPACE+'label', 
+                                dict(map(lambda x: (x[0], unicode(x[1])), info.iteritems())), #transform {key:value, ...} -> {key:unicode(value), ...}
+                                num=unicode(num)))
 
                         diagramNode.append(connectionNode)
                     diagramsNode.append(diagramNode)
@@ -296,11 +296,7 @@ class CProject(object):
                                         if propCon.tag == UMLPROJECT_NAMESPACE+"point":
                                             conect.AddPoint((int(propCon.get("x").decode('unicode_escape')),int(propCon.get("y").decode('unicode_escape'))))
                                         elif propCon.tag == UMLPROJECT_NAMESPACE+"label":
-                                            conect.SetLabelPosition(int(propCon.get("num").decode('unicode_escape')),
-                                                int(propCon.get("index").decode('unicode_escape')),
-                                                float(propCon.get("section").decode('unicode_escape')),
-                                                int(propCon.get("distance").decode('unicode_escape')),
-                                                float(propCon.get("angle").decode('unicode_escape')))
+                                            conect.RestoreLabelPosition(int(propCon.get("num")), dict(propCon.items()))
 
         root = etree.XML(data)
 
