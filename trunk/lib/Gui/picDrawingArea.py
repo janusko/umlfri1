@@ -5,7 +5,7 @@ from lib.colors import invert
 from lib.config import config
 
 from common import CWidget, event
-from lib.Drawing import CDiagram, CElement, CConnection
+from lib.Drawing import CDiagram, CElement, CConnection, CConLabelInfo
 
 from lib.Elements import CElementObject
 from lib.Connections import CConnectionObject
@@ -257,6 +257,11 @@ class CpicDrawingArea(CWidget):
                             itemSel.DeselectPoint()
                             i = itemSel.WhatPartOfYouIsAtPosition(self.canvas, pos)
                             self.__BeginDragLine(event, itemSel, i)
+                    
+                    elif isinstance(itemSel, CConLabelInfo):
+                        pass
+                        
+                    
                     else:
                         selElements = list(self.Diagram.GetSelectedElements())
                         self.selElem = selElements[0]

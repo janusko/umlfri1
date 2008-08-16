@@ -1,7 +1,7 @@
 from lib.Exceptions.UserException import *
 from lib.Exceptions.UMLException import UMLException
 from lib.config import config
-import Connection, Element
+import Connection, Element, ConLabelInfo
 import lib.Math2D
 from lib.Math2D import CRectangle
 from lib.Math2D import CPoint
@@ -175,7 +175,6 @@ class CDiagram:
         if canvas is not None:
             for conn in self.connections:
                 conn.ValidatePoints(canvas)
-                conn.RecalculateLabels()
     
     def DeleteObject(self, object):
         self.size = None
@@ -264,8 +263,11 @@ class CDiagram:
         
     def GetElementAtPosition(self, canvas, pos):
         for c in self.connections:
-            if c.AreYouAtPosition(canvas, pos):
+            r = c.WhatPartOfYouIsAtPosition(canvas, pos)
+            if isinstance(r, (int, long)):
                 return c
+            elif r is not None:
+                return r
                 
         for e in self.elements[::-1]:
             if e.AreYouAtPosition(canvas, pos):
