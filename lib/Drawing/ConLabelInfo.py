@@ -179,7 +179,7 @@ class CConLabelInfo(CCacheableObject, CSelectableObject):
         
         points = list(self.connection.GetPoints(canvas))
         scaled = CLine(points[self.idx], points[self.idx + 1]).Scale(self.pos)
-        return = CLineVector(scaled.GetEnd(),
+        return CLineVector(scaled.GetEnd(), 
             scaled.Angle() + self.angle, self.pos).GetEnd().GetPos()
     
     def RecalculatePosition(self, canvas, pos = None):
