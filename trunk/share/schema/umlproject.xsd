@@ -177,8 +177,6 @@
 			<xs:documentation>type of Label</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="num" type="xs:integer" use="required"/>
-        <xs:attribute name="x" type="xs:float" use="required"/>
-        <xs:attribute name="y" type="xs:float" use="required"/>
 		<xs:attribute name="idx" type="xs:integer" use="required"/>
 		<xs:attribute name="pos" type="xs:float" use="required"/>
 		<xs:attribute name="dist" type="xs:float" use="required"/>

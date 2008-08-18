@@ -236,8 +236,7 @@ class CConnection(CCacheableObject, CSelectableObject):
             self.labels[id].SetLogicalLabel(logicalLabelInfo[1])
             
         else:
-            self.labels[id] = CConLabelInfo(self, canvas, 
-                logicalLabel = logicalLabelInfo[1])
+            self.labels[id] = CConLabelInfo(self, logicalLabel = logicalLabelInfo[1])
             self.labels[id].SetToDefaultPosition(canvas, logicalLabelInfo[0])
         
         return self.labels[id].GetPosition(canvas)
@@ -263,7 +262,7 @@ class CConnection(CCacheableObject, CSelectableObject):
         @param info: dictionary with parameters to restore label position
         @type  info: dict
         '''
-        self.labels[id] = CConLabelInfo(self, None, **info)
+        self.labels[id] = CConLabelInfo(self, **info)
         
     def InsertPoint(self, canvas, point, index = None):
         '''
@@ -320,8 +319,7 @@ class CConnection(CCacheableObject, CSelectableObject):
         self.ValidatePoints(canvas)
         
         for label in changed:
-            label.RecalculateAbsolutePosition(canvas) # adjust (x, y) to new position
-            label.RecalculateRelativePosition(canvas) # make sure, that label is bound to closest segment
+            label.RecalculatePosition(canvas) # adjust (x, y) to new position
     
     def AddPoint(self, point):
         '''
@@ -385,8 +383,6 @@ class CConnection(CCacheableObject, CSelectableObject):
         self.points = map(
             lambda x: (x[0] + delta[0], x[1] + delta[1]), 
             self.points)
-        for label in self.labels.values():
-            label.MoveWithOthers(delta)
         
     def MovePoint(self, canvas, pos, index):
         '''
@@ -413,8 +409,7 @@ class CConnection(CCacheableObject, CSelectableObject):
         if self.ValidPoint([prevPoint, pos, nextPoint]):
             for label in self.labels.values():
                 if label.idx in (index - 1, index):
-                    label.RecalculateAbsolutePosition(canvas)
-                    label.RecalculateRelativePosition(canvas)
+                    label.RecalculatePosition(canvas)
             self.ValidatePoints(canvas)
         else:
             self.RemovePoint(canvas, index)
@@ -486,8 +481,7 @@ class CConnection(CCacheableObject, CSelectableObject):
             self.selpoint -= 1
 
         for label in changed:
-            label.RecalculateAbsolutePosition(canvas)
-            label.RecalculateRelativePosition(canvas)
+            label.RecalculatePosition(canvas)
         
         if runValidation:
             self.ValidatePoints(canvas)
@@ -522,18 +516,16 @@ class CConnection(CCacheableObject, CSelectableObject):
                 point = self.destination.GetCenter(canvas)
             else:
                 point = self.points[0]
-            result = self.__ComputeIntersect(canvas, self.source, center, point)
-            return int(result[0]), int(result[1])
+            return self.__ComputeIntersect(canvas, self.source, center, point)
         elif index - 1 < len(self.points):
-            return int(self.points[index - 1][0]), int(self.points[index - 1][1])
+            return self.points[index - 1]
         elif index - 1 == len(self.points) :
             center = self.destination.GetCenter(canvas)
             if len(self.points) == 0:
                 point = self.source.GetCenter(canvas)
             else:
                 point = self.points[-1]
-            result = self.__ComputeIntersect(canvas, self.destination, center, point)
-            return int(result[0]), int(result[1])
+            return self.__ComputeIntersect(canvas, self.destination, center, point)
         else:
             raise ConnectionError("PointNotExists")
         
