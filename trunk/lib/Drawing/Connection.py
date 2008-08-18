@@ -407,6 +407,7 @@ class CConnection(CCacheableObject, CSelectableObject):
         nextPoint = self.GetPoint(canvas, index + 1)
 
         if self.ValidPoint([prevPoint, pos, nextPoint]):
+            self.points[index - 1] = pos
             for label in self.labels.values():
                 if label.idx in (index - 1, index):
                     label.RecalculatePosition(canvas)
