@@ -24,7 +24,7 @@ class CConLabelInfo(CCacheableObject, CSelectableObject):
         - angle     --> self.angle
     '''
     
-    def __init__(self, connection, canvas, x = None, y = None, idx = 0, 
+    def __init__(self, connection, idx = 0, 
                        pos = 0.5, dist = 0, angle = pi/2, logicalLabel = None,
                        **kwds):
         '''create new instance of CLabelInfo
@@ -70,16 +70,10 @@ class CConLabelInfo(CCacheableObject, CSelectableObject):
         
         super(CConLabelInfo, self).__init__()
         self.connection = connection
-        self.x = float(x) if x is not None else None
-        self.y = float(y) if y is not None else None
         self.idx = int(idx)
         self.dist = float(dist)
         self.pos = float(pos)
         self.angle = float(angle)
-        if self.x is None or self.y is None:
-            if canvas is None:
-                raise EConLabelInfo('Insufficient data to create instance')
-            self.RecalculateAbsolutePosition(canvas)
         self.logicalLabel = logicalLabel
     
     def GetSaveInfo(self):
@@ -91,8 +85,6 @@ class CConLabelInfo(CCacheableObject, CSelectableObject):
         @rtype: dict
         '''
         return {\
-            'x': self.x,
-            'y': self.y,
             'idx': self.idx,
             'pos': self.pos,
             'dist': self.dist,
@@ -111,7 +103,8 @@ class CConLabelInfo(CCacheableObject, CSelectableObject):
         @rtype: tuple
         '''
         width, height = self.GetSize(canvas)
-        return int(self.x - width / 2.0), int(self.y - height / 2.0)
+        x, y = self.GetAbsolutePosition(canvas)
+        return int(x - width / 2.0), int(y - height / 2.0)
     
     def SetLogicalLabel(self, logicalLabel):
         '''
@@ -134,7 +127,8 @@ class CConLabelInfo(CCacheableObject, CSelectableObject):
         @type  pos: tuple
         '''
         width, height = self.GetSize(canvas)
-        self.x, self.y = pos[0] + width / 2.0, pos[1] + height / 2.0
+        self.RecalculatePosition(canvas, 
+            (pos[0] + width / 2.0, pos[1] + height / 2.0))
     
     def GetSize(self, canvas):
         '''
@@ -160,9 +154,10 @@ class CConLabelInfo(CCacheableObject, CSelectableObject):
         '''
         
         width, height = self.GetSize(canvas)
+        x, y = self.GetAbsolutePosition()
         
-        return ( (int(self.x - width / 2.), int(self.y - height / 2.) ),
-                 (int(self.x + width / 2.), int(self.y + height / 2.) ) )
+        return ( (int(x - width / 2.), int(y - height / 2.) ),
+                 (int(x + width / 2.), int(y + height / 2.) ) )
     
     def GetCentered(self):
         '''
@@ -171,9 +166,9 @@ class CConLabelInfo(CCacheableObject, CSelectableObject):
         @return: (x, y) position of the middle
         @rtype:  tuple
         '''
-        return self.x, self.y
+        return self.GetAbsolutePosition()
     
-    def RecalculateAbsolutePosition(self, canvas):
+    def GetAbsolutePosition(self, canvas):
         '''
         Reset absolute position of label according to its relative position
         to the connection.
@@ -184,10 +179,10 @@ class CConLabelInfo(CCacheableObject, CSelectableObject):
         
         points = list(self.connection.GetPoints(canvas))
         scaled = CLine(points[self.idx], points[self.idx + 1]).Scale(self.pos)
-        self.x, self.y = CLineVector(scaled.GetEnd(),
+        return = CLineVector(scaled.GetEnd(),
             scaled.Angle() + self.angle, self.pos).GetEnd().GetPos()
     
-    def RecalculateRelativePosition(self, canvas):
+    def RecalculatePosition(self, canvas, pos = None):
         '''
         Reset relative position of label to the connection according to the
         absolute position of label and polyline of the connection.
@@ -195,28 +190,16 @@ class CConLabelInfo(CCacheableObject, CSelectableObject):
         @param canvas: Canvas on which its being drawn
         @type  canvas: L{CCairoCanvas<CCairoCanvas>}
         '''
+        x, y = pos if pos is not None else self.GetAbsolutePosition(canvas)
         points = list(self.connection.GetPoints(canvas))
         self.idx, point, self.dist, self.angle = \
-            CPolyLine(tuple(points)).Nearest(CPoint((self.x, self.y)))
+            CPolyLine(tuple(points)).Nearest(CPoint((x, y)))
         try:
             self.pos = (CPoint(points[self.idx]) - point) / \
                 (CPoint(points[self.idx + 1]) - CPoint(points[self.idx]))
         except ZeroDivisionError:
             self.pos = 0.0
     
-    def MoveWithOthers(self, delta):
-        '''Move position of label by delta.
-        
-        @attention: Called only if whole connection moved by delta. Thus called
-        only from L{CConnection.MoveAll<CConnection.MoveAll>} and only absolute
-        position is changed.
-        
-        @param delta: (dx, dy) distance
-        @type  delta: tuple
-        '''
-        self.x += delta[0]
-        self.y += delta[1]
-
     def AreYouAtPosition(self, canvas, point):
         '''@return: True if (x, y) hits label
         @rtype: bool
@@ -330,10 +313,10 @@ class CConLabelInfo(CCacheableObject, CSelectableObject):
             raise EConLabelInfo("UndefinedPosition")
         self.dist = 0.0
         self.angle = 0.0
-        self.RecalculateAbsolutePosition(canvas)
         if offset is not None:
             multi = -1 if (points[self.idx][1] - points[self.idx + 1][1]) * \
                 (.5 - self.pos) < 0 else 0
-            self.y += multi * offset * self.height
-            self.RecalculateRelativePosition(canvas)
+            x, y = self.GetAbsolutePosition(canvas)
+            self.RecalculatePosition(canvas, 
+                (x, y + multi * offset * self.height))
     
