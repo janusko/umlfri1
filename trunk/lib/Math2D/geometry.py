@@ -9,7 +9,7 @@ class CPoint:
         - C{A - B} distance from A to B
         - C{A == B} both at equal position
         - C{A <> B} at different positions
-        - C(A < B) A is sharply to the left and up from B
+        - C{A < B} A is sharply to the left and up from B
         - C{A <= B} like with horizontaly or verticaly same position
     '''
     
@@ -86,7 +86,7 @@ class CLine:
     
     Allowed operations for segments AB, CD and point E:
     
-        - C{abs(AB))} lenght of segment
+        - C{abs(AB)} lenght of segment
         - C{AB * CD} list of intersections of two segments. if they have some
             common segment, only endpoints of common segment are returned
         - C{AB * E} position of E if E belongs to AB 
@@ -99,10 +99,10 @@ class CLine:
         create new instance of CLine
         
         @param start: (x, y) position of first endpoint of segment
-        @type start: (float, float) or CPoint
+        @type start: tuple (float, float) or CPoint
         
         @param end: (x, y) position of second endpoint of segment
-        @type end: (float, float) or CPoint
+        @type end: tuple (float, float) or CPoint or None
         '''
         if not isinstance(start, CPoint):
             start = CPoint(start)
@@ -110,6 +110,29 @@ class CLine:
             end = CPoint(end)
         self.start = start
         self.end = end
+    
+    @classmethod
+    def CreateAsVector(self, start, alpha, length):
+        '''
+        Alternative constructor to create new instance of CLine
+        
+        @return: new instance of L{CLine<CLine>}
+        @rtype: L{CLine<CLine>}
+        
+        @param start: (x, y) position of first endpoint of segment
+        @type start: tuple (float, float) or CPoint
+        
+        @param alpha: angle of line
+        @type alpha: float
+        
+        @param length: length of segment
+        @type length: float
+        '''
+        if not isinstance(start, CPoint):
+            start = CPoint(start)
+        x, y = start.GetPos()
+        end = CPoint((x + math.cos(alpha)*length, y + math.sin(alpha)*length))
+        return CLine(start, end)
         
     def GetStart(self):
         '''
@@ -145,7 +168,7 @@ class CLine:
         '''
         @return: another line with start at the same position but with end moved
         so that new one is factor-times longer
-        @rtype: CLine
+        @rtype: L{CLine<CLine>}
         '''
         (Ax, Ay), (Bx, By) = self.GetPos()
         return CLine(self.GetStart(), (Ax + (Bx - Ax)*factor, Ay + (By - Ay)*factor))
@@ -156,7 +179,7 @@ class CLine:
         
         @return: ((x, y), distance, angle) - position of tha closest point at 
         segment, distance to it and angle of (point,(x,y)) to the line
-        @rtype:  CPoint
+        @rtype:  tuple
         
         @param point: specified position
         @type point:  L{CPoint<CPoint>}
@@ -248,19 +271,30 @@ class CLine:
     def __eq__(self, other):
         return (self.start == other.GetStart() and self.end == other.GetEnd()) or \
             (self.start == other.GetEnd() and self.end ==other.GetStart())
-            
-class CLineVector(CLine):
-    def __init__(self, start, alpha, length):
-        if not isinstance(start, CPoint):
-            start = CPoint(start)
-        x, y = start.GetPos()
-        end = CPoint((x + math.cos(alpha)*length, y + math.sin(alpha)*length))
-        CLine.__init__(self, start, end)
+    
     
 class CPolyLine:
+    '''
+    sequence of subsequent line segments formed by sequence of points
+    
+    Allowed operations for polylines ABCD, EFGH, line IJ and point K:
+        
+        - C{abs(ABCD)} length of C{abs(AB) + abs(BC) + abs(CD)}
+        - C{ABCD * EFGH} list of all the intersections, see L{CLine<CLine>}
+        - C{ABCD * IJ} list of all the intersections
+        - C{ABCD * K} K if it lies at the AB, BC or CD
+    '''
     def __init__(self, points):
+        '''
+        create new instance of polyline
+        
+        @param points: sequence of points or tuples that can form a point
+        @type points: sequence
+        
+        @raise MathException: if there is less than 2 points
+        '''
         if len(points) < 2:
-            raise MathException
+            raise MathException()
         self.lines = []
         start = points[0]
         for end in points[1:]:
@@ -268,18 +302,47 @@ class CPolyLine:
             start = end
             
     def GetLine(self, index):
+        '''
+        @return: segment of polyline at index
+        @rtype: L{CLine<CLine>}
+        
+        @param index: index of line segment, negative values indexes backwards
+        @type index: int
+        
+        @raise IndexError: out of range
+        '''
         return self.lines[index]
         
     def GetLines(self):
+        '''
+        Iterator over the line segments
+        '''
         for line in self.lines:
             yield line
             
     def GetPos(self):
+        '''
+        @return: list of CPoint instances forming chain of segments
+        @rtype: list
+        '''
         result = [self.lines[0].GetStart().GetPos()]
         result.extend([line.GetEnd().GetPos() for line in self.lines])
         return result
         
     def Nearest(self, point):
+        '''
+        Get index of the closest line segment from the polyline to the
+        specified point, position of the closest point at the segment, distance
+        to it and angle
+        
+        @note: see L{CLine.Nearest<CLine.Nearest>}
+        
+        @return: (index, (x, y), distance, angle)
+        @rtype: tuple
+        
+        @param point: specified position
+        @type point: L{CPoint<CPoint>}
+        '''
         result = None
         for index, line in enumerate(self.lines):
             nearest, dist, angle = line.Nearest(point)
@@ -302,6 +365,10 @@ class CPolyLine:
     __rmul__ = __mul__
     
 class CPolygon(CPolyLine):
+    '''
+    Same functionality as L{CPolyLine<CPolyLine>} but includes segment from
+    the last point to the first one.
+    '''
     def __init__(self, points):
         CPolyLine.__init__(self, points)
         self.lines.append(CLine(points[-1], points[0]))
@@ -310,7 +377,29 @@ class CPolygon(CPolyLine):
         return [line.GetStart().GetPos() for line in self.lines]
         
 class CRectangle(CPolygon):
+    '''
+    Rectangular L{CPolygon<CPolygon>} with sides parallel to the sides of the 
+    screen
+    
+    @note: only sides of the object are taken into account, not the area inside
+    
+    Allowed operations:
+    
+        - the same as for L{CPolygon<CPolygon>}
+        - C{CRectangle() * CRectangle()} return list with top-left and 
+        bottom-right L{CPoint<CPoint>}s of intersecting area or empty, if there
+        is no intersection
+    '''
     def __init__(self, topLeft, bottomRight):
+        '''
+        Create a rectangular polygon
+        
+        @param topLeft: (x, y) of top-left corner
+        @type topLeft: (float, float) or L{CPoint<CPoint>}
+        
+        @param bottomRight: (x, y) of bottom-right corner
+        @type bottomRight: (float, float) or L{CPoint<CPoint>}
+        '''
         if isinstance(topLeft, CPoint):
             (x1, y1) = topLeft.GetPos()
         else:
@@ -326,16 +415,26 @@ class CRectangle(CPolygon):
         CPolygon.__init__(self, (CPoint((x1, y1)), CPoint((x2, y1)), CPoint((x2, y2)), CPoint((x1, y2))))
         
     def GetTopLeft(self):
+        '''
+        @return: top-left corner of rectangle
+        @rtype: L{CPoint<CPoint>}
+        '''
         return self.lines[0].GetStart()
         
     def GetBottomRight(self):
+        '''
+        @return: bottom-right corner of rectangle
+        @rtype: L{CPoint<CPoint>}
+        '''
         return self.lines[2].GetStart()
         
     def __mul__(self, other):
         if isinstance(other, CRectangle):
             if self.GetTopLeft() <= other.GetTopLeft() and self.GetBottomRight() >= other.GetBottomRight():
                 return [other.GetTopLeft(), other.GetBottomRight()]
-            if self.GetTopLeft() >= other.GetTopLeft() and self.GetBottomRight() <= other.GetBottomRight():
+            elif self.GetTopLeft() >= other.GetTopLeft() and self.GetBottomRight() <= other.GetBottomRight():
                 return [self.GetTopLeft(), self.GetBottomRight()]
+            else:
+                return []
         return CPolygon.__mul__(self, other)
 
