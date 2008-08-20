@@ -2,13 +2,42 @@ from exceptions import MathException
 import math
 
 class CPoint:
+    '''Interprets one point on plane
+    
+    Allowed operations for points A, B:
+    
+        - C{A - B} distance from A to B
+        - C{A == B} both at equal position
+        - C{A <> B} at different positions
+        - C(A < B) A is sharply to the left and up from B
+        - C{A <= B} like with horizontaly or verticaly same position
+    '''
+    
     def __init__(self, point):
+        '''
+        create new instance of CPoint
+        
+        param point: (x, y) position
+        type point: (float, float) tuple
+        '''
         self.point = point
         
     def GetPos(self):
+        '''
+        get absolute position of point
+        
+        @return: (x, y) position
+        @rtype: tuple
+        '''
         return self.point
         
     def GetIntPos(self):
+        '''
+        get absolute position in integers, fractions are truncated
+        
+        @return: (x, y) position
+        @rtype: tuple
+        '''
         return int(self.point[0]), int(self.point[1])
         
     def __hash__(self):
@@ -50,7 +79,31 @@ class CPoint:
         return repr(self.point)
 
 class CLine:
+    '''
+    line segment
+    
+    @attention: Always keep in mind that it's an segment not an infinite line 
+    
+    Allowed operations for segments AB, CD and point E:
+    
+        - C{abs(AB))} lenght of segment
+        - C{AB * CD} list of intersections of two segments. if they have some
+            common segment, only endpoints of common segment are returned
+        - C{AB * E} position of E if E belongs to AB 
+        - C{AB - CD} minimal distance from AB to CD
+        - C{AB - E} minimal distance from AB to E
+        - C{AB == CD} the same lines, endpoints can be swaped
+    '''
     def __init__(self, start, end):
+        '''
+        create new instance of CLine
+        
+        @param start: (x, y) position of first endpoint of segment
+        @type start: (float, float) or CPoint
+        
+        @param end: (x, y) position of second endpoint of segment
+        @type end: (float, float) or CPoint
+        '''
         if not isinstance(start, CPoint):
             start = CPoint(start)
         if not isinstance(end, CPoint):
@@ -59,23 +112,55 @@ class CLine:
         self.end = end
         
     def GetStart(self):
+        '''
+        @return: first endpoint of segment
+        @rtype: L{CPoint<CPoint>}
+        '''
         return self.start
         
     def GetEnd(self):
+        '''
+        @return: second endpoint of segment
+        @rtype: L{CPoint<CPoint>}
+        '''
         return self.end
         
     def GetPos(self):
+        '''
+        @return: ((x1, y1), (x2, y2)) positions of both endpoints
+        @rtype: tuple ((float, float), (float, float))
+        '''
         return self.GetStart().GetPos(), self.GetEnd().GetPos()
         
     def Angle(self):
+        '''
+        @return: angle of vector (start, end)-> to ((0,0), (0,1))->  
+        in range (-pi, pi]
+        @rtype: float
+        '''
         (x1, y1), (x2, y2) = self.GetPos()
         return math.atan2(y2 - y1, x2 - x1)
         
     def Scale(self, factor):
+        '''
+        @return: another line with start at the same position but with end moved
+        so that new one is factor-times longer
+        @rtype: CLine
+        '''
         (Ax, Ay), (Bx, By) = self.GetPos()
         return CLine(self.GetStart(), (Ax + (Bx - Ax)*factor, Ay + (By - Ay)*factor))
 
     def Nearest(self, point):
+        '''
+        Find the closest point at the line segment to the specified position
+        
+        @return: ((x, y), distance, angle) - position of tha closest point at 
+        segment, distance to it and angle of (point,(x,y)) to the line
+        @rtype:  CPoint
+        
+        @param point: specified position
+        @type point:  L{CPoint<CPoint>}
+        '''
         (Ax, Ay), (Bx, By) = self.GetPos()
         Cx, Cy = point.GetPos()
         D = float((Bx - Ax)**2 + (By - Ay)**2)
