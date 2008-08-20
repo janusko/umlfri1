@@ -1,7 +1,7 @@
 from lib.Exceptions.UserException import *
 from lib.config import config
 #from lib.Connections.Object import CConnectionObject
-from lib.Math2D import CPoint, CLine, CLineVector, CPolyLine, CRectangle
+from lib.Math2D import CPoint, CLine, CPolyLine, CRectangle
 from math import sqrt, atan2, pi
 from CacheableObject import CCacheableObject
 from SelectableObject import CSelectableObject

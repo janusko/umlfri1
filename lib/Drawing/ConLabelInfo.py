@@ -1,4 +1,4 @@
-from lib.Math2D import CPoint, CLineVector, CPolyLine, CLine
+from lib.Math2D import CPoint, CPolyLine, CLine
 from math import pi, sqrt
 #from lib.lib import UMLException
 from CacheableObject import CCacheableObject
@@ -179,7 +179,7 @@ class CConLabelInfo(CCacheableObject, CSelectableObject):
         
         points = list(self.connection.GetPoints(canvas))
         scaled = CLine(points[self.idx], points[self.idx + 1]).Scale(self.pos)
-        return CLineVector(scaled.GetEnd(), 
+        return CLine.CreateAsVector(scaled.GetEnd(), 
             scaled.Angle() + self.angle, self.pos).GetEnd().GetPos()
     
     def RecalculatePosition(self, canvas, pos = None):
