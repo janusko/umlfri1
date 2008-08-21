@@ -71,8 +71,8 @@ class CRecentFiles(object):
                 raise XMLError(xmlschema.error_log.last_error)
 
         for file in root.getchildren():
-            if os.path.exists(file.get("name").decode('unicode_escape')):
-                self.files.append((file.get("name").decode('unicode_escape'),file.get("date").decode('unicode_escape')))
+            if os.path.exists(file.get("name")):
+                self.files.append((file.get("name"),file.get("date")))
 
     def SaveRecentFiles(self):
         root = etree.XML('<RecentFiles xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/recentfiles.xsd"></RecentFiles>')

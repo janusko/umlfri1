@@ -268,33 +268,33 @@ class CProject(object):
             for elem in root:
                 if elem.tag == UMLPROJECT_NAMESPACE+'childs':
                     for node in elem:
-                        proNode = CProjectNode(parentNode,ListObj[node.get("id").decode('unicode_escape')],parentNode.GetPath() + "/" + ListObj[node.get("id").decode('unicode_escape')].GetName() + ":" + ListObj[node.get("id").decode('unicode_escape')].GetType().GetId())
+                        proNode = CProjectNode(parentNode,ListObj[node.get("id")],parentNode.GetPath() + "/" + ListObj[node.get("id")].GetName() + ":" + ListObj[node.get("id")].GetType().GetId())
                         self.AddNode(proNode,parentNode)
                         CreateTree(node,proNode)
 
                 elif elem.tag == UMLPROJECT_NAMESPACE+'diagrams':
                     for area in elem:
                         if area.tag == UMLPROJECT_NAMESPACE+'diagram':
-                            diagram = CDiagram(self.DiagramFactory.GetDiagram(area.get("type").decode('unicode_escape')),area.get("name").decode('unicode_escape'))
+                            diagram = CDiagram(self.DiagramFactory.GetDiagram(area.get("type")),area.get("name"))
                             diagram.SetPath(parentNode.GetPath() + "/" + diagram.GetName() + ":=Diagram=")
                             parentNode.AddDiagram(diagram)
                             for pic in area:
                                 if pic.tag == UMLPROJECT_NAMESPACE+"element":
-                                    element = CElement(diagram,ListObj[pic.get("id").decode('unicode_escape')],True)
-                                    element.SetPosition((int(pic.get("x").decode('unicode_escape')),int(pic.get("y").decode('unicode_escape'))))
-                                    dw = int(pic.get("dw").decode('unicode_escape'))
-                                    dh = int(pic.get("dh").decode('unicode_escape'))
+                                    element = CElement(diagram,ListObj[pic.get("id")],True)
+                                    element.SetPosition((int(pic.get("x")),int(pic.get("y"))))
+                                    dw = int(pic.get("dw"))
+                                    dh = int(pic.get("dh"))
                                     element.SetSizeRelative((dw, dh))
                                 elif pic.tag == UMLPROJECT_NAMESPACE+"connection":
                                     for e in diagram.GetElements():
-                                        if e.GetObject() is ListCon[pic.get("id").decode('unicode_escape')].GetSource():
+                                        if e.GetObject() is ListCon[pic.get("id")].GetSource():
                                             source = e
-                                        if e.GetObject() is ListCon[pic.get("id").decode('unicode_escape')].GetDestination():
+                                        if e.GetObject() is ListCon[pic.get("id")].GetDestination():
                                             destination = e
-                                    conect = CConnection(diagram,ListCon[pic.get("id").decode('unicode_escape')],source,destination,[])
+                                    conect = CConnection(diagram,ListCon[pic.get("id")],source,destination,[])
                                     for propCon in pic:
                                         if propCon.tag == UMLPROJECT_NAMESPACE+"point":
-                                            conect.AddPoint((int(propCon.get("x").decode('unicode_escape')),int(propCon.get("y").decode('unicode_escape'))))
+                                            conect.AddPoint((int(propCon.get("x")),int(propCon.get("y"))))
                                         elif propCon.tag == UMLPROJECT_NAMESPACE+"label":
                                             conect.RestoreLabelPosition(int(propCon.get("num")), dict(propCon.items()))
 
@@ -309,35 +309,35 @@ class CProject(object):
             if element.tag == UMLPROJECT_NAMESPACE+'objects':
                 for subelem in element:
                     if subelem.tag == UMLPROJECT_NAMESPACE+'object':
-                        id = subelem.get("id").decode('unicode_escape')
-                        object = CElementObject(self.ElementFactory.GetElement(subelem.get("type").decode('unicode_escape')))
+                        id = subelem.get("id")
+                        object = CElementObject(self.ElementFactory.GetElement(subelem.get("type")))
 
                         for property in subelem:
                             if property.get("value") is not None:
-                                object.SetAttribute(property.get("name").decode('unicode_escape'),property.get("value").decode('unicode_escape'))
+                                object.SetAttribute(property.get("name"),property.get("value"))
                             elif property.get("type") is not None:
                                 attributes = []
                                 for item in property:
                                     atrib = {}
                                     for attribute in item:
-                                        atrib[attribute.get("name").decode('unicode_escape')] = attribute.get("value").decode('unicode_escape')
+                                        atrib[attribute.get("name")] = attribute.get("value")
                                     if len(atrib) > 0:
                                         attributes.append(atrib)
-                                object.SetAttribute(property.get("name").decode('unicode_escape'),attributes)
+                                object.SetAttribute(property.get("name"),attributes)
                         ListObj[id] = object
 
             elif element.tag == UMLPROJECT_NAMESPACE+'connections':
                 for connection in element:
                     if connection.tag == UMLPROJECT_NAMESPACE+'connection':
-                        id = connection.get("id").decode('unicode_escape')
-                        con = CConnectionObject(self.ConnectionFactory.GetConnection(connection.get("type").decode('unicode_escape')),ListObj[connection.get("source").decode('unicode_escape')],ListObj[connection.get("destination").decode('unicode_escape')])
+                        id = connection.get("id")
+                        con = CConnectionObject(self.ConnectionFactory.GetConnection(connection.get("type")),ListObj[connection.get("source")],ListObj[connection.get("destination")])
                         for propCon in connection:
-                            con.SetAttribute(propCon.get("name").decode('unicode_escape'),propCon.get("value").decode('unicode_escape'))
+                            con.SetAttribute(propCon.get("name"),propCon.get("value"))
                         ListCon[id] = con
             elif element.tag == UMLPROJECT_NAMESPACE+'projecttree':
                 for subelem in element:
                     if subelem.tag == UMLPROJECT_NAMESPACE+'node':
-                        proNode = CProjectNode(None,ListObj[subelem.get("id").decode('unicode_escape')],ListObj[subelem.get("id").decode('unicode_escape')].GetName() + ":" + ListObj[subelem.get("id").decode('unicode_escape')].GetType().GetId())
+                        proNode = CProjectNode(None,ListObj[subelem.get("id")],ListObj[subelem.get("id")].GetName() + ":" + ListObj[subelem.get("id")].GetType().GetId())
                         self.SetRoot(proNode)
                         CreateTree(subelem,proNode)
                         
