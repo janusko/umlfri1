@@ -33,7 +33,7 @@ class CpicDrawingArea(CWidget):
         'run-dialog':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_PYOBJECT,
             (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT, )), #type, message
         'add-element':(gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
-            (gobject.TYPE_PYOBJECT,gobject.TYPE_PYOBJECT,)),
+            (gobject.TYPE_PYOBJECT,gobject.TYPE_PYOBJECT,gobject.TYPE_PYOBJECT,)),
         'delete-element-from-all':(gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
             (gobject.TYPE_PYOBJECT, )),
         'drop-from-treeview': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
@@ -300,7 +300,18 @@ class CpicDrawingArea(CWidget):
             CElement(self.Diagram, ElementObject).SetPosition(pos)
             self.AdjustScrollBars()
             self.emit('set-selected', None)
-            self.emit('add-element', ElementObject, self.Diagram)
+            #here, I get prent element of selected elements (if element is on (over) another element)
+            minzorder = 9999999
+            parentElement = None
+            for el in self.Diagram.GetSelectedElements():
+                pos1, pos2 = el.GetSquare(self.canvas)
+                zorder = self.Diagram.elements.index(el)
+                for el2 in self.Diagram.GetElementsInRange(self.canvas, pos1, pos2, True):
+                    if self.Diagram.elements.index(el2) < minzorder:        #get element with minimal zorder
+                        minzorder = self.Diagram.elements.index(el2)
+                        parentElement = el2.object
+                    
+            self.emit('add-element', ElementObject, self.Diagram, parentElement)
             self.Paint()
 
         elif toolBtnSel[0] == 'Connection':
