@@ -309,7 +309,7 @@ class CpicDrawingArea(CWidget):
                 for el2 in self.Diagram.GetElementsInRange(self.canvas, pos1, pos2, True):
                     if self.Diagram.elements.index(el2) < minzorder:        #get element with minimal zorder
                         minzorder = self.Diagram.elements.index(el2)
-                        parentElement = el2.object
+                        parentElement = el2.GetObject()
                     
             self.emit('add-element', ElementObject, self.Diagram, parentElement)
             self.Paint()

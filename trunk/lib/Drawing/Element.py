@@ -127,3 +127,6 @@ class CElement(CVisibleObject):
     def CopyFromElement(self, element):
         self.deltaSize = element.deltaSize
         self.position = element.position
+    
+    def GetObject(self):
+        return self.object
