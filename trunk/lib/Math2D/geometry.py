@@ -197,9 +197,9 @@ class CLine:
         elif 0 < t1 < D:
             pos = CPoint((Ax + (Bx - Ax)*t1/D, Ay + (By - Ay)*t1/D))
             if t2 >= 0:
-                angle = math.atan2(Cy - By, Cx - Bx) - math.pi/2
+                angle = math.pi/2
             else:
-                angle = math.atan2(Cy - By, Cx - Bx) + math.pi/2
+                angle = - math.pi/2
             return pos, pos - point, angle
         else:
             angle = math.atan2(Cy - By, Cx - Bx) - self.Angle()

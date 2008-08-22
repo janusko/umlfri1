@@ -180,7 +180,7 @@ class CConLabelInfo(CCacheableObject, CSelectableObject):
         points = list(self.connection.GetPoints(canvas))
         scaled = CLine(points[self.idx], points[self.idx + 1]).Scale(self.pos)
         return CLine.CreateAsVector(scaled.GetEnd(), 
-            scaled.Angle() + self.angle, self.pos).GetEnd().GetPos()
+            scaled.Angle() + self.angle, self.dist).GetEnd().GetPos()
     
     def RecalculatePosition(self, canvas, pos = None):
         '''
@@ -315,8 +315,7 @@ class CConLabelInfo(CCacheableObject, CSelectableObject):
         self.angle = 0.0
         if offset is not None:
             multi = -1 if (points[self.idx][1] - points[self.idx + 1][1]) * \
-                (.5 - self.pos) < 0 else 0
+                (.5 - self.pos) > 0 else 1
             x, y = self.GetAbsolutePosition(canvas)
-            self.RecalculatePosition(canvas, 
-                (x, y + multi * offset * self.height))
+            self.RecalculatePosition(canvas, (x, y + multi * offset * 15))
     

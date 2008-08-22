@@ -7,6 +7,8 @@
         <Item value="Name" type="str" propid="name" />
         <Item value="Source Cardinality" type="str" propid="SCardinality" />
         <Item value="Destination Cardinality" type="str" propid="DCardinality" />
+        <Item value="Source Role" type="str" propid="SRole" />
+        <Item value="Destination Role" type="str" propid="DRole" />
         <Item value="Notes" type="note" />
     </Attributes>
     <Appearance>
@@ -30,6 +32,20 @@
             <Condition condition="#DCardinality" type="empty" negate="1">
                 <Rectangle fill="/Styles/Connection/TextFill">
                     <TextBox text="#DCardinality" font="/Styles/Connection/NameTextFont" color="/Styles/Connection/NameTextColor" />
+                </Rectangle>
+            </Condition>
+        </Label>
+        <Label position="source+1">
+            <Condition condition="#SRole" type="empty" negate="1">
+                <Rectangle fill="/Styles/Connection/TextFill">
+                    <TextBox text="#SRole" font="/Styles/Connection/NameTextFont" color="/Styles/Connection/NameTextColor" />
+                </Rectangle>
+            </Condition>
+        </Label>
+        <Label position="destination+1">
+            <Condition condition="#DRole" type="empty" negate="1">
+                <Rectangle fill="/Styles/Connection/TextFill">
+                    <TextBox text="#DRole" font="/Styles/Connection/NameTextFont" color="/Styles/Connection/NameTextColor" />
                 </Rectangle>
             </Condition>
         </Label>
