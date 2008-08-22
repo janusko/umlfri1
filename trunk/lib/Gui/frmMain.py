@@ -402,8 +402,8 @@ class CfrmMain(CWindow):
 
     # Moje vlastne signale
     @event("picDrawingArea", "add-element")
-    def on_add_element(self, widget, Element, diagram):
-        self.twProjectView.AddElement(Element, diagram)
+    def on_add_element(self, widget, Element, diagram, parentElement):
+        self.twProjectView.AddElement(Element, diagram, parentElement)
 
 
 

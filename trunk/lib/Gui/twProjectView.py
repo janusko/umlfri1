@@ -210,8 +210,11 @@ class CtwProjectView(CWidget):
         self.twProjectView.get_selection().select_iter(iter)
                     
     
-    def AddElement(self, element, diagram):
-        path = diagram.GetPath()
+    def AddElement(self, element, diagram, parentElement = None):
+        if parentElement is None:
+            path = diagram.GetPath()
+        else:
+            path = parentElement.GetPath()
         parent = self.application.GetProject().GetNode(path)
         node = CProjectNode(parent, element, parent.GetPath() + "/" + element.GetName() + ":" + element.GetType().GetId())
         self.application.GetProject().AddNode(node, parent)
