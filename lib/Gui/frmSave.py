@@ -14,10 +14,17 @@ class CfrmSave(common.CWindow):
         filter.set_name(_("UML .FRI Projects"))
         filter.add_pattern('*'+lib.consts.PROJECT_EXTENSION)
         self.form.add_filter(filter)
+        
+        filter = gtk.FileFilter()
+        filter.set_name(_("UML .FRI Clear XML Projects"))
+        filter.add_pattern('*'+lib.consts.PROJECT_CLEARXML_EXTENSION)
+        self.form.add_filter(filter)
+        
         filter = gtk.FileFilter()
         filter.set_name(_("UML .FRI Project templates"))
         filter.add_pattern('*'+lib.consts.PROJECT_TPL_EXTENSION)
         self.form.add_filter(filter)
+        
         filter = gtk.FileFilter()
         filter.set_name(_("All files"))
         filter.add_pattern("*")
@@ -37,6 +44,8 @@ class CfrmSave(common.CWindow):
                 if '.' not in os.path.basename(filename):
                     if filter == _("UML .FRI Projects"):
                         filename += lib.consts.PROJECT_EXTENSION
+                    elif filter == _("UML .FRI Clear XML Projects"):
+                        filename += lib.consts.PROJECT_CLEARXML_EXTENSION
                     elif filter == _("UML .FRI Project templates"):
                         filename += lib.consts.PROJECT_TPL_EXTENSION
                 if not os.path.isdir(filename):

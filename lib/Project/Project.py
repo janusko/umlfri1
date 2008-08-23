@@ -15,7 +15,7 @@ from lib.Connections.Factory import CConnectionFactory
 from lib.Versions.Factory import CVersionFactory
 from lib.Drawing import CDiagram
 import os.path
-from lib.consts import ROOT_PATH, VERSIONS_PATH, DIAGRAMS_PATH, ELEMENTS_PATH, CONNECTIONS_PATH, UMLPROJECT_NAMESPACE
+from lib.consts import ROOT_PATH, VERSIONS_PATH, DIAGRAMS_PATH, ELEMENTS_PATH, CONNECTIONS_PATH, UMLPROJECT_NAMESPACE, PROJECT_EXTENSION, PROJECT_CLEARXML_EXTENSION
 from lib.config import config
 
 #try to import necessary lybraries for XML parsing
@@ -247,22 +247,36 @@ class CProject(object):
             if not xmlschema.validate(rootNode):
                 raise XMLError(xmlschema.error_log.last_error)
 
-        #save Recent File Tree into ZIP file
-        out = ZipFile(filename, 'w', ZIP_DEFLATED)
-        out.writestr('content.xml', '<?xml version="1.0" encoding="utf-8"?>\n'+etree.tostring(rootNode, encoding='utf-8'))
-        out.close()
+        #save Recent File Tree into ZIP file if it is .frip
+        ext = filename.split('.')
+        ext.reverse()
+        #ext[0] = "."+ext[0]
+        if (("."+ext[0]) != PROJECT_CLEARXML_EXTENSION):     #zipped
+            fZip = ZipFile(filename, 'w', ZIP_DEFLATED)
+            fZip.writestr('content.xml', '<?xml version="1.0" encoding="utf-8"?>\n'+etree.tostring(rootNode, encoding='utf-8'))
+            fZip.close()
+        else:                                       #no zipped - clear xml file
+            f = open(filename, 'w')
+            f.write('<?xml version="1.0" encoding="utf-8"?>\n'+etree.tostring(rootNode, encoding='utf-8'))
+            f.close()
     
     def LoadProject(self, filename, copy = False):
         ListObj = {}
         ListCon = {}
-        file = ZipFile(filename,"r")
+        
+        ext = filename.split('.')
+        ext.reverse()
+        if (("."+ext[0]) != PROJECT_CLEARXML_EXTENSION):
+            file = ZipFile(filename,'r')
+            data = file.read('content.xml')
+        else:
+            file = open(filename, 'r')
+            data = file.read()
         
         if copy:
             self.filename = None
         else:
             self.filename = filename
-        
-        data = file.read('content.xml')
         
         def CreateTree(root, parentNode):
             for elem in root:
