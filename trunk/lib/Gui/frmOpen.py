@@ -27,10 +27,17 @@ class CfrmOpen(common.CWindow):
         filter.set_name(_("UML .FRI Projects"))
         filter.add_pattern('*'+lib.consts.PROJECT_EXTENSION)
         self.fwOpenExisting.add_filter(filter)
+        
+        filter = gtk.FileFilter()
+        filter.set_name(_("UML .FRI Clear XML Projects"))
+        filter.add_pattern('*'+lib.consts.PROJECT_CLEARXML_EXTENSION)
+        self.fwOpenExisting.add_filter(filter)
+        
         filter = gtk.FileFilter()
         filter.set_name(_("UML .FRI Project templates"))
         filter.add_pattern('*'+lib.consts.PROJECT_TPL_EXTENSION)
         self.fwOpenExisting.add_filter(filter)
+        
         filter = gtk.FileFilter()
         filter.set_name(_("All files"))
         filter.add_pattern("*")
@@ -46,15 +53,19 @@ class CfrmOpen(common.CWindow):
         if not os.path.isfile(filename):
             return gtk.gdk.pixbuf_new_from_file(config['/Paths/Images']+lib.consts.DEFAULT_TEMPLATE_ICON)
         f = os.tempnam()
-        z = zipfile.ZipFile(filename)
-        for i in z.namelist():
-            if i in ('icon.png', 'icon.gif', 'icon.jpg', 'icon.ico', 'icon.png'):
-                file(f, 'wb').write(z.read(i))
-                ret = gtk.gdk.pixbuf_new_from_file(f)
-                os.unlink(f)
-                return ret
-        else:
-            return gtk.gdk.pixbuf_new_from_file(config['/Paths/Images']+lib.consts.DEFAULT_TEMPLATE_ICON)
+        ext = filename.split('.')
+        ext.reverse()
+        
+        if (("."+ext[0]) != lib.consts.PROJECT_CLEARXML_EXTENSION):
+            z = zipfile.ZipFile(filename)
+            for i in z.namelist():
+                if i in ('icon.png', 'icon.gif', 'icon.jpg', 'icon.ico', 'icon.png'):
+                    file(f, 'wb').write(z.read(i))
+                    ret = gtk.gdk.pixbuf_new_from_file(f)
+                    os.unlink(f)
+                    return ret
+
+        return gtk.gdk.pixbuf_new_from_file(config['/Paths/Images']+lib.consts.DEFAULT_TEMPLATE_ICON)
     
     def __ReloadOpenRecentList(self):
         self.listStore.clear()
