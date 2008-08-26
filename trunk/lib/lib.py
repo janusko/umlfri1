@@ -1,3 +1,50 @@
+#try to import necessary lybraries for XML parsing
+try:
+    from lxml import etree
+    HAVE_LXML = True
+except ImportError:
+    HAVE_LXML = False
+    try:
+        # Python 2.5
+        import xml.etree.cElementTree as etree
+    except ImportError:
+        try:
+            # Python 2.5
+            import xml.etree.ElementTree as etree
+        except ImportError:
+            try:
+                # normal cElementTree install
+                import cElementTree as etree
+            except ImportError:
+                # normal ElementTree install
+                import elementtree.ElementTree as etree
+
+def Indent(elem, level=0):
+    """
+    The indent function is a variant of the one in Fredrik Lundh's effbotlib.
+    This function make XML Tree more human friendly.
+    
+    @param  elem: XML element to parse
+    @type   elem: L{Element<xml.etree.ElementTree.Element>}
+    
+    @param  level: level of element
+    @type   level: integer
+    """
+    i = "\n" + level*"  "
+    if len(elem):
+        if not elem.text or not elem.text.strip():
+            elem.text = i + "  "
+        for e in elem:
+            Indent(e, level+1)
+            if not e.tail or not e.tail.strip():
+                e.tail = i + "  "
+        if not e.tail or not e.tail.strip():
+            e.tail = i
+    else:
+        if level and (not elem.tail or not elem.tail.strip()):
+            elem.tail = i
+
+
 def ToBool(val):
     """
     Convert any value to boolean

@@ -1,4 +1,4 @@
-from lib.lib import XMLEncode, IDGenerator
+from lib.lib import XMLEncode, IDGenerator, Indent
 from ProjectNode import CProjectNode
 from cStringIO import StringIO
 from zipfile import ZipFile, ZIP_STORED, ZIP_DEFLATED
@@ -247,6 +247,9 @@ class CProject(object):
             if not xmlschema.validate(rootNode):
                 raise XMLError(xmlschema.error_log.last_error)
 
+        #make human-friendly tree
+        Indent(rootNode)
+        
         #save Recent File Tree into ZIP file if it is .frip
         ext = filename.split('.')
         ext.reverse()
