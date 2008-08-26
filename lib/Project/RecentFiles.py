@@ -1,4 +1,4 @@
-from lib.lib import XMLEncode
+from lib.lib import XMLEncode, Indent
 from lib.Exceptions.UserException import *
 import os.path
 from lib.config import config
@@ -84,6 +84,9 @@ class CRecentFiles(object):
         if HAVE_LXML:
             if not xmlschema.validate(root):
                 raise XMLError(xmlschema.error_log.last_error)
+        
+        #make human-friendly tree
+        Indent(root)
         
         #save Recent File Tree
         f = open(self.filename, 'w')
