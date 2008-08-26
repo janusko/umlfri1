@@ -1,24 +1,3 @@
-#try to import necessary lybraries for XML parsing
-try:
-    from lxml import etree
-    HAVE_LXML = True
-except ImportError:
-    HAVE_LXML = False
-    try:
-        # Python 2.5
-        import xml.etree.cElementTree as etree
-    except ImportError:
-        try:
-            # Python 2.5
-            import xml.etree.ElementTree as etree
-        except ImportError:
-            try:
-                # normal cElementTree install
-                import cElementTree as etree
-            except ImportError:
-                # normal ElementTree install
-                import elementtree.ElementTree as etree
-
 def Indent(elem, level=0):
     """
     The indent function is a variant of the one in Fredrik Lundh's effbotlib.

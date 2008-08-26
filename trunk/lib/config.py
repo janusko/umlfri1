@@ -106,13 +106,13 @@ class CConfig(object):
         k = self.original.keys()
         k.sort()
         
-        if HAVE_LXML:
-            if not os.path.isdir(self['/Paths/UserDir']):
-                os.mkdir(self['/Paths/UserDir'])
+        if not os.path.isdir(self['/Paths/UserDir']):
+            os.mkdir(self['/Paths/UserDir'])
         
-        #user config schema
-        xmlschema_doc = etree.parse(os.path.join(xmlschema_path, "userconfig.xsd"))
-        self.xmlschema = etree.XMLSchema(xmlschema_doc)
+        if HAVE_LXML:
+            #user config schema
+            xmlschema_doc = etree.parse(os.path.join(xmlschema_path, "userconfig.xsd"))
+            self.xmlschema = etree.XMLSchema(xmlschema_doc)
         
         self.file = self['/Paths/UserConfig']
         if os.path.isfile(self.file):
