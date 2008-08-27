@@ -11,7 +11,7 @@ from SelectableObject import CSelectableObject
 
 class EConLabelInfo(Exception): pass
 
-class CConLabelInfo(CCacheableObject, CSelectableObject):
+class CConLabelInfo(CCacheableObject):
     '''
     Carries information about graphical representation of label 
     
@@ -335,4 +335,23 @@ class CConLabelInfo(CCacheableObject, CSelectableObject):
                 (.5 - self.pos) > 0 else 1
             x, y = self.GetAbsolutePosition(canvas)
             self.RecalculatePosition(canvas, (x, y + multi * offset * 15))
+    
+    def Select(self):
+        '''
+        directs call to self.connection
+        '''
+        return self.connection.Select()
+    
+    def Deselect(self):
+        '''
+        directs call to self.connection
+        '''
+        return self.connection.Deselect()
+    
+    def GetSelected(self):
+        '''
+        directs call to self.connection
+        '''
+        return self.connection.GetSelected()
+        
     
