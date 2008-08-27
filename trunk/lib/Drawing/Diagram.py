@@ -88,7 +88,7 @@ class CDiagram:
             
     def GetSelectedElements(self):
         for i in self.selected:
-            if isinstance(i, Element.CElement):
+            if isinstance(i, (Element.CElement, ConLabelInfo.CConLabelInfo)):
                 yield i
             
     def GetSelectedConnections(self):
@@ -96,7 +96,6 @@ class CDiagram:
             if isinstance(i, Connection.CConnection):
                 yield i
             
-    
     def AddConnection(self, connection):
         self.size = None
         if connection not in self.connections:
@@ -139,7 +138,7 @@ class CDiagram:
         x2, y2 = 0, 0
         
         for el in self.GetSelectedElements():
-            x, y = el.GetPosition()
+            x, y = el.GetPosition(canvas)
             w, h = el.GetSize(canvas)
             if x < x1:
                 x1 = x
@@ -158,20 +157,22 @@ class CDiagram:
         elements = set()
         if canvas is not None:
             for el in self.GetSelectedElements():
-                pos1, pos2 = el.GetSquare(canvas)
-                zorder = self.elements.index(el)
-                for el2 in self.GetElementsInRange(canvas, pos1, pos2, True):
-                    if self.elements.index(el2) > zorder:
-                        elements.add(el2)
+                if not isinstance(el, ConLabelInfo.CConLabelInfo):
+                    pos1, pos2 = el.GetSquare(canvas)
+                    zorder = self.elements.index(el)
+                    for el2 in self.GetElementsInRange(canvas, pos1, pos2, True):
+                        if self.elements.index(el2) > zorder:
+                            elements.add(el2)
         elements |= set(self.GetSelectedElements())
         for el in elements:
-            x, y = el.GetPosition()
-            el.SetPosition((x + deltax, y + deltay))
-            for con in el.GetConnections():
-                if (con.GetSource() in elements) and (con.GetDestination() in elements):
-                    if con not in movedCon:
-                        con.MoveAll(delta)
-                        movedCon.add(con)
+            x, y = el.GetPosition(canvas)
+            el.SetPosition((x + deltax, y + deltay), canvas)
+            if not isinstance(el, ConLabelInfo.CConLabelInfo):
+                for con in el.GetConnections():
+                    if (con.GetSource() in elements) and (con.GetDestination() in elements):
+                        if con not in movedCon:
+                            con.MoveAll(delta)
+                            movedCon.add(con)
         if canvas is not None:
             for conn in self.connections:
                 conn.ValidatePoints(canvas)
@@ -251,7 +252,7 @@ class CDiagram:
                 for point in connection.GetMiddlePoints():
                     result = tuple(max(x) for x in zip(result, point))
             for element in self.elements:
-                    point = tuple(sum(x) for x in zip(element.GetPosition(), element.GetSize(canvas)))
+                    point = tuple(sum(x) for x in zip(element.GetPosition(canvas), element.GetSize(canvas)))
                     result = tuple(max(x) for x in zip(result, point))
             page = (config['/Page/Width'], config['/Page/Height'])
             result = (page[0] * (result[0]//page[0] + 1), page[1] * (result[1]//page[1] + 1))
@@ -414,7 +415,7 @@ class CDiagram:
     def GetExpSquare(self, canvas):
         x_max, y_max,x_min, y_min,  = 0, 0,  101, 101
         for el in self.elements:
-            posX, posY = el.GetPosition()
+            posX, posY = el.GetPosition(canvas)
             w, h = el.GetSize(canvas)
             
             if posX + w > x_max:

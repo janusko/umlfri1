@@ -97,6 +97,13 @@ class CConLabelInfo(CCacheableObject, CSelectableObject):
         '''
         return self.connection.GetDiagram()
     
+    def GetObject(self):
+        '''
+        @return: Logical Label Object
+        @rtype: L{CConnectionObject<lib.Connections.Object.CConnectionObject>}
+        '''
+        return self.connection.GetObject()
+    
     def GetPosition(self, canvas):
         '''
         @return: absolute position of top-left corner (x, y)
@@ -154,10 +161,20 @@ class CConLabelInfo(CCacheableObject, CSelectableObject):
         '''
         
         width, height = self.GetSize(canvas)
-        x, y = self.GetAbsolutePosition()
+        x, y = self.GetAbsolutePosition(canvas)
         
         return ( (int(x - width / 2.), int(y - height / 2.) ),
                  (int(x + width / 2.), int(y + height / 2.) ) )
+    
+    def GetSquareAtPosition(self, pos):
+        '''
+        Does nothing, only for interface compatibility with 
+        L{CElement<Element.CElement>}
+        
+        @return: None
+        @rtype: NoneType
+        '''
+        return None
     
     def GetCentered(self):
         '''
