@@ -161,8 +161,9 @@ class CDiagram:
                     pos1, pos2 = el.GetSquare(canvas)
                     zorder = self.elements.index(el)
                     for el2 in self.GetElementsInRange(canvas, pos1, pos2, True):
-                        if self.elements.index(el2) > zorder:
-                            elements.add(el2)
+                        if not isinstance(el2, ConLabelInfo.CConLabelInfo):
+                            if self.elements.index(el2) > zorder:
+                                elements.add(el2)
         elements |= set(self.GetSelectedElements())
         for el in elements:
             x, y = el.GetPosition(canvas)
@@ -341,52 +342,56 @@ class CDiagram:
     # Presunutie elementov uplne dopredu
     def ShiftElementsToTop(self):
         for selectedElement in self.GetSelectedElements():
-            selectedIdx = self.elements.index(selectedElement)
-            del self.elements[selectedIdx]
-            self.elements.append(selectedElement) 
+            if not isinstance(selectedElement, ConLabelInfo.CConLabelInfo):
+                selectedIdx = self.elements.index(selectedElement)
+                del self.elements[selectedIdx]
+                self.elements.append(selectedElement) 
 
     # Presunutie elementov uplne dozadu
     def ShiftElementsToBottom(self):
         for selectedElement in self.GetSelectedElements():
-            selectedIdx = self.elements.index(selectedElement)
-            del self.elements[selectedIdx]
-            self.elements.insert(0, selectedElement);
+            if not isinstance(selectedElement, ConLabelInfo.CConLabelInfo):
+                selectedIdx = self.elements.index(selectedElement)
+                del self.elements[selectedIdx]
+                self.elements.insert(0, selectedElement);
             
     # Presunutie elementov o 1 dopredu
     def ShiftElementsForward(self, canvas):
         for selectedElement in self.GetSelectedElements():
-            selectedIdx = self.elements.index(selectedElement)
-            selSq = selectedElement.GetSquare(canvas);
-            selRect = CRectangle(CPoint(selSq[0]), CPoint(selSq[1]))
-            selectedShifted = False
-            otherElementIdx = selectedIdx + 1
-            while otherElementIdx < len(self.elements) and selectedShifted == False:
-                othSq = self.elements[otherElementIdx].GetSquare(canvas)
-                othRect = CRectangle(CPoint(othSq[0]), CPoint(othSq[1]))
-                prienik = selRect*othRect 
-                if len(prienik) > 0:
-                    del self.elements[selectedIdx]
-                    self.elements.insert(otherElementIdx, selectedElement);
-                    selectedShifted = True # uz je posunuty -> koncim a presuvam dalsi selecnuty
-                otherElementIdx += 1
+            if not isinstance(selectedElement, ConLabelInfo.CConLabelInfo):
+                selectedIdx = self.elements.index(selectedElement)
+                selSq = selectedElement.GetSquare(canvas);
+                selRect = CRectangle(CPoint(selSq[0]), CPoint(selSq[1]))
+                selectedShifted = False
+                otherElementIdx = selectedIdx + 1
+                while otherElementIdx < len(self.elements) and selectedShifted == False:
+                    othSq = self.elements[otherElementIdx].GetSquare(canvas)
+                    othRect = CRectangle(CPoint(othSq[0]), CPoint(othSq[1]))
+                    prienik = selRect*othRect 
+                    if len(prienik) > 0:
+                        del self.elements[selectedIdx]
+                        self.elements.insert(otherElementIdx, selectedElement);
+                        selectedShifted = True # uz je posunuty -> koncim a presuvam dalsi selecnuty
+                    otherElementIdx += 1
                 
     # Presunutie elementov o 1 dozadu
     def ShiftElementsBack(self, canvas):
         for selectedElement in self.GetSelectedElements():
-            selectedIdx = self.elements.index(selectedElement)
-            selSq = selectedElement.GetSquare(canvas);
-            selRect = CRectangle(CPoint(selSq[0]), CPoint(selSq[1]))
-            selectedShifted = False
-            otherElementIdx = selectedIdx - 1
-            while otherElementIdx >= 0 and selectedShifted == False:
-                othSq = self.elements[otherElementIdx].GetSquare(canvas)
-                othRect = CRectangle(CPoint(othSq[0]), CPoint(othSq[1]))
-                prienik = selRect*othRect
-                if len(prienik) > 0:
-                    del self.elements[selectedIdx]
-                    self.elements.insert(otherElementIdx, selectedElement);
-                    selectedShifted = True # uz je posunuty -> koncim a presuvam dalsi selecnuty
-                otherElementIdx -= 1
+            if not isinstance(selectedElement, ConLabelInfo.CConLabelInfo):
+                selectedIdx = self.elements.index(selectedElement)
+                selSq = selectedElement.GetSquare(canvas);
+                selRect = CRectangle(CPoint(selSq[0]), CPoint(selSq[1]))
+                selectedShifted = False
+                otherElementIdx = selectedIdx - 1
+                while otherElementIdx >= 0 and selectedShifted == False:
+                    othSq = self.elements[otherElementIdx].GetSquare(canvas)
+                    othRect = CRectangle(CPoint(othSq[0]), CPoint(othSq[1]))
+                    prienik = selRect*othRect
+                    if len(prienik) > 0:
+                        del self.elements[selectedIdx]
+                        self.elements.insert(otherElementIdx, selectedElement);
+                        selectedShifted = True # uz je posunuty -> koncim a presuvam dalsi selecnuty
+                    otherElementIdx -= 1
     
     def CutSelection(self, clipboard):
         if self.selected:
