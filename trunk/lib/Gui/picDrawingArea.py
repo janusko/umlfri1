@@ -292,7 +292,8 @@ class CpicDrawingArea(CWidget):
         if toolBtnSel[0] == 'Element':
             ElementType = self.application.GetProject().GetElementFactory().GetElement(toolBtnSel[1])
             ElementObject = CElementObject(ElementType)
-            CElement(self.Diagram, ElementObject).SetPosition(pos)
+            newElement = CElement(self.Diagram, ElementObject)
+            newElement.SetPosition(pos)
             self.AdjustScrollBars()
             self.emit('set-selected', None)
             #here, I get prent element of selected elements (if element is on (over) another element)
@@ -301,10 +302,14 @@ class CpicDrawingArea(CWidget):
             for el in self.Diagram.GetSelectedElements():
                 pos1, pos2 = el.GetSquare(self.canvas)
                 zorder = self.Diagram.elements.index(el)
-                for el2 in self.Diagram.GetElementsInRange(self.canvas, pos1, pos2, True):
-                    if self.Diagram.elements.index(el2) < minzorder:        #get element with minimal zorder
-                        minzorder = self.Diagram.elements.index(el2)
-                        parentElement = el2.GetObject()
+                if newElement.AreYouInRange(self.canvas, pos1, pos2, True):
+                    for el2 in self.Diagram.GetElementsInRange(self.canvas, pos1, pos2, True):
+                        #print el2.GetName()
+                        print str(pos1) + " " + str(pos2)
+                        print el2.GetObject().GetName()
+                        if self.Diagram.elements.index(el2) < minzorder:        #get element with minimal zorder
+                            minzorder = self.Diagram.elements.index(el2)
+                            parentElement = el2.GetObject()
                     
             self.emit('add-element', ElementObject, self.Diagram, parentElement)
             self.Paint()
