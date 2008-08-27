@@ -1,7 +1,7 @@
 from exceptions import MathException
 import math
 
-class CPoint:
+class CPoint(object):
     '''Interprets one point on plane
     
     Allowed operations for points A, B:
@@ -78,7 +78,7 @@ class CPoint:
     def __repr__(self):
         return repr(self.point)
 
-class CLine:
+class CLine(object):
     '''
     line segment
     
@@ -112,7 +112,7 @@ class CLine:
         self.end = end
     
     @classmethod
-    def CreateAsVector(self, start, alpha, length):
+    def CreateAsVector(cls, start, alpha, length):
         '''
         Alternative constructor to create new instance of CLine
         
@@ -132,7 +132,7 @@ class CLine:
             start = CPoint(start)
         x, y = start.GetPos()
         end = CPoint((x + math.cos(alpha)*length, y + math.sin(alpha)*length))
-        return CLine(start, end)
+        return cls(start, end)
         
     def GetStart(self):
         '''
@@ -273,7 +273,7 @@ class CLine:
             (self.start == other.GetEnd() and self.end ==other.GetStart())
     
     
-class CPolyLine:
+class CPolyLine(object):
     '''
     sequence of subsequent line segments formed by sequence of points
     
@@ -294,7 +294,7 @@ class CPolyLine:
         @raise MathException: if there is less than 2 points
         '''
         if len(points) < 2:
-            raise MathException()
+            raise MathException
         self.lines = []
         start = points[0]
         for end in points[1:]:
@@ -434,6 +434,10 @@ class CRectangle(CPolygon):
                 return [other.GetTopLeft(), other.GetBottomRight()]
             elif self.GetTopLeft() >= other.GetTopLeft() and self.GetBottomRight() <= other.GetBottomRight():
                 return [self.GetTopLeft(), self.GetBottomRight()]
+            elif other.GetTopLeft() <= self.GetTopLeft() <= other.GetBottomRight():
+                return [self.GetTopLeft(), other.GetBottomRight()]
+            elif self.GetTopLeft() <= other.GetTopLeft() <= self.GetBottomRight():
+                return [other.GetTopLeft(), self.GetBottomRight()]
             else:
                 return []
         return CPolygon.__mul__(self, other)
