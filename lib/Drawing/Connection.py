@@ -431,11 +431,14 @@ class CConnection(CCacheableObject, CSelectableObject):
         @type  delta: tuple
         '''
         size = config['/Styles/Selection/PointsSize']
+        color = config['/Styles/Selection/PointsColor']
         self.object.Paint(canvas, self, delta)
         if self.selected is True:
             dx, dy = delta
             for index, i in enumerate(self.GetPoints(canvas)):
-                canvas.DrawRectangle((i[0] + dx - size//2, i[1] + dy - size//2), (size, size), config['/Styles/Selection/PointsColor'])
+                canvas.DrawRectangle((i[0] + dx - size//2, i[1] + dy - size//2), (size, size), color)
+            for label in self.labels.values():
+                canvas.DrawRectangle(label.GetPosition(canvas), label.GetSize(canvas), color)
 
     def RemovePoint(self, canvas, index, runValidation = True):
         '''
