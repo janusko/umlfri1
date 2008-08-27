@@ -257,11 +257,6 @@ class CpicDrawingArea(CWidget):
                             itemSel.DeselectPoint()
                             i = itemSel.WhatPartOfYouIsAtPosition(self.canvas, pos)
                             self.__BeginDragLine(event, itemSel, i)
-                    
-                    elif isinstance(itemSel, CConLabelInfo):
-                        pass
-                        
-                    
                     else:
                         selElements = list(self.Diagram.GetSelectedElements())
                         self.selElem = selElements[0]

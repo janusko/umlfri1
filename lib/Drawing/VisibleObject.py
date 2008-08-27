@@ -36,7 +36,7 @@ class CVisibleObject(CCacheableObject, CSelectableObject):
     def GetObject(self):
         return self.object
     
-    def GetPosition(self):
+    def GetPosition(self, *ignored):
         return self.position
         
     def GetCenter(self, canvas):
@@ -57,7 +57,7 @@ class CVisibleObject(CCacheableObject, CSelectableObject):
         w, h = self.GetSize(canvas)
         return ((x, y), (x + w, y + h))
     
-    def SetPosition(self, pos):
+    def SetPosition(self, pos, *ignored):
         self.position = pos
         
     def GetDiagram(self):

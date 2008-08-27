@@ -40,4 +40,4 @@ WEB = 'http://umlfri.kst.fri.uniza.sk/'
 MAIL = 'projekt@umlfri.kst.fri.uniza.sk'
 DEBUG=False
 
-LABELS_CLICKABLE = False # Used to ignore labels at drawing area
+LABELS_CLICKABLE = True # Used to ignore labels at drawing area
