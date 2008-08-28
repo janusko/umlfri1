@@ -434,11 +434,5 @@ class CRectangle(CPolygon):
                 return [other.GetTopLeft(), other.GetBottomRight()]
             elif self.GetTopLeft() >= other.GetTopLeft() and self.GetBottomRight() <= other.GetBottomRight():
                 return [self.GetTopLeft(), self.GetBottomRight()]
-            elif other.GetTopLeft() <= self.GetTopLeft() <= other.GetBottomRight():
-                return [self.GetTopLeft(), other.GetBottomRight()]
-            elif self.GetTopLeft() <= other.GetTopLeft() <= self.GetBottomRight():
-                return [other.GetTopLeft(), self.GetBottomRight()]
-            else:
-                return []
         return CPolygon.__mul__(self, other)
 

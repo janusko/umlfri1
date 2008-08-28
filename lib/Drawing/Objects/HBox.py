@@ -26,7 +26,7 @@ class CHBox(CContainer):
         for i in self.childs:
             wi, hi = i.GetSize(canvas, element)
             if size[0] is None:
-                w += wi
+                w = max(w, wi)
             h.append(hi)
         if size[1] is not None and self.expand:
             hs = size[1] - sum(h)
@@ -51,7 +51,7 @@ class CHBox(CContainer):
         for i in self.childs:
             wi, hi = i.GetSize(canvas, element)
             if size[0] is None:
-                w += wi
+                w = max(w, wi)
             h.append(hi)
         if size[1] is not None and self.expand:
             hs = size[1] - sum(h)

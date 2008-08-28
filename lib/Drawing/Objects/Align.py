@@ -71,4 +71,4 @@ class CAlign(CSimpleContainer):
                 y += (h - hc)/2
             elif aligny == "bottom":
                 y += h - hc
-        self.GetChild().Paint(canvas, (x, y), element, (w, h))
+        self.GetChild().Paint(canvas, (x, y), element)
