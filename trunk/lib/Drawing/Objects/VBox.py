@@ -27,7 +27,7 @@ class CVBox(CContainer):
             wi, hi = i.GetSize(canvas, element)
             w.append(wi)
             if size[1] is None:
-                h += hi
+                h = max(h, hi)
         if size[0] is not None and self.expand:
             ws = size[0] - sum(w)
             if ws > 0:
@@ -52,7 +52,7 @@ class CVBox(CContainer):
             wi, hi = i.GetSize(canvas, element)
             w.append(wi)
             if size[1] is None:
-                h += hi
+                h = max(h, hi)
         if size[0] is not None and self.expand:
             ws = size[0] - sum(w)
             if ws > 0:
