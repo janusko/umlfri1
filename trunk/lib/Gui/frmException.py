@@ -132,7 +132,7 @@ class CfrmException(CWindow):
             buff.insert_with_tags_by_name(iter, _(' line '),   "bold")
             buff.insert_with_tags_by_name(iter, str(line_num), "mono")
             buff.insert_with_tags_by_name(iter, _(' in '),     "bold")
-            buff.insert_with_tags_by_name(iter, fun_name + '\n' + text + '\n', "mono")
+            buff.insert_with_tags_by_name(iter, (fun_name or "") + '\n' + (text or "") + '\n', "mono")
         #name and error
         buff.insert_with_tags_by_name(iter, '\n' + exctype.__name__  + ': ', "bold")
         buff.insert_with_tags_by_name(iter, str(value), "mono")

@@ -5,6 +5,7 @@
     <DestArrow possible="1" default="0" />
     <Attributes>
         <Item value="Name" type="str" propid="name" />
+        <Item value="Stereotype" type="str" propid="stereotype" />
         <Item value="Source Cardinality" type="str" propid="SCardinality" />
         <Item value="Destination Cardinality" type="str" propid="DCardinality" />
         <Item value="Source Role" type="str" propid="SRole" />
@@ -15,11 +16,26 @@
         <LineStyle style="solid" color="/Styles/Connection/LineColor" />
         <ArrowStyle style="simple" fill="/Styles/Connection/ArrowFillColor" color="/Styles/Connection/ArrowColor" />
         <Label position="center">
-            <Condition condition="#name" type="empty" negate="1">
-                <Rectangle fill="/Styles/Connection/TextFill">
-                    <TextBox text="#name" font="/Styles/Connection/NameTextFont" color="/Styles/Connection/NameTextColor" />
-                </Rectangle>
-            </Condition>
+            <HBox>
+                <Condition condition="#stereotype" type="empty" negate="1">
+                    <Align align="center">
+                        <Rectangle fill="/Styles/Connection/TextFill">
+                            <VBox>
+                                <TextBox text="&#171;" font="/Styles/Connection/TextFont" color="/Styles/Connection/TextColor" />
+                                <TextBox text="#stereotype" font="/Styles/Connection/TextFont" color="/Styles/Connection/TextColor" />
+                                <TextBox text="&#187;" font="/Styles/Connection/TextFont" color="/Styles/Connection/TextColor" />
+                            </VBox>
+                        </Rectangle>
+                    </Align>
+                </Condition>
+                <Condition condition="#name" type="empty" negate="1">
+                    <Align align="center">
+                        <Rectangle fill="/Styles/Connection/TextFill">
+                            <TextBox text="#name" font="/Styles/Connection/NameTextFont" color="/Styles/Connection/NameTextColor" />
+                        </Rectangle>
+                    </Align>
+                </Condition>
+            </HBox>
         </Label>
         <Label position="source">
             <Condition condition="#SCardinality" type="empty" negate="1">
