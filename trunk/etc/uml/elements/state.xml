@@ -6,6 +6,7 @@
     </Connections>
     <Attributes>
         <Item value="Name" type="str" propid="name" />
+        <Item value="Stereotype" type="str" propid="stereotype" />
         <Item value="Notes" type="note" />
     </Attributes>
     <Appearance>
@@ -14,9 +15,20 @@
                 <Sizer minheight="50">
                     <HBox>
                         <Padding padding="5">
+                        <HBox>
+                            <Condition condition="#stereotype" type="empty" negate="1">
+                                <Align align="center">
+                                    <VBox>
+                                        <TextBox text="&#171;" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                        <TextBox text="#stereotype" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                        <TextBox text="&#187;" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                    </VBox>
+                                </Align>
+                            </Condition>
                             <Align align="center">
                                 <TextBox text="#name" font="/Styles/Element/NameTextFont" color="/Styles/Element/NameTextColor" />
                             </Align>
+                        </HBox>
                         </Padding>
                         <Line type="horizontal" color="/Styles/Element/LineColor" />
                     </HBox>
