@@ -33,7 +33,10 @@
                                 </Align>
                             </Condition>
                             <Align align="center">
-                                <TextBox text="#name" font="/Styles/Element/NameTextFont" color="/Styles/Element/NameTextColor" />
+                                <HBox>
+                                    <TextBox text="#name" font="/Styles/Element/NameTextFont" color="/Styles/Element/NameTextColor" />
+                                    <Line type="horizontal" color="/Styles/Element/NameTextColor" />
+                                </HBox>
                             </Align>
                         </HBox>
                     </Padding>
