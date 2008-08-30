@@ -54,11 +54,6 @@
 												<xs:documentation>Define color of text</xs:documentation>
 											</xs:annotation>
 										</xs:element>
-										<xs:element name="ObjectNameTextFont" type="xs:string">
-											<xs:annotation>
-												<xs:documentation>Define font of object name</xs:documentation>
-											</xs:annotation>
-										</xs:element>
 										<xs:element name="NameTextFont" type="xs:string">
 											<xs:annotation>
 												<xs:documentation>Define font of text for name</xs:documentation>
