@@ -489,6 +489,7 @@ class CfrmMain(CWindow):
     def on_nbProperties_content_update(self, widget, element, property):
         if isinstance(element, CDiagram):
             self.twProjectView.UpdateElement(element)
+            self.nbTabs.RefreshTab(element)
         else:
             if element.GetObject().GetType().HasVisualAttribute(property):
                 self.picDrawingArea.Paint()

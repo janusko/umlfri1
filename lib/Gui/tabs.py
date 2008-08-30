@@ -151,8 +151,15 @@ class CTabs(CWidget):
             del self.diagrams[1]
             self.nbTabs.remove_page(1)
 
-
-    
+    def RefreshTab(self, diagram):
+        if diagram in self.diagrams:
+            num = self.diagrams.index(diagram)
+            page = self.nbTabs.get_nth_page(num) #ebPage = event box Page
+            page_label = self.nbTabs.get_tab_label(page)
+            for l in page_label:
+                if isinstance(l, gtk.Label):
+                    label = l
+            label.set_text(diagram.GetName())
     
     def on_mnuTab_activate(self, widget, diagram):
         for id, a in enumerate(self.diagrams):
