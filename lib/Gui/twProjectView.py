@@ -1,7 +1,7 @@
 from common import CWidget
 from lib.Project import CProject, CProjectNode
 from lib.Elements import CElementFactory, CElementObject
-from lib.Drawing import CElement
+from lib.Drawing import CElement, CDiagram
 from lib.Exceptions.UserException import *
 from lib.Drawing.Canvas.GtkPlus import PixmapFromPath
 
@@ -249,8 +249,17 @@ class CtwProjectView(CWidget):
                 node = self.twProjectView.get_model().get(iter,3)[0]
                 if object is node.GetObject():
                     break
-            node.Change()  
-            
+
+            node.Change()
+            model = self.twProjectView.get_model()
+            self.TreeStore.set_value(iter, 0, object.GetName())
+
+        if isinstance(object, CDiagram):
+            for iter in self.get_iters_from_path(self.twProjectView.get_model(),self.twProjectView.get_model().get_iter_root() ,object.GetPath()):
+                node = self.twProjectView.get_model().get(iter,3)[0]
+                if object is node:
+                    break
+ 
             model = self.twProjectView.get_model()
             self.TreeStore.set_value(iter, 0, object.GetName())
     
@@ -286,9 +295,6 @@ class CtwProjectView(CWidget):
         if self.EventButton[0] == 3:
             self.mnuTreeDelete.set_sensitive(len(treeView.get_model().get_path(iter)) > 1)
             self.menuTreeElement.popup(None,None,None,self.EventButton[0],self.EventButton[1])
-            
-        if treeView.get_model().get(iter,2)[0] == "=Diagram=":
-            return
         
         self.emit('selected-item-tree',treeView.get_model().get(iter,3)[0])
             

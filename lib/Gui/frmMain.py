@@ -6,10 +6,9 @@ import lib.consts
 
 import os.path
 
-from lib.Drawing import CElement
+from lib.Drawing import CElement, CDiagram
 from lib.Elements import CElementObject
 from dialogs import CWarningDialog, CQuestionDialog, ECancelPressed
-from lib.Drawing import CDiagram
 from tbToolBox import CtbToolBox
 from twProjectView import CtwProjectView
 from mnuItems import CmnuItems
@@ -488,9 +487,12 @@ class CfrmMain(CWindow):
 
     @event("nbProperties", "content-update")
     def on_nbProperties_content_update(self, widget, element, property):
-        if element.GetObject().GetType().HasVisualAttribute(property):
-            self.picDrawingArea.Paint()
-            self.twProjectView.UpdateElement(element.GetObject())
+        if isinstance(element, CDiagram):
+            self.twProjectView.UpdateElement(element)
+        else:
+            if element.GetObject().GetType().HasVisualAttribute(property):
+                self.picDrawingArea.Paint()
+                self.twProjectView.UpdateElement(element.GetObject())
 
     @event("tbToolBox", "toggled")
     def on_tbToolBox_toggled(self, widget, ItemId, ItemType):

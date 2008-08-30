@@ -1,4 +1,5 @@
 from common import CWidget, CellRendererButton, event
+from lib.Drawing import CDiagram
 
 import gobject
 import gtk
@@ -58,8 +59,16 @@ class ClwProperties(CWidget):
     def Fill(self, Element):
         self.element = Element
         self.listStore.clear()
+        
         if Element is  None:
             return
+        
+        if isinstance(self.element, CDiagram):
+            v = self.element.GetName()
+            row = self.listStore.append()
+            self.listStore.set(row, ID_TYPE, 'str', ID_NAME, 'Name', ID_VALUE, v, ID_TEXT_VISIBLE, True, ID_COMBO_VISIBLE, False, ID_BUTTON_VISIBLE, False, ID_EDITABLE, True)
+            return
+        
         object = Element.GetObject()
         type = Element.GetObject().GetType()
         for k in type.GetAttributes():
@@ -94,7 +103,10 @@ class ClwProperties(CWidget):
         iter = model.get_iter_from_string(path)
         model.set(iter, ID_VALUE, new_value) 
         name, = model.get(iter, ID_NAME)
-        self.element.GetObject().SetAttribute(name ,new_value)
+        if isinstance(self.element, CDiagram):
+            self.element.SetName(new_value)
+        else:
+            self.element.GetObject().SetAttribute(name ,new_value)
         self.emit('content_update', self.element, name)
         
     @event("ComboRenderer", "edited")
