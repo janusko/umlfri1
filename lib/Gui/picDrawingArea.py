@@ -206,6 +206,7 @@ class CpicDrawingArea(CWidget):
     @event("picEventBox", "button-press-event")
     def on_picEventBox_button_press_event(self, widget, event):
         self.picDrawingArea.grab_focus()  
+        pos = self.GetAbsolutePos((event.x, event.y))
         
         if event.button == 1 and event.type == gtk.gdk._2BUTTON_PRESS:
             if len(tuple(self.Diagram.GetSelected())) == 1:
@@ -223,7 +224,6 @@ class CpicDrawingArea(CWidget):
                 self.__AddItem(toolBtnSel, event)
                 return
             
-            pos = self.GetAbsolutePos((event.x, event.y))
             itemSel = self.Diagram.GetElementAtPosition(self.canvas, pos)
             if itemSel is not None: #ak som nieco trafil:              
                 if itemSel in self.Diagram.GetSelected(): # deselecting:
@@ -277,8 +277,14 @@ class CpicDrawingArea(CWidget):
                         self.Paint()
                         self.emit('selected-item', list(self.Diagram.GetSelected()))
                 self.__BeginDragSel(event)
-        else:
-            if event.button == 3:
+        elif event.button == 3:
+                self.Diagram.DeselectAll()
+                itemSel = self.Diagram.GetElementAtPosition(self.canvas, pos)
+                if itemSel is not None:
+                    self.Diagram.AddToSelection(itemSel)
+                self.pmShowInProjectView.set_sensitive(True)                
+                self.Paint()
+                self.emit('selected-item', list(self.Diagram.GetSelected()))
                 #ak je nieco vyselectovane:
                 if len( list(self.Diagram.GetSelectedElements()) ) > 0: 
                     if self.Diagram.GetSelected() is not None and len(tuple(self.Diagram.GetSelected())) < 2:
