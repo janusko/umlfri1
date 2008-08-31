@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: UML .FRI 1.0-beta\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2008-08-31 19:11+0100\n"
-"Last-Translator: BlueWay <bluewaysk@gmail.com>\n"
+"PO-Revision-Date: 2008-08-31 20:17+0100\n"
+"Last-Translator: Ján Janech <janech@kios.sk>\n"
 "Language-Team: uml_fri <uml@kst.fri.utc.sk>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -572,21 +572,6 @@ msgstr "_Zobraziť"
 
 msgid "_Z-Order"
 msgstr "Poradie"
-
-msgid "gtk-about"
-msgstr "gtk-o aplikácii"
-
-msgid "gtk-cancel"
-msgstr "gtk-zruš"
-
-msgid "gtk-ok"
-msgstr "gtk-ok"
-
-msgid "gtk-preferences"
-msgstr "gtk-nastavenia"
-
-msgid "gtk-save"
-msgstr "gtk-ulož"
 
 #, fuzzy
 msgid "project web"
