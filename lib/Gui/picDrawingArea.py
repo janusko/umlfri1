@@ -278,8 +278,9 @@ class CpicDrawingArea(CWidget):
                         self.emit('selected-item', list(self.Diagram.GetSelected()))
                 self.__BeginDragSel(event)
         elif event.button == 3:
-                self.Diagram.DeselectAll()
                 itemSel = self.Diagram.GetElementAtPosition(self.canvas, pos)
+                if itemSel not in frozenset(self.Diagram.GetSelected()):
+                    self.Diagram.DeselectAll()
                 if itemSel is not None:
                     self.Diagram.AddToSelection(itemSel)
                 self.pmShowInProjectView.set_sensitive(True)                
