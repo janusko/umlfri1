@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: UML .FRI 1.0-beta\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2007-02-17 20:44+0100\n"
-"Last-Translator: Jan Janech <janech@kios.sk>\n"
+"PO-Revision-Date: 2008-08-31 18:25+0100\n"
+"Last-Translator: BlueWay <bluewaysk@gmail.com>\n"
 "Language-Team: uml_fri <uml@kst.fri.utc.sk>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -12,184 +12,101 @@ msgstr ""
 "X-Poedit-Country: SLOVAKIA\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: ../../gui/gui.glade:10
-msgid "UML .FRI"
-msgstr "UML .FRI"
-
-#: ../../gui/gui.glade:37
-msgid "_File"
+#, fuzzy
+msgid ""
+"\n"
+"File "
 msgstr "_Súbor"
 
-#: ../../gui/gui.glade:88
-msgid "_Edit"
-msgstr "_Upraviť"
+msgid ""
+"\n"
+"architecture:\t\t"
+msgstr ""
 
-#: ../../gui/gui.glade:133
-msgid "_Project"
-msgstr "_Projekt"
+msgid ""
+"\n"
+"gtk version:\t\t"
+msgstr ""
 
-#: ../../gui/gui.glade:142
-#: ../../gui/gui.glade:3719
-msgid "Add diagram"
-msgstr "Pridať diagram"
+msgid ""
+"\n"
+"machine:\t\t"
+msgstr ""
 
-#: ../../gui/gui.glade:179
-msgid "_Diagram"
-msgstr "_Diagram"
+msgid ""
+"\n"
+"platform:\t\t"
+msgstr ""
 
-#: ../../gui/gui.glade:189
-#: ../../gui/gui.glade:3592
-msgid "Export diagram as SVG"
-msgstr "Uložiť diagram ako SVG"
+msgid ""
+"\n"
+"pygtk version:\t\t"
+msgstr ""
 
-#: ../../gui/gui.glade:202
-msgid "_Element"
-msgstr "_Element"
+msgid ""
+"\n"
+"python version:\t\t"
+msgstr ""
 
-#: ../../gui/gui.glade:211
-msgid "_Z-Order"
-msgstr "Poradie"
+msgid " in "
+msgstr "v"
 
-#: ../../gui/gui.glade:220
-#: ../../gui/gui.glade:3628
-msgid "Send Back"
-msgstr "O jeden dozadu "
+msgid " line "
+msgstr "čiara"
 
-#: ../../gui/gui.glade:241
-#: ../../gui/gui.glade:3649
-msgid "Bring Forward"
-msgstr "O jeden dopredu  "
+msgid "<b>project e-mail address</b>"
+msgstr "e-mail adresa projektu"
 
-#: ../../gui/gui.glade:262
-#: ../../gui/gui.glade:3670
-msgid "Send To Bottom"
-msgstr "Presunúť dozadu"
+msgid ""
+"<span size=\"xx-large\">UML.fri</span>\n"
+"<b>Version 1.0 beta</b>\n"
+"\n"
+"Free python-based CASE tool."
+msgstr ""
+"<span size=\"xx-large\">UML.fri</span>\n"
+"<b>Version 1.0 beta</b>\n"
+"\n"
+"Free python-based CASE tool."
 
-#: ../../gui/gui.glade:283
-#: ../../gui/gui.glade:3691
-msgid "Bring To Top"
-msgstr "Presunúť dopredu"
-
-#: ../../gui/gui.glade:312
-msgid "_View"
-msgstr "_Zobraziť"
-
-#: ../../gui/gui.glade:321
-msgid "Toolbar"
-msgstr "Panel s nástrojmi"
-
-#: ../../gui/gui.glade:335
-msgid "_Help"
-msgstr "_Pomocník"
-
-#: ../../gui/gui.glade:344
-msgid "_About"
-msgstr "_O projekte..."
-
-#: ../../gui/gui.glade:549
 msgid "About"
 msgstr "O projekte"
 
-#: ../../gui/gui.glade:585
-msgid "Open Existing Project"
-msgstr "Otvoriť existujúci projekt"
+msgid "Abstract"
+msgstr "Abstract"
 
-#: ../../gui/gui.glade:909
-msgid "Create New Project"
-msgstr "Vytvoriť nový projekt"
+msgid "Add diagram"
+msgstr "Pridať diagram"
 
-#: ../../gui/gui.glade:1015
-#: ../../lib/Gui/picDrawingArea.py:56
-msgid "Start page"
-msgstr "Úvodná strana"
+msgid "All files"
+msgstr "Všetky súbory"
 
-#: ../../gui/gui.glade:1198
-#: ../../gui/gui.glade:1501
-msgid "Properties"
-msgstr "Vlastnosti"
+msgid "An exception has occured"
+msgstr "Výnimku vyvolalo"
 
-#: ../../gui/gui.glade:1256
-msgid "Notes"
-msgstr "Poznámky"
+msgid "An exception has occured:"
+msgstr "Výnimku vyvolalo:"
 
-#: ../../gui/gui.glade:1318
-msgid "About us"
-msgstr "O projekte UML.FRI"
+msgid "Arrow color"
+msgstr "Farba šípky"
 
-#: ../../gui/gui.glade:1391
-msgid "Okay, I understand"
-msgstr "Jasné, rozumiem"
+msgid "Arrow fill color"
+msgstr "Farba výplne šípky"
 
-#: ../../gui/gui.glade:1425
-msgid "Donate this project"
-msgstr "Podporiť projekt"
-
-#: ../../gui/gui.glade:1670
-msgid "Attributes"
-msgstr "Atribúty"
-
-#: ../../gui/gui.glade:1776
-msgid "Operations"
-msgstr "Operácie"
-
-#: ../../gui/gui.glade:1843
-msgid "Connections"
-msgstr "Spojenia"
-
-#: ../../gui/gui.glade:1874
 msgid "Attribute"
 msgstr "Atribút"
 
-#: ../../gui/gui.glade:1947
-#: ../../gui/gui.glade:2518
-msgid "Name:"
-msgstr "Názov:"
+msgid "Attributes"
+msgstr "Atribúty"
 
-#: ../../gui/gui.glade:1975
-msgid "Type:"
-msgstr "Typ:"
+msgid "Basic information about Your system"
+msgstr "Základné informácie o vašom systéme"
 
-#: ../../gui/gui.glade:2003
-msgid "Scope: "
-msgstr "Platnosť:"
+msgid "Bring Forward"
+msgstr "O jeden dopredu  "
 
-#: ../../gui/gui.glade:2031
-#: ../../gui/gui.glade:2630
-msgid "Stereotype:"
-msgstr "Stereotyp:"
+msgid "Bring To Top"
+msgstr "Presunúť dopredu"
 
-#: ../../gui/gui.glade:2059
-msgid "Containment: "
-msgstr "Vlastníctvo:"
-
-#: ../../gui/gui.glade:2087
-msgid "Initial:"
-msgstr "Počiatočná hodnota"
-
-#: ../../gui/gui.glade:2115
-#: ../../gui/gui.glade:2938
-msgid "Documentation:"
-msgstr "Komentár:"
-
-#: ../../gui/gui.glade:2249
-msgid "Property"
-msgstr "Property"
-
-#: ../../gui/gui.glade:2268
-#: ../../gui/gui.glade:2791
-msgid "Const"
-msgstr "Const"
-
-#: ../../gui/gui.glade:2303
-msgid "Derived"
-msgstr "Derived"
-
-#: ../../gui/gui.glade:2322
-#: ../../gui/gui.glade:2747
-msgid "Static"
-msgstr "Static"
-
-#: ../../gui/gui.glade:2417
 msgid ""
 "By Reference\n"
 "By Value\n"
@@ -199,238 +116,460 @@ msgstr ""
 "Hodnotou\n"
 "Neurčené"
 
-#: ../../gui/gui.glade:2445
-msgid "Operation"
-msgstr "Operácie"
+#, fuzzy
+msgid "C_ontribute"
+msgstr "Atribút"
 
-#: ../../gui/gui.glade:2546
-msgid "Parameters:"
-msgstr "Parametre"
+#, fuzzy
+msgid "C_redits"
+msgstr "_Upraviť"
 
-#: ../../gui/gui.glade:2574
-msgid "Return Type:"
-msgstr "Návratový typ"
-
-#: ../../gui/gui.glade:2602
-msgid "Scope:"
-msgstr "Platnosť:"
-
-#: ../../gui/gui.glade:2769
-msgid "Abstract"
-msgstr "Abstract"
-
-#: ../../gui/gui.glade:2813
-msgid "Return Array"
-msgstr "Return Array"
-
-#: ../../gui/gui.glade:2835
-msgid "Pure"
-msgstr "Pure"
-
-#: ../../gui/gui.glade:2857
-msgid "Synchronized"
-msgstr "Synchronized"
-
-#: ../../gui/gui.glade:2879
-msgid "Is Query"
-msgstr "Is Query"
-
-#: ../../gui/gui.glade:3033
-msgid "Open Project"
-msgstr "Otvoriť projekt"
-
-#: ../../gui/gui.glade:3129
-msgid "Create _New Project"
-msgstr "Vytvoriť _nový projekt"
-
-#: ../../gui/gui.glade:3175
-#: ../../gui/gui.glade:3261
-msgid "Open as _copy"
-msgstr "Otvoriť ako _kópiu"
-
-#: ../../gui/gui.glade:3199
-msgid "_Open Existing Project"
-msgstr "_Otvoriť existujúci projekt"
-
-#: ../../gui/gui.glade:3285
-msgid "Open _Recent Project"
-msgstr "Naposledy otvo_rené"
-
-#: ../../gui/gui.glade:3320
-msgid "Save Project As"
-msgstr "Uložiť projekt ako"
-
-#: ../../gui/gui.glade:3383
-msgid "Find in diagrams"
-msgstr "Nájdi v diagramoch"
-
-#: ../../gui/gui.glade:3479
-msgid "UML.fri"
-msgstr "UML.fri"
-
-#: ../../gui/gui.glade:3532
-msgid "Pages"
-msgstr "Záložky"
-
-#: ../../gui/gui.glade:3560
-msgid "Close diagram"
-msgstr "Zatvoriť diagram"
-
-#: ../../gui/gui.glade:3569
 msgid "Close all diagram"
 msgstr "Zatvoriť všetky diagramy"
 
-#: ../../gui/gui.glade:3584
-#: ../../gui/gui.glade:3611
-msgid "Show in project view"
-msgstr "Nájdi v strome projektu"
+msgid "Close diagram"
+msgstr "Zatvoriť diagram"
 
-#: ../../gui/gui.glade:3603
-msgid "Open specificetion ..."
-msgstr "Vlastnosti"
+msgid "Commandbar"
+msgstr ""
 
-#: ../../gui/gui.glade:3619
-msgid "Z-Order"
-msgstr "Poradie"
+msgid "Connection"
+msgstr "Spojenie"
 
-#: ../../gui/gui.glade:3753
+msgid "Connections"
+msgstr "Spojenia"
+
+msgid "Const"
+msgstr "Const"
+
+msgid "Containment: "
+msgstr "Vlastníctvo:"
+
+msgid "Create New Project"
+msgstr "Vytvoriť nový projekt"
+
+msgid "Create _New Project"
+msgstr "Vytvoriť _nový projekt"
+
+msgid "Date"
+msgstr "Dátum poslednej zmeny"
+
 msgid "Delete"
 msgstr "Odstrániť"
 
-#: ../../gui/gui.glade:3773
-msgid "Find in diagrams ..."
-msgstr "Nájdi v diagramoch ..."
+msgid "Derived"
+msgstr "Derived"
 
-#: ../../lib/Gui/picDrawingArea.py:356
-msgid "Invalid connection"
-msgstr "Nepovolené spojenie"
+msgid "Diagram name"
+msgstr "Názov diagramu"
 
-#: ../../lib/Gui/frmAttribute.py:63
-#: ../../lib/Gui/frmOperation.py:84
-msgid "Fill the name and type fields"
-msgstr "Vyplňte polia s názvom a typom"
+msgid "Diagram type"
+msgstr "Typ diagramu"
 
-#: ../../lib/Gui/frmMain.py:125
+msgid "Do you want to save project?"
+msgstr "Chcete uložiť zmeny vykonané v projekte?"
+
+msgid "Documentation:"
+msgstr "Komentár:"
+
+msgid "Drag"
+msgstr "Ťahať"
+
+#, fuzzy
+msgid "Element"
+msgstr "_Element"
+
+msgid "Elements"
+msgstr "Elementy"
+
 msgid "Error opening file"
 msgstr "Chyba pri otváraní súboru"
 
-#: ../../lib/Gui/frmMain.py:151
-msgid "Choose SVG file"
-msgstr "Vyberte SVG súbor"
+msgid "Exception"
+msgstr "Výnimka"
 
-#: ../../lib/Gui/frmMain.py:172
+msgid "Exception handler"
+msgstr "Manažér výnimiek"
+
+msgid "Exception traceback (most recent call last)"
+msgstr ""
+
+#, fuzzy
+msgid "Export diagram"
+msgstr "Uložiť diagram ako SVG"
+
+msgid "Export diagram as SVG"
+msgstr "Uložiť diagram ako SVG"
+
+msgid "File does not exist"
+msgstr "Súbor nebol nájdený"
+
+msgid "File name"
+msgstr "Názov súboru"
+
+msgid ""
+"File successfully saved as:\n"
+"\n"
+msgstr ""
+"Súbor bol úspešne uložený ako:\n"
+"\n"
+
+msgid "Fill color"
+msgstr "Farba výplne"
+
+msgid "Fill color 2"
+msgstr "Farba výplne 2"
+
+msgid "Fill color 3"
+msgstr "Farba výplne 3"
+
+msgid "Fill the name and type fields"
+msgstr "Vyplňte polia s názvom a typom"
+
+msgid "Find in diagrams"
+msgstr "Nájdi v diagramoch"
+
+msgid "Find in diagrams ..."
+msgstr "Nájdi v diagramoch ..."
+
+msgid "Fullscreen"
+msgstr "Celá obrazovka"
+
+msgid "Gui"
+msgstr "Gui"
+
+msgid "I_nclude project"
+msgstr "V_lož projekt"
+
+#, fuzzy
+msgid "Images"
+msgstr "Záložky"
+
+msgid "Initial:"
+msgstr "Počiatočná hodnota"
+
+msgid "Invalid connection"
+msgstr "Nepovolené spojenie"
+
+msgid "Is Query"
+msgstr "Is Query"
+
+msgid "Line color"
+msgstr "Farba čiary"
+
+msgid "Locales"
+msgstr ""
+
+msgid "Name"
+msgstr "Názov"
+
+msgid "Name Text Font"
+msgstr "Písmo názvu"
+
+msgid "Name text color"
+msgstr "Farba názvu"
+
+msgid "Name text font"
+msgstr "Písmo názvu"
+
+msgid "Name:"
+msgstr "Názov:"
+
+msgid "Notes"
+msgstr "Poznámky"
+
+msgid "Object"
+msgstr "Objekt"
+
+msgid "Open Existing Project"
+msgstr "Otvoriť existujúci projekt"
+
+msgid "Open Project"
+msgstr "Otvoriť projekt"
+
+msgid "Open _Recent Project"
+msgstr "Naposledy otvo_rené"
+
+msgid "Open as _copy"
+msgstr "Otvoriť ako _kópiu"
+
+msgid "Open specificetion ..."
+msgstr "Vlastnosti"
+
+msgid "Operation"
+msgstr "Operácie"
+
+msgid "Operations"
+msgstr "Operácie"
+
+msgid "Pages"
+msgstr "Záložky"
+
+msgid "Parameters"
+msgstr "Parametre"
+
+msgid "Parameters:"
+msgstr "Parametre"
+
+#, fuzzy
+msgid "Paths"
+msgstr "Záložky"
+
+msgid "Please help us improve the UML.FRI application by sending us this log."
+msgstr "Prosím, pomôžte nám zdokonaliť UML .FRI aplikáciu a pošlite nám túto správu"
+
+msgid "Points color"
+msgstr "Farba bodu"
+
+msgid "Points size"
+msgstr "Veľkosť bodu"
+
+msgid "Preferences"
+msgstr "Nastavenia"
+
+msgid "Properties"
+msgstr "Vlastnosti"
+
+msgid "Property"
+msgstr "Property"
+
+msgid "Pure"
+msgstr "Pure"
+
+msgid "Question"
+msgstr "Otázka"
+
+msgid "Recent files"
+msgstr "Naposledy otvorené súbory"
+
+msgid "Rectagle width"
+msgstr "Šírka štvoruholníka"
+
+msgid "Rectangle color"
+msgstr "Farba štvoruholníka"
+
+msgid "Rectangle width"
+msgstr "Šírka štvoruholníka"
+
+msgid "Return Array"
+msgstr "Return Array"
+
+msgid "Return Type:"
+msgstr "Návratový typ"
+
+msgid "Root"
+msgstr "Koreň"
+
+msgid "Save Error log"
+msgstr "Ulož chybovú hlášku"
+
+msgid "Save Project As"
+msgstr "Uložiť projekt ako"
+
+msgid "Scope"
+msgstr "Platnosť"
+
+msgid "Scope:"
+msgstr "Platnosť:"
+
+msgid "Scope: "
+msgstr "Platnosť:"
+
+#, fuzzy
+msgid "Selection"
+msgstr "Spojenie"
+
+msgid "Send Back"
+msgstr "O jeden dozadu "
+
+msgid "Send To Bottom"
+msgstr "Presunúť dozadu"
+
+msgid "Shadow color"
+msgstr "Farba tieňa"
+
+msgid "Show in project view"
+msgstr "Nájdi v strome projektu"
+
+msgid "Start page"
+msgstr "Úvodná strana"
+
+msgid "Static"
+msgstr "Static"
+
+msgid "Stereotype:"
+msgstr "Stereotyp:"
+
+msgid "Styles"
+msgstr "Štýl"
+
+msgid "Synchronized"
+msgstr "Synchronized"
+
+msgid "System _info"
+msgstr "Systémové _informácie"
+
+msgid "Templates"
+msgstr "Predlohy"
+
+msgid "Text Font"
+msgstr "Písmo textu"
+
+msgid "Text color"
+msgstr "Farba textu"
+
+#, fuzzy
+msgid "Text files"
+msgstr "Všetky súbory"
+
+msgid "Text font"
+msgstr "Písmo textu"
+
+#, fuzzy
+msgid "Toolbox"
+msgstr "Panel s nástrojmi"
+
+msgid "Type"
+msgstr "Typ"
+
+msgid "Type:"
+msgstr "Typ:"
+
+msgid "UML .FRI"
+msgstr "UML .FRI"
+
+#, fuzzy
+msgid "UML .FRI Clear XML Projects"
+msgstr "UML .FRI Projekt"
+
+msgid "UML .FRI Project templates"
+msgstr "UML .FRI Šablóna projektu"
+
+msgid "UML .FRI Projects"
+msgstr "UML .FRI Projekt"
+
 msgid "UML .FRI designer"
 msgstr "UML .FRI dizajnér"
 
-#: ../../lib/Gui/frmMain.py:174
 #, python-format
 msgid "UML .FRI designer [%s]"
 msgstr "UML .FRI dizajnér [%s]"
 
-#: ../../lib/Gui/frmMain.py:181
-#: ../../lib/Gui/frmMain.py:191
-#: ../../lib/Gui/frmMain.py:205
-msgid "Do you want to save project?"
-msgstr "Chcete uložiť zmeny vykonané v projekte?"
+msgid "UML.fri"
+msgstr "UML.fri"
 
-#: ../../lib/Gui/frmMain.py:274
-#: ../../lib/Gui/frmMain.py:384
+msgid ""
+"UML.fri is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.\n"
+"\n"
+"UML.fri is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.\n"
+"\n"
+"You should have received a copy of the GNU General Public License along with UML.fri; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
+msgstr ""
+
+#, fuzzy
+msgid "UML.fri website"
+msgstr "UML.fri"
+
 msgid "Unable to insert element"
 msgstr "Element už existuje"
 
-#: ../../lib/Gui/frmMain.py:276
-#: ../../lib/Gui/frmMain.py:386
-msgid "Wrong element: "
-msgstr "Nesprávny element:"
+msgid "Use the <i>Report</i> button to post this error directly on our website, or use the <i>Save</i> button to save the error log with your basic system information to a file. If the <i>Include project</i> option is chcecked Your current project will be added to this text file as well. You can also write some some basic information about what were You doing when this exception occured in the <i>User comments</i> tab to help us recreate it. Please send us the saved text file to our project e-mail address:"
+msgstr ""
 
-#: ../../lib/Gui/twProjectView.py:38
-msgid "Elements"
-msgstr "Elementy"
+msgid "User config"
+msgstr ""
 
-#: ../../lib/Gui/lwProperties.py:22
-#: ../../lib/Gui/frmProperties.py:18
-#: ../../lib/Gui/frmProperties.py:23
-msgid "Name"
-msgstr "Názov"
+msgid "User dir"
+msgstr ""
 
-#: ../../lib/Gui/lwProperties.py:35
 msgid "Value"
 msgstr "Hodnota"
 
-#: ../../lib/Gui/frmProperties.py:17
-#: ../../lib/Gui/frmProperties.py:21
-msgid "Scope"
-msgstr "Platnosť"
-
-#: ../../lib/Gui/frmProperties.py:19
-#: ../../lib/Gui/frmProperties.py:22
-msgid "Type"
-msgstr "Typ"
-
-#: ../../lib/Gui/frmProperties.py:24
-msgid "Parameters"
-msgstr "Parametre"
-
-#: ../../lib/Gui/frmProperties.py:26
-msgid "Object"
-msgstr "Objekt"
-
-#: ../../lib/Gui/frmProperties.py:27
-msgid "Connection"
-msgstr "Spojenie"
-
-#: ../../lib/Gui/frmProperties.py:30
-#: ../../lib/Gui/frmProperties.py:57
-msgid "Visible"
-msgstr "Viditeľnosť"
-
-#: ../../lib/Gui/frmOpen.py:27
-#: ../../lib/Gui/frmSave.py:14
-#: ../../lib/Gui/frmSave.py:38
-msgid "UML .FRI Projects"
-msgstr "UML .FRI Projekt"
-
-#: ../../lib/Gui/frmOpen.py:31
-#: ../../lib/Gui/frmSave.py:18
-#: ../../lib/Gui/frmSave.py:40
-msgid "UML .FRI Project templates"
-msgstr "UML .FRI Šablóna projektu"
-
-#: ../../lib/Gui/frmOpen.py:35
-#: ../../lib/Gui/frmSave.py:22
-msgid "All files"
-msgstr "Všetky súbory"
-
-#: ../../lib/Gui/frmOpen.py:42
-msgid "File name"
-msgstr "Názov súboru"
-
-#: ../../lib/Gui/frmOpen.py:43
-msgid "Date"
-msgstr "Dátum poslednej zmeny"
-
-#: ../../lib/Gui/frmOpen.py:120
-msgid "File does not exist"
-msgstr "Súbor nebol nájdený"
-
-#: ../../lib/Gui/frmSplash.py:20
 #, python-format
 msgid "Version: %s"
 msgstr "Verzia: %s"
 
-#: ../../lib/Gui/frmFindInDiagram.py:23
-msgid "Diagram name"
-msgstr "Názov diagramu"
+msgid "Visible"
+msgstr "Viditeľnosť"
 
-#: ../../lib/Gui/frmFindInDiagram.py:24
-msgid "Diagram type"
-msgstr "Typ diagramu"
-
-#: ../../lib/Gui/dialogs.py:10
 msgid "Warning"
 msgstr "Varovanie"
 
-#: ../../lib/Gui/dialogs.py:24
-msgid "Question"
-msgstr "Otázka"
+msgid ""
+"We are looking for people willing to help us improve our\n"
+"application. You too can contribute in many ways:\n"
+"\n"
+"* Report us Your wishes or desired features.\n"
+"* Join our development team.\n"
+"* Contribute art work, like new icons, logos.\n"
+"* Translate\n"
+"<i>Visit our web page for more information. </i>"
+msgstr ""
+
+msgid "What were You doing when this exception occured ?"
+msgstr "Čo ste robili, keď došlo k tejto výnimke?"
+
+msgid "Wrong element: "
+msgstr "Nesprávny element:"
+
+msgid "Z-Order"
+msgstr "Poradie"
+
+msgid "_Diagram"
+msgstr "_Diagram"
+
+msgid "_Edit"
+msgstr "_Upraviť"
+
+msgid "_Element"
+msgstr "_Element"
+
+msgid "_Error log"
+msgstr "_Chybová hláška"
+
+msgid "_File"
+msgstr "_Súbor"
+
+msgid "_Help"
+msgstr "_Pomocník"
+
+msgid "_License"
+msgstr "_Licencia"
+
+msgid "_Open Existing Project"
+msgstr "_Otvoriť existujúci projekt"
+
+msgid "_Project"
+msgstr "_Projekt"
+
+msgid "_Report"
+msgstr "_Správa"
+
+msgid "_User comments"
+msgstr "_Poznámky užívateľa"
+
+msgid "_View"
+msgstr "_Zobraziť"
+
+msgid "_Z-Order"
+msgstr "Poradie"
+
+msgid "gtk-about"
+msgstr ""
+
+msgid "gtk-cancel"
+msgstr ""
+
+msgid "gtk-ok"
+msgstr ""
+
+msgid "gtk-preferences"
+msgstr ""
+
+msgid "gtk-save"
+msgstr ""
+
+#, fuzzy
+msgid "project web"
+msgstr "_Projekt"
 
