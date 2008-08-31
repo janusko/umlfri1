@@ -259,7 +259,7 @@ class CtwProjectView(CWidget):
                 node = self.twProjectView.get_model().get(iter,3)[0]
                 if object is node:
                     break
- 
+
             model = self.twProjectView.get_model()
             self.TreeStore.set_value(iter, 0, object.GetName())
     

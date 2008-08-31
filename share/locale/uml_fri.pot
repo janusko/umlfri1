@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: UML .FRI 1.0-beta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-17 20:29+0100\n"
+"POT-Creation-Date: 2008-08-31 17:48+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,395 +16,556 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../gui/gui.glade:10
-msgid "UML .FRI"
+msgid ""
+"\n"
+"File "
 msgstr ""
 
-#: ../../gui/gui.glade:37
-msgid "_File"
+msgid ""
+"\n"
+"architecture:\t\t"
 msgstr ""
 
-#: ../../gui/gui.glade:88
-msgid "_Edit"
+msgid ""
+"\n"
+"gtk version:\t\t"
 msgstr ""
 
-#: ../../gui/gui.glade:133
-msgid "_Project"
+msgid ""
+"\n"
+"machine:\t\t"
 msgstr ""
 
-#: ../../gui/gui.glade:142 ../../gui/gui.glade:3719
-msgid "Add diagram"
+msgid ""
+"\n"
+"platform:\t\t"
 msgstr ""
 
-#: ../../gui/gui.glade:179
-msgid "_Diagram"
+msgid ""
+"\n"
+"pygtk version:\t\t"
 msgstr ""
 
-#: ../../gui/gui.glade:189 ../../gui/gui.glade:3592
-msgid "Export diagram as SVG"
+msgid ""
+"\n"
+"python version:\t\t"
 msgstr ""
 
-#: ../../gui/gui.glade:202
-msgid "_Element"
+msgid " in "
 msgstr ""
 
-#: ../../gui/gui.glade:211
-msgid "_Z-Order"
+msgid " line "
 msgstr ""
 
-#: ../../gui/gui.glade:220 ../../gui/gui.glade:3628
-msgid "Send Back"
+msgid "<b>project e-mail address</b>"
 msgstr ""
 
-#: ../../gui/gui.glade:241 ../../gui/gui.glade:3649
-msgid "Bring Forward"
+msgid ""
+"<span size=\"xx-large\">UML.fri</span>\n"
+"<b>Version 1.0 beta</b>\n"
+"\n"
+"Free python-based CASE tool."
 msgstr ""
 
-#: ../../gui/gui.glade:262 ../../gui/gui.glade:3670
-msgid "Send To Bottom"
-msgstr ""
-
-#: ../../gui/gui.glade:283 ../../gui/gui.glade:3691
-msgid "Bring To Top"
-msgstr ""
-
-#: ../../gui/gui.glade:312
-msgid "_View"
-msgstr ""
-
-#: ../../gui/gui.glade:321
-msgid "Toolbar"
-msgstr ""
-
-#: ../../gui/gui.glade:335
-msgid "_Help"
-msgstr ""
-
-#: ../../gui/gui.glade:344
-msgid "_About"
-msgstr ""
-
-#: ../../gui/gui.glade:549
 msgid "About"
 msgstr ""
 
-#: ../../gui/gui.glade:585
-msgid "Open Existing Project"
+msgid "Abstract"
 msgstr ""
 
-#: ../../gui/gui.glade:909
-msgid "Create New Project"
+msgid "Add diagram"
 msgstr ""
 
-#: ../../gui/gui.glade:1015 ../../lib/Gui/picDrawingArea.py:56
-msgid "Start page"
+msgid "All files"
 msgstr ""
 
-#: ../../gui/gui.glade:1198 ../../gui/gui.glade:1501
-msgid "Properties"
+msgid "An exception has occured"
 msgstr ""
 
-#: ../../gui/gui.glade:1256
-msgid "Notes"
+msgid "An exception has occured:"
 msgstr ""
 
-#: ../../gui/gui.glade:1318
-msgid "About us"
+msgid "Arrow color"
 msgstr ""
 
-#: ../../gui/gui.glade:1391
-msgid "Okay, I understand"
+msgid "Arrow fill color"
 msgstr ""
 
-#: ../../gui/gui.glade:1425
-msgid "Donate this project"
-msgstr ""
-
-#: ../../gui/gui.glade:1670
-msgid "Attributes"
-msgstr ""
-
-#: ../../gui/gui.glade:1776
-msgid "Operations"
-msgstr ""
-
-#: ../../gui/gui.glade:1843
-msgid "Connections"
-msgstr ""
-
-#: ../../gui/gui.glade:1874
 msgid "Attribute"
 msgstr ""
 
-#: ../../gui/gui.glade:1947 ../../gui/gui.glade:2518
-msgid "Name:"
+msgid "Attributes"
 msgstr ""
 
-#: ../../gui/gui.glade:1975
-msgid "Type:"
+msgid "Basic information about Your system"
 msgstr ""
 
-#: ../../gui/gui.glade:2003
-msgid "Scope: "
+msgid "Bring Forward"
 msgstr ""
 
-#: ../../gui/gui.glade:2031 ../../gui/gui.glade:2630
-msgid "Stereotype:"
+msgid "Bring To Top"
 msgstr ""
 
-#: ../../gui/gui.glade:2059
-msgid "Containment: "
-msgstr ""
-
-#: ../../gui/gui.glade:2087
-msgid "Initial:"
-msgstr ""
-
-#: ../../gui/gui.glade:2115 ../../gui/gui.glade:2938
-msgid "Documentation:"
-msgstr ""
-
-#: ../../gui/gui.glade:2249
-msgid "Property"
-msgstr ""
-
-#: ../../gui/gui.glade:2268 ../../gui/gui.glade:2791
-msgid "Const"
-msgstr ""
-
-#: ../../gui/gui.glade:2303
-msgid "Derived"
-msgstr ""
-
-#: ../../gui/gui.glade:2322 ../../gui/gui.glade:2747
-msgid "Static"
-msgstr ""
-
-#: ../../gui/gui.glade:2417
 msgid ""
 "By Reference\n"
 "By Value\n"
 "Not Specified"
 msgstr ""
 
-#: ../../gui/gui.glade:2445
-msgid "Operation"
+msgid "C_ontribute"
 msgstr ""
 
-#: ../../gui/gui.glade:2546
-msgid "Parameters:"
+msgid "C_redits"
 msgstr ""
 
-#: ../../gui/gui.glade:2574
-msgid "Return Type:"
-msgstr ""
-
-#: ../../gui/gui.glade:2602
-msgid "Scope:"
-msgstr ""
-
-#: ../../gui/gui.glade:2769
-msgid "Abstract"
-msgstr ""
-
-#: ../../gui/gui.glade:2813
-msgid "Return Array"
-msgstr ""
-
-#: ../../gui/gui.glade:2835
-msgid "Pure"
-msgstr ""
-
-#: ../../gui/gui.glade:2857
-msgid "Synchronized"
-msgstr ""
-
-#: ../../gui/gui.glade:2879
-msgid "Is Query"
-msgstr ""
-
-#: ../../gui/gui.glade:3033
-msgid "Open Project"
-msgstr ""
-
-#: ../../gui/gui.glade:3129
-msgid "Create _New Project"
-msgstr ""
-
-#: ../../gui/gui.glade:3175 ../../gui/gui.glade:3261
-msgid "Open as _copy"
-msgstr ""
-
-#: ../../gui/gui.glade:3199
-msgid "_Open Existing Project"
-msgstr ""
-
-#: ../../gui/gui.glade:3285
-msgid "Open _Recent Project"
-msgstr ""
-
-#: ../../gui/gui.glade:3320
-msgid "Save Project As"
-msgstr ""
-
-#: ../../gui/gui.glade:3383
-msgid "Find in diagrams"
-msgstr ""
-
-#: ../../gui/gui.glade:3479
-msgid "UML.fri"
-msgstr ""
-
-#: ../../gui/gui.glade:3532
-msgid "Pages"
-msgstr ""
-
-#: ../../gui/gui.glade:3560
-msgid "Close diagram"
-msgstr ""
-
-#: ../../gui/gui.glade:3569
 msgid "Close all diagram"
 msgstr ""
 
-#: ../../gui/gui.glade:3584 ../../gui/gui.glade:3611
-msgid "Show in project view"
+msgid "Close diagram"
 msgstr ""
 
-#: ../../gui/gui.glade:3603
-msgid "Open specificetion ..."
+msgid "Commandbar"
 msgstr ""
 
-#: ../../gui/gui.glade:3619
-msgid "Z-Order"
+msgid "Connection"
 msgstr ""
 
-#: ../../gui/gui.glade:3753
+msgid "Connections"
+msgstr ""
+
+msgid "Const"
+msgstr ""
+
+msgid "Containment: "
+msgstr ""
+
+msgid "Create New Project"
+msgstr ""
+
+msgid "Create _New Project"
+msgstr ""
+
+msgid "Date"
+msgstr ""
+
 msgid "Delete"
 msgstr ""
 
-#: ../../gui/gui.glade:3773
-msgid "Find in diagrams ..."
+msgid "Derived"
 msgstr ""
 
-#: ../../lib/Gui/picDrawingArea.py:356
-msgid "Invalid connection"
+msgid "Diagram name"
 msgstr ""
 
-#: ../../lib/Gui/frmAttribute.py:63 ../../lib/Gui/frmOperation.py:84
-msgid "Fill the name and type fields"
+msgid "Diagram type"
 msgstr ""
 
-#: ../../lib/Gui/frmMain.py:125
+msgid "Do you want to save project?"
+msgstr ""
+
+msgid "Documentation:"
+msgstr ""
+
+msgid "Drag"
+msgstr ""
+
+msgid "Element"
+msgstr ""
+
+msgid "Elements"
+msgstr ""
+
 msgid "Error opening file"
 msgstr ""
 
-#: ../../lib/Gui/frmMain.py:151
-msgid "Choose SVG file"
+msgid "Exception"
 msgstr ""
 
-#: ../../lib/Gui/frmMain.py:172
+msgid "Exception handler"
+msgstr ""
+
+msgid "Exception traceback (most recent call last)"
+msgstr ""
+
+msgid "Export diagram"
+msgstr ""
+
+msgid "Export diagram as SVG"
+msgstr ""
+
+msgid "File does not exist"
+msgstr ""
+
+msgid "File name"
+msgstr ""
+
+msgid ""
+"File successfully saved as:\n"
+"\n"
+msgstr ""
+
+msgid "Fill color"
+msgstr ""
+
+msgid "Fill color 2"
+msgstr ""
+
+msgid "Fill color 3"
+msgstr ""
+
+msgid "Fill the name and type fields"
+msgstr ""
+
+msgid "Find in diagrams"
+msgstr ""
+
+msgid "Find in diagrams ..."
+msgstr ""
+
+msgid "Fullscreen"
+msgstr ""
+
+msgid "Gui"
+msgstr ""
+
+msgid "I_nclude project"
+msgstr ""
+
+msgid "Images"
+msgstr ""
+
+msgid "Initial:"
+msgstr ""
+
+msgid "Invalid connection"
+msgstr ""
+
+msgid "Is Query"
+msgstr ""
+
+msgid "Line color"
+msgstr ""
+
+msgid "Locales"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Name Text Font"
+msgstr ""
+
+msgid "Name text color"
+msgstr ""
+
+msgid "Name text font"
+msgstr ""
+
+msgid "Name:"
+msgstr ""
+
+msgid "Notes"
+msgstr ""
+
+msgid "Object"
+msgstr ""
+
+msgid "Open Existing Project"
+msgstr ""
+
+msgid "Open Project"
+msgstr ""
+
+msgid "Open _Recent Project"
+msgstr ""
+
+msgid "Open as _copy"
+msgstr ""
+
+msgid "Open specificetion ..."
+msgstr ""
+
+msgid "Operation"
+msgstr ""
+
+msgid "Operations"
+msgstr ""
+
+msgid "Pages"
+msgstr ""
+
+msgid "Parameters"
+msgstr ""
+
+msgid "Parameters:"
+msgstr ""
+
+msgid "Paths"
+msgstr ""
+
+msgid "Please help us improve the UML.FRI application by sending us this log."
+msgstr ""
+
+msgid "Points color"
+msgstr ""
+
+msgid "Points size"
+msgstr ""
+
+msgid "Preferences"
+msgstr ""
+
+msgid "Properties"
+msgstr ""
+
+msgid "Property"
+msgstr ""
+
+msgid "Pure"
+msgstr ""
+
+msgid "Question"
+msgstr ""
+
+msgid "Recent files"
+msgstr ""
+
+msgid "Rectagle width"
+msgstr ""
+
+msgid "Rectangle color"
+msgstr ""
+
+msgid "Rectangle width"
+msgstr ""
+
+msgid "Return Array"
+msgstr ""
+
+msgid "Return Type:"
+msgstr ""
+
+msgid "Root"
+msgstr ""
+
+msgid "Save Error log"
+msgstr ""
+
+msgid "Save Project As"
+msgstr ""
+
+msgid "Scope"
+msgstr ""
+
+msgid "Scope:"
+msgstr ""
+
+msgid "Scope: "
+msgstr ""
+
+msgid "Selection"
+msgstr ""
+
+msgid "Send Back"
+msgstr ""
+
+msgid "Send To Bottom"
+msgstr ""
+
+msgid "Shadow color"
+msgstr ""
+
+msgid "Show in project view"
+msgstr ""
+
+msgid "Start page"
+msgstr ""
+
+msgid "Static"
+msgstr ""
+
+msgid "Stereotype:"
+msgstr ""
+
+msgid "Styles"
+msgstr ""
+
+msgid "Synchronized"
+msgstr ""
+
+msgid "System _info"
+msgstr ""
+
+msgid "Templates"
+msgstr ""
+
+msgid "Text Font"
+msgstr ""
+
+msgid "Text color"
+msgstr ""
+
+msgid "Text files"
+msgstr ""
+
+msgid "Text font"
+msgstr ""
+
+msgid "Toolbox"
+msgstr ""
+
+msgid "Type"
+msgstr ""
+
+msgid "Type:"
+msgstr ""
+
+msgid "UML .FRI"
+msgstr ""
+
+msgid "UML .FRI Clear XML Projects"
+msgstr ""
+
+msgid "UML .FRI Project templates"
+msgstr ""
+
+msgid "UML .FRI Projects"
+msgstr ""
+
 msgid "UML .FRI designer"
 msgstr ""
 
-#: ../../lib/Gui/frmMain.py:174
 #, python-format
 msgid "UML .FRI designer [%s]"
 msgstr ""
 
-#: ../../lib/Gui/frmMain.py:181 ../../lib/Gui/frmMain.py:191
-#: ../../lib/Gui/frmMain.py:205
-msgid "Do you want to save project?"
+msgid "UML.fri"
 msgstr ""
 
-#: ../../lib/Gui/frmMain.py:274 ../../lib/Gui/frmMain.py:384
+msgid ""
+"UML.fri is free software; you can redistribute it and/or modify it under the "
+"terms of the GNU General Public License as published by the Free Software "
+"Foundation; either version 2 of the License, or (at your option) any later "
+"version.\n"
+"\n"
+"UML.fri is distributed in the hope that it will be useful, but WITHOUT ANY "
+"WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
+"FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
+"details.\n"
+"\n"
+"You should have received a copy of the GNU General Public License along with "
+"UML.fri; if not, write to the Free Software Foundation, Inc., 51 Franklin "
+"Street, Fifth Floor, Boston, MA 02110-1301, USA."
+msgstr ""
+
+msgid "UML.fri website"
+msgstr ""
+
 msgid "Unable to insert element"
 msgstr ""
 
-#: ../../lib/Gui/frmMain.py:276 ../../lib/Gui/frmMain.py:386
-msgid "Wrong element: "
+msgid ""
+"Use the <i>Report</i> button to post this error directly on our website, or "
+"use the <i>Save</i> button to save the error log with your basic system "
+"information to a file. If the <i>Include project</i> option is chcecked Your "
+"current project will be added to this text file as well. You can also write "
+"some some basic information about what were You doing when this exception "
+"occured in the <i>User comments</i> tab to help us recreate it. Please send "
+"us the saved text file to our project e-mail address:"
 msgstr ""
 
-#: ../../lib/Gui/twProjectView.py:38
-msgid "Elements"
+msgid "User config"
 msgstr ""
 
-#: ../../lib/Gui/lwProperties.py:22 ../../lib/Gui/frmProperties.py:18
-#: ../../lib/Gui/frmProperties.py:23
-msgid "Name"
+msgid "User dir"
 msgstr ""
 
-#: ../../lib/Gui/lwProperties.py:35
 msgid "Value"
 msgstr ""
 
-#: ../../lib/Gui/frmProperties.py:17 ../../lib/Gui/frmProperties.py:21
-msgid "Scope"
-msgstr ""
-
-#: ../../lib/Gui/frmProperties.py:19 ../../lib/Gui/frmProperties.py:22
-msgid "Type"
-msgstr ""
-
-#: ../../lib/Gui/frmProperties.py:24
-msgid "Parameters"
-msgstr ""
-
-#: ../../lib/Gui/frmProperties.py:26
-msgid "Object"
-msgstr ""
-
-#: ../../lib/Gui/frmProperties.py:27
-msgid "Connection"
-msgstr ""
-
-#: ../../lib/Gui/frmProperties.py:30 ../../lib/Gui/frmProperties.py:57
-msgid "Visible"
-msgstr ""
-
-#: ../../lib/Gui/frmOpen.py:27 ../../lib/Gui/frmSave.py:14
-#: ../../lib/Gui/frmSave.py:38
-msgid "UML .FRI Projects"
-msgstr ""
-
-#: ../../lib/Gui/frmOpen.py:31 ../../lib/Gui/frmSave.py:18
-#: ../../lib/Gui/frmSave.py:40
-msgid "UML .FRI Project templates"
-msgstr ""
-
-#: ../../lib/Gui/frmOpen.py:35 ../../lib/Gui/frmSave.py:22
-msgid "All files"
-msgstr ""
-
-#: ../../lib/Gui/frmOpen.py:42
-msgid "File name"
-msgstr ""
-
-#: ../../lib/Gui/frmOpen.py:43
-msgid "Date"
-msgstr ""
-
-#: ../../lib/Gui/frmOpen.py:120
-msgid "File does not exist"
-msgstr ""
-
-#: ../../lib/Gui/frmSplash.py:20
 #, python-format
 msgid "Version: %s"
 msgstr ""
 
-#: ../../lib/Gui/frmFindInDiagram.py:23
-msgid "Diagram name"
+msgid "Visible"
 msgstr ""
 
-#: ../../lib/Gui/frmFindInDiagram.py:24
-msgid "Diagram type"
-msgstr ""
-
-#: ../../lib/Gui/dialogs.py:10
 msgid "Warning"
 msgstr ""
 
-#: ../../lib/Gui/dialogs.py:24
-msgid "Question"
+msgid ""
+"We are looking for people willing to help us improve our\n"
+"application. You too can contribute in many ways:\n"
+"\n"
+"* Report us Your wishes or desired features.\n"
+"* Join our development team.\n"
+"* Contribute art work, like new icons, logos.\n"
+"* Translate\n"
+"<i>Visit our web page for more information. </i>"
+msgstr ""
+
+msgid "What were You doing when this exception occured ?"
+msgstr ""
+
+msgid "Wrong element: "
+msgstr ""
+
+msgid "Z-Order"
+msgstr ""
+
+msgid "_Diagram"
+msgstr ""
+
+msgid "_Edit"
+msgstr ""
+
+msgid "_Element"
+msgstr ""
+
+msgid "_Error log"
+msgstr ""
+
+msgid "_File"
+msgstr ""
+
+msgid "_Help"
+msgstr ""
+
+msgid "_License"
+msgstr ""
+
+msgid "_Open Existing Project"
+msgstr ""
+
+msgid "_Project"
+msgstr ""
+
+msgid "_Report"
+msgstr ""
+
+msgid "_User comments"
+msgstr ""
+
+msgid "_View"
+msgstr ""
+
+msgid "_Z-Order"
+msgstr ""
+
+msgid "gtk-about"
+msgstr ""
+
+msgid "gtk-cancel"
+msgstr ""
+
+msgid "gtk-ok"
+msgstr ""
+
+msgid "gtk-preferences"
+msgstr ""
+
+msgid "gtk-save"
+msgstr ""
+
+msgid "project web"
 msgstr ""
