@@ -287,7 +287,7 @@ class CpicDrawingArea(CWidget):
                 self.Paint()
                 self.emit('selected-item', list(self.Diagram.GetSelected()))
                 #ak je nieco vyselectovane:
-                if len( list(self.Diagram.GetSelectedElements()) ) > 0: 
+                if len(list(self.Diagram.GetSelectedElements(nolabels = True))) > 0: 
                     if self.Diagram.GetSelected() is not None and len(tuple(self.Diagram.GetSelected())) < 2:
                         self.pmOpenSpecification.set_sensitive(True)
                     else:
