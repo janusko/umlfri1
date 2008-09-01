@@ -86,10 +86,14 @@ class CDiagram:
             if i in self.selected:
                 yield i
             
-    def GetSelectedElements(self):
+    def GetSelectedElements(self, nolabels = False):
         for i in self.selected:
-            if isinstance(i, (Element.CElement, ConLabelInfo.CConLabelInfo)):
-                yield i
+            if nolabels:
+                if isinstance(i, Element.CElement):
+                    yield i
+            else:
+                if isinstance(i, (Element.CElement, ConLabelInfo.CConLabelInfo)):
+                    yield i
             
     def GetSelectedConnections(self):
         for i in self.selected:
