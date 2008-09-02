@@ -220,17 +220,16 @@ class CConnection(CCacheableObject, CSelectableObject):
         @type  canvas: L{CCairoCanvas<CCairoCanvas>}
         
         @param id: identifier of label
-        @type  id: whatever hasheable
+        @type  id: int
         
         @param logicalLabelInfo: (defaultPosition, logicalLabel)
+            
+            - C{defaultPosition} (str): default position of label - valid value
+            - C{logicalLabel} (L{CVisualObject
+            <lib.Drawing.Objects.VisualObject.CVisualObject>}) 
+            reference to logical representation of label.
+        
         @type logicalLabelInfo: tuple
-        
-        @param defaultPosition: default position of label - valid value
-        @type  position: str
-        
-        @param logicalLabel: reference to logical representation of label.
-        @type logicalLabel: L{CVisualObject
-        <lib.Drawing.Objects.VisualObject.CVisualObject>}
         '''
         if id in self.labels:
             self.labels[id].SetLogicalLabel(logicalLabelInfo[1])
@@ -424,7 +423,7 @@ class CConnection(CCacheableObject, CSelectableObject):
         drawing rectangles if the connection is selected.
         
         @param canvas: Canvas on which its being drawn
-        @type  canvas: L{CCairoCanvas<CCairoCanvas>}
+        @type  canvas: L{CCairoCanvas<lib.Drawing.Canvas.CairoCanvas.CCairoCanvas>}
         
         @param delta: (x, y) offset by which is drawing area moved by 
         scrollbars on the screen
@@ -449,7 +448,7 @@ class CConnection(CCacheableObject, CSelectableObject):
         @type  index: int
         
         @param canvas: Canvas on which its being drawn
-        @type  canvas: L{CCairoCanvas<CCairoCanvas>}
+        @type  canvas: L{CCairoCanvas<lib.Drawing.Canvas.CairoCanvas.CCairoCanvas>}
         
         @param runValidation: if True then at the end executes 
         L{self.ValidatePoints<self.ValidatePoints>}
@@ -596,10 +595,6 @@ class CConnection(CCacheableObject, CSelectableObject):
             than /Styles/Selection/PointsSize  in config.xml
             - Lines from 1st to 2nd and from 2nd to 3rd point must form angle 
             sharper than (pi - /Styles/Connection/MinimalAngle)
-        
-        @param canvas: Canvas on which its being drawn
-        @type  canvas: L{CCairoCanvas<CCairoCanvas>}
-
         
         @param points: list of three points [(x1, y1), (x2, y2), (x3, y3)]. 
         The middle point defined by (x2, y2) is to be examined

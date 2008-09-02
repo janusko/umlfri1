@@ -16,9 +16,6 @@ class CConLabelInfo(CCacheableObject):
         @param connection: owner of label
         @type  connection: L{CConection<Connection.CConnection>}
         
-        @param canvas: Canvas on which its being drawn
-        @type  canvas: L{CCairoCanvas<lib.Drawing.Canvas.CairoCanvas.CCairoCanvas>}
-        
         @param idx: index of line segment to wich is bound
         @type idx: int >= 0 
         
