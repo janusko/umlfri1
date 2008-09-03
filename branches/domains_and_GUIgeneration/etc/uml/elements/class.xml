@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ElementType id="Class" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Icon path="icons/class.png" />
+    <Connections>
+        <Item value="Association" />
+        <Item value="Generalization" with="Class" allowrecursive="0" />
+        <Item value="Agregation" with="Class" allowrecursive="1" />
+        <Item value="Compose" with="Class" allowrecursive="0" />
+    </Connections>
+    <Attributes>
+        <Item value="Name" type="str" propid="name" />
+        <Item value="Stereotype" type="str" propid="stereotype" />
+        <Item value="Scope" type="enum">
+            <Option value="public" />
+            <Option value="private" />
+            <Option value="protected" />
+        </Item>
+        <Item value="Attributes" type="attrs" propid="attributes" />
+        <Item value="Operations" type="opers" propid="operations" />
+        <Item value="Abstract" type="bool" />
+        <Item value="Notes" type="note" />
+    </Attributes>
+    <Appearance>
+        <Shadow padding="3" color="/Styles/Element/ShadowColor">
+            <Rectangle fill="/Styles/Element/FillColor" border="/Styles/Element/LineColor">
+                <HBox>
+                    <Padding padding="5">
+                        <HBox>
+                            <Condition condition="#stereotype" type="empty" negate="1">
+                                <Align align="center">
+                                    <VBox>
+                                        <TextBox text="&#171;" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                        <TextBox text="#stereotype" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                        <TextBox text="&#187;" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                    </VBox>
+                                </Align>
+                            </Condition>
+                            <Align align="center">
+                                <TextBox text="#name" font="/Styles/Element/NameTextFont" color="/Styles/Element/NameTextColor" />
+                            </Align>
+                        </HBox>
+                    </Padding>
+                    <Line type="horizontal" color="/Styles/Element/LineColor" />
+                    <Padding padding="5">
+                        <HBox>
+                            <Loop collection="attributes">
+                                <VBox>
+                                    <TextBox text="@scope" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                    <TextBox text="@line" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                </VBox>
+                            </Loop>
+                        </HBox>
+                    </Padding>
+                    <Condition condition="#operations" type="empty" negate="1">
+                        <HBox>
+                            <Line type="horizontal" color="/Styles/Element/LineColor" />
+                            <Padding padding="5">
+                                <HBox>
+                                    <Loop collection="operations">
+                                        <VBox>
+                                            <TextBox text="@scope" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                            <TextBox text="@line" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                        </VBox>
+                                    </Loop>
+                                </HBox>
+                            </Padding>
+                        </HBox>
+                    </Condition>
+                </HBox>
+            </Rectangle>
+        </Shadow>
+    </Appearance>
+</ElementType>
