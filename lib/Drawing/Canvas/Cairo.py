@@ -6,7 +6,7 @@ import pangocairo
 import gtk
 import gtk.gdk
 import cairo
-from lib import colors
+from lib import colors, consts
 
 
 #  dash sequence for line styles used in self.cr.set_dash(dash_sequence, offset), where
@@ -52,23 +52,34 @@ class CCairoCanvas(CAbstractCanvas):
 
 
     def __init__(self, widget, window = None, storage = None):
-
         self.widget = widget
-        
-
         if window is None:
             self.window = widget.window
         else:
             self.window = window
-
         self.cairo_context = self.window.cairo_create()
-
         self.alpha = 1.0
+        self.scale = 1.0
         self.storage = storage
         self.cr = pangocairo.CairoContext(self.cairo_context)
         self.pango_layout = self.cr.create_layout()
         self.fonts = {}
         self.cr.save()
+
+    def ToLogical(self, pos):
+        pos = (int(pos[0]/self.scale),int(pos[1]/self.scale))     
+        return pos
+
+    def ToPhysical(self, pos):
+        pos = (int(pos[0]*self.scale),int(pos[1]*self.scale)) 
+        return pos
+
+    def SetScale(self, scale):
+            self.scale = scale
+
+    def SetAlpha(self, alpha):
+        if alpha >= 0.0 and alpha <= 1.0:
+            self.alpha = alpha
 
 
     def __SetFont(self, (family, style, size), returndesc = False):
@@ -138,7 +149,8 @@ class CCairoCanvas(CAbstractCanvas):
             size0=1.0
             size1=float(size[1])/float(size[0])
             radius = int(size[0])/2
-
+            
+        self.cr.scale(self.scale, self.scale)
         self.cr.translate (int(pos[0])+(int(size[0])/2), int(pos[1])+(int(size[1])/2))
         self.cr.scale(size0, size1)
         self.cr.arc(0,0,radius,arc[0],arc[1])
@@ -164,6 +176,7 @@ class CCairoCanvas(CAbstractCanvas):
 
     def DrawLine(self, start, end, fg, line_width = None, line_style = None):
         self.cr.save()
+        self.cr.scale(self.scale, self.scale)
         self.cr.move_to(int(start[0]),int(start[1]))
         self.cr.line_to(int(end[0]),int(end[1]))
 
@@ -183,6 +196,7 @@ class CCairoCanvas(CAbstractCanvas):
 
     def DrawLines(self, points, fg, line_width = None, line_style = None):
         self.cr.save()
+        self.cr.scale(self.scale, self.scale)
         move_pen = True
         for x,y in points :
             if move_pen:
@@ -206,6 +220,7 @@ class CCairoCanvas(CAbstractCanvas):
 
     def DrawPolygon(self, points, fg = None, bg = None, line_width = None, line_style = None):
         self.cr.save()
+        self.cr.scale(self.scale, self.scale)
         move_pen = True
 
         for x,y in points :
@@ -245,6 +260,7 @@ class CCairoCanvas(CAbstractCanvas):
 
     def DrawRectangle(self, pos, size, fg = None, bg = None, line_width = None, line_style = None):
         self.cr.save()
+        self.cr.scale(self.scale, self.scale)
         self.cr.rectangle(int(pos[0]), int(pos[1]), int(size[0]), int(size[1]))
 
         if bg is not None:
@@ -268,6 +284,7 @@ class CCairoCanvas(CAbstractCanvas):
 
     def DrawText(self, pos, text, font, fg):
         self.cr.save()
+        self.cr.scale(self.scale, self.scale)
         self.__SetFont(font)
         self.cr.move_to (int(pos[0]), int(pos[1]))
         #self.pango_layout.set_markup(text)
@@ -297,6 +314,7 @@ class CCairoCanvas(CAbstractCanvas):
             raise DrawingError('storage')
         pixmap = PixmapFromPath(self.storage, filename)
         self.cr.save()
+        self.cr.scale(self.scale, self.scale)
         self.cr.set_source_surface (pixmap, pos[0], pos[1])
         self.cr.paint()
         self.cr.restore()
@@ -306,7 +324,7 @@ class CCairoCanvas(CAbstractCanvas):
         if self.storage is None:
             raise DrawingError('storage')
         pixmap = PixmapFromPath(self.storage, filename)
-        return pixmap.get_width(), pixmap.get_height()
+        return pixmap.get_width(), pixmap.get_height() # + self.cr.scale(self.scale, self.scale)
 
 
     def Clear(self):
