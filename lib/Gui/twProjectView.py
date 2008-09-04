@@ -259,7 +259,13 @@ class CtwProjectView(CWidget):
                 node = self.twProjectView.get_model().get(iter,3)[0]
                 if object is node:
                     break
-
+                parent = node
+            
+            if parent == object:
+                node.SetPath(parent.GetPath().split('/')[0] + '/' + object.GetName() + ":=Diagram=")
+            else:
+                node.SetPath(parent.GetPath() + '/' + object.GetName() + ":=Diagram=")
+            
             model = self.twProjectView.get_model()
             self.TreeStore.set_value(iter, 0, object.GetName())
     
