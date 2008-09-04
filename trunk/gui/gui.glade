@@ -130,7 +130,7 @@
                     <child>
                       <widget class="GtkImageMenuItem" id="mItemAddDiagram">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Add diagram</property>
+                        <property name="label" translatable="yes">_Add diagram</property>
                         <property name="use_underline">True</property>
                         <child>
                           <widget class="GtkMenu" id="mItemAddDiagram_menu">
@@ -166,7 +166,7 @@
                     <child>
                       <widget class="GtkMenuItem" id="mnuExport">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Export diagram</property>
+                        <property name="label" translatable="yes">_Export diagram</property>
                         <property name="use_underline">True</property>
                       </widget>
                     </child>
@@ -264,21 +264,59 @@
                 <child>
                   <widget class="GtkMenu" id="mItemView_menu">
                     <child>
-                      <widget class="GtkCheckMenuItem" id="mnuViewTools">
+                      <widget class="GtkImageMenuItem" id="mnuZoomIn">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Toolbox</property>
+                        <property name="label" translatable="yes">Zoom _In</property>
                         <property name="use_underline">True</property>
-                        <property name="active">True</property>
-                        <accelerator key="space" modifiers="GDK_CONTROL_MASK" signal="activate"/>
+                        <child internal-child="image">
+                          <widget class="GtkImage" id="menu-item-image13">
+                            <property name="visible">True</property>
+                            <property name="stock">gtk-zoom-in</property>
+                          </widget>
+                        </child>
                       </widget>
                     </child>
                     <child>
-                      <widget class="GtkCheckMenuItem" id="mnuViewCommands">
+                      <widget class="GtkImageMenuItem" id="mnuZoomOut">
                         <property name="visible">True</property>
-                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="label" translatable="yes">Commandbar</property>
+                        <property name="label" translatable="yes">Zoom _Out</property>
                         <property name="use_underline">True</property>
-                        <property name="active">True</property>
+                        <child internal-child="image">
+                          <widget class="GtkImage" id="menu-item-image14">
+                            <property name="stock">gtk-zoom-out</property>
+                          </widget>
+                        </child>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkSeparatorMenuItem" id="separatormenuitem6">
+                        <property name="visible">True</property>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkImageMenuItem" id="mnuNormalSize">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">_Actual Size</property>
+                        <property name="use_underline">True</property>
+                        <child internal-child="image">
+                          <widget class="GtkImage" id="menu-item-image12">
+                            <property name="visible">True</property>
+                            <property name="stock">gtk-zoom-100</property>
+                          </widget>
+                        </child>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkImageMenuItem" id="mnuBestFit">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">_Best Fit</property>
+                        <property name="use_underline">True</property>
+                        <child internal-child="image">
+                          <widget class="GtkImage" id="menu-item-image15">
+                            <property name="visible">True</property>
+                            <property name="stock">gtk-zoom-fit</property>
+                          </widget>
+                        </child>
                       </widget>
                     </child>
                     <child>
@@ -292,9 +330,32 @@
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="label" translatable="yes">Fullscreen</property>
+                        <property name="label" translatable="yes">_Fullscreen</property>
                         <property name="use_underline">True</property>
                         <accelerator key="Return" modifiers="GDK_MOD1_MASK" signal="activate"/>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkSeparatorMenuItem" id="separatormenuitem5">
+                        <property name="visible">True</property>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkCheckMenuItem" id="mnuViewTools">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">_Toolbox</property>
+                        <property name="use_underline">True</property>
+                        <property name="active">True</property>
+                        <accelerator key="space" modifiers="GDK_CONTROL_MASK" signal="activate"/>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkCheckMenuItem" id="mnuViewCommands">
+                        <property name="visible">True</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="label" translatable="yes">_Commandbar</property>
+                        <property name="use_underline">True</property>
+                        <property name="active">True</property>
                       </widget>
                     </child>
                   </widget>
@@ -311,7 +372,7 @@
                     <child>
                       <widget class="GtkMenuItem" id="mnuWebsite">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">UML.fri website</property>
+                        <property name="label" translatable="yes">_UML.fri website</property>
                         <property name="use_underline">True</property>
                       </widget>
                     </child>
@@ -396,6 +457,33 @@
                   <widget class="GtkToolButton" id="cmdPaste">
                     <property name="visible">True</property>
                     <property name="stock_id">gtk-paste</property>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkSeparatorToolItem" id="separatortoolitem2">
+                    <property name="visible">True</property>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkToolButton" id="cmdZoomOut">
+                    <property name="visible">True</property>
+                    <property name="stock_id">gtk-zoom-out</property>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkToolButton" id="cmdZoomIn">
+                    <property name="visible">True</property>
+                    <property name="stock_id">gtk-zoom-in</property>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
@@ -1112,11 +1200,11 @@ application. You too can contribute in many ways:
                         <property name="editable">False</property>
                         <property name="wrap_mode">GTK_WRAP_WORD</property>
                         <property name="cursor_visible">False</property>
-                        <property name="text" translatable="yes">UML.fri is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+                        <property name="text" translatable="yes">UML. FRI is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
 
-UML.fri is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+UML. FRI is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License along with UML.fri; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</property>
+You should have received a copy of the GNU General Public License along with UML. FRI; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</property>
                       </widget>
                     </child>
                   </widget>
@@ -3846,7 +3934,7 @@ String</property>
               <widget class="GtkLabel" id="lblHelp">
                 <property name="height_request">36</property>
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Please help us improve the UML.FRI application by sending us this log.</property>
+                <property name="label" translatable="yes">Please help us improve the UML. FRI application by sending us this log.</property>
                 <property name="justify">GTK_JUSTIFY_CENTER</property>
               </widget>
               <packing>
