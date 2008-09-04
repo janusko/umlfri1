@@ -144,7 +144,7 @@ class CConnection(CCacheableObject, CSelectableObject):
         for x, y in self.GetPoints(canvas):
             left, top, right, bottom = min(left, x), min(top, y), max(right, x), max(bottom, x)
         if includeLabels:
-            for label in self.labels.itervalues()
+            for label in self.labels.values():
                 (x1, y1), (x2, y2) = label.GetSquare(canvas)
                 left, top, right, bottom = min(left, x1), min(top, y1), max(right, x2), max(bottom, x2)
         return ((left, top), (right, bottom))
