@@ -37,7 +37,7 @@ class CfrmMain(CWindow):
         'mnuExport',
         #############
         'mItemView',
-        'mnuViewTools', 'mnuViewCommands',
+        'mnuViewTools', 'mnuViewCommands', 'mnuNormalSize', 'mnuZoomIn','mnuZoomOut', 'mnuBestFit',
         'hndCommandBar',
         #############
         'mnuOptions',
@@ -50,7 +50,7 @@ class CfrmMain(CWindow):
         'mmShift_SendBack', 'mmShift_BringForward', 'mmShift_ToBottom', 'mmShift_ToTop',
         #############
         #toolbar
-        'cmdOpen', 'cmdSave', 'cmdCopy', 'cmdCut', 'cmdPaste',
+        'cmdOpen', 'cmdSave', 'cmdCopy', 'cmdCut', 'cmdPaste', 'cmdZoomOut', 'cmdZoomIn',
         #############
         #fullscreen
         'mnuMenubar', 'mnuFullscreen', 'cmdCloseFullscreen', 'vpaRight', 'sbStatus'
@@ -113,11 +113,17 @@ class CfrmMain(CWindow):
         self.cmdCopy.set_sensitive(element)
         self.cmdCut.set_sensitive(element)
         self.cmdPaste.set_sensitive(diagram)
+        self.cmdZoomIn.set_sensitive(diagram)
+        self.cmdZoomOut.set_sensitive(diagram)
         self.mnuSave.set_sensitive(project)
         self.mnuCopy.set_sensitive(element)
         self.mnuCut.set_sensitive(element)
         self.mnuPaste.set_sensitive(diagram)
         self.mnuDelete.set_sensitive(element)
+        self.mnuNormalSize.set_sensitive(diagram)
+        self.mnuZoomIn.set_sensitive(diagram)
+        self.mnuZoomOut.set_sensitive(diagram)
+        self.mnuBestFit.set_sensitive(diagram)
     
     def LoadProject(self, filename, copy):
         self.application.ProjectInit()
@@ -375,11 +381,30 @@ class CfrmMain(CWindow):
     def on_mnuDelete_click(self, widget):
         self.picDrawingArea.DeleteElements()
     
+        
+    @event("mnuNormalSize","activate")
+    def mnuNormalSize_click(self, widget):
+        self.picDrawingArea.SetNormalScale()
+
+    @event("mnuBestFit","activate")
+    def mnuBestFit_click(self, widget):
+        self.picDrawingArea.BestFitScale()
+
+    @event("cmdZoomOut", "clicked")
+    @event("mnuZoomOut","activate")
+    def on_mnuZoomOut_click(self, widget):
+        self.picDrawingArea.IncScale(-lib.consts.SCALE_INCREASE)
+
+    @event("cmdZoomIn", "clicked")
+    @event("mnuZoomIn","activate")
+    def on_mnuZoomIn_click(self, widget):
+        self.picDrawingArea.IncScale(lib.consts.SCALE_INCREASE)
+
     @event("cmdCut", "clicked")
     @event("mnuCut","activate")
     def on_mnuCut_click(self, widget):
         self.picDrawingArea.ActionCut()
-    
+ 
     @event("cmdCopy", "clicked")
     @event("mnuCopy","activate")
     def on_mnuCopy_click(self, widget):

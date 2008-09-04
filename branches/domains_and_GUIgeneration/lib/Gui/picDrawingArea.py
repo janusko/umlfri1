@@ -51,36 +51,95 @@ class CpicDrawingArea(CWidget):
         self.selSq = None
         self.pressedKeys = set()
         #self.scrollPos = (0, 0)
+        self.scale = 1.0
         
-        self.bufview = ((0, 0), (2000, 1500))
-        self.buffer = gtk.gdk.Pixmap(self.picDrawingArea.window, *self.bufview[1])
+        self.bufv = ((0, 0), (2000, 1500))
+        #self.bufview = ((0, 0), (2000, 1500))
+        self.buffer = gtk.gdk.Pixmap(self.picDrawingArea.window, *self.bufv[1])
         self.Diagram = CDiagram(None,_("Start page"))
         self.canvas = None
+        
+        self.bufview = ((0, 0), (4000, 3000))
+
 
         cmap = self.picDrawingArea.window.get_colormap()
         self.DragGC = self.picDrawingArea.window.new_gc(foreground = cmap.alloc_color(invert(config['/Styles/Drag/RectangleColor'])),
             function = gtk.gdk.XOR, line_width = config['/Styles/Drag/RectangleWidth'])
-        
+
         self.TARGETS = [
         ('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_WIDGET, 0),
         ('text/plain', 0, 1),
         ('TEXT', 0, 2),
         ('STRING', 0, 3),
         ]
-        
+
         self.picEventBox.drag_dest_set(gtk.DEST_DEFAULT_ALL, self.TARGETS, gtk.gdk.ACTION_COPY)
-        
+
         self.AdjustScrollBars()
         self.Hide()
-        
+
         self.cursors = {None: None}
         for name, img in (('grab', lib.consts.GRAB_CURSOR), ('grabbing', lib.consts.GRABBING_CURSOR)):
             self.cursors[name] = gtk.gdk.Cursor(gtk.gdk.display_get_default(), gtk.gdk.pixbuf_new_from_file(config['/Paths/Images']+img), 0, 0)
-        
+
     def __SetCursor(self, cursor = None):
         self.picDrawingArea.window.set_cursor(self.cursors[cursor])
+
+    
+    def ExtendBuffer(self):
+        s,b = self.Diagram.GetSizeSquare(self.canvas)
+        b = self.canvas.ToPhysical(b)
         
+        if self.bufv[1][0] < b[0] or self.bufv[1][1]<b[1]:
+            self.bufv = ((0,0),b)
+            self.buffer = gtk.gdk.Pixmap(self.picDrawingArea.window, *self.bufv[1])
+            self.Redraw()
+    
+    
+    def BestFitScale(self):
+        winSizeX, winSizeY = self.GetWindowSize()
+        (diaSizeMinX, diaSizeMinY), (diaSizeMaxX, diaSizeMaxY) = self.Diagram.GetSizeSquare(self.canvas)
+        scaleX = float(winSizeX) / float(diaSizeMaxX-diaSizeMinX)
+        scaleY = float(winSizeY) / float(diaSizeMaxY-diaSizeMinY)
+        if scaleX > scaleY :
+            scale = scaleY
+        else : scale = scaleX
+        
+        if scale < lib.consts.SCALE_MIN:
+            scale = lib.consts.SCALE_MIN
+        elif scale > lib.consts.SCALE_MAX:
+            scale = lib.consts.SCALE_MAX
+
+        self.SetScale(scale)
+        diaSizeMinX, diaSizeMinY = self.canvas.ToPhysical((diaSizeMinX, diaSizeMinY))
+        self.picHBar.set_value(diaSizeMinX)
+        self.picVBar.set_value(diaSizeMinY)
+
+    def SetScale(self, scale):
+        if (scale >= lib.consts.SCALE_MIN) and (scale <= lib.consts.SCALE_MAX):
+            self.scale = scale
+            self.canvas.SetScale(self.scale)
+            self.AdjustScrollBars()
+            self.Paint()
+
+    def IncScale(self, scale):
+        tmp_scale = self.scale + scale
+        
+        if (tmp_scale > lib.consts.SCALE_MIN) and (tmp_scale < lib.consts.SCALE_MAX):
+            self.scale = tmp_scale
+            self.canvas.SetScale(self.scale)
+            self.AdjustScrollBars()
+            #self.ExtendBuffer()
+            self.Paint()
+
+    def SetNormalScale(self):
+        self.picHBar.set_value(0)
+        self.picVBar.set_value(0)
+        self.SetScale(1.0)
+            
+
     def Redraw(self):
+        
         self.canvas = CCairoCanvas(self.picDrawingArea, self.buffer, self.application.GetProject().GetStorage())
 
     def Hide(self):
@@ -108,7 +167,7 @@ class CpicDrawingArea(CWidget):
 
     def GetWindowSize(self):
         tmpx, tmpy =  self.picDrawingArea.window.get_size()
-        return (int(tmpx), (tmpy))
+        return (tmpx, tmpy)
 
     def GetDiagramSize(self):
         tmp = [int(max(i)) for i in zip(self.Diagram.GetSize(self.canvas), self.picDrawingArea.window.get_size())]
@@ -120,12 +179,12 @@ class CpicDrawingArea(CWidget):
     def SetPos(self, pos = (0, 0)):
         self.picHBar.set_value(pos[0])
         self.picVBar.set_value(pos[1])
-        
+ 
     def GetAbsolutePos(self, (posx, posy)):
-        return int(self.picHBar.get_value() + posx), int(self.picVBar.get_value() + posy)
+        return self.canvas.ToLogical((int(self.picHBar.get_value() + posx), int(self.picVBar.get_value() + posy)))
 
     def GetRelativePos(self, (posx, posy)):
-        return int(-self.picHBar.get_value() + posx), int(-self.picVBar.get_value() + posy)
+        return self.canvas.ToPhysical((int(-self.picHBar.get_value() + posx), int(-self.picVBar.get_value() + posy)))
 
     def Paint(self, changed = True):
         size = self.GetWindowSize()
@@ -140,7 +199,8 @@ class CpicDrawingArea(CWidget):
             changed = True
         if changed:
             self.Diagram.SetViewPort(self.bufview)
-            self.Diagram.Paint(self.canvas)
+            self.Diagram.PaintFull(self.canvas)
+            #self.Diagram.Paint(self.canvas)
         wgt = self.picDrawingArea.window
         gc = wgt.new_gc()
         wgt.draw_drawable(gc, self.buffer, posx - bposx, posy - bposy, 0, 0, sizx, sizy)
@@ -157,7 +217,11 @@ class CpicDrawingArea(CWidget):
             self.__DrawNewConnection((None, None), False)
 
     def AdjustScrollBars(self):
-        dasx, dasy = self.GetDiagramSize()
+        if self.canvas is None:
+            dasx, dasy = self.GetDiagramSize()
+        else : 
+            dasx, dasy = self.canvas.ToPhysical(self.GetDiagramSize())
+
         wisx, wisy = self.GetWindowSize()
 
         tmp = self.picHBar.get_adjustment()
@@ -179,8 +243,8 @@ class CpicDrawingArea(CWidget):
         canvas.Finish()
         self.Paint()    
 
-
     def ExportSvg(self, filename):
+        # obsolete
         self.Diagram.DeselectAll()
         self.Paint()
         canvas = CSvgCanvas(1000, 1000, self.canvas, self.application.GetProject().GetStorage())
@@ -553,35 +617,63 @@ class CpicDrawingArea(CWidget):
         if erase:
             self.picDrawingArea.window.draw_rectangle(self.DragGC, False, *self.__oldsel)
         if draw:
-            (x1, y1), (x2, y2) = self.DragSel, self.GetAbsolutePos(pos)
+            x1, y1 = self.DragSel
+            x2, y2 = self.GetAbsolutePos(pos)
             if x1 > x2:
                 x1, x2 = x2, x1
             if y1 > y2:
                 y1, y2 = y2, y1
             tmpx, tmpy = self.GetRelativePos((x1, y1))
-            w, h = x2 - x1, y2 - y1
+            w, h = self.canvas.ToPhysical((x2 - x1, y2 - y1))
+            # zoom adjust
+            hbar, vbar = self.picHBar.get_value(),self.picVBar.get_value()
+            sx, sy = self.canvas.ToPhysical((hbar, vbar))
             if self.selSq is None:
-                self.__oldsel = tmpx, tmpy, w, h
+                self.__oldsel = tmpx + sx - hbar, tmpy + sy - vbar, w, h
                 self.picDrawingArea.window.draw_rectangle(self.DragGC, False, *self.__oldsel)
 
+
     def __DrawDragRect(self, pos, erase = True, draw = True):
+        
         if erase:
-            self.picDrawingArea.window.draw_rectangle(self.DragGC, False, self.__oldpos[0], self.__oldpos[1], *self.DragRect[1])
+            x1 = self.__oldpos[0]
+            y1 = self.__oldpos[1]
+            x2,y2 = self.canvas.ToPhysical(self.DragRect[1])
+            self.picDrawingArea.window.draw_rectangle(self.DragGC, False, x1, y1, x2, y2)
+
         if draw:
             tmpx, tmpy = self.GetRelativePos(self.DragRect[0])
             dx, dy = self.__GetDelta(pos)
             if self.selSq is None:
-                self.picDrawingArea.window.draw_rectangle(self.DragGC, False, tmpx + dx, tmpy + dy, *self.DragRect[1])
-                self.__oldpos = tmpx + dx, tmpy + dy 
+                # zoom adjust
+                hbar, vbar = self.picHBar.get_value(),self.picVBar.get_value()
+                sx, sy = self.canvas.ToPhysical((hbar, vbar))
+              
+                x1,y1 = self.canvas.ToPhysical((dx,dy))
+                x1 = x1 + tmpx + sx - hbar
+                y1 = y1 + tmpy + sy - vbar
+                x2,y2 = self.canvas.ToPhysical(self.DragRect[1])
+                self.picDrawingArea.window.draw_rectangle(self.DragGC, False, x1, y1, x2, y2)
+                self.__oldpos = x1, y1
+
 
     def __DrawResRect(self, pos, erase = True, draw = True):
+	# zoom adjust
+        hbar, vbar = self.picHBar.get_value(),self.picVBar.get_value()
+        sx, sy = self.canvas.ToPhysical((hbar, vbar))
         if erase:
-            self.picDrawingArea.window.draw_rectangle(self.DragGC, False, self.DragRect[0][0], self.DragRect[0][1], self.DragRect[1][0], self.DragRect[1][1])
+            x1 = self.DragRect[0][0] + sx - hbar
+	    y1 = self.DragRect[0][1] + sy - vbar            
+	    x2,y2 = self.canvas.ToPhysical(self.DragRect[1])
+            self.picDrawingArea.window.draw_rectangle(self.DragGC, False, x1, y1, x2, y2)
         if draw:
-            delta = self.__GetDelta(pos, True)
+	    delta = self.__GetDelta(pos, True)
             rect = self.selElem.GetResizedRect(self.canvas, delta, self.selSq)
             rect = self.GetRelativePos(rect[0]), rect[1]
-            self.picDrawingArea.window.draw_rectangle(self.DragGC, False, rect[0][0], rect[0][1], rect[1][0], rect[1][1])
+            x1 = rect[0][0] + sx - hbar
+            y1 = rect[0][1] + sy - vbar
+	    x2,y2 = self.canvas.ToPhysical(rect[1])
+            self.picDrawingArea.window.draw_rectangle(self.DragGC, False, x1, y1, x2, y2)
             self.DragRect = rect
 
     def __DrawDragPoint(self, (x, y), erase = True, draw = True):
@@ -590,6 +682,12 @@ class CpicDrawingArea(CWidget):
         connection, index = self.DragPoint
         prev, next = connection.GetNeighbours(index, self.canvas)
         points = [self.GetRelativePos(prev), (int(x), int(y)), self.GetRelativePos(next)]
+        # zoom adjust
+        hbar, vbar = self.picHBar.get_value(),self.picVBar.get_value()
+        sx, sy = self.canvas.ToPhysical((hbar, vbar))
+        points[0] = (points[0][0]+ sx - hbar,  points[0][1]+ sy - vbar)         
+        points[2] = (points[2][0]+ sx - hbar,  points[2][1]+ sy - vbar) 
+
         if erase:
             self.picDrawingArea.window.draw_lines(self.DragGC, self.__oldPoints)
         if draw:
@@ -604,13 +702,22 @@ class CpicDrawingArea(CWidget):
         all = tuple(connection.GetPoints(self.canvas))
         prev, next = all[index], all[index + 1]
         points = [self.GetRelativePos(prev), (int(x), int(y)), self.GetRelativePos(next)]
+        # zoom adjust
+        hbar, vbar = self.picHBar.get_value(),self.picVBar.get_value()
+        sx, sy = self.canvas.ToPhysical((hbar, vbar))
+        points[0] = (points[0][0]+ sx - hbar,  points[0][1]+ sy - vbar) 
+        points[2] = (points[2][0]+ sx - hbar,  points[2][1]+ sy - vbar) 
+        
         if erase:
             self.picDrawingArea.window.draw_lines(self.DragGC, self.__oldPoints)
         if draw:
             self.__oldPoints = points
             self.__oldPoints2 = self.GetAbsolutePos((x, y))
-            self.picDrawingArea.window.draw_lines(self.DragGC, self.__oldPoints)
             
+            
+            
+            self.picDrawingArea.window.draw_lines(self.DragGC, self.__oldPoints)
+
     def __DrawDragMove(self, pos):
         #posx, posy = self.scrollPos
         posx, posy = self.Diagram.GetHScrollingPos(), self.Diagram.GetVScrollingPos()

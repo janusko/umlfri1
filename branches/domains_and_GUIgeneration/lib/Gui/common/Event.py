@@ -24,6 +24,7 @@ def event(obj, *args):
                         return fnc(self, *args, **kw_args)
                     except :
                         displayTraceback(self.application)
+                        raise
                 else:
                     try:
                         return fnc(self, *args, **kw_args)

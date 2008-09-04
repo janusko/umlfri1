@@ -422,22 +422,60 @@ class CDiagram:
             pasted.add(el)
 
     def GetExpSquare(self, canvas):
+        #square for export, the minimal size is measured so the exported diagram has the same edges - looks better
         x_max, y_max,x_min, y_min,  = 0, 0,  101, 101
         for el in self.elements:
             posX, posY = el.GetPosition(canvas)
             w, h = el.GetSize(canvas)
-            
             if posX + w > x_max:
                 x_max = posX + w
             if posY + h > y_max:
                 y_max = posY + h
-        
             if posX < x_min:
                 x_min = posX
             if posY < y_min:
                 y_min = posY
-            if x_min > 100 : 
-                x_min = 100
-            if y_min > 100 : 
-                y_min = 100
+
+        for connection in self.connections:
+            for point in connection.GetMiddlePoints():
+                posX, posY = point
+                if posX > x_max:
+                    x_max = posX
+                if posY > y_max:
+                    y_max = posY
+                if posX < x_min:
+                    x_min = posX
+                if posY < y_min:
+                    y_min = posY
+        if x_min > 100 :
+            x_min = 100
+        if y_min > 100 :
+            y_min = 100
         return (x_max +x_min, y_max + y_min)
+
+    def GetSizeSquare(self, canvas):
+        x_max, y_max,x_min, y_min,  = 0, 0,  9999, 9999
+        for el in self.elements:
+            posX, posY = el.GetPosition(canvas)
+            w, h = el.GetSize(canvas)
+            if posX + w > x_max:
+                x_max = posX + w
+            if posY + h > y_max:
+                y_max = posY + h
+            if posX < x_min:
+                x_min = posX
+            if posY < y_min:
+                y_min = posY
+        for connection in self.connections:
+            for point in connection.GetMiddlePoints():
+                posX, posY = point
+                if posX > x_max:
+                    x_max = posX
+                if posY > y_max:
+                    y_max = posY
+                if posX < x_min:
+                    x_min = posX
+                if posY < y_min:
+                    y_min = posY
+        return ((int(x_min),int(y_min)),(int(x_max), int(y_max)))
+

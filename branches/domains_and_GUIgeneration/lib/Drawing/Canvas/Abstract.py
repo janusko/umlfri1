@@ -34,3 +34,9 @@ class CAbstractCanvas:
     
     def Clear(self):
         pass
+    
+    def ToLogical(self, pos):
+        return pos
+    
+    def ToPhysical(self, pos):
+        return pos

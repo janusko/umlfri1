@@ -1,66 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Type id="class_attribute">
-    <Logic>
-        <Item id="Name" type="str" optional="False" />
-        <Item id="Stereotype" type="str" optional="True" />
-        <Item id="Scope" type="enum">
-            <Value>Private</Value>
-            <Value>Protected</Value>
-            <Value>Public</Value>
-        </Item>
-        <Item id="Type" type="str" optional="True" />
-        <Item id="Static" type="bool" />
-        <Item id="Default" type="str" optional="True" />
-        <Item id="Note" type="str" optional="True" />
-    </Logic>
-    <DiagramLayout who="Result">
-        <Condition id="StaticUnderline" type="bool" who="Static">
-            <FontChange underline="1" />
-        </Condition>
-        <Concatenate id="Result">
-            <Condition type="empty" negate="1" who="Stereotype">
-                <Concatenate>
-                    <Text>«</Text>
-                    <ValueOf who="Stereotype" />
-                    <Text>» </Text>
-                </Concatenate>
-            </Condition>
-            <Replace who="Scope">
-                <Value value="Private">- </Value>
-                <Value value="Protected"># </Value>
-                <Value value="Public">+ </Value>
-            </Replace>
-            <ValueOf who="Name" fontchange="StaticUnderline" />
-            <Condition type="empty" negate="1" who="Type">
-                <Concatenate>
-                    <Text> : </Text>
-                    <ValueOf who="Type" />
-                </Concatenate>
-            </Condition>
-            <Condition type="empty" negate="1" who="Default">
-                <Concatenate>
-                    <Text> = </Text>
-                    <ValueOf who="Default" />
-                </Concatenate>
-            </Condition>
-        </Concatenate>
-    </DiagramLayout>
-    <MenuLayout>
-        <TextBox ref="Name" posx="0" posy="0" />
-        <ComboBox ref="Type" posx="1" posy="0" editable="1">
-            <Value>int</Value>
-            <Value>float</Value>
-            <Value>str</Value>
-            <Value>bool</Value>
-        </ComboBox>
-        <ComboBox ref="Scope" posx="0" posy="1" editable="0">
-            <Value>Private</Value>
-            <Value>Protected</Value>
-            <Value>Public</Value>
-        </ComboBox>
-        <TextBox ref="Stereotype" posx="1" posy="1" />
-        <TextBox ref="Default" posx="0" posy="2" />
-        <CheckBox ref="Static" posx="1" posy="2" />
-        <NoteBox ref="Note" posx="0" posy="3" width="2" />
-    </MenuLayout>
+    <Item id="Name" type="str" />
+    <Item id="Stereotype" type="str" />
+    <Item id="Scope" type="enum">
+        <Value>Private</Value>
+        <Value>Protected</Value>
+        <Value>Public</Value>
+    </Item>
+    <Item id="Type" type="str" />
+    <Item id="Static" type="bool" />
+    <Item id="Default" type="str" />
+    <Item id="Note" type="str" />
 </Type>

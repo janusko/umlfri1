@@ -70,4 +70,25 @@
             </Rectangle>
         </Shadow>
     </Appearance>
+    <Dialog>
+        <TextBox ref="Name" posx="0" posy="0" />
+        <ListBox ref="Attributes">
+            <TextBox ref="Name" posx="0" posy="0" />
+            <ComboBox ref="Type" posx="1" posy="0" editable="1">
+                <Value>int</Value>
+                <Value>float</Value>
+                <Value>str</Value>
+                <Value>bool</Value>
+            </ComboBox>
+            <ComboBox ref="Scope" posx="0" posy="1" editable="0">
+                <Value>Private</Value>
+                <Value>Protected</Value>
+                <Value>Public</Value>
+            </ComboBox>
+            <TextBox ref="Stereotype" posx="1" posy="1" />
+            <TextBox ref="Default" posx="0" posy="2" />
+            <CheckBox ref="Static" posx="1" posy="2" />
+            <NoteBox ref="Note" posx="0" posy="3" width="2" />
+        </ListBox>
+    </Dialog>
 </ElementType>

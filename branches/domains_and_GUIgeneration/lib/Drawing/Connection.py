@@ -128,12 +128,14 @@ class CConnection(CCacheableObject, CSelectableObject):
         else:
             return None
             
-    def GetSquare(self, canvas):
-        '''get absolute positoin of minimal rectangle to which line fits,
-        excluding labels.
+    def GetSquare(self, canvas, inlcudeLabels=False):
+        '''get absolute positoin of minimal rectangle to which fits connection
         
         @param canvas: Canvas on which its being drawn
         @type  canvas: L{CCairoCanvas<CCairoCanvas>}
+        
+        @param includeLabels: if True, labels are included into the square
+        @type includeLabels: bool
         
         @return: ((left, top), (right, bottom))
         @rtype: tuple
@@ -141,6 +143,10 @@ class CConnection(CCacheableObject, CSelectableObject):
         left, top, right, bottom = 1000000, 1000000, -1000000, -1000000
         for x, y in self.GetPoints(canvas):
             left, top, right, bottom = min(left, x), min(top, y), max(right, x), max(bottom, x)
+        if includeLabels:
+            for label in self.labels.values():
+                (x1, y1), (x2, y2) = label.GetSquare(canvas)
+                left, top, right, bottom = min(left, x1), min(top, y1), max(right, x2), max(bottom, x2)
         return ((left, top), (right, bottom))
         
     def GetSource(self):

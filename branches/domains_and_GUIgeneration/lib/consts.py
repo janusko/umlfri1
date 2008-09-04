@@ -38,6 +38,9 @@ CONFIG_NAMESPACE = '{http://umlfri.kst.fri.uniza.sk/xmlschema/config.xsd}'
 
 WEB = 'http://umlfri.kst.fri.uniza.sk/'
 MAIL = 'projekt@umlfri.kst.fri.uniza.sk'
-DEBUG=False
+DEBUG=True
 
 LABELS_CLICKABLE = True # Used to ignore labels at drawing area
+SCALE_MAX = 5.0
+SCALE_MIN = 0.4
+SCALE_INCREASE = 0.2
