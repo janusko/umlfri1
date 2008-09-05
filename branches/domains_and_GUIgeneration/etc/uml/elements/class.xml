@@ -15,8 +15,8 @@
             <Option value="private" />
             <Option value="protected" />
         </Item>
-        <Item value="Attributes" type="attrs" propid="attributes" />
-        <Item value="Operations" type="opers" propid="operations" />
+        <Item value="Attributes" type="list" itemtype="Class_attribute" propid="attributes" />
+        <Item value="Operations" type="list" itemtype="Operation" propid="operations" />
         <Item value="Abstract" type="bool" />
         <Item value="Notes" type="note" />
     </Attributes>

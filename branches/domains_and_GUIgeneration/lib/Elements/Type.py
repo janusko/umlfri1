@@ -12,7 +12,7 @@ class CElementType(object):
         self.attributeList = []
         self.generatename = True
     
-    def AppendAttribute(self, value, type, propid = None, options = []):
+    def AppendAttribute(self, value, type, propid = None, options = [], itemtype=None):
         if propid is not None:
             self.visAttrs[propid] = value
         self.attributes[value] = (type, options)

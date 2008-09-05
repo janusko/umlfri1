@@ -94,15 +94,12 @@ class CElementFactory(object):
                     obj.AppendConnection(value, with_what, allow_recursive)
             elif element.tag == METAMODEL_NAMESPACE+'Attributes':
                 for item in element:
-                    value = item.get('value')
-                    type = item.get('type')
-                    propid = item.get('propid')
                     if item.get('notgenerate') != None:
                         obj.SetGenerateName(not item.get('notgenerate'))
                     options = []
                     for opt in item:
                         options.append(opt.get('value'))
-                    obj.AppendAttribute(value, type, propid, options)
+                    obj.AppendAttribute(options = options, **dict(item.items()))
             elif element.tag == METAMODEL_NAMESPACE+'Appearance':
                 tmp = None
                 for j in element:
