@@ -13,8 +13,9 @@ from Align import CAlign
 from Svg import CSvg
 from Sizer import CSizer
 from Icon import CIcon
+from Switch import CCase, CSwitch
 
 ALL = {'Condition': CCondition, 'Ellipse': CEllipse, 'HBox': CHBox, 'Line': CLine, 'Loop': CLoop,
        'Padding': CPadding, 'Rectangle': CRectangle, 'TextBox': CTextBox, 'VBox': CVBox,
        'Shadow': CShadow, 'Proportional': CProportional, 'Align': CAlign, 'Svg': CSvg,
-       'Sizer': CSizer, 'Icon': CIcon}
+       'Sizer': CSizer, 'Icon': CIcon, 'Case': CCase, 'Switch': CSwitch}
