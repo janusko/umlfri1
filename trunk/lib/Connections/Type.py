@@ -213,21 +213,17 @@ class CConnectionType(object):
         """
         return id in self.visAttrs.itervalues()
 
-    def Paint(self, canvas, connection, delta = (0, 0)):
+    def Paint(self, context):
         """
         Paint connection of given type on canvas
         
-        @param canvas: Connection will be painted on this canvas
-        @type  canvas: L{CAbstractCanvas<lib.Drawing.Canvas.Abstract.CAbstractCanvas>}
-        
-        @param connection: connection, which has to be painted
-        @type  connection: L{CConnection<lib.Drawing.Connection.CConnection>}
-        
-        @param delta: translation of point (0, 0)
-        @type  delta: (integer, integer)
+        @param context: context in which is connection being drawn
+        @type  context: L{CDrawingContext<lib.Drawing.DrawingContext.CDrawingContext>}
         """
-        dx, dy = delta
-        tmp = [(x + dx, y + dy) for (x, y) in connection.GetPoints(canvas)]
+        dx, dy = context.GetPos()
+        canvas = context.GetCanvas()
+        
+        tmp = [(x + dx, y + dy) for (x, y) in context.GetPoints()]
         o = tmp[0]
         for i in tmp[1:]:
             self.line.Paint(canvas, o, i)
@@ -242,11 +238,6 @@ class CConnectionType(object):
             X = tmp[-1][0] - tmp[-2][0]
             Y = tmp[-1][1] - tmp[-2][1]
             self.destArrow.Paint(canvas, tmp[-1], atan2(-X, Y))
-        
-        for id, lbl in enumerate(self.labels):
-            size = lbl[1].GetSize(canvas, connection)
-            pos = connection.GetLabelPosition(canvas, id, lbl)
-            lbl[1].Paint(canvas, pos, connection)
     
     def GetLabels(self):
         """
@@ -255,8 +246,20 @@ class CConnectionType(object):
         @return: all labels
         @rtype:  iterator over (string, L{CVisualObject<lib.Drawing.Objects.VisualObject.CVisualObject>}) pairs
         """
-        for id, label in enumerate(self.labels):
-            yield id, label[0]
+        for label in self.labels:
+            yield label
+    
+    def GetLabel(self, idx):
+        """
+        Get label by its index
+        
+        @param idx: index
+        @type  idx: integer
+        
+        @return: all labels
+        @rtype:  (string, L{CVisualObject<lib.Drawing.Objects.VisualObject.CVisualObject>})
+        """
+        return self.labels[idx]
             
     def GetAttribute(self, key):
         """

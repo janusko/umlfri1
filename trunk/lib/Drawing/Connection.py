@@ -7,6 +7,7 @@ from CacheableObject import CCacheableObject
 from SelectableObject import CSelectableObject
 from ConLabelInfo import CConLabelInfo
 from lib.consts import LABELS_CLICKABLE
+from DrawingContext import CDrawingContext
 
 class CConnection(CCacheableObject, CSelectableObject):
     '''Graphical representation of connection
@@ -73,7 +74,7 @@ class CConnection(CCacheableObject, CSelectableObject):
             self.points = points
         self.source = source
         self.destination = destination
-        self.labels = {}
+        self.labels = dict((id, CConLabelInfo(self, logicalLabel = value[1])) for id, value in enumerate(self.object.GetType().GetLabels()))
         self.selpoint = None
         self.object.AddAppears(diagram)
         super(CConnection, self).__init__()
@@ -214,7 +215,7 @@ class CConnection(CCacheableObject, CSelectableObject):
         '''
         return self.object
     
-    def GetLabelPosition(self, canvas, id, logicalLabelInfo):
+    def GetLabelPosition(self, canvas, id):
         '''
         Get absolute (x,y) position of label defined by id
         
@@ -228,21 +229,8 @@ class CConnection(CCacheableObject, CSelectableObject):
         @param id: identifier of label
         @type  id: int
         
-        @param logicalLabelInfo: (defaultPosition, logicalLabel)
-            
-            - C{defaultPosition} (str): default position of label - valid value
-            - C{logicalLabel} (L{CVisualObject
-            <lib.Drawing.Objects.VisualObject.CVisualObject>}) 
-            reference to logical representation of label.
-        
         @type logicalLabelInfo: tuple
         '''
-        if id in self.labels:
-            self.labels[id].SetLogicalLabel(logicalLabelInfo[1])
-            
-        else:
-            self.labels[id] = CConLabelInfo(self, logicalLabel = logicalLabelInfo[1])
-            self.labels[id].SetToDefaultPosition(canvas, logicalLabelInfo[0])
         
         return self.labels[id].GetPosition(canvas)
     
@@ -267,7 +255,7 @@ class CConnection(CCacheableObject, CSelectableObject):
         @param info: dictionary with parameters to restore label position
         @type  info: dict
         '''
-        self.labels[id] = CConLabelInfo(self, **info)
+        self.labels[id].SetSaveInfo(**info)
         
     def InsertPoint(self, canvas, point, index = None):
         '''
@@ -431,14 +419,18 @@ class CConnection(CCacheableObject, CSelectableObject):
         @param canvas: Canvas on which its being drawn
         @type  canvas: L{CCairoCanvas<lib.Drawing.Canvas.CairoCanvas.CCairoCanvas>}
         
-        @param delta: (x, y) offset by which is drawing area moved by 
-        scrollbars on the screen
+        @param delta: (x, y) translation of point (0, 0)
         @type  delta: tuple
         '''
-        size = config['/Styles/Selection/PointsSize']
-        color = config['/Styles/Selection/PointsColor']
-        self.object.Paint(canvas, self, delta)
+        
+        self.object.Paint(CDrawingContext(canvas, self, delta))
+        
+        for lbl in self.labels.values():
+            lbl.Paint(canvas, delta)
+        
         if self.selected is True:
+            size = config['/Styles/Selection/PointsSize']
+            color = config['/Styles/Selection/PointsColor']
             dx, dy = delta
             for index, i in enumerate(self.GetPoints(canvas)):
                 canvas.DrawRectangle((i[0] + dx - size//2, i[1] + dy - size//2), (size, size), color)

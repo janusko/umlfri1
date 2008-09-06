@@ -33,42 +33,30 @@ class CAlign(CSimpleContainer):
             rx, ry = False, False
         return self.alignx is None and rx, self.aligny is None and ry
 
-    def PaintShadow(self, canvas, pos, element, color, size = (None, None)):
-        x, y = pos
-        w, h = self.ComputeSize(canvas, element, size)
-        wc, hc = self.GetChild().GetSize(canvas, element)
-        # w, h = size
-        alignx, aligny = self.GetVariables(element, 'alignx', 'aligny')
-        if size[0] is not None:
+    def Paint(self, context):
+        x, y = context.GetPos()
+        we, he = context.GetSize()
+        w, h = context.ComputeSize(self)
+        wc, hc = self.GetChild().GetSize(context)
+        alignx, aligny = self.GetVariables(context, 'alignx', 'aligny')
+        
+        if we is not None:
             if self.alignx is None:
                 wc = w
             elif alignx == "center":
                 x += (w - wc)/2
             elif alignx == "right":
                 x += w - wc
-        if size[1] is not None:
+        if he is not None:
             if self.aligny is None:
                 hc = h
             elif aligny == "center":
                 y += (h - hc)/2
             elif aligny == "bottom":
                 y += h - hc
-        self.GetChild().PaintShadow(canvas, (x, y), element, color, (cw, hc))
-
-    def Paint(self, canvas, pos, element, size = (None, None)):
-        x, y = pos
-        w, h = self.ComputeSize(canvas, element, size)
-        wc, hc = self.GetChild().GetSize(canvas, element)
-        # w, h = size
-        alignx, aligny = self.GetVariables(element, 'alignx', 'aligny')
-        if size[0] is not None:
-            if alignx == "center":
-                x += (w - wc)/2
-            elif alignx == "right":
-                x += w - wc
-        if size[1] is not None:
-            if aligny == "center":
-                y += (h - hc)/2
-            elif aligny == "bottom":
-                y += h - hc
-        self.GetChild().Paint(canvas, (x, y), element)
+        
+        context.Push()
+        context.Move((x, y))
+        context.Resize((wc, hc))
+        CSimpleContainer.Paint(self, context)
+        context.Pop()

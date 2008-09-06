@@ -15,9 +15,9 @@ class CCase(CSimpleContainer):
             raise XMLError("Switch as parent needed")
         CSimpleContainer.SetParent(self, parent)
     
-    def IsTrue(self, element, value):
+    def IsTrue(self, context):
         ret = True
-        condition, = self.GetVariables(element, 'condition')
+        condition, = self.GetVariables(context, 'condition')
         
         if condition is None:
             return True
@@ -38,29 +38,19 @@ class CSwitch(CContainer):
             raise XMLError("Case needed")
         CContainer.AppendChild(self, child)
     
-    def GetSize(self, canvas, element):
-        value, = self.GetVariables(element, 'value')
-        size = element.GetCachedSize(self)
-        if size is not None:
-            return size
-        w = 0
-        h = 0
+    def ComputeSize(self, context):
+        value, = self.GetVariables(context, 'value')
+        
         for i in self.childs:
-            if i.IsTrue(element, value):
-                w, h = i.GetSize(canvas, element)
-                break
-        return element.CacheSize(self, (w, h))
+            if i.IsTrue(context, value):
+                return i.GetSize(context)
+        
+        return (0, 0)
 
-    def PaintShadow(self, canvas, pos, element, color, size = (None, None)):
-        value, = self.GetVariables(element, 'value')
+    def Paint(self, context):
+        value, = self.GetVariables(context, 'value')
+        
         for i in self.childs:
-            if i.IsTrue(element, value):
-                i.PaintShadow(canvas, pos, element, color, size)
-                break
-
-    def Paint(self, canvas, pos, element, size = (None, None)):
-        value, = self.GetVariables(element, 'value')
-        for i in self.childs:
-            if i.IsTrue(element, value):
-                i.Paint(canvas, pos, element, size)
+            if i.IsTrue(context, value):
+                i.Paint(context)
                 break

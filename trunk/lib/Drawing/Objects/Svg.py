@@ -52,19 +52,21 @@ class CSvg(CVisualObject):
         
         recursive(element, TransformMatrix.mk_scale(self.scale))
     
-    def GetSize(self, canvas, element):
+    def ComputeSize(self, context):
         return self.width * self.scale, self.height * self.scale
     
-    def PaintShadow(self, canvas, pos, element, color, size = (None, None)):
-        trans = TransformMatrix.mk_translation(pos)
+    def Paint(self, context):
+        trans = TransformMatrix.mk_translation(context.GetPos())
+        shadowcolor = context.GetShadowColor()
+        
         for path in self.svg:
-            if path['style'].get('fill', None) is None:
-                bgcolor = None
+            if shadowcolor:
+                if path['style'].get('fill', None) is None:
+                    bgcolor = None
+                else:
+                    bgcolor = shadowcolor
+                color = shadowcolor
             else:
-                bgcolor = color
-            canvas.DrawPath(trans*path['path'], color, bgcolor, int(float(path['style'].get('stroke-width', '1').rstrip('px'))+0.5))
-    
-    def Paint(self, canvas, pos, element, size = (None, None)):
-        trans = TransformMatrix.mk_translation(pos)
-        for path in self.svg:
-            canvas.DrawPath(trans*path['path'], path['style'].get('stroke', 'black'), path['style'].get('fill', None), int(float(path['style'].get('stroke-width', '1').rstrip('px'))+0.5))
+                color = path['style'].get('stroke', 'black')
+                bgcolor = path['style'].get('fill', None)
+            context.GetCanvas().DrawPath(trans*path['path'], color, bgcolor, int(float(path['style'].get('stroke-width', '1').rstrip('px'))+0.5))
