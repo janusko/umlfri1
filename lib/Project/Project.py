@@ -313,7 +313,9 @@ class CProject(object):
                                         if propCon.tag == UMLPROJECT_NAMESPACE+"point":
                                             conect.AddPoint((int(propCon.get("x")),int(propCon.get("y"))))
                                         elif propCon.tag == UMLPROJECT_NAMESPACE+"label":
-                                            conect.RestoreLabelPosition(int(propCon.get("num")), dict(propCon.items()))
+                                            data = dict(propCon.items())
+                                            del data["num"]
+                                            conect.RestoreLabelPosition(int(propCon.get("num")), data)
 
         root = etree.XML(data)
 

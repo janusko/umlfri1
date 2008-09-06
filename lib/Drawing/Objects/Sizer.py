@@ -40,11 +40,8 @@ class CSizer(CSimpleContainer):
             rx, ry = CSimpleContainer.GetResizable(self)
         return self.width is None and rx, self.height is None and ry
 
-    def GetSize(self, canvas, element):
-        size = element.GetCachedSize(self)
-        if size is not None:
-            return size
-        w, h = CSimpleContainer.GetSize(self, canvas, element)
+    def ComputeSize(self, context):
+        w, h = CSimpleContainer.ComputeSize(self, context)
         
         if self.height is not None:
             h = self.height
@@ -60,12 +57,12 @@ class CSizer(CSimpleContainer):
         elif self.maxwidth is not None and self.maxwidth < w:
             w = self.maxwidth
         
-        return element.CacheSize(self, (w, h))
+        return (w, h)
 
-    def PaintShadow(self, canvas, pos, element, color, size = (None, None)):
-        size = self.ComputeSize(canvas, element, size)
-        CSimpleContainer.PaintShadow(self, canvas, (pos[0], pos[1]), element, color, (size[0], size[1]))
-
-    def Paint(self, canvas, pos, element, size = (None, None)):
-        size = self.ComputeSize(canvas, element, size)
-        CSimpleContainer.Paint(self, canvas, (pos[0], pos[1]), element, (size[0], size[1]))
+    def Paint(self, context):
+        size = context.ComputeSize(self)
+        
+        context.Push()
+        context.Resize(size)
+        CSimpleContainer.Paint(self, context)
+        context.Pop()

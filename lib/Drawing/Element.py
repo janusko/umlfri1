@@ -1,5 +1,6 @@
 from lib.config import config
-from lib.Drawing import CConnection
+from Connection import CConnection
+from DrawingContext import CDrawingContext
 from VisibleObject import CVisibleObject
 
 class CElement(CVisibleObject):
@@ -46,7 +47,7 @@ class CElement(CVisibleObject):
         self.squares = []
 
     def Paint(self, canvas, delta = (0, 0)):
-        self.object.Paint(canvas, self, delta)
+        self.object.Paint(CDrawingContext(canvas, self, (self.position[0]+ delta[0], self.position[1]+ delta[1]), self.GetSize(canvas)))
         if self.selected:
             x, y = self.position
             w, h = self.GetSize(canvas)

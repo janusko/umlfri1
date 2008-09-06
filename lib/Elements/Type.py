@@ -125,11 +125,8 @@ class CElementType(object):
     def SetGenerateName(self, generate):
         self.generatename = generate
         
-    def Paint(self, canvas, element, delta = (0, 0)):
-        dx, dy = delta
-        x, y = element.GetPosition()
-        pos = (x + dx,  y + dy)
-        self.appearance.Paint(canvas, pos, element, element.GetSize(canvas))
+    def Paint(self, context):
+        self.appearance.Paint(context)
     
     def SetAppearance(self, appearance):
         self.appearance = appearance
@@ -149,5 +146,5 @@ class CElementType(object):
         else:
             raise ElementAttributeError('VisAttrDontExists')
     
-    def GetSize(self, canvas, element):
-        return self.appearance.GetSize(canvas, element)
+    def GetSize(self, context):
+        return self.appearance.GetSize(context)

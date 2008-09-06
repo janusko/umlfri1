@@ -10,9 +10,9 @@ class CCondition(CSimpleContainer):
         self.negate = ToBool(negate)
         self.value = value
     
-    def __IsTrue(self, element):
+    def IsTrue(self, context):
         ret = True
-        condition, value = self.GetVariables(element, 'condition', 'value')
+        condition, value = self.GetVariables(context, 'condition', 'value')
         if self.type == 'empty':
             ret = not condition
         elif self.type == 'equal':
@@ -21,20 +21,11 @@ class CCondition(CSimpleContainer):
             return not ret
         return ret
 
-    def GetSize(self, canvas, element):
-        size = element.GetCachedSize(self)
-        if size is not None:
-            return size
-        if self.__IsTrue(element):
-            return element.CacheSize(self, CSimpleContainer.GetSize(self, canvas, element))
-        return element.CacheSize(self, (0, 0))
+    def ComputeSize(self, context):
+        if self.IsTrue(context):
+            return CSimpleContainer.ComputeSize(self, context)
+        return (0, 0)
 
-    def PaintShadow(self, canvas, pos, element, color, size = (None, None)):
-        if self.__IsTrue(element):
-            for child in self.childs:
-                CSimpleContainer.Paint(self, canvas, pos, element, color, size)
-
-    def Paint(self, canvas, pos, element, size = (None, None)):
-        if self.__IsTrue(element):
-            for child in self.childs:
-                CSimpleContainer.Paint(self, canvas, pos, element, size)
+    def Paint(self, context):
+        if self.IsTrue(context):
+            CSimpleContainer.Paint(self, context)

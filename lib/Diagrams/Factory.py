@@ -112,8 +112,9 @@ class CDiagramFactory(object):
                 
             elif element.tag == METAMODEL_NAMESPACE+'Elements':
                 for item in element:
-                    value = item.get('value')
-                    obj.AppendElement(value)
+                    if not isinstance(item, etree._Comment):
+                        value = item.get('value')
+                        obj.AppendElement(value)
                     
             elif element.tag == METAMODEL_NAMESPACE+'Connections':
                 for item in element:
