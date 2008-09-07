@@ -9,13 +9,15 @@
     </Attributes>
     <Appearance>
         <HBox expand="0">
-            <Ellipse fill="/Styles/Element/FillColor" border="/Styles/Element/LineColor">
-                <Padding padding="10">
-                    <Ellipse fill="/Styles/Element/Fill3Color">
-                        <Sizer width="15" height="15" />
-                    </Ellipse>
-                </Padding>
-            </Ellipse>
+            <Proportional ratio="1:1" align="center center" size="minimal">
+                <Ellipse fill="/Styles/Element/FillColor" border="/Styles/Element/LineColor">
+                    <Padding padding="10">
+                        <Ellipse fill="/Styles/Element/Fill3Color">
+                            <Sizer width="15" height="15" />
+                        </Ellipse>
+                    </Padding>
+                </Ellipse>
+            </Proportional>
             <HBox>
                 <Condition condition="#stereotype" type="empty" negate="1">
                     <Align align="center">

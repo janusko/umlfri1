@@ -6,38 +6,44 @@ class CAlign(CSimpleContainer):
         CSimpleContainer.__init__(self)
         self.alignx = None
         self.aligny = None
-        align = align.split()
-        if len(align) > 2:
-            raise XMLError("Align", "align")
-        if align == ['center', 'center']:
+        if isinstance(align, tuple):
             self.alignx, self.aligny = align
-        elif 'center' in align:
-            if align[0] == 'center':
-                self.alignx = 'center'
-                del align[0]
-            else:
-                self.aligny = 'center'
-                del align[1]
-        for i in align:
-            if i in ('left', 'right'):
-                self.alignx = i
-            elif i in ('bottom', 'top'):
-                self.aligny = i
-            elif i == 'middle':
-                self.aligny = 'center'
+        else:
+            align = align.split()
+            if len(align) > 2:
+                raise XMLError("Align", "align")
+            if align == ['center', 'center']:
+                self.alignx, self.aligny = align
+            elif 'center' in align:
+                if align[0] == 'center':
+                    self.alignx = 'center'
+                    del align[0]
+                else:
+                    self.aligny = 'center'
+                    del align[1]
+            for i in align:
+                if i in ('left', 'right'):
+                    self.alignx = i
+                elif i in ('bottom', 'top'):
+                    self.aligny = i
+                elif i == 'middle':
+                    self.aligny = 'center'
     
     def GetResizable(self):
         if self.alignx is None or self.aligny is None:
             rx, ry = CSimpleContainer.GetResizable(self)
         else:
             rx, ry = False, False
-        return self.alignx is None and rx, self.aligny is None and ry
+        return self.alignx is not None or rx, self.aligny is not None or ry
+    
+    def ComputeChildSize(self, context):
+        return self.GetChild().GetSize(context)
 
     def Paint(self, context):
         x, y = context.GetPos()
         we, he = context.GetSize()
         w, h = context.ComputeSize(self)
-        wc, hc = self.GetChild().GetSize(context)
+        wc, hc = self.ComputeChildSize(context)
         alignx, aligny = self.GetVariables(context, 'alignx', 'aligny')
         
         if we is not None:
