@@ -1,6 +1,7 @@
 from lib.Math2D import CPoint, CPolyLine, CLine
 from math import pi, sqrt
 from CacheableObject import CCacheableObject
+from DrawingContext import CDrawingContext
 
 class EConLabelInfo(Exception): pass
 
@@ -10,8 +11,7 @@ class CConLabelInfo(CCacheableObject):
     '''
     
     def __init__(self, connection, idx = 0, 
-                       pos = 0.5, dist = 0, angle = pi/2, logicalLabel = None,
-                       **kwds):
+                       pos = 0.5, dist = 0, angle = pi/2, logicalLabel = None):
         '''
         @param connection: owner of label
         @type  connection: L{CConection<Connection.CConnection>}
@@ -59,6 +59,19 @@ class CConLabelInfo(CCacheableObject):
             'pos': self.pos,
             'dist': self.dist,
             'angle': self.angle}
+    
+    def SetSaveInfo(self, idx = 0, pos = 0.5, dist = 0, angle = pi/2):
+        '''Get information about self to be saved to .frip file
+        
+        This information can be used to restore values of attributes
+        
+        @return: dictionary containing essential information
+        @rtype: dict
+        '''
+        self.idx = int(idx)
+        self.dist = float(dist)
+        self.pos = float(pos)
+        self.angle = float(angle)
     
     def GetDiagram(self):
         '''
@@ -122,7 +135,9 @@ class CConLabelInfo(CCacheableObject):
         @type canvas: L{CCairoCanvas<lib.Drawing.Canvas.CairoCanvas.CCairoCanvas>}
         '''
         
-        return (self.logicalLabel.GetSize(canvas, self.connection) 
+        context = CDrawingContext(canvas, self.connection, (0, 0))
+        
+        return (self.logicalLabel.GetSize(context) 
             if self.logicalLabel is not None else (0, 0))
     
     def GetMinimalSize(self, canvas):
@@ -347,5 +362,8 @@ class CConLabelInfo(CCacheableObject):
         directs call to self.connection
         '''
         return self.connection.GetSelected()
-        
     
+    def Paint(self, canvas, delta = (0, 0)):
+        pos = self.GetPosition(canvas)
+        context = CDrawingContext(canvas, self.connection, (pos[0] + delta[0], pos[1] + delta[1]))
+        self.logicalLabel.Paint(context)

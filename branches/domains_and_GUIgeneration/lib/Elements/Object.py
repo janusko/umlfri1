@@ -119,8 +119,8 @@ class CElementObject(object):
     def GetType(self):
         return self.type
     
-    def GetSize(self, canvas, element):
-        return self.type.GetSize(canvas, element)
+    def GetSize(self, context):
+        return self.type.GetSize(context)
         
     def GetName(self):
         if 'Name' in self.attribs:
@@ -195,8 +195,8 @@ class CElementObject(object):
             val = v
         return val
 
-    def Paint(self, canvas, element, delta = (0, 0)):
-        self.type.Paint(canvas, element, delta)
+    def Paint(self, context):
+        self.type.Paint(context)
 
     def RemoveAttribute(self, key):
         self.revision += 1

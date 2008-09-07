@@ -17,33 +17,27 @@ class CLine(CVisualObject):
                 tp = 'horizontal'
         return tp
 
-    def GetSize(self, canvas, element):
-        size = element.GetCachedSize(self)
-        if size is not None:
-            return size
+    def ComputeSize(self, context):
         tp = self.__ComputeType()
         if tp == 'horizontal':
-            return element.CacheSize(self, (0, 1))
+            return (0, 1)
         else:
-            return element.CacheSize(self, (1, 0))
+            return (1, 0)
     
     def GetResizable(self):
         tp = self.__ComputeType()
         return tp == 'horizontal', tp == 'vertical'
 
-    def PaintShadow(self, canvas, pos, element, color, size = (None, None)):
-        size = self.ComputeSize(canvas, element, size)
+    def Paint(self, context):
+        size = context.ComputeSize(self)
         tp = self.__ComputeType()
+        pos = context.GetPos()
+        size = context.GetSize()
+        color = context.GetShadowColor()
+        if color is None:
+            color, = self.GetVariables(context, 'color')
+        
         if tp == 'horizontal' and pos[0] is not None:
-            canvas.DrawLine(pos, (pos[0]+size[0], pos[1]), color)
+            context.GetCanvas().DrawLine(pos, (pos[0]+size[0], pos[1]), color)
         elif tp == 'vertical' and pos[1] is not None:
-            canvas.DrawLine(pos, (pos[0], pos[1]+size[1]), color)
-
-    def Paint(self, canvas, pos, element, size = (None, None)):
-        size = self.ComputeSize(canvas, element, size)
-        tp = self.__ComputeType()
-        color, = self.GetVariables(element, 'color')
-        if tp == 'horizontal' and pos[0] is not None:
-            canvas.DrawLine(pos, (pos[0]+size[0], pos[1]), color)
-        elif tp == 'vertical' and pos[1] is not None:
-            canvas.DrawLine(pos, (pos[0], pos[1]+size[1]), color)
+            context.GetCanvas().DrawLine(pos, (pos[0], pos[1]+size[1]), color)

@@ -237,20 +237,14 @@ class CConnectionObject(object):
             self.source.RemoveConnection(self)
             self.destination.RemoveConnection(self)            
     
-    def Paint(self, canvas, connection, delta = (0, 0)):
+    def Paint(self, context):
         """
         Paint self on canvas
         
-        @param canvas: connection will be painted on this canvas
-        @type  canvas: L{CAbstractCanvas<lib.Drawing.Canvas.Abstract.CAbstractCanvas>}
-        
-        @param connection: connection object which has to be painted on canvas
-        @type  connection: L{CAbstractCanvas<lib.Drawing.Connection.CConnection>}
-        
-        @param delta: translation of point (0, 0)
-        @type  delta: (integer, integer)
+        @param context: context in which is connection being drawn
+        @type  context: L{CDrawingContext<lib.Drawing.DrawingContext.CDrawingContext>}
         """
-        self.type.Paint(canvas, connection, delta)
+        self.type.Paint(context)
     
     def GetAttributes(self):
         """

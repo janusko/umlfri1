@@ -5,19 +5,16 @@ class CPadding(CSimpleContainer):
         CSimpleContainer.__init__(self)
         self.padding = int(padding)
 
-    def GetSize(self, canvas, element):
-        size = element.GetCachedSize(self)
-        if size is not None:
-            return size
-        w, h = CSimpleContainer.GetSize(self, canvas, element)
-        return element.CacheSize(self, (w + 2*self.padding, h + 2*self.padding))
+    def ComputeSize(self, context):
+        w, h = CSimpleContainer.ComputeSize(self, context)
+        return (w + 2*self.padding, h + 2*self.padding)
 
-    def PaintShadow(self, canvas, pos, element, color, size = (None, None)):
-        size = self.ComputeSize(canvas, element, size)
-        CSimpleContainer.PaintShadow(self, canvas, (pos[0]+self.padding, pos[1]+self.padding),
-                    element, color, (size[0] - 2*self.padding, size[1] - 2*self.padding))
-
-    def Paint(self, canvas, pos, element, size = (None, None)):
-        size = self.ComputeSize(canvas, element, size)
-        CSimpleContainer.Paint(self, canvas, (pos[0]+self.padding, pos[1]+self.padding), element,
-                    (size[0] - 2*self.padding, size[1] - 2*self.padding))
+    def Paint(self, context):
+        size = context.ComputeSize(self)
+        pos = context.GetPos()
+        
+        context.Push()
+        context.Move((pos[0]+self.padding, pos[1]+self.padding))
+        context.Resize((size[0] - 2*self.padding, size[1] - 2*self.padding))
+        CSimpleContainer.Paint(self, context)
+        context.Pop()

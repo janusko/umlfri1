@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Type propid="class_attribute">
+<Type propid="method">
     <Item propid="name" type="str" value="Name" />
+    <Item propid="rtype" type="str" value="Return type" />
+    <Item propid="parameters" type="list" itemtype="method_parameter" value="Parameters" />
     <Item propid="stereotype" type="str" value="Stereotype" />
-    <Item propid="scope" type="enum" value="Scope">
+    <Item propid="scope" type="enum" value="Scope" >
         <Value>Private</Value>
         <Value>Protected</Value>
         <Value>Public</Value>
     </Item>
-    <Item propid="type" type="str" value="Type" />
     <Item propid="static" type="bool" value="Static" />
-    <Item propid="default" type="str" value="Default" />
+    <Item propid="virtual" type="bool" value="Virtual" />
+    <Item propid="default" type="str" value="Default Value" />
     <Item propid="note" type="str" value="Note" />
 </Type>

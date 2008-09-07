@@ -5,31 +5,32 @@ class CHBox(CContainer):
         CContainer.__init__(self)
         self.expand = tuple(int(cell) for cell in expand.split())
     
-    def GetSize(self, canvas, element):
-        size = element.GetCachedSize(self)
-        if size is not None:
-            return size
+    def ComputeSize(self, context):
         w = 0
         h = 0
         for i in self.childs:
-            wi, hi = i.GetSize(canvas, element)
+            wi, hi = i.GetSize(context)
             w = max(w, wi)
             h += hi
-        return element.CacheSize(self, (w, h))
+        return (w, h)
 
-    def PaintShadow(self, canvas, pos, element, color, size = (None, None)):
-        if size[0] is None:
+    def Paint(self, context):
+        x, y = context.GetPos()
+        we, he = context.GetSize()
+        if we is None:
             w = 0
         else:
-            w = size[0]
+            w = we
+        
         h = []
         for i in self.childs:
-            wi, hi = i.GetSize(canvas, element)
-            if size[0] is None:
+            wi, hi = i.GetSize(context)
+            if we is None:
                 w = max(w, wi)
             h.append(hi)
-        if size[1] is not None and self.expand:
-            hs = size[1] - sum(h)
+        
+        if he is not None and self.expand:
+            hs = he - sum(h)
             if hs > 0:
                 hx = hs / len(self.expand)
                 for i in self.expand:
@@ -37,32 +38,11 @@ class CHBox(CContainer):
                     hs -= hx
                 if hs > 0:
                     h[self.expand[-1]] += hs
-        x, y = pos
+        
         for id, i in enumerate(self.childs):
-            i.PaintShadow(canvas, (x, y), element, color, (w, h[id]))
-            y += h[id]
-
-    def Paint(self, canvas, pos, element, size = (None, None)):
-        if size[0] is None:
-            w = 0
-        else:
-            w = size[0]
-        h = []
-        for i in self.childs:
-            wi, hi = i.GetSize(canvas, element)
-            if size[0] is None:
-                w = max(w, wi)
-            h.append(hi)
-        if size[1] is not None and self.expand:
-            hs = size[1] - sum(h)
-            if hs > 0:
-                hx = hs / len(self.expand)
-                for i in self.expand:
-                    h[i] += hx
-                    hs -= hx
-                if hs > 0:
-                    h[self.expand[-1]] += hs
-        x, y = pos
-        for id, i in enumerate(self.childs):
-            i.Paint(canvas, (x, y), element, (w, h[id]))
+            context.Push()
+            context.Move((x, y))
+            context.Resize((w, h[id]))
+            i.Paint(context)
+            context.Pop()
             y += h[id]

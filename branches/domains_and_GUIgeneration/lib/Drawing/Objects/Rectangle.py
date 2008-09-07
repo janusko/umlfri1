@@ -55,63 +55,18 @@ class CRectangle(CSimpleContainer):
     def GetResizable(self):
         return True, True
 
-    def PaintShadow(self, canvas, pos, element, color, size = (None, None)):
-        size = self.ComputeSize(canvas, element, size)
-        if self.sides == self.corners == (None, None, None, None):
-            canvas.DrawRectangle(pos, size, None, color)
+    def Paint(self, context):
+        size = context.ComputeSize(self)
+        shadowcolor = context.GetShadowColor()
+        if shadowcolor is None:
+            border, fill = self.GetVariables(context, 'border', 'fill')
         else:
-            corners = []
-            (x, y), (w, h) = pos, size
-            if self.sides[0] is not None:
-                y += self.sides[0][2]
-                h -= self.sides[0][2]
-            if self.sides[1] is not None:
-                w -= self.sides[1][2]
-            if self.sides[2] is not None:
-                h -= self.sides[2][2]
-            if self.sides[3] is not None:
-                x += self.sides[3][2]
-                w -= self.sides[3][2]
-            positions = (x, y), (x + w, y), (x + w, y+h), (x, y+h)
-            oldpos = None
-            lastside = None
-            for i, c in enumerate(self.corners):
-                if c is None:
-                    if self.sides[i] is not None:
-                        scale = ((w, self.sides[i][2]), (self.sides[i][2], h), (w, self.sides[i][2]), (self.sides[i][2], h))
-                        if i == 3 and lastside is not None:
-                            tmp = lastside
-                        else:
-                            tmp = TransformMatrix.mk_translation(positions[i])*TransformMatrix.mk_scale2(scale[i])*self.sides[i][1][-1]
-                        if self.sides[i-1] is None:
-                            if i:
-                                corners.append(PathPartLine(oldpos, tmp.GetFirstPos()))
-                            else:
-                                corners.append(PathPartMove(tmp.GetFirstPos()))
-                        corners.append(tmp)
-                        oldpos = tmp.GetLastPos()
-                    elif self.sides[i-1] is not None:
-                        if not i:
-                            scale = ((w, self.sides[i-1][2]), (self.sides[i-1][2], h), (w, self.sides[i-1][2]), (self.sides[i-1][2], h))
-                            lastside = TransformMatrix.mk_translation(positions[i-1])*TransformMatrix.mk_scale2(scale[i-1])*self.sides[i-1][1][-1]
-                            oldpos = lastside.GetLastPos()
-                    else:
-                        if i:
-                            corners.append(PathPartLine(oldpos, positions[i]))
-                        else:
-                            corners.append(PathPartMove(positions[i]))
-                        oldpos = positions[i]
-                else:
-                    tmp = TransformMatrix.mk_translation(positions[i])*c[1][-1]
-                    corners.append(tmp)
-                    oldpos = tmp.GetLastPos()
-            corners = Path.Join(corners).Flattern()
-            corners.Close()
-            canvas.DrawPath(corners, None, color)
-
-    def Paint(self, canvas, pos, element, size = (None, None)):
-        size = self.ComputeSize(canvas, element, size)
-        border, fill = self.GetVariables(element, 'border', 'fill')
+            border, fill = None, shadowcolor
+        
+        canvas = context.GetCanvas()
+        pos = context.GetPos()
+        size = context.ComputeSize(self)
+        
         if self.sides == self.corners == (None, None, None, None):
             canvas.DrawRectangle(pos, size, border, fill)
         else:
@@ -164,17 +119,19 @@ class CRectangle(CSimpleContainer):
             corners.Close()
             canvas.DrawPath(corners, border, fill)
         
-        for i in self.childs:
-            i.Paint(canvas, pos, element, size)
+        if shadowcolor is not None:
+            return
+        
+        CSimpleContainer.Paint(self, context)
         
         for i, c in enumerate(self.corners):
             if c is not None and len(c[1]) > 0:
                 tmp = TransformMatrix.mk_translation(positions[i])*c[1][:-1]
-                color, = self.ParseVariables(element, c[0])
+                color, = self.ParseVariables(context, c[0])
                 canvas.DrawPath(tmp, border, color)
         
         for i, s in enumerate(self.sides):
             if s is not None and len(s[1]) > 0:
                 tmp = TransformMatrix.mk_translation(positions[i])*s[1][:-1]
-                color, = self.ParseVariables(element, s[0])
+                color, = self.ParseVariables(context, s[0])
                 canvas.DrawPath(tmp, border, color)

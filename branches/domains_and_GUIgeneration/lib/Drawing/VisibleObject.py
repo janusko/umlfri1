@@ -2,6 +2,7 @@ from lib.config import config
 from lib.Drawing import CConnection
 from CacheableObject import CCacheableObject
 from SelectableObject import CSelectableObject
+from DrawingContext import CDrawingContext
 
 class CVisibleObject(CCacheableObject, CSelectableObject):
     '''
@@ -44,12 +45,12 @@ class CVisibleObject(CCacheableObject, CSelectableObject):
         return w / 2 + self.position[0], h / 2 + self.position[1]
     
     def GetSize(self, canvas):
-        w, h = self.object.GetSize(canvas, self)
+        w, h = self.GetMinimalSize(canvas)
         w, h = w + self.deltaSize[0], h + self.deltaSize[1]
         return w, h 
         
     def GetMinimalSize(self, canvas):
-        w, h = self.object.GetSize(canvas, self)
+        w, h = self.object.GetSize(CDrawingContext(canvas, self, (0, 0)))
         return w, h
         
     def GetSquare(self, canvas):

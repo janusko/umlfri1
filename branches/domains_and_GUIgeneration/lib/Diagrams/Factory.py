@@ -112,13 +112,15 @@ class CDiagramFactory(object):
                 
             elif element.tag == METAMODEL_NAMESPACE+'Elements':
                 for item in element:
-                    value = item.get('value')
-                    obj.AppendElement(value)
+                    if item.tag == METAMODEL_NAMESPACE+'Item':
+                        value = item.get('value')
+                        obj.AppendElement(value)
                     
             elif element.tag == METAMODEL_NAMESPACE+'Connections':
                 for item in element:
-                    value = item.get('value')
-                    obj.AppendConnection(value)
+                    if item.tag == METAMODEL_NAMESPACE+'Item':
+                        value = item.get('value')
+                        obj.AppendConnection(value)
         
         self.types[root.get('id')] = obj
     

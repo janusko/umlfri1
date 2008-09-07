@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Type propid="class_attribute">
     <Item propid="name" type="str" value="Name" />
-    <Item propid="stereotype" type="str" value="Stereotype" />
-    <Item propid="scope" type="enum" value="Scope">
-        <Value>Private</Value>
-        <Value>Protected</Value>
-        <Value>Public</Value>
-    </Item>
     <Item propid="type" type="str" value="Type" />
-    <Item propid="static" type="bool" value="Static" />
+    <Item propid="scope" type="enum" value="Scope" >
+        <Value>in</Value>
+        <Value>out</Value>
+        <Value>in out</Value>
+    </Item>
+    <Item propid="const" type="bool" value="Const" />
     <Item propid="default" type="str" value="Default" />
     <Item propid="note" type="str" value="Note" />
 </Type>
