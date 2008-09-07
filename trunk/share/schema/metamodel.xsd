@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- edited with XMLSpy v2008 (http://www.altova.com) by Papi Raton (Pirate Bay) -->
 <!-- (c) UML.FRI -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" targetNamespace="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:element name="ElementType">
@@ -121,6 +120,15 @@
 		<xs:complexContent>
 			<xs:extension base="SimpleObjectContainer">
 				<xs:attribute name="ratio" type="xs:string" use="required"/>
+				<xs:attribute name="align" type="xs:string"/>
+				<xs:attribute name="size" default="maximal">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="maximal"/>
+							<xs:enumeration value="minimal"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
