@@ -2,16 +2,16 @@
 <Domain id="class_attribute" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" >
     <Import />
     <Attributes>
-        <Item propid="name" type="str" value="Name" />
-        <Item propid="stereotype" type="str" value="Stereotype" />
-        <Item propid="scope" type="enum" value="Scope">
-            <Value>Private</Value>
-            <Value>Protected</Value>
-            <Value>Public</Value>
+        <Item id="name" type="str" name="Name" />
+        <Item id="stereotype" type="str" name="Stereotype" />
+        <Item id="scope" type="enum" name="Scope">
+            <Option value="Private" />
+            <Option value="Protected" />
+            <Option value="Public" />
         </Item>
-        <Item propid="type" type="str" value="Type" />
-        <Item propid="static" type="bool" value="Static" />
-        <Item propid="default" type="str" value="Default" />
-        <Item propid="note" type="str" value="Note" />
+        <Item id="type" type="str" name="Type" />
+        <Item id="static" type="bool" name="Static" />
+        <Item id="default" type="str" name="Default" />
+        <Item id="note" type="str" name="Note" />
     </Attributes>
 </Domain>

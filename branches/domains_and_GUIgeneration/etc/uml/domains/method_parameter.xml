@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Type propid="class_attribute">
-    <Item propid="name" type="str" value="Name" />
-    <Item propid="type" type="str" value="Type" />
-    <Item propid="scope" type="enum" value="Scope" >
-        <Value>in</Value>
-        <Value>out</Value>
-        <Value>in out</Value>
-    </Item>
-    <Item propid="const" type="bool" value="Const" />
-    <Item propid="default" type="str" value="Default" />
-    <Item propid="note" type="str" value="Note" />
+<Type id="class_attribute">
+    <Import />
+    <Attributes>
+        <Item id="name" type="str" name="Name" />
+        <Item id="type" type="str" name="Type" />
+        <Item id="scope" type="enum" name="Scope" >
+            <Option value="in" />
+            <Option value="out" />
+            <Option value="in out" />
+        </Item>
+        <Item id="const" type="bool" name="Const" />
+        <Item id="default" type="str" name="Default" />
+        <Item id="note" type="str" name="Note" />
+    </Attributes>
 </Type>

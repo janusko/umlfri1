@@ -33,6 +33,7 @@ if HAVE_LXML:
     xmlschema = etree.XMLSchema(xmlschema_doc)
 
 
+class EDomainFactory(Exception): pass
 
 class CDomainFactory(object):
     '''
@@ -50,7 +51,7 @@ class CDomainFactory(object):
         @type path: string
         """
         
-        self.types = {}
+        self.domains = {}
         self.path = path
         
         self.storage = storage
@@ -58,15 +59,15 @@ class CDomainFactory(object):
             if file.endswith('.xml'):
                 self.__Load(os.path.join(self.path, file))
     
-    def GetDomain(self, name):
+    def GetDomain(self, id):
         """
         @return: Domain type by name
         @rtype: L{CDomainType<Type.CDomainType>}
         
-        @param type: Element type name
-        @type  type: string
+        @param id: Element type name
+        @type  id: string
         """
-        return self.types[type]
+        return self.domains[id]
     
     def __Load(self, path):
         '''
@@ -82,14 +83,22 @@ class CDomainFactory(object):
             if not xmlschema.validate(root):
                 raise FactoryError("XMLError", xmlschema.error_log.last_error)
         
+        if rood.get('id') in self.types:
+            raise EDomainFactory('Duplicate domain identifier')
+        
         obj = CDomainPath(root.get('id'))
         
         for section in root:
-            {   METAMODEL_NAMESPACE + 'Import': self.__LoadImport
-                METAMODEL_NAMESPACE + 'Attributes': self.__LoadAttributes
-            }[section.tag()](obj, section)
+            if section.tag == METAMODEL_NAMESPACE + 'Import':
+                self.__LoadImport(obj, section)
             
-        self.types[root.get('id')] = obj
+            elif section.tag == METAMODEL_NAMESPACE + 'Attributes': 
+                self.__LoadAttributes(obj, section)
+            
+            else:
+                raise EDomainFactory('Unknown Section: %s'%(section.tag, ))
+            
+        self.domains[root.get('id')] = obj
     
     def __LoadImport(self, obj, section):
         '''
@@ -105,7 +114,7 @@ class CDomainFactory(object):
         '''
         
         for domain in section:
-            obj.AppendImport(domain.get('value'))
+            obj.AppendImport(domain.get('id'))
     
     def __LoadAttributes(self, obj, section):
         '''
@@ -124,4 +133,4 @@ class CDomainFactory(object):
             options = []
             for opt in item:
                 options.append(opt.get('value'))
-            obj.AppendItem(options = options, **dict(item.items()))
+            obj.AppendItem(options, **dict(item.items()))

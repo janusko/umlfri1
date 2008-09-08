@@ -20,6 +20,8 @@ CONNECTIONS_PATH = 'connections'
 ICONS_PATH = 'icons'
 DOMAINS_PATH = 'domains'
 
+ATOMIC_DOMAINS = ('bool', 'int', 'float', 'str', 'enum', 'list')
+
 ARROW_IMAGE = 'arrow.png'
 
 DEFAULT_TEMPLATE_ICON = 'default_icon.png'

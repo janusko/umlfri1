@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Type propid="method">
+<Type id="method">
     <Import>
-        <Domain value="method_parameter" />
+        <Domain id="method_parameter" />
     </Import>
-    <Item propid="name" type="str" value="Name" />
-    <Item propid="rtype" type="str" value="Return type" />
-    <Item propid="parameters" type="list" itemtype="method_parameter" value="Parameters" />
-    <Item propid="stereotype" type="str" value="Stereotype" />
-    <Item propid="scope" type="enum" value="Scope" >
-        <Value>Private</Value>
-        <Value>Protected</Value>
-        <Value>Public</Value>
+    <Item id="name" type="str" name="Name" />
+    <Item id="rtype" type="str" name="Return type" />
+    <Item id="parameters" type="list" itemtype="method_parameter" name="Parameters" />
+    <Item id="stereotype" type="str" name="Stereotype" />
+    <Item id="scope" type="enum" name="Scope" >
+        <Option value="Private" />
+        <Option value="Protected" />
+        <Option value="Public" />
     </Item>
-    <Item propid="static" type="bool" value="Static" />
-    <Item propid="virtual" type="bool" value="Virtual" />
-    <Item propid="default" type="str" value="Default Value" />
-    <Item propid="note" type="str" value="Note" />
+    <Item id="static" type="bool" name="Static" />
+    <Item id="virtual" type="bool" name="Virtual" />
+    <Item id="default" type="str" name="Default Value" />
+    <Item id="note" type="str" name="Note" />
 </Type>
