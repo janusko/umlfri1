@@ -15,7 +15,7 @@ from lib.Connections.Factory import CConnectionFactory
 from lib.Versions.Factory import CVersionFactory
 from lib.Drawing import CDiagram
 import os.path
-from lib.consts import ROOT_PATH, VERSIONS_PATH, DIAGRAMS_PATH, ELEMENTS_PATH, CONNECTIONS_PATH, UMLPROJECT_NAMESPACE, PROJECT_EXTENSION, PROJECT_CLEARXML_EXTENSION
+from lib.consts import ROOT_PATH, VERSIONS_PATH, DIAGRAMS_PATH, ELEMENTS_PATH, CONNECTIONS_PATH, DOMAINS_PATH, UMLPROJECT_NAMESPACE, PROJECT_EXTENSION, PROJECT_CLEARXML_EXTENSION
 from lib.config import config
 
 #try to import necessary lybraries for XML parsing

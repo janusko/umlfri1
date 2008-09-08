@@ -18,6 +18,7 @@ DIAGRAMS_PATH = 'diagrams'
 ELEMENTS_PATH = 'elements'
 CONNECTIONS_PATH = 'connections'
 ICONS_PATH = 'icons'
+DOMAINS_PATH = 'domains'
 
 ARROW_IMAGE = 'arrow.png'
 

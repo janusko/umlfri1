@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Domain id="class_attribute" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" >
+    <Import />
+    <Attributes>
+        <Item propid="name" type="str" value="Name" />
+        <Item propid="stereotype" type="str" value="Stereotype" />
+        <Item propid="scope" type="enum" value="Scope">
+            <Value>Private</Value>
+            <Value>Protected</Value>
+            <Value>Public</Value>
+        </Item>
+        <Item propid="type" type="str" value="Type" />
+        <Item propid="static" type="bool" value="Static" />
+        <Item propid="default" type="str" value="Default" />
+        <Item propid="note" type="str" value="Note" />
+    </Attributes>
+</Domain>

@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Type propid="method">
+    <Import>
+        <Domain value="method_parameter" />
+    </Import>
     <Item propid="name" type="str" value="Name" />
     <Item propid="rtype" type="str" value="Return type" />
     <Item propid="parameters" type="list" itemtype="method_parameter" value="Parameters" />

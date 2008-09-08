@@ -1,0 +1,2 @@
+class CDomainObject(object):
+    pass
