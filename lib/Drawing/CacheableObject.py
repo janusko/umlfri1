@@ -13,17 +13,17 @@ class CCacheableObject(object):
     def ClearSizeCache(self):
         self.__sizecache = {}
     
-    def CacheSize(self, obj, size):
-        line = getattr(self, '__LOOPVARS__', {}).get('line')
+    def CacheSize(self, context, obj, size):
+        line = context.GetVariables().get('line')
         self.__sizecache[(id(obj), line)] = size
         return size
     
-    def GetCachedSize(self, obj):
+    def GetCachedSize(self, context, obj):
         if self.revision < self.object.GetRevision() or self.cfgrevision < config.GetRevision():
             self.ClearSizeCache()
             self.revision = self.object.GetRevision()
             self.cfgrevision = config.GetRevision()
             return None
-        line = getattr(self, '__LOOPVARS__', {}).get('line')
+        line = context.GetVariables().get('line')
         return self.__sizecache.get((id(obj), line))
     

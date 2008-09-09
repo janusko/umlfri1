@@ -10,40 +10,26 @@ class CConLabelInfo(CCacheableObject):
     Stores information about graphical representation of label
     '''
     
-    def __init__(self, connection, idx = 0, 
-                       pos = 0.5, dist = 0, angle = pi/2, logicalLabel = None):
+    def __init__(self, connection, position, logicalLabel):
         '''
         @param connection: owner of label
         @type  connection: L{CConection<Connection.CConnection>}
         
-        @param idx: index of line segment to wich is bound
-        @type idx: int >= 0 
-        
-        @param pos: relative position of point at lineidx which is bound to
-        @type pos: float 
-        
-        @param dist: distance from label to point which is bound to
-        @type dist: float
+        @param position: initial position of label
+        @type idx: string
         
         @param logicalLabel: reference to logical representation of label.
-        As long as not set, size of label defaults to (0, 0).
         @type logicalLabel: L{CVisualObject
         <lib.Drawing.Objects.VisualObject.CVisualObject>}
-        
-        @kwparam kwds: anything, will be ignored anyway. used so that won't 
-        raise "Unexpected parameter" when passing parameters from XML
-        
-        @note: parameters idx, pos, dist, angle can be also passed in
-        string or unicode as long as they can be transformed to their required
-        types by int() and float() functions respectively
         '''
         
         super(CConLabelInfo, self).__init__()
+        self.idx = 0
+        self.dist = 0
+        self.pos = 0.5
+        self.angle = pi/2
+        self.position = position
         self.connection = connection
-        self.idx = int(idx)
-        self.dist = float(dist)
-        self.pos = float(pos)
-        self.angle = float(angle)
         self.logicalLabel = logicalLabel
     
     def GetSaveInfo(self):
@@ -72,6 +58,7 @@ class CConLabelInfo(CCacheableObject):
         self.dist = float(dist)
         self.pos = float(pos)
         self.angle = float(angle)
+        self.position = None
     
     def GetDiagram(self):
         '''
@@ -364,6 +351,9 @@ class CConLabelInfo(CCacheableObject):
         return self.connection.GetSelected()
     
     def Paint(self, canvas, delta = (0, 0)):
+        if self.position:
+            self.SetToDefaultPosition(canvas, self.position)
+            self.position = None
         pos = self.GetPosition(canvas)
         context = CDrawingContext(canvas, self.connection, (pos[0] + delta[0], pos[1] + delta[1]))
         self.logicalLabel.Paint(context)

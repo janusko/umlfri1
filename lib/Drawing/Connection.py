@@ -74,7 +74,7 @@ class CConnection(CCacheableObject, CSelectableObject):
             self.points = points
         self.source = source
         self.destination = destination
-        self.labels = dict((id, CConLabelInfo(self, logicalLabel = value[1])) for id, value in enumerate(self.object.GetType().GetLabels()))
+        self.labels = dict((id, CConLabelInfo(self, value[0], value[1])) for id, value in enumerate(self.object.GetType().GetLabels()))
         self.selpoint = None
         self.object.AddAppears(diagram)
         super(CConnection, self).__init__()
