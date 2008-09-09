@@ -1,10 +1,11 @@
 from Item import CDomainItem
-from lib.consts import ATOMIC_DOMAINS
 
 class EDomainType(Exception):
     pass
 
 class CDomainType(object):
+    
+    ATOMIC = 'int', 'float', 'str', 'bool', 'enum', 'list'
     
     def __init__(self, name):
         
@@ -31,12 +32,23 @@ class CDomainType(object):
         @param itemtype: used if type is list. defines type of one item in list
         @type itemtype: str
         
-        @raise EDomainType: if type is not atomic or one of imported domains
+        @raise EDomainType: 
+            - if type is not atomic or one of imported domains
+            - if type is "enum" and options is an empty list
         '''
         
-        if not type in ATOMIC_DOMAINS or not type in self.imports:
+        if not type in self.ATOMIC or not type in self.imports:
             raise EDomainType('Used type %s is not imported'%(type, ))
-        self.items[id] = CDomainItem(name, type, options)
+        
+        if type == 'enum' and len(options) == 0:
+            raise EDomainType('Used item %s is of type enum,'
+                ' but has no valid values.'%(id, ))
+        
+        self.items[id] = {\
+            'name': name,             
+            'type':type, 
+            'options': options,
+            'itemtype': itemtype}
 
     def AppendImport(self, id):
         '''
@@ -70,7 +82,122 @@ class CDomainType(object):
             if name == imported: 
                 return True
             else:
-                return factory.GetDomain(imported).HasImportLoop(factory, name)
-        
-        return False #nothing is imported
+                if factory.GetDomain(imported).HasImportLoop(factory, name):
+                    return True
+        return False
     
+    def GetItem(self, id):
+        '''
+        get item information as an dictionary
+        
+        keys of the dictionary: 'name', 'type', 'options', 'itemtype'
+        
+        @param id: identifier of item
+        @type id: str
+        
+        @return: information about item
+        @rtype dict
+        '''
+        
+        return self.items[id]
+    
+    def IterItemID(self):
+        '''
+        Iterator over ID of items
+        
+        @rtype: str
+        '''
+        for id in self.items.iterkeys():
+            yield id
+    
+    def GetName(self):
+        '''
+        @return name of current domain
+        @rtype: str
+        '''
+        return self.name
+    
+    def GetImports(self):
+        '''
+        @return: list of imported domains
+        @rtype: list
+        '''
+        return self.imports
+    
+    def GetDefaultValue(self, id):
+        '''
+        @return: default value of item defined by id
+        @rtype: various
+        
+        @raise EDomainType: 
+            - when id is not valid item identifier
+            - when type of item is not atomic
+        
+        @param id: item identifier
+        @type id: str
+        '''
+        if not id in self.items:
+            raise EDomainType('Unknown identifier %s'%(id, ))
+        
+        if not self.IsAtomic(id):
+            raise EDomainType('Domain type "%s" is not atomic'\
+                %(self.items[id]['type'], ))
+        
+        type = self.items[id]['type']
+        if type == 'int': 
+            return 0
+        elif type == 'float':
+            return 0.0
+        elif type == 'bool':
+            return False
+        elif type == 'str':
+            return ''
+        elif type == 'list':
+            return []
+        elif type == 'enum':
+            return self.items[id]['options'][0]
+        else:
+            raise EDomainType('Domain type "%s" is not atomic'\
+                %(self.items[id]['type'], ))
+    
+    def IsAtomic(self, id):
+        '''
+        @return: True if item defined by id is of an atomic domain
+        @rtype: bool
+        
+        @param id: identifier of item
+        @type id: str
+        
+        @raise EDomainType: if id is not valid item identifier
+        '''
+        if not id in self.items:
+            raise EDomainType('Unknown identifier %s'%(id, ))
+        
+        return self.items[id]['type'] in self.ATOMIC
+    
+    def CheckValueType(self, id, value):
+        '''
+        @return: True if value is of the compatible type by the definition
+        @rtype: bool
+        
+        @param id: identifier of the item
+        @type id: str
+        
+        @param value: value to be checked
+        @type value: atomic domain
+        
+        @raise EDomainType: 
+            - if id is not recoginzed
+            - if type of item defined by id is not atomic
+        '''
+        
+        if not id in self.items:
+            raise EDomainType('Unknown identifier %s'%(id, ))
+        
+        if not self.IsAtomic(id):
+            raise EDomainType('Item %s is of the type %s, which is not atomic'\
+                %(id, self.items[id]['type']))
+        
+        type = self.items[id]['type']
+        if type == 'int':
+            if 
