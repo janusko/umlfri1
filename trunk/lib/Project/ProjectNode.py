@@ -59,6 +59,7 @@ class CProjectNode(object):
         if child not in self.childs:
             self.childs.append(child)
             child.parent = self
+            self.object.AddRevision()
         else:
             raise ProjectError("ExistsChild")
 
@@ -112,6 +113,7 @@ class CProjectNode(object):
     def RemoveChild(self, child):
         if child in self.childs:
             self.childs.remove(child)
+            self.object.AddRevision()
         else:
             raise ProjectError("ChildNotExists")
 
