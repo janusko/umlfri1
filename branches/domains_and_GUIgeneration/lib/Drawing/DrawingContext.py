@@ -28,7 +28,7 @@ class CDrawingContext(object):
         return self.size
     
     def GetCachedSize(self, object):
-        return self.element.GetCachedSize(object)
+        return self.element.GetCachedSize(self, object)
     
     def GetPos(self):
         return self.pos
@@ -42,6 +42,9 @@ class CDrawingContext(object):
     def GetVariable(self, varname):
         return self.variables[varname]
     
+    def GetVariables(self):
+        return self.variables
+    
     def GetAttribute(self, varname):
         return self.element.GetObject().GetVisualProperty(varname)
     
@@ -51,7 +54,7 @@ class CDrawingContext(object):
         self.size = newsize
     
     def CacheSize(self, object, size):
-        return self.element.CacheSize(object, size)
+        return self.element.CacheSize(self, object, size)
     
     def Move(self, newpos):
         self.pos = newpos

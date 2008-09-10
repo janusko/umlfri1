@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Type id="method">
-    <Import>
-        <Domain id="method_parameter" />
+<Import>
+    <Domain id="method_parameter" />
     </Import>
     <Item id="name" type="str" name="Name" />
     <Item id="rtype" type="str" name="Return type" />

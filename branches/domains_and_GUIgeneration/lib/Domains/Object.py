@@ -52,8 +52,14 @@ class CDomainObject(object):
     
     def SetValue(self, id, value):
         '''
-        Set value of field defined by id. Value type must corespond to the 
-        definition.
+        Set value of field defined by id. 
+        
+        domain of field must corenspond to the definition. Two possibilities
+        are allowed:
+            - id is defined with atomic domain. Look at 
+            L{CDomainType.TransformValue<Type.CDomainType.TransformValue>}
+            - id is defined as non-atomic domain. In this case, value MUST be
+            instance of CDomainObject with the same domain as defined.
         
         @param id: field identifier
         @type id: str
@@ -61,10 +67,27 @@ class CDomainObject(object):
         @param value: value of field
         @type value: various
         
-        @raise EDomainObject: if id is not recognized
+        @raise EDomainObject: 
+            - if id is not recognized
+            - if value is non-atomic and it's domain doesn't correspond
+            to the definition
+        
+        @raise EDomainType: if id has atomic type and value cannot be 
+        transformed to this type
+        
+        @raise EDomainObject: if id has non-atomic type and domain of value
+        doesn't correspond to definition
         '''
         
         if not id in self.values:
             raise EDomainObject('Identifier "%s" unknown'%(id, ))
+        
+        if not self.type.IsAtomic(id):
+            assert isinstance(value, CDomainObject)
+            if value.type.GetName() <> self.type.GetItem(id)['type']
+                raise EDomainObject('Invalid Domain of non-atomic value')
+            self.values[id] = value
+        else:
+            self.values[id] = self.type.TransformValue(id, value)
         
         

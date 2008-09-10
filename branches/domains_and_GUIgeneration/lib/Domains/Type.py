@@ -175,7 +175,7 @@ class CDomainType(object):
         
         return self.items[id]['type'] in self.ATOMIC
     
-    def CheckValueType(self, id, value):
+    def TransformValue(self, id, value):
         '''
         @return: True if value is of the compatible type by the definition
         @rtype: bool
