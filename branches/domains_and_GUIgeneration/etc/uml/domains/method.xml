@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Type id="method">
-<Import>
-    <Domain id="method_parameter" />
-    </Import>
-    <Item id="name" type="str" name="Name" />
-    <Item id="rtype" type="str" name="Return type" />
-    <Item id="parameters" type="list" itemtype="method_parameter" name="Parameters" />
-    <Item id="stereotype" type="str" name="Stereotype" />
-    <Item id="scope" type="enum" name="Scope" >
-        <Option value="Private" />
-        <Option value="Protected" />
-        <Option value="Public" />
-    </Item>
-    <Item id="static" type="bool" name="Static" />
-    <Item id="virtual" type="bool" name="Virtual" />
-    <Item id="default" type="str" name="Default Value" />
-    <Item id="note" type="str" name="Note" />
-</Type>
+<Domain id="method" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Import id="method_parameter" />
+    <Attribute id="name" type="str" name="Name" />
+    <Attribute id="rtype" type="str" name="Return type" />
+    <Attribute id="parameters" type="list" name="Parameters">
+        <List type="method_parameter" separator="," />
+    </Attribute>
+    <Attribute id="stereotype" type="str" name="Stereotype" />
+    <Attribute id="scope" type="enum" name="Scope" >
+        <Enum>Private</Enum>
+        <Enum>Protected</Enum>
+        <Enum>Public</Enum>
+    </Attribute>
+    <Attribute id="static" type="bool" name="Static" />
+    <Attribute id="virtual" type="bool" name="Virtual" />
+    <Attribute id="override" type="bool" name="Override" />
+    <Attribute id="note" type="str" name="Note" />
+</Domain>

@@ -57,7 +57,20 @@ class CDomainFactory(object):
         self.storage = storage
         for file in storage.listdir(self.path):
             if file.endswith('.xml'):
+                print file
                 self.__Load(os.path.join(self.path, file))
+        
+        for domain in self.domains.itervalues():
+            result = domain.UndefinedImports()
+            if result:
+                raise EDomainFactory(
+                    'Domain "%s" imports unknown domain%s: %s '%(
+                    domain.GetName(), ('s' if len(result) > 1 else ''),
+                    ', '.join([('"%s"'%item) for item in result])))
+            
+            loop = domain.HasImportLoop()
+            if loop:
+                raise EDomainFactory('Import loop detected: ' + loop)
     
     def GetDomain(self, id):
         """
@@ -67,7 +80,20 @@ class CDomainFactory(object):
         @param id: Element type name
         @type  id: string
         """
+        if not id in self.domains:
+            raise EDomainFactory('unrecognized identifier')
+        
         return self.domains[id]
+    
+    def RecognizedDomain(self, id):
+        '''
+        @return: True if domain identifier is registered in current factory
+        @rtype: bool
+        
+        @param id: Element type name
+        @type  id: string
+        '''
+        return id in self.domains
     
     def __Load(self, path):
         '''
@@ -77,60 +103,64 @@ class CDomainFactory(object):
         @type path: str
         '''
         
-        root = etree.XML(self.storage.read_file(file_path))
+        root = etree.XML(self.storage.read_file(path))
         
-        if HAVE_LXML:
-            if not xmlschema.validate(root):
-                raise FactoryError("XMLError", xmlschema.error_log.last_error)
+        #~ if HAVE_LXML:
+            #~ if not xmlschema.validate(root):
+                #~ raise FactoryError("XMLError", xmlschema.error_log.last_error)
         
-        if rood.get('id') in self.types:
+        if root.tag == METAMODEL_NAMESPACE + 'Domain':
+            self.__LoadDomain(root)
+        
+    def __LoadDomain(self, root):
+        '''
+        Load Domain from root node
+        
+        @param root: node <Domain>
+        '''
+        if root.get('id') in self.domains:
             raise EDomainFactory('Duplicate domain identifier')
         
-        obj = CDomainPath(root.get('id'))
+        obj = CDomainType(root.get('id'), self)
         
-        for section in root:
-            if section.tag == METAMODEL_NAMESPACE + 'Import':
-                self.__LoadImport(obj, section)
+        for node in root:
+            if node.tag == METAMODEL_NAMESPACE + 'Import':
+                obj.AppendImport(node.get('id'))
             
-            elif section.tag == METAMODEL_NAMESPACE + 'Attributes': 
-                self.__LoadAttributes(obj, section)
+            elif node.tag == METAMODEL_NAMESPACE + 'Attribute': 
+                self.__LoadAttribute(obj, node)
+            
+            elif node.tag == METAMODEL_NAMESPACE + 'Parse':
+                obj.AppendParser(**dict(node.items()))
+            
+            elif node.tag == METAMODEL_NAMESPACE + 'Domain':
+                self.__LoadDomain(node)
+                obj.AppendImport(node.get('id'))
             
             else:
                 raise EDomainFactory('Unknown Section: %s'%(section.tag, ))
             
         self.domains[root.get('id')] = obj
     
-    def __LoadImport(self, obj, section):
+    def __LoadAttribute(self, obj, attribute):
         '''
-        Load <Import> part of Domain
-        
-        Import part is used for easier detection of loops in use of domains
+        Load <Attribute> node of Domain
         
         @param obj: domain type to be altered
         @type obj: L{CDomainType<Type.CDomainType>}
         
-        @param section: xml node <Import>...</Import>
-        @type section:
+        @param attribute: xml node
         '''
         
-        for domain in section:
-            obj.AppendImport(domain.get('id'))
-    
-    def __LoadAttributes(self, obj, section):
-        '''
-        Load <Attributes> section of Domain
-        
-        Attributes section has information about fields in domain
-        
-        @param obj: domain type to be altered
-        @type obj: L{CDomainType<Type.CDomainType>}
-        
-        @param section: xml node <Import>...</Import>
-        @type section:
-        '''
-        
-        for item in section:
-            options = []
-            for opt in item:
-                options.append(opt.get('value'))
-            obj.AppendItem(options, **dict(item.items()))
+        obj.AppendAttribute(**dict(attribute.items()))
+        id = attribute.get('id')
+        for option in attribute:
+            if option.tag == METAMODEL_NAMESPACE + 'Enum':
+                obj.AppendEnumValue(id, option.text)
+
+            elif option.tag == METAMODEL_NAMESPACE + 'List':
+                obj.SetList(id, **dict(option.items()))
+            
+            elif node.tag == METAMODEL_NAMESPACE + 'Domain':
+                self.__LoadDomain(node)
+                obj.AppendImport(node.get('id'))

@@ -1,4 +1,5 @@
-from Item import CDomainItem
+import re
+from Object import CDomainObject
 
 class EDomainType(Exception):
     pass
@@ -7,48 +8,40 @@ class CDomainType(object):
     
     ATOMIC = 'int', 'float', 'str', 'bool', 'enum', 'list'
     
-    def __init__(self, name):
-        
+    def __init__(self, name, factory):
+        '''
+        @param name: Domain identifier
+        @type name: str
+
+        @param factory: domain factory that already loaded all the domains
+        @type factory: L{CDomainFactory<Factory.CDomainFactory>}
+        '''
         self.name = name
         self.imports = []
-        self.items = {}
+        self.attributes = {}
+        self.factory = factory
+        self.parsers = []
     
-    def AppendItem(self, options, id, name, type, itemtype=None):
+    def AppendAttribute(self, id, name, type):
         '''
-        Add value filed to the domain
+        Add attribute the domain
         
-        @param options: list of values that enum type can hold, unused otherwise
-        @type options: list
-        
-        @param id: identifier of item.
+        @param id: identifier of attribute.
         @type id: str
         
-        @param name: Name of item. Displayed to user
+        @param name: Name of attribute. Displayed to user
         @type name: str
         
         @param type: id of domain. Must be atomic domain or one of imported
         @type type: str
         
-        @param itemtype: used if type is list. defines type of one item in list
-        @type itemtype: str
-        
-        @raise EDomainType: 
-            - if type is not atomic or one of imported domains
-            - if type is "enum" and options is an empty list
+        @raise EDomainType: if type is not atomic or one of imported domains
         '''
         
-        if not type in self.ATOMIC or not type in self.imports:
+        if not type in self.ATOMIC and not type in self.imports:
             raise EDomainType('Used type %s is not imported'%(type, ))
         
-        if type == 'enum' and len(options) == 0:
-            raise EDomainType('Used item %s is of type enum,'
-                ' but has no valid values.'%(id, ))
-        
-        self.items[id] = {\
-            'name': name,             
-            'type':type, 
-            'options': options,
-            'itemtype': itemtype}
+        self.attributes[id] = {'name': name, 'type':type}
 
     def AppendImport(self, id):
         '''
@@ -57,36 +50,97 @@ class CDomainType(object):
         Only imported domains are allowed to be used
         
         @param id: identifier of imported domain
+        @type id: str
+        '''
+        assert isinstance(id, (str, unicode))
+        self.imports.append(id)
+    
+    def AppendEnumValue(self, id, value):
+        '''
+        Add next valid value for enum type.
+        
+        @param id: identifier of attribute
+        @type id: str
+        
+        @param value: enum value
+        @type value: str
+        '''
+        
+        assert isinstance(value, (str, unicode))
+        if not id in self.attributes:
+            raise EDomainType('Unknown identifier %s'%(id, ))
+            
+        if value in self.attributes.get('enum',[]):
+            raise EDomainType('the same enum value already defined')
+        
+        self.attributes[id].setdefault('enum',[]).append(value)
+    
+    def SetList(self, id, type, separator):
+        '''
+        Set information about items in list
+        
+        @param id: attribute identifier
+        @type id: str
+        
+        @param type: domain of item in list, must be either atomic or imported
+        @type type: str
+        
+        @param separator: character (substring) by which are items of list
+        separated from each other when in list in string representation
+        @type separator: str
+        '''
+        if not id in self.attributes:
+            raise EDomainType('Unknown identifier %s'%(id, ))
+        
+        self.attributes[id]['list'] = {'type':type, 'separator':separator}
+    
+    def AppendParser(self, regexp=None):
+        '''
+        Add parameters for new parser.
+        
+        @param regexp: Regular expression, compiled in verbose mode
+        @type regexp: str
+        '''
+        parser = {}
+        if regexp is not None:
+            parser['regexp'] = re.compile(regexp, re.X)
+        self.parsers.append(parser)
+
+
+    def __InnerImportLoop(self, name):
+        '''
+        Inner recursive loop of self.HasImportLoop
+        
+        @param name: id of domain that is searched in import tree
         @type name: str
+        
+        @return: string representing part of the loop or False
+        @rtype: bool / str
         '''
-        assert isinstance(name, (str, unicode))
-        self.imports.append(name)
-        
-    def HasImportLoop(self, factory, id = None):
-        '''
-        Search for loops in domain import tree
-        
-        @return: True if id is found in 
-        @rtype: bool
-        
-        @param factory: domain factory that already loaded all the domains
-        @type factory: L{CDomainFactory<Factory.CDomainFactory>}
-        
-        @param name: name to search for. if None, current name is used
-        @type name: str
-        '''
-        
-        name = name or self.name # if None, use current name
-        
         for imported in self.imports:
             if name == imported: 
-                return True
+                return self.name + ' - ' + name
             else:
-                if factory.GetDomain(imported).HasImportLoop(factory, name):
-                    return True
+                result = self.factory.GetDomain(imported).__InnerImportLoop(name)
+                if result:
+                    return self.name + ' - ' + result
         return False
+
+    def HasImportLoop(self):
+        '''
+        @return: False if no loop detected, string with loop description otherwise
+        @rtype: bool / str
+        '''
+        return self.__InnerImportLoop(self.name)
     
-    def GetItem(self, id):
+    def UndefinedImports(self):
+        '''
+        @return: list of the domain names that are imported but not recognized
+        @rtype: list
+        '''
+        return ([name for name in self.imports if not self.factory.RecognizedDomain(name)])
+    
+    def GetAttribute(self, id):
         '''
         get item information as an dictionary
         
@@ -99,16 +153,20 @@ class CDomainType(object):
         @rtype dict
         '''
         
-        return self.items[id]
+        return self.attributes[id]
     
-    def IterItemID(self):
+    def IterAttributesID(self):
         '''
         Iterator over ID of items
         
         @rtype: str
         '''
-        for id in self.items.iterkeys():
+        for id in self.attributes.iterkeys():
             yield id
+    
+    def IterParsers(self):
+        for parser in self.parsers:
+            yield parser
     
     def GetName(self):
         '''
@@ -136,14 +194,14 @@ class CDomainType(object):
         @param id: item identifier
         @type id: str
         '''
-        if not id in self.items:
+        if not id in self.attributes:
             raise EDomainType('Unknown identifier %s'%(id, ))
         
         if not self.IsAtomic(id):
             raise EDomainType('Domain type "%s" is not atomic'\
-                %(self.items[id]['type'], ))
+                %(self.attributes[id]['type'], ))
         
-        type = self.items[id]['type']
+        type = self.attributes[id]['type']
         if type == 'int': 
             return 0
         elif type == 'float':
@@ -155,10 +213,10 @@ class CDomainType(object):
         elif type == 'list':
             return []
         elif type == 'enum':
-            return self.items[id]['options'][0]
+            return self.attributes[id]['options'][0]
         else:
             raise EDomainType('Domain type "%s" is not atomic'\
-                %(self.items[id]['type'], ))
+                %(self.attributes[id]['type'], ))
     
     def IsAtomic(self, id):
         '''
@@ -170,10 +228,10 @@ class CDomainType(object):
         
         @raise EDomainType: if id is not valid item identifier
         '''
-        if not id in self.items:
+        if not id in self.attributes:
             raise EDomainType('Unknown identifier %s'%(id, ))
         
-        return self.items[id]['type'] in self.ATOMIC
+        return self.attributes[id]['type'] in self.ATOMIC
     
     def TransformValue(self, id, value):
         '''
@@ -191,13 +249,121 @@ class CDomainType(object):
             - if type of item defined by id is not atomic
         '''
         
-        if not id in self.items:
+        if not id in self.attributes:
             raise EDomainType('Unknown identifier %s'%(id, ))
         
-        if not self.IsAtomic(id):
-            raise EDomainType('Item %s is of the type %s, which is not atomic'\
-                %(id, self.items[id]['type']))
+        type = self.attributes[id]['type']
         
-        type = self.items[id]['type']
-        if type == 'int':
-            if 
+        if type in self.ATOMIC:
+            if type == 'int':
+                return self.__GetInt(value)
+            elif type == 'float':
+                return self.__GetFloat(value)
+            elif type == 'str':
+                return self.__GetStr(value)
+            elif type == 'bool':
+                return self.__GetBool(value)
+            elif type == 'enum':
+                try:
+                    return self.__GetEnum(value, self.attributes[id]['enum'])
+                except KeyError:
+                    raise EDomainType(
+                        'In domain "%s" is attribute "%s" of type "enum", '
+                        'but has no defined values'%(self.name, id))
+            elif type == 'list':
+                try:
+                    return self.__GetList(value, **self.attributes[id]['list'])
+                except KeyError:
+                    raise EDomainType(
+                        'In domain "%s" is attribute "%s" of type "list", '
+                        'but has no list definition'%(self.name, id))
+        else:
+            return self.__GetNonAtomic(value, type)
+    
+    def __GetInt(self, value):
+        if isinstance(value, (int, long)):
+            return value
+        elif isinstance(value, (str, unicode)):
+            try:
+                return int(value)
+            except:
+                raise EDomainType('Cannot convert value to int')
+        else:
+            raise EDomainType('Invalid value type')
+    
+    def __GetFloat(self, value):
+        if isinstance(value, (float, int, long, str, unicode)):
+            try:
+                return float(value)
+            except:
+                raise EDomainType('Cannot convert value to float')
+        else:
+            raise EDomainType('Invalid value type')
+    
+    def __GetStr(self, value):
+        if isinstance(value, (str, unicode)):
+            return value
+        else:
+            return str(value)
+    
+    def __GetBool(self, value):
+        if isinstance(value, bool):
+            return value
+        elif isinstance(value, (int, float, long)):
+            return bool(value)
+        elif isinstance(value, (str, unicode)):
+            if value.lower() in ('true', '1', 'yes'):
+                return True
+            elif value.lower() in ('false', '0', 'no'):
+                return False
+            else:
+                raise EDomainType('Invalid string to be converted to bool')
+        else:
+            raise EDomainType('Invalid value type')
+    
+    def __GetEnum(self, value, enum):
+        if isinstance(value, (str, unicode)):
+            if enum.count(value) > 0:
+                return value
+            else:
+                raise EDomainType('value is not member of enumeration')
+        elif isinstance(value, (int, long)):
+            if 0 <= value < len(enum):
+                return enum[value]
+            else:
+                raise EDomainType('value points to the index out of range')
+        else:
+            raise EDomainType('value cannot be converted to enumeration item')
+    
+    def __GetList(self, value, separator, type):
+        if not isinstance(value, (str, unicode)):
+            raise EDomainType('value cannot be converted to list')
+        result = []
+        domain = self.factory.GetDomain(type)
+        atempt = [False]
+        for parser in self.factory.GetDomain(type).IterParsers():
+            attempt = [parser.match(part) for part in value.split(separator)]
+            if all(attempt):
+                break
+        if not all(attempt):
+            raise EDomainType('No parser can parse all the items in the list')
+        for item in attempt:
+            obj = CDomainObject(type)
+            for id, val in item.groupdict().iteritems():
+                obj.SetValue(id, val)
+            result.append(obj)
+        return result
+    
+    def __GetNonAtomic(self, value, type):
+        attempt = None
+        for parser in self.factory.GetType(type).IterParsers():
+            attempt = parser.match(value)
+            if attemtp:
+                break
+        if not attempt:
+            raise EDomainType('No parser can parse value')
+        obj = CDomainObject(type)
+        for id, val in item.groupdict().iteritems():
+            obj.SetValue(id, val)
+        return obj
+        

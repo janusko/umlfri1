@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Type id="class_attribute">
-    <Import />
-    <Attributes>
-        <Item id="name" type="str" name="Name" />
-        <Item id="type" type="str" name="Type" />
-        <Item id="scope" type="enum" name="Scope" >
-            <Option value="in" />
-            <Option value="out" />
-            <Option value="in out" />
-        </Item>
-        <Item id="const" type="bool" name="Const" />
-        <Item id="default" type="str" name="Default" />
-        <Item id="note" type="str" name="Note" />
-    </Attributes>
-</Type>
+<Domain id="method_parameter" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Attribute id="name" type="str" name="Name" />
+    <Attribute id="type" type="str" name="Type" />
+    <Attribute id="scope" type="enum" name="Scope" >
+        <Enum>in</Enum>
+        <Enum>out</Enum>
+        <Enum>in out</Enum>
+    </Attribute>
+    <Attribute id="const" type="bool" name="Const" />
+    <Attribute id="default" type="str" name="Default" />
+    <Attribute id="note" type="str" name="Note" />
+    <Parse regexp="
+        [ ]* ( \[ (?P&lt;scope&gt; (in|out|in[ ]out) ) \])? 
+        [ ]* (?P&lt;name&gt;[a-zA-Z_][a-zA-Z0-9_]*) 
+        [ ]* : [ ]* (?P&lt;type&gt; [a-zA-Z_][a-zA-Z0-9_]*) 
+        [ ]* ( = [ ]* (?P&lt;default&gt; .+? ) [ ]*$ )?" />
+</Domain>

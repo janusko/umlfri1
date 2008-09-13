@@ -32,7 +32,7 @@ class CDomainObject(object):
         '''
         return self.type
     
-    def GetValue(self, id)
+    def GetValue(self, id):
         '''
         Get value of field. Type can be one of atomic types or CDomainObject
         object if type is non-atomic
@@ -84,10 +84,9 @@ class CDomainObject(object):
         
         if not self.type.IsAtomic(id):
             assert isinstance(value, CDomainObject)
-            if value.type.GetName() <> self.type.GetItem(id)['type']
+            if value.type.GetName() <> self.type.GetItem(id)['type']:
                 raise EDomainObject('Invalid Domain of non-atomic value')
             self.values[id] = value
         else:
             self.values[id] = self.type.TransformValue(id, value)
-        
         
