@@ -17,13 +17,12 @@ class CDomainObject(object):
         @type type: L{CDomainType<Type.CDomainType>}
         '''
         
+        if isinstance(type, (str, unicode)):
+            raise EDomainObject('string cannot be used as domain reference')
         self.type = type
         self.values = {}
-        for id in self.type.IterItemID():
-            if self.type.IsAtomic(id):
-                self.values[id] = self.type.GetDefaultValue(id)
-            else:
-                self.values[id] = CDomainObject(self.type.GetItem(id)['type'])
+        for id in self.type.IterAttributesID():
+            self.values[id] = self.type.GetDefaultValue(id)
     
     def GetType(self):
         '''
@@ -67,11 +66,6 @@ class CDomainObject(object):
         @param value: value of field
         @type value: various
         
-        @raise EDomainObject: 
-            - if id is not recognized
-            - if value is non-atomic and it's domain doesn't correspond
-            to the definition
-        
         @raise EDomainType: if id has atomic type and value cannot be 
         transformed to this type
         
@@ -82,11 +76,4 @@ class CDomainObject(object):
         if not id in self.values:
             raise EDomainObject('Identifier "%s" unknown'%(id, ))
         
-        if not self.type.IsAtomic(id):
-            assert isinstance(value, CDomainObject)
-            if value.type.GetName() <> self.type.GetItem(id)['type']:
-                raise EDomainObject('Invalid Domain of non-atomic value')
-            self.values[id] = value
-        else:
-            self.values[id] = self.type.TransformValue(id, value)
-        
+        self.values[id] = self.type.TransformValue(id, value)
