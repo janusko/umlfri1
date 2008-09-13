@@ -71,6 +71,8 @@ class CDomainFactory(object):
             loop = domain.HasImportLoop()
             if loop:
                 raise EDomainFactory('Import loop detected: ' + loop)
+            
+            domain.CheckMissingInfo()
     
     def GetDomain(self, id):
         """

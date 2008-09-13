@@ -146,6 +146,13 @@ class CDomainType(object):
             - enum part of attributes with "enum" domain
             - list part of attributes with "list" domain and all its 
         '''
+        for id, info in self.attributes.iteritems():
+            if info['type'] == 'enum' and len(info.get('enum',[])) == 0:
+                raise EDomainType('In domain "&s" is attribute "&s" of enum '
+                    'domain, but has no "enum" values defined'&(self.name, id))
+            elif info['type'] == 'list' and 'list' not in info:
+                raise EDomainType('In domain "&s" is attribute "&s" of list '
+                    'domain, but has no "list" definition'&(self.name, id))
     
     def GetAttribute(self, id):
         '''
