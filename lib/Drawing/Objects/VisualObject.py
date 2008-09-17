@@ -4,14 +4,21 @@ class CVisualObject:
     def __init__(self):
         self.parent = None
     
+    def __GetAttrs(self, value, names):
+        for name in names:
+            value = getattr(value, name)
+        return value
+    
     def ParseVariables(self, context, *vals):
         for val in vals:
             if not isinstance(val, (str, unicode)):
                 yield val
             elif val[0] == '#':
-                yield context.GetAttribute(val[1:])
+                names = val[1:].split('.')
+                yield self.__GetAttrs(context.GetAttribute(names[0]), names[1:])
             elif val[0] == '@':
-                yield context['item'][val[1:]]
+                names = val[1:].split('.')
+                yield self.__GetAttrs(context['item'][names[0]], names[1:])
             elif val[0] == '/':
                 yield config[val]
             else:
