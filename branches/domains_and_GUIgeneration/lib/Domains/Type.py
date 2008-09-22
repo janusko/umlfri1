@@ -73,7 +73,7 @@ class CDomainType(object):
         
         self.attributes[id].setdefault('enum',[]).append(value)
     
-    def SetList(self, id, type, parser):
+    def SetList(self, id, type, parser=None):
         '''
         Set information about items in list
         
@@ -342,8 +342,8 @@ class CDomainType(object):
         else:
             raise DomainTypeError('value cannot be converted to enumeration item')
     
-    def __GetList(self, value, type, parser):
-        if isinstance(value, (str, unicode)):
+    def __GetList(self, value, type, parser=None):
+        if isinstance(value, (str, unicode)) and parser is not None : 
             domain = self.factory.GetDomain(type)
             atempt = [False]
             

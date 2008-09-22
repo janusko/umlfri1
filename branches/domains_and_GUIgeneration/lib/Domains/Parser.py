@@ -17,10 +17,18 @@ class CDomainParser(object):
         self.separator = separator
         self.regexp = (re.compile(regexp, re.X) if regexp else None)
     
-    def CreateObject(self, text, type):
+    def CreateObject(self, text, domain):
         '''
+        @return: Domain object of defined domain constructed from text using regexp
+        @rtype: L{CDomainObject<CDomainObject>}
+        
+        @param text: text string to construct object from
+        @type text: str
+        
+        @param domain: Domain of newly created object
+        @type domain: L{CDomainType<Type.CDomainType>}
         '''
-        obj = CDomainObject(type)
+        obj = CDomainObject(domain)
         if self.regexp is not None:
             attempt = self.regexp.match(text)
             if attempt:
@@ -33,11 +41,22 @@ class CDomainParser(object):
     
     def Split(self, text, maxsplit=None):
         '''
+        Split text to the list of strings using separator preferably before
+        regexp.
+        
+        @return: list of strings
+        @rtype: list
+        
+        @param text: text to be separated
+        @type text: str
+        
+        @param maxsplit: maximal number of splits, None for unlimited splits
+        @type maxsplit: int, NoneType
         '''
         assert isinstance(text, (str, unicode))
         
         if self.separator:
-            return text.split(self.separator, (maxsplit or -1))
+            return text.split(self.separator, (maxsplit if maxsplit is not None else -1))
         elif self.regexp:
             return self.regexp.split(text, (maxsplit or 0))[::2]
         

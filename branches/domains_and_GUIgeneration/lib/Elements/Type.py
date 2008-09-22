@@ -2,6 +2,10 @@ from lib.lib import ToBool
 from lib.Exceptions.UserException import *
 
 class CElementType(object):
+    '''
+    Scheme for a class of elements
+    '''
+    
     def __init__(self, id):
         self.icon = None
         self.id = id

@@ -37,7 +37,7 @@ class CElementFactory(object):
     """
     Factory, that creates element type objects
     """
-    def __init__(self, storage, path):
+    def __init__(self, storage, path, domainfactory):
         """
         Create the element factory
         
@@ -49,6 +49,7 @@ class CElementFactory(object):
         """
         self.types = {}
         self.path = path
+        self.domainfactory = domainfactory
         
         self.storage = storage
         for file in storage.listdir(self.path):
@@ -80,18 +81,12 @@ class CElementFactory(object):
         obj = CElementType(root.get('id'))
         
         for element in root:
-            if element.tag == METAMODEL_NAMESPACE+'Icon':
+            if element.tag == METAMODEL_NAMESPACE + 'Icon':
                 obj.SetIcon(element.get('path'))
+            
             elif element.tag == METAMODEL_NAMESPACE+'Connections':
-                for item in element:
-                    value = item.get('value')
-                    with_what = None
-                    allow_recursive = False
-                    if item.get('with') != None:
-                        with_what = item.get('with').split(',')
-                    if item.get('allowrecursive') != None:
-                        allow_recursive = item.get('allowrecursive').lower() in ('1', 'true', 'yes')
-                    obj.AppendConnection(value, with_what, allow_recursive)
+                self.__LoadConnection(obj, element)
+                
             elif element.tag == METAMODEL_NAMESPACE+'Attributes':
                 for item in element:
                     if item.get('notgenerate') != None:
@@ -133,3 +128,14 @@ class CElementFactory(object):
             for child in root:
                 obj.AppendChild(self.__LoadAppearance(child))
         return obj
+    
+    def __LoadConnections(self, obj, root):
+        for item in root:
+            value = item.get('value')
+            with_what = None
+            allow_recursive = False
+            if item.get('with') != None:
+                with_what = item.get('with').split(',')
+            if item.get('allowrecursive') != None:
+                allow_recursive = item.get('allowrecursive').lower() in ('1', 'true', 'yes')
+            obj.AppendConnection(value, with_what, allow_recursive)

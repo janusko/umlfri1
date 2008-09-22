@@ -165,9 +165,9 @@ class CDomainFactory(object):
             elif option.tag == METAMODEL_NAMESPACE + 'List':
                 obj.SetList(id, **self.__LoadList(option))
             
-            elif node.tag == METAMODEL_NAMESPACE + 'Domain':
-                self.__LoadDomain(node)
-                obj.AppendImport(node.get('id'))
+            elif option.tag == METAMODEL_NAMESPACE + 'Domain':
+                self.__LoadDomain(option)
+                obj.AppendImport(option.get('id'))
     
     def __LoadList(self, node):
         '''
