@@ -1,4 +1,4 @@
-class EDomainObject(Exception): pass
+from lib.Exceptions import DomainObjectError
 
 class CDomainObject(object):
     '''
@@ -18,7 +18,7 @@ class CDomainObject(object):
         '''
         
         if isinstance(type, (str, unicode)):
-            raise EDomainObject('string cannot be used as domain reference')
+            raise DomainObjectError('string cannot be used as domain reference')
         self.type = type
         self.values = {}
         for id in self.type.IterAttributesID():
@@ -39,13 +39,13 @@ class CDomainObject(object):
         @retrun: value of filed defined by id
         @rtype: various
         
-        @raise EDomainObject: if id is not recognized
+        @raise DomainObjectError: if id is not recognized
         
         @param id: field identifier
         @type id: str
         '''
         if not id in self.values:
-            raise EDomainObject('Identifier "%s" unknown'%(id, ))
+            raise DomainObjectError('Identifier "%s" unknown'%(id, ))
         
         return self.values[id]
     
@@ -69,11 +69,11 @@ class CDomainObject(object):
         @raise EDomainType: if id has atomic type and value cannot be 
         transformed to this type
         
-        @raise EDomainObject: if id has non-atomic type and domain of value
+        @raise DomainObjectError: if id has non-atomic type and domain of value
         doesn't correspond to definition
         '''
         
         if not id in self.values:
-            raise EDomainObject('Identifier "%s" unknown'%(id, ))
+            raise DomainObjectError('Identifier "%s" unknown'%(id, ))
         
         self.values[id] = self.type.TransformValue(id, value)

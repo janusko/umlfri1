@@ -4,7 +4,9 @@
     <Attribute id="name" type="str" name="Name" />
     <Attribute id="rtype" type="str" name="Return type" />
     <Attribute id="parameters" type="list" name="Parameters">
-        <List type="method_parameter" separator="," />
+        <List type="method_parameter" >
+            <Parse separator="," />
+        </List>
     </Attribute>
     <Attribute id="stereotype" type="str" name="Stereotype" />
     <Attribute id="scope" type="enum" name="Scope" >

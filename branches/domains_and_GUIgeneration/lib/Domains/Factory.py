@@ -5,6 +5,8 @@ from Type import CDomainType
 from lib.config import config
 from lib.consts import METAMODEL_NAMESPACE
 from lib.Drawing.Objects import ALL
+from Parser import CDomainParser
+from lib.Exceptions import DomainFactoryError
 
 #try to import necessary lybraries for XML parsing
 try:
@@ -33,7 +35,7 @@ if HAVE_LXML:
     xmlschema = etree.XMLSchema(xmlschema_doc)
 
 
-class EDomainFactory(Exception): pass
+class DomainFactoryError(Exception): pass
 
 class CDomainFactory(object):
     '''
@@ -63,14 +65,14 @@ class CDomainFactory(object):
         for domain in self.domains.itervalues():
             result = domain.UndefinedImports()
             if result:
-                raise EDomainFactory(
+                raise DomainFactoryError(
                     'Domain "%s" imports unknown domain%s: %s '%(
                     domain.GetName(), ('s' if len(result) > 1 else ''),
                     ', '.join([('"%s"'%item) for item in result])))
             
             loop = domain.HasImportLoop()
             if loop:
-                raise EDomainFactory('Import loop detected: ' + loop)
+                raise DomainFactoryError('Import loop detected: ' + loop)
             
             domain.CheckMissingInfo()
     
@@ -83,7 +85,7 @@ class CDomainFactory(object):
         @type  id: string
         """
         if not id in self.domains:
-            raise EDomainFactory('unrecognized identifier')
+            raise DomainFactoryError('unrecognized identifier')
         
         return self.domains[id]
     
@@ -121,7 +123,7 @@ class CDomainFactory(object):
         @param root: node <Domain>
         '''
         if root.get('id') in self.domains:
-            raise EDomainFactory('Duplicate domain identifier')
+            raise DomainFactoryError('Duplicate domain identifier')
         
         obj = CDomainType(root.get('id'), self)
         
@@ -133,14 +135,14 @@ class CDomainFactory(object):
                 self.__LoadAttribute(obj, node)
             
             elif node.tag == METAMODEL_NAMESPACE + 'Parse':
-                obj.AppendParser(**dict(node.items()))
+                obj.AppendParser(CDomainParser(**dict(node.items())))
             
             elif node.tag == METAMODEL_NAMESPACE + 'Domain':
                 self.__LoadDomain(node)
                 obj.AppendImport(node.get('id'))
             
             else:
-                raise EDomainFactory('Unknown Section: %s'%(section.tag, ))
+                raise DomainFactoryError('Unknown Section: %s'%(section.tag, ))
             
         self.domains[root.get('id')] = obj
     
@@ -161,8 +163,26 @@ class CDomainFactory(object):
                 obj.AppendEnumValue(id, option.text)
 
             elif option.tag == METAMODEL_NAMESPACE + 'List':
-                obj.SetList(id, **dict(option.items()))
+                obj.SetList(id, **self.__LoadList(option))
             
             elif node.tag == METAMODEL_NAMESPACE + 'Domain':
                 self.__LoadDomain(node)
                 obj.AppendImport(node.get('id'))
+    
+    def __LoadList(self, node):
+        '''
+        Parse <List> node of attribute
+        
+        @return: all the information for the list that can be read from node
+        @rtype: dict
+        
+        @param node: <List> XML node
+        @type: xml node
+        '''
+        
+        result = dict(node.items())
+        for option in node:
+            if option.tag == METAMODEL_NAMESPACE + 'Parse':
+                result['parser'] = CDomainParser(**dict(option.items()))
+        
+        return result

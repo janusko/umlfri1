@@ -1,8 +1,6 @@
 import re
 from Object import CDomainObject
-
-class EDomainType(Exception):
-    pass
+from lib.Exceptions import DomainTypeError
 
 class CDomainType(object):
     
@@ -35,11 +33,11 @@ class CDomainType(object):
         @param type: id of domain. Must be atomic domain or one of imported
         @type type: str
         
-        @raise EDomainType: if type is not atomic or one of imported domains
+        @raise DomainTypeError: if type is not atomic or one of imported domains
         '''
         
         if not type in self.ATOMIC and not type in self.imports:
-            raise EDomainType('Used type %s is not imported'%(type, ))
+            raise DomainTypeError('Used type %s is not imported'%(type, ))
         
         self.attributes[id] = {'name': name, 'type':type}
 
@@ -68,14 +66,14 @@ class CDomainType(object):
         
         assert isinstance(value, (str, unicode))
         if not id in self.attributes:
-            raise EDomainType('Unknown identifier %s'%(id, ))
+            raise DomainTypeError('Unknown identifier %s'%(id, ))
             
         if value in self.attributes.get('enum',[]):
-            raise EDomainType('the same enum value already defined')
+            raise DomainTypeError('the same enum value already defined')
         
         self.attributes[id].setdefault('enum',[]).append(value)
     
-    def SetList(self, id, type, separator):
+    def SetList(self, id, type, parser):
         '''
         Set information about items in list
         
@@ -90,20 +88,17 @@ class CDomainType(object):
         @type separator: str
         '''
         if not id in self.attributes:
-            raise EDomainType('Unknown identifier %s'%(id, ))
+            raise DomainTypeError('Unknown identifier %s'%(id, ))
         
-        self.attributes[id]['list'] = {'type':type, 'separator':separator}
+        self.attributes[id]['list'] = {'type':type, 'parser':parser}
     
-    def AppendParser(self, regexp=None):
+    def AppendParser(self, parser):
         '''
         Add parameters for new parser.
         
         @param regexp: Regular expression, compiled in verbose mode
         @type regexp: str
         '''
-        parser = {}
-        if regexp is not None:
-            parser['regexp'] = re.compile(regexp, re.X)
         self.parsers.append(parser)
 
 
@@ -148,10 +143,10 @@ class CDomainType(object):
         '''
         for id, info in self.attributes.iteritems():
             if info['type'] == 'enum' and len(info.get('enum',[])) == 0:
-                raise EDomainType('In domain "&s" is attribute "&s" of enum '
+                raise DomainTypeError('In domain "&s" is attribute "&s" of enum '
                     'domain, but has no "enum" values defined'&(self.name, id))
             elif info['type'] == 'list' and 'list' not in info:
-                raise EDomainType('In domain "&s" is attribute "&s" of list '
+                raise DomainTypeError('In domain "&s" is attribute "&s" of list '
                     'domain, but has no "list" definition'&(self.name, id))
     
     def GetAttribute(self, id):
@@ -206,13 +201,13 @@ class CDomainType(object):
         @return: default value of item defined by id
         @rtype: various
         
-        @raise EDomainType: when id is not valid item identifier
+        @raise DomainTypeError: when id is not valid item identifier
         
         @param id: item identifier
         @type id: str
         '''
         if not id in self.attributes:
-            raise EDomainType('Unknown identifier %s'%(id, ))
+            raise DomainTypeError('Unknown identifier %s'%(id, ))
         
         type = self.attributes[id]['type']
 
@@ -240,10 +235,10 @@ class CDomainType(object):
         @param id: identifier of item
         @type id: str
         
-        @raise EDomainType: if id is not valid item identifier
+        @raise DomainTypeError: if id is not valid item identifier
         '''
         if not id in self.attributes:
-            raise EDomainType('Unknown identifier %s'%(id, ))
+            raise DomainTypeError('Unknown identifier %s'%(id, ))
         
         return self.attributes[id]['type'] in self.ATOMIC
     
@@ -256,13 +251,13 @@ class CDomainType(object):
         
         @param value: value to be transformed
         
-        @raise EDomainType: 
+        @raise DomainTypeError: 
             - if id is not recoginzed
             - if value is incopatible with attribute domain
         '''
         
         if not id in self.attributes:
-            raise EDomainType('Unknown identifier %s'%(id, ))
+            raise DomainTypeError('Unknown identifier %s'%(id, ))
         
         type = self.attributes[id]['type']
         
@@ -279,14 +274,14 @@ class CDomainType(object):
                 try:
                     return self.__GetEnum(value, self.attributes[id]['enum'])
                 except KeyError:
-                    raise EDomainType(
+                    raise DomainTypeError(
                         'In domain "%s" is attribute "%s" of type "enum", '
                         'but has no defined values'%(self.name, id))
             elif type == 'list':
                 try:
                     return self.__GetList(value, **self.attributes[id]['list'])
                 except KeyError:
-                    raise EDomainType(
+                    raise DomainTypeError(
                         'In domain "%s" is attribute "%s" of type "list", '
                         'but has no list definition'%(self.name, id))
         else:
@@ -299,18 +294,18 @@ class CDomainType(object):
             try:
                 return int(value)
             except:
-                raise EDomainType('Cannot convert value to int')
+                raise DomainTypeError('Cannot convert value to int')
         else:
-            raise EDomainType('Invalid value type')
+            raise DomainTypeError('Invalid value type')
     
     def __GetFloat(self, value):
         if isinstance(value, (float, int, long, str, unicode)):
             try:
                 return float(value)
             except:
-                raise EDomainType('Cannot convert value to float')
+                raise DomainTypeError('Cannot convert value to float')
         else:
-            raise EDomainType('Invalid value type')
+            raise DomainTypeError('Invalid value type')
     
     def __GetStr(self, value):
         if isinstance(value, (str, unicode)):
@@ -329,47 +324,43 @@ class CDomainType(object):
             elif value.lower() in ('false', '0', 'no'):
                 return False
             else:
-                raise EDomainType('Invalid string to be converted to bool')
+                raise DomainTypeError('Invalid string to be converted to bool')
         else:
-            raise EDomainType('Invalid value type')
+            raise DomainTypeError('Invalid value type')
     
     def __GetEnum(self, value, enum):
         if isinstance(value, (str, unicode)):
             if enum.count(value) > 0:
                 return value
             else:
-                raise EDomainType('value is not member of enumeration')
+                raise DomainTypeError('value is not member of enumeration')
         elif isinstance(value, (int, long)):
             if 0 <= value < len(enum):
                 return enum[value]
             else:
-                raise EDomainType('value points to the index out of range')
+                raise DomainTypeError('value points to the index out of range')
         else:
-            raise EDomainType('value cannot be converted to enumeration item')
+            raise DomainTypeError('value cannot be converted to enumeration item')
     
-    def __GetList(self, value, separator, type):
+    def __GetList(self, value, type, parser):
         if isinstance(value, (str, unicode)):
-            result = []
             domain = self.factory.GetDomain(type)
             atempt = [False]
-            for parser in self.factory.GetDomain(type).IterParsers():
-                if 'regexp' in parser:
-                    attempt = [parser['regexp'].match(part) for part in value.split(separator)]
+            
+            for itemparser in domain.IterParsers():
+                attempt = [itemparser.CreateObject(part, domain) for part in parser.Split(value)]
                 if all(attempt):
                     break
+            
             if not all(attempt):
-                raise EDomainType('No parser can parse all the items in the list')
-            for item in attempt:
-                obj = CDomainObject(self.factory.GetDomain(type))
-                for id, val in item.groupdict().iteritems():
-                    if val is not None:
-                        obj.SetValue(id, val)
-                result.append(obj)
-            return result
+                raise DomainTypeError('No parser can parse all the items in the list')
+            return attempt
+            
         elif isinstance(value, (list, tuple)):
             return [self.__GetNonAtomic(item, type) for item in value]
+            
         else:
-            raise EDomainType('value cannot be converted to list')
+            raise DomainTypeError('value cannot be converted to list')
 
     
     def __GetNonAtomic(self, value, type):
@@ -377,19 +368,16 @@ class CDomainType(object):
             if value.GetType().GetName() == type:
                 return value
             else:
-                raise EDomainType('Type mismatch')
+                raise DomainTypeError('Type mismatch')
         elif isinstance(value, (str, unicode)):
+            domain = self.factory.GetDomain(type)
             attempt = None
-            for parser in self.factory.GetDomain(type).IterParsers():
-                attempt = parser.match(value)
-                if attemtp:
+            for parser in domain.IterParsers():
+                attempt = parser.CreateObject(value, domain)
+                if attempt:
                     break
             if not attempt:
-                raise EDomainType('No parser can parse value')
-            obj = CDomainObject(self.factory.GetDomain(type))
-            for id, val in item.groupdict().iteritems():
-                if val is not None:
-                    obj.SetValue(id, val)
-            return obj
+                raise DomainTypeError('No parser can parse value')
+            return attempt
         else:
-            raise EDomainType('Invalid value type')
+            raise DomainTypeError('Invalid value type')
