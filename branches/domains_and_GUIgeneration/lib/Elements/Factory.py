@@ -84,17 +84,12 @@ class CElementFactory(object):
             if element.tag == METAMODEL_NAMESPACE + 'Icon':
                 obj.SetIcon(element.get('path'))
             
+            elif element.tag == METAMODEL_NAMESPACE + 'Domain':
+                obj.SetDomain(self.domainfactory.GetDomain(element.get('id')))
+            
             elif element.tag == METAMODEL_NAMESPACE+'Connections':
                 self.__LoadConnection(obj, element)
                 
-            elif element.tag == METAMODEL_NAMESPACE+'Attributes':
-                for item in element:
-                    if item.get('notgenerate') != None:
-                        obj.SetGenerateName(not item.get('notgenerate'))
-                    options = []
-                    for opt in item:
-                        options.append(opt.get('value'))
-                    obj.AppendAttribute(options = options, **dict(item.items()))
             elif element.tag == METAMODEL_NAMESPACE+'Appearance':
                 tmp = None
                 for j in element:

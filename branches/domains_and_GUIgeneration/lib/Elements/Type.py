@@ -15,12 +15,13 @@ class CElementType(object):
         self.visAttrs = {}
         self.attributeList = []
         self.generatename = True
+        self.domain = None
     
-    def AppendAttribute(self, value, type, propid = None, options = [], itemtype=None):
-        if propid is not None:
-            self.visAttrs[propid] = value
-        self.attributes[value] = (type, options)
-        self.attributeList.append(value)
+    def SetDomain(self, domain):
+        self.domain = domain
+    
+    def GetDomain(self):
+        return self.domain
     
     def AppendConnection(self, value, withobject, allowrecursive):
         self.connections[value] = (withobject, allowrecursive)
@@ -40,79 +41,6 @@ class CElementType(object):
     
     def GetResizable(self):
         return self.appearance.GetResizable()
-    
-    def GetDefValue(self, id):
-        type, options = self.attributes[id]
-        if len(options) > 0:
-            temp = options[0]
-        else:
-            temp = None
-        if type == 'int':
-            if temp is None:
-                return 0
-            else:
-                return int(temp)
-        if type == 'enum':
-            if temp is None:
-                raise ElementAttributeError("ListNoOptions")
-            else:
-                return str(temp)
-        elif type == 'float':
-            if temp is None:
-                return 0.0
-            else:
-                return float(temp)
-        elif type == 'bool':
-            if temp is None:
-                return False
-            else:
-                return ToBool(temp)
-        elif type == 'str':
-            if temp is None:
-                return ""
-            else:
-                return str(temp)
-        elif type == 'note':
-            if temp is None:
-                return ""
-            else:
-                return str(temp)
-        elif type == 'list':
-            return []
-    
-    def TypeCastAttribute(self, key, value):
-        type, options = self.attributes[key]
-        if type == 'int':
-            return int(value)
-        if type == 'enum':
-            return str(value)
-        elif type == 'float':
-            return float(value)
-        elif type == 'bool':
-            return ToBool(value)
-        elif type == 'str':
-            return str(value)
-        elif type == 'note':
-            return str(value)
-        elif type == 'attrs':
-            ret = []
-            for i in value:
-                ret.append({'name': str(i['name']), 'type': str(i['type']), 'scope': str(i['scope']),
-                            'stereotype': str(i['stereotype']), 'containment': str(i['containment']), 'initial': str(i['initial']),
-                            'doc': str(i['doc']), 'derived': ToBool(i['derived']), 'static': ToBool(i['static']),
-                            'property': ToBool(i['property']), 'const': ToBool(i['const'])
-                })
-            return ret
-        elif type == 'opers':
-            ret = []
-            for i in value:
-                ret.append({'name': str(i['name']), 'params': str(i['params']), 'abstract': ToBool(i['abstract']),
-                            'static': ToBool(i['static']), 'const': ToBool(i['const']), 'returnarray': ToBool(i['returnarray']),
-                            'pure': ToBool(i['pure']), 'synchronize': ToBool(i['synchronize']), 'isquery': ToBool(i['isquery']),
-                            'scope': str(i['scope']), 'type': str(i['type']), 'stereotype': str(i['stereotype']),
-                            'doc': str(i['doc'])
-                })
-            return ret
     
     def GetAttributes(self):
         for i in self.attributeList:
