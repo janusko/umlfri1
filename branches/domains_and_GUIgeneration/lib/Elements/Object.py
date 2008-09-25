@@ -1,5 +1,6 @@
 from lib.Exceptions.UserException import *
 import weakref
+from lib.Domains import CDomainObject
 
 class CElementObject(object):
     """

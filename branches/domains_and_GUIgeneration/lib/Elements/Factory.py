@@ -46,6 +46,10 @@ class CElementFactory(object):
         
         @param path: Path to directory with connection metamodel XMLs
         @type path: string
+        
+        @param domainfactory: factory that has already loaded all the domains
+        from current metamodel
+        @type domainfactory: L{CDomainFactory<lib.Domains.Factory.CDomainFactory>}
         """
         self.types = {}
         self.path = path

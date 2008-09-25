@@ -42,10 +42,6 @@ class CElementType(object):
     def GetResizable(self):
         return self.appearance.GetResizable()
     
-    def GetAttributes(self):
-        for i in self.attributeList:
-            yield i
-            
     def GetAttribute(self, key):
         return self.attributes[key]
     
