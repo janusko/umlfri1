@@ -1,6 +1,7 @@
+from lib.Depend.gtk2 import gobject
+
 import lib.consts
 import lib.debug
-import gobject
 from lib.Exceptions import UserException
 from lib.Gui.showExceptions import displayTraceback, displayUsrExc
 def event(obj, *args):

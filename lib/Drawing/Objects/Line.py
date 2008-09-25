@@ -1,6 +1,7 @@
+from lib.Depend.gtk2 import gtk
+
 from VisualObject import CVisualObject
 from VBox import CVBox
-import gtk.gdk
 
 class CLine(CVisualObject):
     def __init__(self, type = "auto", color = "black"):

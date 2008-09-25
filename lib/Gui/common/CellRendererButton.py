@@ -1,6 +1,6 @@
-import gtk
-import gobject
-import pango
+from lib.Depend.gtk2 import gtk
+from lib.Depend.gtk2 import gobject
+from lib.Depend.gtk2 import pango
 
 class CellRendererButton(gtk.GenericCellRenderer):
     __gproperties__ = {

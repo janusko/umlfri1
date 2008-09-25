@@ -1,9 +1,8 @@
+from lib.Depend.gtk2 import pango
+from lib.Depend.gtk2 import gtk
+
 from lib.Exceptions.UserException import *
 from Abstract import CAbstractCanvas
-
-import pango
-import gtk
-import gtk.gdk
 
 LINE_STYLES = {'solid': gtk.gdk.LINE_SOLID,
                'dot': gtk.gdk.LINE_ON_OFF_DASH,

@@ -1,7 +1,8 @@
+from lib.Depend.gtk2 import gtk
+from lib.Depend.gtk2 import gobject
+
 from common import CWindow, event
 from lib.Drawing.Canvas.GtkPlus import PixmapFromPath
-import gtk
-import gobject
 import common
 
 class CFindInDiagram(CWindow):

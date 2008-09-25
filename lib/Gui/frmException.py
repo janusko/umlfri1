@@ -1,7 +1,8 @@
+from lib.Depend.gtk2 import gtk
+from lib.Depend.gtk2 import pango
+
 import sys, os
 import platform
-import gtk
-import pango
 import lib.consts
 from common import CWindow
 import traceback
