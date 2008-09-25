@@ -1,11 +1,11 @@
+from lib.Depend.gtk2 import pango
+from lib.Depend.gtk2 import pangocairo
+from lib.Depend.gtk2 import gtk
+from lib.Depend.gtk2 import cairo
+
 from lib.Exceptions.UserException import *
 from Abstract import CAbstractCanvas
 import math
-import pango
-import pangocairo
-import gtk
-import gtk.gdk
-import cairo
 from lib import colors
 
 

@@ -1,7 +1,8 @@
+from lib.Depend.gtk2 import gtk
+from lib.Depend.gtk2 import pango
+
 from common import CWindow, event
 from lib.consts import SPLASH_IMAGE
-
-import gtk, gtk.gdk, pango
 
 gtk.rc_parse_string("""
     style "test"

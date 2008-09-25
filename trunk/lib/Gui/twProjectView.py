@@ -1,3 +1,6 @@
+from lib.Depend.gtk2 import gobject
+from lib.Depend.gtk2 import gtk
+
 from common import CWidget
 from lib.Project import CProject, CProjectNode
 from lib.Elements import CElementFactory, CElementObject
@@ -7,10 +10,6 @@ from lib.Drawing.Canvas.GtkPlus import PixmapFromPath
 
 from common import  event
 import common
-import gobject
-
-import gtk
-import gtk.gdk
 
 
 class CtwProjectView(CWidget):

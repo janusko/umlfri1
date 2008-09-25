@@ -1,4 +1,4 @@
-import gobject
+from lib.Depend.gtk2 import gobject
 
 class CWidget(gobject.GObject):
     widgets = ()

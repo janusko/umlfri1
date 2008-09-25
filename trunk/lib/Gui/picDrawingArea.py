@@ -1,4 +1,5 @@
-import gtk, gtk.gdk, gobject, gtk.keysyms
+from lib.Depend.gtk2 import gtk
+from lib.Depend.gtk2 import gobject
 
 import lib.consts
 from lib.colors import invert

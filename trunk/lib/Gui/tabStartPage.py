@@ -1,7 +1,7 @@
+from lib.Depend.gtk2 import gtk
+from lib.Depend.gtk2 import gobject
+
 from common import CWidget
-import gtk
-import gtk.gdk
-import gobject
 
 from lib.consts import STARTPAGE_IMAGE
 from common import  event

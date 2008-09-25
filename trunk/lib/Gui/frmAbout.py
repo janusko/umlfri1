@@ -1,7 +1,8 @@
+from lib.Depend.gtk2 import pango
+
 from common import CWindow, event
 from lib.config import config
 import lib.consts
-import pango
 
 class CfrmAbout(CWindow):
     widgets = ('tviewCredits', 'lblAboutUmlfri', 'lbtnProjectWeb', )

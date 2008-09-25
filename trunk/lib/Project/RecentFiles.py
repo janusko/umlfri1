@@ -1,3 +1,5 @@
+from lib.Depend.etree import etree, HAVE_LXML
+
 from lib.lib import XMLEncode, Indent
 from lib.Exceptions.UserException import *
 import os.path
@@ -5,28 +7,6 @@ from lib.config import config
 import datetime
 from lib.consts import RECENTFILES_NAMESPACE
 
-#try to import necessary lybraries for XML parsing
-try:
-    from lxml import etree
-    HAVE_LXML = True
-except ImportError:
-    HAVE_LXML = False
-    try:
-        # Python 2.5
-        import xml.etree.cElementTree as etree
-    except ImportError:
-        try:
-            # Python 2.5
-            import xml.etree.ElementTree as etree
-        except ImportError:
-            try:
-                # normal cElementTree install
-                import cElementTree as etree
-            except ImportError:
-                # normal ElementTree install
-                import elementtree.ElementTree as etree
-
-                    
 #if lxml.etree is imported successfully, we use xml validation with xsd schema
 if HAVE_LXML:
     xmlschema_doc = etree.parse(os.path.join(config['/Paths/Schema'], "recentfiles.xsd"))
