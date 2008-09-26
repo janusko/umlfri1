@@ -1,5 +1,6 @@
+from lib.Depend.gtk2 import gtk
+
 import common
-import gtk
 from lib.config import config
 from common import event
 

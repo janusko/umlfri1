@@ -1,6 +1,8 @@
+from lib.Depend.gtk2 import gtk
+from lib.Depend.gtk2 import gobject
+
 from common import CWidget, event
 
-import gtk, gobject
 from lib.Drawing.Canvas.GtkPlus import PixmapFromPath
 
 from lib.config import config

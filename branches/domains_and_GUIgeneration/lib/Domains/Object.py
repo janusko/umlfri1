@@ -77,3 +77,4 @@ class CDomainObject(object):
             raise DomainObjectError('Identifier "%s" unknown'%(id, ))
         
         self.values[id] = self.type.TransformValue(id, value)
+    

@@ -1,8 +1,8 @@
+from lib.Depend.gtk2 import gtk
+from lib.Depend.gtk2 import gobject
+
 from common import CWindow, event
 from lib.Drawing import CElement, CConnection
-import gtk
-
-import gobject
 
 class CfrmProperties(CWindow):
     widgets = ('nbProProperties', 'twAttributes', 'twOperations', 'twConnections', 'cmdDeleteAttribute', 'cmdDeleteOperation', 'cmdNewAttribute', 'cmdNewOperation', )

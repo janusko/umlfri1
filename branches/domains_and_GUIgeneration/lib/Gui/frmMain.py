@@ -1,5 +1,5 @@
-import pygtk
-import gtk
+from lib.Depend.gtk2 import gtk
+
 from common import CWindow, event
 import common
 import lib.consts

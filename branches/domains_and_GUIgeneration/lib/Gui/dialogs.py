@@ -1,4 +1,4 @@
-import gtk
+from lib.Depend.gtk2 import gtk
 
 class ECancelPressed(Exception):
     pass

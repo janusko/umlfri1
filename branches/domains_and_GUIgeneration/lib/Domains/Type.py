@@ -19,6 +19,7 @@ class CDomainType(object):
         self.attributes = {}
         self.factory = factory
         self.parsers = []
+        self.attributeorder = []
     
     def AppendAttribute(self, id, name, type):
         '''
@@ -40,6 +41,7 @@ class CDomainType(object):
             raise DomainTypeError('Used type %s is not imported'%(type, ))
         
         self.attributes[id] = {'name': name, 'type':type}
+        self.attributeorder.append(id)
 
     def AppendImport(self, id):
         '''
@@ -133,7 +135,7 @@ class CDomainType(object):
         @return: list of the domain names that are imported but not recognized
         @rtype: list
         '''
-        return ([name for name in self.imports if not self.factory.RecognizedDomain(name)])
+        return ([name for name in self.imports if not self.factory.HasDomain(name)])
     
     def CheckMissingInfo(self):
         '''
@@ -170,7 +172,7 @@ class CDomainType(object):
         
         @rtype: str
         '''
-        for id in self.attributes.iterkeys():
+        for id in self.attributeorder:
             yield id
     
     def IterParsers(self):
@@ -196,22 +198,31 @@ class CDomainType(object):
         '''
         return self.imports
     
-    def GetDefaultValue(self, id):
+    def GetDefaultValue(self, id=None, domain=None):
         '''
         @return: default value of item defined by id
         @rtype: various
         
-        @raise DomainTypeError: when id is not valid item identifier
+        @raise DomainTypeError: when id is not valid item or domain is unknown
+        or none of parameters are set
         
         @param id: item identifier
         @type id: str
         '''
-        if not id in self.attributes:
-            raise DomainTypeError('Unknown identifier %s'%(id, ))
         
-        type = self.attributes[id]['type']
-
-        if self.IsAtomic(id):
+        if id is not None:
+            if not id in self.attributes:
+                raise DomainTypeError('Unknown identifier %s'%(id, ))
+            type = self.attributes[id]['type']
+        
+        elif domain is not None and (self.IsAtomic(domain) or self.factory.HasDomain(domain))
+            type = domain
+        
+        else:
+            raise DomainTypeError('None of the parameters are valid\n'
+                'id = "%s" domain = "%s"'%(id, domain))
+        
+        if self.IsAtomic(type):
             if type == 'int': 
                 return 0
             elif type == 'float':
@@ -227,7 +238,7 @@ class CDomainType(object):
         else:
             return CDomainObject(self.factory.GetDomain(type))
     
-    def IsAtomic(self, id):
+    def IsAtomic(self, domain):
         '''
         @return: True if item defined by id is of an atomic domain
         @rtype: bool
@@ -237,10 +248,7 @@ class CDomainType(object):
         
         @raise DomainTypeError: if id is not valid item identifier
         '''
-        if not id in self.attributes:
-            raise DomainTypeError('Unknown identifier %s'%(id, ))
-        
-        return self.attributes[id]['type'] in self.ATOMIC
+        return domain in self.ATOMIC
     
     def TransformValue(self, id, value):
         '''

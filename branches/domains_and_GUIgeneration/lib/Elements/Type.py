@@ -7,70 +7,101 @@ class CElementType(object):
     '''
     
     def __init__(self, id):
+        '''
+        create new instance of element type
+        '''
         self.icon = None
         self.id = id
         self.attributes = {}
         self.connections = {}
         self.appearance = None
-        self.visAttrs = {}
         self.attributeList = []
         self.generatename = True
         self.domain = None
     
     def SetDomain(self, domain):
+        '''
+        @param domain: domain type that holds info about data
+        @type domain: L{CDomainType<lib.Domains.Type.CDomainType>}
+        '''
         self.domain = domain
     
     def GetDomain(self):
+        '''
+        @return: current domain type
+        @rtype: L{CDomainType<lib.Domains.Type.CDomainType>}
+        '''
         return self.domain
     
     def AppendConnection(self, value, withobject, allowrecursive):
+        '''
+        add allowed connection as defined in metamodel
+        '''
         self.connections[value] = (withobject, allowrecursive)
     
     def GetAppearance(self):
+        '''
+        @return: appearance as was defined in metamodel
+        '''
         return self.appearance
                 
     def GetConnections(self):
+        '''
+        iterator over allowed connections
+        
+        @return: tuple of values (withobject, allowrecursive)
+        '''
         for item in self.connections.iteritems():
             yield item
     
     def GetIcon(self):
+        '''
+        @return: relative path to the icon of current type
+        @rtype: str
+        '''
         return self.icon
     
     def GetId(self):
+        '''
+        @return: ID or name of the element type as used in metamodel
+        @rtype: str
+        '''
         return self.id
     
     def GetResizable(self):
+        '''
+        @return: True if element can be resized - depends on the uppermost
+        authoritative visual object.
+        @rtype: bool
+        '''
         return self.appearance.GetResizable()
     
-    def GetAttribute(self, key):
-        return self.attributes[key]
-    
-    def GetGenerateName(self):
-        return self.generatename
-        
-    def SetGenerateName(self, generate):
-        self.generatename = generate
-        
     def Paint(self, context):
+        '''
+        Paint element type using context
+        '''
         self.appearance.Paint(context)
     
     def SetAppearance(self, appearance):
+        '''
+        Set appearance as defined in metamodel
+        '''
         self.appearance = appearance
     
     def SetIcon(self, pixbuf):
+        '''
+        set relative path to the icon
+        '''
         self.icon = pixbuf
     
     def SetId(self, id):
+        '''
+        set identifier / name of the current element type
+        '''
         self.id = id
     
-    def HasVisualAttribute(self, id):
-        return id in self.visAttrs.itervalues()
-    
-    def GetVisAttr(self, id):
-        if id in self.visAttrs:
-            return self.visAttrs[id]
-        else:
-            raise ElementAttributeError('VisAttrDontExists')
-    
     def GetSize(self, context):
+        '''
+        @return: size as tuple {width, height)
+        '''
         return self.appearance.GetSize(context)

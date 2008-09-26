@@ -1,3 +1,5 @@
+from lib.Depend.etree import etree, HAVE_LXML
+
 from lib.lib import XMLEncode, IDGenerator, Indent
 from ProjectNode import CProjectNode
 from cStringIO import StringIO
@@ -17,32 +19,6 @@ from lib.Drawing import CDiagram
 import os.path
 from lib.consts import ROOT_PATH, VERSIONS_PATH, DIAGRAMS_PATH, ELEMENTS_PATH, CONNECTIONS_PATH, DOMAINS_PATH, UMLPROJECT_NAMESPACE, PROJECT_EXTENSION, PROJECT_CLEARXML_EXTENSION
 from lib.config import config
-
-#try to import necessary lybraries for XML parsing
-try:
-    from lxml import etree
-    HAVE_LXML = True
-    #print("running with lxml.etree")
-except ImportError:
-    HAVE_LXML = False
-    try:
-        # Python 2.5
-        import xml.etree.cElementTree as etree
-        #print("running with cElementTree on Python 2.5+")
-    except ImportError:
-        try:
-            # Python 2.5
-            import xml.etree.ElementTree as etree
-            #print("running with ElementTree on Python 2.5+")
-        except ImportError:
-            try:
-                # normal cElementTree install
-                import cElementTree as etree
-                #print("running with cElementTree")
-            except ImportError:
-                # normal ElementTree install
-                import elementtree.ElementTree as etree
-                #print("running with ElementTree")
 
 #if lxml.etree is imported successfully, we use xml validation with xsd schema
 if HAVE_LXML:

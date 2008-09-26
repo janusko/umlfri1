@@ -89,7 +89,7 @@ class CDomainFactory(object):
         
         return self.domains[id]
     
-    def RecognizedDomain(self, id):
+    def HasDomain(self, id):
         '''
         @return: True if domain identifier is registered in current factory
         @rtype: bool

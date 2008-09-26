@@ -1,5 +1,6 @@
+from lib.Depend.gtk2 import gtk
+
 import common
-import gtk
 
 class CfrmOperation(common.CWindow):
     name = 'frmOperation'

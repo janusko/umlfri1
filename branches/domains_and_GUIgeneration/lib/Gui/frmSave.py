@@ -1,5 +1,6 @@
+from lib.Depend.gtk2 import gtk
+
 import common
-import gtk
 import lib.consts
 import os.path
 

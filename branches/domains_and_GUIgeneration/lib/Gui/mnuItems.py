@@ -1,4 +1,5 @@
-import gtk, gobject
+from lib.Depend.gtk2 import gtk
+from lib.Depend.gtk2 import gobject
 
 from lib.Drawing.Canvas.GtkPlus import PixmapFromPath
 

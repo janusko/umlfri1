@@ -15,15 +15,9 @@ class CElementObject(object):
         """
         self.revision = 0
         self.type = type
+        self.domainobject = CDomainObject(self.type.GetDomain())
         self.path = None
         self.connections = []
-        self.attribs = {}
-        for i in self.type.GetAttributes():
-            self.SetAttribute(i, self.type.GetDefValue(i))            
-        if type.GetGenerateName():
-            self.SetAttribute('Name', 'New ' + type.GetId())
-        else:
-            self.SetAttribute('Name', '')
         self.node = lambda: None
         self.appears = []
     
@@ -130,22 +124,12 @@ class CElementObject(object):
     def GetSize(self, context):
         return self.type.GetSize(context)
         
-    def GetName(self):
-        if 'Name' in self.attribs:
-            return self.attribs['Name']
-        else:
-            raise ElementAttributeError("KeyError")
-
-    def GetAttribute(self, key):
-        if key in self.attribs:
-            return self.attribs[key]
-        else:
-            return None
+    def GetDomainObject(self):
+        return self.domainobject
     
-    def GetAttributes(self):
-        for attr in self.attribs:
-            yield attr
-        
+    def GetName(self):
+        return self.GetDomainObject().GetValue('name')
+    
     def GetVisualProperty(self, key):
         if key == 'CHILDREN':
             node = self.node()
@@ -206,20 +190,6 @@ class CElementObject(object):
     def Paint(self, context):
         self.type.Paint(context)
 
-    def RemoveAttribute(self, key):
-        self.revision += 1
-        if self.attribs.has_key(key):
-            del self.attribs[key]
-        else:
-            raise ElementAttributeError("KeyError")
-    
-    def HasAttribute(self, key):
-        return key in self.attribs
-            
-    def SetAttribute(self, key, value):
-        self.revision += 1
-        self.attribs[key] = self.type.TypeCastAttribute(key, value)
-        
     def Disconnect(self, connection):
         connection.Disconnect()
         

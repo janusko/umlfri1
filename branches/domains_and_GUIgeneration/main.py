@@ -1,14 +1,13 @@
 #!/usr/bin/python
 
-#~ import pygtk
-
-#~ pygtk.require('2.0')
-
 import warnings
 warnings.simplefilter('ignore', Warning)
 
-import gtk
-import gobject
+import lib.Depend
+lib.Depend.check()
+
+from lib.Depend.gtk2 import gtk
+from lib.Depend.gtk2 import gobject
 
 from lib.Clipboard import CClipboard
 from lib.Gui.common import CApplication, argument

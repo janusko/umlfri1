@@ -1,9 +1,8 @@
+from lib.Depend.gtk2 import gobject
+from lib.Depend.gtk2 import gtk
+
 from common import CWidget, CellRendererButton, event
 from lib.Drawing import CDiagram
-
-import gobject
-import gtk
-import gtk.gdk
 
 ID_NAME, ID_VALUE, ID_TEXT_VISIBLE, ID_COMBO_VISIBLE, ID_EDITABLE ,ID_BUTTON_VISIBLE, ID_MODEL, ID_TYPE = range(8)
 

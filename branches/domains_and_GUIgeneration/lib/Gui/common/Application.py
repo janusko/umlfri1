@@ -1,6 +1,5 @@
-import gtk
-import gobject
-import gtk.glade
+from lib.Depend.gtk2 import gtk
+from lib.Depend.gtk2 import gobject
 
 import sys
 from os.path import abspath
