@@ -367,7 +367,7 @@ class CConnection(CCacheableObject, CSelectableObject):
         '''
         return self.WhatPartOfYouIsAtPosition(canvas, point) is not None
 
-    def MoveAll(self, delta):
+    def MoveAll(self, delta, canvas):
         '''Move all points and labels of connection
         
         @param delta: (dx, dy) distance to move
@@ -376,6 +376,10 @@ class CConnection(CCacheableObject, CSelectableObject):
         self.points = map(
             lambda x: (x[0] + delta[0], x[1] + delta[1]), 
             self.points)
+        for idx, point in enumerate(self.points):
+            if point[0] < 0 or point[1] < 0:
+                self.MovePoint(canvas, point, idx+1)
+            
         
     def MovePoint(self, canvas, pos, index):
         '''
@@ -395,6 +399,8 @@ class CConnection(CCacheableObject, CSelectableObject):
         
         if index <= 0 or index > len(self.points):
             raise IndexError('Out of range')
+        
+        pos = max((0, pos[0])), max((0, pos[1]))
         
         prevPoint = self.GetPoint(canvas, index - 1)
         nextPoint = self.GetPoint(canvas, index + 1)
