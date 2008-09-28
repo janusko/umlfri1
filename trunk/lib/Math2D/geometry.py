@@ -177,33 +177,42 @@ class CLine(object):
         '''
         Find the closest point at the line segment to the specified position
         
-        @return: ((x, y), distance, angle) - position of tha closest point at 
+        @return: (scale, distance, angle) - position of tha closest point at 
         segment, distance to it and angle of (point,(x,y)) to the line
         @rtype:  tuple
         
         @param point: specified position
         @type point:  L{CPoint<CPoint>}
         '''
-        (Ax, Ay), (Bx, By) = self.GetPos()
-        Cx, Cy = point.GetPos()
-        D = float((Bx - Ax)**2 + (By - Ay)**2)
-        if D == 0:
-            return self.GetStart(), self.GetStart() - point, math.atan2(Cy - Ay, Cx - Ax)
-        t1 = (Cx - Ax)*(Bx - Ax) - (Cy - Ay)*(Ay - By)
-        t2 = (Bx - Ax)*(Cy - Ay) - (Cx - Ax)*(By - Ay)
-        if t1 <= 0:
-            angle = math.atan2(Cy - Ay, Cx - Ax) - self.Angle()
-            return self.GetStart(), self.GetStart() - point, angle
-        elif 0 < t1 < D:
-            pos = CPoint((Ax + (Bx - Ax)*t1/D, Ay + (By - Ay)*t1/D))
-            if t2 >= 0:
-                angle = math.pi/2
-            else:
-                angle = - math.pi/2
-            return pos, pos - point, angle
+        
+        if isinstance(point, CPoint):
+            Cx, Cy = point.GetPos()
         else:
-            angle = math.atan2(Cy - By, Cx - Bx) - self.Angle()
-            return self.GetEnd(), self.GetEnd() - point, angle
+            Cx, Cy = point
+        (Ax, Ay), (Bx, By) = self.GetPos()
+        
+        ux = float(Bx - Ax)
+        uy = float(By - Ay)
+        
+        if ux == 0:
+            t = (Cy - Ay) / uy
+        elif uy == 0:
+            t = (Cx - Ax) / ux
+        else:
+            t = ((Cx - Ax) * ux + (Cy - Ay) * uy) / (ux**2 + uy**2)
+        
+        if t < 0:
+            t = 0.0
+            d = CPoint((Ax, Ay)) - CPoint((Cx, Cy))
+        elif t > 1:
+            t = 1.0
+            d = CPoint((Bx, By)) - CPoint((Cx, Cy))
+        else:
+            d = self.Scale(t).GetEnd() - CPoint((Cx, Cy))
+        
+        a = CLine(self.Scale(t).GetEnd(), (Cx, Cy)).Angle() - self.Angle()
+        a %= 2 * math.pi
+        return t, d, a
     
     def __repr__(self):
         return '[' + repr(self.start) + ' ' + repr(self.end) + ']'
