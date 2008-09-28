@@ -84,7 +84,10 @@ class CConLabelInfo(CCacheableObject):
         '''
         width, height = self.GetSize(canvas)
         x, y = self.GetAbsolutePosition(canvas)
-        return int(x - width / 2.0), int(y - height / 2.0)
+        x, y = x - width / 2.0, y - height / 2.0
+        if x < 0 or y < 0:
+            self.SetPosition((x, y), canvas)
+        return int(max((0, x))), int(max((0, y)))
     
     def SetLogicalLabel(self, logicalLabel):
         '''
@@ -110,6 +113,7 @@ class CConLabelInfo(CCacheableObject):
         @type canvas: L{CCairoCanvas<lib.Drawing.Canvas.CairoCanvas.CCairoCanvas>}
         '''
         width, height = self.GetSize(canvas)
+        pos = max((0, pos[0])), max((0, pos[1]))
         self.RecalculatePosition(canvas, 
             (pos[0] + width / 2.0, pos[1] + height / 2.0))
     
@@ -207,6 +211,8 @@ class CConLabelInfo(CCacheableObject):
                 (CPoint(points[self.idx + 1]) - CPoint(points[self.idx]))
         except ZeroDivisionError:
             self.pos = 0.0
+        
+        self.GetPosition(canvas)
     
     def AreYouAtPosition(self, canvas, point):
         '''
