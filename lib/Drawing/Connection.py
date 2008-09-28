@@ -282,6 +282,8 @@ class CConnection(CCacheableObject, CSelectableObject):
         
         @raise IndexError: if 0 > index or len(self.points) < index
         '''
+        point = max((0, point[0])), max((0, point[1]))
+        
         if index < 0 or index > len(self.points):
             raise IndexError('index out of range') 
         
