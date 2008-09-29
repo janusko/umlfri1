@@ -8,6 +8,7 @@ from lib.Exceptions.UserException import *
 from lib.Storages import open_storage
 from lib.Drawing import CElement
 from lib.Drawing import CConnection
+from lib.Domains import CDomainFactory
 from lib.Elements.Type import CElementType
 from lib.Elements.Object import CElementObject
 from lib.Connections.Object import CConnectionObject
@@ -31,7 +32,8 @@ class CProject(object):
         self.root = None
         
         self.Storage = open_storage(os.path.join(ROOT_PATH, 'etc', 'uml'))
-        self.ElementFactory = CElementFactory(self.Storage, ELEMENTS_PATH)
+        self.DomainFactory = CDomainFactory(self.Storage, DOMAINS_PATH)
+        self.ElementFactory = CElementFactory(self.Storage, ELEMENTS_PATH, self.DomainFactory)
         self.DiagramFactory = CDiagramFactory(self.Storage, DIAGRAMS_PATH)
         self.ConnectionFactory = CConnectionFactory(self.Storage, CONNECTIONS_PATH)
         self.VersionFactory = CVersionFactory(self.Storage, VERSIONS_PATH)

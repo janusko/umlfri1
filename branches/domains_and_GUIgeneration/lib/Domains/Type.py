@@ -215,7 +215,7 @@ class CDomainType(object):
                 raise DomainTypeError('Unknown identifier %s'%(id, ))
             type = self.attributes[id]['type']
         
-        elif domain is not None and (self.IsAtomic(domain) or self.factory.HasDomain(domain))
+        elif domain is not None and (self.IsAtomic(domain) or self.factory.HasDomain(domain)):
             type = domain
         
         else:

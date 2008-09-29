@@ -84,7 +84,10 @@ class CConLabelInfo(CCacheableObject):
         '''
         width, height = self.GetSize(canvas)
         x, y = self.GetAbsolutePosition(canvas)
-        return int(x - width / 2.0), int(y - height / 2.0)
+        x, y = x - width / 2.0, y - height / 2.0
+        if x < 0 or y < 0:
+            self.SetPosition((x, y), canvas)
+        return int(max((0, x))), int(max((0, y)))
     
     def SetLogicalLabel(self, logicalLabel):
         '''
@@ -110,6 +113,7 @@ class CConLabelInfo(CCacheableObject):
         @type canvas: L{CCairoCanvas<lib.Drawing.Canvas.CairoCanvas.CCairoCanvas>}
         '''
         width, height = self.GetSize(canvas)
+        pos = max((0, pos[0])), max((0, pos[1]))
         self.RecalculatePosition(canvas, 
             (pos[0] + width / 2.0, pos[1] + height / 2.0))
     
@@ -181,9 +185,10 @@ class CConLabelInfo(CCacheableObject):
         '''
         
         points = list(self.connection.GetPoints(canvas))
+        angle = CLine(points[self.idx], points[self.idx + 1]).Angle()
         scaled = CLine(points[self.idx], points[self.idx + 1]).Scale(self.pos)
         return CLine.CreateAsVector(scaled.GetEnd(), 
-            scaled.Angle() + self.angle, self.dist).GetEnd().GetPos()
+            angle + self.angle, self.dist).GetEnd().GetPos()
     
     def RecalculatePosition(self, canvas, pos = None):
         '''
@@ -199,14 +204,11 @@ class CConLabelInfo(CCacheableObject):
         @type pos: tuple / NoneType
         '''
         x, y = (pos or self.GetAbsolutePosition(canvas))
-        points = list(self.connection.GetPoints(canvas))
-        self.idx, point, self.dist, self.angle = \
+        points = self.connection.GetPoints(canvas)
+        self.idx, self.pos, self.dist, self.angle = \
             CPolyLine(tuple(points)).Nearest(CPoint((x, y)))
-        try:
-            self.pos = (CPoint(points[self.idx]) - point) / \
-                (CPoint(points[self.idx + 1]) - CPoint(points[self.idx]))
-        except ZeroDivisionError:
-            self.pos = 0.0
+        
+        self.GetPosition(canvas)
     
     def AreYouAtPosition(self, canvas, point):
         '''

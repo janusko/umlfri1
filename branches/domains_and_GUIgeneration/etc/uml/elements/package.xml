@@ -1,20 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ElementType id="Package" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
     <Icon path="icons/package.png" />
+    <Domain id="package" />
     <Connections>
         <!--Item value="Association" />
         <Item value="Generalization" with="Class" allowrecursive="0" /-->
     </Connections>
-    <Attributes>
-        <Item value="Name" type="str" propid="name" />
-        <Item value="Stereotype" type="str" propid="stereotype" />
-        <Item value="Scope" type="enum">
-            <Option value="public" />
-            <Option value="private" />
-            <Option value="protected" />
-        </Item>
-        <Item value="Notes" type="note" />
-    </Attributes>
     <Appearance>
         <Shadow padding="3" color="/Styles/Element/ShadowColor">
             <HBox expand="-1">

@@ -176,7 +176,7 @@ class CDiagram:
                 for con in el.GetConnections():
                     if (con.GetSource() in elements) and (con.GetDestination() in elements):
                         if con not in movedCon:
-                            con.MoveAll(delta)
+                            con.MoveAll(delta, canvas)
                             movedCon.add(con)
         if canvas is not None:
             for conn in self.connections:

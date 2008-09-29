@@ -72,7 +72,7 @@ class CElementFactory(object):
                 obj.SetDomain(self.domainfactory.GetDomain(element.get('id')))
             
             elif element.tag == METAMODEL_NAMESPACE+'Connections':
-                self.__LoadConnection(obj, element)
+                self.__LoadConnections(obj, element)
                 
             elif element.tag == METAMODEL_NAMESPACE+'Appearance':
                 tmp = None

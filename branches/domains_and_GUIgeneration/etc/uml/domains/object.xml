@@ -1,0 +1,27 @@
+<Domain id="object" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" >
+    <Attribute id="name" type="str" name="Name" />
+    <Attribute id="stereotype" type="str" name="Stereotype" />
+    <Attribute id="scope" type="enum" name="Scope">
+        <Enum>Private</Enum>
+        <Enum>Protected</Enum>
+        <Enum>Public</Enum>
+    </Attribute>
+    <Attribute id="abstract" type="bool" name="Abstract" />
+    <Attribute id="attributes" type="list" name="Attributes">
+        <List type="object_attribute" />
+        <Domain id="object_attribute">
+            <Attribute id="name" type="str" name="Name" />
+            <Attribute id="stereotype" type="str" name="Stereotype" />
+            <Attribute id="scope" type="enum" name="Scope">
+                <Enum>Private</Enum>
+                <Enum>Protected</Enum>
+                <Enum>Public</Enum>
+            </Attribute>
+            <Attribute id="type" type="str" name="Type" />
+            <Attribute id="static" type="bool" name="Static" />
+            <Attribute id="default" type="str" name="Default" />
+            <Attribute id="note" type="str" name="Note" />
+        </Domain>
+    </Attribute>
+    <Attribute id="note" type="str" name="Note" />
+</Domain>

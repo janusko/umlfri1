@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ElementType id="StartState" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
     <Icon path="icons/initial.png" />
+    <Domain id="state" />
     <Connections>
         <Item value="StateTransition"/>
     </Connections>
-    <Attributes>
-        <Item value="Name" type="str" propid="name" notgenerate="true"/>
-        <Item value="Stereotype" type="str" propid="stereotype" />
-        <Item value="Notes" type="note"/>
-    </Attributes>
     <Appearance>
         <HBox expand="0">
             <Proportional ratio="1:1" align="center center" size="minimal">

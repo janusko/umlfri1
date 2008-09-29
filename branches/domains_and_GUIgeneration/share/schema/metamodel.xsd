@@ -12,6 +12,11 @@
 						<xs:attribute name="path" type="xs:string"/>
 					</xs:complexType>
 				</xs:element>
+                <xs:element name="Domain">
+					<xs:complexType>
+						<xs:attribute name="id" type="xs:string"/>
+					</xs:complexType>
+                </xs:element>
 				<xs:element name="Connections">
 					<xs:complexType>
 						<xs:sequence>
@@ -25,7 +30,7 @@
 						</xs:sequence>
 					</xs:complexType>
 				</xs:element>
-				<xs:element name="Attributes" type="AttributesType" minOccurs="0"/>
+				<!--<xs:element name="Attributes" type="AttributesType" minOccurs="0"/>-->
 				<xs:element name="Appearance" type="SimpleObjectContainer"/>
 			</xs:sequence>
 			<xs:attribute name="id" type="xs:string" use="required"/>

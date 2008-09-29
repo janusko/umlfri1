@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ElementType id="Actor" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
     <Icon path="icons/actor.png" />
+    <Domain id="actor" />
     <Connections>
         <Item value="Association" />
         <Item value="Generalization" with="UseCase" allowrecursive="0" />
     </Connections>
-    <Attributes>
-        <Item value="Name" type="str" propid="name" />
-        <Item value="Stereotype" type="str" propid="stereotype" />
-        <Item value="Notes" type="note" />
-    </Attributes>
     <Appearance>
         <HBox>
             <Align align="center">
