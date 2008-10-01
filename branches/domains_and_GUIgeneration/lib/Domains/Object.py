@@ -78,3 +78,6 @@ class CDomainObject(object):
         
         self.values[id] = self.type.TransformValue(id, value)
     
+    def GetSaveInfo(self):
+        
+        return dict([(id, self.type.PackValue(id, value)) for id, value in self.values.iteritems()])

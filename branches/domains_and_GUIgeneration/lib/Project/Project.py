@@ -142,6 +142,26 @@ class CProject(object):
 
         id = IDGenerator()
         
+        def SaveDomainObjectInfo(data, name=None):
+            '''
+            '''
+            if type(data) is dict:
+                element = etree.Element(UMLPROJECT_NAMESPACE+'dict')
+                for key, value in data.iteritems():
+                    element.append(SaveDomainObjectInfo(value, key))
+            elif type(data) is list:
+                element = etree.Element(UMLPROJECT_NAMESPACE+'list')
+                for value in data:
+                    element.append(SaveDomainObjectInfo(value))
+            elif type(data) in (str, unicode):
+                element = etree.Element(UMLPROJECT_NAMESPACE+'text')
+                element.text = data
+            else:
+                raise Exception("unknown data format")
+            if name:
+                element.set('name', name)
+            return element
+        
         def saveattr(object, element):
             if isinstance(object, dict):
                 attrs = object.iteritems()
@@ -206,7 +226,7 @@ class CProject(object):
         
         for object in elements:
             objectNode = etree.Element(UMLPROJECT_NAMESPACE+'object', type=unicode(object.GetType().GetId()), id=unicode(id(object)))
-            saveattr(object, objectNode)
+            objectNode.append(SaveDomainObjectInfo(object.GetDomainObject().GetSaveInfo())
             objectsNode.append(objectNode)
             
         rootNode.append(objectsNode)
@@ -229,10 +249,7 @@ class CProject(object):
         Indent(rootNode)
         
         #save Recent File Tree into ZIP file if it is .frip
-        ext = filename.split('.')
-        ext.reverse()
-        #ext[0] = "."+ext[0]
-        if (("."+ext[0]) != PROJECT_CLEARXML_EXTENSION):     #zipped
+        if (("." + filename.rsplit('.',1)[-1]) != PROJECT_CLEARXML_EXTENSION):     #zipped
             fZip = ZipFile(filename, 'w', ZIP_DEFLATED)
             fZip.writestr('content.xml', '<?xml version="1.0" encoding="utf-8"?>\n'+etree.tostring(rootNode, encoding='utf-8'))
             fZip.close()
