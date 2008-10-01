@@ -19,6 +19,7 @@ from frmFindInDiagram import CFindInDiagram
 from tabStartPage import CtabStartPage
 from lib.config import config
 from lib.colors import colors
+from lib.Exceptions import UserException
 
 class CfrmMain(CWindow):
     name = 'frmMain'
@@ -416,10 +417,12 @@ class CfrmMain(CWindow):
         try:
             self.picDrawingArea.ActionPaste()
         except UserException, e:
-            if e.GetName() == "Element already exists":
-                return CWarningDialog(self.form, _('Unable to insert element')).run()
-            elif e.GetName() == "Diagram has not this element":
-                return CWarningDialog(self.form, _('Wrong element: ') + e.GetParam(0).GetObject().GetType().GetId()).run()
+            if e.GetName() == "ElementAlreadyExists":
+                return CWarningDialog(self.form, _('Element is already in this diagram')).run()
+            elif e.GetName() == "DiagramHasNotThisElement":
+                return CWarningDialog(self.form, _('Wrong element: ') + e.GetParameter(1).GetObject().GetType().GetId()).run()
+            else:
+                return CWarningDialog(self.form, e.GetName()).run()
     
     def ActionLoadToolBar(self, widget):
         pass
@@ -532,10 +535,12 @@ class CfrmMain(CWindow):
             try:
                 Element = CElement(diagram, node.GetObject()).SetPosition(position)
             except UserException, e:
-                if e.GetName() == "Element already exists":
+                if e.GetName() == "ElementAlreadyExists":
                     return CWarningDialog(self.form, _('Unable to insert element')).run()
                 elif e.GetName() == "DiagramHaveNotThisElement":
                     return CWarningDialog(self.form, _('Wrong element: ') + node.GetObject().GetType().GetId()).run()
+                else:
+                    return CWarningDialog(e.GetName()).run()
             
     
     @event("picDrawingArea", "run-dialog")
