@@ -5,6 +5,7 @@ from ProjectNode import CProjectNode
 from cStringIO import StringIO
 from zipfile import ZipFile, ZIP_STORED, ZIP_DEFLATED
 from lib.Exceptions.UserException import *
+from lib.Exceptions.DevException import DomainObjectError
 from lib.Storages import open_storage
 from lib.Drawing import CElement
 from lib.Drawing import CConnection
@@ -226,7 +227,7 @@ class CProject(object):
         
         for object in elements:
             objectNode = etree.Element(UMLPROJECT_NAMESPACE+'object', type=unicode(object.GetType().GetId()), id=unicode(id(object)))
-            objectNode.append(SaveDomainObjectInfo(object.GetDomainObject().GetSaveInfo())
+            objectNode.append(SaveDomainObjectInfo(object.GetDomainObject().GetSaveInfo()))
             objectsNode.append(objectNode)
             
         rootNode.append(objectsNode)
@@ -276,6 +277,23 @@ class CProject(object):
         else:
             self.filename = filename
         
+        def LoadDomainObjectInfo(element):
+            '''
+            Transform element back to the dictionary readable by 
+            L{CDomainObject.SetSaveInfo<lib.Domains.Object.CDomainObject.SetSaveInfo>}
+            
+            @return: structured dictionary
+            @rtype: dict
+            '''
+            if element.tag == UMLPROJECT_NAMESPACE + 'dict':
+                return dict([(item.get('name'), LoadDomainObjectInfo(item)) for item in element])
+            elif element.tag == UMLPROJECT_NAMESPACE + 'list':
+                return [LoadDomainObjectInfo(item) for item in element]
+            elif element.tag == UMLPROJECT_NAMESPACE + 'text':
+                return element.text
+            else:
+                raise ProjectError("malformed project file")
+        
         def CreateTree(root, parentNode):
             for elem in root:
                 if elem.tag == UMLPROJECT_NAMESPACE+'childs':
@@ -315,9 +333,9 @@ class CProject(object):
         root = etree.XML(data)
 
         #xml (version) file is validate with xsd schema (metamodel.xsd)
-        if HAVE_LXML:
-            if not xmlschema.validate(root):
-                raise XMLError(xmlschema.error_log.last_error)
+        #~ if HAVE_LXML:
+            #~ if not xmlschema.validate(root):
+                #~ raise XMLError(xmlschema.error_log.last_error)
 
         for element in root:
             if element.tag == UMLPROJECT_NAMESPACE+'objects':
@@ -325,19 +343,7 @@ class CProject(object):
                     if subelem.tag == UMLPROJECT_NAMESPACE+'object':
                         id = subelem.get("id")
                         object = CElementObject(self.ElementFactory.GetElement(subelem.get("type")))
-
-                        for property in subelem:
-                            if property.get("value") is not None:
-                                object.SetAttribute(property.get("name"),property.get("value"))
-                            elif property.get("type") is not None:
-                                attributes = []
-                                for item in property:
-                                    atrib = {}
-                                    for attribute in item:
-                                        atrib[attribute.get("name")] = attribute.get("value")
-                                    if len(atrib) > 0:
-                                        attributes.append(atrib)
-                                object.SetAttribute(property.get("name"),attributes)
+                        object.GetDomainObject().SetSaveInfo(LoadDomainObjectInfo(subelem[0]))
                         ListObj[id] = object
 
             elif element.tag == UMLPROJECT_NAMESPACE+'connections':

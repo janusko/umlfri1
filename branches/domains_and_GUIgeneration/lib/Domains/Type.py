@@ -387,13 +387,13 @@ class CDomainType(object):
 
     
     def __GetNonAtomic(self, value, type):
+        domain = self.factory.GetDomain(type)
         if isinstance(value, CDomainObject):
             if value.GetType().GetName() == type:
                 return value
             else:
                 raise DomainTypeError('Type mismatch')
         elif isinstance(value, (str, unicode)):
-            domain = self.factory.GetDomain(type)
             attempt = None
             for parser in domain.IterParsers():
                 attempt = parser.CreateObject(value, domain)
@@ -402,6 +402,10 @@ class CDomainType(object):
             if not attempt:
                 raise DomainTypeError('No parser can parse value')
             return attempt
+        elif isinstance(value, dict):
+            result = CDomainObject(domain)
+            result.SetSaveInfo(value)
+            return result
         else:
             raise DomainTypeError('Invalid value type')
     

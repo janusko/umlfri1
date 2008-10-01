@@ -79,5 +79,22 @@ class CDomainObject(object):
         self.values[id] = self.type.TransformValue(id, value)
     
     def GetSaveInfo(self):
-        
+        '''
+        @return: structured dictionary containing all the necessary data for .frip file
+        @rtype: dict
+        '''
         return dict([(id, self.type.PackValue(id, value)) for id, value in self.values.iteritems()])
+    
+    def SetSaveInfo(self, data):
+        '''
+        Restore all the attribute values from dictionary loaded from .frip file
+        
+        @param data: structured dictionary as returned from 
+        L{self.GetSaveInfo<self.GetSaveInfo>}
+        @type data: dict
+        '''
+        for key, value in data.iteritems():
+            if isinstance(value, dict):
+                self.GetValue(key).SetSaveInfo(value)
+            elif isinstance(value, (list, str, unicode)):
+                self.SetValue(key, value)
