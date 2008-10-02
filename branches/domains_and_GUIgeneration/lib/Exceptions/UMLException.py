@@ -55,4 +55,16 @@ class UMLException(Exception):
         @rtype:  string
         """
         return self.__class__.__name__
+    
+    def GetName(self):
+        '''
+        Get first parameter e.g. text passed to exception
+        '''
+        return self.params[0]
+    
+    def GetParameter(self, idx):
+        '''
+        Get parameter of exception
+        '''
+        return self.params[idx]
 

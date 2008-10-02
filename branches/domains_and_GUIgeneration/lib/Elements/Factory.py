@@ -48,6 +48,15 @@ class CElementFactory(object):
         @type  type: string
         """
         return self.types[type]
+    
+    def IterTypes(self):
+        '''
+        iterator over element types
+        
+        @rtype: L{CElementType<CElementType>}
+        '''
+        for type in self.types.itervalues():
+            yield type
 
     def __Load(self, file_path):
         """

@@ -8,7 +8,6 @@ class CProjectNode(object):
         self.object = object
         if path is not None:
             self.object.SetPath(path)
-        object.Assign(self)
 
     def Change(self):
         if self.parent is not None:

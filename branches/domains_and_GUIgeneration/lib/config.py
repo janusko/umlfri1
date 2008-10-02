@@ -6,10 +6,17 @@ import os
 import colors
 from lib import Indent
 from Exceptions.DevException import *
+from Exceptions import XMLError
+import sys
+
+def expanduser(path):
+	if path[0] == '~':
+		return os.path.expanduser('~').decode(sys.getfilesystemencoding()) + path[1:]
+	return path
 
 def path_type(val):
-    val = val.replace(u'\xFF', consts.ROOT_PATH)
-    val = os.path.abspath(os.path.expanduser(val))
+    val = val.decode('utf-8').replace(u'\xFF', consts.ROOT_PATH)
+    val = os.path.abspath(expanduser(val))
     if os.path.isdir(val):
         val += os.sep
     return val
@@ -89,20 +96,22 @@ class CConfig(object):
         
         if not os.path.isdir(self['/Paths/UserDir']):
             os.mkdir(self['/Paths/UserDir'])
-        
+
         if HAVE_LXML:
-            #user config schema
             xmlschema_doc = etree.parse(os.path.join(xmlschema_path, "userconfig.xsd"))
             self.xmlschema = etree.XMLSchema(xmlschema_doc)
-        
-        self.file = self['/Paths/UserConfig']
-        if os.path.isfile(self.file):
-            tree = etree.XML(open(self.file).read())
-            if HAVE_LXML:
-                if not self.xmlschema.validate(tree):
-                    raise ConfigError, ("XMLError", self.xmlschema.error_log.last_error)
 
-            self.cfgs.update(self.__Load(tree))
+        try:
+            self.file = self['/Paths/UserConfig']
+            if os.path.isfile(self.file):
+                tree = etree.XML(open(self.file).read())
+                if HAVE_LXML:
+                    if not self.xmlschema.validate(tree):
+                        raise ConfigError, ("XMLError", self.xmlschema.error_log.last_error)
+                self.cfgs.update(self.__Load(tree))
+        except (etree.XMLSyntaxError, ConfigError):
+            print 'WARNING: Your local config file is malformed. Personal settings will be ignored'
+            
 
     
     def Clear(self):
@@ -186,7 +195,7 @@ class CConfig(object):
                 if isinstance(val, dict):
                     save(val, newNode, level+1)
                 else:
-                    newNode.text = val
+                    newNode.text = unicode(val)
                 node.append(newNode)
         
         for path, val in self.cfgs.iteritems():

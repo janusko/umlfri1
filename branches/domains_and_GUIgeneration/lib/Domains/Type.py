@@ -4,7 +4,7 @@ from lib.Exceptions import DomainTypeError
 
 class CDomainType(object):
     
-    ATOMIC = 'int', 'float', 'str', 'bool', 'enum', 'list'
+    ATOMIC = 'int', 'float', 'str', 'text', 'bool', 'enum', 'list'
     
     def __init__(self, name, factory):
         '''
@@ -42,6 +42,13 @@ class CDomainType(object):
         
         self.attributes[id] = {'name': name, 'type':type}
         self.attributeorder.append(id)
+    
+    def HasAttribute(self, id):
+        '''
+        @return: True if id is defined attribute
+        @rtype: bool
+        '''
+        return id in self.attributes
 
     def AppendImport(self, id):
         '''
@@ -229,7 +236,7 @@ class CDomainType(object):
                 return 0.0
             elif type == 'bool':
                 return False
-            elif type == 'str':
+            elif type in ('str', 'text'):
                 return ''
             elif type == 'list':
                 return []
@@ -289,7 +296,7 @@ class CDomainType(object):
                 return self.__GetInt(value)
             elif type == 'float':
                 return self.__GetFloat(value)
-            elif type == 'str':
+            elif type in ('str', 'text'):
                 return self.__GetStr(value)
             elif type == 'bool':
                 return self.__GetBool(value)

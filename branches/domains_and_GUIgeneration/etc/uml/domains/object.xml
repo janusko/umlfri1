@@ -20,8 +20,8 @@
             <Attribute id="type" type="str" name="Type" />
             <Attribute id="static" type="bool" name="Static" />
             <Attribute id="default" type="str" name="Default" />
-            <Attribute id="note" type="str" name="Note" />
+            <Attribute id="note" type="text" name="Note" />
         </Domain>
     </Attribute>
-    <Attribute id="note" type="str" name="Note" />
+    <Attribute id="note" type="text" name="Note" />
 </Domain>

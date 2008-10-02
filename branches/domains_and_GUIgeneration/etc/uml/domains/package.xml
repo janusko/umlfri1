@@ -7,5 +7,5 @@
         <Enum>Public</Enum>
     </Attribute>
     <Attribute id="abstract" type="bool" name="Abstract" />
-    <Attribute id="note" type="str" name="Note" />
+    <Attribute id="note" type="text" name="Note" />
 </Domain>

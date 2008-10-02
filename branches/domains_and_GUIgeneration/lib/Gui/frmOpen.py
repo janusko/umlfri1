@@ -9,6 +9,7 @@ import gobject
 import zipfile
 from dialogs import CWarningDialog
 from common import event
+import sys
 
 class CfrmOpen(common.CWindow):
     name = 'frmOpen'
@@ -18,7 +19,7 @@ class CfrmOpen(common.CWindow):
     def __init__(self, app, wTree):
         common.CWindow.__init__(self, app, wTree)
         
-        self.ivOpenModel = gtk.ListStore(gobject.TYPE_STRING, gtk.gdk.Pixbuf, gobject.TYPE_STRING)
+        self.ivOpenModel = gtk.ListStore(gobject.TYPE_STRING, gtk.gdk.Pixbuf, gobject.TYPE_PYOBJECT)
         self.ivOpenNew.set_model(self.ivOpenModel)
         self.ivOpenNew.set_text_column(0)
         self.ivOpenNew.set_pixbuf_column(1)
@@ -71,7 +72,7 @@ class CfrmOpen(common.CWindow):
         self.listStore.clear()
         for name, date in self.application.GetRecentFiles().GetRecentFiles():
             iter = self.listStore.append()
-            self.listStore.set(iter,0,name,1,date, 2, self.__GetIcon(name))
+            self.listStore.set(iter,0,name.encode('utf-8'),1,date, 2, self.__GetIcon(name))
     
     @event("fwOpenExisting", "file-activated")
     def on_fwOpenExisting_file_activated(self, widget):
@@ -114,7 +115,7 @@ class CfrmOpen(common.CWindow):
                         return self.ivOpenModel.get(iter, 2)[0], True # template
                 elif self.nbOpen.get_current_page() == 1:
                     copy = self.chkOpenAsCopyExisting.get_active()
-                    filename = self.fwOpenExisting.get_filename()
+                    filename = self.fwOpenExisting.get_filename().decode('utf-8')
                     if filename is not None and os.path.isfile(filename):
                         if not copy:
                             self.application.GetRecentFiles().AddFile(filename)
@@ -123,7 +124,7 @@ class CfrmOpen(common.CWindow):
                     copy = self.chkOpenAsCopyRecent.get_active()
                     iter = self.twOpenRecent.get_selection().get_selected()[1]
                     if iter is not None:
-                        filename = self.twOpenRecent.get_model().get(iter,0)[0]
+                        filename = self.twOpenRecent.get_model().get(iter,0)[0].decode('utf-8')
                         if not copy:
                             self.application.GetRecentFiles().AddFile(filename)
                         if not os.path.exists(filename):  

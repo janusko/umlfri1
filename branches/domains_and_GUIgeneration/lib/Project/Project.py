@@ -224,6 +224,7 @@ class CProject(object):
         objectsNode = etree.Element(UMLPROJECT_NAMESPACE+'objects')
         connectionsNode = etree.Element(UMLPROJECT_NAMESPACE+'connections')
         projtreeNode = etree.Element(UMLPROJECT_NAMESPACE+'projecttree')
+        counterNode = etree.Element(UMLPROJECT_NAMESPACE+'counters')
         
         for object in elements:
             objectNode = etree.Element(UMLPROJECT_NAMESPACE+'object', type=unicode(object.GetType().GetId()), id=unicode(id(object)))
@@ -240,6 +241,11 @@ class CProject(object):
         rootNode.append(connectionsNode)
         savetree(self.root, projtreeNode)
         rootNode.append(projtreeNode)
+        
+        for type in self.ElementFactory.IterTypes():
+            counterNode.append(etree.Element(UMLPROJECT_NAMESPACE+'count', id = type.GetID(), value = type.GetCounter()))
+        
+        rootNode.append(counterNode)
         
         #xml tree is validate with xsd schema (recentfile.xsd)
         if HAVE_LXML:
@@ -354,13 +360,17 @@ class CProject(object):
                         for propCon in connection:
                             con.SetAttribute(propCon.get("name"),propCon.get("value"))
                         ListCon[id] = con
+            
             elif element.tag == UMLPROJECT_NAMESPACE+'projecttree':
                 for subelem in element:
                     if subelem.tag == UMLPROJECT_NAMESPACE+'node':
                         proNode = CProjectNode(None,ListObj[subelem.get("id")],ListObj[subelem.get("id")].GetName() + ":" + ListObj[subelem.get("id")].GetType().GetId())
                         self.SetRoot(proNode)
                         CreateTree(subelem,proNode)
-                        
+            
+            elif element.tag == UMLPROJECT_NAMESPACE + 'counters':
+                for item in element:
+                    self.ElementFactory.GetType(item.get('id')).SetCounter(int(item.get('value')))
         
     Root = property(GetRoot, SetRoot)
     

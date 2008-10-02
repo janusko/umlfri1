@@ -2,5 +2,5 @@
     <Attribute id="name" type="str" name="Name" />
     <Attribute id="stereotype" type="str" name="Stereotype" />
     <Attribute id="abstract" type="bool" name="Abstract" />
-    <Attribute id="note" type="str" name="Note" />
+    <Attribute id="note" type="text" name="Note" />
 </Domain>

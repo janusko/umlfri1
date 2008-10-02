@@ -7,6 +7,8 @@ if (hasattr(sys, "frozen") or hasattr(sys, "importers") or imp.is_frozen("__main
 else:
     ROOT_PATH = abspath(join(dirname(__file__), '..'))
 
+ROOT_PATH = ROOT_PATH.decode(sys.getfilesystemencoding())
+
 ETC_PATH = join(ROOT_PATH, 'etc')
 
 MAIN_CONFIG_PATH = join(ETC_PATH, 'config.xml')

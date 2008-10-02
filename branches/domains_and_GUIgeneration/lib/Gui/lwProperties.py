@@ -69,28 +69,29 @@ class ClwProperties(CWidget):
             return
         
         object = Element.GetObject()
-        type = Element.GetObject().GetType()
-        for k in type.GetAttributes():
-            v = object.GetAttribute(k)
+        DObject = object.GetDomainObject()
+        DType = DObject.GetType()
+        for attribute in DType.IterAttributesID():
+            value = DObject.GetValue(attribute)
             row = self.listStore.append()
-            atrtype = type.GetAttribute(k)
-            if atrtype[0] == 'bool':
+            domain = DType.GetAttribute(attribute)
+            if domain['type'] == 'bool':
                 model = gtk.ListStore(gobject.TYPE_STRING)
                 model.set(model.append(), 0, 'True')
                 model.set(model.append(), 0, 'False')
-                self.listStore.set(row, ID_TYPE, atrtype[0], ID_NAME, str(k) , ID_VALUE, str(v),  ID_TEXT_VISIBLE, False, ID_COMBO_VISIBLE, True, ID_BUTTON_VISIBLE, False, ID_EDITABLE, False, ID_MODEL, model)
-            elif len(atrtype[1]) > 0:
+                self.listStore.set(row, ID_TYPE, 'bool', ID_NAME, domain['name'] , ID_VALUE, str(value),  ID_TEXT_VISIBLE, False, ID_COMBO_VISIBLE, True, ID_BUTTON_VISIBLE, False, ID_EDITABLE, False, ID_MODEL, model)
+            elif domain['type'] == 'enum':
                 model = gtk.ListStore(gobject.TYPE_STRING)
-                for i in atrtype[1]:
-                    model.set(model.append(), 0 , str(i))
-                editable = not (atrtype[0] == 'enum')
-                self.listStore.set(row, ID_NAME, str(k), ID_VALUE, str(v), ID_TEXT_VISIBLE, False, ID_COMBO_VISIBLE, True, ID_BUTTON_VISIBLE, False, ID_EDITABLE, editable, ID_MODEL, model)
-            elif atrtype[0] == 'str':
-                self.listStore.set(row, ID_TYPE, atrtype[0], ID_NAME, str(k), ID_VALUE, str(v), ID_TEXT_VISIBLE, True, ID_COMBO_VISIBLE, False, ID_BUTTON_VISIBLE, False, ID_EDITABLE, True)
-            elif atrtype[0] == 'note':
+                for item in domain['enum']:
+                    model.set(model.append(), 0 , item)
+                editable = False
+                self.listStore.set(row, ID_NAME, domain['name'], ID_VALUE, str(value), ID_TEXT_VISIBLE, False, ID_COMBO_VISIBLE, True, ID_BUTTON_VISIBLE, False, ID_EDITABLE, editable, ID_MODEL, model)
+            elif domain['type'] in ('str', 'int', 'float'):
+                self.listStore.set(row, ID_TYPE, domain['type'], ID_NAME, domain['name'], ID_VALUE, str(value), ID_TEXT_VISIBLE, True, ID_COMBO_VISIBLE, False, ID_BUTTON_VISIBLE, False, ID_EDITABLE, True)
+            elif domain['type'] == 'note':
                 self.listStore.remove(row)
             else:
-                self.listStore.set(row, ID_TYPE, atrtype[0], ID_NAME, str(k), ID_VALUE, "<<list>>", ID_TEXT_VISIBLE, False, ID_COMBO_VISIBLE, False, ID_BUTTON_VISIBLE, True)
+                self.listStore.set(row, ID_TYPE, domain['type'], ID_NAME, domain['name'], ID_VALUE, "<<list>>", ID_TEXT_VISIBLE, False, ID_COMBO_VISIBLE, False, ID_BUTTON_VISIBLE, True)
         
     def Clear(self):
         self.element = None
