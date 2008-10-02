@@ -6,6 +6,7 @@ import os
 import colors
 from lib import Indent
 from Exceptions.DevException import *
+from Exceptions import XMLError
 import sys
 
 def expanduser(path):
@@ -95,20 +96,22 @@ class CConfig(object):
         
         if not os.path.isdir(self['/Paths/UserDir']):
             os.mkdir(self['/Paths/UserDir'])
-        
+
         if HAVE_LXML:
-            #user config schema
             xmlschema_doc = etree.parse(os.path.join(xmlschema_path, "userconfig.xsd"))
             self.xmlschema = etree.XMLSchema(xmlschema_doc)
-        
-        self.file = self['/Paths/UserConfig']
-        if os.path.isfile(self.file):
-            tree = etree.XML(open(self.file).read())
-            if HAVE_LXML:
-                if not self.xmlschema.validate(tree):
-                    raise ConfigError, ("XMLError", self.xmlschema.error_log.last_error)
 
-            self.cfgs.update(self.__Load(tree))
+        try:
+            self.file = self['/Paths/UserConfig']
+            if os.path.isfile(self.file):
+                tree = etree.XML(open(self.file).read())
+                if HAVE_LXML:
+                    if not self.xmlschema.validate(tree):
+                        raise ConfigError, ("XMLError", self.xmlschema.error_log.last_error)
+                self.cfgs.update(self.__Load(tree))
+        except (etree.XMLSyntaxError, ConfigError):
+            print 'WARNING: Your local config file is malformed. Personal settings will be ignored'
+            
 
     
     def Clear(self):
