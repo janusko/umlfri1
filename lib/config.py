@@ -6,9 +6,10 @@ import os
 import colors
 from lib import Indent
 from Exceptions.DevException import *
+import sys
 
 def path_type(val):
-    val = val.replace(u'\xFF', consts.ROOT_PATH)
+    val = val.replace(u'\xFF', consts.ROOT_PATH.decode(sys.getfilesystemencoding()))
     val = os.path.abspath(os.path.expanduser(val))
     if os.path.isdir(val):
         val += os.sep
