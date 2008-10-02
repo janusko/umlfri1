@@ -8,9 +8,14 @@ from lib import Indent
 from Exceptions.DevException import *
 import sys
 
+def expanduser(path):
+	if path[0] == '~':
+		return os.path.expanduser('~').decode(sys.getfilesystemencoding()) + path[1:]
+	return path
+
 def path_type(val):
-    val = val.replace(u'\xFF', consts.ROOT_PATH.decode(sys.getfilesystemencoding()))
-    val = os.path.abspath(os.path.expanduser(val))
+    val = val.decode('utf-8').replace(u'\xFF', consts.ROOT_PATH)
+    val = os.path.abspath(expanduser(val))
     if os.path.isdir(val):
         val += os.sep
     return val

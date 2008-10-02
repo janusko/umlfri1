@@ -18,7 +18,7 @@ def PixmapFromPath(storage, path):
             pathx = path
         else:
             pathx = storage.get_file_path(path)
-        tmp = gtk.gdk.pixbuf_new_from_file(str(pathx))
+        tmp = gtk.gdk.pixbuf_new_from_file(unicode(pathx))
         pixmaps[(storage, path)] = tmp
     return tmp
 

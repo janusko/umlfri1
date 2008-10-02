@@ -39,7 +39,7 @@ class CfrmSave(common.CWindow):
                     self.form.hide()
                     return None
                 filter = self.form.get_filter().get_name()
-                filename = self.form.get_filename()
+                filename = self.form.get_filename().decode('utf-8')
                 if filename is None:
                     continue
                 if '.' not in os.path.basename(filename):
