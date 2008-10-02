@@ -192,7 +192,7 @@ class CConfig(object):
                 if isinstance(val, dict):
                     save(val, newNode, level+1)
                 else:
-                    newNode.text = val
+                    newNode.text = unicode(val)
                 node.append(newNode)
         
         for path, val in self.cfgs.iteritems():
