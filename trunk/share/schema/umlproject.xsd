@@ -42,7 +42,7 @@
 									<xs:complexContent>
 										<xs:extension base="connectionType">
 											<xs:sequence>
-												<xs:element name="property" type="propertyType" maxOccurs="unbounded"/>
+												<xs:element name="property" type="propertyType" minOccurs="0" maxOccurs="unbounded"/>
 											</xs:sequence>
 										</xs:extension>
 									</xs:complexContent>
