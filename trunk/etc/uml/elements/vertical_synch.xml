@@ -22,4 +22,6 @@
             </Condition>
         </VBox>
     </Appearance>
+    <Options>
+    </Options>
 </ElementType>

@@ -89,8 +89,9 @@ class CElementFactory(object):
                 for j in element:
                     tmp = j
                 obj.SetAppearance(self.__LoadAppearance(tmp))
-            else:
-                raise FactoryError('XMLError', en)
+            elif element.tag == METAMODEL_NAMESPACE+'Options':
+                #I load Options on this place (e.g.: Options - Allow Add Diagram or Package into Element)
+                pass
         
         self.types[root.get('id')] = obj
     
