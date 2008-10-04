@@ -420,8 +420,12 @@
 	</xs:group>
 	<xs:complexType name="OptionType">
 		<xs:choice minOccurs="0" maxOccurs="unbounded">
-			<xs:element name="AddPackage" type="xs:boolean" default="false"/>
-			<xs:element name="AddDiagram" type="xs:boolean" default="false"/>
+			<xs:element name="option" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:attribute name="name" type="xs:string" use="required"/>
+					<xs:attribute name="value" type="xs:boolean" use="required"/>
+				</xs:complexType>
+			</xs:element>
 		</xs:choice>
 	</xs:complexType>
 </xs:schema>

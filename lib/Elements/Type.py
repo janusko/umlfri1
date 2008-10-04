@@ -11,6 +11,13 @@ class CElementType(object):
         self.visAttrs = {}
         self.attributeList = []
         self.generatename = True
+        self.options = {}
+    
+    def AppendOptions(self, name, value):
+        self.options[name] = value
+    
+    def GetOptions(self):
+        return self.options
     
     def AppendAttribute(self, value, type, propid = None, options = []):
         if propid is not None:
