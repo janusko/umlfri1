@@ -1,26 +1,21 @@
 try:
     # lxml
     from lxml import etree
+    from etree import XMLSyntaxError
     HAVE_LXML = True
 except ImportError:
     HAVE_LXML = False
     try:
         # Python 2.5
         import xml.etree.cElementTree as etree
+        from exceptions import SyntaxError as XMLSyntaxError
     except ImportError:
         try:
             # Python 2.5
             import xml.etree.ElementTree as etree
+            import xml.parsers.expat.ExpatError as XMLSyntaxError
         except ImportError:
-            try:
-                # normal cElementTree install
-                import cElementTree as etree
-            except ImportError:
-                # normal ElementTree install
-                try:
-                    import elementtree.ElementTree as etree
-                except ImportError:
-                    etree = None
+            etree = None
 
 def check():
     """
