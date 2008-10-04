@@ -90,8 +90,10 @@ class CElementFactory(object):
                     tmp = j
                 obj.SetAppearance(self.__LoadAppearance(tmp))
             elif element.tag == METAMODEL_NAMESPACE+'Options':
-                #I load Options on this place (e.g.: Options - Allow Add Diagram or Package into Element)
-                pass
+                for item in element:
+                    name = item.get('name')
+                    value = item.get('value')
+                    obj.AppendOptions(name, value)
         
         self.types[root.get('id')] = obj
     

@@ -223,7 +223,6 @@ class CtwProjectView(CWidget):
     
     
     def AddDiagram(self, diagram):
-        
         iter = self.twProjectView.get_selection().get_selected()[1]
         if iter is None:
             iter = self.twProjectView.get_model().get_iter_root()
