@@ -34,4 +34,6 @@
             </HBox>
         </HBox>
     </Appearance>
+    <Options>
+    </Options>
 </ElementType>

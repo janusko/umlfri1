@@ -58,4 +58,6 @@
             </HBox>
         </Shadow>
     </Appearance>
+    <Options>
+    </Options>
 </ElementType>

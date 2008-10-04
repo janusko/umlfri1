@@ -22,4 +22,6 @@
             </Condition>
         </HBox>
     </Appearance>
+    <Options>
+    </Options>
 </ElementType>
