@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- edited with XMLSpy v2008 sp1 (http://www.altova.com) by BlueWay (Bananix) -->
 <!-- (c) UML.FRI -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" targetNamespace="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:element name="ElementType">
@@ -28,7 +27,7 @@
 				</xs:element>
 				<xs:element name="Attributes" type="AttributesType" minOccurs="0"/>
 				<xs:element name="Appearance" type="SimpleObjectContainer"/>
-				<xs:element name="Options" type="OptionType"/>
+				<xs:element name="Options" type="OptionType" minOccurs="0"/>
 			</xs:sequence>
 			<xs:attribute name="id" type="xs:string" use="required"/>
 		</xs:complexType>
@@ -420,12 +419,7 @@
 	</xs:group>
 	<xs:complexType name="OptionType">
 		<xs:choice minOccurs="0" maxOccurs="unbounded">
-			<xs:element name="option" minOccurs="0" maxOccurs="unbounded">
-				<xs:complexType>
-					<xs:attribute name="name" type="xs:string" use="required"/>
-					<xs:attribute name="value" type="xs:boolean" use="required"/>
-				</xs:complexType>
-			</xs:element>
+			<xs:element name="DirectAdd" type="xs:boolean" default="false"/>
 		</xs:choice>
 	</xs:complexType>
 </xs:schema>

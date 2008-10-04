@@ -70,8 +70,4 @@
             </Rectangle>
         </Shadow>
     </Appearance>
-    <Options>
-        <option value="true" name="AddDiagram"/>
-        <option value="true" name="AddPackage"/>
-    </Options>
 </ElementType>

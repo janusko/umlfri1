@@ -59,7 +59,6 @@
         </Shadow>
     </Appearance>
     <Options>
-        <option value="false" name="AddDiagram"/>
-        <option value="true" name="AddPackage"/>
+        <DirectAdd>true</DirectAdd>
     </Options>
 </ElementType>
