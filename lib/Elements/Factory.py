@@ -91,8 +91,8 @@ class CElementFactory(object):
                 obj.SetAppearance(self.__LoadAppearance(tmp))
             elif element.tag == METAMODEL_NAMESPACE+'Options':
                 for item in element:
-                    name = item.get('name')
-                    value = item.get('value')
+                    name = item.tag.split('}')[1]
+                    value = item.text
                     obj.AppendOptions(name, value)
         
         self.types[root.get('id')] = obj
