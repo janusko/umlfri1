@@ -30,4 +30,6 @@
             </Ellipse>
         </Shadow>
     </Appearance>
+    <Options>
+    </Options>
 </ElementType>

@@ -49,4 +49,7 @@
             </HBox>
         </Shadow>
     </Appearance>
+    <Options>
+        <DirectAdd>true</DirectAdd>
+    </Options>
 </ElementType>

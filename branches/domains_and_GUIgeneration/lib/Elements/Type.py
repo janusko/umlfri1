@@ -19,6 +19,7 @@ class CElementType(object):
         self.generatename = True
         self.domain = None
         self.counter = 0
+        self.options = {}
     
     def SetDomain(self, domain):
         '''
@@ -33,6 +34,12 @@ class CElementType(object):
         @rtype: L{CDomainType<lib.Domains.Type.CDomainType>}
         '''
         return self.domain
+    
+    def AppendOptions(self, name, value):
+        self.options[name] = value
+    
+    def GetOptions(self):
+        return self.options
     
     def GenerateName(self):
         '''
@@ -131,3 +138,12 @@ class CElementType(object):
         @return: size as tuple {width, height)
         '''
         return self.appearance.GetSize(context)
+    
+    def HasVisualAttribute(self, name):
+        '''
+        @note: This is fake function for interface compatibility reasons
+        
+        @return: True if name points to anything but "text" domain attribute
+        @rtype: bool
+        '''
+        return self.GetDomain().GetAttribute(name)['type'] != 'text'

@@ -48,4 +48,6 @@
             </Rectangle>
         </Shadow>
     </Appearance>
+    <Options>
+    </Options>
 </ElementType>

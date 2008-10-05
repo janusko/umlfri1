@@ -88,8 +88,11 @@ class CElementFactory(object):
                 for j in element:
                     tmp = j
                 obj.SetAppearance(self.__LoadAppearance(tmp))
-            else:
-                raise FactoryError('XMLError', en)
+            elif element.tag == METAMODEL_NAMESPACE+'Options':
+                for item in element:
+                    name = item.tag.split('}')[1]
+                    value = item.text
+                    obj.AppendOptions(name, value)
         
         self.types[root.get('id')] = obj
     

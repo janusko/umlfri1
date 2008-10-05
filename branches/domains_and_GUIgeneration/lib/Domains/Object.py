@@ -24,12 +24,22 @@ class CDomainObject(object):
         for id in self.type.IterAttributesID():
             self.values[id] = self.type.GetDefaultValue(id)
     
-    def GetType(self):
+    def GetType(self, id=''):
         '''
         @return: logical type of current object
         @rtype: L{CDomainType<Type.CDomainType>}
         '''
-        return self.type
+        if id == '':
+            return self.type
+        elif id.find('.') == -1:
+            ext = ''
+        else:
+            id, ext = id.split('.', 1)
+        if not self.type.IsAtomic(id):
+            return self.GetValue(id).GetType(ext)
+        else:
+            raise DomainObjectError('Attribute "%s" is atomic'%id)
+            
     
     def GetValue(self, id):
         '''
@@ -44,10 +54,31 @@ class CDomainObject(object):
         @param id: field identifier
         @type id: str
         '''
-        if not id in self.values:
+        try:
+            if id.find('.') > -1:
+                id, ext = id.split('.', 1)
+                if self.GetType().IsAtomic(id = id):
+                    raise DomainObjectError('Attribute "%s" is atomic and '
+                    "'doesn't have properties"%id)
+                return self.values[id].GetValue(ext)
+            else:
+                return self.values[id]
+        except KeyError:
             raise DomainObjectError('Identifier "%s" unknown'%(id, ))
-        
-        return self.values[id]
+    
+    def GetDomainName(self, id):
+        try:
+            if id == '':
+                return self.type.GetName()
+            elif id.find('.') > -1:
+                id, ext = id.split('.', 1)
+                if self.GetType().IsAtomic(id = id):
+                    raise DomainObjectError('Attribute "%s" is atomic'%id)
+                return self.values[id].GetDomain(ext)
+            else:
+                return self.type.GetAttribute(id)['type']
+        except KeyError:
+            raise DomainObjectError('Identifier "%s" unknown'%(id, ))
     
     def SetValue(self, id, value):
         '''
@@ -73,10 +104,17 @@ class CDomainObject(object):
         doesn't correspond to definition
         '''
         
-        if not id in self.values:
+        try:
+            if id.find('.') > -1:
+                id, ext = id.split('.', 1)
+                if self.GetType().IsAtomic(id = id):
+                    raise DomainObjectError('Attribute "%s" is atomic and '
+                    "'doesn't have properties"%id)
+                self.values[id].SetValue(ext, value)
+            else:
+                self.values[id] = self.type.TransformValue(id, value)
+        except KeyError:
             raise DomainObjectError('Identifier "%s" unknown'%(id, ))
-        
-        self.values[id] = self.type.TransformValue(id, value)
     
     def GetSaveInfo(self):
         '''

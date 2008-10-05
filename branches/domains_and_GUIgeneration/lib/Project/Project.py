@@ -146,15 +146,15 @@ class CProject(object):
         def SaveDomainObjectInfo(data, name=None):
             '''
             '''
-            if type(data) is dict:
+            if isinstance(data, dict):
                 element = etree.Element(UMLPROJECT_NAMESPACE+'dict')
                 for key, value in data.iteritems():
                     element.append(SaveDomainObjectInfo(value, key))
-            elif type(data) is list:
+            elif isinstance(data, list):
                 element = etree.Element(UMLPROJECT_NAMESPACE+'list')
                 for value in data:
                     element.append(SaveDomainObjectInfo(value))
-            elif type(data) in (str, unicode):
+            elif isinstance(data, (str, unicode)):
                 element = etree.Element(UMLPROJECT_NAMESPACE+'text')
                 element.text = data
             else:
@@ -228,7 +228,7 @@ class CProject(object):
         
         for object in elements:
             objectNode = etree.Element(UMLPROJECT_NAMESPACE+'object', type=unicode(object.GetType().GetId()), id=unicode(id(object)))
-            objectNode.append(SaveDomainObjectInfo(object.GetDomainObject().GetSaveInfo()))
+            objectNode.append(SaveDomainObjectInfo(object.GetSaveInfo()))
             objectsNode.append(objectNode)
             
         rootNode.append(objectsNode)
@@ -243,14 +243,14 @@ class CProject(object):
         rootNode.append(projtreeNode)
         
         for type in self.ElementFactory.IterTypes():
-            counterNode.append(etree.Element(UMLPROJECT_NAMESPACE+'count', id = type.GetID(), value = type.GetCounter()))
+            counterNode.append(etree.Element(UMLPROJECT_NAMESPACE+'count', id = type.GetId(), value = unicode(type.GetCounter())))
         
         rootNode.append(counterNode)
         
-        #xml tree is validate with xsd schema (recentfile.xsd)
-        if HAVE_LXML:
-            if not xmlschema.validate(rootNode):
-                raise XMLError(xmlschema.error_log.last_error)
+        #~ #xml tree is validate with xsd schema (recentfile.xsd)
+        #~ if HAVE_LXML:
+            #~ if not xmlschema.validate(rootNode):
+                #~ raise XMLError(xmlschema.error_log.last_error)
 
         #make human-friendly tree
         Indent(rootNode)
@@ -349,7 +349,7 @@ class CProject(object):
                     if subelem.tag == UMLPROJECT_NAMESPACE+'object':
                         id = subelem.get("id")
                         object = CElementObject(self.ElementFactory.GetElement(subelem.get("type")))
-                        object.GetDomainObject().SetSaveInfo(LoadDomainObjectInfo(subelem[0]))
+                        object.SetSaveInfo(LoadDomainObjectInfo(subelem[0]))
                         ListObj[id] = object
 
             elif element.tag == UMLPROJECT_NAMESPACE+'connections':
@@ -370,7 +370,7 @@ class CProject(object):
             
             elif element.tag == UMLPROJECT_NAMESPACE + 'counters':
                 for item in element:
-                    self.ElementFactory.GetType(item.get('id')).SetCounter(int(item.get('value')))
+                    self.ElementFactory.GetElement(item.get('id')).SetCounter(int(item.get('value')))
         
     Root = property(GetRoot, SetRoot)
     

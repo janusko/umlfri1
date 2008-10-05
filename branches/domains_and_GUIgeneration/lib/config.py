@@ -1,4 +1,4 @@
-from Depend.etree import etree, HAVE_LXML
+from Depend.etree import etree, HAVE_LXML, XMLSyntaxError
 
 import consts
 import os.path
@@ -10,12 +10,12 @@ from Exceptions import XMLError
 import sys
 
 def expanduser(path):
-	if path[0] == '~':
-		return os.path.expanduser('~').decode(sys.getfilesystemencoding()) + path[1:]
-	return path
+    if path[0] == '~':
+        return os.path.expanduser('~').decode(sys.getfilesystemencoding()) + path[1:]
+    return path
 
 def path_type(val):
-    val = val.decode('utf-8').replace(u'\xFF', consts.ROOT_PATH)
+    val = val.replace(u'\xFF', consts.ROOT_PATH)
     val = os.path.abspath(expanduser(val))
     if os.path.isdir(val):
         val += os.sep
@@ -109,7 +109,7 @@ class CConfig(object):
                     if not self.xmlschema.validate(tree):
                         raise ConfigError, ("XMLError", self.xmlschema.error_log.last_error)
                 self.cfgs.update(self.__Load(tree))
-        except (etree.XMLSyntaxError, ConfigError):
+        except (XMLSyntaxError, ConfigError):
             print 'WARNING: Your local config file is malformed. Personal settings will be ignored'
             
 

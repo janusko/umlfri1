@@ -125,12 +125,28 @@ class CElementObject(object):
     
     def GetSize(self, context):
         return self.type.GetSize(context)
-        
-    def GetDomainObject(self):
-        return self.domainobject
     
+    def GetDomainName(self, key=''):
+        return self.domainobject.GetDomainName(key)
+    
+    def GetDomainType(self, key=''):
+        return self.domainobject.GetType(key)
+    
+    def GetValue(self, key):
+        return self.domainobject.GetValue(key)
+    
+    def SetValue(self, key, value):
+        self.domainobject.SetValue(key, value)
+        self.revision += 1
+        
+    def GetSaveInfo(self):
+        return self.domainobject.GetSaveInfo()
+    
+    def SetSaveInfo(self, value):
+        return self.domainobject.SetSaveInfo(value)
+        
     def GetName(self):
-        return self.GetDomainObject().GetValue('name')
+        return self.domainobject.GetValue('name')
     
     def GetVisualProperty(self, key):
         if key == 'CHILDREN':
@@ -144,50 +160,9 @@ class CElementObject(object):
                 o['name'] = vi.GetObject().GetName()
                 v.append(o)
             return v
-        attr = self.type.GetVisAttr(key)
-        type = self.type.GetAttribute(attr)
-        val = self.attribs[attr]
-        if type[0] == 'attrs':
-            v = []
-            for vi in val:
-                s = ''
-                o = {}
-                if vi['scope'] == 'private':
-                    o['scope'] = '-'
-                elif vi['scope'] == 'public':
-                    o['scope'] = '+'
-                elif vi['scope'] == 'protected':
-                    o['scope'] = '#'
-                l = vi['name']
-                if 'type' in vi and vi['type']:
-                    l += ": "+vi['type']
-                if 'initial' in vi and vi['initial']:
-                    l += " = "+vi['initial']
-                o['line'] = l
-                v.append(o)
-            val = v
-        elif type[0] == 'opers':
-            v = []
-            for vi in val:
-                s = ''
-                o = {}
-                if vi['scope'] == 'private':
-                    o['scope'] = '-'
-                elif vi['scope'] == 'public':
-                    o['scope'] = '+'
-                elif vi['scope'] == 'protected':
-                    o['scope'] = '#'
-                l = vi['name']
-                l += "("
-                if 'params' in vi and vi['params']:
-                    l += vi['params']
-                l += ")"
-                if 'type' in vi and vi['type']:
-                    l += ": "+vi['type']
-                o['line'] = l
-                v.append(o)
-            val = v
-        return val
+        
+        else:
+            return self.domainobject.GetValue(key)
 
     def Paint(self, context):
         self.type.Paint(context)

@@ -32,6 +32,7 @@
 				</xs:element>
 				<!--<xs:element name="Attributes" type="AttributesType" minOccurs="0"/>-->
 				<xs:element name="Appearance" type="SimpleObjectContainer"/>
+				<xs:element name="Options" type="OptionType" minOccurs="0"/>
 			</xs:sequence>
 			<xs:attribute name="id" type="xs:string" use="required"/>
 		</xs:complexType>
@@ -421,4 +422,9 @@
 			</xs:element>
 		</xs:choice>
 	</xs:group>
+	<xs:complexType name="OptionType">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="DirectAdd" type="xs:boolean" default="false"/>
+		</xs:choice>
+	</xs:complexType>
 </xs:schema>
