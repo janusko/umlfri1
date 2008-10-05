@@ -1,7 +1,7 @@
 try:
     # lxml
     from lxml import etree
-    from etree import XMLSyntaxError
+    from lxml.etree import XMLSyntaxError
     HAVE_LXML = True
 except ImportError:
     HAVE_LXML = False
@@ -13,7 +13,7 @@ except ImportError:
         try:
             # Python 2.5
             import xml.etree.ElementTree as etree
-            import xml.parsers.expat.ExpatError as XMLSyntaxError
+            from xml.parsers.expat import ExpatError as XMLSyntaxError
         except ImportError:
             etree = None
 
