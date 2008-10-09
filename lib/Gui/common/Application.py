@@ -110,7 +110,7 @@ class CApplication(gobject.GObject):
                     __builtins__._ = lambda text: text
             
             if self.localespath is not None:
-                gtk.glade.bindtextdomain(self.textdomain, self.localespath)
+                gtk.glade.bindtextdomain(self.textdomain, self.localespath.encode(sys.getfilesystemencoding()))
             gtk.glade.textdomain(self.textdomain)
         
         self.wTrees = {}
