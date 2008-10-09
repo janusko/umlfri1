@@ -282,7 +282,7 @@ msgstr ""
 msgid "Open as _copy"
 msgstr ""
 
-msgid "Open specificetion ..."
+msgid "Open specification ..."
 msgstr ""
 
 msgid "Operation"
