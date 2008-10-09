@@ -19,9 +19,9 @@ from lib.Project import CRecentFiles
 from lib.Gui import CfrmSplash, CfrmMain, CfrmAbout, CfrmProperties, CfrmAttribute, CfrmOperation, CfrmOpen, CfrmSave, CfrmOptions, CfrmException
 
 from lib.config import config
-from lib.consts import SPLASH_TIMEOUT
+from lib.consts import SPLASH_TIMEOUT,GLOBAL_VERSION
 
-__version__ = '1.0-beta'
+__version__ = GLOBAL_VERSION
 
 class Application(CApplication):
     windows = (CfrmSplash, CfrmMain, CfrmAbout, CfrmProperties, CfrmAttribute, CfrmOperation, CfrmOpen, CfrmSave, CfrmOptions, CfrmException)

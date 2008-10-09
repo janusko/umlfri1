@@ -21,7 +21,6 @@ class CDiagram:
             name = "New " + type.GetId()
         self.name = name
         
-        
     def GetHScrollingPos(self):
         return self.scrollingPos[0]
     
@@ -467,6 +466,16 @@ class CDiagram:
             if posY < y_min:
                 y_min = posY
         for connection in self.connections:
+            #posX, posY = connection.GetSquare(canvas, True)[1]
+            #if posX > x_max:
+                #x_max = posX
+            #if posY > y_max:
+                #y_max = posY
+            #if posX < x_min:
+                #x_min = posX
+            #if posY < y_min:
+                #y_min = posY
+                    
             for point in connection.GetMiddlePoints():
                 posX, posY = point
                 if posX > x_max:
@@ -477,5 +486,6 @@ class CDiagram:
                     x_min = posX
                 if posY < y_min:
                     y_min = posY
+                  
         return ((int(x_min),int(y_min)),(int(x_max), int(y_max)))
 

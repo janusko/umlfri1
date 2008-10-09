@@ -129,7 +129,7 @@ class CConnection(CCacheableObject, CSelectableObject):
         else:
             return None
             
-    def GetSquare(self, canvas, inlcudeLabels=False):
+    def GetSquare(self, canvas, includeLabels=False):
         '''get absolute positoin of minimal rectangle to which fits connection
         
         @param canvas: Canvas on which its being drawn

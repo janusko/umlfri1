@@ -24,8 +24,11 @@ def event(obj, *args):
                     try:
                         return fnc(self, *args, **kw_args)
                     except :
-                        displayTraceback(self.application)
-                        raise
+                        if lib.consts.ERROR_TO_CONSOLE == True:
+                            raise # reraise the exception
+                        else: 
+                            displayTraceback(self.application)
+                        
                 else:
                     try:
                         return fnc(self, *args, **kw_args)
