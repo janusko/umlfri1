@@ -77,6 +77,9 @@ class CCairoCanvas(CAbstractCanvas):
     def SetScale(self, scale):
             self.scale = scale
 
+    def GetScale(self):
+            return float(self.scale)
+
     def SetAlpha(self, alpha):
         if alpha >= 0.0 and alpha <= 1.0:
             self.alpha = alpha

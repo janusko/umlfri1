@@ -14,7 +14,7 @@ class CfrmAbout(CWindow):
         s, e = buff.get_bounds()
         buff.delete(s,e)
         # set the about info
-        text = _('<span size="xx-large">UML. FRI</span>\n<b>Version 1.0 beta</b>\n\nFree python-based CASE tool.')
+        text = _('<span size="xx-large">UML. FRI</span>\n<b>Version ') + lib.consts.GLOBAL_VERSION + _('</b>\n\nFree python-based CASE tool.')
         self.lblAboutUmlfri.set_use_markup(True)
         self.lblAboutUmlfri.set_label(text)
         # set credits
@@ -44,12 +44,8 @@ class CfrmAbout(CWindow):
  
         for line in lines:
             if ((line[0].isspace() == False) or (line.strip().startswith('Academic'))):
-                buff.insert_with_tags_by_name(iter, line,     "bold")
+                buff.insert_with_tags_by_name(iter, line, "bold")
             else: buff.insert(iter, line)
-
-
-
-
 
 
 
