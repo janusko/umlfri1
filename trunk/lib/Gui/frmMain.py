@@ -4,7 +4,7 @@ import common
 import lib.consts
 import os.path
 from lib.Drawing import CElement, CDiagram
-from lib.Elements import CElementObject
+from lib.Elements import CElementObject, CElementType
 from dialogs import CWarningDialog, CQuestionDialog, ECancelPressed
 from tbToolBox import CtbToolBox
 from twProjectView import CtwProjectView
@@ -438,7 +438,27 @@ class CfrmMain(CWindow):
     def ActionLoadToolBar(self, widget):
         pass
 
-    # own signals
+    # User defined signals
+    @event("twProjectView", "add-element")
+    @event("mnuItems", "add-element")
+    def on_directAdd_element(self, widget, element):
+        """
+        Add element into a project tree
+        
+        @param widget:  Widget
+        @type widget:   CWidget
+        
+        @param element: Id (name) of added element
+        @type element:  String
+        """
+        parentElement = self.twProjectView.GetSelectedNode()
+        if parentElement == None:
+            parentElement = self.twProjectView.GetRootNode()
+
+        ElementType = self.application.GetProject().GetElementFactory().GetElement(element)
+        ElementObject = CElementObject(ElementType)
+        self.twProjectView.AddElement(ElementObject, None, parentElement)
+
     @event("picDrawingArea", "add-element")
     def on_add_element(self, widget, Element, diagram, parentElement):
         self.twProjectView.AddElement(Element, diagram, parentElement)
