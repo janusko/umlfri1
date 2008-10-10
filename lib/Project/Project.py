@@ -77,7 +77,7 @@ class CProject(object):
         i,j = k.split(':')
         
         if i == self.root.GetName() and j == self.root.GetType() and len(path.split('/')) == 1:
-            return root        
+            return self.root
         
         if i == self.root.GetName() and j == self.root.GetType():
             for i in path.split('/')[1:]:

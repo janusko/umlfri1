@@ -35,15 +35,19 @@ class CElementFactory(object):
         for file in storage.listdir(self.path):
             if file.endswith('.xml'):
                 self.__Load(os.path.join(self.path, file))
-
-    def GetElement(self, type):
+                
+    
+    def GetElement(self, type=None):
         """
-        Get element type by name
+        Get element type by name. If name is None, that return value is dictionary of all elements
         
         @param type: Element type name
         @type  type: string
         """
-        return self.types[type]
+        if type == None:
+            return self.types
+        else:
+            return self.types[type]
 
     def __Load(self, file_path):
         """

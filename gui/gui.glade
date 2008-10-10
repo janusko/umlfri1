@@ -152,6 +152,33 @@
                         </child>
                       </widget>
                     </child>
+                    <child>
+                      <widget class="GtkImageMenuItem" id="mItemAddElement">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Add _element</property>
+                        <property name="use_underline">True</property>
+                        <child>
+                          <widget class="GtkMenu" id="mItemAddElement_menu">
+                            <property name="visible">True</property>
+                            <child>
+                              <widget class="GtkMenuItem" id="menuitem2">
+                                <property name="visible">True</property>
+                                <property name="sensitive">False</property>
+                                <property name="label" translatable="yes">none</property>
+                                <property name="use_underline">True</property>
+                              </widget>
+                            </child>
+                          </widget>
+                        </child>
+                        <child internal-child="image">
+                          <widget class="GtkImage" id="menu-item-image26">
+                            <property name="visible">True</property>
+                            <property name="stock">gtk-add</property>
+                            <property name="icon_size">1</property>
+                          </widget>
+                        </child>
+                      </widget>
+                    </child>
                   </widget>
                 </child>
               </widget>
@@ -2781,6 +2808,33 @@ String</property>
         </child>
         <child internal-child="image">
           <widget class="GtkImage" id="image53">
+            <property name="visible">True</property>
+            <property name="stock">gtk-add</property>
+            <property name="icon_size">1</property>
+          </widget>
+        </child>
+      </widget>
+    </child>
+    <child>
+      <widget class="GtkImageMenuItem" id="mTreeAddElement">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">Add element</property>
+        <property name="use_underline">True</property>
+        <child>
+          <widget class="GtkMenu" id="mnuTreeAddElement">
+            <property name="visible">True</property>
+            <child>
+              <widget class="GtkMenuItem" id="menuitem1">
+                <property name="visible">True</property>
+                <property name="sensitive">False</property>
+                <property name="label" translatable="yes">none</property>
+                <property name="use_underline">True</property>
+              </widget>
+            </child>
+          </widget>
+        </child>
+        <child internal-child="image">
+          <widget class="GtkImage" id="menu-item-image25">
             <property name="visible">True</property>
             <property name="stock">gtk-add</property>
             <property name="icon_size">1</property>
