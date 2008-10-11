@@ -27,6 +27,8 @@ if HAVE_LXML:
 
 
 class CProject(object):
+    SaveVersion = '1.0' # save file format version
+    
     def __init__(self):
         self.root = None
         
@@ -36,6 +38,8 @@ class CProject(object):
         self.ConnectionFactory = CConnectionFactory(self.Storage, CONNECTIONS_PATH)
         self.VersionFactory = CVersionFactory(self.Storage, VERSIONS_PATH)
         self.version = self.VersionFactory.GetVersion('UML 1.4')
+        self.MetamodelVersion = '1.4.0'
+        self.MetamodelUri = 'http://umlfri.kst.fri.uniza.sk/metamodel/uml.frim'
         
         self.filename = None
     
@@ -196,11 +200,22 @@ class CProject(object):
         
         elements, connections = self.searchCE(self.root)
         
-        rootNode = etree.XML('<umlproject xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/umlproject.xsd"></umlproject>')
+        rootNode = etree.XML('<umlproject saveversion="%s" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/umlproject.xsd"></umlproject>'%self.SaveVersion)
         
+        metamodelNode = etree.Element(UMLPROJECT_NAMESPACE+'metamodel')
         objectsNode = etree.Element(UMLPROJECT_NAMESPACE+'objects')
         connectionsNode = etree.Element(UMLPROJECT_NAMESPACE+'connections')
         projtreeNode = etree.Element(UMLPROJECT_NAMESPACE+'projecttree')
+        
+        # metamodel informations
+        metamodelUriNode = etree.Element(UMLPROJECT_NAMESPACE+'uri')
+        metamodelUriNode.text = self.MetamodelUri
+        metamodelVersionNode = etree.Element(UMLPROJECT_NAMESPACE+'version')
+        metamodelVersionNode.text = self.MetamodelVersion
+        
+        metamodelNode.append(metamodelUriNode)
+        metamodelNode.append(metamodelVersionNode)
+        rootNode.append(metamodelNode)
         
         for object in elements:
             objectNode = etree.Element(UMLPROJECT_NAMESPACE+'object', type=unicode(object.GetType().GetId()), id=unicode(id(object)))
