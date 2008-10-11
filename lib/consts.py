@@ -41,13 +41,11 @@ CONFIG_NAMESPACE = '{http://umlfri.kst.fri.uniza.sk/xmlschema/config.xsd}'
 # UML. FRI server - web page, mail address and address for error logs
 WEB = 'http://umlfri.kst.fri.uniza.sk/'
 MAIL = 'projekt@umlfri.kst.fri.uniza.sk'
-ERROR_LOG_ADDRESS = 'http://127.0.0.1/log.php'  # yea, i know its localhost... stay tuned, update comming soon... ;)
+ERROR_LOG_ADDRESS = 'http://127.0.0.1/errors/log.php'  # yea, i know its localhost... stay tuned, update comming soon... ;)
 
 DEBUG = True                    # turn DEBUG to true for some more information, e.g. user exceptions will be shown with traceback
 ERROR_TO_CONSOLE = False        # only if DEBUG is true, instead of showing the exception in a window it will be printed to console
  
-GLOBAL_VERSION = '1.0-beta5'    # UML. version
-
 LABELS_CLICKABLE = True         # used to ignore labels at drawing area
 
 # options for zoom 

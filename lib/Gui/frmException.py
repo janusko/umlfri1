@@ -92,7 +92,7 @@ class CfrmException(CWindow):
             ### sending....testing ###
             try:
                 file_to_send = open(log_tar_path, 'r')            
-                string_to_send = file_to_send.read().encode('uu_codec')
+                string_to_send = file_to_send.read().encode('base64_codec')
                 file_to_send.close()
                 
                 values = {'upfile' : string_to_send}
@@ -154,14 +154,14 @@ class CfrmException(CWindow):
             buff.create_tag("mono", family="monospace")
 
         for filename, line_num, fun_name, text in traceback.extract_tb(tb)[1:]:
-            buff.insert_with_tags_by_name(iter, _('\nFile '), "bold")
+            buff.insert_with_tags_by_name(iter, _('File '), "bold")
             buff.insert_with_tags_by_name(iter, filename,      "mono")
             buff.insert_with_tags_by_name(iter, _(' line '),   "bold")
             buff.insert_with_tags_by_name(iter, str(line_num), "mono")
             buff.insert_with_tags_by_name(iter, _(' in '),     "bold")
-            buff.insert_with_tags_by_name(iter, (fun_name or "") + '\n' + (text or "") + '\n', "mono")
+            buff.insert_with_tags_by_name(iter, (fun_name or "") + '\n  ' + (text or "") + '\n\n', "mono")
         #name and error
-        buff.insert_with_tags_by_name(iter, '\n' + exctype.__name__  + ': ', "bold")
+        buff.insert_with_tags_by_name(iter, exctype.__name__  + ': ', "bold")
         buff.insert_with_tags_by_name(iter, str(value), "mono")
 
 
