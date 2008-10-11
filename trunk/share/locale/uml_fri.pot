@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: UML .FRI 1.0-beta\n"
+"Project-Id-Version: UML .FRI __version__ = GLOBAL_VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-31 17:48+0200\n"
+"POT-Creation-Date: 2008-10-10 20:29+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -57,14 +57,18 @@ msgstr ""
 msgid " line "
 msgstr ""
 
+msgid ""
+"</b>\n"
+"\n"
+"Free python-based CASE tool."
+msgstr ""
+
 msgid "<b>project e-mail address</b>"
 msgstr ""
 
 msgid ""
-"<span size=\"xx-large\">UML.fri</span>\n"
-"<b>Version 1.0 beta</b>\n"
-"\n"
-"Free python-based CASE tool."
+"<span size=\"xx-large\">UML. FRI</span>\n"
+"<b>Version "
 msgstr ""
 
 msgid "About"
@@ -73,7 +77,13 @@ msgstr ""
 msgid "Abstract"
 msgstr ""
 
+msgid "Add _element"
+msgstr ""
+
 msgid "Add diagram"
+msgstr ""
+
+msgid "Add element"
 msgstr ""
 
 msgid "All files"
@@ -124,9 +134,6 @@ msgstr ""
 msgid "Close diagram"
 msgstr ""
 
-msgid "Commandbar"
-msgstr ""
-
 msgid "Connection"
 msgstr ""
 
@@ -172,6 +179,9 @@ msgstr ""
 msgid "Element"
 msgstr ""
 
+msgid "Element is already in this diagram"
+msgstr ""
+
 msgid "Elements"
 msgstr ""
 
@@ -200,8 +210,9 @@ msgid "File name"
 msgstr ""
 
 msgid ""
-"File successfully saved as:\n"
+"File successfully send...\n"
 "\n"
+"Thank you for helping improving UML. FRI"
 msgstr ""
 
 msgid "Fill color"
@@ -220,9 +231,6 @@ msgid "Find in diagrams"
 msgstr ""
 
 msgid "Find in diagrams ..."
-msgstr ""
-
-msgid "Fullscreen"
 msgstr ""
 
 msgid "Gui"
@@ -303,7 +311,7 @@ msgstr ""
 msgid "Paths"
 msgstr ""
 
-msgid "Please help us improve the UML.FRI application by sending us this log."
+msgid "Please help us improve the UML. FRI application by sending us this log."
 msgstr ""
 
 msgid "Points color"
@@ -346,9 +354,6 @@ msgid "Return Type:"
 msgstr ""
 
 msgid "Root"
-msgstr ""
-
-msgid "Save Error log"
 msgstr ""
 
 msgid "Save Project As"
@@ -405,13 +410,13 @@ msgstr ""
 msgid "Text color"
 msgstr ""
 
-msgid "Text files"
-msgstr ""
-
 msgid "Text font"
 msgstr ""
 
-msgid "Toolbox"
+msgid ""
+"This is just a test for the Exception handler window.\n"
+"You will see this window if something really bad happens.\n"
+"See the Help tab for more info."
 msgstr ""
 
 msgid "Type"
@@ -439,45 +444,51 @@ msgstr ""
 msgid "UML .FRI designer [%s]"
 msgstr ""
 
-msgid "UML.fri"
-msgstr ""
-
 msgid ""
-"UML.fri is free software; you can redistribute it and/or modify it under the "
-"terms of the GNU General Public License as published by the Free Software "
-"Foundation; either version 2 of the License, or (at your option) any later "
-"version.\n"
+"UML. FRI is free software; you can redistribute it and/or modify it under "
+"the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2 of the License, or (at your option) "
+"any later version.\n"
 "\n"
-"UML.fri is distributed in the hope that it will be useful, but WITHOUT ANY "
+"UML. FRI is distributed in the hope that it will be useful, but WITHOUT ANY "
 "WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
 "FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
 "details.\n"
 "\n"
 "You should have received a copy of the GNU General Public License along with "
-"UML.fri; if not, write to the Free Software Foundation, Inc., 51 Franklin "
+"UML. FRI; if not, write to the Free Software Foundation, Inc., 51 Franklin "
 "Street, Fifth Floor, Boston, MA 02110-1301, USA."
 msgstr ""
 
-msgid "UML.fri website"
+msgid "UML.fri"
 msgstr ""
 
 msgid "Unable to insert element"
 msgstr ""
 
 msgid ""
-"Use the <i>Report</i> button to post this error directly on our website, or "
-"use the <i>Save</i> button to save the error log with your basic system "
-"information to a file. If the <i>Include project</i> option is chcecked Your "
-"current project will be added to this text file as well. You can also write "
-"some some basic information about what were You doing when this exception "
-"occured in the <i>User comments</i> tab to help us recreate it. Please send "
-"us the saved text file to our project e-mail address:"
+"Use the <i>Send</i> button to send this error information directly on our "
+"server. If the <i>Include project</i> option is chcecked Your current "
+"project will be send to the server as well. You can also write some some "
+"basic information about what were You doing when this exception occured in "
+"the <i>User comments</i> tab to help us recreate it. Or You can use the "
+"<i>Report</i> button to post this error directly on our websites bugreport. "
+"In case of some problems, feel free to write us an email on :"
 msgstr ""
 
 msgid "User config"
 msgstr ""
 
 msgid "User dir"
+msgstr ""
+
+msgid "Uups! An error during sending occured:\n"
+msgstr ""
+
+msgid ""
+"Uups! Sending was not successfull.\n"
+"Server response:\n"
+" "
 msgstr ""
 
 msgid "Value"
@@ -513,6 +524,24 @@ msgstr ""
 msgid "Z-Order"
 msgstr ""
 
+msgid "Zoom _In"
+msgstr ""
+
+msgid "Zoom _Out"
+msgstr ""
+
+msgid "_Actual Size"
+msgstr ""
+
+msgid "_Add diagram"
+msgstr ""
+
+msgid "_Best Fit"
+msgstr ""
+
+msgid "_Commandbar"
+msgstr ""
+
 msgid "_Diagram"
 msgstr ""
 
@@ -522,10 +551,19 @@ msgstr ""
 msgid "_Element"
 msgstr ""
 
+msgid "_Error Test"
+msgstr ""
+
 msgid "_Error log"
 msgstr ""
 
+msgid "_Export diagram"
+msgstr ""
+
 msgid "_File"
+msgstr ""
+
+msgid "_Fullscreen"
 msgstr ""
 
 msgid "_Help"
@@ -541,6 +579,15 @@ msgid "_Project"
 msgstr ""
 
 msgid "_Report"
+msgstr ""
+
+msgid "_Send"
+msgstr ""
+
+msgid "_Toolbox"
+msgstr ""
+
+msgid "_UML. FRI Homepage"
 msgstr ""
 
 msgid "_User comments"
@@ -564,7 +611,7 @@ msgstr ""
 msgid "gtk-preferences"
 msgstr ""
 
-msgid "gtk-save"
+msgid "none"
 msgstr ""
 
 msgid "project web"

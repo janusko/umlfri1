@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- edited with XMLSpy v2008 (http://www.altova.com) by Papi Raton (Pirate Bay) -->
 <!-- (c) UML.FRI -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/umlproject.xsd" targetNamespace="http://umlfri.kst.fri.uniza.sk/xmlschema/umlproject.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:element name="umlproject">
