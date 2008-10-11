@@ -3,6 +3,7 @@
     <Icon path="icons/vertical_line.png" />
     <Connections>
         <Item value="StateTransition" />
+        <Item value="ActivityFlow"/>
     </Connections>
     <Attributes>
         <Item value="Name" type="str" propid="name" notgenerate="true" />

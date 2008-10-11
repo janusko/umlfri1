@@ -2,7 +2,8 @@
 <ElementType id="StartState" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
     <Icon path="icons/initial.png" />
     <Connections>
-        <Item value="StateTransition"/>
+        <Item value="StateTransition" with="State"/>
+        <Item value="ActivityFlow" with="Activity"/>
     </Connections>
     <Attributes>
         <Item value="Name" type="str" propid="name" notgenerate="true"/>
