@@ -738,6 +738,15 @@ class CpicDrawingArea(CWidget):
         else:
             points = self.__NewConnection[1]
         points = [self.GetRelativePos(point) for point in points]
+
+        # zoom adjust
+        hbar, vbar = self.picHBar.get_value(),self.picVBar.get_value()
+        sx, sy = self.canvas.ToPhysical((hbar, vbar))     
+        zoom_points=[]
+        for i in range(len(points)):
+            zoom_points.append((points[i][0]+ sx - hbar,  points[i][1]+ sy - vbar) )
+        points = zoom_points
+
         if x is not None:
             points.append((int(x), int(y)))
         if erase:
