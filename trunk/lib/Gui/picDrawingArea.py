@@ -666,21 +666,21 @@ class CpicDrawingArea(CWidget):
                 self.__oldpos = x1, y1
 
     def __DrawResRect(self, pos, erase = True, draw = True):
-	# zoom adjust
+        # zoom adjust
         hbar, vbar = self.picHBar.get_value(),self.picVBar.get_value()
         sx, sy = self.canvas.ToPhysical((hbar, vbar))
         if erase:
             x1 = self.DragRect[0][0] + sx - hbar
-	    y1 = self.DragRect[0][1] + sy - vbar            
-	    x2,y2 = self.canvas.ToPhysical(self.DragRect[1])
+            y1 = self.DragRect[0][1] + sy - vbar            
+            x2,y2 = self.canvas.ToPhysical(self.DragRect[1])
             self.picDrawingArea.window.draw_rectangle(self.DragGC, False, x1, y1, x2, y2)
         if draw:
-	    delta = self.__GetDelta(pos, True)
+            delta = self.__GetDelta(pos, True)
             rect = self.selElem.GetResizedRect(self.canvas, delta, self.selSq)
             rect = self.GetRelativePos(rect[0]), rect[1]
             x1 = rect[0][0] + sx - hbar
             y1 = rect[0][1] + sy - vbar
-	    x2,y2 = self.canvas.ToPhysical(rect[1])
+            x2,y2 = self.canvas.ToPhysical(rect[1])
             self.picDrawingArea.window.draw_rectangle(self.DragGC, False, x1, y1, x2, y2)
             self.DragRect = rect
 
