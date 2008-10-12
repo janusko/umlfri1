@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2008 sp1 (http://www.altova.com) by BlueWay (Bananix) -->
 <!-- (c) UML.FRI -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/umlproject.xsd" targetNamespace="http://umlfri.kst.fri.uniza.sk/xmlschema/umlproject.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:element name="umlproject">
@@ -21,19 +22,9 @@
 							<xs:element name="object" minOccurs="0" maxOccurs="unbounded">
 								<xs:complexType>
 									<xs:complexContent>
-										<xs:extension base="objectType">
+										<xs:extension base="optionType">
 											<xs:sequence>
-												<xs:element name="property" maxOccurs="unbounded">
-													<xs:complexType>
-														<xs:complexContent>
-															<xs:extension base="propertyType">
-																<xs:sequence>
-																	<xs:element name="item" type="itemType" minOccurs="0" maxOccurs="unbounded"/>
-																</xs:sequence>
-															</xs:extension>
-														</xs:complexContent>
-													</xs:complexType>
-												</xs:element>
+												<xs:element name="dict" type="dictType"/>
 											</xs:sequence>
 										</xs:extension>
 									</xs:complexContent>
@@ -50,7 +41,7 @@
 									<xs:complexContent>
 										<xs:extension base="connectionType">
 											<xs:sequence>
-												<xs:element name="property" type="propertyType" minOccurs="0" maxOccurs="unbounded"/>
+												<xs:element name="dict" type="dictType"/>
 											</xs:sequence>
 										</xs:extension>
 									</xs:complexContent>
@@ -72,52 +63,17 @@
 						</xs:sequence>
 					</xs:complexType>
 				</xs:element>
+				<xs:element name="counters">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="count" type="countType" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
 			</xs:sequence>
 			<xs:attribute name="saveversion" type="xs:string" use="required"/>
 		</xs:complexType>
 	</xs:element>
-	<xs:complexType name="objectType">
-		<xs:annotation>
-			<xs:documentation>type of object elemet</xs:documentation>
-		</xs:annotation>
-		<xs:attribute name="type" type="xs:string" use="required"/>
-		<xs:attribute name="id" type="xs:integer" use="required"/>
-	</xs:complexType>
-	<xs:complexType name="propertyType">
-		<xs:annotation>
-			<xs:documentation>type of property</xs:documentation>
-		</xs:annotation>
-		<xs:attribute name="name" type="xs:string" use="required"/>
-		<xs:attribute name="type" type="xs:string" use="optional"/>
-		<xs:attribute name="value" type="xs:string"/>
-	</xs:complexType>
-	<xs:complexType name="connectionType">
-		<xs:annotation>
-			<xs:documentation>type of connection</xs:documentation>
-		</xs:annotation>
-		<xs:attribute name="type" type="xs:string" use="required"/>
-		<xs:attribute name="id" type="xs:integer" use="required"/>
-		<xs:attribute name="source" type="xs:integer" use="required"/>
-		<xs:attribute name="destination" type="xs:integer" use="required"/>
-	</xs:complexType>
-	<xs:complexType name="itemType">
-		<xs:annotation>
-			<xs:documentation>type of Item</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="property" maxOccurs="unbounded">
-				<xs:complexType>
-					<xs:complexContent>
-						<xs:extension base="propertyType">
-							<xs:sequence>
-								<xs:element name="item" type="itemType" minOccurs="0" maxOccurs="unbounded"/>
-							</xs:sequence>
-						</xs:extension>
-					</xs:complexContent>
-				</xs:complexType>
-			</xs:element>
-		</xs:sequence>
-	</xs:complexType>
 	<xs:complexType name="nodeType">
 		<xs:annotation>
 			<xs:documentation>type of Node</xs:documentation>
@@ -190,5 +146,36 @@
 		<xs:attribute name="pos" type="xs:float" use="required"/>
 		<xs:attribute name="dist" type="xs:float" use="required"/>
 		<xs:attribute name="angle" type="xs:float" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="listType">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="dict" type="dictType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="text" type="textType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:choice>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="textType" mixed="true">
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="dictType">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="list" type="listType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="text" type="textType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="dict" type="dictType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="connectionType">
+		<xs:attribute name="source" type="xs:integer" use="required"/>
+		<xs:attribute name="destination" type="xs:integer" use="required"/>
+		<xs:attribute name="type" type="xs:string" use="required"/>
+		<xs:attribute name="id" type="xs:integer" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="optionType">
+		<xs:attribute name="type" type="xs:string" use="required"/>
+		<xs:attribute name="id" type="xs:integer" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="countType">
+		<xs:attribute name="id" type="xs:string" use="required"/>
+		<xs:attribute name="value" type="xs:integer" use="required"/>
 	</xs:complexType>
 </xs:schema>
