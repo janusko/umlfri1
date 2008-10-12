@@ -39,9 +39,12 @@ class CfrmSave(common.CWindow):
                     self.form.hide()
                     return None
                 filter = self.form.get_filter().get_name()
-                filename = self.form.get_filename().decode('utf-8')
+                filename = self.form.get_filename()
                 if filename is None:
-                    continue
+                    self.form.hide()
+                    return
+                else:
+                    filename = filename.decode('utf-8')
                 if '.' not in os.path.basename(filename):
                     if filter == _("UML .FRI Projects"):
                         filename += lib.consts.PROJECT_EXTENSION

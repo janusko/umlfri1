@@ -115,7 +115,11 @@ class CfrmOpen(common.CWindow):
                         return self.ivOpenModel.get(iter, 2)[0], True # template
                 elif self.nbOpen.get_current_page() == 1:
                     copy = self.chkOpenAsCopyExisting.get_active()
-                    filename = self.fwOpenExisting.get_filename().decode('utf-8')
+                    filename = self.fwOpenExisting.get_filename()
+                    if filename is None:
+                        continue
+                    else:
+                        filename = filename.decode('utf-8')
                     if filename is not None and os.path.isfile(filename):
                         if not copy:
                             self.application.GetRecentFiles().AddFile(filename)
