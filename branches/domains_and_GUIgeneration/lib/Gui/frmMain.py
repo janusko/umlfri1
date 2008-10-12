@@ -1,13 +1,10 @@
 from lib.Depend.gtk2 import gtk
-
 from common import CWindow, event
 import common
 import lib.consts
-
 import os.path
-
 from lib.Drawing import CElement, CDiagram
-from lib.Elements import CElementObject
+from lib.Elements import CElementObject, CElementType
 from dialogs import CWarningDialog, CQuestionDialog, ECancelPressed
 from tbToolBox import CtbToolBox
 from twProjectView import CtwProjectView
@@ -46,6 +43,7 @@ class CfrmMain(CWindow):
         'mItemHelp',
         'mnuAbout',
         'mnuWebsite',
+        'mnuError',
         #############
         'mItemElement',
         'mmShift_SendBack', 'mmShift_BringForward', 'mmShift_ToBottom', 'mmShift_ToTop',
@@ -70,14 +68,13 @@ class CfrmMain(CWindow):
         
         self.ReloadTitle()
         
-        
     def SetSensitiveMenuChilds(self, MenuItem, value):
         for i in MenuItem.get_submenu().get_children():
             i.set_sensitive(value)
     
     def UpdateMenuSensitivity(self, project = None, diagram = None, element = None):
         if self.__sensitivity_project is None:
-            self.__sensitivity_project = [True, True, True]
+            self.__sensitivity_project = [True, True, True, True, True]
         changes = 0
         if project is not None:
             if not project:
@@ -101,10 +98,17 @@ class CfrmMain(CWindow):
             self.__sensitivity_project[2] = element
         else:
             element = self.__sensitivity_project[2]
+
+        zoomin = diagram and (self.picDrawingArea.GetScale()+0.00001) < lib.consts.SCALE_MAX
+        zoomout = diagram and (self.picDrawingArea.GetScale()-0.00001) > lib.consts.SCALE_MIN
+       
+        changes += zoomin != self.__sensitivity_project[3]
+        changes += zoomout != self.__sensitivity_project[4]
+        self.__sensitivity_project[3] = zoomin
+        self.__sensitivity_project[4] = zoomout
         
         if changes == 0:
             return
-        
         self.SetSensitiveMenuChilds(self.mItemProject, project)
         self.SetSensitiveMenuChilds(self.mItemDiagram, diagram)
         self.SetSensitiveMenuChilds(self.mItemElement, element)
@@ -122,8 +126,10 @@ class CfrmMain(CWindow):
         self.mnuPaste.set_sensitive(diagram)
         self.mnuDelete.set_sensitive(element)
         self.mnuNormalSize.set_sensitive(diagram)
-        self.mnuZoomIn.set_sensitive(diagram)
-        self.mnuZoomOut.set_sensitive(diagram)
+        self.mnuZoomIn.set_sensitive(zoomin)
+        self.cmdZoomIn.set_sensitive(zoomin)
+        self.mnuZoomOut.set_sensitive(zoomout)
+        self.cmdZoomOut.set_sensitive(zoomout)
         self.mnuBestFit.set_sensitive(diagram)
     
     def LoadProject(self, filename, copy):
@@ -149,7 +155,6 @@ class CfrmMain(CWindow):
         self.picDrawingArea.Redraw()
         self.UpdateMenuSensitivity(project = True)
         
-    
     def PaintAll(self):
         if not self.nbTabs.IsStartPageActive():
             self.picDrawingArea.Paint(True)
@@ -241,6 +246,10 @@ class CfrmMain(CWindow):
         from webbrowser import open_new
         open_new(lib.consts.WEB)
 
+    @event("mnuError", "activate")
+    def on_mnuError_activate(self, mnu):
+        text = _('This is just a test for the Exception handler window.\nYou will see this window if something really bad happens.\nSee the Help tab for more info.')
+        raise Exception(text)
     
     @event('nbTabs','export-svg-from-TabMenu')
     @event('mnuExport', 'activate')
@@ -294,7 +303,6 @@ class CfrmMain(CWindow):
         finally:
             filedlg.destroy()
 
-    
     def ReloadTitle(self):
         if self.application.GetProject() is None or self.application.GetProject().GetFileName() is None:
             self.form.set_title(_('UML .FRI designer'))
@@ -381,25 +389,28 @@ class CfrmMain(CWindow):
     @event("mnuDelete","activate")
     def on_mnuDelete_click(self, widget):
         self.picDrawingArea.DeleteElements()
-    
         
     @event("mnuNormalSize","activate")
     def mnuNormalSize_click(self, widget):
         self.picDrawingArea.SetNormalScale()
+        self.UpdateMenuSensitivity()
 
     @event("mnuBestFit","activate")
     def mnuBestFit_click(self, widget):
         self.picDrawingArea.BestFitScale()
+        self.UpdateMenuSensitivity()
 
     @event("cmdZoomOut", "clicked")
     @event("mnuZoomOut","activate")
     def on_mnuZoomOut_click(self, widget):
         self.picDrawingArea.IncScale(-lib.consts.SCALE_INCREASE)
-
+        self.UpdateMenuSensitivity()
+    
     @event("cmdZoomIn", "clicked")
     @event("mnuZoomIn","activate")
     def on_mnuZoomIn_click(self, widget):
         self.picDrawingArea.IncScale(lib.consts.SCALE_INCREASE)
+        self.UpdateMenuSensitivity()
 
     @event("cmdCut", "clicked")
     @event("mnuCut","activate")
@@ -427,12 +438,30 @@ class CfrmMain(CWindow):
     def ActionLoadToolBar(self, widget):
         pass
 
-    # Moje vlastne signale
+    # User defined signals
+    @event("twProjectView", "add-element")
+    @event("mnuItems", "add-element")
+    def on_directAdd_element(self, widget, element):
+        """
+        Add element into a project tree
+        
+        @param widget:  Widget
+        @type widget:   CWidget
+        
+        @param element: Id (name) of added element
+        @type element:  String
+        """
+        parentElement = self.twProjectView.GetSelectedNode()
+        if parentElement == None:
+            parentElement = self.twProjectView.GetRootNode()
+
+        ElementType = self.application.GetProject().GetElementFactory().GetElement(element)
+        ElementObject = CElementObject(ElementType)
+        self.twProjectView.AddElement(ElementObject, None, parentElement)
+
     @event("picDrawingArea", "add-element")
     def on_add_element(self, widget, Element, diagram, parentElement):
         self.twProjectView.AddElement(Element, diagram, parentElement)
-
-
 
     @event("mnuItems", "create-diagram")
     @event("twProjectView","create-diagram")
@@ -446,7 +475,6 @@ class CfrmMain(CWindow):
     @event("picDrawingArea", "get-selected")
     def on_picDrawingArea_get_selected(self, widget):
         return self.tbToolBox.GetSelected()
-
 
     @event("twProjectView", "selected_diagram")
     def on_select_diagram(self, widget, diagram):
@@ -550,7 +578,6 @@ class CfrmMain(CWindow):
         else:
             pass
     
-    
     @event("picDrawingArea","show-element-in-treeView")
     def on_show_element_in_treeView(self, widget, Element):
         self.twProjectView.ShowElement(Element)
@@ -563,7 +590,7 @@ class CfrmMain(CWindow):
         self.picDrawingArea.Paint()
     
     #Z-Order 
-# 'mmShift_SendBack', 'mmShift_BringForward', 'mmShift_ToBottom', 'mmShift_ToTop'    
+    # 'mmShift_SendBack', 'mmShift_BringForward', 'mmShift_ToBottom', 'mmShift_ToTop'    
     @event("mmShift_SendBack", "activate")
     def on_mnuItems_mmShift_SendBack(self, menuItem):
         self.picDrawingArea.Shift_activate('SendBack')

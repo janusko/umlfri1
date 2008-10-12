@@ -70,8 +70,8 @@ class ClwProperties(CWidget):
             self.listStore.set(row, ID_TYPE, 'str', ID_NAME, 'Name', ID_VALUE, v, ID_TEXT_VISIBLE, True, ID_COMBO_VISIBLE, False, ID_BUTTON_VISIBLE, False, ID_EDITABLE, True)
             return
         
-        object = Element.GetObject()
-        if isinstance(object, CElementObject):
+        object = self.element.GetObject()
+        if isinstance(object, (CElementObject, CConnectionObject)):
             self.attributeIDs = {}
             for attribute in object.GetDomainType().IterAttributesID():
                 value = object.GetValue(attribute)
@@ -95,29 +95,6 @@ class ClwProperties(CWidget):
                     self.listStore.remove(row)
                 else:
                     self.listStore.set(row, ID_TYPE, domain['type'], ID_NAME, domain['name'], ID_VALUE, "<<list>>", ID_TEXT_VISIBLE, False, ID_COMBO_VISIBLE, False, ID_BUTTON_VISIBLE, True)
-        elif isinstance(object, CConnectionObject):
-            type = Element.GetObject().GetType()
-            for k in type.GetAttributes():
-                v = object.GetAttribute(k)
-                row = self.listStore.append()
-                atrtype = type.GetAttribute(k)
-                if atrtype[0] == 'bool':
-                    model = gtk.ListStore(gobject.TYPE_STRING)
-                    model.set(model.append(), 0, 'True')
-                    model.set(model.append(), 0, 'False')
-                    self.listStore.set(row, ID_TYPE, atrtype[0], ID_NAME, str(k) , ID_VALUE, str(v),  ID_TEXT_VISIBLE, False, ID_COMBO_VISIBLE, True, ID_BUTTON_VISIBLE, False, ID_EDITABLE, False, ID_MODEL, model)
-                elif len(atrtype[1]) > 0:
-                    model = gtk.ListStore(gobject.TYPE_STRING)
-                    for i in atrtype[1]:
-                        model.set(model.append(), 0 , str(i))
-                    editable = not (atrtype[0] == 'enum')
-                    self.listStore.set(row, ID_NAME, str(k), ID_VALUE, str(v), ID_TEXT_VISIBLE, False, ID_COMBO_VISIBLE, True, ID_BUTTON_VISIBLE, False, ID_EDITABLE, editable, ID_MODEL, model)
-                elif atrtype[0] == 'str':
-                    self.listStore.set(row, ID_TYPE, atrtype[0], ID_NAME, str(k), ID_VALUE, str(v), ID_TEXT_VISIBLE, True, ID_COMBO_VISIBLE, False, ID_BUTTON_VISIBLE, False, ID_EDITABLE, True)
-                elif atrtype[0] == 'note':
-                    self.listStore.remove(row)
-                else:
-                    self.listStore.set(row, ID_TYPE, atrtype[0], ID_NAME, str(k), ID_VALUE, "<<list>>", ID_TEXT_VISIBLE, False, ID_COMBO_VISIBLE, False, ID_BUTTON_VISIBLE, True)
         
     def Clear(self):
         self.element = None
@@ -131,7 +108,7 @@ class ClwProperties(CWidget):
         name, = model.get(iter, ID_NAME)
         if isinstance(self.element, CDiagram):
             self.element.SetName(new_value)
-        elif isinstance(self.element.GetObject(), CElementObject):
+        elif isinstance(self.element.GetObject(), (CElementObject, CConnectionObject)):
             self.element.GetObject().SetValue(self.attributeIDs[name], new_value)
         elif isinstance(self.element.GetObject(), CConnectionObject):
             self.element.GetObject().SetAttribute(name ,new_value)

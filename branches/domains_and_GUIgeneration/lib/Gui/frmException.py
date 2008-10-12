@@ -1,97 +1,122 @@
 from lib.Depend.gtk2 import gtk
 from lib.Depend.gtk2 import pango
-
-import sys, os
-import platform
 import lib.consts
 from common import CWindow
-import traceback
 from lib.config import config
 from lib.Gui.dialogs import CWarningDialog
+import sys, os, time, tarfile, platform, traceback, cStringIO, datetime, urllib, urllib2
 
-TEMP_FILE = 'tmp.frip'
+EXCEPTION_PROJECT_FILE = 'error.frip'
+
 
 class CfrmException(CWindow):
       
-    widgets = ('tviewErrorLog','tviewSysInfo','btnCancel', 'btnSave',  'btnReport', 'ntbkException', 'lblMail', 'tviewUsrComment', 'chbtnIncludeProject',)
+    widgets = ('tviewErrorLog','tviewSysInfo','btnCancel', 'btnSend',  'btnReport', 'ntbkException', 'lblMail', 'tviewUsrComment', 'chbtnIncludeProject',)
     name = 'frmException'
+
 
     def __init__(self, app, wTree):
         CWindow.__init__(self, app, wTree)
         # using connect, @event could not be used cause this dialog is used in lib.Gui.event
         self.btnReport.connect("clicked", self.OnBtnReportClicked, None)
-        self.btnSave.connect("clicked", self.OnBtnSaveClicked, None)
+        self.btnSend.connect("clicked", self.OnBtnSendClicked, None)
         self.chbtnIncludeProject.connect("toggled", self.OnChbtnIncludeProjectToogled, None)
         self.lblMail.set_label("<span background='white'><b>"+ lib.consts.MAIL + "</b></span>")
         self.project = None
         self.append_project = True
 
-        
+       
     def OnChbtnIncludeProjectToogled(self, widget, event, data=None):
         if self.append_project == False:
             self.append_project = True
         else :
             self.append_project = False
-        
-    def OnBtnSaveClicked(self, widget, event, data=None):
-        filedlg = gtk.FileChooserDialog(_('Save Error log'), self.form, gtk.FILE_CHOOSER_ACTION_SAVE, (gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
-        filter = gtk.FileFilter()
-        filter.set_name(_("Text files"))
-        filter.add_pattern('*.txt')
-        filedlg.add_filter(filter)
-        filter = gtk.FileFilter()
-        filter.set_name(_("All files"))
-        filter.add_pattern('*.*')
-        filedlg.add_filter(filter)
-
+ 
+       
+    def OnBtnSendClicked(self, widget, event, data=None):
         try:
-            while True:
-                if filedlg.run() == gtk.RESPONSE_OK: 
-                    name =  filedlg.get_filter().get_name()
-                    filename = filedlg.get_filename()
+            log_tar_path = config['/Paths/UserDir'] + str(time.time()) + '.tar'  # path to tar file
+            tar = tarfile.open(log_tar_path, "w")
+            tarinfo = tarfile.TarInfo()
+            
+            # tarinfo properties
+            tarinfo.name = 'error.log'
+            tarinfo.type = tarfile.REGTYPE
+            tarinfo.mode = 0600
+            tarinfo.mtime = time.mktime(datetime.datetime.now().timetuple())
+          
+            # striongIO for traceback
+            buff = self.tviewErrorLog.get_buffer()
+            s, e = buff.get_bounds()
+            io_buff =  buff.get_text(s,e)
+            iof = cStringIO.StringIO(io_buff)
+            iof.seek(0)
+            tarinfo.size = len(io_buff)
+            tar.addfile(tarinfo, iof)
+            iof.close()
+           
+            # striongIO for sys info
+            tarinfo.name = 'sys_info.log'
+            buff = self.tviewSysInfo.get_buffer()
+            s, e = buff.get_bounds()
+            io_buff =  buff.get_text(s,e)
+            iof = cStringIO.StringIO(io_buff)
+            iof.seek(0)
+            tarinfo.size = len(io_buff)
+            tar.addfile(tarinfo, iof)
+            iof.close()
 
-                    if '.' not in os.path.basename(filename):
-                        filename += '.txt'
+            # striongIO for comment
+            tarinfo.name = 'comment.log'
+            buff = self.tviewUsrComment.get_buffer()
+            s, e = buff.get_bounds()
+            io_buff =  buff.get_text(s,e)
+ 
+            if len(io_buff) > 0:
+                iof = cStringIO.StringIO(io_buff)
+                iof.seek(0)
+                tarinfo.size = len(io_buff)
+                tar.addfile(tarinfo, iof)
+                iof.close()
 
-                    if not os.path.isdir(filename):
-                        log_file = open(filename, 'w')
-                        log_file.write('#UML.fri ERROR LOG:')
-                        buff = self.tviewErrorLog.get_buffer()
-                        s, e = buff.get_bounds()
-                        log_file.write(buff.get_text(s,e))
+            if self.append_project == True:
+                if self.project is not None:
+                    
+                    log_project_path = config['/Paths/UserDir'] + EXCEPTION_PROJECT_FILE
+                    self.project.SaveProject(log_project_path)
+                    tar.add(log_project_path,EXCEPTION_PROJECT_FILE)
+                    os.remove(log_project_path)
+            
+            tar.close() # closing the tar file, now we have all we need for sending
 
-                        log_file.write('\n\n#SYSTEM INFORMATION:')
-                        buff = self.tviewSysInfo.get_buffer()
-                        s, e = buff.get_bounds()
-                        log_file.write(buff.get_text(s,e))
-
-                        buff = self.tviewUsrComment.get_buffer()
-                        s, e = buff.get_bounds()
-                        text  = buff.get_text(s,e)
-                        if len(text) > 0:
-                            log_file.write('\n\n#USER COMMENTS:\n')
-                            log_file.write(text)
-
-                        if self.append_project == True:
-                            if self.project is not None:
-                                log_file.write('\n\n#INCLUDED PROJECT:\n')
-                                path = config['/Paths/UserDir'] + TEMP_FILE
-                                self.project.SaveProject(path)
-                                in_file = open(path, 'r')
-                                log_file.write(in_file.read().encode('uu_codec'))
-                                in_file.close()
-                                os.remove(path)
-
-
-                        log_file.close()
-                        filedlg.destroy()
-                        CWarningDialog(None, _('File successfully saved as:\n\n') + filename).run()
-                        return
+            ### sending....testing ###
+            try:
+                file_to_send = open(log_tar_path, 'r')            
+                string_to_send = file_to_send.read().encode('base64_codec')
+                file_to_send.close()
+                
+                values = {'upfile' : string_to_send}
+                data = urllib.urlencode(values)
+                req = urllib2.Request(lib.consts.ERROR_LOG_ADDRESS, data)
+                response = urllib2.urlopen(req)
+               
+                # if everything goes well
+                if response.code == 200:
+                    t = _('File successfully send...\n\nThank you for helping improving UML. FRI')
+                    self.btnSend.set_sensitive(False)
+                
+                # not so well, but at least we could get a response :)                
                 else:
-                    filedlg.destroy()
-                    return
+                    t = _('Uups! Sending was not successfull.\nServer response:\n ') + str(response.code) + ' ' + response.msg
+               
+            except urllib2.URLError, e :
+                t = _('Uups! An error during sending occured:\n') + str(e).replace('<','').replace('>','')
+            
+            os.remove(log_tar_path)     # remove the tar-ed log file
+            CWarningDialog(None, t).run()
+            return
+
         finally:
-            #filedlg.destroy()
             self.form.run()
             self.Hide()
 
@@ -101,6 +126,7 @@ class CfrmException(CWindow):
         open_new(lib.consts.WEB)
         self.form.run()
         self.Hide()
+
 
     def Show(self):
         self.form.run()
@@ -128,14 +154,14 @@ class CfrmException(CWindow):
             buff.create_tag("mono", family="monospace")
 
         for filename, line_num, fun_name, text in traceback.extract_tb(tb)[1:]:
-            buff.insert_with_tags_by_name(iter, _('\nFile '), "bold")
+            buff.insert_with_tags_by_name(iter, 'File ', "bold")
             buff.insert_with_tags_by_name(iter, filename,      "mono")
-            buff.insert_with_tags_by_name(iter, _(' line '),   "bold")
+            buff.insert_with_tags_by_name(iter, ' line ',   "bold")
             buff.insert_with_tags_by_name(iter, str(line_num), "mono")
-            buff.insert_with_tags_by_name(iter, _(' in '),     "bold")
-            buff.insert_with_tags_by_name(iter, (fun_name or "") + '\n' + (text or "") + '\n', "mono")
+            buff.insert_with_tags_by_name(iter, ' in ',     "bold")
+            buff.insert_with_tags_by_name(iter, (fun_name or "") + '\n  ' + (text or "") + '\n\n', "mono")
         #name and error
-        buff.insert_with_tags_by_name(iter, '\n' + exctype.__name__  + ': ', "bold")
+        buff.insert_with_tags_by_name(iter, exctype.__name__  + ': ', "bold")
         buff.insert_with_tags_by_name(iter, str(value), "mono")
 
 
@@ -149,21 +175,19 @@ class CfrmException(CWindow):
             buff.create_tag("mono", family="monospace")
  
         iter = buff.get_iter_at_offset(0)
-        buff.insert_with_tags_by_name(iter, _("\nmachine:\t\t"), "bold")
+        buff.insert_with_tags_by_name(iter, "\n%s:\t\t"%_("machine"), "bold")
         buff.insert_with_tags_by_name(iter, platform.machine(), "mono")
-        buff.insert_with_tags_by_name(iter, _("\narchitecture:\t\t"), "bold")
+        buff.insert_with_tags_by_name(iter, "\n%s:\t\t"%_("architecture"), "bold")
         buff.insert_with_tags_by_name(iter, platform.architecture()[0], "mono")
         ver =  str(platform.python_version_tuple()[0]) +'.'+ str(platform.python_version_tuple()[1])+'.'+ str(platform.python_version_tuple()[2])
-        buff.insert_with_tags_by_name(iter, _("\npython version:\t\t"), "bold")
+        buff.insert_with_tags_by_name(iter, "\n%s:\t\t"%_("python version"), "bold")
         buff.insert_with_tags_by_name(iter, ver, "mono")
         ver =  str(gtk.gtk_version[0])+'.'+ str(gtk.gtk_version[1])+'.'+ str(gtk.gtk_version[2])
-        buff.insert_with_tags_by_name(iter, _("\ngtk version:\t\t"), "bold")
+        buff.insert_with_tags_by_name(iter, "\n%s:\t\t"%_("gtk version"), "bold")
         buff.insert_with_tags_by_name(iter, ver, "mono")
         ver =  str(gtk.pygtk_version[0])+'.'+ str(gtk.pygtk_version[1])+'.' + str(gtk.pygtk_version[2])
-        buff.insert_with_tags_by_name(iter, _("\npygtk version:\t\t"), "bold")
+        buff.insert_with_tags_by_name(iter, "\n%s:\t\t"%_("pygtk version"), "bold")
         buff.insert_with_tags_by_name(iter, ver, "mono")
-        buff.insert_with_tags_by_name(iter, _("\nplatform:\t\t"), "bold")
+        buff.insert_with_tags_by_name(iter, "\n%s:\t\t"%_("platform"), "bold")
         buff.insert_with_tags_by_name(iter, platform.platform(), "mono")
-
-
 

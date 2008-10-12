@@ -20,7 +20,7 @@ class CConnectionFactory(object):
     """
     Creates connection types from metamodel XMLs
     """
-    def __init__(self, storage, path):
+    def __init__(self, storage, path, domainfactory):
         """
         Parse metamodel XMLs and creates connection types
         
@@ -32,6 +32,7 @@ class CConnectionFactory(object):
         """
         self.types = {}
         self.path = path
+        self.domainfactory = domainfactory
         
         self.storage = storage
         for file in storage.listdir(self.path):
@@ -61,9 +62,9 @@ class CConnectionFactory(object):
         root = etree.XML(self.storage.read_file(file_path))
 
         #xml (version) file is validate with xsd schema (metamodel.xsd)
-        if HAVE_LXML:
-            if not xmlschema.validate(root):
-                raise FactoryError("XMLError", xmlschema.error_log.last_error)
+        #~ if HAVE_LXML:
+            #~ if not xmlschema.validate(root):
+                #~ raise FactoryError("XMLError", xmlschema.error_log.last_error)
 
         id = root.get('id')
         
@@ -82,15 +83,8 @@ class CConnectionFactory(object):
             elif element.tag == METAMODEL_NAMESPACE+'DestArrow':
                 darr['possible'] = element.get('possible')
                 darr['default'] = element.get('default')
-            elif element.tag == METAMODEL_NAMESPACE+'Attributes':
-                for item in element:
-                    value = item.get('value')
-                    type = item.get('type')
-                    propid = item.get('propid')
-                    options = []
-                    for opt in item:
-                        options.append(opt.get('value'))
-                    attrs.append((value, type, propid, options))
+            elif element.tag == METAMODEL_NAMESPACE+'Domain':
+                domain = self.domainfactory.GetDomain(element.get('id'))
             elif element.tag == METAMODEL_NAMESPACE+'Appearance':
                 for subelem in element:
                     if subelem.tag == METAMODEL_NAMESPACE+'LineStyle':
@@ -111,13 +105,10 @@ class CConnectionFactory(object):
                         labels.append((subelem.get('position'), self.__LoadAppearance(tmp)))
 
         tmp = self.types[id] = CConnectionType(id, CConnectionLine(**ls),
-                                    CConnectionArrow(**sarr), CConnectionArrow(**darr), icon)
+                                    CConnectionArrow(**sarr), CConnectionArrow(**darr), icon, domain)
         for pos, lbl in labels:
             tmp.AddLabel(pos, lbl)
         
-        for attr in attrs:
-            tmp.AppendAttribute(*attr)
-    
     def __LoadAppearance(self, root):
         """
         Loads an appearance section of an XML file

@@ -4,7 +4,7 @@
     <Domain id="actor" />
     <Connections>
         <Item value="Association" />
-        <Item value="Generalization" with="UseCase" allowrecursive="0" />
+        <Item value="Generalization" with="Actor" allowrecursive="0" />
     </Connections>
     <Appearance>
         <HBox>

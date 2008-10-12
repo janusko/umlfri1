@@ -116,6 +116,28 @@ class CDomainObject(object):
         except KeyError:
             raise DomainObjectError('Identifier "%s" unknown'%(id, ))
     
+    def _TracePath(self, id, call, value = None):'''
+        path = re.split(r'(\[|\.)', id, 1)
+        if len(path) == 1: #work with current attribute
+            pass
+        elif path[1] == '.': #nested call
+            if self.type.IsAtomic(id = path[0]): #atomic element doesn't have items
+                raise DomainObjectError('Attribute %s of domain %s is atomic'%\
+                    (path[0], self.type.GetName()))
+            return self.GetValue(path[0])._TracePath(path[2], call, value)
+        elif path[1] == '[':
+            if self.type.GetAttribute(path[0])['type'] <> 'list':
+                raise CDomainObjectError('Attribute %s of domain %s cannot be indexed'%\
+                    (path[0], self.type.GetName()))
+            
+            idx, rest = path[2].split(']', 2)
+            idx = int(idx)
+            if self.type.GetAttribute
+            empty, rest = rest.split('.', 1)
+            if 
+            
+        '''
+    
     def GetSaveInfo(self):
         '''
         @return: structured dictionary containing all the necessary data for .frip file

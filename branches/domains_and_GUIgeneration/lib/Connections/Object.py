@@ -1,4 +1,5 @@
 from lib.Exceptions.UserException import *
+from lib.Domains import CDomainObject
 
 class CConnectionObject(object):
     """
@@ -30,9 +31,7 @@ class CConnectionObject(object):
                 self.source.RemoveConnection(self)
             self.source = None
             raise
-        self.attributes = {}
-        for i in self.type.GetAttributes():
-            self.SetAttribute(i, self.type.GetDefValue(i))
+        self.domainobject = CDomainObject(self.type.GetDomain())
     
     def __CheckRecursiveConnection(self):
         """
@@ -246,69 +245,25 @@ class CConnectionObject(object):
         """
         self.type.Paint(context)
     
-    def GetAttributes(self):
-        """
-        Iterator over attribute names
-        
-        @return: name of attributes
-        @rtype:  iterator over strings
-        """
-        for attr in self.attribs:
-            yield attr
-        
-    def GetAttribute(self, key):
-        """
-        Get the attribute value
-        
-        @param key: name of the attribute
-        @type  key: string
-        
-        @return: attribute value
-        @rtype:  anything
-        """
-        if key in self.attributes:
-            return self.attributes[key]
-        else:
-            raise UMLException("BadKey")
+    def GetDomainName(self, key=''):
+        return self.domainobject.GetDomainName(key)
     
-    def SetAttribute(self, key, value):
-        """
-        Set the attribute value
-        
-        @param key: name of the attribute
-        @type  key: string
-        
-        @param value: new value for the attribute
-        @type  value: anything
-        """
+    def GetDomainType(self, key=''):
+        return self.domainobject.GetType(key)
+    
+    def GetValue(self, key):
+        return self.domainobject.GetValue(key)
+    
+    def SetValue(self, key, value):
+        self.domainobject.SetValue(key, value)
         self.revision += 1
-        self.attributes[key] = value        
-    
-    def RemoveAttribute(self, key):
-        """
-        Remove the attribute by given name
         
-        @param key: name of the attribute
-        @type  key: string
-        """
-        self.revision += 1
-        if key in self.attributes:
-            del self.attributes[key]
-        else:
-            raise UMLException("BadKey")
+    def GetSaveInfo(self):
+        return self.domainobject.GetSaveInfo()
     
+    def SetSaveInfo(self, value):
+        return self.domainobject.SetSaveInfo(value)
+        
     def GetVisualProperty(self, key):
-        """
-        Get property value
-        
-        @param key: property ID
-        @type  key: string
-        
-        
-        @return: property value
-        @rtype:  anything
-        """
-        return self.attributes[self.type.GetVisAttr(key)]
-        
-    Source = property(GetSource, SetSource)
-    Destination = property(GetDestination, SetDestination)
+        return self.domainobject.GetValue(key)
+

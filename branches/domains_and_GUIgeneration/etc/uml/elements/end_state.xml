@@ -2,7 +2,10 @@
 <ElementType id="EndState" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
     <Icon path="icons/final.png" />
     <Domain id="state" />
-    <Connections />
+    <Connections>		
+		<Item value="StateTransition"/>
+        <Item value="ActivityFlow"/>
+    </Connections>		
     <Appearance>
         <HBox expand="0">
             <Proportional ratio="1:1" align="center center" size="minimal">

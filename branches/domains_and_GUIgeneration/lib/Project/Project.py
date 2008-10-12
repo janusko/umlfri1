@@ -29,6 +29,8 @@ if HAVE_LXML:
 
 
 class CProject(object):
+    SaveVersion = '1.0' # save file format version
+    
     def __init__(self):
         self.root = None
         
@@ -36,9 +38,11 @@ class CProject(object):
         self.DomainFactory = CDomainFactory(self.Storage, DOMAINS_PATH)
         self.ElementFactory = CElementFactory(self.Storage, ELEMENTS_PATH, self.DomainFactory)
         self.DiagramFactory = CDiagramFactory(self.Storage, DIAGRAMS_PATH)
-        self.ConnectionFactory = CConnectionFactory(self.Storage, CONNECTIONS_PATH)
+        self.ConnectionFactory = CConnectionFactory(self.Storage, CONNECTIONS_PATH, self.DomainFactory)
         self.VersionFactory = CVersionFactory(self.Storage, VERSIONS_PATH)
         self.version = self.VersionFactory.GetVersion('UML 1.4')
+        self.MetamodelVersion = '1.4.0'
+        self.MetamodelUri = 'http://umlfri.kst.fri.uniza.sk/metamodel/uml.frim'
         
         self.filename = None
     
@@ -80,7 +84,7 @@ class CProject(object):
         i,j = k.split(':')
         
         if i == self.root.GetName() and j == self.root.GetType() and len(path.split('/')) == 1:
-            return root        
+            return self.root
         
         if i == self.root.GetName() and j == self.root.GetType():
             for i in path.split('/')[1:]:
@@ -219,12 +223,23 @@ class CProject(object):
         
         elements, connections = self.searchCE(self.root)
         
-        rootNode = etree.XML('<umlproject xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/umlproject.xsd"></umlproject>')
+        rootNode = etree.XML('<umlproject saveversion="%s" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/umlproject.xsd"></umlproject>'%self.SaveVersion)
         
+        metamodelNode = etree.Element(UMLPROJECT_NAMESPACE+'metamodel')
         objectsNode = etree.Element(UMLPROJECT_NAMESPACE+'objects')
         connectionsNode = etree.Element(UMLPROJECT_NAMESPACE+'connections')
         projtreeNode = etree.Element(UMLPROJECT_NAMESPACE+'projecttree')
         counterNode = etree.Element(UMLPROJECT_NAMESPACE+'counters')
+        
+        # metamodel informations
+        metamodelUriNode = etree.Element(UMLPROJECT_NAMESPACE+'uri')
+        metamodelUriNode.text = self.MetamodelUri
+        metamodelVersionNode = etree.Element(UMLPROJECT_NAMESPACE+'version')
+        metamodelVersionNode.text = self.MetamodelVersion
+        
+        metamodelNode.append(metamodelUriNode)
+        metamodelNode.append(metamodelVersionNode)
+        rootNode.append(metamodelNode)
         
         for object in elements:
             objectNode = etree.Element(UMLPROJECT_NAMESPACE+'object', type=unicode(object.GetType().GetId()), id=unicode(id(object)))
@@ -235,7 +250,7 @@ class CProject(object):
         
         for connection in connections:
             connectionNode = etree.Element(UMLPROJECT_NAMESPACE+'connection', type=unicode(connection.GetType().GetId()), id=unicode(id(connection)), source=unicode(id(connection.GetSource())), destination=unicode(id(connection.GetDestination())))
-            saveattr(connection, connectionNode)
+            connectionNode.append(SaveDomainObjectInfo(connection.GetSaveInfo()))
             connectionsNode.append(connectionNode)
             
         rootNode.append(connectionsNode)
@@ -357,8 +372,7 @@ class CProject(object):
                     if connection.tag == UMLPROJECT_NAMESPACE+'connection':
                         id = connection.get("id")
                         con = CConnectionObject(self.ConnectionFactory.GetConnection(connection.get("type")),ListObj[connection.get("source")],ListObj[connection.get("destination")])
-                        for propCon in connection:
-                            con.SetAttribute(propCon.get("name"),propCon.get("value"))
+                        con.SetSaveInfo(LoadDomainObjectInfo(connection[0]))
                         ListCon[id] = con
             
             elif element.tag == UMLPROJECT_NAMESPACE+'projecttree':

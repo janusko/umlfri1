@@ -4,6 +4,7 @@
     <Domain id="synchronization" />
     <Connections>
         <Item value="StateTransition" />
+        <Item value="ActivityFlow"/>
     </Connections>
     <Appearance>
         <VBox>

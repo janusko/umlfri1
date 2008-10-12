@@ -14,11 +14,12 @@ import common
 
 class CtwProjectView(CWidget):
     name = 'twProjectView'
-    widgets = ('twProjectView','menuTreeElement', 'mnuTreeAddDiagram', 'mnuTreeDelete', 'mnuTreeFindInDiagrams', )
+    widgets = ('twProjectView','menuTreeElement', 'mnuTreeAddDiagram', 'mnuTreeAddElement','mnuTreeDelete', 'mnuTreeFindInDiagrams', )
     
     __gsignals__ = {
         'selected_diagram':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)), 
-        'selected-item-tree':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )), 
+        'selected-item-tree':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
+        'add-element':   (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_STRING,)),
         'create-diagram':   (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_STRING, )),
         'repaint':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
         'close-diagram': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
@@ -66,8 +67,26 @@ class CtwProjectView(CWidget):
         self.TreeStore.clear()
     
     def Redraw(self):
+        """
+        This function load ProjectTree Add menu from enabled diagrams and options of elements
+        
+        """
         for item in self.mnuTreeAddDiagram.get_children():
             self.mnuTreeAddDiagram.remove(item)
+        
+        for item in self.mnuTreeAddElement.get_children():
+            self.mnuTreeAddElement.remove(item)
+        
+        for item in self.application.GetProject().GetElementFactory().IterTypes():
+            if ('DirectAdd', 'true') in item.GetOptions().items():
+                newItem = gtk.ImageMenuItem(item.GetId())
+                self.mnuTreeAddElement.append(newItem)
+                newItem.connect("activate", self.on_mnuAddElement_activate, item.GetId())
+                img = gtk.Image()
+                img.set_from_pixbuf(PixmapFromPath(self.application.GetProject().GetStorage(), self.application.GetProject().GetElementFactory().GetElement(item.GetId()).GetIcon()))
+                newItem.set_image(img)
+                img.show()
+                newItem.show()
         
         for diagram in self.application.GetProject().GetVersion().GetDiagrams():
             mi = gtk.ImageMenuItem(diagram)
@@ -214,14 +233,14 @@ class CtwProjectView(CWidget):
             path = diagram.GetPath()
         else:
             path = parentElement.GetPath()
+
         parent = self.application.GetProject().GetNode(path)
         node = CProjectNode(parent, element, parent.GetPath() + "/" + element.GetName() + ":" + element.GetType().GetId())
         self.application.GetProject().AddNode(node, parent)
         novy = self.TreeStore.append(self.get_iter_from_path(self.twProjectView.get_model(), self.twProjectView.get_model().get_iter_root() ,path))
         self.TreeStore.set(novy, 0, element.GetName() , 1, PixmapFromPath(self.application.GetProject().GetStorage(), element.GetType().GetIcon()), 2, element.GetType().GetId(),3,node)
         
-    
-    
+        
     def AddDiagram(self, diagram):
         iter = self.twProjectView.get_selection().get_selected()[1]
         if iter is None:
@@ -303,6 +322,9 @@ class CtwProjectView(CWidget):
         self.emit('selected-item-tree',treeView.get_model().get(iter,3)[0])
             
     
+    def on_mnuAddElement_activate(self, widget, element):
+        self.emit('add-element', element)
+    
     def on_mnuTreeAddDiagram_activate(self, widget, diagramId):
         self.emit('create-diagram', diagramId)
     
@@ -367,13 +389,19 @@ class CtwProjectView(CWidget):
 
     def GetSelectedNode(self):
         iter = self.twProjectView.get_selection().get_selected()[1]
+        if iter == None:
+            return None
         node = self.twProjectView.get_model().get(iter,3)[0]
         if isinstance(node,CProjectNode):
             return node
         else:
             return None
         
-        
+    def GetRootNode(self):
+        iter = self.twProjectView.get_model().get_iter_root()
+        self.twProjectView.get_selection().select_iter(iter)
+        node = self.twProjectView.get_model().get(iter,3)[0]
+        return node
         
     @event("twProjectView","drag-data-get")
     def on_drag_data_get(self, widget,drag_context, selection_data, info, time):

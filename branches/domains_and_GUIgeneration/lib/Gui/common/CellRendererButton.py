@@ -34,18 +34,12 @@ class CellRendererButton(gtk.GenericCellRenderer):
         layout = widget.create_pango_layout(self.text)
         layout.set_font_description(widget.style.font_desc)
         w, h = layout.get_size()
+        self.width = w / pango.SCALE + 6
         x = cell_area.x + 3
         y = int(cell_area.y + (cell_area.height - h / pango.SCALE) / 2)
+        widget.style.paint_box(window, gtk.STATE_NORMAL, gtk.SHADOW_OUT, None, widget, "button",
+                cell_area.x, cell_area.y, self.width, cell_area.height)
         window.draw_layout(widget.style.text_gc[tid], x, y, layout)
-        if flags & gtk.CELL_RENDERER_SELECTED:
-            widget.style.paint_box(window, gtk.STATE_NORMAL, gtk.SHADOW_OUT, None, widget, "button",
-                    cell_area.x + cell_area.width - self.width, cell_area.y, self.width, cell_area.height)
-            layout = widget.create_pango_layout("...")
-            layout.set_font_description(widget.style.font_desc)
-            w, h = layout.get_size()
-            x = int(cell_area.x + cell_area.width - self.width + (self.width - w / pango.SCALE) / 2)
-            y = int(cell_area.y + (cell_area.height - h / pango.SCALE) / 2)
-            window.draw_layout(widget.style.text_gc[0], x, y, layout)
 
     def on_get_size(self, widget, cell_area=None):
         if cell_area is None:
@@ -54,11 +48,11 @@ class CellRendererButton(gtk.GenericCellRenderer):
             return (cell_area.x, cell_area.y, cell_area.width, cell_area.height)
     
     def on_start_editing(self, event, widget, path, background_area, cell_area, flags):
-        x = cell_area.x + cell_area.width - self.width
         if event is not None and event.type == gtk.gdk.BUTTON_PRESS and \
-            x < event.x < cell_area.x + cell_area.width and \
+            cell_area.x < event.x < cell_area.x + self.width and \
             cell_area.y < event.y < cell_area.y + cell_area.height:
             
+            print path
             self.emit("click", path)
 
 gobject.type_register(CellRendererButton)

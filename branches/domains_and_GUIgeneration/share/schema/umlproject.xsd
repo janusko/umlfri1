@@ -7,6 +7,14 @@
 		</xs:annotation>
 		<xs:complexType>
 			<xs:sequence>
+				<xs:element name="metamodel">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="uri" type="xs:string"/>
+							<xs:element name="version" type="xs:string"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
 				<xs:element name="objects">
 					<xs:complexType>
 						<xs:sequence>
@@ -65,6 +73,7 @@
 					</xs:complexType>
 				</xs:element>
 			</xs:sequence>
+			<xs:attribute name="saveversion" type="xs:string" use="required"/>
 		</xs:complexType>
 	</xs:element>
 	<xs:complexType name="objectType">

@@ -29,7 +29,7 @@ class CtxtNotes(CWidget):
             return
         
         object = Element.GetObject()
-        if isinstance(object, CElementObject):
+        if isinstance(object, (CElementObject, CConnectionObject)):
             if object.GetDomainType().HasAttribute('note'):
                 self.txtNotes.get_buffer().set_text(object.GetValue('note'))
                 self.txtNotes.set_sensitive(True)
@@ -53,7 +53,7 @@ class CtxtNotes(CWidget):
         if self.element is not None:
             if isinstance(self.element, CDiagram):
                 pass    #maybe, In the future, We can add notes to diagram
-            elif isinstance(self.element.GetObject(), CElementObject):
+            elif isinstance(self.element.GetObject(), (CElementObject, CConnectionObject)):
                 self.element.GetObject().SetValue('note', buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter()))
                 self.emit('content_update', self.element, 'note')
             elif isinstance(self.element.GetObject(), CConnectionObject):
