@@ -6,56 +6,15 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: UML .FRI __version__ = GLOBAL_VERSION\n"
+"Project-Id-Version: UML .FRI 1.0-beta5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-10 20:29+0200\n"
+"POT-Creation-Date: 2008-10-12 12:40+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-msgid ""
-"\n"
-"File "
-msgstr ""
-
-msgid ""
-"\n"
-"architecture:\t\t"
-msgstr ""
-
-msgid ""
-"\n"
-"gtk version:\t\t"
-msgstr ""
-
-msgid ""
-"\n"
-"machine:\t\t"
-msgstr ""
-
-msgid ""
-"\n"
-"platform:\t\t"
-msgstr ""
-
-msgid ""
-"\n"
-"pygtk version:\t\t"
-msgstr ""
-
-msgid ""
-"\n"
-"python version:\t\t"
-msgstr ""
-
-msgid " in "
-msgstr ""
-
-msgid " line "
-msgstr ""
 
 msgid ""
 "</b>\n"
@@ -198,9 +157,6 @@ msgid "Exception traceback (most recent call last)"
 msgstr ""
 
 msgid "Export diagram"
-msgstr ""
-
-msgid "Export diagram as SVG"
 msgstr ""
 
 msgid "File does not exist"
@@ -599,20 +555,26 @@ msgstr ""
 msgid "_Z-Order"
 msgstr ""
 
-msgid "gtk-about"
+msgid "architecture"
 msgstr ""
 
-msgid "gtk-cancel"
+msgid "gtk version"
 msgstr ""
 
-msgid "gtk-ok"
-msgstr ""
-
-msgid "gtk-preferences"
+msgid "machine"
 msgstr ""
 
 msgid "none"
 msgstr ""
 
+msgid "platform"
+msgstr ""
+
 msgid "project web"
+msgstr ""
+
+msgid "pygtk version"
+msgstr ""
+
+msgid "python version"
 msgstr ""
