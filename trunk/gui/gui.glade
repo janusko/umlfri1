@@ -2697,7 +2697,7 @@ String</property>
     <child>
       <widget class="GtkMenuItem" id="mnuTabExportSVG">
         <property name="visible">True</property>
-        <property name="label" translatable="yes">Export diagram as SVG</property>
+        <property name="label" translatable="yes">Export diagram</property>
         <property name="use_underline">True</property>
       </widget>
     </child>
