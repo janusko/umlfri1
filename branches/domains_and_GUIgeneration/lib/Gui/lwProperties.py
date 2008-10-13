@@ -105,7 +105,7 @@ class ClwProperties(CWidget):
             
             elif type in ('enum', 'bool'):
                 model = gtk.ListStore(gobject.TYPE_STRING)
-                for item in (DType.GetAttribute(attrID)['type'] if type == 'enum' else ('True', 'False')):
+                for item in (DType.GetAttribute(attrID)['enum'] if type == 'enum' else ('True', 'False')):
                     model.set(model.append(), 0 , item)
                 self.treeStore.set(row, 
                     ID_ID, identifier,

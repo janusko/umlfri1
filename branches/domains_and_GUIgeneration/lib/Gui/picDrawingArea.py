@@ -287,7 +287,7 @@ class CpicDrawingArea(CWidget):
             if len(tuple(self.Diagram.GetSelected())) == 1:
                 for Element in self.Diagram.GetSelected():
                     if isinstance(Element, CElement):
-                        self.emit('open-specification',Element)
+                        #self.emit('open-specification',Element)
                         return
         
         if event.button == 1:
