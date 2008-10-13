@@ -207,6 +207,7 @@ setup(
         ("etc", glob.glob("etc/*.xml")),
         ("etc/templates", glob.glob("etc/templates/*.frit")),
         ("etc/uml/connections", glob.glob("etc/uml/connections/*.xml")),
+        ("etc/uml/domains", glob.glob("etc/uml/domains/*.xml")),
         ("etc/uml/diagrams", glob.glob("etc/uml/diagrams/*.xml")),
         ("etc/uml/elements", glob.glob("etc/uml/elements/*.xml")),
         ("etc/uml/icons", glob.glob("etc/uml/icons/*.png")),
