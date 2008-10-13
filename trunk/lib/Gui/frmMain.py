@@ -547,7 +547,7 @@ class CfrmMain(CWindow):
             self.twProjectView.UpdateElement(element)
             self.nbTabs.RefreshTab(element)
         else:
-            if element.GetObject().GetType().HasVisualAttribute(property):
+            if element.GetObject().HasVisualAttribute(property):
                 self.picDrawingArea.Paint()
                 self.twProjectView.UpdateElement(element.GetObject())
 

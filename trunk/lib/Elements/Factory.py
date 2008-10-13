@@ -1,5 +1,3 @@
-from lib.Depend.etree import etree, HAVE_LXML
-
 import os
 import os.path
 from lib.Exceptions.DevException import *
@@ -7,6 +5,7 @@ from Type import CElementType
 from lib.config import config
 from lib.consts import METAMODEL_NAMESPACE
 from lib.Drawing.Objects import ALL
+from lib.Depend.etree import etree, HAVE_LXML
 
 #if lxml.etree is imported successfully, we use xml validation with xsd schema
 if HAVE_LXML:
@@ -18,7 +17,7 @@ class CElementFactory(object):
     """
     Factory, that creates element type objects
     """
-    def __init__(self, storage, path):
+    def __init__(self, storage, path, domainfactory):
         """
         Create the element factory
         
@@ -27,27 +26,40 @@ class CElementFactory(object):
         
         @param path: Path to directory with connection metamodel XMLs
         @type path: string
+        
+        @param domainfactory: factory that has already loaded all the domains
+        from current metamodel
+        @type domainfactory: L{CDomainFactory<lib.Domains.Factory.CDomainFactory>}
         """
         self.types = {}
         self.path = path
+        self.domainfactory = domainfactory
         
         self.storage = storage
         for file in storage.listdir(self.path):
             if file.endswith('.xml'):
                 self.__Load(os.path.join(self.path, file))
-                
-    
-    def GetElement(self, type=None):
+
+    def GetElement(self, type):
         """
-        Get element type by name. If name is None, that return value is dictionary of all elements
+        Get element type by name
         
         @param type: Element type name
         @type  type: string
         """
-        if type == None:
-            return self.types
-        else:
-            return self.types[type]
+        return self.types[type]
+    
+    def IterTypes(self):
+        '''
+        iterator over element types
+        
+        @rtype: L{CElementType<CElementType>}
+        '''
+        for type in self.types.itervalues():
+            yield type
+    
+    def HasType(self, id):
+        return id in self.types
 
     def __Load(self, file_path):
         """
@@ -65,29 +77,15 @@ class CElementFactory(object):
         obj = CElementType(root.get('id'))
         
         for element in root:
-            if element.tag == METAMODEL_NAMESPACE+'Icon':
+            if element.tag == METAMODEL_NAMESPACE + 'Icon':
                 obj.SetIcon(element.get('path'))
+            
+            elif element.tag == METAMODEL_NAMESPACE + 'Domain':
+                obj.SetDomain(self.domainfactory.GetDomain(element.get('id')))
+            
             elif element.tag == METAMODEL_NAMESPACE+'Connections':
-                for item in element:
-                    value = item.get('value')
-                    with_what = None
-                    allow_recursive = False
-                    if item.get('with') != None:
-                        with_what = item.get('with').split(',')
-                    if item.get('allowrecursive') != None:
-                        allow_recursive = item.get('allowrecursive').lower() in ('1', 'true', 'yes')
-                    obj.AppendConnection(value, with_what, allow_recursive)
-            elif element.tag == METAMODEL_NAMESPACE+'Attributes':
-                for item in element:
-                    value = item.get('value')
-                    type = item.get('type')
-                    propid = item.get('propid')
-                    if item.get('notgenerate') != None:
-                        obj.SetGenerateName(not item.get('notgenerate'))
-                    options = []
-                    for opt in item:
-                        options.append(opt.get('value'))
-                    obj.AppendAttribute(value, type, propid, options)
+                self.__LoadConnections(obj, element)
+                
             elif element.tag == METAMODEL_NAMESPACE+'Appearance':
                 tmp = None
                 for j in element:
@@ -124,3 +122,14 @@ class CElementFactory(object):
             for child in root:
                 obj.AppendChild(self.__LoadAppearance(child))
         return obj
+    
+    def __LoadConnections(self, obj, root):
+        for item in root:
+            value = item.get('value')
+            with_what = None
+            allow_recursive = False
+            if item.get('with') != None:
+                with_what = item.get('with').split(',')
+            if item.get('allowrecursive') != None:
+                allow_recursive = item.get('allowrecursive').lower() in ('1', 'true', 'yes')
+            obj.AppendConnection(value, with_what, allow_recursive)

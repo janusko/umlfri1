@@ -1,5 +1,6 @@
 from lib.Exceptions.UserException import *
 import weakref
+from lib.Domains import CDomainObject
 
 class CElementObject(object):
     """
@@ -14,17 +15,13 @@ class CElementObject(object):
         """
         self.revision = 0
         self.type = type
+        self.domainobject = CDomainObject(self.type.GetDomain())
         self.path = None
         self.connections = []
-        self.attribs = {}
-        for i in self.type.GetAttributes():
-            self.SetAttribute(i, self.type.GetDefValue(i))            
-        if type.GetGenerateName():
-            self.SetAttribute('Name', 'New ' + type.GetId())
-        else:
-            self.SetAttribute('Name', '')
         self.node = lambda: None
         self.appears = []
+        if self.domainobject.GetType().HasAttribute('name'):
+            self.domainobject.SetValue('name',self.type.GenerateName())
     
     def GetRevision(self):
         """
@@ -128,23 +125,29 @@ class CElementObject(object):
     
     def GetSize(self, context):
         return self.type.GetSize(context)
+    
+    def GetDomainName(self, key=''):
+        return self.domainobject.GetDomainName(key)
+    
+    def GetDomainType(self, key=''):
+        return self.domainobject.GetType(key)
+    
+    def GetValue(self, key):
+        return self.domainobject.GetValue(key)
+    
+    def SetValue(self, key, value):
+        self.domainobject.SetValue(key, value)
+        self.revision += 1
+        
+    def GetSaveInfo(self):
+        return self.domainobject.GetSaveInfo()
+    
+    def SetSaveInfo(self, value):
+        return self.domainobject.SetSaveInfo(value)
         
     def GetName(self):
-        if 'Name' in self.attribs:
-            return self.attribs['Name']
-        else:
-            raise ElementAttributeError("KeyError")
-
-    def GetAttribute(self, key):
-        if key in self.attribs:
-            return self.attribs[key]
-        else:
-            return None
+        return self.domainobject.GetValue('name')
     
-    def GetAttributes(self):
-        for attr in self.attribs:
-            yield attr
-        
     def GetVisualProperty(self, key):
         if key == 'CHILDREN':
             node = self.node()
@@ -157,68 +160,16 @@ class CElementObject(object):
                 o['name'] = vi.GetObject().GetName()
                 v.append(o)
             return v
-        attr = self.type.GetVisAttr(key)
-        type = self.type.GetAttribute(attr)
-        val = self.attribs[attr]
-        if type[0] == 'attrs':
-            v = []
-            for vi in val:
-                s = ''
-                o = {}
-                if vi['scope'] == 'private':
-                    o['scope'] = '-'
-                elif vi['scope'] == 'public':
-                    o['scope'] = '+'
-                elif vi['scope'] == 'protected':
-                    o['scope'] = '#'
-                l = vi['name']
-                if 'type' in vi and vi['type']:
-                    l += ": "+vi['type']
-                if 'initial' in vi and vi['initial']:
-                    l += " = "+vi['initial']
-                o['line'] = l
-                v.append(o)
-            val = v
-        elif type[0] == 'opers':
-            v = []
-            for vi in val:
-                s = ''
-                o = {}
-                if vi['scope'] == 'private':
-                    o['scope'] = '-'
-                elif vi['scope'] == 'public':
-                    o['scope'] = '+'
-                elif vi['scope'] == 'protected':
-                    o['scope'] = '#'
-                l = vi['name']
-                l += "("
-                if 'params' in vi and vi['params']:
-                    l += vi['params']
-                l += ")"
-                if 'type' in vi and vi['type']:
-                    l += ": "+vi['type']
-                o['line'] = l
-                v.append(o)
-            val = v
-        return val
+        
+        else:
+            return self.domainobject.GetValue(key)
+    
+    def HasVisualAttribute(self, key):
+        return self.domainobject.HasVisualAttribute(key)
 
     def Paint(self, context):
         self.type.Paint(context)
 
-    def RemoveAttribute(self, key):
-        self.revision += 1
-        if self.attribs.has_key(key):
-            del self.attribs[key]
-        else:
-            raise ElementAttributeError("KeyError")
-    
-    def HasAttribute(self, key):
-        return key in self.attribs
-            
-    def SetAttribute(self, key, value):
-        self.revision += 1
-        self.attribs[key] = self.type.TypeCastAttribute(key, value)
-        
     def Disconnect(self, connection):
         connection.Disconnect()
         
@@ -228,31 +179,11 @@ class CElementObject(object):
             self.connections.remove(connection)
         else:
             raise ConnectionError("ConnectionNotFound")
-     
-    # Automaticke generovanie mena elementu 
-    # pomocou cprojNode zisti mena elementov na rovnakej urovni
-    # ak meno uz existuje (a je rovnaky typ), objekt sa premenuje
-    def Assign(self, cprojNode):
-        if not self.type.GetGenerateName():
-            return
+    
+    def AppendItem(self, key):
+        self.domainobject.AppendItem(key)
         self.revision += 1
-        self.node = weakref.ref(cprojNode)
-        if cprojNode.parent is not None:
-            id = 1
-            # zisti nazvy / typy deti, porovnaj a pripadne sa premenuj
-            checkNames = True
-            while checkNames :
-                checkNames = False
-                for child in cprojNode.parent.childs:
-                    if child.GetName() == self.GetName() and child.GetObject().GetType() is self.GetType():
-                        nName = self.GetName()
-                        while nName[-1].isdigit(): # useknem cisla
-                            nName = nName[:-1]
-                        if nName.endswith(' '):
-                            nName = nName + str(id)
-                        else:
-                            nName = nName + ' ' + str(id)
-                        self.SetAttribute('Name', nName)
-                        id = id + 1
-                        checkNames = True #znovu prekontroluj nazvy
-            cprojNode.Change()
+    
+    def RemoveItem(self, key):
+        self.domainobject.RemoveItem(key)
+        self.revision += 1

@@ -7,7 +7,7 @@ class CConnectionType(object):
     """
     Contains part of metamodel that represents connection type
     """
-    def __init__(self, id, line = None, scrArrow = None, destArrow = None, icon = None):
+    def __init__(self, id, line = None, scrArrow = None, destArrow = None, icon = None, domain = None):
         """
         Initialize connection type and fill its properties
         
@@ -32,9 +32,23 @@ class CConnectionType(object):
         self.id = id
         self.icon = icon
         self.labels = []
-        self.attributes = {}
-        self.attributeList = []
-        self.visAttrs = {}
+        self.domain = domain
+    
+    def GetDomain(self):
+        '''
+        @return: current domain type
+        @rtype: L{CDomainType<lib.Domain.Type.CDomainType>}
+        '''
+        return self.domain
+    
+    def SetDomain(self, domain):
+        '''
+        Set current domain type
+        
+        @param domain: new domain type
+        @type domain: L{CDomainType<lib.Domain.Type.CDomainType>}
+        '''
+        self.domain = domain
     
     def SetIcon(self, value):
         """
@@ -44,72 +58,6 @@ class CConnectionType(object):
         @type  value: string
         """
         self.icon = value
-    
-    def GetDefValue(self, id):
-        """
-        Get default value for given attribute
-        
-        @param id: name of the attribute
-        @type  id: string
-        
-        @return: default value
-        @rtype:  anything
-        """
-        type, options = self.attributes[id]
-        if len(options) > 0:
-            temp = options[0]
-        else:
-            temp = None
-        if type == 'int':
-            if temp is None:
-                return 0
-            else:
-                return int(temp)
-        elif type == 'float':
-            if temp is None:
-                return 0.0
-            else:
-                return float(temp)
-        elif type == 'bool':
-            if temp is None:
-                return False
-            else:
-                return ToBool(temp)
-        elif type == 'str':
-            if temp is None:
-                return ""
-            else:
-                return str(temp)
-        elif type == 'note':
-            if temp is None:
-                return ""
-            else:
-                return str(temp)
-        elif type == 'attrs':
-            return []
-        elif type == 'opers':
-            return []
-    
-    def AppendAttribute(self, value, type, propid = None, options = []):
-        """
-        Append new attribute to the connection type
-        
-        @param value: name of the attribute
-        @type  value: string
-        
-        @param type: attribute domain
-        @type  type: string
-        
-        @param propid: property ID for this attribute
-        @type  propid: string
-        
-        @param options: enumeration of correct values
-        @type  options: list of strings
-        """
-        if propid is not None:
-            self.visAttrs[propid] = value
-        self.attributes[value] = (type, options)
-        self.attributeList.append(value)
     
     def AddLabel(self, position, label):
         """
@@ -201,18 +149,6 @@ class CConnectionType(object):
         """
         self.scrArrow = value
 
-    def HasVisualAttribute(self, id):
-        """
-        Determine, if object has visual attribute
-        
-        @param id: visual attribute name
-        @type  id: string
-        
-        @return: True, id attribute exists
-        @rtype: boolean
-        """
-        return id in self.visAttrs.itervalues()
-
     def Paint(self, context):
         """
         Paint connection of given type on canvas
@@ -260,48 +196,12 @@ class CConnectionType(object):
         @rtype:  (string, L{CVisualObject<lib.Drawing.Objects.VisualObject.CVisualObject>})
         """
         return self.labels[idx]
-            
-    def GetAttribute(self, key):
-        """
-        Get type of given attribute
-        
-        @param key: name of attribute
-        @type  key: string
-        
-        @return: type with options enumeration included
-        @rtype: (string, list of strings)
-        """
-        if key in self.attributes:
-            return self.attributes[key]
-        else:
-            raise ConnectionError("BadKey")
     
-    def GetAttributes(self):
-        """
-        Get list of all attribute names
+    def HasVisualAttribute(self, name):
+        '''
+        @note: This is fake function for interface compatibility reasons
         
-        @return: attribute enumeration
-        @rtype: iterator over strings
-        """
-        for i in self.attributeList:
-            yield i
-    
-    def GetVisAttr(self, id):
-        """
-        Get name of attribute with given property id
-        
-        @param id: attribute name
-        @type  id: string
-        
-        @return: property id
-        @rtype:  string
-        """
-        if id in self.visAttrs:
-            return self.visAttrs[id]
-        else:
-            raise ConnectionError('VisAttrDontExists')
-    
-    ID = property(GetId)
-    Icon = property(GetIcon, SetIcon)
-    DestinationArrow = property(GetDestArrow, SetDestArrow)
-    SourceArrow = property(GetSrcArrow, SetSrcArrow)
+        @return: True if name points to anything but "text" domain attribute
+        @rtype: bool
+        '''
+        return self.GetDomain().GetAttribute(name)['type'] != 'text'

@@ -24,7 +24,7 @@ class CmnuItems(CWidget):
         for item in self.mItemAddElement_menu.get_children():
             self.mItemAddElement_menu.remove(item)
 
-        for item in self.application.GetProject().GetElementFactory().GetElement().values():
+        for item in self.application.GetProject().GetElementFactory().IterTypes():
             if ('DirectAdd', 'true') in item.GetOptions().items():
                 newItem = gtk.ImageMenuItem(item.GetId())
                 self.mItemAddElement_menu.append(newItem)
