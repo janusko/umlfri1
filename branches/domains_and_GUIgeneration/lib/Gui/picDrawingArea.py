@@ -363,10 +363,6 @@ class CpicDrawingArea(CWidget):
                 self.emit('selected-item', list(self.Diagram.GetSelected()))
                 #ak je nieco vyselectovane:
                 if len(list(self.Diagram.GetSelectedElements(nolabels = True))) > 0: 
-                    if self.Diagram.GetSelected() is not None and len(tuple(self.Diagram.GetSelected())) < 2:
-                        self.pmOpenSpecification.set_sensitive(True)
-                    else:
-                        self.pmOpenSpecification.set_sensitive(False)
                     self.pMenuShift.popup(None,None,None,event.button,event.time)
 
     def __AddItem(self, toolBtnSel, event):
