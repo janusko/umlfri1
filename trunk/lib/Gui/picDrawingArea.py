@@ -201,12 +201,14 @@ class CpicDrawingArea(CWidget):
     def Paint(self, changed = True):
  
         posx, posy = int(self.picHBar.get_value()), int(self.picVBar.get_value())
-        sizx, sizy = self.GetWindowSize()
+        sizx, sizy = self.GetWindowSize()        
         ((bposx, bposy), (bsizx, bsizy)) = self.buffer_size
+        
         if posx < bposx or bposx + bsizx < posx + sizx or \
            posy < bposy or bposy + bsizy < posy + sizy:
-            bposx = 0
-            bposy = 0
+            
+            bposx = posx + (sizx - bsizx)//2
+            bposy = posy + (sizy - bsizy)//2
             self.buffer_size = ((bposx, bposy), (bsizx, bsizy))
             changed = True
         if changed:
