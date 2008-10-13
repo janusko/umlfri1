@@ -117,6 +117,7 @@ class CInnoPy2Exe(Cpy2exe):
         print>>f, r'Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked'
         print>>f, r'Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked'
         print>>f, r'Name: "associatefrip"; Description: "{cm:AssocFileExtension,UML .FRI,frip}"; GroupDescription: "{cm:OtherTasks}"'
+        print>>f, r'Name: "associatefripx"; Description: "{cm:AssocFileExtension,UML .FRI,fripx}"; GroupDescription: "{cm:OtherTasks}"'
         print>>f, r'Name: "associatefrit"; Description: "{cm:AssocFileExtension,UML .FRI,frit}"; GroupDescription: "{cm:OtherTasks}"'
         print>>f
         
@@ -149,6 +150,11 @@ class CInnoPy2Exe(Cpy2exe):
         print>>f, r'Root: HKCR; Subkey: "uml_fri project\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\img\fileicon.ico"; Tasks: associatefrip'
         print>>f, r'Root: HKCR; Subkey: "uml_fri project\shell"; ValueType: string; ValueName: ""; ValueData: "open"; Tasks: associatefrip'
         print>>f, r'Root: HKCR; Subkey: "uml_fri project\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\bin\uml_fri.exe"" --open=""%1"""; Tasks: associatefrip'
+        print>>f, r'Root: HKCR; Subkey: ".fripx"; ValueType: string; ValueName: ""; ValueData: "uml_fri XML project"; Flags: uninsdeletevalue; Tasks: associatefripx'
+        print>>f, r'Root: HKCR; Subkey: "uml_fri XML project"; ValueType: string; ValueName: ""; ValueData: "{cm:ProjectFileDesc}"; Flags: uninsdeletekey; Tasks: associatefripx'
+        print>>f, r'Root: HKCR; Subkey: "uml_fri XML project\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\img\fileicon.ico"; Tasks: associatefripx'
+        print>>f, r'Root: HKCR; Subkey: "uml_fri XML project\shell"; ValueType: string; ValueName: ""; ValueData: "open"; Tasks: associatefripx'
+        print>>f, r'Root: HKCR; Subkey: "uml_fri XML project\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\bin\uml_fri.exe"" --open=""%1"""; Tasks: associatefripx'
         print>>f, r'Root: HKCR; Subkey: ".frit"; ValueType: string; ValueName: ""; ValueData: "uml_fri template"; Flags: uninsdeletevalue; Tasks: associatefrit'
         print>>f, r'Root: HKCR; Subkey: "uml_fri template"; ValueType: string; ValueName: ""; ValueData: "{cm:TemplateFileDesc}"; Flags: uninsdeletekey; Tasks: associatefrit'
         print>>f, r'Root: HKCR; Subkey: "uml_fri template\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\img\fileicon.ico"; Tasks: associatefrit'
