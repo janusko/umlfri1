@@ -14,11 +14,9 @@ class CVisualObject:
             if not isinstance(val, (str, unicode)):
                 yield val
             elif val[0] == '#':
-                names = val[1:].split('.')
-                yield self.__GetAttrs(context.GetAttribute(names[0]), names[1:])
+                yield context.GetAttribute(val[1:])
             elif val[0] == '@':
-                names = val[1:].split('.')
-                yield self.__GetAttrs(context['item'][names[0]], names[1:])
+                yield context['item'].GetValue(val[1:])
             elif val[0] == '/':
                 yield config[val]
             else:

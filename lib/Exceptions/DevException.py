@@ -13,3 +13,15 @@ class FactoryError(DevException):
 
 class ConfigError(DevException):
     pass
+
+class DomainFactoryError(DevException):
+    pass
+    
+class DomainTypeError(DevException):
+    pass
+
+class DomainObjectError(DevException):
+    pass
+
+class DomainParserError(DevException):
+    pass

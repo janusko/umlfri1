@@ -3,15 +3,7 @@
     <Icon path="icons/associate.png" />
     <SrcArrow possible="1" default="0" />
     <DestArrow possible="1" default="0" />
-    <Attributes>
-        <Item value="Name" type="str" propid="name" />
-        <Item value="Stereotype" type="str" propid="stereotype" />
-        <Item value="Source Cardinality" type="str" propid="SCardinality" />
-        <Item value="Destination Cardinality" type="str" propid="DCardinality" />
-        <Item value="Source Role" type="str" propid="SRole" />
-        <Item value="Destination Role" type="str" propid="DRole" />
-        <Item value="Notes" type="note" />
-    </Attributes>
+    <Domain id="association" />
     <Appearance>
         <LineStyle style="solid" color="/Styles/Connection/LineColor" />
         <ArrowStyle style="simple" fill="/Styles/Connection/ArrowFillColor" color="/Styles/Connection/ArrowColor" />

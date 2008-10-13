@@ -15,7 +15,7 @@ class CCase(CSimpleContainer):
             raise XMLError("Switch as parent needed")
         CSimpleContainer.SetParent(self, parent)
     
-    def IsTrue(self, context):
+    def IsTrue(self, context, value):
         ret = True
         condition, = self.GetVariables(context, 'condition')
         

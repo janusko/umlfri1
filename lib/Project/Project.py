@@ -5,9 +5,11 @@ from ProjectNode import CProjectNode
 from cStringIO import StringIO
 from zipfile import ZipFile, ZIP_STORED, ZIP_DEFLATED
 from lib.Exceptions.UserException import *
+from lib.Exceptions.DevException import DomainObjectError
 from lib.Storages import open_storage
 from lib.Drawing import CElement
 from lib.Drawing import CConnection
+from lib.Domains import CDomainFactory
 from lib.Elements.Type import CElementType
 from lib.Elements.Object import CElementObject
 from lib.Connections.Object import CConnectionObject
@@ -17,7 +19,7 @@ from lib.Connections.Factory import CConnectionFactory
 from lib.Versions.Factory import CVersionFactory
 from lib.Drawing import CDiagram
 import os.path
-from lib.consts import ROOT_PATH, VERSIONS_PATH, DIAGRAMS_PATH, ELEMENTS_PATH, CONNECTIONS_PATH, UMLPROJECT_NAMESPACE, PROJECT_EXTENSION, PROJECT_CLEARXML_EXTENSION
+from lib.consts import ROOT_PATH, VERSIONS_PATH, DIAGRAMS_PATH, ELEMENTS_PATH, CONNECTIONS_PATH, DOMAINS_PATH, UMLPROJECT_NAMESPACE, PROJECT_EXTENSION, PROJECT_CLEARXML_EXTENSION
 from lib.config import config
 
 #if lxml.etree is imported successfully, we use xml validation with xsd schema
@@ -33,9 +35,10 @@ class CProject(object):
         self.root = None
         
         self.Storage = open_storage(os.path.join(ROOT_PATH, 'etc', 'uml'))
-        self.ElementFactory = CElementFactory(self.Storage, ELEMENTS_PATH)
+        self.DomainFactory = CDomainFactory(self.Storage, DOMAINS_PATH)
+        self.ElementFactory = CElementFactory(self.Storage, ELEMENTS_PATH, self.DomainFactory)
         self.DiagramFactory = CDiagramFactory(self.Storage, DIAGRAMS_PATH)
-        self.ConnectionFactory = CConnectionFactory(self.Storage, CONNECTIONS_PATH)
+        self.ConnectionFactory = CConnectionFactory(self.Storage, CONNECTIONS_PATH, self.DomainFactory)
         self.VersionFactory = CVersionFactory(self.Storage, VERSIONS_PATH)
         self.version = self.VersionFactory.GetVersion('UML 1.4')
         self.MetamodelVersion = '1.4.0'
@@ -144,6 +147,26 @@ class CProject(object):
 
         id = IDGenerator()
         
+        def SaveDomainObjectInfo(data, name=None):
+            '''
+            '''
+            if isinstance(data, dict):
+                element = etree.Element(UMLPROJECT_NAMESPACE+'dict')
+                for key, value in data.iteritems():
+                    element.append(SaveDomainObjectInfo(value, key))
+            elif isinstance(data, list):
+                element = etree.Element(UMLPROJECT_NAMESPACE+'list')
+                for value in data:
+                    element.append(SaveDomainObjectInfo(value))
+            elif isinstance(data, (str, unicode)):
+                element = etree.Element(UMLPROJECT_NAMESPACE+'text')
+                element.text = data
+            else:
+                raise Exception("unknown data format")
+            if name:
+                element.set('name', name)
+            return element
+        
         def saveattr(object, element):
             if isinstance(object, dict):
                 attrs = object.iteritems()
@@ -206,6 +229,7 @@ class CProject(object):
         objectsNode = etree.Element(UMLPROJECT_NAMESPACE+'objects')
         connectionsNode = etree.Element(UMLPROJECT_NAMESPACE+'connections')
         projtreeNode = etree.Element(UMLPROJECT_NAMESPACE+'projecttree')
+        counterNode = etree.Element(UMLPROJECT_NAMESPACE+'counters')
         
         # metamodel informations
         metamodelUriNode = etree.Element(UMLPROJECT_NAMESPACE+'uri')
@@ -219,19 +243,26 @@ class CProject(object):
         
         for object in elements:
             objectNode = etree.Element(UMLPROJECT_NAMESPACE+'object', type=unicode(object.GetType().GetId()), id=unicode(id(object)))
-            saveattr(object, objectNode)
+            objectNode.append(SaveDomainObjectInfo(object.GetSaveInfo()))
             objectsNode.append(objectNode)
             
         rootNode.append(objectsNode)
         
         for connection in connections:
             connectionNode = etree.Element(UMLPROJECT_NAMESPACE+'connection', type=unicode(connection.GetType().GetId()), id=unicode(id(connection)), source=unicode(id(connection.GetSource())), destination=unicode(id(connection.GetDestination())))
-            saveattr(connection, connectionNode)
+            connectionNode.append(SaveDomainObjectInfo(connection.GetSaveInfo()))
             connectionsNode.append(connectionNode)
             
         rootNode.append(connectionsNode)
         savetree(self.root, projtreeNode)
         rootNode.append(projtreeNode)
+        
+        for type in self.ElementFactory.IterTypes():
+            counterNode.append(etree.Element(UMLPROJECT_NAMESPACE+'count', id = type.GetId(), value = unicode(type.GetCounter())))
+        for type in self.DiagramFactory:
+            counterNode.append(etree.Element(UMLPROJECT_NAMESPACE+'count', id = type.GetId(), value = unicode(type.GetCounter())))
+        
+        rootNode.append(counterNode)
         
         #xml tree is validate with xsd schema (recentfile.xsd)
         if HAVE_LXML:
@@ -242,10 +273,7 @@ class CProject(object):
         Indent(rootNode)
         
         #save Recent File Tree into ZIP file if it is .frip
-        ext = filename.split('.')
-        ext.reverse()
-        #ext[0] = "."+ext[0]
-        if (("."+ext[0]) != PROJECT_CLEARXML_EXTENSION):     #zipped
+        if (("." + filename.rsplit('.',1)[-1]) != PROJECT_CLEARXML_EXTENSION):     #zipped
             fZip = ZipFile(filename, 'w', ZIP_DEFLATED)
             fZip.writestr('content.xml', '<?xml version="1.0" encoding="utf-8"?>\n'+etree.tostring(rootNode, encoding='utf-8'))
             fZip.close()
@@ -271,6 +299,23 @@ class CProject(object):
             self.filename = None
         else:
             self.filename = filename
+        
+        def LoadDomainObjectInfo(element):
+            '''
+            Transform element back to the dictionary readable by 
+            L{CDomainObject.SetSaveInfo<lib.Domains.Object.CDomainObject.SetSaveInfo>}
+            
+            @return: structured dictionary
+            @rtype: dict
+            '''
+            if element.tag == UMLPROJECT_NAMESPACE + 'dict':
+                return dict([(item.get('name'), LoadDomainObjectInfo(item)) for item in element])
+            elif element.tag == UMLPROJECT_NAMESPACE + 'list':
+                return [LoadDomainObjectInfo(item) for item in element]
+            elif element.tag == UMLPROJECT_NAMESPACE + 'text':
+                return element.text
+            else:
+                raise ProjectError("malformed project file")
         
         def CreateTree(root, parentNode):
             for elem in root:
@@ -321,19 +366,7 @@ class CProject(object):
                     if subelem.tag == UMLPROJECT_NAMESPACE+'object':
                         id = subelem.get("id")
                         object = CElementObject(self.ElementFactory.GetElement(subelem.get("type")))
-
-                        for property in subelem:
-                            if property.get("value") is not None:
-                                object.SetAttribute(property.get("name"),property.get("value"))
-                            elif property.get("type") is not None:
-                                attributes = []
-                                for item in property:
-                                    atrib = {}
-                                    for attribute in item:
-                                        atrib[attribute.get("name")] = attribute.get("value")
-                                    if len(atrib) > 0:
-                                        attributes.append(atrib)
-                                object.SetAttribute(property.get("name"),attributes)
+                        object.SetSaveInfo(LoadDomainObjectInfo(subelem[0]))
                         ListObj[id] = object
 
             elif element.tag == UMLPROJECT_NAMESPACE+'connections':
@@ -341,15 +374,22 @@ class CProject(object):
                     if connection.tag == UMLPROJECT_NAMESPACE+'connection':
                         id = connection.get("id")
                         con = CConnectionObject(self.ConnectionFactory.GetConnection(connection.get("type")),ListObj[connection.get("source")],ListObj[connection.get("destination")])
-                        for propCon in connection:
-                            con.SetAttribute(propCon.get("name"),propCon.get("value"))
+                        con.SetSaveInfo(LoadDomainObjectInfo(connection[0]))
                         ListCon[id] = con
+            
             elif element.tag == UMLPROJECT_NAMESPACE+'projecttree':
                 for subelem in element:
                     if subelem.tag == UMLPROJECT_NAMESPACE+'node':
                         proNode = CProjectNode(None,ListObj[subelem.get("id")],ListObj[subelem.get("id")].GetName() + ":" + ListObj[subelem.get("id")].GetType().GetId())
                         self.SetRoot(proNode)
                         CreateTree(subelem,proNode)
+            
+            elif element.tag == UMLPROJECT_NAMESPACE + 'counters':
+                for item in element:
+                    if self.ElementFactory.HasType(item.get('id')):
+                        self.ElementFactory.GetElement(item.get('id')).SetCounter(int(item.get('value')))
+                    elif self.DiagramFactory.HasType(item.get('id')):
+                        self.DiagramFactory.GetDiagram(item.get('id')).SetCounter(int(item.get('value')))
                         
         
     Root = property(GetRoot, SetRoot)

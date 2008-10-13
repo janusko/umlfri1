@@ -18,7 +18,7 @@ class CDiagram:
         self.viewport = ((0, 0), (0, 0))
         self.scrollingPos = [0, 0]                  #position on diagram (needed for scrollBars)
         if name is None:
-            name = "New " + type.GetId()
+            name = self.typeDiagram.GenerateName()
         self.name = name
         
     def GetHScrollingPos(self):
@@ -319,29 +319,6 @@ class CDiagram:
         for c in self.connections:
             yield c
             
-    # Automaticke generovanie mena diagramu 
-    # pomocou cprojNode zisti mena diagramov na rovnakej urovni
-    # ak meno uz existuje (a je rovnaky typ), area sa premenuje
-    def Assign(self, cprojNode):
-        if cprojNode.diagrams != []:
-            id = 1
-            # zisti nazvy / typy diagramov, porovnaj a pripadne sa premenuj
-            checkNames = True
-            while checkNames :
-                checkNames = False
-                nName = self.GetName()
-                for drArea in cprojNode.diagrams:
-                    if drArea.GetName() == self.GetName() and drArea.GetType() is self.GetType():
-                        while nName[-1].isdigit(): # useknem cisla
-                            nName = nName[:-1]
-                        if nName.endswith(' '):
-                            nName = nName + str(id)
-                        else:
-                            nName = nName + ' ' + str(id)
-                        self.SetName(nName)
-                        id = id + 1
-                        checkNames = True #znovu prekontroluj nazvy
-                        
     # Presunutie elementov uplne dopredu
     def ShiftElementsToTop(self):
         for selectedElement in self.GetSelectedElements():

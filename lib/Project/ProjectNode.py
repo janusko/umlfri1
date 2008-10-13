@@ -8,7 +8,6 @@ class CProjectNode(object):
         self.object = object
         if path is not None:
             self.object.SetPath(path)
-        object.Assign(self)
 
     def Change(self):
         if self.parent is not None:
@@ -66,7 +65,6 @@ class CProjectNode(object):
 
     def AddDiagram(self, diagram):
         if diagram not in self.diagrams:
-            diagram.Assign(self) # vygenerovanie nazvu
             self.diagrams.append(diagram)
     
     def MoveDiagramToNewNode(self, newNode, diagram):

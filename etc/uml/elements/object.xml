@@ -1,22 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ElementType id="Object" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
     <Icon path="icons/object.png" />
+    <Domain id="object" />
     <Connections>
         <Item value="Association" />
         <Item value="Generalization" with="Object" allowrecursive="0" />
     </Connections>
-    <Attributes>
-        <Item value="Name" type="str" propid="name" />
-        <Item value="Stereotype" type="str" propid="stereotype" />
-        <Item value="Scope" type="enum">
-            <Option value="public" />
-            <Option value="private" />
-            <Option value="protected" />
-         </Item>
-        <Item value="Attributes" type="attrs" propid="attributes" />
-        <Item value="Abstract" type="bool" />
-        <Item value="Notes" type="note" />
-    </Attributes>
     <Appearance>
         <Shadow padding="3" color="/Styles/Element/ShadowColor">
             <Rectangle fill="/Styles/Element/FillColor" border="/Styles/Element/LineColor">
@@ -42,17 +31,24 @@
                     </Padding>
                     <Condition condition="#attributes" type="empty" negate="1">
                         <HBox>
-                            <Line type="horizontal" />
-                            <Padding padding="5">
-                                <HBox>
-                                    <Loop collection="attributes">
-                                        <VBox>
-                                            <TextBox text="@scope" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                            <TextBox text="@line" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                        </VBox>
-                                    </Loop>
-                                </HBox>
-                            </Padding>
+                            <Loop collection="attributes">
+                                <VBox>
+                                    <Switch value="@scope">
+                                        <Case condition="Private">
+                                            <TextBox text=" - " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                        </Case>
+                                        <Case condition="Protected">
+                                            <TextBox text=" # " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                        </Case>
+                                        <Case condition="Public">
+                                            <TextBox text=" + " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                        </Case>
+                                    </Switch>
+                                    <TextBox text="@name" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                    <TextBox text=" :" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                    <TextBox text="@type" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                </VBox>
+                            </Loop>
                         </HBox>
                     </Condition>
                 </HBox>

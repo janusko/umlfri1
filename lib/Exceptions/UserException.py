@@ -37,3 +37,6 @@ class ElementAttributeError(UserException):
 class DrawingError(UserException):
     pass
 
+class ParserError(UserException):
+    pass
+
