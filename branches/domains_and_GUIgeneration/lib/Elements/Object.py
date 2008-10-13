@@ -163,6 +163,9 @@ class CElementObject(object):
         
         else:
             return self.domainobject.GetValue(key)
+    
+    def HasVisualAttribute(self, key):
+        return self.domainobject.HasVisualAttribute(key)
 
     def Paint(self, context):
         self.type.Paint(context)
@@ -176,4 +179,11 @@ class CElementObject(object):
             self.connections.remove(connection)
         else:
             raise ConnectionError("ConnectionNotFound")
-     
+    
+    def AppendItem(self, key):
+        self.domainobject.AppendItem(key)
+        self.revision += 1
+    
+    def RemoveItem(self, key):
+        self.domainobject.RemoveItem(key)
+        self.revision += 1

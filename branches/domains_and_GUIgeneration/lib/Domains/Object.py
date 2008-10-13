@@ -1,4 +1,5 @@
 from lib.Exceptions import DomainObjectError
+import re
 
 class CDomainObject(object):
     '''
@@ -21,123 +22,156 @@ class CDomainObject(object):
             raise DomainObjectError('string cannot be used as domain reference')
         self.type = type
         self.values = {}
-        for id in self.type.IterAttributesID():
+        for id in self.type.IterAttributeIDs():
             self.values[id] = self.type.GetDefaultValue(id)
     
     def GetType(self, id=''):
         '''
-        @return: logical type of current object
-        @rtype: L{CDomainType<Type.CDomainType>}
+        @return: DomainType of attribute
+        @rtype: L{CDomainType<lib.Domains.Type.CDomainType>}
+        
+        @param id: path to the attribute
+        @type id: str
         '''
-        if id == '':
-            return self.type
-        elif id.find('.') == -1:
-            ext = ''
-        else:
-            id, ext = id.split('.', 1)
-        if not self.type.IsAtomic(id):
-            return self.GetValue(id).GetType(ext)
-        else:
-            raise DomainObjectError('Attribute "%s" is atomic'%id)
-            
+        return self._TracePath(id, 'gettype')
+    
+    def GetDomainName(self, id):
+        '''
+        @return: name of DomainType of attribute
+        @rtype: str
+        
+        @param id: path to the attribute
+        @type id: str
+        '''
+        return self._TracePath(id, 'getdomainname')
     
     def GetValue(self, id):
         '''
-        Get value of field. Type can be one of atomic types or CDomainObject
-        object if type is non-atomic
-        
-        @retrun: value of filed defined by id
+        @return: value of attribute
         @rtype: various
         
-        @raise DomainObjectError: if id is not recognized
-        
-        @param id: field identifier
+        @param id: path to the attribute
         @type id: str
         '''
-        try:
-            if id.find('.') > -1:
-                id, ext = id.split('.', 1)
-                if self.GetType().IsAtomic(id = id):
-                    raise DomainObjectError('Attribute "%s" is atomic and '
-                    "'doesn't have properties"%id)
-                return self.values[id].GetValue(ext)
-            else:
-                return self.values[id]
-        except KeyError:
-            raise DomainObjectError('Identifier "%s" unknown'%(id, ))
-    
-    def GetDomainName(self, id):
-        try:
-            if id == '':
-                return self.type.GetName()
-            elif id.find('.') > -1:
-                id, ext = id.split('.', 1)
-                if self.GetType().IsAtomic(id = id):
-                    raise DomainObjectError('Attribute "%s" is atomic'%id)
-                return self.values[id].GetDomain(ext)
-            else:
-                return self.type.GetAttribute(id)['type']
-        except KeyError:
-            raise DomainObjectError('Identifier "%s" unknown'%(id, ))
+        return self._TracePath(id, 'getvalue')
     
     def SetValue(self, id, value):
         '''
-        Set value of field defined by id. 
+        Set new value to the attribute
         
-        domain of field must corenspond to the definition. Two possibilities
-        are allowed:
-            - id is defined with atomic domain. Look at 
-            L{CDomainType.TransformValue<Type.CDomainType.TransformValue>}
-            - id is defined as non-atomic domain. In this case, value MUST be
-            instance of CDomainObject with the same domain as defined.
-        
-        @param id: field identifier
+        @param id: path to the attribute
         @type id: str
         
-        @param value: value of field
+        @param value: new value to be set
         @type value: various
+        '''
+        self._TracePath(id, 'setvalue', value)
+    
+    def AppendItem(self, id):
+        '''
+        Append next object to the attribute with type list
         
-        @raise EDomainType: if id has atomic type and value cannot be 
-        transformed to this type
+        @param id: path to the attribute
+        @type id: str
         
-        @raise DomainObjectError: if id has non-atomic type and domain of value
-        doesn't correspond to definition
+        @param id: path to the attribute
+        @type id: str
+        '''
+        self._TracePath(id, 'append')
+    
+    def RemoveItem(self, id):
+        '''
+        Remove object from attribute with type list
+        
+        @param id: path to the attribute
+        @type id: str
+        '''
+        self._TracePath(id, 'remove')
+    
+    def HasVisualAttribute(self, id):
+        '''
+        @return: True if attribute is being displayed
+        '''
+        return self.GetDomainName(id) != 'text'
+        #return self._TracePath(id, 'visual')
+    
+    def _TracePath(self, id, action, value = None):
+        '''
+        Find attribute defined by id and perform action
+        
+        @param id: 
         '''
         
-        try:
-            if id.find('.') > -1:
-                id, ext = id.split('.', 1)
-                if self.GetType().IsAtomic(id = id):
-                    raise DomainObjectError('Attribute "%s" is atomic and '
-                    "'doesn't have properties"%id)
-                self.values[id].SetValue(ext, value)
-            else:
-                self.values[id] = self.type.TransformValue(id, value)
-        except KeyError:
-            raise DomainObjectError('Identifier "%s" unknown'%(id, ))
-    
-    def _TracePath(self, id, call, value = None):'''
         path = re.split(r'(\[|\.)', id, 1)
+        
         if len(path) == 1: #work with current attribute
-            pass
+            if action == 'setvalue':
+                self.values[path[0]] = self.type.TransformValue(value, id = path[0])
+                return
+            elif action == 'getvalue':
+                return self.values[path[0]]
+            elif action == 'gettype':
+                if path[0] == '':
+                    return self.type
+                else:
+                    return self.type.GetFactory().GetDomain(self.type.GetAttribute(path[0])['type'])
+            elif action == 'getdomainname':
+                if path[0] == '':
+                    return self.type.GetName()
+                else:
+                    return self.type.GetAttribute(path[0])['type']
+            elif action == 'append':
+                if self.type.GetAttribute(path[0])['type'] == 'list':
+                    self.values[path[0]].append(self.type.GetDefaultValue(domain = self.type.GetAttribute(path[0])['list']['type']))
+                else:
+                    raise DomainObjectError('Attribute %s of domain %s is not of type "list"'%\
+                    (path[0], self.type.GetName()))
+            elif action == 'remove':
+                raise DomainObjectError('RemoveItem is allowed on item of a list only')
+            elif action == 'visual':
+                return self.type.HasVisualAttribute(path[0])
+        
         elif path[1] == '.': #nested call
             if self.type.IsAtomic(id = path[0]): #atomic element doesn't have items
                 raise DomainObjectError('Attribute %s of domain %s is atomic'%\
                     (path[0], self.type.GetName()))
-            return self.GetValue(path[0])._TracePath(path[2], call, value)
-        elif path[1] == '[':
+            return self.values[path[0]]._TracePath(path[2], call, value)
+        
+        elif path[1] == '[': #index of list
+            
             if self.type.GetAttribute(path[0])['type'] <> 'list':
                 raise CDomainObjectError('Attribute %s of domain %s cannot be indexed'%\
                     (path[0], self.type.GetName()))
             
-            idx, rest = path[2].split(']', 2)
+            idx, rest = path[2].split(']', 1)
             idx = int(idx)
-            if self.type.GetAttribute
-            empty, rest = rest.split('.', 1)
-            if 
+            if self.type.IsAtomic(domain = self.type.GetAttribute(path[0])['list']['type']) or rest == '':
+                if rest:
+                    raise DomainObjectError('Nothing was expected after "]"')
+                
+                if action == 'setvalue':
+                    self.values[path[0]][idx] = self.type.TransformValue(value, domain = self.type.GetAttribute(path[0])['list']['type'])
+                    return
+                elif action == 'getvalue':
+                    return self.values[path[0]][idx]
+                elif action == 'gettype':
+                    return self.type.GetFactory().GetDomain(self.type.GetAttribute(path[0])['list']['type'])
+                elif action == 'getdomainname':
+                    return self.type.GetAttribute(path[0])['list']['type']
+                elif action == 'append':
+                    if self.type.GetAttribute(path[0])['list']['type'] == 'list':
+                        self.values[path[0]][idx].append(self.type.GetDefaultValue(domain = self.type.GetAttribute(path[0])['list']['type']))
+                    else:
+                        raise DomainObjectError('Type of items in list %s of domain %s are not of type "list"'%\
+                        (path[0], self.type.GetName()))
+                elif action == 'remove':
+                    self.values[path[0]].pop(idx)
+                elif action == 'visual':
+                    return self.type.HasVisualAttribute(path[0])
+                
+            if rest.startswith('.'):
+                return self.values[path[0]][idx]._TracePath(rest[1:], action, value)
             
-        '''
-    
     def GetSaveInfo(self):
         '''
         @return: structured dictionary containing all the necessary data for .frip file

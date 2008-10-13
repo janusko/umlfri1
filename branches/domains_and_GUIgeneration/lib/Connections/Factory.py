@@ -62,9 +62,9 @@ class CConnectionFactory(object):
         root = etree.XML(self.storage.read_file(file_path))
 
         #xml (version) file is validate with xsd schema (metamodel.xsd)
-        #~ if HAVE_LXML:
-            #~ if not xmlschema.validate(root):
-                #~ raise FactoryError("XMLError", xmlschema.error_log.last_error)
+        if HAVE_LXML:
+            if not xmlschema.validate(root):
+                raise FactoryError("XMLError", xmlschema.error_log.last_error)
 
         id = root.get('id')
         

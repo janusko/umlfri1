@@ -21,6 +21,13 @@ class CDomainType(object):
         self.parsers = []
         self.attributeorder = []
     
+    def GetFactory(self):
+        '''
+        @retrun: Current domain factory
+        @rtype: L{CDomainFactory<Factory.CDomainFactory>}
+        '''
+        return self.factory
+    
     def AppendAttribute(self, id, name, type):
         '''
         Add attribute the domain
@@ -173,7 +180,7 @@ class CDomainType(object):
         
         return self.attributes[id]
     
-    def IterAttributesID(self):
+    def IterAttributeIDs(self):
         '''
         Iterator over ID of items
         
@@ -265,14 +272,14 @@ class CDomainType(object):
         '''
         if id is not None:
             if not id in self.attributes:
-                raise DomainTypeError('Unknown identifier %s'%(id, ))
+                raise DomainTypeError('Unknown identifier "%s"'%(id, ))
             return self.IsAtomic(domain = self.attributes[id]['type'])
         elif domain is not None:
             return domain in self.ATOMIC
         else:
             raise DomainTypeError("Invalid input parameters")
     
-    def TransformValue(self, id, value):
+    def TransformValue(self, value, id = None, domain = None):
         '''
         @return: value transformed to domain that is defined for defined attribute
         
@@ -286,10 +293,12 @@ class CDomainType(object):
             - if value is incopatible with attribute domain
         '''
         
-        if not id in self.attributes:
-            raise DomainTypeError('Unknown identifier %s'%(id, ))
-        
-        type = self.attributes[id]['type']
+        if domain is None:
+            if not id in self.attributes:
+                raise DomainTypeError('Unknown identifier %s'%(id, ))
+            type = self.attributes[id]['type']
+        else:
+            type = domain
         
         if type in self.ATOMIC:
             if type == 'int':

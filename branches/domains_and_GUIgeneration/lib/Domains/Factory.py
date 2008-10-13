@@ -39,7 +39,6 @@ class CDomainFactory(object):
         self.storage = storage
         for file in storage.listdir(self.path):
             if file.endswith('.xml'):
-                print file
                 self.__Load(os.path.join(self.path, file))
         
         for domain in self.domains.itervalues():
@@ -65,7 +64,7 @@ class CDomainFactory(object):
         @type  id: string
         """
         if not id in self.domains:
-            raise DomainFactoryError('unrecognized identifier')
+            raise DomainFactoryError('unrecognized domain name ' + id)
         
         return self.domains[id]
     
@@ -89,9 +88,9 @@ class CDomainFactory(object):
         
         root = etree.XML(self.storage.read_file(path))
         
-        #~ if HAVE_LXML:
-            #~ if not xmlschema.validate(root):
-                #~ raise FactoryError("XMLError", xmlschema.error_log.last_error)
+        if HAVE_LXML:
+            if not xmlschema.validate(root):
+                raise FactoryError("XMLError", xmlschema.error_log.last_error)
         
         if root.tag == METAMODEL_NAMESPACE + 'Domain':
             self.__LoadDomain(root)

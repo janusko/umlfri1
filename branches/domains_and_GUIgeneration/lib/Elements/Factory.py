@@ -57,6 +57,9 @@ class CElementFactory(object):
         '''
         for type in self.types.itervalues():
             yield type
+    
+    def HasType(self, id):
+        return id in self.types
 
     def __Load(self, file_path):
         """

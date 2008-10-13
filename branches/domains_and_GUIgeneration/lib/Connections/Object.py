@@ -266,4 +266,17 @@ class CConnectionObject(object):
         
     def GetVisualProperty(self, key):
         return self.domainobject.GetValue(key)
+    
+    def HasVisualAttribute(self, key):
+        return self.domainobject.HasVisualAttribute(key)
+    
+    def AppendItem(self, key):
+        self.domainobject.AppendItem(key)
+        self.revision += 1
+    
+    def RemoveItem(self, key):
+        self.domainobject.RemoveItem(key)
+        self.revision += 1
+
+
 

@@ -259,13 +259,15 @@ class CProject(object):
         
         for type in self.ElementFactory.IterTypes():
             counterNode.append(etree.Element(UMLPROJECT_NAMESPACE+'count', id = type.GetId(), value = unicode(type.GetCounter())))
+        for type in self.DiagramFactory:
+            counterNode.append(etree.Element(UMLPROJECT_NAMESPACE+'count', id = type.GetId(), value = unicode(type.GetCounter())))
         
         rootNode.append(counterNode)
         
-        #~ #xml tree is validate with xsd schema (recentfile.xsd)
-        #~ if HAVE_LXML:
-            #~ if not xmlschema.validate(rootNode):
-                #~ raise XMLError(xmlschema.error_log.last_error)
+        #xml tree is validate with xsd schema (recentfile.xsd)
+        if HAVE_LXML:
+            if not xmlschema.validate(rootNode):
+                raise XMLError(xmlschema.error_log.last_error)
 
         #make human-friendly tree
         Indent(rootNode)
@@ -354,9 +356,9 @@ class CProject(object):
         root = etree.XML(data)
 
         #xml (version) file is validate with xsd schema (metamodel.xsd)
-        #~ if HAVE_LXML:
-            #~ if not xmlschema.validate(root):
-                #~ raise XMLError(xmlschema.error_log.last_error)
+        if HAVE_LXML:
+            if not xmlschema.validate(root):
+                raise XMLError(xmlschema.error_log.last_error)
 
         for element in root:
             if element.tag == UMLPROJECT_NAMESPACE+'objects':
@@ -384,7 +386,11 @@ class CProject(object):
             
             elif element.tag == UMLPROJECT_NAMESPACE + 'counters':
                 for item in element:
-                    self.ElementFactory.GetElement(item.get('id')).SetCounter(int(item.get('value')))
+                    if self.ElementFactory.HasType(item.get('id')):
+                        self.ElementFactory.GetElement(item.get('id')).SetCounter(int(item.get('value')))
+                    elif self.DiagramFactory.HasType(item.get('id')):
+                        self.DiagramFactory.GetDiagram(item.get('id')).SetCounter(int(item.get('value')))
+                        
         
     Root = property(GetRoot, SetRoot)
     

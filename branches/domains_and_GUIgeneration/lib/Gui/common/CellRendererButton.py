@@ -51,8 +51,6 @@ class CellRendererButton(gtk.GenericCellRenderer):
         if event is not None and event.type == gtk.gdk.BUTTON_PRESS and \
             cell_area.x < event.x < cell_area.x + self.width and \
             cell_area.y < event.y < cell_area.y + cell_area.height:
-            
-            print path
             self.emit("click", path)
 
 gobject.type_register(CellRendererButton)

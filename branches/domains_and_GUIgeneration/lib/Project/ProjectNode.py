@@ -65,7 +65,6 @@ class CProjectNode(object):
 
     def AddDiagram(self, diagram):
         if diagram not in self.diagrams:
-            diagram.Assign(self) # vygenerovanie nazvu
             self.diagrams.append(diagram)
     
     def MoveDiagramToNewNode(self, newNode, diagram):

@@ -55,6 +55,9 @@ class CDiagramFactory(object):
             if file.endswith('.xml'):
                 self.__Load(os.path.join(self.path, file))
     
+    def HasType(self, id):
+        return id in self.types
+    
     def __iter__(self):
         """
         Iterator over all contained diagram types

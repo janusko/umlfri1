@@ -45,7 +45,7 @@
                                         </Case>
                                     </Switch>
                                     <TextBox text="@name" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                    <TextBox text=" : " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                    <TextBox text=" :" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
                                     <TextBox text="@type" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
                                 </VBox>
                             </Loop>
@@ -58,8 +58,20 @@
                                 <HBox>
                                     <Loop collection="operations">
                                         <VBox>
-                                            <TextBox text="@scope" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                            <TextBox text="@line" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                            <Switch value="@scope">
+                                                <Case condition="Private">
+                                                    <TextBox text="- " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                </Case>
+                                                <Case condition="Protected">
+                                                    <TextBox text="# " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                </Case>
+                                                <Case condition="Public">
+                                                    <TextBox text="+ " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                </Case>
+                                            </Switch>
+                                            <TextBox text="@name" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                            <TextBox text="() :" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                            <TextBox text="@rtype" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
                                         </VBox>
                                     </Loop>
                                 </HBox>
