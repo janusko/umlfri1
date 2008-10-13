@@ -198,6 +198,7 @@ setup(
     options = {
         "py2exe": {
             "includes": "pango,atk,gobject,cairo,pangocairo",
+            'packages': ['lxml'],
             "compressed": 1,
             "optimize": 2,
         }
@@ -212,6 +213,7 @@ setup(
         ("etc/uml/elements", glob.glob("etc/uml/elements/*.xml")),
         ("etc/uml/icons", glob.glob("etc/uml/icons/*.png")),
         ("etc/uml/versions", glob.glob("etc/uml/versions/*.xml")),
+        ("share/schema", glob.glob("share/schema/*.xsd")),
         ("img", glob.glob("img/*.png")+glob.glob("img/*.ico")),
         (".", ["ABOUT", "README", "LICENSE"])
     ]+list(get_languages('share/locale', 'uml_fri')),
