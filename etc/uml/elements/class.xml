@@ -32,22 +32,35 @@
                     <Padding padding="5">
                         <HBox>
                             <Loop collection="attributes">
-                                <VBox>
-                                    <Switch value="@scope">
-                                        <Case condition="Private">
-                                            <TextBox text=" - " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                        </Case>
-                                        <Case condition="Protected">
-                                            <TextBox text=" # " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                        </Case>
-                                        <Case condition="Public">
-                                            <TextBox text=" + " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                        </Case>
-                                    </Switch>
-                                    <TextBox text="@name" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                    <TextBox text=" :" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                    <TextBox text="@type" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                </VBox>
+                                <Condition type="empty" condition="@name" negate="1">
+                                    <VBox>
+                                        <Switch value="@scope">
+                                            <Case condition="Private">
+                                                <TextBox text=" - " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                            </Case>
+                                            <Case condition="Protected">
+                                                <TextBox text=" # " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                            </Case>
+                                            <Case condition="Public">
+                                                <TextBox text=" + " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                            </Case>
+                                        </Switch>
+                                        <Condition type="empty" condition="@stereotype" negate="1">
+                                            <VBox>
+                                                <TextBox text="&#171;" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                <TextBox text="@stereotype" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                <TextBox text="&#187;  " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                            </VBox>
+                                        </Condition>
+                                        <TextBox text="@name" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                        <Condition type="empty" condition="@type" negate="1">
+                                            <VBox>
+                                                <TextBox text=" :" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                <TextBox text="@type" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                            </VBox>
+                                        </Condition>
+                                    </VBox>
+                                </Condition>
                             </Loop>
                         </HBox>
                     </Padding>
@@ -57,22 +70,31 @@
                             <Padding padding="5">
                                 <HBox>
                                     <Loop collection="operations">
-                                        <VBox>
-                                            <Switch value="@scope">
-                                                <Case condition="Private">
-                                                    <TextBox text=" - " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                                </Case>
-                                                <Case condition="Protected">
-                                                    <TextBox text=" # " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                                </Case>
-                                                <Case condition="Public">
-                                                    <TextBox text=" + " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                                </Case>
-                                            </Switch>
-                                            <TextBox text="@name" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                            <TextBox text="() :" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                            <TextBox text="@rtype" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                        </VBox>
+                                        <Condition type="empty" condition="@name" negate="1">
+                                            <VBox>
+                                                <Switch value="@scope">
+                                                    <Case condition="Private">
+                                                        <TextBox text=" - " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                    </Case>
+                                                    <Case condition="Protected">
+                                                        <TextBox text=" # " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                    </Case>
+                                                    <Case condition="Public">
+                                                        <TextBox text=" + " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                    </Case>
+                                                </Switch>
+                                                <Condition type="empty" condition="@stereotype" negate="1">
+                                                    <VBox>
+                                                        <TextBox text="&#171;" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                        <TextBox text="@stereotype" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                        <TextBox text="&#187;  " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                    </VBox>
+                                                </Condition>
+                                                <TextBox text="@name" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                <TextBox text="() :" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                <TextBox text="@rtype" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                            </VBox>
+                                        </Condition>
                                     </Loop>
                                 </HBox>
                             </Padding>
