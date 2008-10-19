@@ -29,8 +29,6 @@ class CellRendererButton(gtk.GenericCellRenderer):
 
     def on_render(self, window, widget, background_area, cell_area, expose_area, flags):
         tid = 0
-        if flags & gtk.CELL_RENDERER_SELECTED:
-            tid = 3
         layout = widget.create_pango_layout(self.text)
         layout.set_font_description(widget.style.font_desc)
         w, h = layout.get_size()
