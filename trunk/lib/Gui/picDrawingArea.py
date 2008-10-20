@@ -284,7 +284,7 @@ class CpicDrawingArea(CWidget):
     def on_picEventBox_button_press_event(self, widget, event):
         self.picDrawingArea.grab_focus()  
         pos = self.GetAbsolutePos((event.x, event.y))
-        
+
         if event.button == 1 and event.type == gtk.gdk._2BUTTON_PRESS:
             if len(tuple(self.Diagram.GetSelected())) == 1:
                 for Element in self.Diagram.GetSelected():
@@ -354,6 +354,10 @@ class CpicDrawingArea(CWidget):
                         self.Paint()
                         self.emit('selected-item', list(self.Diagram.GetSelected()))
                 self.__BeginDragSel(event)
+
+        elif event.button == 2:
+            self.__BeginDragMove(event)
+
         elif event.button == 3:
                 itemSel = self.Diagram.GetElementAtPosition(self.canvas, pos)
                 if itemSel not in frozenset(self.Diagram.GetSelected()):
@@ -548,6 +552,15 @@ class CpicDrawingArea(CWidget):
 
     @event("picEventBox", "scroll-event")
     def on_picEventBox_scroll_event(self, widget, event):
+
+        if gtk.keysyms.Control_L in self.pressedKeys:
+            if event.direction == gtk.gdk.SCROLL_UP:
+                self.IncScale(lib.consts.SCALE_INCREASE)
+                return
+            elif event.direction == gtk.gdk.SCROLL_DOWN:
+                self.IncScale(-lib.consts.SCALE_INCREASE)
+                return           
+
         if  event.state & gtk.gdk.SHIFT_MASK :
             self.__Scroll(self.picHBar, event.direction)
         else:
