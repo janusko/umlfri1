@@ -21,7 +21,7 @@ from lib.Gui import CfrmSplash, CfrmMain, CfrmAbout, CfrmProperties, CfrmAttribu
 from lib.config import config
 from lib.consts import SPLASH_TIMEOUT
 
-__version__ = '1.0-beta5'
+__version__ = '1.0-beta20081013-r2'
 
 class Application(CApplication):
     windows = (CfrmSplash, CfrmMain, CfrmAbout, CfrmProperties, CfrmAttribute, CfrmOperation, CfrmOpen, CfrmSave, CfrmOptions, CfrmException)
