@@ -29,6 +29,8 @@ class CGtkDllPy2Exe(Cpy2exe):
     GTK_needed_files = ['etc/fonts', 'etc/gtk-2.0', 'etc/pango', ('lib/gtk-2.0/*/engines', 'libwimp.dll'),
                         'lib/gtk-2.0/*/immodules', 'lib/gtk-2.0/*/loaders', 'lib/pango/*/modules',
                         'share/themes/MS-Windows/gtk-2.0']
+    GTK_dll_fixes = ['bin/iconv.dll']
+
     def __init__(self, *args, **kw_args):
         Cpy2exe.__init__(self, *args, **kw_args)
         self.appendGtkDlls()
@@ -48,10 +50,19 @@ class CGtkDllPy2Exe(Cpy2exe):
             for dir, files in dir_files:
                 for file in files:
                     for found in glob.glob(os.sep.join((self.GTK_PATH, dir, file))):
-                        reldir = os.path.dirname(found)[len(self.GTK_PATH)+1:]
-                        self.distribution.data_files.append((reldir, (found, )))
+                        if not os.path.isdir(found):
+                            reldir = os.path.dirname(found)[len(self.GTK_PATH)+1:]
+                            self.distribution.data_files.append((reldir, (found, )))
         for lang in languages:
             self.distribution.data_files.append(('share/locale/%s/LC_MESSAGES'%lang, glob.glob(self.GTK_PATH+'/share/locale/%s/LC_MESSAGES/*.*'%lang)))
+    
+    def find_dlls(self, extensions):
+        dlls = Cpy2exe.find_dlls(self, extensions)
+        for dll in self.GTK_dll_fixes:
+            dll = os.path.abspath(os.sep.join((self.GTK_PATH, dll)))
+            if dll not in dlls:
+                dlls.add(dll)
+        return dlls
 
 class CInnoPy2Exe(Cpy2exe):
     def run(self):
@@ -166,7 +177,7 @@ class CInnoPy2Exe(Cpy2exe):
         print>>f, r'[Run]'
         print>>f, r'Filename: "{app}\%s"; Description: "{cm:LaunchProgram,%s}"; Flags: nowait postinstall skipifsilent'%(main_exe, name)
 
-class CGtkDllAndInnoPy2Exe(CInnoPy2Exe, CGtkDllPy2Exe):
+class CGtkDllAndInnoPy2Exe(CGtkDllPy2Exe, CInnoPy2Exe):
     def __init__(self, *args, **kw_args):
         CGtkDllPy2Exe.__init__(self, *args, **kw_args)
     
