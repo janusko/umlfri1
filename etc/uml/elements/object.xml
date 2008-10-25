@@ -53,8 +53,12 @@
                                             </VBox>
                                         </Condition>
                                         <TextBox text="@name" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                        <TextBox text=" :" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                        <TextBox text="@type" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                        <Condition type="empty" condition="@type" negate="1">
+                                            <VBox>
+                                                <TextBox text=" :" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                <TextBox text="@type" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                            </VBox>
+                                        </Condition>
                                     </VBox>
                                 </Condition>
                             </Loop>
