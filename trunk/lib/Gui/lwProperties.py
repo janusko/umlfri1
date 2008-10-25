@@ -51,6 +51,7 @@ class ClwProperties(CWidget):
         self.Column2.pack_start(self.ButtonRenderer, False)
         self.Column2.add_attribute(self.ButtonRenderer, 'visible', ID_BUTTON_VISIBLE)
         self.Column2.add_attribute(self.ButtonRenderer, 'text', ID_BUTTON_TEXT)
+        self.Column2.add_attribute(self.ButtonRenderer, 'editable', ID_EDITABLE)
         
         
         self.lwProperties.append_column(self.Column1)
@@ -173,24 +174,39 @@ class ClwProperties(CWidget):
         self.element.GetObject().SetValue(key, new_value)
         self.emit('content_update', self.element, key)
     
+    def on_listadd(self, key, iter):
+        self.element.GetObject().AppendItem(key)
+        self._FillListItem(self.element.GetObject(), iter, key, len(self.element.GetObject().GetValue(key)) - 1)
+        self.emit('content_update', self.element, key)
+        
+    def on_listdel(self, key, iter, path):
+        model = self.lwProperties.get_model()
+        parent_path = path.rsplit(':', 1)[0]
+        parent_iter = model.get_iter_from_string(parent_path)
+        parent_key, = model.get(parent_iter, ID_ID)
+        if len(self.element.GetObject().GetValue(parent_key)) == 1:
+            self.lwProperties.collapse_row(parent_path)
+            self.on_listadd(parent_key, parent_iter)
+        self.element.GetObject().RemoveItem(key)
+        self.treeStore.remove(iter)
+        for idx in xrange(int(path.rsplit(':', 1)[-1]), len(self.element.GetObject().GetValue(key.rsplit('[', 1)[0]))):
+            npath = path.rsplit(':', 1)[0] + ':' + str(idx)
+            niter = model.get_iter_from_string(npath)
+            self.treeStore.set(niter,
+                ID_ID, key.rsplit('[', 1)[0] + '[%i]' % idx,
+                ID_NAME, str(idx))
+        self.emit('content_update', self.element, key)
+    
     @event("ButtonRenderer", "click")
     def on_change_button(self, cellrenderer, path):
         model = self.lwProperties.get_model()
         iter = model.get_iter_from_string(path)
         key, action = model.get(iter, ID_ID, ID_ACTION)
         if action == 'listadd':
-            self.element.GetObject().AppendItem(key)
-            self._FillListItem(self.element.GetObject(), iter, key, len(self.element.GetObject().GetValue(key)) - 1)
-        elif action == 'listdel':
-            self.element.GetObject().RemoveItem(key)
-            self.treeStore.remove(iter)
+            self.on_listadd(key, iter)
             
-            for idx in xrange(int(path.rsplit(':', 1)[-1]), len(self.element.GetObject().GetValue(key.rsplit('[', 1)[0]))):
-                npath = path.rsplit(':', 1)[0] + ':' + str(idx)
-                niter = model.get_iter_from_string(npath)
-                self.treeStore.set(niter,
-                    ID_ID, key.rsplit('[', 1)[0] + '[%i]' % idx,
-                    ID_NAME, str(idx))
+        elif action == 'listdel':
+            self.on_listdel(key, iter, path)
         
-        self.emit('content_update', self.element, key)
+        
         
