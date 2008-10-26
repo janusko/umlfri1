@@ -53,7 +53,6 @@ class ClwProperties(CWidget):
         self.Column2.add_attribute(self.ButtonRenderer, 'text', ID_BUTTON_TEXT)
         self.Column2.add_attribute(self.ButtonRenderer, 'editable', ID_EDITABLE)
         
-        
         self.lwProperties.append_column(self.Column1)
         self.lwProperties.append_column(self.Column2)
         self.lwProperties.set_model(self.treeStore)
@@ -62,7 +61,7 @@ class ClwProperties(CWidget):
     def _FillListItem(self, object, parent, prefix, idx):
         itemrow = self.treeStore.append(parent)
         self.treeStore.set(itemrow,
-            ID_ID, prefix + '[%i]' % idx,
+            ID_ID, '[%i]' % idx,
             ID_NAME, str(idx), 
             ID_VALUE, '', #text representation of item in list
             ID_TEXT_VISIBLE, False, 
@@ -79,7 +78,7 @@ class ClwProperties(CWidget):
         
         for attrID in DType.IterAttributeIDs():
             row = self.treeStore.append(parent)
-            identifier = (prefix + '.' if prefix else '') + attrID
+            identifier = ('.' if prefix else '') + attrID
             type = DType.GetAttribute(attrID)['type']
             name = DType.GetAttribute(attrID)['name']
             
@@ -92,13 +91,13 @@ class ClwProperties(CWidget):
                     ID_COMBO_VISIBLE, False, 
                     ID_BUTTON_VISIBLE, False, 
                     ID_EDITABLE, False)#Change to True if has parser
-                self._FillBody(object, row, identifier)
+                self._FillBody(object, row, prefix + identifier)
             
             elif type in ('str', 'int', 'float', 'text'):
                 self.treeStore.set(row, 
                     ID_ID, identifier,
                     ID_NAME, name, 
-                    ID_VALUE, str(object.GetValue(identifier)), 
+                    ID_VALUE, str(object.GetValue(prefix + identifier)), 
                     ID_TEXT_VISIBLE, True, 
                     ID_COMBO_VISIBLE, False, 
                     ID_BUTTON_VISIBLE, False, 
@@ -111,7 +110,7 @@ class ClwProperties(CWidget):
                 self.treeStore.set(row, 
                     ID_ID, identifier,
                     ID_NAME, name, 
-                    ID_VALUE, str(object.GetValue(identifier)), 
+                    ID_VALUE, str(object.GetValue(prefix + identifier)), 
                     ID_TEXT_VISIBLE, False, 
                     ID_COMBO_VISIBLE, True, 
                     ID_BUTTON_VISIBLE, False, 
@@ -129,8 +128,8 @@ class ClwProperties(CWidget):
                     ID_EDITABLE, False, #Change to True if has parser
                     ID_BUTTON_TEXT, 'Add item',
                     ID_ACTION, 'listadd')
-                for idx, item in enumerate(object.GetValue(identifier)):
-                    self._FillListItem(object, row, identifier, idx)
+                for idx, item in enumerate(object.GetValue(prefix + identifier)):
+                    self._FillListItem(object, row, prefix + identifier, idx)
     
     def Fill(self, Element):
         self.element = Element
@@ -151,6 +150,12 @@ class ClwProperties(CWidget):
         self.element = None
         self.treeStore.clear()
     
+    def get_key(self, path):
+        model = self.lwProperties.get_model()
+        path = path.split(':')
+        return ''.join([ model.get(model.get_iter_from_string(':'.join(path[:i+1])), ID_ID)[0] for i in xrange(len(path)) ])
+        
+    
     @event("StrRenderer", "edited")
     def on_change_text(self, cellrenderer, path, new_value):
         model = self.lwProperties.get_model()
@@ -161,7 +166,7 @@ class ClwProperties(CWidget):
             self.element.SetName(new_value)
             self.emit('content_update', self.element, name)
         else:
-            key, = model.get(iter, ID_ID)
+            key = self.get_key(path)
             self.element.GetObject().SetValue(key, new_value)
             self.emit('content_update', self.element, key)
         
@@ -170,7 +175,7 @@ class ClwProperties(CWidget):
         model = self.lwProperties.get_model()
         iter = model.get_iter_from_string(path)
         model.set(iter, ID_VALUE, new_value)
-        key, = model.get(iter, ID_ID)
+        key = self.get_key(path)
         self.element.GetObject().SetValue(key, new_value)
         self.emit('content_update', self.element, key)
     
@@ -183,17 +188,17 @@ class ClwProperties(CWidget):
         model = self.lwProperties.get_model()
         parent_path = path.rsplit(':', 1)[0]
         parent_iter = model.get_iter_from_string(parent_path)
-        parent_key, = model.get(parent_iter, ID_ID)
+        parent_key = self.get_key(parent_path)
         if len(self.element.GetObject().GetValue(parent_key)) == 1:
             self.lwProperties.collapse_row(parent_path)
             self.on_listadd(parent_key, parent_iter)
         self.element.GetObject().RemoveItem(key)
         self.treeStore.remove(iter)
-        for idx in xrange(int(path.rsplit(':', 1)[-1]), len(self.element.GetObject().GetValue(key.rsplit('[', 1)[0]))):
-            npath = path.rsplit(':', 1)[0] + ':' + str(idx)
+        for idx in xrange(int(path.rsplit(':', 1)[-1]), len(self.element.GetObject().GetValue(parent_key))):
+            npath = parent_path + ':' + str(idx)
             niter = model.get_iter_from_string(npath)
             self.treeStore.set(niter,
-                ID_ID, key.rsplit('[', 1)[0] + '[%i]' % idx,
+                ID_ID, '[%i]' % idx,
                 ID_NAME, str(idx))
         self.emit('content_update', self.element, key)
     
@@ -201,7 +206,8 @@ class ClwProperties(CWidget):
     def on_change_button(self, cellrenderer, path):
         model = self.lwProperties.get_model()
         iter = model.get_iter_from_string(path)
-        key, action = model.get(iter, ID_ID, ID_ACTION)
+        action, = model.get(iter, ID_ACTION)
+        key = self.get_key(path)
         if action == 'listadd':
             self.on_listadd(key, iter)
             
