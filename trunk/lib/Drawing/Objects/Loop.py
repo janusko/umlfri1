@@ -20,7 +20,11 @@ class CLoop(CSimpleContainer):
     def ComputeSize(self, context):
         w, h = 0, 0
         o = self.__GetOrientation()
-        for line, item in enumerate(context.GetAttribute(self.collection)):
+        if self.collection.startswith(('/', '#', '@')):
+            collection, = self.GetVariables(context, 'collection')
+        else:
+            collection = context.GetAttribute(self.collection)
+        for line, item in enumerate(collection):
             for i in self.childs:
                 context.Push()
                 context.SetVariables({'item': item, 'line': line})
@@ -42,7 +46,11 @@ class CLoop(CSimpleContainer):
         w, h = context.GetSize()
         x, y = context.GetPos()
         o = self.__GetOrientation()
-        for line, item in enumerate(context.GetAttribute(self.collection)):
+        if self.collection.startswith(('/', '#', '@')):
+            collection, = self.GetVariables(context, 'collection')
+        else:
+            collection = context.GetAttribute(self.collection)
+        for line, item in enumerate(collection):
             for i in self.childs:
                 context.Push()
                 context.SetVariables({'item': item, 'line': line})
