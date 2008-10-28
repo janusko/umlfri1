@@ -25,6 +25,7 @@ class ClwProperties(CWidget):
         self.Column1 = gtk.TreeViewColumn(_('Name'))
         self.Column1.pack_start(renderer, True)
         self.Column1.add_attribute(renderer, 'text', ID_NAME)
+        self.Column1.set_resizable(True)
                  
         self.StrRenderer = gtk.CellRendererText()
         self.StrRenderer.set_property('editable', True)
