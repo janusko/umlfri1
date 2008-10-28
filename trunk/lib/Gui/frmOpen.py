@@ -58,13 +58,16 @@ class CfrmOpen(common.CWindow):
         ext.reverse()
         
         if (("."+ext[0]) != lib.consts.PROJECT_CLEARXML_EXTENSION):
-            z = zipfile.ZipFile(filename)
-            for i in z.namelist():
-                if i in ('icon.png', 'icon.gif', 'icon.jpg', 'icon.ico', 'icon.png'):
-                    file(f, 'wb').write(z.read(i))
-                    ret = gtk.gdk.pixbuf_new_from_file(f)
-                    os.unlink(f)
-                    return ret
+            try:
+                z = zipfile.ZipFile(filename)
+                for i in z.namelist():
+                    if i in ('icon.png', 'icon.gif', 'icon.jpg', 'icon.ico', 'icon.png'):
+                        file(f, 'wb').write(z.read(i))
+                        ret = gtk.gdk.pixbuf_new_from_file(f)
+                        os.unlink(f)
+                        return ret
+            except zipfile.BadZipfile:
+                pass
 
         return gtk.gdk.pixbuf_new_from_file(config['/Paths/Images']+lib.consts.DEFAULT_TEMPLATE_ICON)
     
