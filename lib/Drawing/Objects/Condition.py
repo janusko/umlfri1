@@ -16,7 +16,7 @@ class CCondition(CSimpleContainer):
         if self.type == 'empty':
             ret = not condition
         elif self.type == 'equal':
-            ret = condition == value
+            ret = unicode(condition) == unicode(value)
         if self.negate:
             return not ret
         return ret
