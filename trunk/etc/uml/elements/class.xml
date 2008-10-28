@@ -91,7 +91,84 @@
                                                     </VBox>
                                                 </Condition>
                                                 <TextBox text="@name" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                                <TextBox text="() :" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                <TextBox text="(" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                <Loop collection="@parameters">
+                                                    <VBox>
+                                                        <Condition type="empty" condition="@type" negate="1">
+                                                            <VBox>
+                                                                <Condition type="equal" condition="@const" value="True">
+                                                                    <TextBox text="const " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                                </Condition>
+                                                                <Condition type="equal" condition="@scope" value="in" negate="1">
+                                                                    <VBox>
+                                                                        <TextBox text="[" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                                        <TextBox text="@scope" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                                        <TextBox text="] " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                                    </VBox>
+                                                                </Condition>
+                                                                <Condition type="empty" condition="@name" negate="1">
+                                                                    <VBox>
+                                                                        <TextBox text="@name" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                                        <Condition type="empty" condition="@type" negate="1">
+                                                                            <TextBox text=" " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                                        </Condition>
+                                                                    </VBox>
+                                                                </Condition>
+                                                                <Condition type="empty" condition="@type" negate="1">
+                                                                    <VBox>
+                                                                        <TextBox text=":" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                                        <TextBox text="@type" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                                    </VBox>
+                                                                </Condition>
+                                                                <Condition type="empty" condition="@default" negate="1">
+                                                                    <VBox>
+                                                                        <TextBox text=" = " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                                        <TextBox text="@default" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                                    </VBox>
+                                                                </Condition>
+                                                                <TextBox text=", " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                            </VBox>
+                                                        </Condition>
+                                                        <Condition type="empty" condition="@type">
+                                                            <Condition type="empty" condition="@name" negate="1">
+                                                                <VBox>
+                                                                    <Condition type="equal" condition="@const" value="True">
+                                                                        <TextBox text="const " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                                    </Condition>
+                                                                    <Condition type="equal" condition="@scope" value="in" negate="1">
+                                                                        <VBox>
+                                                                            <TextBox text="[" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                                            <TextBox text="@scope" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                                            <TextBox text="] " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                                        </VBox>
+                                                                    </Condition>
+                                                                    <Condition type="empty" condition="@name" negate="1">
+                                                                        <VBox>
+                                                                            <TextBox text="@name" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                                            <Condition type="empty" condition="@type" negate="1">
+                                                                                <TextBox text=" " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                                            </Condition>
+                                                                        </VBox>
+                                                                    </Condition>
+                                                                    <Condition type="empty" condition="@type" negate="1">
+                                                                        <VBox>
+                                                                            <TextBox text=":" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                                            <TextBox text="@type" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                                        </VBox>
+                                                                    </Condition>
+                                                                    <Condition type="empty" condition="@default" negate="1">
+                                                                        <VBox>
+                                                                            <TextBox text=" = " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                                            <TextBox text="@default" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                                        </VBox>
+                                                                    </Condition>
+                                                                    <TextBox text=", " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                                </VBox>
+                                                            </Condition>
+                                                        </Condition>
+                                                    </VBox>
+                                                </Loop>
+                                                <TextBox text=") :" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
                                                 <TextBox text="@rtype" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
                                             </VBox>
                                         </Condition>
