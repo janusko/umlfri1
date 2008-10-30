@@ -455,7 +455,6 @@
         <child>
           <widget class="GtkHandleBox" id="hndCommandBar">
             <property name="visible">True</property>
-            <property name="shadow_type">GTK_SHADOW_OUT</property>
             <child>
               <widget class="GtkToolbar" id="toolbar1">
                 <property name="visible">True</property>
@@ -466,7 +465,7 @@
                     <property name="stock_id">gtk-open</property>
                   </widget>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
                   </packing>
                 </child>
                 <child>
@@ -475,17 +474,13 @@
                     <property name="stock_id">gtk-save</property>
                   </widget>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
                   </packing>
                 </child>
                 <child>
                   <widget class="GtkSeparatorToolItem" id="separatortoolitem1">
                     <property name="visible">True</property>
                   </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">False</property>
-                  </packing>
                 </child>
                 <child>
                   <widget class="GtkToolButton" id="cmdCopy">
@@ -493,7 +488,7 @@
                     <property name="stock_id">gtk-copy</property>
                   </widget>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
                   </packing>
                 </child>
                 <child>
@@ -502,7 +497,7 @@
                     <property name="stock_id">gtk-cut</property>
                   </widget>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
                   </packing>
                 </child>
                 <child>
@@ -511,17 +506,13 @@
                     <property name="stock_id">gtk-paste</property>
                   </widget>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
                   </packing>
                 </child>
                 <child>
                   <widget class="GtkSeparatorToolItem" id="separatortoolitem2">
                     <property name="visible">True</property>
                   </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">False</property>
-                  </packing>
                 </child>
                 <child>
                   <widget class="GtkToolButton" id="cmdZoomOut">
@@ -529,7 +520,7 @@
                     <property name="stock_id">gtk-zoom-out</property>
                   </widget>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
                   </packing>
                 </child>
                 <child>
@@ -538,7 +529,7 @@
                     <property name="stock_id">gtk-zoom-in</property>
                   </widget>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
                   </packing>
                 </child>
               </widget>
@@ -565,7 +556,7 @@
                     <property name="active">True</property>
                   </widget>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
                   </packing>
                 </child>
               </widget>
@@ -1204,7 +1195,6 @@ application. You too can contribute in many ways:
                             <property name="label" translatable="yes">project web</property>
                             <property name="relief">GTK_RELIEF_NONE</property>
                             <property name="response_id">0</property>
-                            <property name="uri"></property>
                           </widget>
                           <packing>
                             <property name="position">1</property>
@@ -4147,11 +4137,45 @@ String</property>
   </widget>
   <widget class="GtkMenu" id="pMenuShift">
     <child>
-      <widget class="GtkMenuItem" id="pmOpenSpecification">
+      <widget class="GtkImageMenuItem" id="mnuCtxCut">
         <property name="visible">True</property>
-        <property name="sensitive">False</property>
-        <property name="label" translatable="yes">Open specification ...</property>
+        <property name="label" translatable="yes">gtk-cut</property>
         <property name="use_underline">True</property>
+        <property name="use_stock">True</property>
+      </widget>
+    </child>    
+    <child>
+      <widget class="GtkImageMenuItem" id="mnuCtxCopy">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">gtk-copy</property>
+        <property name="use_underline">True</property>
+        <property name="use_stock">True</property>
+      </widget>
+    </child>
+    <child>
+      <widget class="GtkImageMenuItem" id="mnuCtxPaste">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">gtk-paste</property>
+        <property name="use_underline">True</property>
+        <property name="use_stock">True</property>
+      </widget>
+    </child>
+    <child>
+      <widget class="GtkSeparatorMenuItem" id="separatormenuitem100s">
+        <property name="visible">True</property>
+      </widget>
+    </child>
+    <child>
+      <widget class="GtkImageMenuItem" id="mnuCtxDelete">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">gtk-delete</property>
+        <property name="use_underline">True</property>
+        <property name="use_stock">True</property>
+      </widget>
+    </child>
+    <child>
+      <widget class="GtkSeparatorMenuItem" id="separatormenuitem100s">
+        <property name="visible">True</property>
       </widget>
     </child>
     <child>
@@ -4230,6 +4254,14 @@ String</property>
             </child>
           </widget>
         </child>
+      </widget>
+    </child>
+    <child>
+      <widget class="GtkMenuItem" id="pmOpenSpecification">
+        <property name="visible">True</property>
+        <property name="sensitive">False</property>
+        <property name="label" translatable="yes">Open specification ...</property>
+        <property name="use_underline">True</property>
       </widget>
     </child>
   </widget>
