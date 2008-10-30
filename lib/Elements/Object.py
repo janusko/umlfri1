@@ -150,12 +150,15 @@ class CElementObject(object):
     
     def GetVisualProperty(self, key):
         if key == 'CHILDREN':
+            class newdict(dict):
+                GetValue = dict.__getitem__
+            
             node = self.node()
             if node is None:
                 return []
             v = []
             for vi in node.GetChilds():
-                o = {}
+                o = newdict()
                 o['icon'] = vi.GetObject().GetType().GetIcon()
                 o['name'] = vi.GetObject().GetName()
                 v.append(o)
@@ -187,3 +190,6 @@ class CElementObject(object):
     def RemoveItem(self, key):
         self.domainobject.RemoveItem(key)
         self.revision += 1
+    
+    def Assign(self, cprojNode):
+        self.node = weakref.ref(cprojNode)
