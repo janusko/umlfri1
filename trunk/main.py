@@ -35,9 +35,9 @@ class Application(CApplication):
     
     def __init__(self):
         self.recentFiles = CRecentFiles()
-        CApplication.__init__(self)
-        
         self.clipboard = CClipboard()
+        
+        CApplication.__init__(self)
         
         gobject.timeout_add(SPLASH_TIMEOUT, self.GetWindow('frmSplash').Hide)
     
