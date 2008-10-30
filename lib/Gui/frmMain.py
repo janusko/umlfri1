@@ -99,6 +99,8 @@ class CfrmMain(CWindow):
             self.__sensitivity_project[2] = element
         else:
             element = self.__sensitivity_project[2]
+        if not self.application.GetClipboard().IsEmpty():
+             changes += 1
 
         zoomin = diagram and (self.picDrawingArea.GetScale()+0.00001) < lib.consts.SCALE_MAX
         zoomout = diagram and (self.picDrawingArea.GetScale()-0.00001) > lib.consts.SCALE_MIN
@@ -124,7 +126,8 @@ class CfrmMain(CWindow):
         self.mnuSave.set_sensitive(project)
         self.mnuCopy.set_sensitive(element)
         self.mnuCut.set_sensitive(element)
-        self.mnuPaste.set_sensitive(diagram)
+        self.mnuPaste.set_sensitive(diagram and not self.application.GetClipboard().IsEmpty())
+        self.mnuCtxPaste.set_sensitive(diagram and not self.application.GetClipboard().IsEmpty())
         self.mnuDelete.set_sensitive(element)
         self.mnuNormalSize.set_sensitive(diagram)
         self.mnuZoomIn.set_sensitive(zoomin)
@@ -425,6 +428,7 @@ class CfrmMain(CWindow):
     @event("mnuCtxCopy","activate")
     def on_mnuCopy_click(self, widget):
         self.picDrawingArea.ActionCopy()
+        self.UpdateMenuSensitivity()
     
     @event("cmdPaste", "clicked")
     @event("mnuPaste","activate")

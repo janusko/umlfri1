@@ -33,3 +33,10 @@ class CClipboard(object):
         """
         for el in self.content:
             yield el
+            
+    def IsEmpty(self):
+        """
+        @return: True if clipboard is empty
+        @rtype: bool
+        """
+        return len(self.content) == 0
