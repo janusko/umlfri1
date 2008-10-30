@@ -318,7 +318,10 @@ class CDiagram:
     def GetConnections(self):
         for c in self.connections:
             yield c
-            
+
+    def Assign(self, cprojNode):
+        pass
+    
     # Presunutie elementov uplne dopredu
     def ShiftElementsToTop(self):
         for selectedElement in self.GetSelectedElements():
