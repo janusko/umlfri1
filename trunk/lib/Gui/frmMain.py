@@ -28,6 +28,7 @@ class CfrmMain(CWindow):
         #############
         'mItemEdit',
         'mnuCut', 'mnuCopy', 'mnuPaste', 'mnuDelete',
+        'mnuCtxCut', 'mnuCtxCopy', 'mnuCtxPaste', 'mnuCtxDelete',
         #############
         'mItemProject',
         #############
@@ -387,6 +388,7 @@ class CfrmMain(CWindow):
             self.ReloadTitle()
 
     @event("mnuDelete","activate")
+    @event("mnuCtxDelete","activate")
     def on_mnuDelete_click(self, widget):
         self.picDrawingArea.DeleteElements()
         
@@ -414,16 +416,19 @@ class CfrmMain(CWindow):
 
     @event("cmdCut", "clicked")
     @event("mnuCut","activate")
+    @event("mnuCtxCut", "activate")
     def on_mnuCut_click(self, widget):
         self.picDrawingArea.ActionCut()
  
     @event("cmdCopy", "clicked")
     @event("mnuCopy","activate")
+    @event("mnuCtxCopy","activate")
     def on_mnuCopy_click(self, widget):
         self.picDrawingArea.ActionCopy()
     
     @event("cmdPaste", "clicked")
     @event("mnuPaste","activate")
+    @event("mnuCtxPaste","activate")
     def on_mnuPaste_click(self, widget):
         try:
             self.picDrawingArea.ActionPaste()
