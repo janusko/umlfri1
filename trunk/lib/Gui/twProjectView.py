@@ -107,7 +107,7 @@ class CtwProjectView(CWidget):
         self.TreeStore.set(parent, 0, root.GetName(), 1, PixmapFromPath(self.application.GetProject().GetStorage(), root.GetObject().GetType().GetIcon()), 2, root.GetType(), 3, root)
         self.__DrawTree(root, parent)
     
-    
+
     def __DrawTree(self, root, parent):
         
         for diagram in root.GetDiagrams():
@@ -256,6 +256,7 @@ class CtwProjectView(CWidget):
         novy = self.TreeStore.append(iter)
         self.TreeStore.set(novy, 0, diagram.GetName() , 1, PixmapFromPath(self.application.GetProject().GetStorage(), diagram.GetType().GetIcon()), 2, '=Diagram=',3,diagram)
         path = self.TreeStore.get_path(novy)
+        self.Redraw()
         self.twProjectView.expand_to_path(path)
         self.twProjectView.get_selection().select_iter(novy)
         
