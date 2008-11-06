@@ -6,7 +6,7 @@ from lib.Drawing import CDiagram
 from lib.Elements.Object import CElementObject
 from lib.Connections.Object import CConnectionObject
 
-ID_ID, ID_NAME, ID_VALUE, ID_TEXT_VISIBLE, ID_COMBO_VISIBLE, ID_EDITABLE, ID_BUTTON_VISIBLE, ID_MODEL, ID_BUTTON_TEXT, ID_ACTION = range(10)
+ID_ID, ID_NAME, ID_VALUE, ID_TEXT_VISIBLE, ID_COMBO_VISIBLE, ID_EDITABLE, ID_BUTTON_VISIBLE, ID_BUTTON_TEXT, ID_ACTION = range(9)
 
 class ClwProperties(CWidget):
     name = 'lwProperties'
@@ -19,9 +19,11 @@ class ClwProperties(CWidget):
     
     def __init__(self, app, wTree):
         
-        self.treeStore = gtk.TreeStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_BOOLEAN, gobject.TYPE_BOOLEAN, gobject.TYPE_BOOLEAN, gobject.TYPE_BOOLEAN, gtk.TreeModel, gobject.TYPE_STRING, gobject.TYPE_STRING)
+        self.treeStore = gtk.TreeStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_BOOLEAN, gobject.TYPE_BOOLEAN, gobject.TYPE_BOOLEAN, gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING)
         
         renderer = gtk.CellRendererText()
+        self.combomodel = gtk.ListStore(gobject.TYPE_STRING)
+        
         self.Column1 = gtk.TreeViewColumn(_('Name'))
         self.Column1.pack_start(renderer, True)
         self.Column1.add_attribute(renderer, 'text', ID_NAME)
@@ -32,6 +34,7 @@ class ClwProperties(CWidget):
         self.ComboRenderer = gtk.CellRendererCombo()
         self.ComboRenderer.set_property('text-column', 0)
         self.ComboRenderer.set_property('editable', True)
+        self.ComboRenderer.set_property('model', self.combomodel)
         
         self.Column2 = gtk.TreeViewColumn(_('Value'))
         self.Column2.pack_start(self.StrRenderer, True)
@@ -41,7 +44,7 @@ class ClwProperties(CWidget):
         self.Column2.add_attribute(self.StrRenderer, 'editable', ID_EDITABLE)
         self.Column2.add_attribute(self.StrRenderer, 'visible', ID_TEXT_VISIBLE)
         
-        self.Column2.add_attribute(self.ComboRenderer, 'model', ID_MODEL)
+        
         self.Column2.add_attribute(self.ComboRenderer, 'has-entry', ID_EDITABLE)
         self.Column2.add_attribute(self.ComboRenderer, 'visible', ID_COMBO_VISIBLE)
         self.Column2.add_attribute(self.ComboRenderer, 'text', ID_VALUE)
@@ -105,9 +108,6 @@ class ClwProperties(CWidget):
                     ID_EDITABLE, True)
             
             elif type in ('enum', 'bool'):
-                model = gtk.ListStore(gobject.TYPE_STRING)
-                for item in (DType.GetAttribute(attrID)['enum'] if type == 'enum' else ('True', 'False')):
-                    model.set(model.append(), 0 , item)
                 self.treeStore.set(row, 
                     ID_ID, identifier,
                     ID_NAME, name, 
@@ -115,8 +115,7 @@ class ClwProperties(CWidget):
                     ID_TEXT_VISIBLE, False, 
                     ID_COMBO_VISIBLE, True, 
                     ID_BUTTON_VISIBLE, False, 
-                    ID_EDITABLE, False, 
-                    ID_MODEL, model)
+                    ID_EDITABLE, False)
             
             elif type == 'list':
                 self.treeStore.set(row, 
@@ -156,6 +155,23 @@ class ClwProperties(CWidget):
         path = path.split(':')
         return ''.join([ model.get(model.get_iter_from_string(':'.join(path[:i+1])), ID_ID)[0] for i in xrange(len(path)) ])
         
+    
+    @event("lwProperties", "cursor-changed")
+    def on_selection_change(self, treeview):
+        model, iter = treeview.get_selection().get_selected()
+        model = self.lwProperties.get_model()
+        if isinstance(iter, gtk.TreeIter) and model.get(iter, ID_COMBO_VISIBLE)[0]:
+            path = self.lwProperties.get_model().get_string_from_iter(iter)
+            key = self.get_key(path)
+            self.combomodel.clear()
+            if key.find('.') == -1:
+                key, attr = '', key
+            else:
+                key, attr = key.rsplit('.', 1)
+            DType = self.element.GetObject().GetDomainType(key)
+            type = DType.GetAttribute(attr)['type']
+            for item in (DType.GetAttribute(attr)['enum'] if type == 'enum' else ('True', 'False')):
+                self.combomodel.set(self.combomodel.append(), 0 , item)
     
     @event("StrRenderer", "edited")
     def on_change_text(self, cellrenderer, path, new_value):
