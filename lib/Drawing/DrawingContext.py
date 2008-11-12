@@ -67,3 +67,6 @@ class CDrawingContext(object):
     
     def GetPoints(self):
         return self.element.GetPoints(self.canvas)
+    
+    def GetLoopPath(self):
+        return tuple(i[2].get('line') for i in self.stack) + (self.variables.get('line'), )

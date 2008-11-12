@@ -15,6 +15,8 @@ class CVisualObject:
                 yield val
             elif val[0] == '#':
                 yield context.GetAttribute(val[1:])
+            elif val == '@':
+                yield context['line']
             elif val[0] == '@':
                 yield context['item'].GetValue(val[1:])
             elif val[0] == '/':

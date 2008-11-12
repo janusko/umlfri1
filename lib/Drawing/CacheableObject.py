@@ -14,7 +14,7 @@ class CCacheableObject(object):
         self.__sizecache = {}
     
     def CacheSize(self, context, obj, size):
-        line = context.GetVariables().get('line')
+        line = context.GetLoopPath()
         self.__sizecache[(id(obj), line)] = size
         return size
     
@@ -24,6 +24,6 @@ class CCacheableObject(object):
             self.revision = self.object.GetRevision()
             self.cfgrevision = config.GetRevision()
             return None
-        line = context.GetVariables().get('line')
+        line = context.GetLoopPath()
         return self.__sizecache.get((id(obj), line))
     
