@@ -116,7 +116,10 @@
                                                                 </Condition>
                                                                 <Condition type="empty" condition="@type" negate="1">
                                                                     <VBox>
-                                                                        <TextBox text=": " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                                        <TextBox text=":" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                                        <Condition type="empty" condition="@name" negate="1">
+                                                                            <TextBox text=" " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                                        </Condition>
                                                                         <TextBox text="@type" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
                                                                     </VBox>
                                                                 </Condition>
@@ -151,7 +154,10 @@
                                                                     </Condition>
                                                                     <Condition type="empty" condition="@type" negate="1">
                                                                         <VBox>
-                                                                            <TextBox text=": " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                                            <TextBox text=":" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                                            <Condition type="empty" condition="@name" negate="1">
+                                                                                <TextBox text=" " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                                            </Condition>
                                                                             <TextBox text="@type" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
                                                                         </VBox>
                                                                     </Condition>
@@ -166,8 +172,13 @@
                                                         </Condition>
                                                     </VBox>
                                                 </Loop>
-                                                <TextBox text="): " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                                <TextBox text="@rtype" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                <TextBox text=")" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                <Condition type="empty" condition="@rtype" negate="1">
+                                                    <VBox>
+                                                        <TextBox text=": " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                        <TextBox text="@rtype" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                    </VBox>
+                                                </Condition>
                                             </VBox>
                                         </Condition>
                                     </Loop>

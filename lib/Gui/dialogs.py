@@ -17,7 +17,7 @@ class CWarningDialog:
 
 class CQuestionDialog:
     def __init__(self, form, message, allow_cancel = False):
-        self.dialog = gtk.MessageDialog(form, 0, gtk.MESSAGE_INFO, gtk.BUTTONS_YES_NO)
+        self.dialog = gtk.MessageDialog(form, gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT, gtk.MESSAGE_QUESTION, gtk.BUTTONS_YES_NO)
         if allow_cancel:
              self.dialog.add_buttons(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL)
         self.dialog.set_markup(message)
