@@ -14,7 +14,12 @@ import common
 
 class CtwProjectView(CWidget):
     name = 'twProjectView'
-    widgets = ('twProjectView','menuTreeElement', 'mnuTreeAddDiagram', 'mnuTreeAddElement','mnuTreeDelete', 'mnuTreeFindInDiagrams', )
+    widgets = ('twProjectView',
+               
+               'menuTreeElement',
+               'mnuTreeAddDiagram', 'mnuTreeAddElement','mnuTreeDelete', 'mnuTreeFindInDiagrams',
+               'mnuTreeSetAsDefault', 'mnuTreeUnSetDefault',
+              )
     
     __gsignals__ = {
         'selected_diagram':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)), 
@@ -314,8 +319,15 @@ class CtwProjectView(CWidget):
         model = self.twProjectView.get_model()
         if model.get(iter,2)[0] == "=Diagram=":
             self.mnuTreeFindInDiagrams.set_sensitive(False)
+            self.mnuTreeSetAsDefault.set_sensitive(True)
+            self.mnuTreeUnSetDefault.set_sensitive(True)
+            default = model.get(iter,3)[0] in self.application.GetProject().GetDefaultDiagrams()
+            self.mnuTreeSetAsDefault.set_property("visible", not default)
+            self.mnuTreeUnSetDefault.set_property("visible", default)
         else:
             self.mnuTreeFindInDiagrams.set_sensitive(True)
+            self.mnuTreeSetAsDefault.set_sensitive(False)
+            self.mnuTreeUnSetDefault.set_sensitive(False)
         if self.EventButton[0] == 3:
             self.mnuTreeDelete.set_sensitive(len(treeView.get_model().get_path(iter)) > 1)
             self.menuTreeElement.popup(None,None,None,self.EventButton[0],self.EventButton[1])
@@ -474,7 +486,17 @@ class CtwProjectView(CWidget):
                 next_iter_to_copy = model.iter_nth_child(iter_to_copy, i)
                 self.IterCopy(treeview, model, next_iter_to_copy, new_iter, gtk.TREE_VIEW_DROP_INTO_OR_BEFORE)
     
-    
+    @event("mnuTreeSetAsDefault", "activate", "set")
+    @event("mnuTreeUnSetDefault", "activate", "unset")
+    def on_set_as_default_activate(self, widget, action):
+        iter = self.twProjectView.get_selection().get_selected()[1]
+        model = self.twProjectView.get_model()
+        if model.get(iter,2)[0] == "=Diagram=":
+            diagram = model.get(iter,3)[0]
+            if action == 'set':
+                self.application.GetProject().AddDefaultDiagram(diagram)
+            else:
+                self.application.GetProject().DeleteDefaultDiagram(diagram)
     
     @event("twProjectView","drag_data_received")
     def on_drag_data_received(self, widget, context, x, y, selection, info, etime):

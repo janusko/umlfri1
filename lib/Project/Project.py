@@ -44,7 +44,20 @@ class CProject(object):
         self.MetamodelVersion = '1.4.0'
         self.MetamodelUri = 'http://umlfri.kst.fri.uniza.sk/metamodel/uml.frim'
         
+        self.defaultDiagram = None
+        
         self.filename = None
+    
+    def GetDefaultDiagrams(self):
+        if self.defaultDiagram is not None:
+            yield self.defaultDiagram
+    
+    def AddDefaultDiagram(self, diagram):
+        self.defaultDiagram = diagram
+    
+    def DeleteDefaultDiagram(self, diagram):
+        if self.defaultDiagram is diagram:
+            self.defaultDiagram = None
     
     def GetStorage(self):
         return self.Storage
@@ -199,6 +212,8 @@ class CProject(object):
             if node.HasDiagram():
                 for area in node.GetDiagrams():
                     diagramNode = etree.Element(UMLPROJECT_NAMESPACE+'diagram', name=area.GetName(), type=unicode(area.GetType().GetId()))
+                    if area is self.defaultDiagram:
+                        diagramNode.attrib['default'] = 'true'
                     for e in area.GetElements():
                         pos = e.GetPosition()
                         dw, dh = e.GetSizeRelative()
@@ -330,6 +345,8 @@ class CProject(object):
                         if area.tag == UMLPROJECT_NAMESPACE+'diagram':
                             diagram = CDiagram(self.DiagramFactory.GetDiagram(area.get("type")),area.get("name"))
                             diagram.SetPath(parentNode.GetPath() + "/" + diagram.GetName() + ":=Diagram=")
+                            if 'default' in area.attrib and area.attrib['default'].lower() in ('1', 'true'):
+                                self.defaultDiagram = diagram
                             parentNode.AddDiagram(diagram)
                             for pic in area:
                                 if pic.tag == UMLPROJECT_NAMESPACE+"element":

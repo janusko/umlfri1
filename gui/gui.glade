@@ -4338,5 +4338,24 @@ Protected</property>
         <property name="use_underline">True</property>
       </widget>
     </child>
+    <child>
+      <widget class="GtkSeparatorMenuItem" id="menuitem3">
+        <property name="visible">True</property>
+      </widget>
+    </child>
+    <child>
+      <widget class="GtkMenuItem" id="mnuTreeSetAsDefault">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">Set as default</property>
+        <property name="use_underline">True</property>
+      </widget>
+    </child>
+    <child>
+      <widget class="GtkMenuItem" id="mnuTreeUnSetDefault">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">Unset default diagram</property>
+        <property name="use_underline">True</property>
+      </widget>
+    </child>
   </widget>
 </glade-interface>
