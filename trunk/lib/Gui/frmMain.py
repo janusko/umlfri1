@@ -158,6 +158,9 @@ class CfrmMain(CWindow):
         self.nbProperties.Fill(None)
         self.picDrawingArea.Redraw()
         self.UpdateMenuSensitivity(project = True)
+        for diagram in self.application.GetProject().GetDefaultDiagrams():
+            self.nbTabs.AddTab(diagram)
+            self.picDrawingArea.SetDiagram(diagram)
         
     def PaintAll(self):
         if not self.nbTabs.IsStartPageActive():

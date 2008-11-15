@@ -392,7 +392,10 @@ class CpicDrawingArea(CWidget):
                             minzorder = self.Diagram.elements.index(el2)
                             parentElement = el2.GetObject()
                     
+            self.Diagram.DeselectAll()
+            self.Diagram.AddToSelection(newElement)
             self.emit('add-element', ElementObject, self.Diagram, parentElement)
+            self.emit('selected-item', list(self.Diagram.GetSelected()))
             self.Paint()
 
         elif toolBtnSel[0] == 'Connection':
