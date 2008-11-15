@@ -369,6 +369,8 @@ class CProject(object):
                                             data = dict(propCon.items())
                                             del data["num"]
                                             conect.RestoreLabelPosition(int(propCon.get("num")), data)
+        
+        self.defaultDiagram = None
 
         root = etree.XML(data)
 
