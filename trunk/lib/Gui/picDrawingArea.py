@@ -25,7 +25,7 @@ class CpicDrawingArea(CWidget):
     widgets = ('picDrawingArea', 'picEventBox', 'picVBar', 'picHBar',
                 'tbDrawingArea', 'vbAll', 'nbTabs', 'pMenuShift', 
                 'pmShift_SendBack', 'pmShift_BringForward', 'pmShift_ToBottom', 'pmShift_ToTop','pmShowInProjectView',
-                'pmOpenSpecification')
+                'pmOpenSpecification', 'mnuCtxShiftDelete')
 
     __gsignals__ = {
         'get-selected':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_PYOBJECT,
@@ -832,3 +832,12 @@ class CpicDrawingArea(CWidget):
         self.Diagram.PasteSelection(self.application.GetClipboard())
         self.Paint()
         self.emit('selected-item', list(self.Diagram.GetSelected()))
+        
+    @event("mnuCtxShiftDelete","activate")
+    def onMnuCtxShiftDelteActivate(self, menuItem):
+        for sel in self.Diagram.GetSelected():
+            if isinstance(sel, Element.CElement):
+                self.emit('delete-element-from-all',sel.GetObject())
+            else:
+                self.Diagram.ShiftDeleteConnection(sel)
+        self.Paint()
