@@ -7,9 +7,8 @@
         <Enum>Public</Enum>
     </Attribute>
     <Attribute id="abstract" type="bool" name="Abstract" />
-    <Attribute id="attributes" type="list" name="Attributes">
-        <List type="object_attribute" />
-        <Domain id="object_attribute">
+    <Attribute id="attributes" type="list" name="Attributes">        
+        <Domain>
             <Attribute id="name" type="str" name="Name" />
             <Attribute id="stereotype" type="str" name="Stereotype" />
             <Attribute id="scope" type="enum" name="Scope">

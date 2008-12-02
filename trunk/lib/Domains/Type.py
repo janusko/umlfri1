@@ -89,7 +89,7 @@ class CDomainType(object):
         
         self.attributes[id].setdefault('enum',[]).append(value)
     
-    def SetList(self, id, type, parser=None):
+    def SetList(self, id, type=None, parser=None):
         '''
         Set information about items in list
         
@@ -104,9 +104,12 @@ class CDomainType(object):
         @type separator: str
         '''
         if not id in self.attributes:
-            raise DomainTypeError('Unknown identifier %s'%(id, ))
-        
-        self.attributes[id]['list'] = {'type':type, 'parser':parser}
+            raise DomainTypeError('Unknown identifier %s'%(id, ))                
+        list = self.attributes[id].setdefault('list',{})
+        if type is not None:
+            list['type'] = type
+        if parser is not None:
+            list['parser'] = parser
     
     def AppendParser(self, parser):
         '''

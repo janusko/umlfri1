@@ -15,8 +15,6 @@ if HAVE_LXML:
     xmlschema = etree.XMLSchema(xmlschema_doc)
 
 
-class DomainFactoryError(Exception): pass
-
 class CDomainFactory(object):
     '''
     Factory to create Domains
@@ -95,16 +93,28 @@ class CDomainFactory(object):
         if root.tag == METAMODEL_NAMESPACE + 'Domain':
             self.__LoadDomain(root)
         
-    def __LoadDomain(self, root):
+    def __LoadDomain(self, root, name=None):
         '''
         Load Domain from root node
         
         @param root: node <Domain>
-        '''
-        if root.get('id') in self.domains:
-            raise DomainFactoryError('Duplicate domain identifier')
         
-        obj = CDomainType(root.get('id'), self)
+        @param name: name of parent domain, None for root domain
+        @type name: str  
+        '''
+        if name is None:
+            name = root.get('id')
+            if name is None:
+                raise DomainFactoryError('Undefined root domain id')
+            if name.find('.') != -1:
+                raise DomainFactoryError('"." not allowed in domain id')
+            if name in self.domains:
+                raise DomainFactoryError('Duplicate domain identifier')
+        elif root.get('id') is not None:
+            raise DomainFactoryError('Domain id not allowed in nested domain')
+        
+        obj = CDomainType(name, self)
+        self.domains[name] = obj
         
         for node in root:
             if node.tag == METAMODEL_NAMESPACE + 'Import':
@@ -116,14 +126,11 @@ class CDomainFactory(object):
             elif node.tag == METAMODEL_NAMESPACE + 'Parse':
                 obj.AppendParser(CDomainParser(**dict(node.items())))
             
-            elif node.tag == METAMODEL_NAMESPACE + 'Domain':
-                self.__LoadDomain(node)
-                obj.AppendImport(node.get('id'))
             
             else:
                 raise DomainFactoryError('Unknown Section: %s'%(section.tag, ))
             
-        self.domains[root.get('id')] = obj
+        
     
     def __LoadAttribute(self, obj, attribute):
         '''
@@ -145,8 +152,10 @@ class CDomainFactory(object):
                 obj.SetList(id, **self.__LoadList(option))
             
             elif option.tag == METAMODEL_NAMESPACE + 'Domain':
-                self.__LoadDomain(option)
-                obj.AppendImport(option.get('id'))
+                name = obj.GetName() +'.' + id
+                self.__LoadDomain(option, name)                
+                obj.AppendImport(name)
+                obj.SetList(id, type = name)
     
     def __LoadList(self, node):
         '''
