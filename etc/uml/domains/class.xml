@@ -7,9 +7,8 @@
         <Enum>Public</Enum>
     </Attribute>
     <Attribute id="abstract" type="bool" name="Abstract" />
-    <Attribute id="attributes" type="list" name="Attributes">
-        <List type="class_attribute" />
-        <Domain id="class_attribute">
+    <Attribute id="attributes" type="list" name="Attributes">        
+        <Domain>
             <Attribute id="name" type="str" name="Name" />
             <Attribute id="stereotype" type="str" name="Stereotype" />
             <Attribute id="scope" type="enum" name="Scope">
@@ -23,16 +22,15 @@
             <Attribute id="note" type="text" name="Note" />
         </Domain>
     </Attribute>
-    <Attribute id="operations" type="list" name="Operations">
-        <List type="operation" />
-        <Domain id="operation">
+    <Attribute id="operations" type="list" name="Operations">        
+        <Domain>
             <Attribute id="name" type="str" name="Name" />
             <Attribute id="rtype" type="str" name="Return type" />
             <Attribute id="parameters" type="list" name="Parameters">
-                <List type="operation_parameter" >
+                <List>
                     <Parse separator="," />
                 </List>
-                <Domain id="operation_parameter">
+                <Domain>
                     <Attribute id="name" type="str" name="Name" />
                     <Attribute id="type" type="str" name="Type" />
                     <Attribute id="scope" type="enum" name="Scope" >
