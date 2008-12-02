@@ -23,7 +23,7 @@ def event(obj, *args):
                 if lib.consts.DEBUG == True:
                     try:
                         return fnc(self, *args, **kw_args)
-                    except :
+                    except Exception, e:
                         if lib.consts.ERROR_TO_CONSOLE == True:
                             raise # reraise the exception
                         else: 

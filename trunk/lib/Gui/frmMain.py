@@ -501,11 +501,9 @@ class CfrmMain(CWindow):
     def on_change_diagram(self, widget, diagram):
         if diagram is None:
             self.mnuFullscreen.set_sensitive(False)
-            self.picDrawingArea.Hide()
             self.tbToolBox.SetButtons(None)
             self.UpdateMenuSensitivity(diagram = False)
         else:
-            self.picDrawingArea.Show()
             self.picDrawingArea.SetDiagram(diagram)
             self.tbToolBox.SetButtons(diagram.GetType().GetId())
             self.UpdateMenuSensitivity(diagram = True)
