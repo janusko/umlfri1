@@ -22,8 +22,8 @@ PAGE_SIZE=(config["/Page/Width"],config["/Page/Height"])
 
 class CpicDrawingArea(CWidget):
     name = 'picDrawingArea'
-    widgets = ('picDrawingArea', 'picEventBox', 'picVBar', 'picHBar',
-                'tbDrawingArea', 'vbAll', 'nbTabs', 'pMenuShift', 
+    widgets = ('picDrawingArea', 'picEventBox', 'picVBar', 'picHBar', 'fixStartPage',
+                'tbDrawingArea', 'nbTabs', 'pMenuShift', 
                 'pmShift_SendBack', 'pmShift_BringForward', 'pmShift_ToBottom', 'pmShift_ToTop','pmShowInProjectView',
                 'pmOpenSpecification', 'mnuCtxShiftDelete')
 
@@ -46,6 +46,7 @@ class CpicDrawingArea(CWidget):
     }
 
     def __init__(self, app, wTree):
+        self.canvas = None
         CWidget.__init__(self, app, wTree)
 
         self.__NewConnection = None
@@ -58,9 +59,9 @@ class CpicDrawingArea(CWidget):
         self.scale = 1.0
         self.buffer_size = ((0, 0), lib.consts.BUFFER_SIZE)
         #self.bufview = self.buffer_size#((0, 0), (6000, 6000))
+        self.picDrawingArea.realize()
         self.buffer = gtk.gdk.Pixmap(self.picDrawingArea.window, *self.buffer_size[1])
         self.Diagram = CDiagram(None,_("Start page"))
-        self.canvas = None
         cmap = self.picDrawingArea.window.get_colormap()
         self.DragGC = self.picDrawingArea.window.new_gc(foreground = cmap.alloc_color(invert(config['/Styles/Drag/RectangleColor'])),
             function = gtk.gdk.XOR, line_width = config['/Styles/Drag/RectangleWidth'])
@@ -74,7 +75,6 @@ class CpicDrawingArea(CWidget):
 
         self.picEventBox.drag_dest_set(gtk.DEST_DEFAULT_ALL, self.TARGETS, gtk.gdk.ACTION_COPY)
         self.AdjustScrollBars()
-        self.Hide()
         self.cursors = {None: None}
         for name, img in (('grab', lib.consts.GRAB_CURSOR), ('grabbing', lib.consts.GRABBING_CURSOR)):
             self.cursors[name] = gtk.gdk.Cursor(gtk.gdk.display_get_default(), gtk.gdk.pixbuf_new_from_file(config['/Paths/Images']+img), 0, 0)
@@ -154,14 +154,6 @@ class CpicDrawingArea(CWidget):
         self.canvas = CCairoCanvas(self.picDrawingArea, self.buffer, self.application.GetProject().GetStorage())
         self.canvas.SetScale(self.scale)
 
-    def Hide(self):
-        self.vbAll.set_child_packing(self.nbTabs, True, True, 0, gtk.PACK_START)
-        self.tbDrawingArea.hide()
-
-    def Show(self):
-        self.vbAll.set_child_packing(self.nbTabs, False, True, 0, gtk.PACK_START)
-        self.tbDrawingArea.show()
-
     def GetDiagram(self):
         return self.Diagram
 
@@ -199,7 +191,8 @@ class CpicDrawingArea(CWidget):
         return self.canvas.ToPhysical((int(-self.picHBar.get_value() + posx), int(-self.picVBar.get_value() + posy)))
 
     def Paint(self, changed = True):
- 
+        if not self.picDrawingArea.window:
+            return
         posx, posy = int(self.picHBar.get_value()), int(self.picVBar.get_value())
         sizx, sizy = self.GetWindowSize()        
         ((bposx, bposy), (bsizx, bsizy)) = self.buffer_size
@@ -290,16 +283,16 @@ class CpicDrawingArea(CWidget):
                 for Element in self.Diagram.GetSelected():
                     if isinstance(Element, CElement):
                         #self.emit('open-specification',Element)
-                        return
+                        return True
         
         if event.button == 1:
             if gtk.keysyms.space in self.pressedKeys:
                 self.__BeginDragMove(event)
-                return
+                return True
             toolBtnSel = self.emit('get-selected')
             if toolBtnSel is not None:
                 self.__AddItem(toolBtnSel, event)
-                return
+                return True
             
             itemSel = self.Diagram.GetElementAtPosition(self.canvas, pos)
             if itemSel is not None: #ak som nieco trafil:              
@@ -370,6 +363,7 @@ class CpicDrawingArea(CWidget):
                 #ak je nieco vyselectovane:
                 if len(list(self.Diagram.GetSelectedElements(nolabels = True))) > 0: 
                     self.pMenuShift.popup(None,None,None,event.button,event.time)
+        return True
 
     def __AddItem(self, toolBtnSel, event):
         pos = self.GetAbsolutePos((event.x, event.y))
@@ -550,8 +544,9 @@ class CpicDrawingArea(CWidget):
 
     @event("picDrawingArea", "size-allocate")
     def on_picDrawingArea_size_allocate(self, widget, tmp):
-        self.AdjustScrollBars()
-        self.Paint(False)
+        if self.canvas:
+            self.AdjustScrollBars()
+            self.Paint(False)
 
     @event("picEventBox", "scroll-event")
     def on_picEventBox_scroll_event(self, widget, event):

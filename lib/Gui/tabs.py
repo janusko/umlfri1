@@ -9,7 +9,7 @@ from twProjectView import CtwProjectView
 
 class CTabs(CWidget):
     name = 'nbTabs'
-    widgets = ('nbTabs','twProjectView',
+    widgets = ('nbTabs','twProjectView', 'picDrawingArea', 'tbDrawingArea',
                 #Context menu
                 'menuTreeElement',
                 'mnuTab', 'mnuTabExportSVG', 'mnuTabPages_menu', 'mnuTabCloseDiagram', 'mnuTabCloseAllDiagram',
@@ -46,9 +46,6 @@ class CTabs(CWidget):
                 self.SetCurrentPage(self.diagrams.index(diagram))
                 return
 
-        hbox = gtk.HBox()
-        hbox.show()  
-        
         hboxbut = gtk.HBox(spacing = 3)
         hboxbut.show()     
 
@@ -68,7 +65,10 @@ class CTabs(CWidget):
         hboxbut.add(img)
         hboxbut.add(label1)
         hboxbut.add(button)
-        self.nbTabs.append_page(hbox,hboxbut)
+        if self.tbDrawingArea.parent != self.nbTabs:
+            self.tbDrawingArea.reparent(self.nbTabs)
+            self.nbTabs.remove_page(1)
+        self.nbTabs.append_page(self.tbDrawingArea,hboxbut)
         button.connect("clicked", self.on_button_click, self.nbTabs.get_nth_page(self.nbTabs.get_n_pages()-1))
         self.diagrams.append(diagram)
        
