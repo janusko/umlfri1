@@ -12,6 +12,7 @@ ROOT_PATH = ROOT_PATH.decode(sys.getfilesystemencoding())
 ETC_PATH = join(ROOT_PATH, 'etc')
 
 MAIN_CONFIG_PATH = join(ETC_PATH, 'config.xml')
+USERGUI_PATH ='/Paths/UserDir/usergui.xml'
 
 SPLASH_TIMEOUT = 0
 
@@ -38,6 +39,7 @@ METAMODEL_NAMESPACE = '{http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd}'
 UMLPROJECT_NAMESPACE = '{http://umlfri.kst.fri.uniza.sk/xmlschema/umlproject.xsd}'
 RECENTFILES_NAMESPACE = '{http://umlfri.kst.fri.uniza.sk/xmlschema/recentfiles.xsd}'
 CONFIG_NAMESPACE = '{http://umlfri.kst.fri.uniza.sk/xmlschema/config.xsd}'
+USERGUI_NAMESPACE='http://umlfri.kst.fri.uniza.sk/xmlschema/usergui.xsd'
 
 # UML. FRI server - web page, mail address and address for error logs
 WEB = 'http://umlfri.kst.fri.uniza.sk/'

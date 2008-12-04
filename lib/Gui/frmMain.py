@@ -53,7 +53,8 @@ class CfrmMain(CWindow):
         'cmdOpen', 'cmdSave', 'cmdCopy', 'cmdCut', 'cmdPaste', 'cmdZoomOut', 'cmdZoomIn',
         #############
         #fullscreen
-        'mnuMenubar', 'mnuFullscreen', 'cmdCloseFullscreen', 'vpaRight', 'sbStatus'
+        'mnuMenubar', 'mnuFullscreen', 'cmdCloseFullscreen', 'vpaRight', 'sbStatus','hpaRight'
+        
         )
 
     complexWidgets = (CtbToolBox, CtwProjectView, CmnuItems, CpicDrawingArea, CnbProperties, CTabs,
@@ -61,7 +62,7 @@ class CfrmMain(CWindow):
 
     def __init__(self, app, wTree):
         CWindow.__init__(self, app, wTree)
-
+        
         self.form.maximize()
         
         self.__sensitivity_project = None
@@ -501,9 +502,11 @@ class CfrmMain(CWindow):
     def on_change_diagram(self, widget, diagram):
         if diagram is None:
             self.mnuFullscreen.set_sensitive(False)
+            self.picDrawingArea.Hide()
             self.tbToolBox.SetButtons(None)
             self.UpdateMenuSensitivity(diagram = False)
         else:
+            self.picDrawingArea.Show()
             self.picDrawingArea.SetDiagram(diagram)
             self.tbToolBox.SetButtons(diagram.GetType().GetId())
             self.UpdateMenuSensitivity(diagram = True)

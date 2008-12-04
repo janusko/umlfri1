@@ -10,7 +10,7 @@ from lib.Depend.gtk2 import gtk
 from lib.Depend.gtk2 import gobject
 
 from lib.Clipboard import CClipboard
-from lib.Gui.common import CApplication, argument
+from lib.Gui.common import CApplication, argument, CUserGui
 import os.path
 
 from lib.Project import CProject
@@ -20,6 +20,7 @@ from lib.Gui import CfrmSplash, CfrmMain, CfrmAbout, CfrmProperties, CfrmAttribu
 
 from lib.config import config
 from lib.consts import SPLASH_TIMEOUT
+
 
 __version__ = '1.0-beta20081013-r2'
 
@@ -38,6 +39,7 @@ class Application(CApplication):
         self.clipboard = CClipboard()
         
         CApplication.__init__(self)
+        self.UserGui= CUserGui(self)
         
         gobject.timeout_add(SPLASH_TIMEOUT, self.GetWindow('frmSplash').Hide)
     
@@ -89,6 +91,7 @@ class Application(CApplication):
         return widget
     
     def Quit(self):
+        self.UserGui.SaveConfig()
         CApplication.Quit(self)
         config.Save()
         self.recentFiles.SaveRecentFiles()
