@@ -40,13 +40,13 @@ class CUserGui(object):
         """
         try:
             self.file = config['/Paths/UserGui']
+            self.cfg = {}
             if os.path.isfile(self.file):
                 tree = etree.XML(open(self.file).read())
                 print "nacitany etree"
 #                if HAVE_LXML:
 #                    if not self.xmlschema.validate(tree):
 #                        raise ConfigError, ("XMLError", self.xmlschema.error_log.last_error)
-                self.cfg = {}
                 self.__recursive(tree,'/',self.cfg)
                 print self.cfg
                 
@@ -97,6 +97,7 @@ class CUserGui(object):
         print>>f, etree.tostring(rootNode, encoding='utf-8')
         
     def ApplyConfig(self):
+        print "Apply Config"
         for path in types:
             path2 = path.split('/')
             act = self.app.GetWindow(path2[1])
