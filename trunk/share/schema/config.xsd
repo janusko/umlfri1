@@ -116,6 +116,7 @@
 							<xs:element name="UserDir" type="xs:string"/>
 							<xs:element name="UserConfig" type="xs:string"/>
 							<xs:element name="RecentFiles" type="xs:string"/>
+							<xs:element name="UserGui" type="xs:string"/>
 						</xs:all>
 					</xs:complexType>
 				</xs:element>

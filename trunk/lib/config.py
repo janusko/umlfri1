@@ -55,6 +55,7 @@ types = {
     "/Paths/UserDir": path_type,
     "/Paths/UserConfig": path_type,
     "/Paths/RecentFiles": path_type,
+    "/Paths/UserGui": path_type,
     "/Page/Width": int,
     "/Page/Height": int,
 }

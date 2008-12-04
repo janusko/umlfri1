@@ -46,6 +46,7 @@
         <UserDir>~/.uml_fri</UserDir>
         <UserConfig>~/.uml_fri/config.xml</UserConfig>
         <RecentFiles>~/.uml_fri/RecentFiles.xml</RecentFiles>
+        <UserGui>~/.uml_fri/UserGui.xml</UserGui>
     </Paths>
     <Page>
         <Width>797</Width>
