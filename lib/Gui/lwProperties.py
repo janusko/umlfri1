@@ -189,12 +189,13 @@ class ClwProperties(CWidget):
         
     @event("ComboRenderer", "edited")
     def on_change_combo(self, cellrenderer, path, new_value):
-        model = self.lwProperties.get_model()
-        iter = model.get_iter_from_string(path)
-        model.set(iter, ID_VALUE, new_value)
-        key = self.get_key(path)
-        self.element.GetObject().SetValue(key, new_value)
-        self.emit('content_update', self.element, key)
+        if new_value:
+            model = self.lwProperties.get_model()
+            iter = model.get_iter_from_string(path)
+            model.set(iter, ID_VALUE, new_value)
+            key = self.get_key(path)
+            self.element.GetObject().SetValue(key, new_value)
+            self.emit('content_update', self.element, key)
     
     def on_listadd(self, key, iter):
         self.element.GetObject().AppendItem(key)
