@@ -1,7 +1,7 @@
 from lib.Depend.gtk2 import gobject
 from lib.Depend.gtk2 import gtk
 
-from common import CWidget, CellRendererButton, event
+from lib.Gui.common import CWidget, CellRendererButton, event
 from lib.Drawing import CDiagram
 from lib.Elements.Object import CElementObject
 from lib.Connections.Object import CConnectionObject
