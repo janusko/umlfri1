@@ -6,6 +6,9 @@ from lib.Exceptions.UserException import *
 from Abstract import CAbstractCanvas
 from lib import colors
 
+import os
+import sys
+
 #  dash sequence for line styles used in self.cr.set_dash(dash_sequence, offset), where
 #  dash_sequence - an array specifying alternate lengths of on and off stroke portions
 #  offset - an offset into the dash pattern at which the stroke should start
@@ -24,7 +27,7 @@ def PixmapFromPath(storage, path):
         else:
             pathx = storage.get_file_path(path)
 
-        tmp = cairo.ImageSurface.create_from_png(str(pathx))
+        tmp = cairo.ImageSurface.create_from_png(unicode(pathx).encode(sys.getfilesystemencoding()))
         pixmaps[(storage, path)] = tmp
 
     return tmp
