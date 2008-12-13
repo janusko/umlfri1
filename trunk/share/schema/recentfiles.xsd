@@ -8,9 +8,20 @@
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element name="File" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>Each of files is defined in this block</xs:documentation>
+					</xs:annotation>
 					<xs:complexType>
-						<xs:attribute name="name" type="xs:string" use="required"/>
-						<xs:attribute name="date" type="xs:string" use="required"/>
+						<xs:attribute name="name" type="xs:string" use="required">
+							<xs:annotation>
+								<xs:documentation>Store name of file</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+						<xs:attribute name="date" type="xs:string" use="required">
+							<xs:annotation>
+								<xs:documentation>Store date of file</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
 					</xs:complexType>
 				</xs:element>
 			</xs:sequence>
