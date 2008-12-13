@@ -11,8 +11,9 @@ from lib.lib import Indent
 #    xmlschema_doc = etree.parse(os.path.join(config['/Paths/Schema'], "metamodel.xsd"))
 #    xmlschema = etree.XMLSchema(xmlschema_doc)
 types = {
-    '/frmMain/form/height-request':int,
+   # '/frmMain/form/window/width':int,
     '/frmMain/form/width-request':int,
+    '/frmMain/form/height-request':int,
     '/frmMain/hpaRight/position':int,
     '/frmMain/vpaRight/position':int,
 }
@@ -43,12 +44,10 @@ class CUserGui(object):
             self.cfg = {}
             if os.path.isfile(self.file):
                 tree = etree.XML(open(self.file).read())
-                print "nacitany etree"
 #                if HAVE_LXML:
 #                    if not self.xmlschema.validate(tree):
 #                        raise ConfigError, ("XMLError", self.xmlschema.error_log.last_error)
                 self.__recursive(tree,'/',self.cfg)
-                print self.cfg
                 
         except (XMLSyntaxError, ConfigError):
             print 'WARNING: dopisat nieco!!!!!!'
