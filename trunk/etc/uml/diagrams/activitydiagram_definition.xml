@@ -8,7 +8,7 @@
         <Item value="Activity" />        
         <Item value="StartState" />
         <Item value="EndState" />
-        <!--Item value="Decision" /-->
+        <Item value="Decision" />
         <Item value="VerticalSynchronization" />
         <Item value="HorizontalSynchronization" />
     </Elements>
