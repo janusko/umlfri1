@@ -135,7 +135,7 @@ class CDomainObject(object):
             if self.type.IsAtomic(id = path[0]): #atomic element doesn't have items
                 raise DomainObjectError('Attribute %s of domain %s is atomic'%\
                     (path[0], self.type.GetName()))
-            return self.values[path[0]]._TracePath(path[2], call, value)
+            return self.values[path[0]]._TracePath(path[2], action, value)
         
         elif path[1] == '[': #index of list
             
