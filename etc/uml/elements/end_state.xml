@@ -3,8 +3,8 @@
     <Icon path="icons/final.png" />
     <Domain id="state" />
     <Connections>		
-		<Item value="StateTransition"/>
-        <Item value="ActivityFlow"/>
+        <Item value="StateTransition" with="State" />
+        <Item value="ActivityFlow" with="Activity,Decision" />
     </Connections>		
     <Appearance>
         <HBox expand="0">
