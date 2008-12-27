@@ -28,7 +28,7 @@ class CDomainType(object):
         '''
         return self.factory
     
-    def AppendAttribute(self, id, name, type):
+    def AppendAttribute(self, id, name, type = None):
         '''
         Add attribute the domain
         
@@ -44,7 +44,7 @@ class CDomainType(object):
         @raise DomainTypeError: if type is not atomic or one of imported domains
         '''
         
-        if not type in self.ATOMIC and not type in self.imports:
+        if type is not None and type not in self.ATOMIC and type not in self.imports:
             raise DomainTypeError('Used type %s is not imported'%(type, ))
         
         self.attributes[id] = {'name': name, 'type':type}
@@ -146,6 +146,13 @@ class CDomainType(object):
         @rtype: bool / str
         '''
         return self.__InnerImportLoop(self.name)
+    
+    def EmptyTypes(self):
+        '''
+        @return: list of attributes with type set to None
+        @rtype: list
+        '''
+        return [name for name in self.attributes.iterkeys() if self.attributes[name]['type'] is None]
     
     def UndefinedImports(self):
         '''

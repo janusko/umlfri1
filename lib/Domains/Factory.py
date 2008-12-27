@@ -40,6 +40,13 @@ class CDomainFactory(object):
                 self.__Load(os.path.join(self.path, file))
         
         for domain in self.domains.itervalues():
+            result = domain.EmptyTypes()
+            if result:
+                raise DomainFactoryError(
+                    'Domain "%s" has attribute%s without type: %s '%(
+                    domain.GetName(), ('s' if len(result) > 1 else ''),
+                    ', '.join([('"%s"'%item) for item in result])))
+            
             result = domain.UndefinedImports()
             if result:
                 raise DomainFactoryError(
@@ -147,15 +154,21 @@ class CDomainFactory(object):
         for option in attribute:
             if option.tag == METAMODEL_NAMESPACE + 'Enum':
                 obj.AppendEnumValue(id, option.text)
-
+            
             elif option.tag == METAMODEL_NAMESPACE + 'List':
                 obj.SetList(id, **self.__LoadList(option))
             
             elif option.tag == METAMODEL_NAMESPACE + 'Domain':
                 name = obj.GetName() +'.' + id
-                self.__LoadDomain(option, name)                
+                self.__LoadDomain(option, name)
                 obj.AppendImport(name)
-                obj.SetList(id, type = name)
+                if obj.GetAttribute(id)['type'] is None:
+                    obj.GetAttribute(id)['type'] = name
+                elif obj.GetAttribute(id)['type'] == 'list':
+                    obj.SetList(id, type = name)
+                else:
+                    raise DomainFactoryError('Nested Domain is not allowed '
+                        'in attribute of type ' + obj.GetAttribute(id)['type'])
     
     def __LoadList(self, node):
         '''
