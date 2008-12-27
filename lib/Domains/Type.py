@@ -104,12 +104,13 @@ class CDomainType(object):
         @type separator: str
         '''
         if not id in self.attributes:
-            raise DomainTypeError('Unknown identifier %s'%(id, ))                
-        list = self.attributes[id].setdefault('list',{})
+            raise DomainTypeError('Unknown identifier %s'%(id, ))
+        list = self.attributes[id].setdefault('list',{'type':None})
         if type is not None:
             list['type'] = type
         if parser is not None:
             list['parser'] = parser
+        
     
     def AppendParser(self, parser):
         '''
@@ -152,7 +153,11 @@ class CDomainType(object):
         @return: list of attributes with type set to None
         @rtype: list
         '''
-        return [name for name in self.attributes.iterkeys() if self.attributes[name]['type'] is None]
+        return [name for name in self.attributes.iterkeys() 
+                if self.attributes[name]['type'] is None
+                    or (self.attributes[name]['type'] == 'list' 
+                        and ('list' not in self.attributes[name]
+                            or self.attributes[name]['list']['type'] is None))]
     
     def UndefinedImports(self):
         '''
