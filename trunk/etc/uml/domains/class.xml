@@ -7,7 +7,7 @@
         <Enum>Public</Enum>
     </Attribute>
     <Attribute id="abstract" type="bool" name="Abstract" />
-    <Attribute id="attributes" type="list" name="Attributes">        
+    <Attribute id="attributes" type="list" name="Attributes">
         <Domain>
             <Attribute id="name" type="str" name="Name" />
             <Attribute id="stereotype" type="str" name="Stereotype" />
@@ -22,7 +22,7 @@
             <Attribute id="note" type="text" name="Note" />
         </Domain>
     </Attribute>
-    <Attribute id="operations" type="list" name="Operations">        
+    <Attribute id="operations" type="list" name="Operations">
         <Domain>
             <Attribute id="name" type="str" name="Name" />
             <Attribute id="rtype" type="str" name="Return type" />

@@ -162,13 +162,15 @@ class CDomainFactory(object):
                 name = obj.GetName() +'.' + id
                 self.__LoadDomain(option, name)
                 obj.AppendImport(name)
-                if obj.GetAttribute(id)['type'] is None:
+                at = obj.GetAttribute(id)
+                attype = at['type']
+                if attype is None:
                     obj.GetAttribute(id)['type'] = name
-                elif obj.GetAttribute(id)['type'] == 'list':
+                elif attype == 'list' and ('list' not in at or at['list']['type'] is None):
                     obj.SetList(id, type = name)
                 else:
-                    raise DomainFactoryError('Nested Domain is not allowed '
-                        'in attribute of type ' + obj.GetAttribute(id)['type'])
+                    raise DomainFactoryError('Nested Domain %s is not allowed '
+                        'where type is explicitly set.'%(name,))
     
     def __LoadList(self, node):
         '''
