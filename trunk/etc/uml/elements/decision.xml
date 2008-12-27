@@ -4,6 +4,7 @@
     <Domain id="decision" />
     <Connections>
         <Item value="ActivityFlow" />
+        <Item value="StateTransition" />
     </Connections>
     <Appearance>
         <Shadow padding="3" color="/Styles/Element/ShadowColor">
