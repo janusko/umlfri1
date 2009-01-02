@@ -65,10 +65,9 @@ class CTabs(CWidget):
         hboxbut.add(img)
         hboxbut.add(label1)
         hboxbut.add(button)
-        if self.tbDrawingArea.parent != self.nbTabs:
-            self.tbDrawingArea.reparent(self.nbTabs)
-            self.nbTabs.remove_page(1)
-        self.nbTabs.append_page(self.tbDrawingArea,hboxbut)
+        hboxpic = gtk.HBox()
+        hboxpic.show()
+        self.nbTabs.append_page(hboxpic,hboxbut)
         button.connect("clicked", self.on_button_click, self.nbTabs.get_nth_page(self.nbTabs.get_n_pages()-1))
         self.diagrams.append(diagram)
        
@@ -102,6 +101,11 @@ class CTabs(CWidget):
             for chld in self.nbTabs.get_nth_page(0).get_children():
                 chld.show()
         else:
+            page = self.nbTabs.get_nth_page(page_num)
+            if self.tbDrawingArea.get_parent():
+                self.tbDrawingArea.get_parent().remove(self.tbDrawingArea)
+            page.pack_start(self.tbDrawingArea)
+            self.picDrawingArea.queue_draw()
             self.emit("change_current_page", self.diagrams[page_num])
             self.mnuTabExportSVG.set_sensitive(True)
             self.mnuTabCloseDiagram.set_sensitive(True)
@@ -116,6 +120,8 @@ class CTabs(CWidget):
     def CloseTab(self, diagram):
         if diagram in self.diagrams:
             num = self.diagrams.index(diagram)
+            if num == self.nbTabs.get_current_page() and self.tbDrawingArea.get_parent():
+                self.tbDrawingArea.get_parent().remove(self.tbDrawingArea)
             self.diagrams.remove(diagram)
             #self.mnuTabPages_menu.remove(self.mnuTabPages_menu.get_children()[num])
             self.nbTabs.remove_page(num)
