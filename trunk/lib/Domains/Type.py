@@ -45,7 +45,8 @@ class CDomainType(object):
         '''
         
         if type is not None and type not in self.ATOMIC and type not in self.imports:
-            raise DomainTypeError('Used type %s is not imported'%(type, ))
+            raise DomainTypeError('Used type "%s" is not imported '
+                'in definition of "%s.%s"'%(type, self.name, id))
         
         self.attributes[id] = {'name': name, 'type':type}
         self.attributeorder.append(id)
@@ -107,6 +108,9 @@ class CDomainType(object):
             raise DomainTypeError('Unknown identifier %s'%(id, ))
         list = self.attributes[id].setdefault('list',{'type':None})
         if type is not None:
+            if type not in self.ATOMIC and type not in self.imports:
+                raise DomainTypeError('Used type "%s" is not imported '
+                    'in list definition of "%s.%s"'%(type, self.name, id))
             list['type'] = type
         if parser is not None:
             list['parser'] = parser
@@ -176,9 +180,15 @@ class CDomainType(object):
             if info['type'] == 'enum' and len(info.get('enum',[])) == 0:
                 raise DomainTypeError('In domain "&s" is attribute "&s" of enum '
                     'domain, but has no "enum" values defined'&(self.name, id))
-            elif info['type'] == 'list' and 'list' not in info:
-                raise DomainTypeError('In domain "&s" is attribute "&s" of list '
-                    'domain, but has no "list" definition'&(self.name, id))
+            elif info['type'] == 'list':
+                if 'list' not in info:
+                    raise DomainTypeError('In domain "&s" is attribute "&s" of list '
+                        'domain, but has no "list" definition'&(self.name, id))
+                elif ('parser' in info['list'] and 
+                    not self.IsAtomic(domain = info['list']['type']) and 
+                    len(list(self.factory.GetDomain(info['list']['type']).IterParsers())) == 0):
+                    raise DomainTypeError('"%s.%s" is list with parser, but used domain "%s" '
+                        'has no parser.' % (self.name, id, info['list']['type']))
     
     def GetAttribute(self, id):
         '''

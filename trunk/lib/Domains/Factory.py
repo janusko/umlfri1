@@ -43,7 +43,7 @@ class CDomainFactory(object):
             result = domain.EmptyTypes()
             if result:
                 raise DomainFactoryError(
-                    'Domain "%s" has attribute%s without type: %s '%(
+                    'Domain "%s" has attribute "%s" without type: "%s" '%(
                     domain.GetName(), ('s' if len(result) > 1 else ''),
                     ', '.join([('"%s"'%item) for item in result])))
             
@@ -69,7 +69,7 @@ class CDomainFactory(object):
         @type  id: string
         """
         if not id in self.domains:
-            raise DomainFactoryError('unrecognized domain name ' + id)
+            raise DomainFactoryError('unrecognized domain name "%s"' % id)
         
         return self.domains[id]
     
@@ -113,18 +113,20 @@ class CDomainFactory(object):
             name = root.get('id')
             if name is None:
                 raise DomainFactoryError('Undefined root domain id')
-            if name.find('.') != -1:
-                raise DomainFactoryError('"." not allowed in domain id')
+            if '.' in name:
+                raise DomainFactoryError('"." not allowed in id of global domain in "%s"' % name)
             if name in self.domains:
-                raise DomainFactoryError('Duplicate domain identifier')
+                raise DomainFactoryError('Duplicate domain identifier "%s"' % name)
         elif root.get('id') is not None:
-            raise DomainFactoryError('Domain id not allowed in nested domain')
+            raise DomainFactoryError('Domain id not allowed in nested domain "%s"' % name)
         
         obj = CDomainType(name, self)
         self.domains[name] = obj
         
         for node in root:
             if node.tag == METAMODEL_NAMESPACE + 'Import':
+                if '.' in node.get('id'):
+                    raise DomainFactoryError('Explicit import of local domain not allowed in "%s"' % name)
                 obj.AppendImport(node.get('id'))
             
             elif node.tag == METAMODEL_NAMESPACE + 'Attribute': 
@@ -135,7 +137,7 @@ class CDomainFactory(object):
             
             
             else:
-                raise DomainFactoryError('Unknown Section: %s'%(section.tag, ))
+                raise DomainFactoryError('Unknown Section "%s" in domain "%s"'%(name, section.tag, ))
             
         
     
@@ -148,16 +150,25 @@ class CDomainFactory(object):
         
         @param attribute: xml node
         '''
-        
-        obj.AppendAttribute(**dict(attribute.items()))
         id = attribute.get('id')
+        type = attribute.get('type')
+        if type is not None and '.' in type:
+            raise DomainFactoryError('Local domain "%s" cannot be used as explicitly '
+                'set type of "%s.%s"' % (type, obj.GetName(), id))
+        obj.AppendAttribute(**dict(attribute.items()))
         for option in attribute:
             if option.tag == METAMODEL_NAMESPACE + 'Enum':
                 obj.AppendEnumValue(id, option.text)
             
             elif option.tag == METAMODEL_NAMESPACE + 'List':
                 obj.SetList(id, **self.__LoadList(option))
-            
+                ltype = obj.GetAttribute(id)['list']['type']
+                if ltype == 'list':
+                    raise DomainFactoryError('List of lists not supported in "%s.%s"'
+                        %(obj.GetName(), id))
+                elif ltype is not None and '.' in ltype:
+                    raise DomainFactoryError('Local domain "%s" cannot be used as explicitly '
+                        'set itemtype of "%s.%s"' % (type, obj.GetName(), id))
             elif option.tag == METAMODEL_NAMESPACE + 'Domain':
                 name = obj.GetName() +'.' + id
                 self.__LoadDomain(option, name)
@@ -169,8 +180,8 @@ class CDomainFactory(object):
                 elif attype == 'list' and ('list' not in at or at['list']['type'] is None):
                     obj.SetList(id, type = name)
                 else:
-                    raise DomainFactoryError('Nested Domain %s is not allowed '
-                        'where type is explicitly set.'%(name,))
+                    raise DomainFactoryError('Nested Domain "%s" is not allowed '
+                        'because type is explicitly set.'%(name,))
     
     def __LoadList(self, node):
         '''
