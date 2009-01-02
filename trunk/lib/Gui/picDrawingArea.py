@@ -49,6 +49,7 @@ class CpicDrawingArea(CWidget):
         self.canvas = None
         CWidget.__init__(self, app, wTree)
 
+        self.__invalidated = False
         self.__NewConnection = None
         self.dnd = None
         self.selecting = None
@@ -78,6 +79,7 @@ class CpicDrawingArea(CWidget):
         self.cursors = {None: None}
         for name, img in (('grab', lib.consts.GRAB_CURSOR), ('grabbing', lib.consts.GRABBING_CURSOR)):
             self.cursors[name] = gtk.gdk.Cursor(gtk.gdk.display_get_default(), gtk.gdk.pixbuf_new_from_file(config['/Paths/Images']+img), 0, 0)
+        self.__invalidated = False
 
     def __SetCursor(self, cursor = None):
         self.picDrawingArea.window.set_cursor(self.cursors[cursor])
@@ -163,7 +165,6 @@ class CpicDrawingArea(CWidget):
         self.Diagram.SetHScrollingPos(int(self.picHBar.get_value()))
         #change diagram
         self.Diagram = diagram
-        self.AdjustScrollBars()
         #load srolling position of new diagram
         self.picHBar.set_value(self.Diagram.GetHScrollingPos())
         self.picVBar.set_value(self.Diagram.GetVScrollingPos())
@@ -191,7 +192,9 @@ class CpicDrawingArea(CWidget):
         return self.canvas.ToPhysical((int(-self.picHBar.get_value() + posx), int(-self.picVBar.get_value() + posy)))
 
     def Paint(self, changed = True):
-        if not self.picDrawingArea.window:
+        if not self.picDrawingArea.window or not self.canvas:
+            if changed:
+                self.__invalidated = True # redraw completly on nex configure event
             return
         posx, posy = int(self.picHBar.get_value()), int(self.picVBar.get_value())
         sizx, sizy = self.GetWindowSize()        
@@ -207,6 +210,7 @@ class CpicDrawingArea(CWidget):
         if changed:
             self.Diagram.SetViewPort(self.buffer_size)
             self.Diagram.Paint(self.canvas)
+        self.AdjustScrollBars()
         wgt = self.picDrawingArea.window
         gc = wgt.new_gc()
          
@@ -526,13 +530,13 @@ class CpicDrawingArea(CWidget):
         self.emit('drop-from-treeview',position)
         self.Paint()
 
+    @event("picDrawingArea", "configure-event")
     @event("picDrawingArea", "expose-event")
-    def on_picDrawingArea_configure_event(self, widget, tmp):
-        self.Paint(False)
-
-    @event("picDrawingArea", "expose-event")
+    @event("picDrawingArea", "size-allocate")
     def on_picDrawingArea_expose_event(self, widget, tmp):
-        self.Paint(False)
+        inv = self.__invalidated
+        self.__invalidated = False
+        self.Paint(inv)
 
     @event("picVBar", "value-changed")
     def on_picVBar_value_changed(self, widget):
@@ -541,12 +545,6 @@ class CpicDrawingArea(CWidget):
     @event("picHBar", "value-changed")
     def on_picHBar_value_changed(self, widget):
         self.Paint(False)
-
-    @event("picDrawingArea", "size-allocate")
-    def on_picDrawingArea_size_allocate(self, widget, tmp):
-        if self.canvas:
-            self.AdjustScrollBars()
-            self.Paint(False)
 
     @event("picEventBox", "scroll-event")
     def on_picEventBox_scroll_event(self, widget, event):
