@@ -4,7 +4,6 @@ from lib.Exceptions.DevException import *
 from Type import CDomainType
 from lib.config import config
 from lib.consts import METAMODEL_NAMESPACE
-from lib.Drawing.Objects import ALL
 from Parser import CDomainParser
 from lib.Exceptions import DomainFactoryError
 from lib.Depend.etree import etree, HAVE_LXML

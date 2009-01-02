@@ -7,7 +7,7 @@ from CacheableObject import CCacheableObject
 from SelectableObject import CSelectableObject
 from ConLabelInfo import CConLabelInfo
 from lib.consts import LABELS_CLICKABLE
-from DrawingContext import CDrawingContext
+from Context import CDrawingContext
 
 class CConnection(CCacheableObject, CSelectableObject):
     '''Graphical representation of connection

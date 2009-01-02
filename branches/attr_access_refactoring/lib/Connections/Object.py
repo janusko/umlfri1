@@ -241,7 +241,7 @@ class CConnectionObject(object):
         Paint self on canvas
         
         @param context: context in which is connection being drawn
-        @type  context: L{CDrawingContext<lib.Drawing.DrawingContext.CDrawingContext>}
+        @type  context: L{CDrawingContext<lib.Drawing.Context.DrawingContext.CDrawingContext>}
         """
         self.type.Paint(context)
     
@@ -250,6 +250,9 @@ class CConnectionObject(object):
     
     def GetDomainType(self, key=''):
         return self.domainobject.GetType(key)
+    
+    def GetDomainObject(self):
+        return self.domainobject
     
     def GetValue(self, key):
         return self.domainobject.GetValue(key)

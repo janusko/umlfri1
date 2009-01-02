@@ -1,27 +1,26 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ElementType id="Activity" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
-    <Icon path="icons/state.png" />
-    <Domain id="activity" />
+<ElementType xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" id="Activity">
+    <Icon path="icons/state.png"/>
+    <Domain id="activity"/>
     <Connections>
-        <Item value="ActivityFlow" />
+        <Item value="ActivityFlow"/>
     </Connections>
     <Appearance>
-        <Shadow padding="3" color="/Styles/Element/ShadowColor">
-            <Rectangle fill="/Styles/Element/FillColor" border="/Styles/Element/LineColor" right="10 rounded" left="10 rounded">
+        <Shadow padding="3" color="#cfg.Styles.Element.ShadowColor">
+            <Rectangle fill="#cfg.Styles.Element.FillColor" border="#cfg.Styles.Element.LineColor" right="10 rounded" left="10 rounded">
                 <Sizer minheight="50">
                     <Padding padding="5">
                         <HBox>
-                            <Condition condition="#stereotype" type="empty" negate="1">
+                            <Condition condition="#self.stereotype" type="empty" negate="1">
                                 <Align align="center">
                                     <VBox>
-                                        <TextBox text="&#171;" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                        <TextBox text="#stereotype" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                        <TextBox text="&#187;" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                        <TextBox text="&#171;" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                                        <TextBox text="#self.stereotype" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                                        <TextBox text="&#187;" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
                                     </VBox>
                                 </Align>
                             </Condition>
                             <Align align="center">
-                                <TextBox text="#name" font="/Styles/Element/NameTextFont" color="/Styles/Element/NameTextColor" />
+                                <TextBox text="#self.name" font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/>
                             </Align>
                         </HBox>
                     </Padding>

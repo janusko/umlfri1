@@ -1,32 +1,31 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ElementType id="State" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
-    <Icon path="icons/state.png" />
-    <Domain id="state" />
+<ElementType xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" id="State">
+    <Icon path="icons/state.png"/>
+    <Domain id="state"/>
     <Connections>
-        <Item value="StateTransition" />
+        <Item value="StateTransition"/>
     </Connections>
     <Appearance>
-        <Shadow padding="3" color="/Styles/Element/ShadowColor">
-            <Rectangle fill="/Styles/Element/FillColor" border="/Styles/Element/LineColor" righttop="10 rounded" rightbottom="10 rounded" lefttop="10 rounded" leftbottom="10 rounded">
+        <Shadow padding="3" color="#cfg.Styles.Element.ShadowColor">
+            <Rectangle fill="#cfg.Styles.Element.FillColor" border="#cfg.Styles.Element.LineColor" righttop="10 rounded" rightbottom="10 rounded" lefttop="10 rounded" leftbottom="10 rounded">
                 <Sizer minheight="50">
                     <HBox>
                         <Padding padding="5">
                         <HBox>
-                            <Condition condition="#stereotype" type="empty" negate="1">
+                            <Condition condition="#self.stereotype" type="empty" negate="1">
                                 <Align align="center">
                                     <VBox>
-                                        <TextBox text="&#171;" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                        <TextBox text="#stereotype" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                        <TextBox text="&#187;" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                        <TextBox text="&#171;" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                                        <TextBox text="#self.stereotype" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                                        <TextBox text="&#187;" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
                                     </VBox>
                                 </Align>
                             </Condition>
                             <Align align="center">
-                                <TextBox text="#name" font="/Styles/Element/NameTextFont" color="/Styles/Element/NameTextColor" />
+                                <TextBox text="#self.name" font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/>
                             </Align>
                         </HBox>
                         </Padding>
-                        <Line type="horizontal" color="/Styles/Element/LineColor" />
+                        <Line type="horizontal" color="#cfg.Styles.Element.LineColor"/>
                     </HBox>
                 </Sizer>
             </Rectangle>

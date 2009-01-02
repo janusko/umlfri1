@@ -154,26 +154,25 @@ class CConnectionType(object):
         Paint connection of given type on canvas
         
         @param context: context in which is connection being drawn
-        @type  context: L{CDrawingContext<lib.Drawing.DrawingContext.CDrawingContext>}
+        @type  context: L{CDrawingContext<lib.Drawing.Context.DrawingContext.CDrawingContext>}
         """
         dx, dy = context.GetPos()
-        canvas = context.GetCanvas()
         
         tmp = [(x + dx, y + dy) for (x, y) in context.GetPoints()]
         o = tmp[0]
         for i in tmp[1:]:
-            self.line.Paint(canvas, o, i)
+            self.line.Paint(context, o, i)
             o = i
         
         if self.scrArrow is not None:
             X = tmp[0][0] - tmp[1][0]
             Y = tmp[0][1] - tmp[1][1]
-            self.scrArrow.Paint(canvas, tmp[0], atan2(-X, Y))
+            self.scrArrow.Paint(context, tmp[0], atan2(-X, Y))
         
         if self.destArrow is not None:
             X = tmp[-1][0] - tmp[-2][0]
             Y = tmp[-1][1] - tmp[-2][1]
-            self.destArrow.Paint(canvas, tmp[-1], atan2(-X, Y))
+            self.destArrow.Paint(context, tmp[-1], atan2(-X, Y))
     
     def GetLabels(self):
         """

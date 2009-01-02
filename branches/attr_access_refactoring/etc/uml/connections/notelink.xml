@@ -1,11 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ConnectionType id="Note Link" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
-    <Icon path="icons/note_link.png" />
-    <SrcArrow possible="0" default="0" />
-    <DestArrow possible="0" default="0" />
-    <Domain id="empty" />
+<ConnectionType xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" id="Note Link">
+    <Icon path="icons/note_link.png"/>
+    <SrcArrow possible="0" default="0"/>
+    <DestArrow possible="0" default="0"/>
+    <Domain id="empty"/>
     <Appearance>
-        <LineStyle style="dot" color="/Styles/Connection/LineColor" />
-        <ArrowStyle style="simple" fill="/Styles/Connection/ArrowFillColor" color="/Styles/Connection/ArrowColor" />
+        <LineStyle style="dot" color="#cfg.Styles.Connection.LineColor"/>
+        <ArrowStyle style="simple" fill="#cfg.Styles.Connection.ArrowFillColor" color="#cfg.Styles.Connection.ArrowColor"/>
     </Appearance>
 </ConnectionType>

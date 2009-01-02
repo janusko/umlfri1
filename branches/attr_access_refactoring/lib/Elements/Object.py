@@ -132,6 +132,9 @@ class CElementObject(object):
     def GetDomainType(self, key=''):
         return self.domainobject.GetType(key)
     
+    def GetDomainObject(self):
+        return self.domainobject
+    
     def GetValue(self, key):
         return self.domainobject.GetValue(key)
     

@@ -3,6 +3,7 @@ from lib.Exceptions.UserException import *
 from lib.config import config
 from math import pi
 
+from lib.Drawing.Context import CParamEval
 from lib.Math2D import TransformMatrix, PointMatrix
 
 ARROW_TYPES = {'simple': ('polyline',
@@ -79,12 +80,27 @@ class CConnectionArrow(object):
         self.size = int(size)
         self.color = color
     
-    def Paint(self, canvas, pos, angle):
+    def ParseVariables(self, context, *vals):
+        for val in vals:
+            if not isinstance(val, (str, unicode)):
+                yield val
+            elif val[0] == '#':
+                if val[1] == '#':
+                    yield val[1:]
+                else:
+                    yield CParamEval(val[1:])(context)
+            else:
+                yield val
+    
+    def GetVariables(self, context, *names):
+        return self.ParseVariables(context, *(getattr(self, name) for name in names))
+    
+    def Paint(self, context, pos, angle):
         """
         Paint arrow on the canvas
         
-        @param canvas: Arrow will be painted on this canvas
-        @type  canvas: L{CAbstractCanvas<lib.Drawing.Canvas.Abstract.CAbstractCanvas>}
+        @param context: context in which is arrow being drawn
+        @type  context: L{CAbstractCanvas<lib.Drawing.Context.DrawingContext.CDrawingContext>}
         
         @param pos: Position of the center of the arrow
         @type  pos: (integer, integer)
@@ -97,35 +113,27 @@ class CConnectionArrow(object):
         
         steps = config['/Styles/Connection/ArrowAngleSteps']
         step = 2 * pi / steps
-        angle = step * ( (angle // step + (1 if angle % step / step > .5 
-                          else 0)) % steps )
+        angle = step * round(angle / step)
         
         transMatrix = TransformMatrix.mk_translation(pos)*TransformMatrix.mk_rotation(angle)* \
                         TransformMatrix.mk_scale(self.size)
         x, y = pos
-        if self.fill[0] == '/':
-            fill = config[self.fill]
-        else:
-            fill = self.fill
-        if self.color[0] == '/':
-            color = config[self.color]
-        else:
-            color = self.color
+        color, fill = self.GetVariables(context, 'color', 'fill')
         points = []
         if self.style in ARROW_TYPES.keys():
             for i in ARROW_TYPES[self.style][1]:
                 points.append((transMatrix*i).GetIntPos())
             
             if ARROW_TYPES[self.style][0] == 'polyline':
-                canvas.DrawLines(points, color)
+                context.GetCanvas().DrawLines(points, color)
             elif ARROW_TYPES[self.style][0] == 'polygon':
-                canvas.DrawPolygon(points, bg = fill, fg = color)
+                context.GetCanvas().DrawPolygon(points, bg = fill, fg = color)
             elif ARROW_TYPES[self.style][0] == 'fillPolygon':
-                canvas.DrawPolygon(points, bg = color)
+                context.GetCanvas().DrawPolygon(points, bg = color)
             elif ARROW_TYPES[self.style][0] == 'line':
                 if self.style == 'crosscircle':
-                    canvas.DrawArc((x - self.size/2, y - self.size/2), (self.size, self.size), fg = color, bg = fill)
+                    context.GetCanvas().DrawArc((x - self.size/2, y - self.size/2), (self.size, self.size), fg = color, bg = fill)
                 for i in xrange(0,len(points) - 1, 2):
-                    canvas.DrawLine(points[i], points[i+1], color)
+                    context.GetCanvas().DrawLine(points[i], points[i+1], color)
         else:
             raise ConnectionError("UndefinedStyleArrow")

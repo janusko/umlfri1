@@ -1,59 +1,58 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ConnectionType id="Agregation" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
-    <Icon path="icons/agregate.png" />
-    <SrcArrow possible="0" default="0" />
-    <DestArrow possible="1" default="1" />
-    <Domain id="association" />
+<ConnectionType xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" id="Agregation">
+    <Icon path="icons/agregate.png"/>
+    <SrcArrow possible="0" default="0"/>
+    <DestArrow possible="1" default="1"/>
+    <Domain id="association"/>
     <Appearance>
-        <LineStyle style="solid" color="/Styles/Connection/LineColor" />
-        <ArrowStyle style="diamond" fill="/Styles/Connection/ArrowFillColor" color="/Styles/Connection/ArrowColor" />
+        <LineStyle style="solid" color="#cfg.Styles.Connection.LineColor"/>
+        <ArrowStyle style="diamond" fill="#cfg.Styles.Connection.ArrowFillColor" color="#cfg.Styles.Connection.ArrowColor"/>
         <Label position="center">
             <HBox>
-                <Condition condition="#stereotype" type="empty" negate="1">
+                <Condition condition="#self.stereotype" type="empty" negate="1">
                     <Align align="center">
-                        <Rectangle fill="/Styles/Connection/TextFill">
+                        <Rectangle fill="#cfg.Styles.Connection.TextFill">
                             <VBox>
-                                <TextBox text="&#171;" font="/Styles/Connection/TextFont" color="/Styles/Connection/TextColor" />
-                                <TextBox text="#stereotype" font="/Styles/Connection/TextFont" color="/Styles/Connection/TextColor" />
-                                <TextBox text="&#187;" font="/Styles/Connection/TextFont" color="/Styles/Connection/TextColor" />
+                                <TextBox text="&#xAB;" font="#cfg.Styles.Connection.TextFont" color="#cfg.Styles.Connection.TextColor"/>
+                                <TextBox text="#self.stereotype" font="#cfg.Styles.Connection.TextFont" color="#cfg.Styles.Connection.TextColor"/>
+                                <TextBox text="&#xBB;" font="#cfg.Styles.Connection.TextFont" color="#cfg.Styles.Connection.TextColor"/>
                             </VBox>
                         </Rectangle>
                     </Align>
                 </Condition>
-                <Condition condition="#name" type="empty" negate="1">
+                <Condition condition="#self.name" type="empty" negate="1">
                     <Align align="center">
-                        <Rectangle fill="/Styles/Connection/TextFill">
-                            <TextBox text="#name" font="/Styles/Connection/NameTextFont" color="/Styles/Connection/NameTextColor" />
+                        <Rectangle fill="#cfg.Styles.Connection.TextFill">
+                            <TextBox text="#self.name" font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>
                         </Rectangle>
                     </Align>
                 </Condition>
             </HBox>
         </Label>
         <Label position="source">
-            <Condition condition="#SCardinality" type="empty" negate="1">
-                <Rectangle fill="/Styles/Connection/TextFill">
-                    <TextBox text="#SCardinality" font="/Styles/Connection/NameTextFont" color="/Styles/Connection/NameTextColor" />
+            <Condition condition="#self.SCardinality" type="empty" negate="1">
+                <Rectangle fill="#cfg.Styles.Connection.TextFill">
+                    <TextBox text="#self.SCardinality" font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>
                 </Rectangle>
             </Condition>
         </Label>
         <Label position="destination">
-            <Condition condition="#DCardinality" type="empty" negate="1">
-                <Rectangle fill="/Styles/Connection/TextFill">
-                    <TextBox text="#DCardinality" font="/Styles/Connection/NameTextFont" color="/Styles/Connection/NameTextColor" />
+            <Condition condition="#self.DCardinality" type="empty" negate="1">
+                <Rectangle fill="#cfg.Styles.Connection.TextFill">
+                    <TextBox text="#self.DCardinality" font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>
                 </Rectangle>
             </Condition>
         </Label>
         <Label position="source+1">
-            <Condition condition="#SRole" type="empty" negate="1">
-                <Rectangle fill="/Styles/Connection/TextFill">
-                    <TextBox text="#SRole" font="/Styles/Connection/NameTextFont" color="/Styles/Connection/NameTextColor" />
+            <Condition condition="#self.SRole" type="empty" negate="1">
+                <Rectangle fill="#cfg.Styles.Connection.TextFill">
+                    <TextBox text="#self.SRole" font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>
                 </Rectangle>
             </Condition>
         </Label>
         <Label position="destination+1">
-            <Condition condition="#DRole" type="empty" negate="1">
-                <Rectangle fill="/Styles/Connection/TextFill">
-                    <TextBox text="#DRole" font="/Styles/Connection/NameTextFont" color="/Styles/Connection/NameTextColor" />
+            <Condition condition="#self.DRole" type="empty" negate="1">
+                <Rectangle fill="#cfg.Styles.Connection.TextFill">
+                    <TextBox text="#self.DRole" font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>
                 </Rectangle>
             </Condition>
         </Label>

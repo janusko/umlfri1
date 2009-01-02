@@ -1,20 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ElementType id="HorizontalSynchronization" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
-    <Icon path="icons/horizontal_line.png" />
-    <Domain id="synchronization" />
+<ElementType xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" id="HorizontalSynchronization">
+    <Icon path="icons/horizontal_line.png"/>
+    <Domain id="synchronization"/>
     <Connections>
-        <Item value="StateTransition" />
-        <Item value="ActivityFlow" />
+        <Item value="StateTransition"/>
+        <Item value="ActivityFlow"/>
     </Connections>
     <Appearance>
         <HBox>
             <Sizer minwidth="50" height="5">
-                <Rectangle fill="/Styles/Element/Fill3Color" border="/Styles/Element/LineColor" />
+                <Rectangle fill="#cfg.Styles.Element.Fill3Color" border="#cfg.Styles.Element.LineColor"/>
             </Sizer>
-            <Condition condition="#name" type="empty" negate="1">
+            <Condition condition="#self.name" type="empty" negate="1">
                 <Padding padding="10">
                     <Align align="center center">
-                        <TextBox text="#name" font="/Styles/Element/NameTextFont" color="/Styles/Element/NameTextColor" />
+                        <TextBox text="#self.name" font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/>
                     </Align>
                 </Padding>
             </Condition>

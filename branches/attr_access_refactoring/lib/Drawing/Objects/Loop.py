@@ -27,7 +27,8 @@ class CLoop(CSimpleContainer):
         for line, item in enumerate(collection):
             for i in self.childs:
                 context.Push()
-                context.SetVariables({'item': item, 'line': line})
+                context.SetLine(line)
+                context.SetVariables(item)
                 wc, hc = i.GetSize(context)
                 context.Pop()
                 
@@ -46,14 +47,12 @@ class CLoop(CSimpleContainer):
         w, h = context.GetSize()
         x, y = context.GetPos()
         o = self.__GetOrientation()
-        if self.collection.startswith(('/', '#', '@')):
-            collection, = self.GetVariables(context, 'collection')
-        else:
-            collection = context.GetAttribute(self.collection)
+        collection, = self.GetVariables(context, 'collection')
         for line, item in enumerate(collection):
             for i in self.childs:
                 context.Push()
-                context.SetVariables({'item': item, 'line': line})
+                context.SetVariables(item)
+                context.SetLine(line)
                 wc, hc = i.GetSize(context)
                 
                 if o == "horizontal":

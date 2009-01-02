@@ -1,4 +1,5 @@
 from lib.config import config
+from lib.Drawing.Context import CParamEval
 
 class CConnectionLine(object):
     """
@@ -20,13 +21,28 @@ class CConnectionLine(object):
         self.color = color
         self.style = style
         self.width = int(width)
+    
+    def ParseVariables(self, context, *vals):
+        for val in vals:
+            if not isinstance(val, (str, unicode)):
+                yield val
+            elif val[0] == '#':
+                if val[1] == '#':
+                    yield val[1:]
+                else:
+                    yield CParamEval(val[1:])(context)
+            else:
+                yield val
+    
+    def GetVariables(self, context, *names):
+        return self.ParseVariables(context, *(getattr(self, name) for name in names))
 
-    def Paint(self, canvas, start, end):
+    def Paint(self, context, start, end):
         """
         Paint the line on given canvas
         
-        @param canvas: Arrow will be painted on this canvas
-        @type  canvas: L{CAbstractCanvas<lib.Drawing.Canvas.Abstract.CAbstractCanvas>}
+        @param context: context in which is line being drawn
+        @type  context: L{CAbstractCanvas<lib.Drawing.Context.DrawingContext.CDrawingContext>}
         
         @param start: starting coordinates of the line
         @type  start: (int, int)
@@ -34,8 +50,5 @@ class CConnectionLine(object):
         @param end: ending coordinates of the line
         @type  end: (int, int)
         """
-        if self.color[0] == '/':
-            color = config[self.color]
-        else:
-            color = self.color
-        canvas.DrawLine(start, end, color, line_width = self.width, line_style = self.style)
+        color, = self.GetVariables(context, 'color')
+        context.GetCanvas().DrawLine(start, end, color, line_width = self.width, line_style = self.style)

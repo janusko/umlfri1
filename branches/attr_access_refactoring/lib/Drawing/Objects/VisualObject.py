@@ -1,4 +1,5 @@
 from lib.config import config
+from lib.Drawing.Context import CParamEval
 
 class CVisualObject:
     def __init__(self):
@@ -14,13 +15,10 @@ class CVisualObject:
             if not isinstance(val, (str, unicode)):
                 yield val
             elif val[0] == '#':
-                yield context.GetAttribute(val[1:])
-            elif val == '@':
-                yield context['line']
-            elif val[0] == '@':
-                yield context['item'].GetValue(val[1:])
-            elif val[0] == '/':
-                yield config[val]
+                if val[1] == '#':
+                    yield val[1:]
+                else:
+                    yield CParamEval(val[1:])(context)
             else:
                 yield val
     
