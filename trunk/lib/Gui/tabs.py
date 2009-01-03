@@ -32,46 +32,65 @@ class CTabs(CWidget):
         self.mnuTabCloseDiagram.set_sensitive(False)
         self.mnuTabCloseAllDiagram.set_sensitive(False)
         self.mnuTabShowInProjectView.set_sensitive(False)
-        
-        mi = gtk.RadioMenuItem(None,self.diagrams[0].GetName()) 
-        mi.set_active(True)
-        mi.show()   
-        mi.connect("toggled", self.on_mnuTab_activate, self.diagrams[0])
-        self.mnuTabPages_menu.remove(self.mnuTabPages_menu.get_children()[0])
-        self.mnuTabPages_menu.append(mi)
-        
-    def AddTab(self, diagram):       
-        for i in self.diagrams:
-            if i is diagram:
-                self.SetCurrentPage(self.diagrams.index(diagram))
-                return
-
+        sp = self.nbTabs.get_nth_page(0)
+        splbl = self.nbTabs.get_tab_label(sp)
+        self.nbTabs.remove_page(0)
+        self.__AddNbPage(None, splbl, sp)
+        self.__RefreshEnable()
+    
+    def __RefreshEnable(self):
+        sp = self.nbTabs.get_nth_page(0)
+        if len(self.diagrams) == 1:
+            sp.show()
+        splbl = self.nbTabs.get_tab_label(sp)
+        splbl.get_children()[-1].set_sensitive(len(self.diagrams) > 1)
+    
+    def __AddNbPage(self, pixbuf, label, page):
         hboxbut = gtk.HBox(spacing = 3)
-        hboxbut.show()     
-
+        hboxbut.show()
+        
+        if pixbuf is not None:
+            img = gtk.Image()
+            img.set_from_pixbuf(pixbuf)
+            img.show()
+        
+        if isinstance(label, (str, unicode)):
+            label1 = gtk.Label(label)
+            label1.show()
+        else:
+            label1 = label 
+        
         button = gtk.Button()
         image = gtk.image_new_from_stock(gtk.STOCK_CLOSE, gtk.ICON_SIZE_SMALL_TOOLBAR)       
         image.show()
         button.add(image)
         button.set_relief(gtk.RELIEF_NONE)
-        button.show()                
-        label1 = gtk.Label(diagram.GetName())
-        label1.show() 
+        button.show()
+        button.connect("clicked", self.on_button_click, page)
         
-        img = gtk.Image()
-        img.set_from_pixbuf(PixmapFromPath(self.application.GetProject().GetStorage(), diagram.GetType().GetIcon()))
-        img.show()
-        
-        hboxbut.add(img)
+        if pixbuf is not None:
+            hboxbut.add(img)
         hboxbut.add(label1)
         hboxbut.add(button)
-        hboxpic = gtk.HBox()
-        hboxpic.show()
-        self.nbTabs.append_page(hboxpic,hboxbut)
-        button.connect("clicked", self.on_button_click, self.nbTabs.get_nth_page(self.nbTabs.get_n_pages()-1))
+        idx = self.nbTabs.append_page(page, hboxbut)
+        
+    def AddTab(self, diagram):
+        for i in self.diagrams:
+            if i is diagram:
+                self.SetCurrentPage(self.diagrams.index(diagram))
+                return
+        
+        page = gtk.HBox()
+        page.show()
+        
+        self.__AddNbPage(
+            PixmapFromPath(self.application.GetProject().GetStorage(), diagram.GetType().GetIcon()),
+            diagram.GetName(),
+            page)
         self.diagrams.append(diagram)
        
         self.SetCurrentPage(self.nbTabs.get_n_pages()-1)
+        self.__RefreshEnable()
     
     def Show(self):
         self.nbTabs.show()
@@ -120,12 +139,15 @@ class CTabs(CWidget):
     def CloseTab(self, diagram):
         if diagram in self.diagrams:
             num = self.diagrams.index(diagram)
-            if num == self.nbTabs.get_current_page() and self.tbDrawingArea.get_parent():
-                self.tbDrawingArea.get_parent().remove(self.tbDrawingArea)
-            self.diagrams.remove(diagram)
-            #self.mnuTabPages_menu.remove(self.mnuTabPages_menu.get_children()[num])
-            self.nbTabs.remove_page(num)
-            
+            if num == 0:
+                self.nbTabs.get_nth_page(0).hide()
+            else:
+                if num == self.nbTabs.get_current_page() and self.tbDrawingArea.get_parent():
+                    self.tbDrawingArea.get_parent().remove(self.tbDrawingArea)
+                self.diagrams.remove(diagram)
+                #self.mnuTabPages_menu.remove(self.mnuTabPages_menu.get_children()[num])
+                self.nbTabs.remove_page(num)
+        self.__RefreshEnable()
     
     def CloseCurrentTab(self):
         if self.nbTabs.get_current_page() > 0:
@@ -152,9 +174,11 @@ class CTabs(CWidget):
             self.nbTabs.set_current_page(page)
     
     def CloseAll(self):
+        self.tbDrawingArea.get_parent().remove(self.tbDrawingArea)
         for i in xrange(1, len(self.diagrams)):
             del self.diagrams[1]
             self.nbTabs.remove_page(1)
+        self.__RefreshEnable()
 
     def RefreshTab(self, diagram):
         if diagram in self.diagrams:
