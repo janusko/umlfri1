@@ -7,12 +7,13 @@ class CDrawingContext(object):
         self.variables = {}
         self.stack = []
         self.shadowcolor = None
+        self.line = 0
     
     def Push(self):
-        self.stack.append((self.pos, self.size, self.variables, self.stack, self.shadowcolor))
+        self.stack.append((self.pos, self.size, self.variables.copy(), self.stack, self.shadowcolor, self.line))
     
     def Pop(self):
-        self.pos, self.size, self.variables, self.stack, self.shadowcolor = self.stack.pop()
+        self.pos, self.size, self.variables, self.stack, self.shadowcolor, self.line = self.stack.pop()
     
     def ComputeSize(self, object):
         size = self.size
@@ -39,6 +40,9 @@ class CDrawingContext(object):
     def GetShadowColor(self):
         return self.shadowcolor
     
+    def GetLine(self):
+        return self.line
+    
     def GetVariable(self, varname):
         return self.variables[varname]
     
@@ -47,6 +51,9 @@ class CDrawingContext(object):
     
     def GetAttribute(self, varname):
         return self.element.GetObject().GetVisualProperty(varname)
+    
+    def GetDomainObject(self):
+        return self.element.GetObject().GetDomainObject()
     
     __getitem__ = GetVariable
     
@@ -60,7 +67,10 @@ class CDrawingContext(object):
         self.pos = newpos
     
     def SetVariables(self, vars):
-        self.variables = vars
+        self.variables.update(vars)
+    
+    def SetLine(self, line):
+        self.line = line
     
     def SetShadowColor(self, color):
         self.shadowcolor = color
@@ -69,4 +79,4 @@ class CDrawingContext(object):
         return self.element.GetPoints(self.canvas)
     
     def GetLoopPath(self):
-        return tuple(i[2].get('line') for i in self.stack) + (self.variables.get('line'), )
+        return tuple(i[5] for i in self.stack) + (self.line, )
