@@ -23,7 +23,7 @@ class CConLabelInfo(CCacheableObject):
         <lib.Drawing.Objects.VisualObject.CVisualObject>}
         '''
         
-        super(CConLabelInfo, self).__init__()
+        CCacheableObject.__init__(self)
         self.idx = 0
         self.dist = 0
         self.pos = 0.5
