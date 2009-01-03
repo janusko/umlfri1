@@ -878,7 +878,6 @@
                     <child>
                       <widget class="GtkLabel" id="lblStart">
                         <property name="visible">True</property>
-                        <property name="ypad">7</property>
                         <property name="label" translatable="yes">Start page</property>
                       </widget>
                       <packing>
