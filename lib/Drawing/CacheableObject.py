@@ -5,7 +5,6 @@ class CCacheableObject(object):
     """Size cache of visible object"""
     
     def __init__(self):
-        super(CCacheableObject, self).__init__()
         self.ClearSizeCache()
         self.revision = 0
         self.cfgrevision = 0

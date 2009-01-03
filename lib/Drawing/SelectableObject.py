@@ -1,7 +1,6 @@
 class CSelectableObject(object):
     '''Implements interface for selecting visible object'''
     def __init__(self):
-        super(CSelectableObject, self).__init__()
         self.selected = False
         
     def Select(self):

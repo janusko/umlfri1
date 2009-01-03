@@ -5,7 +5,7 @@ from VisibleObject import CVisibleObject
 
 class CElement(CVisibleObject):
     def __init__(self, diagram, obj, isLoad = False):
-        super(CElement, self).__init__()
+        CVisibleObject.__init__(self)
         self.isLoad = isLoad
         self.object = obj
         self.squares = []
@@ -43,7 +43,7 @@ class CElement(CVisibleObject):
         self.squares.append(((-posx, -posy), (x, y), (x1 - x, y1 - y)))
     
     def Deselect(self):
-        super(CElement, self).Deselect()
+        CVisibleObject.Deselect(self)
         self.squares = []
 
     def Paint(self, canvas, delta = (0, 0)):
