@@ -194,5 +194,5 @@ class CDomainObject(object):
                 self.SetValue(key, value)
     
     def __iter__(self):
-        for id, value in self.values.iteritems():
-            yield id, value
+        for id in self.type.IterAttributeIDs():
+            yield id, self.values[id]
