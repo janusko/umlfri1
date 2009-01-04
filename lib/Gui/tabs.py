@@ -174,7 +174,8 @@ class CTabs(CWidget):
             self.nbTabs.set_current_page(page)
     
     def CloseAll(self):
-        self.tbDrawingArea.get_parent().remove(self.tbDrawingArea)
+        if self.tbDrawingArea.get_parent():
+            self.tbDrawingArea.get_parent().remove(self.tbDrawingArea)
         for i in xrange(1, len(self.diagrams)):
             del self.diagrams[1]
             self.nbTabs.remove_page(1)
