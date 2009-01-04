@@ -122,6 +122,7 @@ class CTabs(CWidget):
             self.__StartPage += 1
         self.__Current = page_num
 
+    @event("nbTabs", "switch-page")
     def on_change_current_page(self, notebook, page, page_num):
         if self.tbDrawingArea.get_parent():
             self.tbDrawingArea.get_parent().remove(self.tbDrawingArea)
