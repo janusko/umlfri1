@@ -5,7 +5,7 @@
     <Domain id="association"/>
     <Appearance>
         <LineStyle style="solid" color="#cfg.Styles.Connection.LineColor"/>
-        <ArrowStyle style="simple" fill="#cfg.Styles.Connection.ArrowFillColor" color="#cfg/Styles/Connection/ArrowColor"/>
+        <ArrowStyle style="simple" fill="#cfg.Styles.Connection.ArrowFillColor" color="#cfg.Styles.Connection.ArrowColor"/>
         <Label position="center">
             <HBox>
                 <Condition condition="#self.stereotype" type="empty" negate="1">
