@@ -461,7 +461,7 @@ class CpicDrawingArea(CWidget):
     @event("picEventBox", "key-press-event")
     def on_key_press_event(self, widget, event):
         if event.keyval in self.pressedKeys:
-            return
+            return True
         self.pressedKeys.add(event.keyval)
         if event.keyval == gtk.keysyms.Delete:
             if event.state == gtk.gdk.SHIFT_MASK:
@@ -481,7 +481,32 @@ class CpicDrawingArea(CWidget):
             self.emit('set-selected', None)
         elif event.keyval == gtk.keysyms.space:
             self.__SetCursor('grab')
-
+        elif event.keyval == gtk.keysyms.Left:
+            for sel in self.Diagram.GetSelected():
+                pos = sel.GetPosition(sel)
+                if (pos[0]>10):pos = pos[0]-10, pos[1]
+                sel.SetPosition(pos)
+                self.Paint()
+        elif event.keyval == gtk.keysyms.Right:
+            for sel in self.Diagram.GetSelected():
+                pos = sel.GetPosition(sel)
+                pos = pos[0]+10, pos[1]
+                sel.SetPosition(pos)
+                self.Paint()
+        elif event.keyval == gtk.keysyms.Up:
+            for sel in self.Diagram.GetSelected():
+                pos = sel.GetPosition(sel)
+                if (pos[1]>10):pos = pos[0], pos[1]-10
+                sel.SetPosition(pos)
+                self.Paint()
+        elif event.keyval == gtk.keysyms.Down:
+            for sel in self.Diagram.GetSelected():
+                pos = sel.GetPosition(sel)
+                pos = pos[0], pos[1]+10
+                sel.SetPosition(pos)
+                self.Paint()        
+        return True    
+                      
     @event("picEventBox", "key-release-event")
     def on_key_release_event(self, widget, event):
         if gtk.keysyms.space in self.pressedKeys:
