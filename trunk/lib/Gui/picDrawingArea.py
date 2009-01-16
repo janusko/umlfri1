@@ -349,7 +349,16 @@ class CpicDrawingArea(CWidget):
                 self.emit('selected-item', list(self.Diagram.GetSelected()))
                 #ak je nieco vyselectovane:
                 if len(list(self.Diagram.GetSelectedElements(nolabels = True))) > 0: 
-                    self.pMenuShift.popup(None,None,None,event.button,event.time)
+			#tu schovam nepotrebne veci
+			for item in self.pMenuShift.get_children():
+				if item.name <> 'mnuCtxPaste':
+					item.set_sensitive(True)
+		else:
+			#ukryjem vsetko
+			for item in self.pMenuShift.get_children():
+				if item.name <> 'mnuCtxPaste':
+					item.set_sensitive(False)
+		self.pMenuShift.popup(None,None,None,event.button,event.time)
         return True
 
     def __AddItem(self, toolBtnSel, event):
