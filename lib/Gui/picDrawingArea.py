@@ -339,29 +339,29 @@ class CpicDrawingArea(CWidget):
             self.__BeginDragMove(event)
 
         elif event.button == 3:
-                itemSel = self.Diagram.GetElementAtPosition(self.canvas, pos)
-                if itemSel not in frozenset(self.Diagram.GetSelected()):
-                    self.Diagram.DeselectAll()
-                if itemSel is not None:
-                    self.Diagram.AddToSelection(itemSel)
-                self.pmShowInProjectView.set_sensitive(True)                
-                self.Paint()
-                self.emit('selected-item', list(self.Diagram.GetSelected()))
-        #if something is selected:
-        if len(list(self.Diagram.GetSelectedElements(nolabels = True))) > 0: 
-            #hide unnecessary things
-            for item in self.pMenuShift.get_children():
-                if item.name <> 'mnuCtxPaste':
-                    item.set_sensitive(True)
-        else:
-            #hide all
-            for item in self.pMenuShift.get_children():
-                if item.name <> 'mnuCtxPaste':
-                    item.set_sensitive(False)
-        self.pMenuShift.popup(None,None,None,event.button,event.time)
-        if len(list(self.Diagram.GetSelectedElements(nolabels = True))) > 1:     
-            self.pmShowInProjectView.set_sensitive(False)
-        return True
+            itemSel = self.Diagram.GetElementAtPosition(self.canvas, pos)
+            if itemSel not in frozenset(self.Diagram.GetSelected()):
+                self.Diagram.DeselectAll()
+            if itemSel is not None:
+                self.Diagram.AddToSelection(itemSel)
+            self.pmShowInProjectView.set_sensitive(True)                
+            self.Paint()
+            self.emit('selected-item', list(self.Diagram.GetSelected()))
+            #if something is selected:
+            if len(list(self.Diagram.GetSelectedElements(nolabels = True))) > 0: 
+                #hide unnecessary things
+                for item in self.pMenuShift.get_children():
+                    if item.name <> 'mnuCtxPaste':
+                        item.set_sensitive(True)
+            else:
+                #hide all
+                for item in self.pMenuShift.get_children():
+                    if item.name <> 'mnuCtxPaste':
+                        item.set_sensitive(False)
+            self.pMenuShift.popup(None,None,None,event.button,event.time)
+            if len(list(self.Diagram.GetSelectedElements(nolabels = True))) > 1:     
+                self.pmShowInProjectView.set_sensitive(False)
+            return True
 
     def __AddItem(self, toolBtnSel, event):
         pos = self.GetAbsolutePos((event.x, event.y))
