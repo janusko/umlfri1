@@ -359,6 +359,8 @@ class CpicDrawingArea(CWidget):
 				if item.name <> 'mnuCtxPaste':
 					item.set_sensitive(False)
 		self.pMenuShift.popup(None,None,None,event.button,event.time)
+                if len(list(self.Diagram.GetSelectedElements(nolabels = True))) > 1:     
+                    self.pmShowInProjectView.set_sensitive(False)
         return True
 
     def __AddItem(self, toolBtnSel, event):
