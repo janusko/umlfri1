@@ -465,7 +465,7 @@
                     <property name="stock_id">gtk-open</property>
                   </widget>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
                   </packing>
                 </child>
                 <child>
@@ -474,17 +474,13 @@
                     <property name="stock_id">gtk-save</property>
                   </widget>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
                   </packing>
                 </child>
                 <child>
                   <widget class="GtkSeparatorToolItem" id="separatortoolitem1">
                     <property name="visible">True</property>
                   </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">False</property>
-                  </packing>
                 </child>
                 <child>
                   <widget class="GtkToolButton" id="cmdCopy">
@@ -492,7 +488,7 @@
                     <property name="stock_id">gtk-copy</property>
                   </widget>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
                   </packing>
                 </child>
                 <child>
@@ -501,7 +497,7 @@
                     <property name="stock_id">gtk-cut</property>
                   </widget>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
                   </packing>
                 </child>
                 <child>
@@ -510,17 +506,13 @@
                     <property name="stock_id">gtk-paste</property>
                   </widget>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
                   </packing>
                 </child>
                 <child>
                   <widget class="GtkSeparatorToolItem" id="separatortoolitem2">
                     <property name="visible">True</property>
                   </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">False</property>
-                  </packing>
                 </child>
                 <child>
                   <widget class="GtkToolButton" id="cmdZoomOut">
@@ -528,7 +520,7 @@
                     <property name="stock_id">gtk-zoom-out</property>
                   </widget>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
                   </packing>
                 </child>
                 <child>
@@ -537,7 +529,7 @@
                     <property name="stock_id">gtk-zoom-in</property>
                   </widget>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
                   </packing>
                 </child>
               </widget>
@@ -564,7 +556,7 @@
                     <property name="active">True</property>
                   </widget>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
                   </packing>
                 </child>
               </widget>
@@ -4134,7 +4126,7 @@ String</property>
   </widget>
   <widget class="GtkMenu" id="pMenuShift">
     <child>
-      <widget class="GtkImageMenuItem" id="mnuCtxCut">
+      <widget class="GtkImageMenuItem" id="mnuCtxCut">        
         <property name="visible">True</property>
         <property name="label" translatable="yes">gtk-cut</property>
         <property name="use_underline">True</property>
@@ -4173,11 +4165,16 @@ String</property>
     </child>
     <child>
       <widget class="GtkImageMenuItem" id="mnuCtxShiftDelete">
-        <property name="visible">True</property>
-        <property name="label" translatable="yes">gtk-clear</property>
+        <property name="visible">True</property>        
+        <property name="label" translatable="yes">Delete from Project</property>
         <property name="use_underline">True</property>
-        <property name="use_stock">True</property>
         <accelerator key="Delete" modifiers="GDK_SHIFT_MASK" signal="activate"/>
+        <child internal-child="image">
+          <widget class="GtkImage" id="menu-item-image27">
+            <property name="stock">gtk-delete</property>
+            <property name="icon_size">1</property>
+          </widget>
+        </child>
       </widget>
     </child>
     <child>
