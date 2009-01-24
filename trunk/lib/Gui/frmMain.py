@@ -468,7 +468,7 @@ class CfrmMain(CWindow):
         if parentElement == None:
             parentElement = self.twProjectView.GetRootNode()
 
-        ElementType = self.application.GetProject().GetElementFactory().GetElement(element)
+        ElementType = self.application.GetProject().GetMetamodel().GetElementFactory().GetElement(element)
         ElementObject = CElementObject(ElementType)
         self.twProjectView.AddElement(ElementObject, None, parentElement)
 
@@ -479,7 +479,7 @@ class CfrmMain(CWindow):
     @event("mnuItems", "create-diagram")
     @event("twProjectView","create-diagram")
     def on_mnuItems_create_diagram(self, widget, diagramId):
-        diagram = CDiagram(self.application.GetProject().GetDiagramFactory().GetDiagram(diagramId))
+        diagram = CDiagram(self.application.GetProject().GetMetamodel().GetDiagramFactory().GetDiagram(diagramId))
         self.twProjectView.AddDiagram(diagram)
         self.nbTabs.AddTab(diagram)
         self.picDrawingArea.SetDiagram(diagram)
