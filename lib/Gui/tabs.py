@@ -87,7 +87,7 @@ class CTabs(CWidget):
         page.show()
         
         self.__AddNbPage(
-            PixmapFromPath(self.application.GetProject().GetStorage(), diagram.GetType().GetIcon()),
+            PixmapFromPath(self.application.GetProject().GetMetamodel().GetStorage(), diagram.GetType().GetIcon()),
             diagram.GetName(),
             page)
         self.diagrams.append(diagram)

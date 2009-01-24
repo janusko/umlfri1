@@ -6,20 +6,15 @@ from cStringIO import StringIO
 from zipfile import ZipFile, ZIP_STORED, ZIP_DEFLATED
 from lib.Exceptions.UserException import *
 from lib.Exceptions.DevException import DomainObjectError
-from lib.Storages import open_storage
 from lib.Drawing import CElement
 from lib.Drawing import CConnection
-from lib.Domains import CDomainFactory
 from lib.Elements.Type import CElementType
 from lib.Elements.Object import CElementObject
 from lib.Connections.Object import CConnectionObject
-from lib.Elements.Factory import CElementFactory
-from lib.Diagrams.Factory import CDiagramFactory
-from lib.Connections.Factory import CConnectionFactory
-from lib.Versions.Factory import CVersionFactory
+from lib.Metamodel import CMetamodelManager
 from lib.Drawing import CDiagram
 import os.path
-from lib.consts import ROOT_PATH, VERSIONS_PATH, DIAGRAMS_PATH, ELEMENTS_PATH, CONNECTIONS_PATH, DOMAINS_PATH, UMLPROJECT_NAMESPACE, PROJECT_EXTENSION, PROJECT_CLEARXML_EXTENSION
+from lib.consts import UMLPROJECT_NAMESPACE, PROJECT_EXTENSION, PROJECT_CLEARXML_EXTENSION
 from lib.config import config
 
 #if lxml.etree is imported successfully, we use xml validation with xsd schema
@@ -34,16 +29,8 @@ class CProject(object):
     def __init__(self):
         self.root = None
         
-        self.Storage = open_storage(os.path.join(ROOT_PATH, 'etc', 'uml'))
-        self.DomainFactory = CDomainFactory(self.Storage, DOMAINS_PATH)
-        self.ElementFactory = CElementFactory(self.Storage, ELEMENTS_PATH, self.DomainFactory)
-        self.DiagramFactory = CDiagramFactory(self.Storage, DIAGRAMS_PATH)
-        self.ConnectionFactory = CConnectionFactory(self.Storage, CONNECTIONS_PATH, self.DomainFactory)
-        self.VersionFactory = CVersionFactory(self.Storage, VERSIONS_PATH)
-        self.version = self.VersionFactory.GetVersion('UML 1.4')
-        self.MetamodelVersion = '1.4.0'
-        self.MetamodelUri = 'http://umlfri.kst.fri.uniza.sk/metamodel/uml.frim'
-        
+        self.__metamodelManager = CMetamodelManager()
+        self.__metamodel = None
         self.defaultDiagram = None
         
         self.filename = None
@@ -59,26 +46,8 @@ class CProject(object):
         if self.defaultDiagram is diagram:
             self.defaultDiagram = None
     
-    def GetStorage(self):
-        return self.Storage
-    
-    def GetElementFactory(self):
-        return self.ElementFactory
-    
-    def GetDiagramFactory(self):
-        return self.DiagramFactory
-    
-    def GetConnectionFactory(self):
-        return self.ConnectionFactory
-    
-    def GetVersionFactory(self):
-        return self.VersionFactory
-    
-    def GetStorage(self):
-        return self.Storage
-    
-    def GetVersion(self):
-        return self.version
+    def GetMetamodel(self):
+        return self.__metamodel
     
     def SetRoot(self, value):
         self.root = value
@@ -153,6 +122,8 @@ class CProject(object):
         return elements, connections
     
     def SaveProject(self, filename = None):
+        assert self.__metamodel is not None
+        
         if filename is None:
             filename = self.filename
         else:
@@ -248,9 +219,9 @@ class CProject(object):
         
         # metamodel informations
         metamodelUriNode = etree.Element(UMLPROJECT_NAMESPACE+'uri')
-        metamodelUriNode.text = self.MetamodelUri
+        metamodelUriNode.text = self.GetMetamodel().GetUri()
         metamodelVersionNode = etree.Element(UMLPROJECT_NAMESPACE+'version')
-        metamodelVersionNode.text = self.MetamodelVersion
+        metamodelVersionNode.text = self.GetMetamodel().GetVersion()
         
         metamodelNode.append(metamodelUriNode)
         metamodelNode.append(metamodelVersionNode)
@@ -272,9 +243,9 @@ class CProject(object):
         savetree(self.root, projtreeNode)
         rootNode.append(projtreeNode)
         
-        for type in self.ElementFactory.IterTypes():
+        for type in self.GetMetamodel().GetElementFactory().IterTypes():
             counterNode.append(etree.Element(UMLPROJECT_NAMESPACE+'count', id = type.GetId(), value = unicode(type.GetCounter())))
-        for type in self.DiagramFactory:
+        for type in self.GetMetamodel().GetDiagramFactory():
             counterNode.append(etree.Element(UMLPROJECT_NAMESPACE+'count', id = type.GetId(), value = unicode(type.GetCounter())))
         
         rootNode.append(counterNode)
@@ -343,7 +314,7 @@ class CProject(object):
                 elif elem.tag == UMLPROJECT_NAMESPACE+'diagrams':
                     for area in elem:
                         if area.tag == UMLPROJECT_NAMESPACE+'diagram':
-                            diagram = CDiagram(self.DiagramFactory.GetDiagram(area.get("type")),area.get("name"))
+                            diagram = CDiagram(self.GetMetamodel().GetDiagramFactory().GetDiagram(area.get("type")),area.get("name"))
                             diagram.SetPath(parentNode.GetPath() + "/" + diagram.GetName() + ":=Diagram=")
                             if 'default' in area.attrib and area.attrib['default'].lower() in ('1', 'true'):
                                 self.defaultDiagram = diagram
@@ -380,11 +351,24 @@ class CProject(object):
                 raise XMLError(xmlschema.error_log.last_error)
 
         for element in root:
-            if element.tag == UMLPROJECT_NAMESPACE+'objects':
+            if element.tag == UMLPROJECT_NAMESPACE+'metamodel':
+                uri = None
+                version = None
+                
+                for item in element:
+                    if item.tag == UMLPROJECT_NAMESPACE+'uri':
+                        uri = item.text
+                    elif item.tag == UMLPROJECT_NAMESPACE+'version':
+                        version = item.text
+                
+                if not uri or not version:
+                    raise XMLError("Bad metamodel definition")
+                self.__metamodel = self.__metamodelManager.GetMetamodel(uri, version)
+            elif element.tag == UMLPROJECT_NAMESPACE+'objects':
                 for subelem in element:
                     if subelem.tag == UMLPROJECT_NAMESPACE+'object':
                         id = subelem.get("id")
-                        object = CElementObject(self.ElementFactory.GetElement(subelem.get("type")))
+                        object = CElementObject(self.GetMetamodel().GetElementFactory().GetElement(subelem.get("type")))
                         object.SetSaveInfo(LoadDomainObjectInfo(subelem[0]))
                         ListObj[id] = object
 
@@ -392,7 +376,7 @@ class CProject(object):
                 for connection in element:
                     if connection.tag == UMLPROJECT_NAMESPACE+'connection':
                         id = connection.get("id")
-                        con = CConnectionObject(self.ConnectionFactory.GetConnection(connection.get("type")),ListObj[connection.get("source")],ListObj[connection.get("destination")])
+                        con = CConnectionObject(self.GetMetamodel().GetConnectionFactory().GetConnection(connection.get("type")),ListObj[connection.get("source")],ListObj[connection.get("destination")])
                         con.SetSaveInfo(LoadDomainObjectInfo(connection[0]))
                         ListCon[id] = con
             
@@ -405,10 +389,10 @@ class CProject(object):
             
             elif element.tag == UMLPROJECT_NAMESPACE + 'counters':
                 for item in element:
-                    if self.ElementFactory.HasType(item.get('id')):
-                        self.ElementFactory.GetElement(item.get('id')).SetCounter(int(item.get('value')))
-                    elif self.DiagramFactory.HasType(item.get('id')):
-                        self.DiagramFactory.GetDiagram(item.get('id')).SetCounter(int(item.get('value')))
+                    if self.GetMetamodel().GetElementFactory().HasType(item.get('id')):
+                        self.GetMetamodel().GetElementFactory().GetElement(item.get('id')).SetCounter(int(item.get('value')))
+                    elif self.GetMetamodel().GetDiagramFactory().HasType(item.get('id')):
+                        self.GetMetamodel().GetDiagramFactory().GetDiagram(item.get('id')).SetCounter(int(item.get('value')))
                         
         
     Root = property(GetRoot, SetRoot)

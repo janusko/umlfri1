@@ -24,22 +24,22 @@ class CmnuItems(CWidget):
         for item in self.mItemAddElement_menu.get_children():
             self.mItemAddElement_menu.remove(item)
 
-        for item in self.application.GetProject().GetElementFactory().IterTypes():
+        for item in self.application.GetProject().GetMetamodel().GetElementFactory().IterTypes():
             if ('DirectAdd', 'true') in item.GetOptions().items():
                 newItem = gtk.ImageMenuItem(item.GetId())
                 self.mItemAddElement_menu.append(newItem)
                 newItem.connect("activate", self.on_mnuAddElement_activate, item.GetId())
                 img = gtk.Image()
-                img.set_from_pixbuf(PixmapFromPath(self.application.GetProject().GetStorage(), self.application.GetProject().GetElementFactory().GetElement(item.GetId()).GetIcon()))
+                img.set_from_pixbuf(PixmapFromPath(self.application.GetProject().GetMetamodel().GetStorage(), self.application.GetProject().GetMetamodel().GetElementFactory().GetElement(item.GetId()).GetIcon()))
                 newItem.set_image(img)
                 img.show()
                 newItem.show()
         
-        for diagram in self.application.GetProject().GetVersion().GetDiagrams():
+        for diagram in self.application.GetProject().GetMetamodel().GetDiagrams():
             newItem = gtk.ImageMenuItem(diagram)
             newItem.connect("activate", self.on_mnuDiagrams_activate, diagram)
             img = gtk.Image()
-            img.set_from_pixbuf(PixmapFromPath(self.application.GetProject().GetStorage(), self.application.GetProject().GetDiagramFactory().GetDiagram(diagram).GetIcon()))
+            img.set_from_pixbuf(PixmapFromPath(self.application.GetProject().GetMetamodel().GetStorage(), self.application.GetProject().GetMetamodel().GetDiagramFactory().GetDiagram(diagram).GetIcon()))
             img.show()
             newItem.set_image(img)
             self.mItemAddDiagram_menu.append(newItem)

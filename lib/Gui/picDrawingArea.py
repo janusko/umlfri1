@@ -125,7 +125,7 @@ class CpicDrawingArea(CWidget):
         self.SetScale(1.0)
             
     def Redraw(self):        
-        self.canvas = CCairoCanvas(self.picDrawingArea, self.buffer, self.application.GetProject().GetStorage())
+        self.canvas = CCairoCanvas(self.picDrawingArea, self.buffer, self.application.GetProject().GetMetamodel().GetStorage())
         self.canvas.SetScale(self.scale)
 
     def GetDiagram(self):
@@ -229,7 +229,7 @@ class CpicDrawingArea(CWidget):
         self.Diagram.DeselectAll()
         #what u see export(only currently visible area will be exported): sizeX, sizeY = self.GetWindowSize() 
         sizeX, sizeY = self.Diagram.GetExpSquare(self.canvas)
-        canvas = CExportCanvas(self.application.GetProject().GetStorage(), export_type, filename, sizeX, sizeY)
+        canvas = CExportCanvas(self.application.GetProject().GetMetamodel().GetStorage(), export_type, filename, sizeX, sizeY)
         self.Diagram.PaintFull(canvas)
         canvas.Finish()
         self.Paint()    
@@ -238,7 +238,7 @@ class CpicDrawingArea(CWidget):
         # obsolete
         self.Diagram.DeselectAll()
         self.Paint()
-        canvas = CSvgCanvas(1000, 1000, self.canvas, self.application.GetProject().GetStorage())
+        canvas = CSvgCanvas(1000, 1000, self.canvas, self.application.GetProject().GetMetamodel().GetStorage())
         canvas.Clear()
         self.Diagram.Paint(canvas)
         canvas.WriteOut(file(filename, 'w'))
@@ -366,7 +366,7 @@ class CpicDrawingArea(CWidget):
     def __AddItem(self, toolBtnSel, event):
         pos = self.GetAbsolutePos((event.x, event.y))
         if toolBtnSel[0] == 'Element':
-            ElementType = self.application.GetProject().GetElementFactory().GetElement(toolBtnSel[1])
+            ElementType = self.application.GetProject().GetMetamodel().GetElementFactory().GetElement(toolBtnSel[1])
             ElementObject = CElementObject(ElementType)
             newElement = CElement(self.Diagram, ElementObject)
             newElement.SetPosition(pos)
@@ -399,7 +399,7 @@ class CpicDrawingArea(CWidget):
             elif isinstance(itemSel, CConnection):
                 return
             elif self.__NewConnection is None:
-                ConnectionType = self.application.GetProject().GetConnectionFactory().GetConnection(toolBtnSel[1])
+                ConnectionType = self.application.GetProject().GetMetamodel().GetConnectionFactory().GetConnection(toolBtnSel[1])
                 center = itemSel.GetCenter(self.canvas)
                 relcenter = self.GetRelativePos(center)
                 self.__NewConnection = (ConnectionType, [center], itemSel)
