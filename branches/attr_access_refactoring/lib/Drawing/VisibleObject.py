@@ -15,7 +15,8 @@ class CVisibleObject(CCacheableObject, CSelectableObject):
         '''
         self.position = (0,0)
         self.deltaSize = (0,0)
-        super(CVisibleObject,self).__init__()
+        CCacheableObject.__init__(self)
+        CSelectableObject.__init__(self)
 
     def AreYouAtPosition(self, canvas, pos):
         x, y = pos

@@ -465,7 +465,7 @@
                     <property name="stock_id">gtk-open</property>
                   </widget>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
                   </packing>
                 </child>
                 <child>
@@ -474,17 +474,13 @@
                     <property name="stock_id">gtk-save</property>
                   </widget>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
                   </packing>
                 </child>
                 <child>
                   <widget class="GtkSeparatorToolItem" id="separatortoolitem1">
                     <property name="visible">True</property>
                   </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">False</property>
-                  </packing>
                 </child>
                 <child>
                   <widget class="GtkToolButton" id="cmdCopy">
@@ -492,7 +488,7 @@
                     <property name="stock_id">gtk-copy</property>
                   </widget>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
                   </packing>
                 </child>
                 <child>
@@ -501,7 +497,7 @@
                     <property name="stock_id">gtk-cut</property>
                   </widget>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
                   </packing>
                 </child>
                 <child>
@@ -510,17 +506,13 @@
                     <property name="stock_id">gtk-paste</property>
                   </widget>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
                   </packing>
                 </child>
                 <child>
                   <widget class="GtkSeparatorToolItem" id="separatortoolitem2">
                     <property name="visible">True</property>
                   </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">False</property>
-                  </packing>
                 </child>
                 <child>
                   <widget class="GtkToolButton" id="cmdZoomOut">
@@ -528,7 +520,7 @@
                     <property name="stock_id">gtk-zoom-out</property>
                   </widget>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
                   </packing>
                 </child>
                 <child>
@@ -537,7 +529,7 @@
                     <property name="stock_id">gtk-zoom-in</property>
                   </widget>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
                   </packing>
                 </child>
               </widget>
@@ -564,7 +556,7 @@
                     <property name="active">True</property>
                   </widget>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
                   </packing>
                 </child>
               </widget>
@@ -878,7 +870,6 @@
                     <child>
                       <widget class="GtkLabel" id="lblStart">
                         <property name="visible">True</property>
-                        <property name="ypad">7</property>
                         <property name="label" translatable="yes">Start page</property>
                       </widget>
                       <packing>
@@ -4135,7 +4126,7 @@ String</property>
   </widget>
   <widget class="GtkMenu" id="pMenuShift">
     <child>
-      <widget class="GtkImageMenuItem" id="mnuCtxCut">
+      <widget class="GtkImageMenuItem" id="mnuCtxCut">        
         <property name="visible">True</property>
         <property name="label" translatable="yes">gtk-cut</property>
         <property name="use_underline">True</property>
@@ -4174,11 +4165,16 @@ String</property>
     </child>
     <child>
       <widget class="GtkImageMenuItem" id="mnuCtxShiftDelete">
-        <property name="visible">True</property>
-        <property name="label" translatable="yes">gtk-clear</property>
+        <property name="visible">True</property>        
+        <property name="label" translatable="yes">Delete from Project</property>
         <property name="use_underline">True</property>
-        <property name="use_stock">True</property>
         <accelerator key="Delete" modifiers="GDK_SHIFT_MASK" signal="activate"/>
+        <child internal-child="image">
+          <widget class="GtkImage" id="menu-item-image27">
+            <property name="stock">gtk-delete</property>
+            <property name="icon_size">1</property>
+          </widget>
+        </child>
       </widget>
     </child>
     <child>
@@ -4364,6 +4360,206 @@ String</property>
         <property name="visible">True</property>
         <property name="label" translatable="yes">Unset default diagram</property>
         <property name="use_underline">True</property>
+      </widget>
+    </child>
+  </widget>
+  <widget class="GtkDialog" id="frmExport">
+    <property name="border_width">5</property>
+    <property name="window_position">GTK_WIN_POS_CENTER_ON_PARENT</property>
+    <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
+    <property name="has_separator">False</property>
+    <child internal-child="vbox">
+      <widget class="GtkVBox" id="vbxMain">
+        <property name="visible">True</property>
+        <property name="spacing">2</property>
+        <child>
+          <widget class="GtkVBox" id="vbxMainOptions">
+            <property name="visible">True</property>
+            <property name="spacing">2</property>
+            <child>
+              <widget class="GtkHBox" id="hbxSelectLabel">
+                <property name="visible">True</property>
+                <child>
+                  <widget class="GtkLabel" id="lblSelectPrompt">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">Select directory &amp; file name</property>
+                  </widget>
+                </child>
+              </widget>
+            </child>
+            <child>
+              <widget class="GtkHBox" id="hbxFilePathInput">
+                <property name="visible">True</property>
+                <child>
+                  <widget class="GtkFileChooserButton" id="fcbDirectorySelect">
+                    <property name="visible">True</property>
+                    <property name="show_hidden">True</property>
+                    <property name="action">GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER</property>
+                    <property name="title" translatable="yes">Select a directory</property>
+                  </widget>
+                </child>
+                <child>
+                  <widget class="GtkEntry" id="entFileNameForExport">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="text" translatable="yes">default file name</property>
+                  </widget>
+                  <packing>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </widget>
+              <packing>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkLabel" id="lblPomSpace">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">
+</property>
+              </widget>
+              <packing>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkLabel" id="lblExportFormat">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Export format</property>
+              </widget>
+              <packing>
+                <property name="position">3</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkHBox" id="hbxButtonsToChooseExportFormat">
+                <property name="visible">True</property>
+                <child>
+                  <widget class="GtkToggleButton" id="tbnPNG">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="label" translatable="yes">P_NG</property>
+                    <property name="use_underline">True</property>
+                    <property name="response_id">0</property>
+                  </widget>
+                </child>
+                <child>
+                  <widget class="GtkToggleButton" id="tbnPDF">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="label" translatable="yes">P_DF</property>
+                    <property name="use_underline">True</property>
+                    <property name="response_id">0</property>
+                  </widget>
+                  <packing>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkToggleButton" id="tbnPostScript">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="label" translatable="yes">P_ostScript</property>
+                    <property name="use_underline">True</property>
+                    <property name="response_id">0</property>
+                  </widget>
+                  <packing>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkToggleButton" id="tbnSVG">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="label" translatable="yes">S_VG</property>
+                    <property name="use_underline">True</property>
+                    <property name="response_id">0</property>
+                  </widget>
+                  <packing>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
+              </widget>
+              <packing>
+                <property name="position">4</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkCheckButton" id="cbnAddExtensionAuto">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="label" translatable="yes">_Automatically add extension</property>
+                <property name="use_underline">True</property>
+                <property name="response_id">0</property>
+                <property name="draw_indicator">True</property>
+              </widget>
+              <packing>
+                <property name="position">5</property>
+              </packing>
+            </child>
+          </widget>
+          <packing>
+            <property name="fill">False</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child internal-child="action_area">
+          <widget class="GtkHButtonBox" id="hbbDownButtons">
+            <property name="visible">True</property>
+            <property name="layout_style">GTK_BUTTONBOX_SPREAD</property>
+            <child>
+              <widget class="GtkButton" id="btnExport">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="response_id">0</property>
+                <child>
+                  <widget class="GtkHBox" id="hbxExportButton">
+                    <property name="visible">True</property>
+                    <child>
+                      <widget class="GtkImage" id="imgExportImg">
+                        <property name="visible">True</property>
+                        <property name="stock">gtk-convert</property>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="lblExportLabel">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">_Export</property>
+                        <property name="use_underline">True</property>
+                      </widget>
+                      <packing>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </widget>
+                </child>
+              </widget>
+            </child>
+            <child>
+              <widget class="GtkButton" id="btnCancel">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="label" translatable="yes">_Cancel</property>
+                <property name="use_underline">True</property>
+                <property name="response_id">0</property>
+              </widget>
+              <packing>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </widget>
+          <packing>
+            <property name="expand">False</property>
+            <property name="pack_type">GTK_PACK_END</property>
+          </packing>
+        </child>
       </widget>
     </child>
   </widget>

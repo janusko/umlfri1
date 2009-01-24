@@ -77,13 +77,14 @@ class CConnection(CCacheableObject, CSelectableObject):
         self.labels = dict((id, CConLabelInfo(self, value[0], value[1])) for id, value in enumerate(self.object.GetType().GetLabels()))
         self.selpoint = None
         self.object.AddAppears(diagram)
-        super(CConnection, self).__init__()
-   
+        CCacheableObject.__init__(self)
+        CSelectableObject.__init__(self)
+    
     def Deselect(self):
         '''Execute L{CSelectableObject.Deselect<CSelectableObject.Deselect>} 
         and L{self.DeselectPoint<self.DeselectPoint>}
         '''
-        super(CConnection, self).Deselect()
+        CSelectableObject.Deselect(self)
         self.DeselectPoint()
         
     def SelectPoint(self, index):

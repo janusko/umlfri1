@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: UML .FRI 1.0-beta5\n"
+"Project-Id-Version: UML .FRI 1.0-beta20081013-r2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-12 12:40+0200\n"
+"POT-Creation-Date: 2009-01-23 10:07+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -117,6 +117,9 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
+msgid "Delete from Project"
+msgstr ""
+
 msgid "Derived"
 msgstr ""
 
@@ -157,6 +160,9 @@ msgid "Exception traceback (most recent call last)"
 msgstr ""
 
 msgid "Export diagram"
+msgstr ""
+
+msgid "Export format"
 msgstr ""
 
 msgid "File does not exist"
@@ -255,6 +261,15 @@ msgstr ""
 msgid "Operations"
 msgstr ""
 
+msgid "P_DF"
+msgstr ""
+
+msgid "P_NG"
+msgstr ""
+
+msgid "P_ostScript"
+msgstr ""
+
 msgid "Pages"
 msgstr ""
 
@@ -312,6 +327,9 @@ msgstr ""
 msgid "Root"
 msgstr ""
 
+msgid "S_VG"
+msgstr ""
+
 msgid "Save Project As"
 msgstr ""
 
@@ -324,6 +342,12 @@ msgstr ""
 msgid "Scope: "
 msgstr ""
 
+msgid "Select a directory"
+msgstr ""
+
+msgid "Select directory & file name"
+msgstr ""
+
 msgid "Selection"
 msgstr ""
 
@@ -331,6 +355,9 @@ msgid "Send Back"
 msgstr ""
 
 msgid "Send To Bottom"
+msgstr ""
+
+msgid "Set as default"
 msgstr ""
 
 msgid "Shadow color"
@@ -422,14 +449,17 @@ msgstr ""
 msgid "Unable to insert element"
 msgstr ""
 
+msgid "Unset default diagram"
+msgstr ""
+
 msgid ""
 "Use the <i>Send</i> button to send this error information directly on our "
 "server. If the <i>Include project</i> option is chcecked Your current "
 "project will be send to the server as well. You can also write some some "
 "basic information about what were You doing when this exception occured in "
 "the <i>User comments</i> tab to help us recreate it. Or You can use the "
-"<i>Report</i> button to post this error directly on our websites bugreport. "
-"In case of some problems, feel free to write us an email on :"
+"<i>Home</i> button to post this error directly on our websites bugreport. In "
+"case of problems, feel free to write us an email on :"
 msgstr ""
 
 msgid "User config"
@@ -492,7 +522,13 @@ msgstr ""
 msgid "_Add diagram"
 msgstr ""
 
+msgid "_Automatically add extension"
+msgstr ""
+
 msgid "_Best Fit"
+msgstr ""
+
+msgid "_Cancel"
 msgstr ""
 
 msgid "_Commandbar"
@@ -511,6 +547,9 @@ msgid "_Error Test"
 msgstr ""
 
 msgid "_Error log"
+msgstr ""
+
+msgid "_Export"
 msgstr ""
 
 msgid "_Export diagram"
@@ -534,9 +573,6 @@ msgstr ""
 msgid "_Project"
 msgstr ""
 
-msgid "_Report"
-msgstr ""
-
 msgid "_Send"
 msgstr ""
 
@@ -556,6 +592,9 @@ msgid "_Z-Order"
 msgstr ""
 
 msgid "architecture"
+msgstr ""
+
+msgid "default file name"
 msgstr ""
 
 msgid "gtk version"

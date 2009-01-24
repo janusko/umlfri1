@@ -404,7 +404,7 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="Version">
+	<xs:element name="Metamodel">
 		<xs:annotation>
 			<xs:documentation>Version of UML.FRI</xs:documentation>
 		</xs:annotation>
@@ -422,7 +422,6 @@
 					</xs:complexType>
 				</xs:element>
 			</xs:sequence>
-			<xs:attribute name="id" type="xs:string" use="required"/>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="ConnectionType">

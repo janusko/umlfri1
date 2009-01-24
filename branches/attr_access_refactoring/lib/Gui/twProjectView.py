@@ -3,7 +3,6 @@ from lib.Depend.gtk2 import gtk
 
 from common import CWidget
 from lib.Project import CProject, CProjectNode
-from lib.Elements import CElementFactory, CElementObject
 from lib.Drawing import CElement, CDiagram
 from lib.Exceptions.UserException import *
 from lib.Drawing.Canvas.GtkPlus import PixmapFromPath
@@ -82,22 +81,22 @@ class CtwProjectView(CWidget):
         for item in self.mnuTreeAddElement.get_children():
             self.mnuTreeAddElement.remove(item)
         
-        for item in self.application.GetProject().GetElementFactory().IterTypes():
+        for item in self.application.GetProject().GetMetamodel().GetElementFactory().IterTypes():
             if ('DirectAdd', 'true') in item.GetOptions().items():
                 newItem = gtk.ImageMenuItem(item.GetId())
                 self.mnuTreeAddElement.append(newItem)
                 newItem.connect("activate", self.on_mnuAddElement_activate, item.GetId())
                 img = gtk.Image()
-                img.set_from_pixbuf(PixmapFromPath(self.application.GetProject().GetStorage(), self.application.GetProject().GetElementFactory().GetElement(item.GetId()).GetIcon()))
+                img.set_from_pixbuf(PixmapFromPath(self.application.GetProject().GetMetamodel().GetStorage(), self.application.GetProject().GetMetamodel().GetElementFactory().GetElement(item.GetId()).GetIcon()))
                 newItem.set_image(img)
                 img.show()
                 newItem.show()
         
-        for diagram in self.application.GetProject().GetVersion().GetDiagrams():
+        for diagram in self.application.GetProject().GetMetamodel().GetDiagrams():
             mi = gtk.ImageMenuItem(diagram)
             
             img = gtk.Image()
-            img.set_from_pixbuf(PixmapFromPath(self.application.GetProject().GetStorage(), self.application.GetProject().GetDiagramFactory().GetDiagram(diagram).GetIcon()))
+            img.set_from_pixbuf(PixmapFromPath(self.application.GetProject().GetMetamodel().GetStorage(), self.application.GetProject().GetMetamodel().GetDiagramFactory().GetDiagram(diagram).GetIcon()))
             img.show()
             
             mi.set_image(img)
@@ -109,7 +108,7 @@ class CtwProjectView(CWidget):
         root = project.GetRoot()
         self.TreeStore.clear()
         parent = self.TreeStore.append(None)
-        self.TreeStore.set(parent, 0, root.GetName(), 1, PixmapFromPath(self.application.GetProject().GetStorage(), root.GetObject().GetType().GetIcon()), 2, root.GetType(), 3, root)
+        self.TreeStore.set(parent, 0, root.GetName(), 1, PixmapFromPath(self.application.GetProject().GetMetamodel().GetStorage(), root.GetObject().GetType().GetIcon()), 2, root.GetType(), 3, root)
         self.__DrawTree(root, parent)
     
 
@@ -117,11 +116,11 @@ class CtwProjectView(CWidget):
         
         for diagram in root.GetDiagrams():
             novy = self.TreeStore.append(parent)
-            self.TreeStore.set(novy, 0, diagram.GetName() , 1, PixmapFromPath(self.application.GetProject().GetStorage(), diagram.GetType().GetIcon()), 2, '=Diagram=',3,diagram)
+            self.TreeStore.set(novy, 0, diagram.GetName() , 1, PixmapFromPath(self.application.GetProject().GetMetamodel().GetStorage(), diagram.GetType().GetIcon()), 2, '=Diagram=',3,diagram)
         
         for node in root.GetChilds():
             novy = self.TreeStore.append(parent)
-            self.TreeStore.set(novy, 0, node.GetName() , 1, PixmapFromPath(self.application.GetProject().GetStorage(), node.GetObject().GetType().GetIcon()), 2, node.GetType(),3,node)
+            self.TreeStore.set(novy, 0, node.GetName() , 1, PixmapFromPath(self.application.GetProject().GetMetamodel().GetStorage(), node.GetObject().GetType().GetIcon()), 2, node.GetType(),3,node)
             self.__DrawTree(node, novy)
             
          
@@ -243,7 +242,7 @@ class CtwProjectView(CWidget):
         node = CProjectNode(parent, element, parent.GetPath() + "/" + element.GetName() + ":" + element.GetType().GetId())
         self.application.GetProject().AddNode(node, parent)
         novy = self.TreeStore.append(self.get_iter_from_path(self.twProjectView.get_model(), self.twProjectView.get_model().get_iter_root() ,path))
-        self.TreeStore.set(novy, 0, element.GetName() , 1, PixmapFromPath(self.application.GetProject().GetStorage(), element.GetType().GetIcon()), 2, element.GetType().GetId(),3,node)
+        self.TreeStore.set(novy, 0, element.GetName() , 1, PixmapFromPath(self.application.GetProject().GetMetamodel().GetStorage(), element.GetType().GetIcon()), 2, element.GetType().GetId(),3,node)
         
         
     def AddDiagram(self, diagram):
@@ -259,7 +258,7 @@ class CtwProjectView(CWidget):
         diagram.SetPath(node.GetPath() + "/" + diagram.GetName() + ":=Diagram=")
         node.AddDiagram(diagram)
         novy = self.TreeStore.append(iter)
-        self.TreeStore.set(novy, 0, diagram.GetName() , 1, PixmapFromPath(self.application.GetProject().GetStorage(), diagram.GetType().GetIcon()), 2, '=Diagram=',3,diagram)
+        self.TreeStore.set(novy, 0, diagram.GetName() , 1, PixmapFromPath(self.application.GetProject().GetMetamodel().GetStorage(), diagram.GetType().GetIcon()), 2, '=Diagram=',3,diagram)
         path = self.TreeStore.get_path(novy)
         self.Redraw()
         self.twProjectView.expand_to_path(path)
