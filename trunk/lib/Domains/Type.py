@@ -28,7 +28,7 @@ class CDomainType(object):
         '''
         return self.factory
     
-    def AppendAttribute(self, id, name, type = None):
+    def AppendAttribute(self, id, name, type = None, default = None):
         '''
         Add attribute the domain
         
@@ -41,6 +41,9 @@ class CDomainType(object):
         @param type: id of domain. Must be atomic domain or one of imported
         @type type: str
         
+        @param type: default value for attribute
+        @type type: str
+        
         @raise DomainTypeError: if type is not atomic or one of imported domains
         '''
         
@@ -48,7 +51,7 @@ class CDomainType(object):
             raise DomainTypeError('Used type "%s" is not imported '
                 'in definition of "%s.%s"'%(type, self.name, id))
         
-        self.attributes[id] = {'name': name, 'type':type}
+        self.attributes[id] = {'name': name, 'type':type, 'default': default}
         self.attributeorder.append(id)
     
     def HasAttribute(self, id):
@@ -190,6 +193,14 @@ class CDomainType(object):
                     raise DomainTypeError('"%s.%s" is list with parser, but used domain "%s" '
                         'has no parser.' % (self.name, id, info['list']['type']))
     
+    def CheckDefault(self):
+        '''
+        Search through self.attributes for validity of default values
+        ''' 
+        for name in self.attributes.iterkeys():
+            if self.attributes[name]['default'] is not None:
+                self.TransformValue(self.attributes[name]['default'], name)
+        
     def GetAttribute(self, id):
         '''
         get item information as an dictionary
@@ -263,17 +274,17 @@ class CDomainType(object):
         
         if self.IsAtomic(domain=type):
             if type == 'int': 
-                return 0
+                return self.attributes[id]['default'] or 0
             elif type == 'float':
-                return 0.0
+                return self.attributes[id]['default'] or 0.0
             elif type == 'bool':
-                return False
+                return self.attributes[id]['default'] or False
             elif type in ('str', 'text'):
-                return ''
+                return self.attributes[id]['default'] or ''
             elif type == 'list':
                 return []
             elif type == 'enum':
-                return self.attributes[id]['enum'][0]
+                return self.attributes[id]['default'] or self.attributes[id]['enum'][0]
         else:
             return CDomainObject(self.factory.GetDomain(type))
     

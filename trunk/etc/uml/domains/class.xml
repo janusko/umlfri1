@@ -11,7 +11,7 @@
         <Domain>
             <Attribute id="name" type="str" name="Name" />
             <Attribute id="stereotype" type="str" name="Stereotype" />
-            <Attribute id="scope" type="enum" name="Scope">
+            <Attribute id="scope" type="enum" name="Scope" default="Private">
                 <Enum>Private</Enum>
                 <Enum>Protected</Enum>
                 <Enum>Public</Enum>
@@ -49,7 +49,7 @@
                 </Domain>                
             </Attribute>
             <Attribute id="stereotype" type="str" name="Stereotype" />
-            <Attribute id="scope" type="enum" name="Scope" >
+            <Attribute id="scope" type="enum" name="Scope" default="Public">
                 <Enum>Private</Enum>
                 <Enum>Protected</Enum>
                 <Enum>Public</Enum>
