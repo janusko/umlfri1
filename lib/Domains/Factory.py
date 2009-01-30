@@ -59,6 +59,7 @@ class CDomainFactory(object):
                 raise DomainFactoryError('Import loop detected: ' + loop)
             
             domain.CheckMissingInfo()
+            domain.CheckDefault()
     
     def GetDomain(self, id):
         """
@@ -152,6 +153,7 @@ class CDomainFactory(object):
         '''
         id = attribute.get('id')
         type = attribute.get('type')
+        default = attribute.get('default')
         if type is not None and '.' in type:
             raise DomainFactoryError('Local domain "%s" cannot be used as explicitly '
                 'set type of "%s.%s"' % (type, obj.GetName(), id))
