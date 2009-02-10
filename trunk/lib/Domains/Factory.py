@@ -18,6 +18,8 @@ if HAVE_LXML:
 class CDomainFactory(object):
     '''
     Factory to create Domains
+    
+    @ivar domains: dictionary with domain names as keys and domain types as values
     '''
     
     def __init__(self, storage, path):

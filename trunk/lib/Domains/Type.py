@@ -3,6 +3,15 @@ from Object import CDomainObject
 from lib.Exceptions import DomainTypeError
 
 class CDomainType(object):
+    '''
+    @cvar ATOMIC: list of names of atomic attribute types
+    @ivar name: name/id of domain
+    @ivar imports: list of names of domains imported by this one
+    @ivar attributes: description of attributes
+    @ivar factory: reference to factory that created current instance
+    @ivar parsers: list of parsers of this domain
+    @ivar attributeorder: order of attributes defined by metamodel
+    '''
     
     ATOMIC = 'int', 'float', 'str', 'text', 'bool', 'enum', 'list'
     

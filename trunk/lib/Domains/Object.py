@@ -4,6 +4,9 @@ import re
 class CDomainObject(object):
     '''
     representation of logical element attribute - its value
+    
+    @ivar values: stores values of domain attributes
+    @ivar type: reference to domain type
     '''
     
     def __init__(self, type):
@@ -99,7 +102,7 @@ class CDomainObject(object):
         '''
         Find attribute defined by id and perform action
         
-        @param id: 
+        @param id: path to the attribute
         '''
         
         path = re.split(r'(\[|\.)', id, 1)
