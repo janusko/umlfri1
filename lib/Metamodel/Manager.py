@@ -5,7 +5,7 @@ from lib.config import config
 from lib.Storages import open_storage
 from Metamodel import CMetamodel
 import os.path
-from lib.consts import ROOT_PATH, METAMODEL_PATH
+from lib.consts import ROOT_PATH, METAMODEL_PATH, METAMODEL_LIST_NAMESPACE
 
 #if lxml.etree is imported successfully, we use xml validation with xsd schema
 if HAVE_LXML:
@@ -14,11 +14,29 @@ if HAVE_LXML:
 
 class CMetamodelManager(object):
     def __init__(self):
-        pass
+        self.__metamodels = {}
+        self.__LoadList(config['/Paths/MetamodelList'])
     
     def GetMetamodel(self, uri, version):
-        storage = open_storage(os.path.join(ROOT_PATH, 'etc', 'uml'))
+        storage = open_storage(self.__metamodels[(uri, version)])
         return self.__LoadMetamodel(storage)
+    
+    def __LoadList(self, path):
+        print path
+        root = etree.XML(file(path).read())
+        
+        for node in root:
+            uri = None
+            version = None
+            path = None
+            for info in node:
+                if info.tag == METAMODEL_LIST_NAMESPACE+'Uri':
+                    uri = info.text
+                elif info.tag == METAMODEL_LIST_NAMESPACE+'Version':
+                    version = info.text
+                elif info.tag == METAMODEL_LIST_NAMESPACE+'Path':
+                    path = info.text.replace(u'\xFF', ROOT_PATH)
+            self.__metamodels[(uri, version)] = path
     
     def __LoadMetamodel(self, storage):
         metamodel = CMetamodel(storage)

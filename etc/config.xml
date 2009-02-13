@@ -38,6 +38,7 @@
     </Styles>
     <Paths>
         <Root>&apppath;</Root>
+        <MetamodelList>&apppath;/etc/metamodels.xml</MetamodelList>
         <Templates>&apppath;/etc/templates/</Templates>
         <Images>&apppath;/img/</Images>
         <Gui>&apppath;/gui/</Gui>
