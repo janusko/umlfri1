@@ -5,7 +5,6 @@
     <Elements>
         <Item value="Note" />
         <Item value="Package" />
-        <Item value="Object" />
         <Item value="Class" />
     </Elements>
     <Connections>

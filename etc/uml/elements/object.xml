@@ -3,8 +3,8 @@
     <Icon path="icons/object.png" />
     <Domain id="object" />
     <Connections>
-        <Item value="Association" />
-        <Item value="Generalization" with="Object" allowrecursive="0" />
+        <Item value="AssociationInstance" />
+        <Item value="Note Link" with="Note" />
     </Connections>
     <Appearance>
         <Shadow padding="3" color="/Styles/Element/ShadowColor">
