@@ -11,62 +11,70 @@
     <Appearance>
         <Shadow padding="3" color="/Styles/Element/ShadowColor">
             <Rectangle fill="/Styles/Element/FillColor" border="/Styles/Element/LineColor">
-                <HBox>
-                    <Padding padding="5">
-                        <HBox>
-                            <Condition condition="#stereotype" type="empty" negate="1">
-                                <Align align="center">
-                                    <VBox>
-                                        <TextBox text="&#171;" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                        <TextBox text="#stereotype" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                        <TextBox text="&#187;" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                    </VBox>
-                                </Align>
-                            </Condition>
-                            <Align align="center">
-                                <HBox>
-                                    <TextBox text="#name" font="/Styles/Element/NameTextFont" color="/Styles/Element/NameTextColor" />
-                                    <Line type="horizontal" color="/Styles/Element/NameTextColor" />
-                                </HBox>
-                            </Align>
-                        </HBox>
-                    </Padding>
-                    <Condition condition="#attributes" type="empty" negate="1">
-                        <HBox>
-                            <Loop collection="attributes">
-                                <Condition type="empty" condition="@name" negate="1">
-                                    <VBox>
-                                        <Switch value="@scope">
-                                            <Case condition="Private">
-                                                <TextBox text=" - " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                            </Case>
-                                            <Case condition="Protected">
-                                                <TextBox text=" # " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                            </Case>
-                                            <Case condition="Public">
-                                                <TextBox text=" + " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                            </Case>
-                                        </Switch>
-                                        <Condition type="empty" condition="@stereotype" negate="1">
-                                            <VBox>
-                                                <TextBox text="&#171;" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                                <TextBox text="@stereotype" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                                <TextBox text="&#187;  " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                            </VBox>
-                                        </Condition>
-                                        <TextBox text="@name" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                        <Condition type="empty" condition="@type" negate="1">
-                                            <VBox>
-                                                <TextBox text=" :" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                                <TextBox text="@type" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                            </VBox>
-                                        </Condition>
-                                    </VBox>
+                <Padding padding="5">
+                    <HBox>
+                        <Padding padding="5">
+                            <HBox>
+                                <Condition condition="#stereotype" type="empty" negate="1">
+                                    <Align align="center">
+                                        <VBox>
+                                            <TextBox text="&#171;" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                            <TextBox text="#stereotype" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                            <TextBox text="&#187;" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                        </VBox>
+                                    </Align>
                                 </Condition>
-                            </Loop>
-                        </HBox>
-                    </Condition>
-                </HBox>
+                                <Align align="center">
+                                    <HBox>
+                                        <TextBox text="#name" font="/Styles/Element/NameTextFont" color="/Styles/Element/NameTextColor" />
+                                        <Line type="horizontal" color="/Styles/Element/NameTextColor" />
+                                    </HBox>
+                                </Align>
+                            </HBox>
+                        </Padding>
+                        <Condition condition="#attributes" type="empty" negate="1">
+                            <HBox>
+                                <Loop collection="attributes">
+                                    <Condition type="empty" condition="@name" negate="1">
+                                        <VBox>
+                                            <Switch value="@scope">
+                                                <Case condition="Private">
+                                                    <TextBox text=" - " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                </Case>
+                                                <Case condition="Protected">
+                                                    <TextBox text=" # " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                </Case>
+                                                <Case condition="Public">
+                                                    <TextBox text=" + " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                </Case>
+                                            </Switch>
+                                            <Condition type="empty" condition="@stereotype" negate="1">
+                                                <VBox>
+                                                    <TextBox text="&#171;" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                    <TextBox text="@stereotype" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                    <TextBox text="&#187;  " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                </VBox>
+                                            </Condition>
+                                            <TextBox text="@name" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                            <Condition type="empty" condition="@type" negate="1">
+                                                <VBox>
+                                                    <TextBox text=" :" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                    <TextBox text="@type" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                </VBox>
+                                            </Condition>
+                                            <Condition type="empty" condition="@default" negate="1">
+                                                <VBox>
+                                                    <TextBox text=" = " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                    <TextBox text="@default" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                </VBox>
+                                            </Condition>
+                                        </VBox>
+                                    </Condition>
+                                </Loop>
+                            </HBox>
+                        </Condition>
+                    </HBox>
+                </Padding>
             </Rectangle>
         </Shadow>
     </Appearance>
