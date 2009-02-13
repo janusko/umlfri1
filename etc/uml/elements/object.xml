@@ -5,6 +5,8 @@
     <Connections>
         <Item value="AssociationInstance" />
         <Item value="Note Link" with="Note" />
+        <Item value="Association" />
+        <Item value="Generalization" with="Object" allowrecursive="0" />
     </Connections>
     <Appearance>
         <Shadow padding="3" color="/Styles/Element/ShadowColor">
