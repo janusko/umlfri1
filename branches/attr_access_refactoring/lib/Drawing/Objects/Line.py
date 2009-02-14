@@ -2,9 +2,14 @@ from lib.Depend.gtk2 import gtk
 
 from VisualObject import CVisualObject
 from VBox import CVBox
+from lib.datatypes import CColor
 
 class CLine(CVisualObject):
-    def __init__(self, type = "auto", color = "black"):
+    params = {
+        'type': str,
+        'color': CColor
+    }
+    def __init__(self, type = "auto", color = CColor("black")):
         CVisualObject.__init__(self)
         self.type = type
         self.color = color

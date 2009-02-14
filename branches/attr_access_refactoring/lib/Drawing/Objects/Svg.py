@@ -3,13 +3,18 @@ from lib.Math2D import TransformMatrix, Path
 from lib.consts import METAMODEL_NAMESPACE
 
 class CSvg(CVisualObject):
+    types = {
+        'width': int,
+        'height': int,
+        'scale': str
+    }
     def __init__(self, width, height, scale="1"):
         if scale[-1] == '%':
             self.scale = float(scale[:-1])/100
         else:
             self.scale = float(scale)
-        self.width = int(width)
-        self.height = int(height)
+        self.width = width
+        self.height = height
         self.svg = []
     
     def __parsestyle(self, style):

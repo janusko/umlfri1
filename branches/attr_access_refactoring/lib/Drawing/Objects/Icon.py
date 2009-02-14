@@ -2,6 +2,9 @@ from VisualObject import CVisualObject
 import sys
 
 class CIcon(CVisualObject):
+    params = {
+        'filename': str
+    }
     def __init__(self, filename):
         CVisualObject.__init__(self)
         self.filename = filename

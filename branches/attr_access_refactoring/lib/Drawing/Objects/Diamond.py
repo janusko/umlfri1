@@ -2,9 +2,14 @@ from SimpleContainer import CSimpleContainer
 from lib.Math2D import Path, PathPartLine, PathPartMove
 import math
 from lib.Exceptions.UserException import *
+from lib.datatypes import CColor
 
 class CDiamond(CSimpleContainer):
-    def __init__(self, fill = None, border = "white"):
+    params = {
+        'fill': CColor,
+        'border': CColor
+    }
+    def __init__(self, fill = None, border = CColor("white")):
         CSimpleContainer.__init__(self)
         self.fill = fill
         self.border = border

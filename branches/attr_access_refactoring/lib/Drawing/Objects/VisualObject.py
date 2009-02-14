@@ -2,6 +2,7 @@ from lib.config import config
 from lib.Drawing.Context import CParamEval
 
 class CVisualObject:
+    types = {}
     def __init__(self):
         self.parent = None
     
@@ -10,20 +11,13 @@ class CVisualObject:
             value = getattr(value, name)
         return value
     
-    def ParseVariables(self, context, *vals):
-        for val in vals:
-            if not isinstance(val, (str, unicode)):
-                yield val
-            elif val[0] == '#':
-                if val[1] == '#':
-                    yield val[1:]
-                else:
-                    yield CParamEval(val[1:])(context)
-            else:
-                yield val
-    
     def GetVariables(self, context, *names):
-        return self.ParseVariables(context, *(getattr(self, name) for name in names))
+        for name in names:
+            value = getattr(self, name)
+            if isinstance(value, CParamEval):
+                yield value(context)
+            else:
+                yield value
     
     def GetResizable(self):
         return False, False

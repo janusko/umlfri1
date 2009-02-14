@@ -1,13 +1,18 @@
 from SimpleContainer import CSimpleContainer
 
-from lib.lib import ToBool
 
 class CCondition(CSimpleContainer):
+    params = {
+        'condition': str,
+        'type': str,
+        'negate': bool,
+        'value': None # value type is not important
+    }
     def __init__(self, condition, type = "equal", negate = False, value = None):
         CSimpleContainer.__init__(self)
         self.condition = condition
         self.type = type
-        self.negate = ToBool(negate)
+        self.negate = negate
         self.value = value
     
     def IsTrue(self, context):

@@ -3,6 +3,7 @@ from lib.Depend.gtk2 import gtk
 
 from common import CWidget
 from lib.Project import CProject, CProjectNode
+from lib.Elements import CElementObject
 from lib.Drawing import CElement, CDiagram
 from lib.Exceptions.UserException import *
 from lib.Drawing.Canvas.GtkPlus import PixmapFromPath

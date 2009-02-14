@@ -2,6 +2,7 @@ from SimpleContainer import CSimpleContainer
 from lib.Math2D import Path, PathPartLine, PathPartMove, TransformMatrix
 import math
 from lib.Exceptions.UserException import *
+from lib.datatypes import CColor
 
 cornerDefs = {
     'rounded': 'M 0,1 C 0,0.446 0.446,0 1,0',
@@ -13,7 +14,19 @@ sideDefs = {
 }
 
 class CRectangle(CSimpleContainer):
-    def __init__(self, fill = None, border = "white", lefttop = None, righttop = None, leftbottom = None, rightbottom = None, left = None, right = None, top = None, bottom = None):
+    types = {
+        'fill': CColor,
+        'border': CColor,
+        'lefttop': str,
+        'righttop': str,
+        'leftbottom': str,
+        'rightbottom': str,
+        'left': str,
+        'right': str,
+        'top': str,
+        'bottom': str
+    }
+    def __init__(self, fill = None, border = CColor("white"), lefttop = None, righttop = None, leftbottom = None, rightbottom = None, left = None, right = None, top = None, bottom = None):
         CSimpleContainer.__init__(self)
         self.fill = fill
         self.border = border

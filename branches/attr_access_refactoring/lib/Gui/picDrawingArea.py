@@ -2,7 +2,6 @@ from lib.Depend.gtk2 import gtk
 from lib.Depend.gtk2 import gobject
 
 import lib.consts
-from lib.colors import invert
 from lib.config import config
 
 from common import CWidget, event
@@ -62,7 +61,7 @@ class CpicDrawingArea(CWidget):
         self.buffer = gtk.gdk.Pixmap(self.picDrawingArea.window, *self.buffer_size[1])
         self.Diagram = CDiagram(None,_("Start page"))
         cmap = self.picDrawingArea.window.get_colormap()
-        self.DragGC = self.picDrawingArea.window.new_gc(foreground = cmap.alloc_color(invert(config['/Styles/Drag/RectangleColor'])),
+        self.DragGC = self.picDrawingArea.window.new_gc(foreground = cmap.alloc_color(str(config['/Styles/Drag/RectangleColor'].Invert())),
             function = gtk.gdk.XOR, line_width = config['/Styles/Drag/RectangleWidth'])
 
         self.TARGETS = [

@@ -5,6 +5,7 @@ from Type import CElementType
 from lib.config import config
 from lib.consts import METAMODEL_NAMESPACE
 from lib.Drawing.Objects import ALL
+from lib.Drawing.Context import BuildParam
 from lib.Depend.etree import etree, HAVE_LXML
 
 #if lxml.etree is imported successfully, we use xml validation with xsd schema
@@ -114,7 +115,7 @@ class CElementFactory(object):
         cls = ALL[root.tag.split("}")[1]]
         params = {}
         for attr in root.attrib.items():    #return e.g. attr == ('id', '1') => attr[0] == 'id', attr[1] == '1'
-            params[attr[0]] = attr[1]
+            params[attr[0]] = BuildParam(attr[1], cls.types.get(attr[0], None))
         obj = cls(**params)
         if hasattr(obj, "LoadXml"):
             obj.LoadXml(root)

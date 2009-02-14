@@ -1,14 +1,18 @@
 from Container import CContainer
 from SimpleContainer import CSimpleContainer
 from lib.Exceptions.UserException import *
-from lib.lib import ToBool
 
 class CCase(CSimpleContainer):
+    types = {
+        'condition': str,
+        'negate': bool,
+        'type': None # Type is not important
+    }
     def __init__(self, condition = None, negate = False, type = "equal"):
         CSimpleContainer.__init__(self)
         self.condition = condition
         self.type = type
-        self.negate = ToBool(negate)
+        self.negate = negate
 
     def SetParent(self, parent):
         if not isinstance(parent, CSwitch):
