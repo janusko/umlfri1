@@ -162,7 +162,7 @@ class CtwProjectView(CWidget):
         i = path.split('/')[0]
         j,k = i.split(':')
         name, type = model.get(root, 0, 2)
-        endName, endType = path.split('/')[-1].split(':')
+        endName, endType = path.split('/')[-1].rsplit(':', 1)
         
         if len(path.split('/')) == 1 and name == j and type == k:
             return [root]
