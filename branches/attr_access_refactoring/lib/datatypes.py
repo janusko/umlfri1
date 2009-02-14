@@ -34,7 +34,7 @@ class CFont(object):
             self.__fontStyle = set()
             while tmp[-1].lower() in ('bold', 'italic', 'underline', 'strike'):
                 self.__fontStyle.add(tmp.pop(-1).lower())
-            self.__fontFamily = ' '.join(font)
+            self.__fontFamily = ' '.join(tmp)
     
     def GetSize(self):
         return self.__fontSize
@@ -54,3 +54,9 @@ class CFont(object):
         tmp = CFont(self)
         tmp.__fontSize += delta
         return tmp
+    
+    def __str__(self):
+        if self.__fontStyle:
+            return ' '.join((self.__fontFamily, ' '.join(self.__fontStyle), str(self.__fontSize)))
+        else:
+            return ' '.join((self.__fontFamily, str(self.__fontSize)))
