@@ -22,8 +22,7 @@
                             </Condition>
                             <Align align="center">
                                 <HBox>
-                                    <TextBox text="#self.name" font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/>
-                                    <Line type="horizontal" color="#cfg.Styles.Element.NameTextColor"/>
+                                    <TextBox text="#self.name" font="#cfg.Styles.Element.NameTextFont.ChangeStyle('underline')" color="#cfg.Styles.Element.NameTextColor"/>
                                 </HBox>
                             </Align>
                         </HBox>

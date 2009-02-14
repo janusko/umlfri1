@@ -27,7 +27,7 @@ class CFont(object):
         if isinstance(font, CFont):
             self.__fontFamily = font.__fontFamily
             self.__fontSize = font.__fontSize
-            self.__fontStyle = font.__fontStyle
+            self.__fontStyle = set(font.__fontStyle)
         else:
             tmp = font.split()
             self.__fontSize = int(tmp.pop(-1))
