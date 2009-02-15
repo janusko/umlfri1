@@ -49,8 +49,12 @@ class CDrawingContext(object):
     def GetVariables(self):
         return self.variables
     
-    def GetAttribute(self, varname):
-        return self.element.GetObject().GetVisualProperty(varname)
+    def GetProjectNode(self):
+        obj = self.element.GetObject()
+        if hasattr(obj, 'GetNode'):
+            return obj.GetNode()
+        else:
+            return None
     
     def GetDomainObject(self):
         return self.element.GetObject().GetDomainObject()

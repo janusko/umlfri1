@@ -33,7 +33,7 @@
                     <Sizer minwidth="60" minheight="60">
                         <Padding padding="5">
                             <HBox>
-                                <Loop collection="#_children">
+                                <Loop collection="#children">
                                     <VBox>
                                         <Icon filename="#icon"/>
                                         <Align align="left center">

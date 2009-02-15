@@ -95,7 +95,7 @@ class CElementObject(object):
         @return: project node of this element
         @rtype:  L{CProjectNode<lib.Project.Node.CProjectNode>}
         """
-        return self.node
+        return self.node()
         
     def AddConnection(self, connection):
         """
@@ -150,25 +150,6 @@ class CElementObject(object):
         
     def GetName(self):
         return self.domainobject.GetValue('name')
-    
-    def GetVisualProperty(self, key):
-        if key == 'CHILDREN':
-            class newdict(dict):
-                GetValue = dict.__getitem__
-            
-            node = self.node()
-            if node is None:
-                return []
-            v = []
-            for vi in node.GetChilds():
-                o = newdict()
-                o['icon'] = vi.GetObject().GetType().GetIcon()
-                o['name'] = vi.GetObject().GetName()
-                v.append(o)
-            return v
-        
-        else:
-            return self.domainobject.GetValue(key)
     
     def HasVisualAttribute(self, key):
         return self.domainobject.HasVisualAttribute(key)

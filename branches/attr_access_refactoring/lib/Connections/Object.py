@@ -266,9 +266,6 @@ class CConnectionObject(object):
     
     def SetSaveInfo(self, value):
         return self.domainobject.SetSaveInfo(value)
-        
-    def GetVisualProperty(self, key):
-        return self.domainobject.GetValue(key)
     
     def HasVisualAttribute(self, key):
         return self.domainobject.HasVisualAttribute(key)
