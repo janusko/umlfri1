@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ElementType id="Preparation" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Icon path="icons/Preparation.png" />
+    <Domain id="Preparation" />
+    <Connections>
+        <Item value="Note Link" with="Note" />
+        <Item value="Flow Line" />
+    </Connections>
+    <Appearance>
+        <Shadow padding="3" color="/Styles/Element/ShadowColor">
+            <Rectangle fill="/Styles/Element/FillColor" border="/Styles/Element/LineColor" right="10 beak" left="10 beak" >
+                <Sizer minheight="30" minwidth="100">
+                    <Padding padding="10"> 
+                        <Align align="center center">
+                            <VBox>
+                                <TextBox text="Do " font="/Styles/Element/NameTextFont" color="/Styles/Element/NameTextColor" />  
+                                <TextBox text="#variable" font="/Styles/Element/NameTextFont" color="/Styles/Element/NameTextColor" />
+                                <TextBox text=" = " font="/Styles/Element/NameTextFont" color="/Styles/Element/NameTextColor" />  
+                                <TextBox text="#initialvalue" font="/Styles/Element/NameTextFont" color="/Styles/Element/NameTextColor" />                                                                                                                               
+                                <TextBox text=" " font="/Styles/Element/NameTextFont" color="/Styles/Element/NameTextColor" /> 
+                                <TextBox text="#looptype" font="/Styles/Element/NameTextFont" color="/Styles/Element/NameTextColor" />
+                                <TextBox text=" " font="/Styles/Element/NameTextFont" color="/Styles/Element/NameTextColor" /> 
+                                <TextBox text="#endvalue" font="/Styles/Element/NameTextFont" color="/Styles/Element/NameTextColor" />                                
+                            </VBox>
+                        </Align>        
+                    </Padding>    				
+                </Sizer>
+            </Rectangle>
+        </Shadow>
+    </Appearance>
+    <Options>
+    </Options>
+</ElementType>
