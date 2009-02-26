@@ -138,6 +138,7 @@ class CfrmMain(CWindow):
         self.mnuBestFit.set_sensitive(diagram)
     
     def LoadProject(self, filename, copy):
+        self.nbTabs.CloseAll()
         self.application.ProjectInit()
         try:
             self.application.GetProject().LoadProject(filename, copy)
@@ -153,7 +154,6 @@ class CfrmMain(CWindow):
             return CWarningDialog(self.form, _('Error opening file')).run()
             
         self.ReloadTitle()
-        self.nbTabs.CloseAll()
         self.twProjectView.Redraw()
         self.mnuItems.Redraw()
         self.nbProperties.Fill(None)
