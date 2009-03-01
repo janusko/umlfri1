@@ -214,6 +214,7 @@ class CpicDrawingArea(CWidget):
         else : 
             #dasx, dasy = self.GetDiagramSize()
             dasx, dasy = self.canvas.ToPhysical(self.GetDiagramSize())
+                
         wisx, wisy = self.GetWindowSize()
         tmp = self.picHBar.get_adjustment()
         tmp.upper = dasx
@@ -492,30 +493,36 @@ class CpicDrawingArea(CWidget):
             self.emit('set-selected', None)
         elif event.keyval == gtk.keysyms.space:
             self.__SetCursor('grab')
-        elif event.keyval == gtk.keysyms.Left:
-            for sel in self.Diagram.GetSelected():
-                pos = sel.GetPosition(sel)
-                if (pos[0]>10):pos = pos[0]-10, pos[1]
-                sel.SetPosition(pos)
-                self.Paint()
+        
         elif event.keyval == gtk.keysyms.Right:
-            for sel in self.Diagram.GetSelected():
-                pos = sel.GetPosition(sel)
-                pos = pos[0]+10, pos[1]
-                sel.SetPosition(pos)
-                self.Paint()
+            self.Diagram.MoveSelection((10,0))
+            # this looks kinda complicated, so short:
+            # if the maximal x value of the selection(+ selection size) is bigger
+            # then scrollbar x position and window x size - the moving selection
+            # is "out of sight" move the selection "in the middle" of the window
+            if self.GetRelativePos(self.Diagram.GetSelectSquare(self.canvas)[0])[0]+self.Diagram.GetSelectSquare(self.canvas)[1][0] > self.Diagram.GetHScrollingPos()+self.GetWindowSize()[0] :
+                self.picHBar.set_value(self.scale*(self.Diagram.GetSelectSquare(self.canvas)[0][0]-(self.GetWindowSize()[0]//2)))
+            self.picEventBox.emit("key-release-event", event)
+            self.Paint()
+        elif event.keyval == gtk.keysyms.Left:
+            self.Diagram.MoveSelection((-10,0))
+            if self.GetRelativePos(self.Diagram.GetSelectSquare(self.canvas)[0])[0] < self.Diagram.GetHScrollingPos():
+                self.picHBar.set_value(self.scale*(self.Diagram.GetSelectSquare(self.canvas)[0][0]-(self.GetWindowSize()[0]//2)))
+            self.picEventBox.emit("key-release-event", event)
+            self.Paint()
         elif event.keyval == gtk.keysyms.Up:
-            for sel in self.Diagram.GetSelected():
-                pos = sel.GetPosition(sel)
-                if (pos[1]>10):pos = pos[0], pos[1]-10
-                sel.SetPosition(pos)
-                self.Paint()
+            self.Diagram.MoveSelection((0,-10))
+            if self.GetRelativePos(self.Diagram.GetSelectSquare(self.canvas)[0])[1] < self.Diagram.GetVScrollingPos():
+                self.picVBar.set_value(self.scale*(self.Diagram.GetSelectSquare(self.canvas)[0][1]-(self.GetWindowSize()[1]//2)))
+            self.picEventBox.emit("key-release-event", event)
+            self.Paint()
+
         elif event.keyval == gtk.keysyms.Down:
-            for sel in self.Diagram.GetSelected():
-                pos = sel.GetPosition(sel)
-                pos = pos[0], pos[1]+10
-                sel.SetPosition(pos)
-                self.Paint()        
+            self.Diagram.MoveSelection((0,10))
+            if self.GetRelativePos(self.Diagram.GetSelectSquare(self.canvas)[0])[1]+self.Diagram.GetSelectSquare(self.canvas)[1][1] > self.Diagram.GetVScrollingPos()+self.GetWindowSize()[1]:
+                self.picVBar.set_value(self.scale*(self.Diagram.GetSelectSquare(self.canvas)[0][1]-(self.GetWindowSize()[1]//2)))
+            self.picEventBox.emit("key-release-event", event)
+            self.Paint()  
         return True    
                       
     @event("picEventBox", "key-release-event")
@@ -567,8 +574,7 @@ class CpicDrawingArea(CWidget):
 
     @event("picEventBox", "scroll-event")
     def on_picEventBox_scroll_event(self, widget, event):
-
-        if gtk.keysyms.Control_L in self.pressedKeys:
+        if (event.state & gtk.gdk.CONTROL_MASK):
             if event.direction == gtk.gdk.SCROLL_UP:
                 self.IncScale(lib.consts.SCALE_INCREASE)
                 return
