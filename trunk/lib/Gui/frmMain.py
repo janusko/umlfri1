@@ -622,7 +622,7 @@ class CfrmMain(CWindow):
 
     @event("picDrawingArea.picEventBox", "scroll-event")
     def on_picEventBox_scroll_event(self, widget, event):
-        if gtk.keysyms.Control_L in self.picDrawingArea.pressedKeys:
+        if (event.state & gtk.gdk.CONTROL_MASK):
             self.UpdateMenuSensitivity()
 
     
