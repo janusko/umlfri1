@@ -96,4 +96,5 @@ class Application(CApplication):
         config.Save()
         self.recentFiles.SaveRecentFiles()
 
-Application().Main()
+if __name__ == '__main__':
+    Application().Main()
