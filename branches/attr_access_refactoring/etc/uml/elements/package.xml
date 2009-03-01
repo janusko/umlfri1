@@ -33,9 +33,9 @@
                     <Sizer minwidth="60" minheight="60">
                         <Padding padding="5">
                             <HBox>
-                                <Loop collection="#children">
+                                <Loop collection="#self._Children">
                                     <VBox>
-                                        <Icon filename="#icon"/>
+                                        <Icon filename="#_Icon"/>
                                         <Align align="left center">
                                             <TextBox text="#name" font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/>
                                         </Align>

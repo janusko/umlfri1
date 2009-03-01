@@ -1,6 +1,5 @@
-from DomainEvalWrapper import CDomainEvalWrapper 
+from NodeEvalWrapper import CNodeEvalWrapper
 from ConfigEvalWrapper import CConfigEvalWrapper
-from ChildrenEvalWrapper import CChildrenEvalWrapper
 
 class CParamEval(object):
     def __init__(self, str, type = None):
@@ -9,9 +8,8 @@ class CParamEval(object):
     
     def __call__(self, context):
         locals = dict(
-            self = CDomainEvalWrapper(context.GetDomainObject()),
+            self = CNodeEvalWrapper(context.GetDomainObject(), context.GetProjectNode()),
             cfg = CConfigEvalWrapper(),
-            children = CChildrenEvalWrapper(context.GetProjectNode()),
             _line = context.GetLine(),
         )
         locals.update(context.GetVariables())
