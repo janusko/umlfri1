@@ -7,9 +7,9 @@ class CNodeEvalWrapper(object):
     
     def __convert(self, val):
         if isinstance(val, CDomainObject):
-            return CNodeEvalWrapper(val, self.__node)
+            return CNodeEvalWrapper(val, None)
         elif isinstance(val, list):
-            return CNodeEvalWrapper(val, self.__node)
+            return CNodeEvalWrapper(val, None)
         else:
             return val
     
@@ -23,9 +23,10 @@ class CNodeEvalWrapper(object):
         if isinstance(self.__object, CDomainObject):
             for name, val in self.__object:
                 yield name, self.__convert(val)   
-            yield '_Children', self._Children
-            yield '_Icon', self._Icon
-            yield '_Parent', self._Parent
+            if self.__node is not None:
+                yield '_Children', self._Children
+                yield '_Icon', self._Icon
+                yield '_Parent', self._Parent
         else:
             for val in self.__object:
                 yield self.__convert(val)
