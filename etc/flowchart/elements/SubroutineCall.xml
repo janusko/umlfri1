@@ -9,7 +9,7 @@
     <Appearance>
         <Shadow padding="3" color="/Styles/Element/ShadowColor">
             <Rectangle fill="/Styles/Element/FillColor" border="/Styles/Element/LineColor">
-                <VBox>
+                <VBox expand="2">
                     <Sizer width="10" />
                     <Line color="/Styles/Element/LineColor"/>
                     <Sizer minheight="50" minwidth="100">

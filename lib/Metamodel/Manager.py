@@ -22,7 +22,6 @@ class CMetamodelManager(object):
         return self.__LoadMetamodel(storage)
     
     def __LoadList(self, path):
-        print path
         root = etree.XML(file(path).read())
         
         for node in root:

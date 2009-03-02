@@ -30,7 +30,7 @@ class CVBox(CContainer):
                 h = max(h, hi)
         
         if we is not None and self.expand:
-            ws = size[0] - sum(w)
+            ws = we - sum(w)
             if ws > 0:
                 wx = ws / len(self.expand)
                 for i in self.expand:
