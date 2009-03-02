@@ -86,11 +86,11 @@ class CTabs(CWidget):
         page = gtk.HBox()
         page.show()
         
+        self.diagrams.append(diagram)
         self.__AddNbPage(
             PixmapFromPath(self.application.GetProject().GetMetamodel().GetStorage(), diagram.GetType().GetIcon()),
             diagram.GetName(),
             page)
-        self.diagrams.append(diagram)
        
         self.SetCurrentPage(self.nbTabs.get_n_pages()-1)
         self.__RefreshEnable()
