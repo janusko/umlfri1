@@ -11,6 +11,7 @@
         <Item value="Start" />
         <Item value="End" />       
         <Item value="Connector"/>
+        <Item value="Subroutine Call"/>
     </Elements>
     <Connections>
         <Item value="Flow Line" />
