@@ -223,7 +223,15 @@ setup(
         ("etc/uml/diagrams", glob.glob("etc/uml/diagrams/*.xml")),
         ("etc/uml/elements", glob.glob("etc/uml/elements/*.xml")),
         ("etc/uml/icons", glob.glob("etc/uml/icons/*.png")),
-        ("etc/uml/versions", glob.glob("etc/uml/versions/*.xml")),
+        ("etc/uml", glob.glob("etc/uml/*.xml")),
+
+        ("etc/flowchart/connections", glob.glob("etc/flowchart/connections/*.xml")),
+        ("etc/flowchart/domains", glob.glob("etc/flowchart/domains/*.xml")),
+        ("etc/flowchart/diagrams", glob.glob("etc/flowchart/diagrams/*.xml")),
+        ("etc/flowchart/elements", glob.glob("etc/flowchart/elements/*.xml")),
+        ("etc/flowchart/icons", glob.glob("etc/flowchart/icons/*.png")),
+        ("etc/flowchart", glob.glob("etc/flowchart/*.xml")),
+        
         ("share/schema", glob.glob("share/schema/*.xsd")),
         ("img", glob.glob("img/*.png")+glob.glob("img/*.ico")),
         (".", ["ABOUT", "README", "LICENSE"])

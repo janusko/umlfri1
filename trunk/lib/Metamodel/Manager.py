@@ -19,7 +19,7 @@ class CMetamodelManager(object):
     
     def GetMetamodel(self, uri, version):
         storage = open_storage(self.__metamodels[(uri, version)])
-        return self.__LoadMetamodel(storage)
+        return self.__LoadMetamodel(storage, uri, version)
     
     def __LoadList(self, path):
         root = etree.XML(file(path).read())
@@ -37,8 +37,8 @@ class CMetamodelManager(object):
                     path = info.text.replace(u'\xFF', ROOT_PATH)
             self.__metamodels[(uri, version)] = path
     
-    def __LoadMetamodel(self, storage):
-        metamodel = CMetamodel(storage)
+    def __LoadMetamodel(self, storage, uri, version):
+        metamodel = CMetamodel(storage, uri, version)
         
         root = etree.XML(storage.read_file(METAMODEL_PATH))
         #xml (version) file is validate with xsd schema (metamodel.xsd)
