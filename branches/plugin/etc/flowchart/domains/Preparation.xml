@@ -1,0 +1,11 @@
+<Domain id="Preparation" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" >
+    <Attribute id="name" type="str" name="Name" />
+    <Attribute id="variable" type="str" name="Variable Name" />
+    <Attribute id="looptype" type="enum" name="Loop type" default="To">
+        <Enum>To</Enum>
+        <Enum>Down To</Enum>
+    </Attribute>
+    <Attribute id="initialvalue" type="str" name="Initial value" />
+    <Attribute id="endvalue" type="str" name="End value" />
+    <Attribute id="note" type="text" name="Note" />
+</Domain>
