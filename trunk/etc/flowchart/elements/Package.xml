@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ElementType id="Package" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
     <Icon path="icons/Package.png" />
-    <Domain id="Package" />
-    <Connections>      
-    </Connections>
+    <Domain id="Package" identity="name" />
+    <Connections />
     <Appearance>
         <Shadow padding="3" color="/Styles/Element/ShadowColor">
             <HBox expand="-1">

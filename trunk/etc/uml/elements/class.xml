@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ElementType id="Class" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
     <Icon path="icons/class.png" />
-    <Domain id="class" />
+    <Domain id="class" identity="name" />
     <Connections>
         <Item value="Association" />
         <Item value="Generalization" with="Class" allowrecursive="0" />

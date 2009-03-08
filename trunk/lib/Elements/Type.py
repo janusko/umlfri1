@@ -20,6 +20,7 @@ class CElementType(object):
         self.domain = None
         self.counter = 0
         self.options = {}
+        self.identity = None
     
     def SetDomain(self, domain):
         '''
@@ -34,6 +35,24 @@ class CElementType(object):
         @rtype: L{CDomainType<lib.Domains.Type.CDomainType>}
         '''
         return self.domain
+    
+    def SetIdentity(self, identity):
+        '''
+        Change element identity
+        
+        @param identity: Name of property acting as unique identifier of element
+        @type identity: string
+        '''
+        self.identity = identity
+    
+    def GetIdentity(self):
+        '''
+        Determine element identity
+        
+        @return: Name of property acting as unique identifier of element
+        @rtype: string
+        '''
+        return self.identity
     
     def AppendOptions(self, name, value):
         self.options[name] = value

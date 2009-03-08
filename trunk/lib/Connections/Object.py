@@ -277,6 +277,3 @@ class CConnectionObject(object):
     def RemoveItem(self, key):
         self.domainobject.RemoveItem(key)
         self.revision += 1
-
-
-
