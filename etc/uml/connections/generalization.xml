@@ -3,7 +3,7 @@
     <Icon path="icons/generalize.png" />
     <SrcArrow possible="0" default="0" />
     <DestArrow possible="1" default="1" />
-    <Domain id="generalization" />
+    <Domain id="generalization" identity="name" />
     <Appearance>
         <LineStyle style="solid" color="/Styles/Connection/LineColor" />
         <ArrowStyle style="triangle" fill="/Styles/Connection/ArrowFillColor" color="/Styles/Connection/ArrowColor" />

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ElementType id="Activity" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
     <Icon path="icons/state.png" />
-    <Domain id="activity" />
+    <Domain id="activity" identity="name" />
     <Connections>
         <Item value="ActivityFlow" />
     </Connections>

@@ -1,5 +1,4 @@
 <Domain id="SubroutineCall" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" >
-    <Attribute id="name" type="str" name="Name" />
     <Attribute id="subroutineCall" type="str" name="Subroutine Call" />	
     <Attribute id="note" type="text" name="Note" />
 </Domain>

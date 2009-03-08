@@ -21,6 +21,7 @@
 					</xs:annotation>
 					<xs:complexType>
 						<xs:attribute name="id" type="xs:string"/>
+						<xs:attribute name="identity" type="xs:string"/>
 					</xs:complexType>
 				</xs:element>
 				<xs:element name="Connections">
@@ -434,6 +435,7 @@
 				<xs:element name="Domain">
 					<xs:complexType>
 						<xs:attribute name="id" type="xs:string"/>
+						<xs:attribute name="identity" type="xs:string"/>
 					</xs:complexType>
 				</xs:element>
 				<xs:element name="SrcArrow" type="ArrowType"/>

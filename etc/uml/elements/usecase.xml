@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ElementType id="UseCase" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
     <Icon path="icons/usecase.png" />
-    <Domain id="usecase" />
+    <Domain id="usecase" identity="name" />
     <Connections>
         <Item value="Association" />
         <Item value="Generalization" with="UseCase" allowrecursive="0" />
