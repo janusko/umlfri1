@@ -8,6 +8,7 @@
         <Item value="Input Output" />
         <Item value="Decision"/>
         <Item value="Preparation" />
+        <Item value="Preparation End" />
         <Item value="Start" />
         <Item value="End" />       
         <Item value="Connector"/>
