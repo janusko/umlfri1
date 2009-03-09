@@ -184,7 +184,8 @@ class CDomainObject(object):
         @return: structured dictionary containing all the necessary data for .frip file
         @rtype: dict
         '''
-        return dict([(id, self.type.PackValue(id, value)) for id, value in self.values.iteritems()])
+        return dict([(id, self.type.PackValue(id, value) if id != DEFAULT_IDENTITY else str(value))
+            for id, value in self.values.iteritems()])
     
     def SetSaveInfo(self, data):
         '''
