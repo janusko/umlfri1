@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ElementType id="Connector" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Icon path="icons/Connector.png" />
+    <Domain id="Connector" />
+    <Connections>
+        <Item value="Note Link" with="Note" />
+        <Item value="Flow Line" />
+    </Connections>
+    <Appearance>
+        <Shadow padding="3" color="/Styles/Element/ShadowColor">
+            <Ellipse fill="/Styles/Element/FillColor" border="/Styles/Element/LineColor">
+                <Proportional ratio="1:1" align="center center" size="minimal" >
+                    <Padding padding="20">
+                        <HBox>
+                            <Align align="center center">
+                                <TextBox text="#connectorid" font="/Styles/Element/NameTextFont" color="/Styles/Element/NameTextColor" />
+                            </Align>
+                        </HBox>
+                    </Padding>
+                </Proportional>
+            </Ellipse>
+        </Shadow>
+    </Appearance>
+    <Options>
+    </Options>
+</ElementType>
