@@ -10,7 +10,7 @@ from lib.consts import ARROW_IMAGE
 
 class CtbToolBox(CWidget):
     name = 'tbToolBox'
-    widgets = ('tbToolBox', 'hboxWorkSpace')
+    widgets = ('tbToolBox', )
     
     __gsignals__ = {
         "toggled":  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_PYOBJECT, 
@@ -102,13 +102,12 @@ class CtbToolBox(CWidget):
             
     def Show(self):
         if not self.__visible:
-            self.hboxWorkSpace.pack_start(self.tbToolBox, expand=False, fill=False)
-            self.hboxWorkSpace.reorder_child(self.tbToolBox, 0)
+            self.tbToolBox.show()
             self.__visible = True
         
     def Hide(self):
         if self.__visible:
-            self.hboxWorkSpace.remove(self.tbToolBox)
+            self.tbToolBox.hide()
             self.__visible = False
         
     def SetVisible(self, value):

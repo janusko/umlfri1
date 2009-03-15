@@ -41,4 +41,19 @@ def check():
     assert pango is not None, "PyGTK have no pango support"
     assert cairo is not None and pangocairo is not None, "PyGTK have no cairo support"
     
+    assert gtk.gtk_version >= (2, 10), "GTK+ 2.10 or better is required"
+    assert gtk.pygtk_version >= (2, 10), "PyGTK 2.10 or better is required"
+    
     # pygtk.require('2.0')
+
+def version():
+    """
+    Check pygtk libraries versions
+    
+    @return: versions of each library connected to PyGTK
+    @rtype: list of (str, str)
+    """
+    return [
+        ("GTK+ version", ".".join(str(i) for i in gtk.gtk_version)),
+        ("PyGTK version", ".".join(str(i) for i in gtk.gtk_version)),
+    ]

@@ -22,9 +22,10 @@ PAGE_SIZE=(config["/Page/Width"],config["/Page/Height"])
 
 class CpicDrawingArea(CWidget):
     name = 'picDrawingArea'
-    widgets = ('picDrawingArea', 'picEventBox', 'picVBar', 'picHBar', 'fixStartPage',
-                'tbDrawingArea', 'nbTabs', 'pMenuShift', 
+    widgets = ('picDrawingArea', 'picEventBox', 'picVBar', 'picHBar',
+                'pMenuShift', 
                 'pmShift_SendBack', 'pmShift_BringForward', 'pmShift_ToBottom', 'pmShift_ToTop','pmShowInProjectView',
+                'mnuCtxCut', 'mnuCtxCopy', 'mnuCtxPaste', 'mnuCtxDelete',
                 'pmOpenSpecification', 'mnuCtxShiftDelete')
 
     __gsignals__ = {
@@ -244,7 +245,8 @@ class CpicDrawingArea(CWidget):
         self.Diagram.Paint(canvas)
         canvas.WriteOut(file(filename, 'w'))
     
-    def DeleteElements(self):
+    @event("mnuCtxDelete","activate")
+    def DeleteElements(self, widget = None):
         for sel in self.Diagram.GetSelected():
             if isinstance(sel, CConnection):
                 index = sel.GetSelectedPoint()
@@ -258,6 +260,12 @@ class CpicDrawingArea(CWidget):
         self.Diagram.DeselectAll()
         self.emit('selected-item', list(self.Diagram.GetSelected()))
         self.Paint()
+    
+    def UpdateMenuSensitivity(self, project, diagram, element):
+        self.pmShowInProjectView.set_sensitive(element)
+        for item in self.pMenuShift.get_children():
+            item.set_sensitive(element)
+        self.mnuCtxPaste.set_sensitive(diagram and not self.application.GetClipboard().IsEmpty())
     
     @event("picEventBox", "button-press-event")
     def on_picEventBox_button_press_event(self, widget, event):
@@ -305,7 +313,6 @@ class CpicDrawingArea(CWidget):
                 elif not (event.state & gtk.gdk.CONTROL_MASK) and not (event.state & gtk.gdk.SHIFT_MASK):
                     self.Diagram.DeselectAll()
                     self.Diagram.AddToSelection(itemSel)
-                    self.pmShowInProjectView.set_sensitive(True)
                     if isinstance(itemSel, CConnection):
                         i = itemSel.GetPointAtPosition(pos)
                         if i is not None:
@@ -324,7 +331,6 @@ class CpicDrawingArea(CWidget):
                     self.Paint()
                     self.emit('selected-item', list(self.Diagram.GetSelected()))
                 else:
-                    self.pmShowInProjectView.set_sensitive(False)
                     self.Diagram.AddToSelection(itemSel)
                     self.Paint()
                     self.emit('selected-item', list(self.Diagram.GetSelected()))
@@ -345,23 +351,10 @@ class CpicDrawingArea(CWidget):
                 self.Diagram.DeselectAll()
             if itemSel is not None:
                 self.Diagram.AddToSelection(itemSel)
-            self.pmShowInProjectView.set_sensitive(True)                
             self.Paint()
             self.emit('selected-item', list(self.Diagram.GetSelected()))
             #if something is selected:
-            if len(list(self.Diagram.GetSelectedElements(nolabels = True))) > 0: 
-                #hide unnecessary things
-                for item in self.pMenuShift.get_children():
-                    if item.name <> 'mnuCtxPaste':
-                        item.set_sensitive(True)
-            else:
-                #hide all
-                for item in self.pMenuShift.get_children():
-                    if item.name <> 'mnuCtxPaste':
-                        item.set_sensitive(False)
             self.pMenuShift.popup(None,None,None,event.button,event.time)
-            if len(list(self.Diagram.GetSelectedElements(nolabels = True))) > 1:     
-                self.pmShowInProjectView.set_sensitive(False)
             return True
 
     def __AddItem(self, toolBtnSel, event):
@@ -804,15 +797,18 @@ class CpicDrawingArea(CWidget):
     def on_pmShift_ToTop_activate(self, menuItem):
         self.Shift_activate('ToTop')
     
-    def ActionCopy(self):
+    @event("mnuCtxCopy","activate")
+    def ActionCopy(self, widget = None):
         self.Diagram.CopySelection(self.application.GetClipboard())
     
-    def ActionCut(self):
+    @event("mnuCtxCut", "activate")
+    def ActionCut(self, widget = None):
         self.Diagram.CutSelection(self.application.GetClipboard())
         self.Paint()
         self.emit('selected-item', list(self.Diagram.GetSelected()))
     
-    def ActionPaste(self):
+    @event("mnuCtxPaste","activate")
+    def ActionPaste(self, widget = None):
         self.Diagram.PasteSelection(self.application.GetClipboard())
         self.Paint()
         self.emit('selected-item', list(self.Diagram.GetSelected()))

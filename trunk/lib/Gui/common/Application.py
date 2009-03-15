@@ -1,10 +1,12 @@
 from lib.Depend.gtk2 import gtk
 from lib.Depend.gtk2 import gobject
+from lib.Depend.gtk2 import pango
 
 import sys
 from os.path import abspath
 import gettext
 import getopt
+import traceback
 
 class CApplication(gobject.GObject):
     windows = ()
@@ -146,6 +148,42 @@ class CApplication(gobject.GObject):
     
     def GetWindow(self, name):
         return self.wins[name]
+    
+    def DisplayException(self, exccls, excobj, tb):
+        win = gtk.Window()
+        win.set_title('Exception')
+        text = gtk.TextView()
+        text.set_editable(False)
+        buffer = text.get_buffer()
+        text.show()
+        win.add(text)
+        win.show()
+        
+        buffer.create_tag("italic", style=pango.STYLE_ITALIC)
+        buffer.create_tag("bold", weight=pango.WEIGHT_BOLD)
+        buffer.create_tag("monospace", family="monospace")
+        
+        iter = buffer.get_iter_at_offset(0)
+        
+        buffer.insert_with_tags_by_name(iter, "Traceback (most recent call last):\n", "bold")
+        
+        for filename, line, function, text in traceback.extract_tb(tb)[1:]:
+            buffer.insert(iter, "\tFile \"")
+            buffer.insert_with_tags_by_name(iter, filename, "bold")
+            buffer.insert(iter, "\", line ")
+            buffer.insert_with_tags_by_name(iter, str(line), "bold")
+            if function is not None and function != '?':
+                buffer.insert(iter, ", in ")
+                buffer.insert_with_tags_by_name(iter, str(function), "bold")
+            buffer.insert(iter, "\n")
+            if text is not None:
+                buffer.insert(iter, "\t\t")
+                buffer.insert_with_tags_by_name(iter, str(text), "monospace")
+                buffer.insert(iter, "\n")
+        
+        buffer.insert(iter, "\n")
+        buffer.insert_with_tags_by_name(iter, exccls.__name__, "bold")
+        buffer.insert(iter, ": %s\n"%excobj)
     
     def Main(self):
         self.GetWindow(self.main_window).Show()

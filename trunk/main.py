@@ -17,10 +17,12 @@ from lib.Project import CProject
 from lib.Project import CRecentFiles
 
 from lib.Gui import CfrmSplash, CfrmMain, CfrmAbout, CfrmProperties, CfrmAttribute, CfrmOperation, CfrmOpen, CfrmSave, CfrmOptions, CfrmException
+from lib.Gui.dialogs import CExceptionDialog
 
 from lib.config import config
 from lib.consts import SPLASH_TIMEOUT
 
+from lib.Exceptions import UserException
 
 __version__ = '1.0-beta20090309'
 
@@ -89,6 +91,18 @@ class Application(CApplication):
         widget = gtk.FileChooserWidget(action)
         widget.show()
         return widget
+    
+    def DisplayException(self, exccls, excobj, tb):
+        if issubclass(exccls, UserException) and not lib.consts.DEBUG:
+            text = _('An exception has occured:')+ '\n\n<b>'+exccls.__name__ +':</b> '+ str(excobj)
+            CExceptionDialog(None, text).run()
+        elif lib.consts.ERROR_TO_CONSOLE == True:
+            raise # reraise the exception
+        else: 
+            win = self.GetWindow('frmException')
+            win.SetParent(self.GetWindow('frmMain'))
+            win.SetErrorLog(exccls, excobj, tb)
+            win.Show()
     
     def Quit(self):
         self.UserGui.SaveConfig()
