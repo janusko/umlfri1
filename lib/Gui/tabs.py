@@ -5,13 +5,11 @@ from common import CWidget
 from common import  event
 from lib.Drawing import CDiagram
 from lib.Drawing.Canvas.GtkPlus import PixmapFromPath
-from twProjectView import CtwProjectView
 
 class CTabs(CWidget):
     name = 'nbTabs'
-    widgets = ('nbTabs','twProjectView', 'picDrawingArea', 'tbDrawingArea',
+    widgets = ('nbTabs', 'tbDrawingArea',
                 #Context menu
-                'menuTreeElement',
                 'mnuTab', 'mnuTabExportSVG', 'mnuTabPages_menu', 'mnuTabCloseDiagram', 'mnuTabCloseAllDiagram',
                 'mnuTabShowInProjectView',)
     
@@ -139,7 +137,6 @@ class CTabs(CWidget):
             self.diagrams[page_num].DeselectAll()
             page = self.nbTabs.get_nth_page(page_num)
             page.pack_start(self.tbDrawingArea)
-            self.picDrawingArea.queue_draw()
             self.emit("change_current_page", self.diagrams[page_num])
             self.mnuTabExportSVG.set_sensitive(True)
             self.mnuTabCloseDiagram.set_sensitive(True)
