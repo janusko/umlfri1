@@ -55,5 +55,5 @@ def version():
     """
     return [
         ("GTK+ version", ".".join(str(i) for i in gtk.gtk_version)),
-        ("PyGTK version", ".".join(str(i) for i in gtk.gtk_version)),
+        ("PyGTK version", ".".join(str(i) for i in gtk.pygtk_version)),
     ]
