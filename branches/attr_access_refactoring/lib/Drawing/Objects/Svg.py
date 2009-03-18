@@ -1,6 +1,7 @@
 from VisualObject import CVisualObject
 from lib.Math2D import TransformMatrix, Path
 from lib.consts import METAMODEL_NAMESPACE
+from lib.datatypes import CColor
 
 class CSvg(CVisualObject):
     types = {
@@ -72,6 +73,9 @@ class CSvg(CVisualObject):
                     bgcolor = shadowcolor
                 color = shadowcolor
             else:
-                color = path['style'].get('stroke', 'black')
-                bgcolor = path['style'].get('fill', None)
+                color = CColor(path['style'].get('stroke', 'black'))
+                if 'fill' in path['style'] and path['style']['fill'] is not None:
+                    bgcolor = CColor(path['style']['fill'])
+                else:
+                    bgcolor = None
             context.GetCanvas().DrawPath(trans*path['path'], color, bgcolor, int(float(path['style'].get('stroke-width', '1').rstrip('px'))+0.5))
