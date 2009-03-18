@@ -19,7 +19,7 @@ from lib.Exceptions import UserException
 
 class CfrmMain(CWindow):
     name = 'frmMain'
-    widgets = ('hboxWorkSpace', 'mnuUseCaseDiagram',
+    widgets = (
         #menu
         #############
         'mItemFile',
@@ -27,7 +27,6 @@ class CfrmMain(CWindow):
         #############
         'mItemEdit',
         'mnuCut', 'mnuCopy', 'mnuPaste', 'mnuDelete',
-        'mnuCtxCut', 'mnuCtxCopy', 'mnuCtxPaste', 'mnuCtxDelete',
         #############
         'mItemProject',
         #############
@@ -52,8 +51,7 @@ class CfrmMain(CWindow):
         'cmdOpen', 'cmdSave', 'cmdCopy', 'cmdCut', 'cmdPaste', 'cmdZoomOut', 'cmdZoomIn',
         #############
         #fullscreen
-        'mnuMenubar', 'mnuFullscreen', 'cmdCloseFullscreen', 'vpaRight', 'sbStatus','hpaRight'
-        
+        'mnuMenubar', 'mnuFullscreen', 'cmdCloseFullscreen', 'vpaRight', 'sbStatus','hpaRight',
         )
 
     complexWidgets = (CtbToolBox, CtwProjectView, CmnuItems, CpicDrawingArea, CnbProperties, CTabs,
@@ -112,6 +110,9 @@ class CfrmMain(CWindow):
         
         if changes == 0:
             return
+        
+        self.picDrawingArea.UpdateMenuSensitivity(project, diagram, element)
+        
         self.SetSensitiveMenuChilds(self.mItemProject, project)
         self.SetSensitiveMenuChilds(self.mItemDiagram, diagram)
         self.SetSensitiveMenuChilds(self.mItemElement, element)
@@ -120,14 +121,13 @@ class CfrmMain(CWindow):
         self.cmdSave.set_sensitive(project)
         self.cmdCopy.set_sensitive(element)
         self.cmdCut.set_sensitive(element)
-        self.cmdPaste.set_sensitive(diagram)
+        self.cmdPaste.set_sensitive(diagram and not self.application.GetClipboard().IsEmpty())
         self.cmdZoomIn.set_sensitive(diagram)
         self.cmdZoomOut.set_sensitive(diagram)
         self.mnuSave.set_sensitive(project)
         self.mnuCopy.set_sensitive(element)
         self.mnuCut.set_sensitive(element)
         self.mnuPaste.set_sensitive(diagram and not self.application.GetClipboard().IsEmpty())
-        self.mnuCtxPaste.set_sensitive(diagram and not self.application.GetClipboard().IsEmpty())
         self.mnuDelete.set_sensitive(element)
         self.mnuNormalSize.set_sensitive(diagram)
         self.mnuZoomIn.set_sensitive(zoomin)
@@ -135,8 +135,10 @@ class CfrmMain(CWindow):
         self.mnuZoomOut.set_sensitive(zoomout)
         self.cmdZoomOut.set_sensitive(zoomout)
         self.mnuBestFit.set_sensitive(diagram)
+        self.mnuFullscreen.set_sensitive(diagram)
     
     def LoadProject(self, filename, copy):
+        self.nbTabs.CloseAll()
         self.application.ProjectInit()
         try:
             self.application.GetProject().LoadProject(filename, copy)
@@ -152,7 +154,6 @@ class CfrmMain(CWindow):
             return CWarningDialog(self.form, _('Error opening file')).run()
             
         self.ReloadTitle()
-        self.nbTabs.CloseAll()
         self.twProjectView.Redraw()
         self.mnuItems.Redraw()
         self.nbProperties.Fill(None)
@@ -364,7 +365,6 @@ class CfrmMain(CWindow):
             self.ReloadTitle()
 
     @event("mnuDelete","activate")
-    @event("mnuCtxDelete","activate")
     def on_mnuDelete_click(self, widget):
         self.picDrawingArea.DeleteElements()
         
@@ -392,20 +392,17 @@ class CfrmMain(CWindow):
 
     @event("cmdCut", "clicked")
     @event("mnuCut","activate")
-    @event("mnuCtxCut", "activate")
     def on_mnuCut_click(self, widget):
         self.picDrawingArea.ActionCut()
  
     @event("cmdCopy", "clicked")
     @event("mnuCopy","activate")
-    @event("mnuCtxCopy","activate")
     def on_mnuCopy_click(self, widget):
         self.picDrawingArea.ActionCopy()
         self.UpdateMenuSensitivity()
     
     @event("cmdPaste", "clicked")
     @event("mnuPaste","activate")
-    @event("mnuCtxPaste","activate")
     def on_mnuPaste_click(self, widget):
         try:
             self.picDrawingArea.ActionPaste()
@@ -470,14 +467,12 @@ class CfrmMain(CWindow):
     @event("nbTabs", "change_current_page")
     def on_change_diagram(self, widget, diagram):
         if diagram is None:
-            self.mnuFullscreen.set_sensitive(False)
             self.tbToolBox.SetButtons(None)
             self.UpdateMenuSensitivity(diagram = False)
         else:
             self.picDrawingArea.SetDiagram(diagram)
             self.tbToolBox.SetButtons(diagram.GetType().GetId())
             self.UpdateMenuSensitivity(diagram = True)
-            self.mnuFullscreen.set_sensitive(True)
     
     @event("nbTabs","show-diagram-in-project")
     def on_show_diagram_in_project(self, widget, diagram):
@@ -589,7 +584,7 @@ class CfrmMain(CWindow):
 
     @event("picDrawingArea.picEventBox", "scroll-event")
     def on_picEventBox_scroll_event(self, widget, event):
-        if gtk.keysyms.Control_L in self.picDrawingArea.pressedKeys:
+        if (event.state & gtk.gdk.CONTROL_MASK):
             self.UpdateMenuSensitivity()
 
     

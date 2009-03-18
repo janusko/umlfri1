@@ -1,9 +1,13 @@
 from lib.Exceptions import DomainObjectError
 import re
+from lib.consts import DEFAULT_IDENTITY
 
 class CDomainObject(object):
     '''
     representation of logical element attribute - its value
+    
+    @ivar values: stores values of domain attributes
+    @ivar type: reference to domain type
     '''
     
     def __init__(self, type):
@@ -99,14 +103,17 @@ class CDomainObject(object):
         '''
         Find attribute defined by id and perform action
         
-        @param id: 
+        @param id: path to the attribute
         '''
         
         path = re.split(r'(\[|\.)', id, 1)
         
         if len(path) == 1: #work with current attribute
             if action == 'setvalue':
-                self.values[path[0]] = self.type.TransformValue(value, id = path[0])
+                if path[0] == DEFAULT_IDENTITY:
+                    self.values[path[0]] = str(value)
+                else:
+                    self.values[path[0]] = self.type.TransformValue(value, id = path[0])
                 return
             elif action == 'getvalue':
                 return self.values[path[0]]
@@ -177,7 +184,8 @@ class CDomainObject(object):
         @return: structured dictionary containing all the necessary data for .frip file
         @rtype: dict
         '''
-        return dict([(id, self.type.PackValue(id, value)) for id, value in self.values.iteritems()])
+        return dict([(id, self.type.PackValue(id, value) if id != DEFAULT_IDENTITY else str(value))
+            for id, value in self.values.iteritems()])
     
     def SetSaveInfo(self, data):
         '''

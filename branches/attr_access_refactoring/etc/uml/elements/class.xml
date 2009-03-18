@@ -1,6 +1,7 @@
-<ElementType xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" id="Class">
-    <Icon path="icons/class.png"/>
-    <Domain id="class"/>
+<?xml version="1.0" encoding="utf-8"?>
+<ElementType id="Class" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Icon path="icons/class.png" />
+    <Domain id="class" identity="name" />
     <Connections>
         <Item value="Association"/>
         <Item value="Generalization" with="Class" allowrecursive="0"/>
@@ -56,6 +57,12 @@
                                             <VBox>
                                                 <TextBox text=": " font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
                                                 <TextBox text="#type" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                                            </VBox>
+                                        </Condition>
+                                        <Condition type="empty" condition="#default" negate="1">
+                                            <VBox>
+                                                <TextBox text=" = " font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor" />
+                                                <TextBox text="#default" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor" />
                                             </VBox>
                                         </Condition>
                                     </VBox>

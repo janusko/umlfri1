@@ -40,6 +40,7 @@ METAMODEL_NAMESPACE = '{http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd}'
 UMLPROJECT_NAMESPACE = '{http://umlfri.kst.fri.uniza.sk/xmlschema/umlproject.xsd}'
 RECENTFILES_NAMESPACE = '{http://umlfri.kst.fri.uniza.sk/xmlschema/recentfiles.xsd}'
 CONFIG_NAMESPACE = '{http://umlfri.kst.fri.uniza.sk/xmlschema/config.xsd}'
+METAMODEL_LIST_NAMESPACE = '{http://umlfri.kst.fri.uniza.sk/xmlschema/metamodelList.xsd}'
 USERGUI_NAMESPACE='http://umlfri.kst.fri.uniza.sk/xmlschema/usergui.xsd'
 
 # UML. FRI server - web page, mail address and address for error logs
@@ -58,3 +59,5 @@ SCALE_MIN = 0.6
 SCALE_INCREASE = 0.2
 BUFFER_SIZE=(2000.0,1500.0)         # buffer size at the start
 BUFFER_MAX_SIZE=(6400.0,6400.0)     # the graphic buffer will be extended to max this values
+
+DEFAULT_IDENTITY='@id'

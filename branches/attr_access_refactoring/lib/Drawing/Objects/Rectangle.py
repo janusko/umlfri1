@@ -11,20 +11,22 @@ cornerDefs = {
 
 sideDefs = {
     'rounded': 'M 0,0 C -0.554,0 -1,-0.223 -1,-0.5 C -1,-0.777 -0.554,-1 0,-1',
+    'sidelong' : 'M -1,0 L 0,-1',
+    'beak' : 'M 0,-1 L -1,-0.5 L 0,0'    
 }
 
 class CRectangle(CSimpleContainer):
     types = {
         'fill': CColor,
         'border': CColor,
-        'lefttop': str,
-        'righttop': str,
-        'leftbottom': str,
-        'rightbottom': str,
-        'left': str,
-        'right': str,
-        'top': str,
-        'bottom': str
+        'lefttop': (int, str, CColor),
+        'righttop': (int, str, CColor),
+        'leftbottom': (int, str, CColor),
+        'rightbottom': (int, str, CColor),
+        'left': (int, str, CColor),
+        'right': (int, str, CColor),
+        'top': (int, str, CColor),
+        'bottom': (int, str, CColor)
     }
     def __init__(self, fill = None, border = CColor("white"), lefttop = None, righttop = None, leftbottom = None, rightbottom = None, left = None, right = None, top = None, bottom = None):
         CSimpleContainer.__init__(self)
@@ -61,23 +63,19 @@ class CRectangle(CSimpleContainer):
         corners = []
         for i, c in enumerate(self.GetVariables(context, 'lefttop', 'righttop', 'rightbottom', 'leftbottom')):
             if c is not None:
-                if isinstance(c, (str, unicode)):
-                    c = c.split(None, 2)
                 if len(c) == 2:
-                    c = c[0], None, c[1]
+                    c = c[0], c[1], None
                 trans = TransformMatrix.mk_scale(int(c[0]))*TransformMatrix.mk_rotation(i*math.pi/2)
-                c = str(c[1]), trans*Path(cornerDefs.get(c[2], c[2]))
+                c = c[2], trans*Path(cornerDefs.get(c[1], c[1]))
             corners.append(c)
         
         sides = []
         for i, s in enumerate(self.GetVariables(context, 'top', 'right', 'bottom', 'left')):
             if s is not None:
-                if isinstance(s, (str, unicode)):
-                    s = s.split(None, 2)
                 if len(s) == 2:
-                    s = s[0], None, s[1]
+                    s = s[0], s[1], None
                 trans = TransformMatrix.mk_rotation((i+1)*math.pi/2)
-                s = str(s[1]), trans*Path(sideDefs.get(s[2], s[2])), int(s[0])
+                s = str(s[2]), trans*Path(sideDefs.get(s[1], s[1])), int(s[0])
             sides.append(s)
         
         canvas = context.GetCanvas()
@@ -105,7 +103,7 @@ class CRectangle(CSimpleContainer):
             for i, c in enumerate(corners):
                 if c is None:
                     if sides[i] is not None:
-                        scale = ((w, ides[i][2]), (sides[i][2], h), (w, sides[i][2]), (sides[i][2], h))
+                        scale = ((w, sides[i][2]), (sides[i][2], h), (w, sides[i][2]), (sides[i][2], h))
                         if i == 3 and lastside is not None:
                             tmp = lastside
                         else:

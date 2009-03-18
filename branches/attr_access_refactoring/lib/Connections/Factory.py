@@ -75,6 +75,8 @@ class CConnectionFactory(object):
         icon = None
         labels = []
         attrs = []
+        domain = None
+        identity = None
         for element in root:
             if element.tag == METAMODEL_NAMESPACE+'Icon':
                 icon = element.get('path')
@@ -86,6 +88,7 @@ class CConnectionFactory(object):
                 darr['default'] = element.get('default')
             elif element.tag == METAMODEL_NAMESPACE+'Domain':
                 domain = self.domainfactory.GetDomain(element.get('id'))
+                identity = element.get('identity')
             elif element.tag == METAMODEL_NAMESPACE+'Appearance':
                 for subelem in element:
                     if subelem.tag == METAMODEL_NAMESPACE+'LineStyle':
@@ -106,7 +109,7 @@ class CConnectionFactory(object):
                         labels.append((subelem.get('position'), self.__LoadAppearance(tmp)))
 
         tmp = self.types[id] = CConnectionType(id, CConnectionLine(**ls),
-                                    CConnectionArrow(**sarr), CConnectionArrow(**darr), icon, domain)
+                                    CConnectionArrow(**sarr), CConnectionArrow(**darr), icon, domain, identity)
         for pos, lbl in labels:
             tmp.AddLabel(pos, lbl)
         

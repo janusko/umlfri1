@@ -1,7 +1,9 @@
-<ElementType xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" id="Object">
+<ElementType id="Object" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
     <Icon path="icons/object.png"/>
-    <Domain id="object"/>
+    <Domain id="object" identity="name"/>
     <Connections>
+        <Item value="AssociationInstance"/>
+        <Item value="Note Link" with="Note"/>
         <Item value="Association"/>
         <Item value="Generalization" with="Object" allowrecursive="0"/>
     </Connections>
@@ -11,55 +13,67 @@
                 <HBox>
                     <Padding padding="5">
                         <HBox>
-                            <Condition condition="#self.stereotype" type="empty" negate="1">
+                            <Condition condition="#stereotype" type="empty" negate="1">
                                 <Align align="center">
                                     <VBox>
                                         <TextBox text="&#171;" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
-                                        <TextBox text="#self.stereotype" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                                        <TextBox text="#stereotype" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
                                         <TextBox text="&#187;" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
                                     </VBox>
                                 </Align>
                             </Condition>
                             <Align align="center">
                                 <HBox>
-                                    <TextBox text="#self.name" font="#cfg.Styles.Element.NameTextFont.ChangeStyle('underline')" color="#cfg.Styles.Element.NameTextColor"/>
+                                    <TextBox text="#name" font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/>
+                                    <Line type="horizontal" color="#cfg.Styles.Element.NameTextColor"/>
                                 </HBox>
                             </Align>
                         </HBox>
                     </Padding>
-                    <Condition condition="#self.attributes" type="empty" negate="1">
+                    <Condition condition="#attributes" type="empty" negate="1">
                         <HBox>
-                            <Loop collection="#self.attributes">
-                                <Condition type="empty" condition="#name" negate="1">
-                                    <VBox>
-                                        <Switch value="#scope">
-                                            <Case condition="Private">
-                                                <TextBox text=" - " font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
-                                            </Case>
-                                            <Case condition="Protected">
-                                                <TextBox text=" # " font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
-                                            </Case>
-                                            <Case condition="Public">
-                                                <TextBox text=" + " font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
-                                            </Case>
-                                        </Switch>
-                                        <Condition type="empty" condition="#stereotype" negate="1">
+                            <Line type="horizontal" color="#cfg.Styles.Element.LineColor"/>
+                            <Padding padding="5">
+                                <HBox>
+                                    <Loop collection="attributes">
+                                        <Condition type="empty" condition="#name" negate="1">
                                             <VBox>
-                                                <TextBox text="&#171;" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
-                                                <TextBox text="#stereotype" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
-                                                <TextBox text="&#187;  " font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                                                <Switch value="#scope">
+                                                    <Case condition="Private">
+                                                        <TextBox text=" - " font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                                                    </Case>
+                                                    <Case condition="Protected">
+                                                        <TextBox text=" # " font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                                                    </Case>
+                                                    <Case condition="Public">
+                                                        <TextBox text=" + " font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                                                    </Case>
+                                                </Switch>
+                                                <Condition type="empty" condition="#stereotype" negate="1">
+                                                    <VBox>
+                                                        <TextBox text="&#171;" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                                                        <TextBox text="#stereotype" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                                                        <TextBox text="&#187;  " font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                                                    </VBox>
+                                                </Condition>
+                                                <TextBox text="#name" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                                                <Condition type="empty" condition="#type" negate="1">
+                                                    <VBox>
+                                                        <TextBox text=" :" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                                                        <TextBox text="#type" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                                                    </VBox>
+                                                </Condition>
+                                                <Condition type="empty" condition="#default" negate="1">
+                                                    <VBox>
+                                                        <TextBox text=" = " font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                                                        <TextBox text="#default" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                                                    </VBox>
+                                                </Condition>
                                             </VBox>
                                         </Condition>
-                                        <TextBox text="#name" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
-                                        <Condition type="empty" condition="#type" negate="1">
-                                            <VBox>
-                                                <TextBox text=" :" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
-                                                <TextBox text="#type" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
-                                            </VBox>
-                                        </Condition>
-                                    </VBox>
-                                </Condition>
-                            </Loop>
+                                    </Loop>
+                                </HBox>
+                            </Padding>
                         </HBox>
                     </Condition>
                 </HBox>

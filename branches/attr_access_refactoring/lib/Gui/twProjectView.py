@@ -130,7 +130,7 @@ class CtwProjectView(CWidget):
         chld = root
         
         i = path.split('/')[0]
-        j,k = i.split(':')
+        j,k = i.rsplit(':',1)
         name, type = model.get(root, 0, 2)
         
         if len(path.split('/')) == 1 and name == j and type == k:
@@ -138,7 +138,7 @@ class CtwProjectView(CWidget):
             
         if name == j and type == k:
             for i in path.split('/')[1:]:
-                j, k = i.split(':')
+                j, k = i.rsplit(':',1)
                 for id in xrange(model.iter_n_children(root)):
                     chld = model.iter_nth_child(root, id)
                     name, type = model.get(chld, 0, 2)
@@ -160,16 +160,16 @@ class CtwProjectView(CWidget):
         iter = []
         
         i = path.split('/')[0]
-        j,k = i.split(':')
+        j,k = i.rsplit(':',1)
         name, type = model.get(root, 0, 2)
-        endName, endType = path.split('/')[-1].split(':')
+        endName, endType = path.split('/')[-1].rsplit(':', 1)
         
         if len(path.split('/')) == 1 and name == j and type == k:
             return [root]
         
         if name == j and type == k:
             def rekurzia(root,path):
-                j, k = path.split('/')[0].split(':')
+                j, k = path.split('/')[0].rsplit(':',1)
                 for id in xrange(model.iter_n_children(root)):
                     chld = model.iter_nth_child(root, id)
                     name, type = model.get(chld, 0, 2)
@@ -194,11 +194,11 @@ class CtwProjectView(CWidget):
         chld = root
         diagrams = []
         i = path.split('/')[0]
-        j,k = i.split(':')
+        j,k = i.rsplit(':',1)
         name, type = model.get(root, 0, 2)
         if name == j and type == k:
             for i in path.split('/')[1:]:
-                j, k = i.split(':')
+                j, k = i.rsplit(':',1)
                 for id in xrange(model.iter_n_children(root)):
                     chld = model.iter_nth_child(root, id)
                     name, type = model.get(chld, 0, 2)

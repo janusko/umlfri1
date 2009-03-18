@@ -1,5 +1,6 @@
 import os
 import os.path
+import re
 from lib.Exceptions.DevException import *
 from Type import CDomainType
 from lib.config import config
@@ -17,6 +18,8 @@ if HAVE_LXML:
 class CDomainFactory(object):
     '''
     Factory to create Domains
+    
+    @ivar domains: dictionary with domain names as keys and domain types as values
     '''
     
     def __init__(self, storage, path):
@@ -58,6 +61,7 @@ class CDomainFactory(object):
                 raise DomainFactoryError('Import loop detected: ' + loop)
             
             domain.CheckMissingInfo()
+            domain.CheckDefault()
     
     def GetDomain(self, id):
         """
@@ -110,10 +114,15 @@ class CDomainFactory(object):
         '''
         if name is None:
             name = root.get('id')
-            if name is None:
-                raise DomainFactoryError('Undefined root domain id')
-            if '.' in name:
-                raise DomainFactoryError('"." not allowed in id of global domain in "%s"' % name)
+            p = re.compile('[a-zA-Z][a-zA-Z0-9_]*')
+            if p.match(name) is None:
+                raise DomainFactoryError('Name "%s" is not valid' %name)
+#            if name is None:
+#                raise DomainFactoryError('Undefined root domain id')
+#            if '.' in name:
+#                raise DomainFactoryError('"." not allowed in id of global domain in "%s"' % name)
+#            if '@' in name:
+#                    raise DomainFactoryError('@ not allowed in "%s"' % name)
             if name in self.domains:
                 raise DomainFactoryError('Duplicate domain identifier "%s"' % name)
         elif root.get('id') is not None:
@@ -124,8 +133,13 @@ class CDomainFactory(object):
         
         for node in root:
             if node.tag == METAMODEL_NAMESPACE + 'Import':
+                p = re.compile('[a-zA-Z][a-zA-Z0-9_]*')
+#            if p.match(node) is None:
+#                raise DomainFactoryError('Name "%s" is not valid' %node)
                 if '.' in node.get('id'):
                     raise DomainFactoryError('Explicit import of local domain not allowed in "%s"' % name)
+#                if '@' in node.get('id'):
+#                    raise DomainFactoryError('@ not allowed in "%s"' % name)
                 obj.AppendImport(node.get('id'))
             
             elif node.tag == METAMODEL_NAMESPACE + 'Attribute': 
@@ -150,7 +164,13 @@ class CDomainFactory(object):
         @param attribute: xml node
         '''
         id = attribute.get('id')
+#        if '@' in id:
+#            raise DomainFactoryError('@ not allowed in "%s"' % id)
+        p = re.compile('[a-zA-Z][a-zA-Z0-9_]*')
+        if p.match(id) is None:
+            raise DomainFactoryError('Name "%s" is not valid' %id)
         type = attribute.get('type')
+        default = attribute.get('default')
         if type is not None and '.' in type:
             raise DomainFactoryError('Local domain "%s" cannot be used as explicitly '
                 'set type of "%s.%s"' % (type, obj.GetName(), id))

@@ -1,8 +1,9 @@
-<ConnectionType xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" id="Compose">
-    <Icon path="icons/compose.png"/>
-    <SrcArrow possible="0" default="0"/>
-    <DestArrow possible="1" default="1"/>
-    <Domain id="association"/>
+<?xml version="1.0" encoding="utf-8"?>
+<ConnectionType id="Compose" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Icon path="icons/compose.png" />
+    <SrcArrow possible="0" default="0" />
+    <DestArrow possible="1" default="1" />
+    <Domain id="association" identity="name" />
     <Appearance>
         <LineStyle style="solid" color="#cfg.Styles.Connection.LineColor"/>
         <ArrowStyle style="fdiamond" fill="#cfg.Styles.Connection.ArrowFillColor" color="#cfg.Styles.Connection.ArrowColor"/>

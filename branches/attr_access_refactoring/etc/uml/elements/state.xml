@@ -1,6 +1,7 @@
-<ElementType xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" id="State">
-    <Icon path="icons/state.png"/>
-    <Domain id="state"/>
+<?xml version="1.0" encoding="utf-8"?>
+<ElementType id="State" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Icon path="icons/state.png" />
+    <Domain id="state" identity="name" />
     <Connections>
         <Item value="StateTransition"/>
     </Connections>

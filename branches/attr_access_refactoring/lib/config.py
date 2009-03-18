@@ -49,6 +49,7 @@ types = {
     "/Styles/Drag/RectangleWidth": int,
     "/Styles/Drag/RectangleColor": CColor,
     "/Paths/Root": path_type,
+    "/Paths/MetamodelList": path_type,
     "/Paths/Templates": path_type,
     "/Paths/Images": path_type,
     "/Paths/Gui": path_type,

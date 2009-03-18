@@ -11,7 +11,7 @@
         <Domain>
             <Attribute id="name" type="str" name="Name" />
             <Attribute id="stereotype" type="str" name="Stereotype" />
-            <Attribute id="scope" type="enum" name="Scope">
+            <Attribute id="scope" type="enum" name="Scope" default="Private">
                 <Enum>Private</Enum>
                 <Enum>Protected</Enum>
                 <Enum>Public</Enum>
@@ -46,10 +46,10 @@
                         [ ]* (?P&lt;name&gt;[a-zA-Z_][a-zA-Z0-9_]*) 
                         [ ]* : [ ]* (?P&lt;type&gt; [a-zA-Z_][a-zA-Z0-9_]*) 
                         [ ]* ( = [ ]* (?P&lt;default&gt; .+? ) [ ]*$ )?" />
-                </Domain>                
+                </Domain>
             </Attribute>
             <Attribute id="stereotype" type="str" name="Stereotype" />
-            <Attribute id="scope" type="enum" name="Scope" >
+            <Attribute id="scope" type="enum" name="Scope" default="Public">
                 <Enum>Private</Enum>
                 <Enum>Protected</Enum>
                 <Enum>Public</Enum>

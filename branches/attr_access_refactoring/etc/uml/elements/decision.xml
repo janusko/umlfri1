@@ -1,6 +1,7 @@
-<ElementType xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" id="Decision">
-    <Icon path="icons/decision.png"/>
-    <Domain id="decision"/>
+<?xml version="1.0" encoding="utf-8"?>
+<ElementType id="Decision" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Icon path="icons/decision.png" />
+    <Domain id="decision" identity="name" />
     <Connections>
         <Item value="ActivityFlow"/>
         <Item value="StateTransition"/>

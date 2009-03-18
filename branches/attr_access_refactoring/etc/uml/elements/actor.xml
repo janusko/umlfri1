@@ -1,6 +1,7 @@
-<ElementType xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" id="Actor">
-    <Icon path="icons/actor.png"/>
-    <Domain id="actor"/>
+<?xml version="1.0" encoding="utf-8"?>
+<ElementType id="Actor" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Icon path="icons/actor.png" />
+    <Domain id="actor" identity="name" />
     <Connections>
         <Item value="Association"/>
         <Item value="Generalization" with="Actor" allowrecursive="0"/>

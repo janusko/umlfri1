@@ -5,13 +5,22 @@ from lib.Exceptions import DomainParserError
 class CDomainParser(object):
     '''
     Parser supporting various types of parsing methods.
+    
+    @ivar separator: string that can be used to separate items of list from one string
+    
+    @ivar regexp: compiled regular expression, can be used in role of separator or to 
+        set values of attributes of domain object
     '''
     
     def __init__(self, separator=None, regexp=None):
         '''
         most of the parameters can be left out set to None
         
-        @param separator: used to split by
+        @param separator: string used to separate list items
+        @type separator: str
+        
+        @param regexp: string to be compiled as regular expression
+        @type regexp: str
         '''
         
         self.separator = separator

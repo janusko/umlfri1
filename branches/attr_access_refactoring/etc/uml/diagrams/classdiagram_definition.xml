@@ -5,8 +5,8 @@
     <Elements>
         <Item value="Note" />
         <Item value="Package" />
-        <Item value="Object" />
         <Item value="Class" />
+        <Item value="Object" />
     </Elements>
     <Connections>
         <Item value="Generalization" />

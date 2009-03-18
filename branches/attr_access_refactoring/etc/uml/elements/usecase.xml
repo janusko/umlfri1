@@ -1,6 +1,6 @@
-<ElementType xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" id="UseCase">
+<ElementType id="UseCase" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
     <Icon path="icons/usecase.png"/>
-    <Domain id="usecase"/>
+    <Domain id="usecase" identity="name"/>
     <Connections>
         <Item value="Association"/>
         <Item value="Generalization" with="UseCase" allowrecursive="0"/>
@@ -10,20 +10,22 @@
             <Ellipse fill="#cfg.Styles.Element.FillColor" border="#cfg.Styles.Element.LineColor">
                 <Proportional ratio="3:1">
                     <Padding padding="8">
-                        <HBox>
-                            <Condition condition="#self.stereotype" type="empty" negate="1">
+                        <Align align="center center">
+                            <HBox>
+                                <Condition condition="#stereotype" type="empty" negate="1">
+                                    <Align align="center">
+                                        <VBox>
+                                            <TextBox text="&#171;" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                                            <TextBox text="#stereotype" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                                            <TextBox text="&#187;" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                                        </VBox>
+                                    </Align>
+                                </Condition>
                                 <Align align="center">
-                                    <VBox>
-                                        <TextBox text="&#171;" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
-                                        <TextBox text="#self.stereotype" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
-                                        <TextBox text="&#187;" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
-                                    </VBox>
+                                    <TextBox text="#name" font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/>
                                 </Align>
-                            </Condition>
-                            <Align align="center">
-                                <TextBox text="#self.name" font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/>
-                            </Align>
-                        </HBox>
+                            </HBox>
+                        </Align>
                     </Padding>
                 </Proportional>
             </Ellipse>

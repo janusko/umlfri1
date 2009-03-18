@@ -24,9 +24,23 @@ def BoolWrap(value):
         return value.lower() in ('true', 'yes', '1')
     return bool(value)
 
+def TupleWrap(type):
+    def tmp(value):
+        out = []
+        if isinstance(value, (str, unicode)):
+            tmp = value.split()
+        else:
+            tmp = value
+        for num, val in enumerate(tmp):
+            out.append(type[num](val))
+        return tuple(out)
+    return tmp
+
 def BuildParam(value, type = None):
     if type is bool:
         type = BoolWrap
+    if isinstance(type, tuple):
+        type = TupleWrap(type)
     if isinstance(value, (str, unicode)) and value.startswith('#'):
         if value.startswith('##'):
             if type is not None:

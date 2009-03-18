@@ -5,6 +5,7 @@ class CWidget(gobject.GObject):
     complexWidgets = ()
     name = ''
     glade = None
+    __allWidgets = {}
     
     def __init__(self, app, wTree):
         gobject.GObject.__init__(self)
@@ -27,6 +28,10 @@ class CWidget(gobject.GObject):
                             events.setdefault(obj, []).append((event, fnc, params))
         self.application = app
         for widgetName in self.widgets:
+            if widgetName in self.__allWidgets:
+                raise Exception, '%s cannot be used in %s (allready used in %s)'%(widgetName, self.__class__.__name__, self.__allWidgets[widgetName])
+            else:
+                self.__allWidgets[widgetName] = self.__class__.__name__
             setattr(self, widgetName, wTree.get_widget(widgetName))
         for widgetClass in self.complexWidgets:
             setattr(self, widgetClass.name, widgetClass(app, wTree))
