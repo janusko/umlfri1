@@ -1,3 +1,4 @@
+from __future__ import with_statement
 from lib.Depend.gtk2 import gtk
 from lib.Depend.gtk2 import pango
 import lib.Depend
@@ -38,6 +39,20 @@ class CfrmException(CWindow):
         iter = buff.get_iter_at_offset(0)
         buff.insert_with_tags_by_name(iter, "UML .FRI:\t\t", "bold")
         buff.insert_with_tags_by_name(iter, self.application.GetVersion(), "mono")
+        try:
+            with open('.svn/entries') as svn:
+                result = []
+                for idx, line in enumerate(svn):
+                    if idx in [3, 4, 9, 10]: 
+                        result.append(line[:-1])
+                    if idx > 10:
+                        break
+                result = '%s@%s (%s) %s' % (result[1], result[3], result[0], result[2])
+                buff.insert_with_tags_by_name(iter, "\nUML .FRI (svn):\t\t", "bold")
+                buff.insert_with_tags_by_name(iter, result, "mono")
+        except IOError:
+            pass
+            
         for name, version in lib.Depend.version():
             buff.insert_with_tags_by_name(iter, "\n%s:\t\t"%name, "bold")
             buff.insert_with_tags_by_name(iter, version, "mono")
