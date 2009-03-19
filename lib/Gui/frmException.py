@@ -40,7 +40,7 @@ class CfrmException(CWindow):
         buff.insert_with_tags_by_name(iter, "UML .FRI:\t\t", "bold")
         buff.insert_with_tags_by_name(iter, self.application.GetVersion(), "mono")
         try:
-            with open('.svn/entries') as svn:
+            with open(lib.consts.ROOT_PATH + '/.svn/entries') as svn:
                 result = []
                 for idx, line in enumerate(svn):
                     if idx in [3, 4, 9, 10]: 
@@ -162,9 +162,6 @@ class CfrmException(CWindow):
     def Show(self):
         self.form.run()
         buff = self.tviewErrorLog.get_buffer()
-        s, e = buff.get_bounds()
-        buff.delete(s,e)
-        buff = self.tviewSysInfo.get_buffer()
         s, e = buff.get_bounds()
         buff.delete(s,e)
         buff = self.tviewUsrComment.get_buffer()
