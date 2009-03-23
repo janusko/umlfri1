@@ -43,11 +43,11 @@ class CfrmException(CWindow):
             with open(lib.consts.ROOT_PATH + '/.svn/entries') as svn:
                 result = []
                 for idx, line in enumerate(svn):
-                    if idx in [3, 4, 9, 10]: 
+                    if idx in [3, 4, 10]: 
                         result.append(line[:-1])
                     if idx > 10:
                         break
-                result = '%s@%s (%s) %s' % (result[1], result[3], result[0], result[2])
+                result = '%s@%s (%s)' % (result[1], result[2], result[0])
                 buff.insert_with_tags_by_name(iter, "\nUML .FRI (svn):\t\t", "bold")
                 buff.insert_with_tags_by_name(iter, result, "mono")
         except IOError:
