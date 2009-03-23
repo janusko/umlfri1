@@ -15,6 +15,8 @@ from lib.Exceptions.UserException import *
 from lib.Drawing.Canvas import CGtkCanvas, CSvgCanvas, CCairoCanvas, CExportCanvas
 from lib.Drawing import Element
 
+import thread
+
 targets = [('document/uml', 0, gtk.TARGET_SAME_WIDGET)]
 
 PAGE_SIZE=(config["/Page/Width"],config["/Page/Height"])
@@ -47,6 +49,9 @@ class CpicDrawingArea(CWidget):
     }
 
     def __init__(self, app, wTree):
+        self.paintlock = thread.allocate()
+        self.tobePainted = False
+        self.paintChanged = False
         self.canvas = None
         CWidget.__init__(self, app, wTree)
 
@@ -169,7 +174,25 @@ class CpicDrawingArea(CWidget):
         h,v = (self.picHBar.get_value(),self.picVBar.get_value())
         return int(-h+x), int(-v+y)
       
+    def ToPaint(self, changed = True):
+        try:
+            self.paintlock.acquire()
+            self.paintChanged = self.paintChanged or changed
+            if not self.tobePainted:
+                self.tobePainted = True
+                gobject.timeout_add(5, self.Paint)
+        finally:
+            self.paintlock.release()
+        
+    
     def Paint(self, changed = True):
+        try:
+            self.paintlock.acquire()
+            self.tobePainted = False
+            changed = changed or self.paintChanged
+            self.paintChanged = False
+        finally:
+            self.paintlock.release()
         if not self.picDrawingArea.window or not self.canvas:
             if changed:
                 self.__invalidated = True # redraw completly on next configure event
@@ -495,29 +518,28 @@ class CpicDrawingArea(CWidget):
             # is "out of sight" move the selection "in the middle" of the window
             if self.GetRelativePos(self.Diagram.GetSelectSquare(self.canvas)[0])[0]+self.Diagram.GetSelectSquare(self.canvas)[1][0] > self.Diagram.GetHScrollingPos()+self.GetWindowSize()[0] :
                 self.picHBar.set_value(self.scale*(self.Diagram.GetSelectSquare(self.canvas)[0][0]-(self.GetWindowSize()[0]//2)))
+            self.ToPaint()
             self.picEventBox.emit("key-release-event", event)
-            self.Paint()
         elif event.keyval == gtk.keysyms.Left:
             self.Diagram.MoveSelection((-10,0))
             if self.GetRelativePos(self.Diagram.GetSelectSquare(self.canvas)[0])[0] < self.Diagram.GetHScrollingPos():
                 self.picHBar.set_value(self.scale*(self.Diagram.GetSelectSquare(self.canvas)[0][0]-(self.GetWindowSize()[0]//2)))
+            self.ToPaint()
             self.picEventBox.emit("key-release-event", event)
-            self.Paint()
         elif event.keyval == gtk.keysyms.Up:
             self.Diagram.MoveSelection((0,-10))
             if self.GetRelativePos(self.Diagram.GetSelectSquare(self.canvas)[0])[1] < self.Diagram.GetVScrollingPos():
                 self.picVBar.set_value(self.scale*(self.Diagram.GetSelectSquare(self.canvas)[0][1]-(self.GetWindowSize()[1]//2)))
+            self.ToPaint()
             self.picEventBox.emit("key-release-event", event)
-            self.Paint()
-
         elif event.keyval == gtk.keysyms.Down:
             self.Diagram.MoveSelection((0,10))
             if self.GetRelativePos(self.Diagram.GetSelectSquare(self.canvas)[0])[1]+self.Diagram.GetSelectSquare(self.canvas)[1][1] > self.Diagram.GetVScrollingPos()+self.GetWindowSize()[1]:
                 self.picVBar.set_value(self.scale*(self.Diagram.GetSelectSquare(self.canvas)[0][1]-(self.GetWindowSize()[1]//2)))
+            self.ToPaint()  
             self.picEventBox.emit("key-release-event", event)
-            self.Paint()  
-        return True    
-                      
+        return True
+    
     @event("picEventBox", "key-release-event")
     def on_key_release_event(self, widget, event):
         if gtk.keysyms.space in self.pressedKeys:
