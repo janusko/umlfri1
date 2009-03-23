@@ -1,19 +1,23 @@
+from __future__ import with_statement
 from lib.Depend.gtk2 import gtk
 from lib.Depend.gtk2 import pango
+import lib.Depend
 import lib.consts
 from common import CWindow
 from lib.config import config
 from lib.Gui.dialogs import CWarningDialog
-import sys, os, time, tarfile, platform, traceback, cStringIO, datetime, urllib, urllib2
+import sys, os, time, tarfile, traceback, cStringIO, datetime, urllib, urllib2
+import os.path
 
 EXCEPTION_PROJECT_FILE = 'error.frip'
 
 
 class CfrmException(CWindow):
-      
     widgets = ('tviewErrorLog','tviewSysInfo','btnCancel', 'btnSend',  'btnReport', 'ntbkException', 'lblMail', 'tviewUsrComment', 'chbtnIncludeProject',)
     name = 'frmException'
-
+    
+    __modPaths = [os.path.abspath(dir).replace(os.path.sep, "/") for dir in sys.path]
+    __modPaths.sort(key=len, reverse=True)
 
     def __init__(self, app, wTree):
         CWindow.__init__(self, app, wTree)
@@ -22,10 +26,37 @@ class CfrmException(CWindow):
         self.btnSend.connect("clicked", self.OnBtnSendClicked, None)
         self.chbtnIncludeProject.connect("toggled", self.OnChbtnIncludeProjectToogled, None)
         self.lblMail.set_label("<span background='white'><b>"+ lib.consts.MAIL + "</b></span>")
-        self.project = None
         self.append_project = True
 
-       
+        buff = self.tviewSysInfo.get_buffer()  
+        tag_tab = buff.get_tag_table()
+
+        if tag_tab.lookup("bold") is None:
+            buff.create_tag("bold", weight=pango.WEIGHT_BOLD, family="monospace")
+        if tag_tab.lookup("mono") is None:
+            buff.create_tag("mono", family="monospace")
+        
+        iter = buff.get_iter_at_offset(0)
+        buff.insert_with_tags_by_name(iter, "UML .FRI:\t\t", "bold")
+        buff.insert_with_tags_by_name(iter, self.application.GetVersion(), "mono")
+        try:
+            with open(lib.consts.ROOT_PATH + '/.svn/entries') as svn:
+                result = []
+                for idx, line in enumerate(svn):
+                    if idx in [3, 4, 10]: 
+                        result.append(line[:-1])
+                    if idx > 10:
+                        break
+                result = '%s@%s (%s)' % (result[1], result[2], result[0])
+                buff.insert_with_tags_by_name(iter, "\nUML .FRI (svn):\t\t", "bold")
+                buff.insert_with_tags_by_name(iter, result, "mono")
+        except IOError:
+            pass
+            
+        for name, version in lib.Depend.version():
+            buff.insert_with_tags_by_name(iter, "\n%s:\t\t"%name, "bold")
+            buff.insert_with_tags_by_name(iter, version, "mono")
+    
     def OnChbtnIncludeProjectToogled(self, widget, event, data=None):
         if self.append_project == False:
             self.append_project = True
@@ -80,10 +111,10 @@ class CfrmException(CWindow):
                 iof.close()
 
             if self.append_project == True:
-                if self.project is not None:
+                if self.application.GetProject() is not None:
                     
                     log_project_path = config['/Paths/UserDir'] + EXCEPTION_PROJECT_FILE
-                    self.project.SaveProject(log_project_path)
+                    self.application.GetProject().SaveProject(log_project_path)
                     tar.add(log_project_path,EXCEPTION_PROJECT_FILE)
                     os.remove(log_project_path)
             
@@ -133,17 +164,13 @@ class CfrmException(CWindow):
         buff = self.tviewErrorLog.get_buffer()
         s, e = buff.get_bounds()
         buff.delete(s,e)
-        buff = self.tviewSysInfo.get_buffer()
-        s, e = buff.get_bounds()
-        buff.delete(s,e)
         buff = self.tviewUsrComment.get_buffer()
         s, e = buff.get_bounds()
         buff.delete(s,e)
         self.Hide()
 
 
-    def SetErrorLog(self):
-        exctype, value, tb = sys.exc_info()
+    def SetErrorLog(self, exccls, excobj, tb):
         buff = self.tviewErrorLog.get_buffer()
         tag_tab = buff.get_tag_table()
         iter = buff.get_end_iter()
@@ -154,6 +181,11 @@ class CfrmException(CWindow):
             buff.create_tag("mono", family="monospace")
 
         for filename, line_num, fun_name, text in traceback.extract_tb(tb)[1:]:
+            filename = os.path.abspath(filename).replace(os.path.sep, "/")
+            for dir in self.__modPaths:
+                if filename.startswith(dir):
+                    filename = filename[len(dir)+1:]
+                    break
             buff.insert_with_tags_by_name(iter, 'File ', "bold")
             buff.insert_with_tags_by_name(iter, filename,      "mono")
             buff.insert_with_tags_by_name(iter, ' line ',   "bold")
@@ -161,33 +193,5 @@ class CfrmException(CWindow):
             buff.insert_with_tags_by_name(iter, ' in ',     "bold")
             buff.insert_with_tags_by_name(iter, (fun_name or "") + '\n  ' + (text or "") + '\n\n', "mono")
         #name and error
-        buff.insert_with_tags_by_name(iter, exctype.__name__  + ': ', "bold")
-        buff.insert_with_tags_by_name(iter, str(value), "mono")
-
-
-    def SetSystemInfo(self):
-        buff = self.tviewSysInfo.get_buffer()  
-        tag_tab = buff.get_tag_table()
-
-        if tag_tab.lookup("bold") is None:
-            buff.create_tag("bold", weight=pango.WEIGHT_BOLD, family="monospace")
-        if tag_tab.lookup("mono") is None:
-            buff.create_tag("mono", family="monospace")
- 
-        iter = buff.get_iter_at_offset(0)
-        buff.insert_with_tags_by_name(iter, "\n%s:\t\t"%_("machine"), "bold")
-        buff.insert_with_tags_by_name(iter, platform.machine(), "mono")
-        buff.insert_with_tags_by_name(iter, "\n%s:\t\t"%_("architecture"), "bold")
-        buff.insert_with_tags_by_name(iter, platform.architecture()[0], "mono")
-        ver =  str(platform.python_version_tuple()[0]) +'.'+ str(platform.python_version_tuple()[1])+'.'+ str(platform.python_version_tuple()[2])
-        buff.insert_with_tags_by_name(iter, "\n%s:\t\t"%_("python version"), "bold")
-        buff.insert_with_tags_by_name(iter, ver, "mono")
-        ver =  str(gtk.gtk_version[0])+'.'+ str(gtk.gtk_version[1])+'.'+ str(gtk.gtk_version[2])
-        buff.insert_with_tags_by_name(iter, "\n%s:\t\t"%_("gtk version"), "bold")
-        buff.insert_with_tags_by_name(iter, ver, "mono")
-        ver =  str(gtk.pygtk_version[0])+'.'+ str(gtk.pygtk_version[1])+'.' + str(gtk.pygtk_version[2])
-        buff.insert_with_tags_by_name(iter, "\n%s:\t\t"%_("pygtk version"), "bold")
-        buff.insert_with_tags_by_name(iter, ver, "mono")
-        buff.insert_with_tags_by_name(iter, "\n%s:\t\t"%_("platform"), "bold")
-        buff.insert_with_tags_by_name(iter, platform.platform(), "mono")
-
+        buff.insert_with_tags_by_name(iter, exccls.__name__  + ': ', "bold")
+        buff.insert_with_tags_by_name(iter, str(excobj), "mono")

@@ -1,6 +1,7 @@
 from lib.Exceptions.UserException import *
 import weakref
 from lib.Domains import CDomainObject
+from lib.consts import DEFAULT_IDENTITY
 
 class CElementObject(object):
     """
@@ -20,8 +21,8 @@ class CElementObject(object):
         self.connections = []
         self.node = lambda: None
         self.appears = []
-        if self.domainobject.GetType().HasAttribute('name'):
-            self.domainobject.SetValue('name',self.type.GenerateName())
+        if self.type.GetIdentity() is None or self.domainobject.GetType().HasAttribute(self.type.GetIdentity()):
+            self.domainobject.SetValue(self.type.GetIdentity() or DEFAULT_IDENTITY, self.type.GenerateName() or DEFAULT_IDENTITY)
     
     def GetRevision(self):
         """
@@ -146,7 +147,7 @@ class CElementObject(object):
         return self.domainobject.SetSaveInfo(value)
         
     def GetName(self):
-        return self.domainobject.GetValue('name')
+        return self.domainobject.GetValue(self.type.GetIdentity() or DEFAULT_IDENTITY)
     
     def GetVisualProperty(self, key):
         if key == 'CHILDREN':

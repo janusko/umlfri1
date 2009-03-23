@@ -1,9 +1,8 @@
 from lib.Depend.gtk2 import gobject
 
-import lib.consts
-import lib.debug
-from lib.Exceptions import UserException
-from lib.Gui.showExceptions import displayTraceback, displayUsrExc
+import sys
+
+
 def event(obj, *args):
     """
         event(obj, event)
@@ -18,28 +17,14 @@ def event(obj, *args):
             event = None
             params = args
         if not hasattr(fnc, 'events'):
-
             def tmp2(self, *args, **kw_args):
-                if lib.consts.DEBUG == True:
-                    try:
-                        return fnc(self, *args, **kw_args)
-                    except Exception, e:
-                        if lib.consts.ERROR_TO_CONSOLE == True:
-                            raise # reraise the exception
-                        else: 
-                            displayTraceback(self.application)
-                        
-                else:
-                    try:
-                        return fnc(self, *args, **kw_args)
-                    except UserException:
-                        displayUsrExc()
-                    except:
-                        displayTraceback(self.application)
+                try:
+                    return fnc(self, *args, **kw_args)
+                except Exception, e:
+                    exccls, excobj, tb = sys.exc_info()
+                    self.application.DisplayException(exccls, excobj, tb)
 
             fncx = tmp2
-            #else:
-                #fncx = fnc
             fncx.events = []
         else:
             fncx = fnc

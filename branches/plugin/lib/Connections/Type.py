@@ -7,7 +7,7 @@ class CConnectionType(object):
     """
     Contains part of metamodel that represents connection type
     """
-    def __init__(self, id, line = None, scrArrow = None, destArrow = None, icon = None, domain = None):
+    def __init__(self, id, line = None, scrArrow = None, destArrow = None, icon = None, domain = None, identity = None):
         """
         Initialize connection type and fill its properties
         
@@ -25,6 +25,9 @@ class CConnectionType(object):
         
         @param icon: path to connection icon within metamodel storage
         @type  icon: string
+        
+        @param identity: Name of property acting as unique identifier of connection
+        @type  identity: string
         """
         self.line = line
         self.scrArrow = scrArrow
@@ -33,6 +36,7 @@ class CConnectionType(object):
         self.icon = icon
         self.labels = []
         self.domain = domain
+        self.identity = identity
     
     def GetDomain(self):
         '''
@@ -49,6 +53,24 @@ class CConnectionType(object):
         @type domain: L{CDomainType<lib.Domain.Type.CDomainType>}
         '''
         self.domain = domain
+    
+    def GetConnectionIdentity(self):
+        '''
+        Determine connection identity
+        
+        @return: Name of property acting as unique identifier of connection
+        @rtype: L{CDomainType<lib.Domain.Type.CDomainType>}
+        '''
+        return self.identity
+    
+    def SetDomain(self, identity):
+        '''
+        Change identity of connection
+        
+        @param identity: Name of property acting as unique identifier of connection
+        @type identity: string
+        '''
+        self.identity = identity
     
     def SetIcon(self, value):
         """

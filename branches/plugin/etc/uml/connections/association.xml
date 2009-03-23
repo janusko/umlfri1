@@ -3,7 +3,7 @@
     <Icon path="icons/associate.png" />
     <SrcArrow possible="1" default="0" />
     <DestArrow possible="1" default="0" />
-    <Domain id="association" />
+    <Domain id="association" identity="name" />
     <Appearance>
         <LineStyle style="solid" color="/Styles/Connection/LineColor" />
         <ArrowStyle style="simple" fill="/Styles/Connection/ArrowFillColor" color="/Styles/Connection/ArrowColor" />

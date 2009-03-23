@@ -1,0 +1,27 @@
+import re
+
+IDENTIFIER = 'UML.FRI'
+FIRST_LINE_PLUGIN = re.compile(r'(?P<command>\w+) +(?P<type>[\w:.]+) +%s/(?P<version>\d+\.\d+)\r?$' % IDENTIFIER)
+FIRST_LINE_MAIN = re.compile(r'%s/(?P<version>\d+\.\d+) +(?P<code>\d{3})( (?P<text>[ \w]+))?\r?$' % IDENTIFIER)
+PARAM_LINE = re.compile(r'(?P<key>[A-Za-z_]\w*): *(?P<value>[^\r\n]+)\r?$')
+EMPTY_LINE = re.compile(r'(\r|\n|\r\n)$')
+
+RESP_NOTIFY = 100
+
+RESP_OK = 200
+RESP_GUI_ADDED = 201
+RESP_GUI_SENSITIVE = 202
+RESP_GUI_INSENSITIVE = 203
+RESP_GUI_ACTIVATED = 204
+
+RESP_UNKONWN_COMMAND = 400
+RESP_UNSUPPORTED_VERSION = 401
+RESP_INVALID_COMMAND_TYPE = 402
+RESP_MISSING_PARAMETER = 403
+RESP_INVALID_PARAMETER = 404
+RESP_ID_ALREADY_USED = 406
+RESP_UNKNOWN_ID = 407
+RESP_UNKNOWN_METHOD = 408
+RESP_NOT_A_STATIC_METHOD = 410
+
+RESP_UNHANDELED_EXCEPTION = 500

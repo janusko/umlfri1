@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ElementType id="VerticalSynchronization" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
     <Icon path="icons/vertical_line.png" />
-    <Domain id="synchronization" />
+    <Domain id="synchronization" identity="name" />
     <Connections>
         <Item value="StateTransition" />
         <Item value="ActivityFlow"/>

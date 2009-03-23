@@ -25,3 +25,12 @@ class DomainObjectError(DevException):
 
 class DomainParserError(DevException):
     pass
+
+class PluginCommunicationError(DevException):
+    pass
+
+class ParamValueError(PluginCommunicationError):
+    pass
+
+class ParamMissingError(PluginCommunicationError):
+    pass

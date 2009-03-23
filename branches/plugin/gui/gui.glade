@@ -1152,6 +1152,55 @@
                   </packing>
                 </child>
                 <child>
+                  <widget class="GtkVBox" id="vbox110">
+                    <property name="visible">True</property>
+                    <child>
+                      <widget class="GtkLabel" id="lblAboutSysInformation">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Basic information about Your system</property>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkScrolledWindow" id="scrollwinAboutSysInfo">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+                        <child>
+                          <widget class="GtkTextView" id="tviewAboutSysInfo">
+                            <property name="height_request">200</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="editable">False</property>
+                            <property name="cursor_visible">False</property>
+                          </widget>
+                        </child>
+                      </widget>
+                      <packing>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="lblAboutSysInf">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">System _info</property>
+                    <property name="use_underline">True</property>
+                  </widget>
+                  <packing>
+                    <property name="type">tab</property>
+                    <property name="position">1</property>
+                    <property name="tab_fill">False</property>
+                  </packing>
+                </child>
+                <child>
                   <widget class="GtkVBox" id="vbox15">
                     <property name="visible">True</property>
                     <child>
