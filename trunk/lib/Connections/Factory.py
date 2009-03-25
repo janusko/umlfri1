@@ -49,6 +49,8 @@ class CConnectionFactory(object):
         @return: Connection type of given name
         @rtype:  L{CConnectionType<Type.CConnectionType>}
         """
+        if not type in self.types:
+            raise FactoryError('unrecognized connectionType name "%s"' % type)
         return self.types[type]
     
     def IterTypes(self):
