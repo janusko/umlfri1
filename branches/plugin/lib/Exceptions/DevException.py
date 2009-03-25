@@ -14,7 +14,7 @@ class FactoryError(DevException):
 class ConfigError(DevException):
     pass
 
-class DomainFactoryError(DevException):
+class DomainFactoryError(FactoryError):
     pass
     
 class DomainTypeError(DevException):

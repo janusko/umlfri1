@@ -1,9 +1,8 @@
-from AcceptServer import CAcceptServer
-from SocketWrapper import CSocketWrapper
+from Communication.AcceptServer import CAcceptServer
+from Communication.SocketWrapper import CSocketWrapper
 from Proxy import CProxy
 from lib.consts import *
 from GuiManager import CGuiManager
-from ComSpec import *
 import thread
 
 class CPluginManager(object):
@@ -18,7 +17,7 @@ class CPluginManager(object):
         self.connection = {}
         self.app = app
         self.guimanager = CGuiManager(app)
-        self.proxy = CProxy(self)
+        self.proxy = CProxy(self, app)
         self.acceptserver = CAcceptServer(('localhost', PLUGIN_SOCKET), self.NewConnection)
         self.acceptserver.Start()
     

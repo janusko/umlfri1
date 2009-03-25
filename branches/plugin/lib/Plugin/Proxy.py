@@ -1,13 +1,14 @@
 import thread, time, sys, socket, re
 from interface import interface
 from lib.Depend.gtk2 import gtk
-from ComSpec import *
+from Communication.ComSpec import *
 from lib.Exceptions import *
 
 class CProxy(object):
     
-    def __init__(self, manager):
+    def __init__(self, manager, app):
         self.manager = manager
+        self.app = app
         self.guimanager = manager.GetGuiManager()
     
     def Error(self, addr):
@@ -26,17 +27,81 @@ class CProxy(object):
                 
                 if com == 'gui':
                     self._gui(command['type'].lower(), params, addr)
+                
+                elif com == 'metamodel':
+                    self._metamodel(command['type'].lower(), params, addr)
                     
                 else:
                     self.manager.Send(addr, RESP_UNKONWN_COMMAND, command = com)
             
             except (ParamValueError, ), e:
-                self.manager.Send(addr, RESP_INVALID_PARAMETER, **dict((i, params[i])for i in e))
+                self.manager.Send(addr, RESP_INVALID_PARAMETER, params = [i for i in e])
             except (ParamMissingError, ), e:
-                self.manager.Send(addr, RESP_MISSING_PARAMETER, param = e.args[0])
+                self.manager.Send(addr, RESP_MISSING_PARAMETER, param = e[0])
         
         else:
             self.manager.Send(addr, RESP_UNSUPPORTED_VERSION, version = command['version'])
+    
+    def _metamodel(self, com, params, addr):
+        try:
+            ctype = com.split('.', 1)
+            assert (len(ctype) == 2 and ctype[0] in ('list', 'detail') and 
+                ctype[1] in ('metamodel', 'element', 'diagram', 'connection', 'domain'))
+            
+            if self.app.GetProject() is not None:
+                metamodel = self.app.GetProject().GetMetamodel()
+            else:
+                self.manager.Send(addr, RESP_PROJECT_NOT_LOADED)
+                return
+            
+            
+            if ctype[0] == 'list':
+                assert ctype[1] != 'metamodel'
+                if ctype[1] == 'diagram':
+                    result = list(metamodel.GetDiagrams())
+                elif ctype[1] == 'element':
+                    result = [e.GetId() for e in metamodel.GetElementFactory().IterTypes()]
+                elif ctype[1] == 'connection':
+                    result = [c.GetId() for c in metamodel.GetConnectionFactory().IterTypes()]
+                elif ctype[1] == 'domain':
+                    result = [d.GetName() for d in metamodel.GetDomainFactory().IterTypes()]
+                self.manager.Send(addr, RESP_METAMODEL_DESCRIPTION, type = com, result = result)
+            
+            if ctype[0] == 'detail':
+                if ctype[1] == 'metamodel':
+                    result = {'uri': metamodel.GetUri(), 'version': metamodel.GetVersion()}
+                    name = 'metamodel'
+                else:
+                    if 'name' in params:
+                        name = params['name']
+                    else:
+                        raise ParamMissingError('name')
+                    if ctype[1] == 'diagram':
+                        diagram = metamodel.GetDiagramFactory().GetDiagram(name)
+                        result = {'connection': list(diagram.GetConnections()),
+                                  'element': list( diagram.GetElements())}
+                    if ctype[1] == 'element':
+                        element = metamodel.GetElementFactory().GetElement(name)
+                        result = {'connection': list(element.GetConnections()),
+                                  'domain':     element.GetDomain().GetName(),
+                                  'identity':   element.GetIdentity(),
+                                  'options':    element.GetOptions(),
+                                  'resizable':  element.GetResizable()}
+                    if ctype[1] == 'connection':
+                        connection = metamodel.GetConnectionFactory().GetConnection(name)
+                        result = {'domain':   connection.GetDomain().GetName(),
+                                  'identity': connection.GetConnectionIdentity()}
+                    if ctype[1] == 'domain':
+                        domain = metamodel.GetDomainFactory().GetDomain(name)
+                        result = {'attributes': [dict(id = attr, **domain.GetAttribute(attr)) for attr in domain.IterAttributeIDs()],
+                                  'parsers':  list(domain.IterParsers()),}
+                self.manager.Send(addr, RESP_METAMODEL_DESCRIPTION, type = com, result = result, name = name)
+        
+        except (AssertionError, ), e:
+            self.manager.Send(addr, RESP_INVALID_COMMAND_TYPE, command = 'metamodel', type = com)
+        
+        except (FactoryError, ), e:
+            raise ParamValueError('name')
     
     def _gui(self, ctype, params, addr):
         try:
@@ -52,7 +117,7 @@ class CProxy(object):
                 self.manager.Send(addr, RESP_GUI_INSENSITIVE, path = params['path'])
                 
             else:
-                self.manager.Send(addr, RESP_INVALID_COMMAND_TYPE, command = com, type = ctype)
+                self.manager.Send(addr, RESP_INVALID_COMMAND_TYPE, command = 'gui', type = ctype)
             
         except (KeyError, ), e:
             raise ParamMissingError(e.message)
@@ -96,7 +161,7 @@ class CProxy(object):
             self.manager.Send(addr, RESP_GUI_ADDED, type = mtype, fullname = params['path'])
         
         else:
-            raise ParamValueError(params['type'])
+            raise ParamValueError('type')
     
     def _guiactivated(self, item, path, addr):
         print 'GuiActivated', path, addr
