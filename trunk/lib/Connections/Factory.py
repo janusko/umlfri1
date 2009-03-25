@@ -50,7 +50,16 @@ class CConnectionFactory(object):
         @rtype:  L{CConnectionType<Type.CConnectionType>}
         """
         return self.types[type]
-
+    
+    def IterTypes(self):
+        '''
+        iterator over connection types
+        
+        @rtype: L{CConnectionType<CConnectionType>}
+        '''
+        for type in self.types.itervalues():
+            yield type
+            
     def __Load(self, file_path):
         """
         Load an XMLs from given path
