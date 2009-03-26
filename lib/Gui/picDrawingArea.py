@@ -21,6 +21,7 @@ targets = [('document/uml', 0, gtk.TARGET_SAME_WIDGET)]
 
 PAGE_SIZE=(config["/Page/Width"],config["/Page/Height"])
 
+class Record(object): pass
 
 class CpicDrawingArea(CWidget):
     name = 'picDrawingArea'
@@ -54,6 +55,7 @@ class CpicDrawingArea(CWidget):
         self.paintChanged = False
         self.canvas = None
         CWidget.__init__(self, app, wTree)
+        self.keydragPosition = None
 
         self.__invalidated = False
         self.__NewConnection = None
@@ -314,7 +316,7 @@ class CpicDrawingArea(CWidget):
                 return True
             
             itemSel = self.Diagram.GetElementAtPosition(self.canvas, pos)
-            if itemSel is not None: #ak som nieco trafil:              
+            if itemSel is not None: #ak som nieco trafil:
                 if itemSel in self.Diagram.GetSelected(): # deselecting:
                     if (event.state & gtk.gdk.CONTROL_MASK) or (event.state & gtk.gdk.SHIFT_MASK):
                         self.Diagram.RemoveFromSelection(itemSel)
@@ -488,7 +490,8 @@ class CpicDrawingArea(CWidget):
     
     @event("picEventBox", "key-press-event")
     def on_key_press_event(self, widget, event):
-        if event.keyval in self.pressedKeys:
+        if (event.keyval in self.pressedKeys and
+            event.keyval not in (gtk.keysyms.Right, gtk.keysyms.Left, gtk.keysyms.Up, gtk.keysyms.Down)):
             return True
         self.pressedKeys.add(event.keyval)
         if event.keyval == gtk.keysyms.Delete:
@@ -510,34 +513,26 @@ class CpicDrawingArea(CWidget):
         elif event.keyval == gtk.keysyms.space:
             self.__SetCursor('grab')
         
-        elif event.keyval == gtk.keysyms.Right:
-            self.Diagram.MoveSelection((10,0))
-            # this looks kinda complicated, so short:
-            # if the maximal x value of the selection(+ selection size) is bigger
-            # then scrollbar x position and window x size - the moving selection
-            # is "out of sight" move the selection "in the middle" of the window
-            if self.GetRelativePos(self.Diagram.GetSelectSquare(self.canvas)[0])[0]+self.Diagram.GetSelectSquare(self.canvas)[1][0] > self.Diagram.GetHScrollingPos()+self.GetWindowSize()[0] :
-                self.picHBar.set_value(self.scale*(self.Diagram.GetSelectSquare(self.canvas)[0][0]-(self.GetWindowSize()[0]//2)))
-            self.ToPaint()
-            self.picEventBox.emit("key-release-event", event)
-        elif event.keyval == gtk.keysyms.Left:
-            self.Diagram.MoveSelection((-10,0))
-            if self.GetRelativePos(self.Diagram.GetSelectSquare(self.canvas)[0])[0] < self.Diagram.GetHScrollingPos():
-                self.picHBar.set_value(self.scale*(self.Diagram.GetSelectSquare(self.canvas)[0][0]-(self.GetWindowSize()[0]//2)))
-            self.ToPaint()
-            self.picEventBox.emit("key-release-event", event)
-        elif event.keyval == gtk.keysyms.Up:
-            self.Diagram.MoveSelection((0,-10))
-            if self.GetRelativePos(self.Diagram.GetSelectSquare(self.canvas)[0])[1] < self.Diagram.GetVScrollingPos():
-                self.picVBar.set_value(self.scale*(self.Diagram.GetSelectSquare(self.canvas)[0][1]-(self.GetWindowSize()[1]//2)))
-            self.ToPaint()
-            self.picEventBox.emit("key-release-event", event)
-        elif event.keyval == gtk.keysyms.Down:
-            self.Diagram.MoveSelection((0,10))
-            if self.GetRelativePos(self.Diagram.GetSelectSquare(self.canvas)[0])[1]+self.Diagram.GetSelectSquare(self.canvas)[1][1] > self.Diagram.GetVScrollingPos()+self.GetWindowSize()[1]:
-                self.picVBar.set_value(self.scale*(self.Diagram.GetSelectSquare(self.canvas)[0][1]-(self.GetWindowSize()[1]//2)))
-            self.ToPaint()  
-            self.picEventBox.emit("key-release-event", event)
+        elif event.keyval in (gtk.keysyms.Right, gtk.keysyms.Left, gtk.keysyms.Up, gtk.keysyms.Down):
+            selected = list(self.Diagram.GetSelectedElements())
+            if selected:
+                if self.dnd is None: #Zacinam posuvat
+                    self.keydragPosition = list(selected[0].GetCenter(self.canvas))
+                    e = Record()
+                    e.x, e.y = self.keydragPosition
+                    self.__BeginDragRect(e)
+                if self.dnd == 'rect':
+                    if self.keydragPosition is None:
+                        self.keydragPosition = list(selected[0].GetCenter(self.canvas))
+                    if gtk.keysyms.Right in self.pressedKeys:
+                        self.keydragPosition[0] += 10
+                    if gtk.keysyms.Left in self.pressedKeys:
+                        self.keydragPosition[0] -= 10
+                    if gtk.keysyms.Up in self.pressedKeys:
+                        self.keydragPosition[1] -= 10
+                    if gtk.keysyms.Down in self.pressedKeys:
+                        self.keydragPosition[1] += 10
+                    self.__DrawDragRect(self.keydragPosition)
         return True
     
     @event("picEventBox", "key-release-event")
@@ -545,13 +540,26 @@ class CpicDrawingArea(CWidget):
         if gtk.keysyms.space in self.pressedKeys:
             if self.dnd != 'move':
                 self.__SetCursor(None)
+        
         self.pressedKeys.discard(event.keyval)
+        
+        if (event.keyval in (gtk.keysyms.Right, gtk.keysyms.Left, gtk.keysyms.Up, gtk.keysyms.Down) 
+            and set() == self.pressedKeys.intersection(set([gtk.keysyms.Right, gtk.keysyms.Left, gtk.keysyms.Up, gtk.keysyms.Down]))
+            and self.dnd == 'rect'):
+            
+            delta = self.__GetDelta(self.keydragPosition)
+            self.keydragPosition = None
+            self.Diagram.MoveSelection(delta, self.canvas)
+            self.dnd = None
+            self.Paint()
+            
+            
 
     @event("picEventBox", "motion-notify-event")
     def on_motion_notify_event(self, widget, event):
         if self.dnd == 'resize':
             self.__DrawResRect((event.x, event.y), True, True)    
-        elif self.dnd == 'rect':
+        elif self.dnd == 'rect' and self.keydragPosition is None:
             self.__DrawDragRect((event.x, event.y))
         elif self.dnd == 'point':
             self.__DrawDragPoint((event.x, event.y))

@@ -155,7 +155,8 @@ class CDiagram:
     
     def MoveSelection(self, delta, canvas = None):
         self.size = None
-        deltax, deltay = delta
+        deltax = max(delta[0], -min(el.GetSquare(canvas)[0][0] for el in self.GetSelectedElements()))
+        deltay = max(delta[1], -min(el.GetSquare(canvas)[0][1] for el in self.GetSelectedElements()))
         movedCon = set()
         elements = set()
         if canvas is not None:
@@ -170,16 +171,13 @@ class CDiagram:
         elements |= set(self.GetSelectedElements())
         for el in elements:
             x, y = el.GetPosition(canvas)
-            #range check
-            if ((x + deltax) > 0 and (y + deltay) > 0):
-                el.SetPosition((x + deltax, y + deltay), canvas)
-                              
-                if not isinstance(el, ConLabelInfo.CConLabelInfo):
-                    for con in el.GetConnections():
-                        if (con.GetSource() in elements) and (con.GetDestination() in elements):
-                            if con not in movedCon:
-                                con.MoveAll(delta, canvas)
-                                movedCon.add(con)
+            el.SetPosition((x + deltax, y + deltay), canvas)
+            if not isinstance(el, ConLabelInfo.CConLabelInfo):
+                for con in el.GetConnections():
+                    if (con.GetSource() in elements) and (con.GetDestination() in elements):
+                        if con not in movedCon:
+                            con.MoveAll(delta, canvas)
+                            movedCon.add(con)
         if canvas is not None:
             for conn in self.connections:
                 conn.ValidatePoints(canvas)
