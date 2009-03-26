@@ -732,6 +732,9 @@ class CpicDrawingArea(CWidget):
             x, y = self.__oldPoints2
         connection, index = self.DragPoint
         prev, next = connection.GetNeighbours(index, self.canvas)
+        abspos = self.GetAbsolutePos((x, y))
+        x, y = max(abspos[0], 0), max(abspos[1], 0)
+        x, y = self.GetRelativePos((x, y))
         points = [self.GetRelativePos(prev), (int(x), int(y)), self.GetRelativePos(next)]
         if erase:
             self.picDrawingArea.window.draw_lines(self.DragGC, self.__oldPoints)
@@ -743,6 +746,9 @@ class CpicDrawingArea(CWidget):
     def __DrawDragLine(self, x, y, erase = True, draw = True):
         if x is None:
             x, y = self.__oldPoints2
+        abspos = self.GetAbsolutePos((x, y))
+        x, y = max(abspos[0], 0), max(abspos[1], 0)
+        x, y = self.GetRelativePos((x, y))
         connection, index = self.DragPoint
         all = tuple(connection.GetPoints(self.canvas))
         prev, next = all[index], all[index + 1]
