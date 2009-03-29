@@ -291,7 +291,8 @@ class CpicDrawingArea(CWidget):
         for item in self.pMenuShift.get_children():
             item.set_sensitive(element)
         self.mnuCtxPaste.set_sensitive(diagram and not self.application.GetClipboard().IsEmpty())
-        self.pmOpenSpecification.set_sensitive(element)
+        selection = list(self.Diagram.GetSelected())
+        self.pmOpenSpecification.set_sensitive(len(selection) == 1 and isinstance(selection[0], CElement))
     
     @event("picEventBox", "button-press-event")
     def on_picEventBox_button_press_event(self, widget, event):
@@ -304,7 +305,7 @@ class CpicDrawingArea(CWidget):
             if len(tuple(self.Diagram.GetSelected())) == 1:
                 for Element in self.Diagram.GetSelected():
                     if isinstance(Element, CElement):
-                        #self.emit('open-specification',Element)
+                        self.emit('open-specification',Element)
                         return True
         
         if event.button == 1:

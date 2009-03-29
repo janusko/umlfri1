@@ -30,7 +30,7 @@ class CfrmProperties(CWindow):
         else:
             self.__connections.remove(con)
     
-    def ShowProperties(self, what, elementObject):
+    def ShowProperties(self, what, elementObject, picDrawingArea):
         self.__saved = False
         if isinstance(elementObject, CElement):
             isElement = True
@@ -61,8 +61,9 @@ class CfrmProperties(CWindow):
         
         response = self.form.run()
         while response == gtk.RESPONSE_APPLY:
-            response = self.form.run()
             self.__Save()
+            picDrawingArea.Paint()
+            response = self.form.run()
         if response == gtk.RESPONSE_OK:
             self.__Save()
         self.Hide()

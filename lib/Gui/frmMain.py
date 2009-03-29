@@ -592,7 +592,7 @@ class CfrmMain(CWindow):
     def on_show_open_specification(self, widget, Element):
         tmp = self.application.GetWindow('frmProperties')
         tmp.SetParent(self.application.GetWindow('frmMain'))
-        tmp.ShowProperties('',Element)
+        tmp.ShowProperties('', Element, self.picDrawingArea)
         self.picDrawingArea.Paint()
     
     #Z-Order 
