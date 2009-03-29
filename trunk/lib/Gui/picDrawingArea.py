@@ -290,9 +290,18 @@ class CpicDrawingArea(CWidget):
         self.pmShowInProjectView.set_sensitive(element)
         for item in self.pMenuShift.get_children():
             item.set_sensitive(element)
-        self.mnuCtxPaste.set_sensitive(diagram and not self.application.GetClipboard().IsEmpty())
+            
+        self.mnuCtxPaste.set_sensitive(
+            diagram and not self.application.GetClipboard().IsEmpty() and
+            not bool(set(i.GetObject() for i in self.Diagram.GetElements()).intersection(set(i.GetObject() for i in self.application.GetClipboard().GetContent())))
+        )
         selection = list(self.Diagram.GetSelected())
         self.pmOpenSpecification.set_sensitive(len(selection) == 1 and isinstance(selection[0], CElement))
+        if (self.application.GetProject() is not None and 
+            self.Diagram is not None and
+            self.application.GetProject().GetRoot().GetObject() in (
+                [item.GetObject() for item in self.Diagram.GetSelectedElements()])):
+            self.mnuCtxShiftDelete.set_sensitive(False)
     
     @event("picEventBox", "button-press-event")
     def on_picEventBox_button_press_event(self, widget, event):
@@ -381,6 +390,7 @@ class CpicDrawingArea(CWidget):
             self.Paint()
             self.emit('selected-item', list(self.Diagram.GetSelected()))
             #if something is selected:
+            self.UpdateMenuSensitivity(bool(self.application.GetProject()), bool(self.Diagram), int(len(list(self.Diagram.GetSelected())) > 0))
             self.pMenuShift.popup(None,None,None,event.button,event.time)
             return True
 
