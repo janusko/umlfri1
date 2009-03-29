@@ -291,6 +291,7 @@ class CpicDrawingArea(CWidget):
         for item in self.pMenuShift.get_children():
             item.set_sensitive(element)
         self.mnuCtxPaste.set_sensitive(diagram and not self.application.GetClipboard().IsEmpty())
+        self.pmOpenSpecification.set_sensitive(element)
     
     @event("picEventBox", "button-press-event")
     def on_picEventBox_button_press_event(self, widget, event):
