@@ -30,6 +30,8 @@ class CfrmSave(common.CWindow):
         filter.set_name(_("All files"))
         filter.add_pattern("*")
         self.form.add_filter(filter)
+
+        self.zippedFileExtensions = [_("UML .FRI Projects"), _("UML .FRI Project templates")]
     
     def ShowDialog(self, parent):
         self.form.set_transient_for(parent.form)
@@ -37,7 +39,7 @@ class CfrmSave(common.CWindow):
             while True:
                 if self.form.run() == gtk.RESPONSE_CANCEL:
                     self.form.hide()
-                    return None
+                    return None, None
                 filter = self.form.get_filter().get_name()
                 filename = self.form.get_filename()
                 if filename is None:
@@ -48,12 +50,16 @@ class CfrmSave(common.CWindow):
                 if '.' not in os.path.basename(filename):
                     if filter == _("UML .FRI Projects"):
                         filename += lib.consts.PROJECT_EXTENSION
+                        #isZippedFile = True
                     elif filter == _("UML .FRI Clear XML Projects"):
                         filename += lib.consts.PROJECT_CLEARXML_EXTENSION
+                        #isZippedFile = False
                     elif filter == _("UML .FRI Project templates"):
                         filename += lib.consts.PROJECT_TPL_EXTENSION
+                        #isZippedFile = True
+                isZippedFile = filter in self.zippedFileExtensions
                 if not os.path.isdir(filename):
                     self.application.GetRecentFiles().AddFile(filename)
-                    return filename
+                    return filename, isZippedFile
         finally:
             self.form.hide()
