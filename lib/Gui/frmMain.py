@@ -392,9 +392,9 @@ class CfrmMain(CWindow):
 
     @event("mnuSaveAs", "activate")
     def ActionSaveAs(self, widget):
-        filename = self.application.GetWindow("frmSave").ShowDialog(self)
+        filename, isZippedFile = self.application.GetWindow("frmSave").ShowDialog(self)
         if filename is not None:
-            self.application.GetProject().SaveProject(filename)
+            self.application.GetProject().SaveProject(filename, isZippedFile)
             self.ReloadTitle()
 
     @event("mnuDelete","activate")
