@@ -13,7 +13,7 @@
                 <HBox>
                     <Padding padding="5">
                         <HBox>
-                            <Condition condition="#stereotype" type="empty" negate="1">
+                            <Condition condition="#stereotype">
                                 <Align align="center">
                                     <VBox>
                                         <TextBox text="&#171;" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
@@ -30,13 +30,13 @@
                             </Align>
                         </HBox>
                     </Padding>
-                    <Condition condition="#attributes" type="empty" negate="1">
+                    <Condition condition="#attributes">
                         <HBox>
                             <Line type="horizontal" color="#cfg.Styles.Element.LineColor"/>
                             <Padding padding="5">
                                 <HBox>
                                     <Loop collection="attributes">
-                                        <Condition type="empty" condition="#name" negate="1">
+                                        <Condition condition="#name">
                                             <VBox>
                                                 <Switch value="#scope">
                                                     <Case condition="Private">
@@ -49,7 +49,7 @@
                                                         <TextBox text=" + " font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
                                                     </Case>
                                                 </Switch>
-                                                <Condition type="empty" condition="#stereotype" negate="1">
+                                                <Condition condition="#stereotype">
                                                     <VBox>
                                                         <TextBox text="&#171;" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
                                                         <TextBox text="#stereotype" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
@@ -57,13 +57,13 @@
                                                     </VBox>
                                                 </Condition>
                                                 <TextBox text="#name" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
-                                                <Condition type="empty" condition="#type" negate="1">
+                                                <Condition condition="#type">
                                                     <VBox>
                                                         <TextBox text=" :" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
                                                         <TextBox text="#type" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
                                                     </VBox>
                                                 </Condition>
-                                                <Condition type="empty" condition="#default" negate="1">
+                                                <Condition condition="#default">
                                                     <VBox>
                                                         <TextBox text=" = " font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
                                                         <TextBox text="#default" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>

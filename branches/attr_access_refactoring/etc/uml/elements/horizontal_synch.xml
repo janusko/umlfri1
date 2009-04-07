@@ -11,7 +11,7 @@
             <Sizer minwidth="50" height="5">
                 <Rectangle fill="#cfg.Styles.Element.Fill3Color" border="#cfg.Styles.Element.LineColor"/>
             </Sizer>
-            <Condition condition="#self.name" type="empty" negate="1">
+            <Condition condition="#self.name">
                 <Padding padding="10">
                     <Align align="center center">
                         <TextBox text="#self.name" font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/>

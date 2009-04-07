@@ -33,6 +33,9 @@ class CCase(CSimpleContainer):
         return ret
 
 class CSwitch(CContainer):
+    types = {
+        'value': None # Type is not important
+    }
     def __init__(self, value):
         CContainer.__init__(self)
         self.value = value

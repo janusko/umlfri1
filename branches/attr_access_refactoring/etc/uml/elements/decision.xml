@@ -13,7 +13,7 @@
                     <Padding padding="12">
                         <Align align="center center">
                             <HBox>
-                                <Condition condition="#self.stereotype" type="empty" negate="1">
+                                <Condition condition="#self.stereotype">
                                     <VBox>
                                         <TextBox text="&#171;" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
                                         <TextBox text="#self.stereotype" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>

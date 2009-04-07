@@ -8,7 +8,7 @@
         <ArrowStyle style="simple" fill="#cfg.Styles.Connection.ArrowFillColor" color="#cfg.Styles.Connection.ArrowColor"/>
         <Label position="center">
             <HBox>
-                <Condition condition="#name" type="empty" negate="1">
+                <Condition condition="#name">
                     <Align align="center">
                         <Rectangle fill="#cfg.Styles.Connection.TextFill">
                             <TextBox text="#name" font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>

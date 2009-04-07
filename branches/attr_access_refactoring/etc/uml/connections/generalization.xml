@@ -8,9 +8,9 @@
         <LineStyle style="solid" color="#cfg.Styles.Connection.LineColor"/>
         <ArrowStyle style="triangle" fill="#cfg.Styles.Connection.ArrowFillColor" color="#cfg.Styles.Connection.ArrowColor"/>
         <Label position="center">
-            <Condition condition="#self.name" type="empty" negate="1">
+            <Condition condition="#self.name or self.stereotype">
                 <HBox>
-                    <Condition condition="#self.stereotype" type="empty" negate="1">
+                    <Condition condition="#self.stereotype">
                         <Align align="center">
                             <Rectangle fill="#cfg.Styles.Connection.TextFill">
                                 <VBox>
@@ -21,7 +21,7 @@
                             </Rectangle>
                         </Align>
                     </Condition>
-                    <Condition condition="#self.name" type="empty" negate="1">
+                    <Condition condition="#self.name">
                         <Align align="center">
                             <Rectangle fill="#cfg.Styles.Connection.TextFill">
                                 <TextBox text="#self.name" font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>

@@ -19,7 +19,7 @@
                 </Svg>
             </Align>
             <HBox>
-                <Condition condition="#self.stereotype" type="empty" negate="1">
+                <Condition condition="#self.stereotype">
                     <Align align="center">
                         <VBox>
                             <TextBox text="&#171;" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>

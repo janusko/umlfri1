@@ -8,7 +8,7 @@
         <ArrowStyle style="simple" fill="#cfg.Styles.Connection.ArrowFillColor" color="#cfg.Styles.Connection.ArrowColor"/>
         <Label position="center">
             <HBox>
-                <Condition condition="#stereotype" type="empty" negate="1">
+                <Condition condition="#stereotype">
                     <Align align="center">
                         <Rectangle fill="#cfg.Styles.Connection.TextFill">
                             <VBox>
@@ -19,7 +19,7 @@
                         </Rectangle>
                     </Align>
                 </Condition>
-                <Condition condition="#name" type="empty" negate="1">
+                <Condition condition="#name">
                     <Align align="center">
                         <Rectangle fill="#cfg.Styles.Connection.TextFill">
                             <HBox>
@@ -32,28 +32,28 @@
             </HBox>
         </Label>
         <Label position="source">
-            <Condition condition="#SCardinality" type="empty" negate="1">
+            <Condition condition="#SCardinality">
                 <Rectangle fill="#cfg.Styles.Connection.TextFill">
                     <TextBox text="#SCardinality" font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>
                 </Rectangle>
             </Condition>
         </Label>
         <Label position="destination">
-            <Condition condition="#DCardinality" type="empty" negate="1">
+            <Condition condition="#DCardinality">
                 <Rectangle fill="#cfg.Styles.Connection.TextFill">
                     <TextBox text="#DCardinality" font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>
                 </Rectangle>
             </Condition>
         </Label>
         <Label position="source+1">
-            <Condition condition="#SRole" type="empty" negate="1">
+            <Condition condition="#SRole">
                 <Rectangle fill="#cfg.Styles.Connection.TextFill">
                     <TextBox text="#SRole" font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>
                 </Rectangle>
             </Condition>
         </Label>
         <Label position="destination+1">
-            <Condition condition="#DRole" type="empty" negate="1">
+            <Condition condition="#DRole">
                 <Rectangle fill="#cfg.Styles.Connection.TextFill">
                     <TextBox text="#DRole" font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>
                 </Rectangle>
