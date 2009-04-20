@@ -7,6 +7,7 @@ from lib.config import config
 from lib.consts import METAMODEL_NAMESPACE
 from lib.Drawing.Objects import ALL
 from Parser import CDomainParser
+from Joiner import CDomainJoiner
 from lib.Exceptions import DomainFactoryError
 from lib.Depend.etree import etree, HAVE_LXML
 
@@ -157,8 +158,9 @@ class CDomainFactory(object):
             
             elif node.tag == METAMODEL_NAMESPACE + 'Parse':
                 obj.AppendParser(CDomainParser(**dict(node.items())))
-            
-            
+            elif node.tag == METAMODEL_NAMESPACE + 'Join':
+                obj.AppendJoiner(CDomainJoiner(**dict(node.items())))                
+                
             else:
                 raise DomainFactoryError('Unknown Section "%s" in domain "%s"'%(name, section.tag, ))
             

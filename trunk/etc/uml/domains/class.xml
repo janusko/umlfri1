@@ -46,6 +46,7 @@
                         [ ]* (?P&lt;name&gt;[a-zA-Z_][a-zA-Z0-9_]*) 
                         [ ]* : [ ]* (?P&lt;type&gt; [a-zA-Z_][a-zA-Z0-9_]*) 
                         [ ]* ( = [ ]* (?P&lt;default&gt; .+? ) [ ]*$ )?" />
+                    <Join joiner="#scope #name : #type = #default"/>
                 </Domain>
             </Attribute>
             <Attribute id="stereotype" type="str" name="Stereotype" />
