@@ -28,6 +28,7 @@ class CDomainType(object):
         self.attributes = {}
         self.factory = factory
         self.parsers = []
+        self.joiners = []
         self.attributeorder = []
     
     def GetFactory(self):
@@ -138,6 +139,9 @@ class CDomainType(object):
         self.parsers.append(parser)
 
 
+    def AppendJoiner(self, joiner):
+        self.joiners.append(joiner)
+        
     def __InnerImportLoop(self, name):
         '''
         Inner recursive loop of self.HasImportLoop
@@ -243,6 +247,10 @@ class CDomainType(object):
         for parser in self.parsers:
             yield parser
     
+    def IterJoiners(self):
+        for joiner in self.joiners:
+            yield joiner
+            
     def GetName(self):
         '''
         @return: name of current domain
