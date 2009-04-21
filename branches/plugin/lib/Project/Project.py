@@ -3,7 +3,7 @@ from lib.Depend.etree import etree, HAVE_LXML
 from lib.lib import XMLEncode, IDGenerator, Indent
 from ProjectNode import CProjectNode
 from cStringIO import StringIO
-from zipfile import ZipFile, ZIP_STORED, ZIP_DEFLATED
+from zipfile import ZipFile, ZIP_STORED, ZIP_DEFLATED, is_zipfile
 from lib.Exceptions.UserException import *
 from lib.Exceptions.DevException import DomainObjectError
 from lib.Drawing import CElement
@@ -34,6 +34,7 @@ class CProject(object):
         self.defaultDiagram = None
         
         self.filename = None
+        self.isZippedFile = None
     
     def GetDefaultDiagrams(self):
         if self.defaultDiagram is not None:
@@ -121,13 +122,19 @@ class CProject(object):
         _search(node)
         return elements, connections
     
-    def SaveProject(self, filename = None):
+    def SaveProject(self, filename = None, isZippedFile = None):
         assert self.__metamodel is not None
         
         if filename is None:
             filename = self.filename
         else:
             self.filename = filename
+
+        if isZippedFile is None:
+            isZippedFile = self.isZippedFile
+        else:
+            self.isZippedFile = isZippedFile
+        print 'isZippedFile: ' + str(isZippedFile)
 
         id = IDGenerator()
         
@@ -259,28 +266,55 @@ class CProject(object):
         Indent(rootNode)
         
         #save Recent File Tree into ZIP file if it is .frip
-        if (("." + filename.rsplit('.',1)[-1]) != PROJECT_CLEARXML_EXTENSION):     #zipped
+
+#This part of code is commented out and substituted with code in lines 283-286 just during testing period
+#        if (("." + filename.rsplit('.',1)[-1]) != PROJECT_CLEARXML_EXTENSION):
+#            fZip = ZipFile(filename, 'w', ZIP_DEFLATED)
+#            fZip.writestr('content.xml', '<?xml version="1.0" encoding="utf-8"?>\n'+etree.tostring(rootNode, encoding='utf-8'))
+#            fZip.close()
+#        else:                                       #no zipped - clear xml file
+#            f = open(filename, 'w')
+#            f.write('<?xml version="1.0" encoding="utf-8"?>\n'+etree.tostring(rootNode, encoding='utf-8'))
+#            f.close()
+#Quoobik-debug info
+#        if ((filename.rsplit('.',1)[-1]) != PROJECT_CLEARXML_EXTENSION):
+#            raise ProjectError("Nespravny format otvaraneho suboru!")
+
+        if isZippedFile :
             fZip = ZipFile(filename, 'w', ZIP_DEFLATED)
             fZip.writestr('content.xml', '<?xml version="1.0" encoding="utf-8"?>\n'+etree.tostring(rootNode, encoding='utf-8'))
             fZip.close()
-        else:                                       #no zipped - clear xml file
+        else:
             f = open(filename, 'w')
             f.write('<?xml version="1.0" encoding="utf-8"?>\n'+etree.tostring(rootNode, encoding='utf-8'))
             f.close()
-    
+
     def LoadProject(self, filename, copy = False):
         ListObj = {}
         ListCon = {}
-        
-        ext = filename.split('.')
-        ext.reverse()
-        if (("."+ext[0]) != PROJECT_CLEARXML_EXTENSION):
+
+#This part of code is commented out and substituted with code in lines 283-286 just during testing period
+#        ext = filename.split('.')
+#        ext.reverse()
+#        if (("."+ext[0]) != PROJECT_CLEARXML_EXTENSION):
+#            file = ZipFile(filename,'r')
+#            data = file.read('content.xml')
+#        else:
+#            file = open(filename, 'r')
+#            data = file.read()
+#Quoobik-debug info
+#        if ((filename.rsplit('.',1)[-1]) != PROJECT_CLEARXML_EXTENSION):
+#            raise ProjectError("Nespravny format otvaraneho suboru!")
+
+        if is_zipfile(filename):
+            self.isZippedFile = True
             file = ZipFile(filename,'r')
             data = file.read('content.xml')
         else:
+            self.isZippedFile = False
             file = open(filename, 'r')
             data = file.read()
-        
+
         if copy:
             self.filename = None
         else:

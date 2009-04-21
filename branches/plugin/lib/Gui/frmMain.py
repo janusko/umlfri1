@@ -122,7 +122,9 @@ class CfrmMain(CWindow):
         self.cmdSave.set_sensitive(project)
         self.cmdCopy.set_sensitive(element)
         self.cmdCut.set_sensitive(element)
-        self.cmdPaste.set_sensitive(diagram and not self.application.GetClipboard().IsEmpty())
+        self.cmdPaste.set_sensitive(
+            diagram and not self.application.GetClipboard().IsEmpty() and
+            not bool(set(i.GetObject() for i in self.picDrawingArea.GetDiagram().GetElements()).intersection(set(i.GetObject() for i in self.application.GetClipboard().GetContent()))))
         self.cmdZoomIn.set_sensitive(diagram)
         self.cmdZoomOut.set_sensitive(diagram)
         self.mnuSave.set_sensitive(project)
@@ -390,9 +392,9 @@ class CfrmMain(CWindow):
 
     @event("mnuSaveAs", "activate")
     def ActionSaveAs(self, widget):
-        filename = self.application.GetWindow("frmSave").ShowDialog(self)
+        filename, isZippedFile = self.application.GetWindow("frmSave").ShowDialog(self)
         if filename is not None:
-            self.application.GetProject().SaveProject(filename)
+            self.application.GetProject().SaveProject(filename, isZippedFile)
             self.ReloadTitle()
 
     @event("mnuDelete","activate")
@@ -568,6 +570,7 @@ class CfrmMain(CWindow):
             diagram = self.picDrawingArea.GetDiagram()
             try:
                 Element = CElement(diagram, node.GetObject()).SetPosition(position)
+                self.UpdateMenuSensitivity()
             except UserException, e:
                 if e.GetName() == "ElementAlreadyExists":
                     return CWarningDialog(self.form, _('Unable to insert element')).run()
@@ -592,7 +595,7 @@ class CfrmMain(CWindow):
     def on_show_open_specification(self, widget, Element):
         tmp = self.application.GetWindow('frmProperties')
         tmp.SetParent(self.application.GetWindow('frmMain'))
-        tmp.ShowProperties('',Element)
+        tmp.ShowProperties('', Element, self.picDrawingArea)
         self.picDrawingArea.Paint()
     
     #Z-Order 

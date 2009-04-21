@@ -20,6 +20,7 @@ class CPluginManager(object):
         self.proxy = CProxy(self, app)
         self.acceptserver = CAcceptServer(('localhost', PLUGIN_SOCKET), self.NewConnection)
         self.acceptserver.Start()
+        print "PORT:", self.acceptserver.sock.getsockname()[1]
     
     def NewConnection(self, sock, addr):
         '''

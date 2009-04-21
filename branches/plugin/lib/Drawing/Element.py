@@ -2,9 +2,11 @@ from lib.config import config
 from Connection import CConnection
 from DrawingContext import CDrawingContext
 from VisibleObject import CVisibleObject
+from lib.Plugin import Reference
 
-class CElement(CVisibleObject):
+class CElement(CVisibleObject, Reference):
     def __init__(self, diagram, obj, isLoad = False):
+        Reference.__init__(self)
         CVisibleObject.__init__(self)
         self.isLoad = isLoad
         self.object = obj

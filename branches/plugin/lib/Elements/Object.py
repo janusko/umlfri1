@@ -2,8 +2,9 @@ from lib.Exceptions.UserException import *
 import weakref
 from lib.Domains import CDomainObject
 from lib.consts import DEFAULT_IDENTITY
+from lib.Plugin import Reference
 
-class CElementObject(object):
+class CElementObject(Reference):
     """
     Object that represents logical element and its properties
     """
@@ -14,6 +15,7 @@ class CElementObject(object):
         @param type: Type of the new element
         @type  type: L{CElementType<Type.CElementType>}
         """
+        Reference.__init__(self)
         self.revision = 0
         self.type = type
         self.domainobject = CDomainObject(self.type.GetDomain())

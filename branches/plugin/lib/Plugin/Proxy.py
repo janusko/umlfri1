@@ -3,6 +3,7 @@ from interface import interface
 from lib.Depend.gtk2 import gtk
 from Communication.ComSpec import *
 from lib.Exceptions import *
+from Interface import Reference, Meta
 
 class CProxy(object):
     
@@ -30,6 +31,9 @@ class CProxy(object):
                 
                 elif com == 'metamodel':
                     self._metamodel(command['type'].lower(), params, addr)
+                
+                elif com == 'exec':
+                    self._exec(command['type'], params, addr)
                     
                 else:
                     self.manager.Send(addr, RESP_UNKONWN_COMMAND, command = com)
@@ -41,6 +45,37 @@ class CProxy(object):
         
         else:
             self.manager.Send(addr, RESP_UNSUPPORTED_VERSION, version = command['version'])
+    
+    def _exec(self, com, params, addr):
+            match = re.match(r'(?P<id>([a-zA-Z_][a-zA-Z0-9_]*|#[0-9]+)).(?P<fname>\w+)$', com)
+            if match is None:
+                self.manager.Send(addr, RESP_INVALID_COMMAND_TYPE, command = 'exec', type = com)
+                return
+            identifier = match.groupdict()['id']
+            fname = match.groupdict()['fname']
+            callid = params.pop('__id__', None)
+            
+            if identifier.startswith('#'):
+                obj = t_object(identifier[1:])
+            elif identifier == 'project':
+                obj = self.app.GetProject()
+            
+            if obj is None:
+                self.manager.Send(addr, RESP_INVALID_OBJECT, id = identifier)
+                return
+            
+            desc = Meta.GetMethod(obj.__class__, fname)
+            if desc is None:
+                self.manager.Send(addr, RESP_UNKNOWN_METHOD, id = identifier, fname = fname)
+                return
+            
+            params = dict((key, desc[1]['params'].get(key, lambda x: x)(params[key])) for key in params)
+            result = desc[0](obj, **params)
+            
+            if callid is not None:
+                self.manager.Send(addr, RESP_RESULT, __id__ = callid, result = desc[1]['result'](result))
+            
+        
     
     def _metamodel(self, com, params, addr):
         try:

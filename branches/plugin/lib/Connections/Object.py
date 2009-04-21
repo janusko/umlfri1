@@ -1,7 +1,8 @@
 from lib.Exceptions.UserException import *
 from lib.Domains import CDomainObject
+from lib.Plugin import Reference
 
-class CConnectionObject(object):
+class CConnectionObject(Reference):
     """
     Object that represents logical connection and its properties
     """
@@ -18,6 +19,7 @@ class CConnectionObject(object):
         @param dest: Destination element of connection
         @type  dest: L{CElementObject<lib.Elements.Object.CElementObject>}
         """
+        Reference.__init__(self)
         self.source = None
         self.destination = None
         self.revision = 0
