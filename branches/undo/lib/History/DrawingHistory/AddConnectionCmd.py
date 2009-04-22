@@ -18,7 +18,7 @@ class CAddConnectionCmd(CHistoryOperation):
         self.connection = CConnection(self.diagram, self.connectionObject, source, self.destination, points[1:])
         
         if self.description == None:
-            self.description = _('Add %s Connection') %(self.connection.GetObject().GetType().GetId())
+            self.description = _('Adding %s connection to %s') %(self.connection.GetObject().GetType().GetId(), self.diagram.GetName())
 
 
     def undo(self):

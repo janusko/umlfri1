@@ -20,7 +20,7 @@ class CMoveConnectionPointCmd(CHistoryOperation):
         self.connection.MovePoint(self.canvas, self.point, self.index)
         
         if self.description == None:
-            self.description = _('Move %s connection point') %(self.connection.GetObject().GetType().GetId())
+            self.description = _('Moving %s connection point') %(self.connection.GetObject().GetType().GetId())
     
     def undo(self):
         if self.old_len > len(self.connection.points) :
