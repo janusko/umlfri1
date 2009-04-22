@@ -635,9 +635,6 @@ class CfrmMain(CWindow):
                 addElement = CAddElementCmd(Element, position)
                 addElement.do()
                 self.history.add(addElement)
-                
-                
-                
                 #Element = CElement(diagram, node.GetObject()).SetPosition(position)
                 self.UpdateMenuSensitivity()
             except UserException, e:
