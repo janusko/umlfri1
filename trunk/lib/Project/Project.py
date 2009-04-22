@@ -134,8 +134,7 @@ class CProject(object):
             isZippedFile = self.isZippedFile
         else:
             self.isZippedFile = isZippedFile
-        print 'isZippedFile: ' + str(isZippedFile)
-
+        
         id = IDGenerator()
         
         def SaveDomainObjectInfo(data, name=None):
