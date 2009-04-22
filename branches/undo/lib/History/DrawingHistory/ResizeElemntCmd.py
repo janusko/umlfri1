@@ -14,7 +14,7 @@ class CResizeElemntCmd(CHistoryOperation):
     def do (self):
         self.element.Resize(self.canvas, self.delta, self.selSq)
         if self.description == None:
-            self.description = _('Resize %s element on %s') %(self.element.GetObject().GetName(), self.diagram.GetName())
+            self.description = _('Resize %s element on %s') %(self.element.GetObject().GetName(), self.element.diagram.GetName())
 
 
     def undo(self):
