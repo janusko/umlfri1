@@ -20,7 +20,7 @@ import thread
 # undo/redo tag    
 #
 from lib.History.DrawingHistory import CAddElementCmd, CDeleteItemCmd, CResizeElemntCmd, CMoveSelectionCmd
-from lib.History.DrawingHistory import CAddConnectionCmd, CInsertConnectionPointCmd, CMoveConnectionPointCmd
+from lib.History.DrawingHistory import CAddConnectionCmd, CInsertConnectionPointCmd, CMoveConnectionPointCmd, CPurgeConnectionCmd
 from lib.History import CApplicationHistory
 
 
@@ -431,10 +431,12 @@ class CpicDrawingArea(CWidget):
         if toolBtnSel[0] == 'Element':
             ElementType = self.application.GetProject().GetMetamodel().GetElementFactory().GetElement(toolBtnSel[1])
             ElementObject = CElementObject(ElementType)
+
             #
             # undo/redo tag    
             #
-            addElement = CAddElementCmd(self.Diagram,ElementObject,pos )
+            newElement = CElement(self.Diagram, ElementObject)            
+            addElement = CAddElementCmd(newElement, pos)
             addElement.do()
             self.emit('history-entry',addElement)
             
@@ -451,14 +453,14 @@ class CpicDrawingArea(CWidget):
             for el in self.Diagram.GetSelectedElements():
                 pos1, pos2 = el.GetSquare(self.canvas)
                 zorder = self.Diagram.elements.index(el)
-                if addElement.newElement.AreYouInRange(self.canvas, pos1, pos2, True):
+                if newElement.AreYouInRange(self.canvas, pos1, pos2, True):
                     for el2 in self.Diagram.GetElementsInRange(self.canvas, pos1, pos2, True):
                         if self.Diagram.elements.index(el2) < minzorder:        #get element with minimal zorder
                             minzorder = self.Diagram.elements.index(el2)
                             parentElement = el2.GetObject()
                     
             self.Diagram.DeselectAll()
-            self.Diagram.AddToSelection(addElement.newElement)
+            self.Diagram.AddToSelection(newElement)
             
             self.emit('add-element', ElementObject, self.Diagram, parentElement)
             self.emit('selected-item', list(self.Diagram.GetSelected()))
@@ -547,7 +549,6 @@ class CpicDrawingArea(CWidget):
                 if itemSel is None or isinstance(itemSel, CConnection):
                     self.__NewConnection[1].append(pos)
                     self.__DrawNewConnection((None, None))
-                    print 'Delete point ?'
                 elif itemSel is not self.__NewConnection[2] or len(self.__NewConnection[1]) > 2:
                     (type, points, source), destination = self.__NewConnection, itemSel
                     #
@@ -579,15 +580,22 @@ class CpicDrawingArea(CWidget):
             if event.state == gtk.gdk.SHIFT_MASK:
                 self.emit('history-start-group')
                 for sel in self.Diagram.GetSelected():
+                    
+                    self.emit('history-start-group')
+                    
                     if isinstance(sel, Element.CElement):
-                        
                         #
                         # undo/redo tag    
                         #    
                         self.emit('delete-element-from-all',sel.GetObject())
        
                     else:
-                        self.Diagram.ShiftDeleteConnection(sel)
+                        purgeConnection = CPurgeConnectionCmd(sel)
+                        purgeConnection.do()
+                        self.emit('history-entry',purgeConnection)
+                        #self.Diagram.ShiftDeleteConnection(sel)
+                    self.emit('history-end-group')                      
+   
             else:
                 #
                 # undo/redo tag    
@@ -947,10 +955,18 @@ class CpicDrawingArea(CWidget):
         
     @event("mnuCtxShiftDelete","activate")
     def onMnuCtxShiftDelteActivate(self, menuItem):
+        #
+        # undo/redo tag    
+        #
+        self.emit('history-start-group')
         for sel in self.Diagram.GetSelected():
             if isinstance(sel, Element.CElement):
                 self.emit('delete-element-from-all',sel.GetObject())
                 #self.emit('delete-element-from-all',sel.GetObject())
             else:
-                self.Diagram.ShiftDeleteConnection(sel)
+                purgeConnection = CPurgeConnectionCmd(sel)
+                purgeConnection.do()
+                self.emit('history-entry',purgeConnection)
+                #self.Diagram.ShiftDeleteConnection(sel)
+        self.emit('history-end-group')
         self.Paint()

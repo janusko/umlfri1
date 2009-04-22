@@ -18,6 +18,7 @@ from lib.config import config
 from lib.colors import colors
 from lib.Exceptions import UserException
 from lib.History import CApplicationHistory
+from lib.History.DrawingHistory import CAddElementCmd
 
 
 
@@ -627,7 +628,17 @@ class CfrmMain(CWindow):
         if node is not None:
             diagram = self.picDrawingArea.GetDiagram()
             try:
-                Element = CElement(diagram, node.GetObject()).SetPosition(position)
+                Element = CElement(diagram, node.GetObject())# .SetPosition(position)
+                #
+                # undo/redo tag    
+                #  
+                addElement = CAddElementCmd(Element, position)
+                addElement.do()
+                self.history.add(addElement)
+                
+                
+                
+                #Element = CElement(diagram, node.GetObject()).SetPosition(position)
                 self.UpdateMenuSensitivity()
             except UserException, e:
                 if e.GetName() == "ElementAlreadyExists":

@@ -27,12 +27,12 @@ class CDeleteItemCmd(CHistoryOperation):
                     self.delCon.append(con) 
             
             if self.description == None:
-                self.description = _('Delete %s element on %s, %s') %(self.item.GetObject().GetName(), str(pos[0]), str(pos[1]))
+                self.description = _('Delete %s element from %s') %(self.item.GetObject().GetName(), self.diagram.GetName())
             
             
         elif isinstance(self.item , CConnection):
             if self.description == None:
-                self.description = _('Delete %s Connection') %(self.item.GetObject().GetType().GetId())
+                self.description = _('Delete %s connection from %s') %(self.item.GetObject().GetType().GetId(), self.diagram.GetName())
         
         self.diagram.DeleteItem(self.item )
         

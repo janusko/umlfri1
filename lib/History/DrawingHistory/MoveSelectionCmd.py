@@ -22,9 +22,9 @@ class CMoveSelectionCmd(CHistoryOperation):
             if len(self.selection) == 1:
                 for el in self.diagram.GetSelectedElements():
                     if isinstance(el , CElement):
-                        self.description = _('Moving %s') %(el.GetObject().GetName())
+                        self.description = _('Moving %s on %s') %(el.GetObject().GetName(), self.diagram.GetName())
                     else:
-                        self.description = _('Moving %s label') %(el.GetObject().GetType().GetId())
+                        self.description = _('Moving %s label on %s') %(el.GetObject().GetType().GetId(), self.diagram.GetName())
                 
             else:
                 self.description = _('Moving selection of:')

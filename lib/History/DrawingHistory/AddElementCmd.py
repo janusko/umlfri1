@@ -7,27 +7,28 @@ from lib.Drawing import  CElement
 
 class CAddElementCmd(CHistoryOperation):
     
-    def __init__(self, diagram, elementObject, pos, description = None): 
+    def __init__(self, newElement, pos, description = None): 
         CHistoryOperation.__init__(self, description)
-        self.Diagram = diagram
-        self.ElementObject = elementObject
+        self.diagram = newElement.diagram
+        self.newElement = newElement
+        #self.ElementObject = elementObject
         self.pos = pos
 
 
     def do (self):
-        self.newElement = CElement(self.Diagram, self.ElementObject)
+        #self.newElement = CElement(self.diagram, self.ElementObject)
         self.newElement.SetPosition(self.pos)
         if self.description == None:
-            self.description = _('Add new %s element on %s, %s') %(self.newElement.GetObject().GetName(), str(self.pos[0]), str(self.pos[1]))
+            self.description = _('Adding %s element to %s') %(self.newElement.GetObject().GetName(), self.diagram.GetName())
 
 
     def undo(self):
         self.newElement.Deselect()
-        self.newElement.GetObject().RemoveAppears(self.Diagram)
-        self.Diagram.DeleteElement(self.newElement)      
+        self.newElement.GetObject().RemoveAppears(self.diagram)
+        self.diagram.DeleteElement(self.newElement)      
         
         
     def redo(self):
-        self.Diagram.AddElement(self.newElement)
-        self.newElement.GetObject().AddAppears(self.Diagram)
+        self.diagram.AddElement(self.newElement)
+        self.newElement.GetObject().AddAppears(self.diagram)
  

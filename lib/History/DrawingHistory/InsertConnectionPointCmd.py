@@ -26,7 +26,7 @@ class CInsertConnectionPointCmd(CHistoryOperation):
             else:
                 self.old_len = len(self.connection.points)
                 if self.description == None:
-                    self.description = _('Insert point to %s connection ') %(self.connection.GetObject().GetType().GetId())
+                    self.description = _('Inserting point to %s connection ') %(self.connection.GetObject().GetType().GetId())
         else:
             self.enabled = False    
   
