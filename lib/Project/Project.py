@@ -71,7 +71,7 @@ class CProject(object):
         
         if i == self.root.GetName() and j == self.root.GetType():
             for i in path.split('/')[1:]:
-                j, k  = i.split(':')
+                j, k  = i.rsplit(':', 1)
                 if k == "=Diagram=":
                     return node
                 else:
