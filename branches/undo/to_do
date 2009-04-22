@@ -1,0 +1,23 @@
+status        bug
+
+:)          insert connection point bug
+
+:(          make sure history operations are valid for _all_ diagrams
+
+:)          fix the traveling resize element bug - resize on the proper spot
+
+:)          fix the automatic connection point removal bug 
+
+>:(         purged element should restore connections properly (now disabled)
+
+:(          undoable z-order ??? nah
+
+:(          get rid of picDrawingAarea emits to twProjectView  -should resolve encapsulation nightmare by areas add element and purge bug
+
+:(          replace all the actions with undoable ones - tw menu, main menu....    
+
+:)          frmMain - implement update menu sensitivity for undo/redo mnu and cmd properly        
+
+
+
+:_(         mooooooooore history commands

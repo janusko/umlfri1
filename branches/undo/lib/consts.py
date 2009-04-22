@@ -61,3 +61,7 @@ BUFFER_SIZE=(2000.0,1500.0)         # buffer size at the start
 BUFFER_MAX_SIZE=(6400.0,6400.0)     # the graphic buffer will be extended to max this values
 
 DEFAULT_IDENTITY='@id'
+
+# history consts
+STACK_SIZE_TO_SHOW = 20             # number of undo/redo steps shown in the undo/redo menu 
+STACK_MAX_SIZE = 1000               # maximum size of the undo/redo stack kept by the application history

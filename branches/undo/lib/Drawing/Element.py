@@ -3,6 +3,7 @@ from Connection import CConnection
 from DrawingContext import CDrawingContext
 from VisibleObject import CVisibleObject
 
+
 class CElement(CVisibleObject):
     def __init__(self, diagram, obj, isLoad = False):
         CVisibleObject.__init__(self)

@@ -25,3 +25,6 @@ class DomainObjectError(DevException):
 
 class DomainParserError(DevException):
     pass
+
+class HistoryError(DevException):
+    pass
