@@ -214,6 +214,7 @@ class CDiagram:
                     deleted.append(con)
             for con in deleted:
                 self.DeleteConnection(con)
+                
         else:
             raise DrawingError("ElementDoesNotExists")
         

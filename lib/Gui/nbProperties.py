@@ -21,6 +21,7 @@ class CnbProperties(CWidget):
     
     @event("lwProperties", "content-update")
     def on_lwProperties_content_update(self, widget, element, property):
+        print property
         self.emit("content-update", element, property)
     
     @event("txtNotes", "content-update")
