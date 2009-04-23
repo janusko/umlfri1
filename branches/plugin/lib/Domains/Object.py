@@ -116,7 +116,10 @@ class CDomainObject(object):
                     self.values[path[0]] = self.type.TransformValue(value, id = path[0])
                 return
             elif action == 'getvalue':
-                return self.values[path[0]]
+                if path[0] in self.values:
+                    return self.values[path[0]]
+                else:
+                    raise DomainObjectError('Invalid attribute %s in domain %s' % (path[0], self.type.GetName()))
             elif action == 'gettype':
                 if path[0] == '':
                     return self.type

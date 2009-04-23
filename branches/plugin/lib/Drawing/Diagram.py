@@ -9,6 +9,8 @@ from lib.Plugin import Reference
 
 
 class CDiagram(Reference):
+    NAME_PROPERY = 'Name' #This must be replaced by domain
+    
     def __init__(self, type, name = None): #  name = "untitled"
         Reference.__init__(self)
         self.elements = []

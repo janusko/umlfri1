@@ -1,1 +1,6 @@
-from ElementVisual import CElementVisual
+import Project
+import ElementVisual
+import ElementObject
+import ConnectionVisual
+import ConnectionObject
+import Diagram

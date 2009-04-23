@@ -1,6 +1,4 @@
-from lib.Plugin import Reference
-
-class CDiagramType(Reference):
+class CDiagramType(object):
     """
     Type of diagram
     """
@@ -11,7 +9,6 @@ class CDiagramType(Reference):
         @param id: Name of the diagram type
         @type  id: string
         """
-        Reference.__init__(self)
         self.icon = None
         self.id = id
         self.elements = []

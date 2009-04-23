@@ -1,10 +1,9 @@
-from lib.Plugin.ComSpec import *
-from lib.Plugin.Interface.meta import Meta
+from base import IBase
+from lib.Plugin.Communication.ComSpec import *
 from lib.Plugin.Interface.decorators import *
 from lib.Drawing.Element import CElement
 
-class CElementVisual(object):
-    __metaclass__ = Meta
+class IElementVisual(IBase):
     __cls__ = CElement
     
     def GetPosition(self):

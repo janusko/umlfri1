@@ -1,1 +1,1 @@
-from Plugin.Interface.Classes import *
+import Plugin.Interface.Classes

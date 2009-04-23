@@ -26,7 +26,7 @@ if HAVE_LXML:
 class CProject(object):
     SaveVersion = '1.0' # save file format version
     
-    def __init__(self):
+    def __init__(self, app):
         self.root = None
         
         self.__metamodelManager = CMetamodelManager()
@@ -35,6 +35,7 @@ class CProject(object):
         
         self.filename = None
         self.isZippedFile = None
+        self.app = app
     
     def GetDefaultDiagrams(self):
         if self.defaultDiagram is not None:
@@ -71,7 +72,7 @@ class CProject(object):
         
         if i == self.root.GetName() and j == self.root.GetType():
             for i in path.split('/')[1:]:
-                j, k  = i.split(':')
+                j, k  = i.rsplit(':', 1)
                 if k == "=Diagram=":
                     return node
                 else:
@@ -134,8 +135,7 @@ class CProject(object):
             isZippedFile = self.isZippedFile
         else:
             self.isZippedFile = isZippedFile
-        print 'isZippedFile: ' + str(isZippedFile)
-
+        
         id = IDGenerator()
         
         def SaveDomainObjectInfo(data, name=None):

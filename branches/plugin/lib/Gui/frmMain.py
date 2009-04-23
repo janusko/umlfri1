@@ -548,8 +548,8 @@ class CfrmMain(CWindow):
     @event("twProjectView","show_frmFindInDiagram")
     def on_show_frmFindInDiagram(self, widget, diagrams, object):
         self.frmFindInDiagram.ShowDialog(diagrams, object)
-
-    @event("nbProperties", "content-update")
+    
+    @event('application.bus', 'content-update')
     def on_nbProperties_content_update(self, widget, element, property):
         if isinstance(element, CDiagram):
             self.twProjectView.UpdateElement(element)

@@ -34,3 +34,6 @@ class ParamValueError(PluginCommunicationError):
 
 class ParamMissingError(PluginCommunicationError):
     pass
+
+class ErrorDuringExecution(PluginCommunicationError):
+    pass

@@ -44,3 +44,6 @@ class CPluginManager(object):
     def Send(self, addr, code, **params):
         self.connection[addr].Send(code, '', params)
     
+    def DomainValueChanged(self, element, property):
+        print element, element.GetPluginId(), property
+    

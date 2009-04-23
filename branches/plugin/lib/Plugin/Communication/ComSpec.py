@@ -1,5 +1,5 @@
 import re
-from Interface import Reference
+from lib.Plugin.Interface import Reference
 
 IDENTIFIER = 'UML.FRI'
 FIRST_LINE_PLUGIN = re.compile(r'(?P<command>\w+) +(?P<type>[\w#:.]+) +%s/(?P<version>\d+\.\d+)\r?$' % IDENTIFIER)
@@ -38,7 +38,24 @@ def t_2intTuple(val):
         raise ValueError()
 
 def t_object(val):
-    return Reference.GetObject(int(val[1:]))
+    if re.match(r'#[0-9]+$', val) is not None:
+        return Reference.GetObject(int(val[1:]))
+    elif val == 'None':
+        return None
+    else:
+        raise ValueError()
+
+def t_classobject(cls):
+    def check(val):
+        res = t_object(val)
+        if isinstance(val, cls):
+            return res
+        else:
+            raise ValueError()
+    return check
 
 def r_object(val):
-    return '#%i' % (val.GetPluginId(), )
+    return '#%i' % (val.GetPluginId(), ) if val is not None else 'None'
+
+def r_objectlist(val):
+    return `list(r_object(i) for i in val)`

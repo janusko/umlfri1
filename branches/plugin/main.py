@@ -16,7 +16,7 @@ import os.path
 from lib.Project import CProject
 from lib.Project import CRecentFiles
 
-from lib.Gui import CfrmSplash, CfrmMain, CfrmAbout, CfrmProperties, CfrmOpen, CfrmSave, CfrmOptions, CfrmException
+from lib.Gui import CfrmSplash, CfrmMain, CfrmAbout, CfrmProperties, CfrmOpen, CfrmSave, CfrmOptions, CfrmException, CPluginAdapter, CBus
 from lib.Gui.dialogs import CExceptionDialog
 
 from lib.config import config
@@ -40,12 +40,17 @@ class Application(CApplication):
     def __init__(self):
         self.recentFiles = CRecentFiles()
         self.clipboard = CClipboard()
+        self.bus = CBus()
         
         CApplication.__init__(self)
         self.UserGui= CUserGui(self)
-        self.manager = CPluginManager(self)
+        self.pluginManager = CPluginManager(self)
+        self.pluginAdapter = CPluginAdapter(self)
         
         gobject.timeout_add(SPLASH_TIMEOUT, self.GetWindow('frmSplash').Hide)
+    
+    def GetBus(self):
+        return self.bus
     
     @argument("-o", "--open", True)
     def DoOpen(self, value):
@@ -74,7 +79,7 @@ class Application(CApplication):
     
     def ProjectInit(self):
         if self.project is None:
-            self.project = CProject()
+            self.project = CProject(self)
             
     def ProjectDelete(self):
         self.project = None
@@ -111,6 +116,9 @@ class Application(CApplication):
         CApplication.Quit(self)
         config.Save()
         self.recentFiles.SaveRecentFiles()
+    
+    def GetPluginManager(self):
+        return self.pluginManager
 
 if __name__ == '__main__':
     Application().Main()

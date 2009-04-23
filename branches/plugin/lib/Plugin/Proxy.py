@@ -47,6 +47,7 @@ class CProxy(object):
             self.manager.Send(addr, RESP_UNSUPPORTED_VERSION, version = command['version'])
     
     def _exec(self, com, params, addr):
+        #~ try:
             match = re.match(r'(?P<id>([a-zA-Z_][a-zA-Z0-9_]*|#[0-9]+)).(?P<fname>\w+)$', com)
             if match is None:
                 self.manager.Send(addr, RESP_INVALID_COMMAND_TYPE, command = 'exec', type = com)
@@ -56,7 +57,7 @@ class CProxy(object):
             callid = params.pop('__id__', None)
             
             if identifier.startswith('#'):
-                obj = t_object(identifier[1:])
+                obj = t_object(identifier)
             elif identifier == 'project':
                 obj = self.app.GetProject()
             
@@ -68,14 +69,20 @@ class CProxy(object):
             if desc is None:
                 self.manager.Send(addr, RESP_UNKNOWN_METHOD, id = identifier, fname = fname)
                 return
+            else:
+                params[desc[0].func_code.co_varnames[0]] = obj
             
             params = dict((key, desc[1]['params'].get(key, lambda x: x)(params[key])) for key in params)
-            result = desc[0](obj, **params)
+            result = desc[0](**params)
             
             if callid is not None:
                 self.manager.Send(addr, RESP_RESULT, __id__ = callid, result = desc[1]['result'](result))
             
+        #~ except (TypeError, ), e:
+            #~ raise ParamMissingError()
         
+        #~ except (ValueError, ), e:
+            #~ raise ParamValueError()
     
     def _metamodel(self, com, params, addr):
         try:

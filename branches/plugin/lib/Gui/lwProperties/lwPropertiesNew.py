@@ -12,11 +12,6 @@ class ClwProperties(CWidget):
     name = 'lwProperties'
     widgets = ('lwProperties',)
     
-    __gsignals__ = {
-        'content_update':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
-            (gobject.TYPE_PYOBJECT, gobject.TYPE_STRING)),      
-    }
-    
     def __init__(self, app, wTree):
         
         self.treeStore = gtk.TreeStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_BOOLEAN, gobject.TYPE_BOOLEAN, gobject.TYPE_BOOLEAN, gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING)
@@ -141,7 +136,7 @@ class ClwProperties(CWidget):
         if isinstance(self.element, CDiagram):
             v = self.element.GetName()
             row = self.treeStore.append(None)
-            self.treeStore.set(row, ID_NAME, 'Name', ID_VALUE, v, ID_TEXT_VISIBLE, True, ID_COMBO_VISIBLE, False, ID_BUTTON_VISIBLE, False, ID_EDITABLE, True)
+            self.treeStore.set(row, ID_NAME, CDiagram.NAME_PROPERY, ID_VALUE, v, ID_TEXT_VISIBLE, True, ID_COMBO_VISIBLE, False, ID_BUTTON_VISIBLE, False, ID_EDITABLE, True)
             return
         else:
             self._FillBody(self.element.GetObject(), None, '')
@@ -181,11 +176,11 @@ class ClwProperties(CWidget):
         if isinstance(self.element, CDiagram):
             name, = model.get(iter, ID_NAME)
             self.element.SetName(new_value)
-            self.emit('content_update', self.element, name)
+            self.application.GetBus().emit('content-update', self.element, name)
         else:
             key = self.get_key(path)
             self.element.GetObject().SetValue(key, new_value)
-            self.emit('content_update', self.element, key)
+            self.application.GetBus().emit('content-update', self.element, key)
         
     @event("ComboRenderer", "edited")
     def on_change_combo(self, cellrenderer, path, new_value):
@@ -195,12 +190,12 @@ class ClwProperties(CWidget):
             model.set(iter, ID_VALUE, new_value)
             key = self.get_key(path)
             self.element.GetObject().SetValue(key, new_value)
-            self.emit('content_update', self.element, key)
+            self.application.GetBus().emit('content-update', self.element, key)
     
     def on_listadd(self, key, iter):
         self.element.GetObject().AppendItem(key)
         self._FillListItem(self.element.GetObject(), iter, key, len(self.element.GetObject().GetValue(key)) - 1)
-        self.emit('content_update', self.element, key)
+        self.application.GetBus().emit('content-update', self.element, key)
         
     def on_listdel(self, key, iter, path):
         model = self.lwProperties.get_model()
@@ -218,7 +213,7 @@ class ClwProperties(CWidget):
             self.treeStore.set(niter,
                 ID_ID, '[%i]' % idx,
                 ID_NAME, str(idx))
-        self.emit('content_update', self.element, key)
+        self.application.GetBus().emit('content-update', self.element, key)
     
     @event("ButtonRenderer", "click")
     def on_change_button(self, cellrenderer, path):
