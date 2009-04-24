@@ -148,7 +148,14 @@ class CProxy(object):
     def _gui(self, ctype, params, addr):
         try:
             if ctype == 'add':
-                self._addgui(params, addr)
+                mtype = params.pop('type')
+                path = params.pop('path')
+                if mtype in ('submenu', ):
+                    name = params.pop('name', None)
+                else:
+                    name = params.pop('name')
+                self.guimanager.AddItem(mtype, path, name, self._guiactivated, addr, **params)
+                self.manager.Send(addr, RESP_GUI_ADDED, type = mtype, fullname = path + '/' + (name or ''))
             
             elif ctype == 'sensitive':
                 self.guimanager.SetSensitive(params['path'], True)
@@ -160,51 +167,9 @@ class CProxy(object):
                 
             else:
                 self.manager.Send(addr, RESP_INVALID_COMMAND_TYPE, command = 'gui', type = ctype)
-            
         except (KeyError, ), e:
             raise ParamMissingError(e.message)
         
-    
-    def _addgui(self, params, addr):
-        mtype = params['type'] 
-        if mtype in ('ImageMenuItem', 'MenuItem'):
-            if mtype == 'ImageMenuItem':
-                if 'stock_id' in params:
-                    item = gtk.ImageMenuItem(stock_id = params['stock_id'])
-                else:
-                    item = gtk.ImageMenuItem(params['text'])
-                    image = gtk.Image()
-                    image.set_from_file(params['filename'])
-                    item.set_image(image)
-            else:
-                item = gtk.MenuItem(params['text'])
-            item.connect('activate', self._guiactivated, addr, params['path'] + '/' + params['name'])
-            item.show()
-            self.guimanager.AddMenuItem(item, params['name'], params['path'])
-            self.manager.Send(addr, RESP_GUI_ADDED, type = mtype, fullname = params['path'] + '/' + params['name'])
-        
-        elif mtype == 'ToolButton':
-            if 'stock_id' in params:
-                item = gtk.ToolButton(params['stock_id'])
-            else:
-                if 'filename' in params:
-                    image = gtk.Image()
-                    image.set_from_file(params['filename'])
-                else:
-                    image = None
-                item = gtk.ToolButton(image, params['text'])
-            item.connect('clicked', self._guiactivated, addr, params['path'] + '/' + params['name'])
-            item.show()
-            self.guimanager.AddButton(item, params['name'], params['path'])
-            self.manager.Send(addr, RESP_GUI_ADDED, type = mtype, fullname = params['path'] + '/' + params['name'])
-        
-        elif mtype == 'submenu':
-            self.guimanager.AddSubmenu(params['path'])
-            self.manager.Send(addr, RESP_GUI_ADDED, type = mtype, fullname = params['path'])
-        
-        else:
-            raise ParamValueError('type')
-    
     def _guiactivated(self, item, path, addr):
         print 'GuiActivated', path, addr
         self.manager.Send(addr, RESP_GUI_ACTIVATED, path = path)

@@ -2,7 +2,7 @@ from Communication.AcceptServer import CAcceptServer
 from Communication.SocketWrapper import CSocketWrapper
 from Proxy import CProxy
 from lib.consts import *
-from GuiManager import CGuiManager
+from lib.Gui import CGuiManager
 import thread
 
 class CPluginManager(object):
