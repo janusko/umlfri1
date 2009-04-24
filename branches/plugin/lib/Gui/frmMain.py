@@ -3,7 +3,7 @@ from common import CWindow, event
 import common
 import lib.consts
 import os.path
-from lib.Drawing import CElement, CDiagram
+from lib.Drawing import CElement, CDiagram, CConnection
 from lib.Elements import CElementObject, CElementType
 from dialogs import CWarningDialog, CQuestionDialog, ECancelPressed
 from tbToolBox import CtbToolBox
@@ -555,9 +555,13 @@ class CfrmMain(CWindow):
             self.twProjectView.UpdateElement(element)
             self.nbTabs.RefreshTab(element)
         else:
-            if element.GetObject().HasVisualAttribute(property):
-                self.picDrawingArea.Paint()
-                self.twProjectView.UpdateElement(element.GetObject())
+            if isinstance(element, (CElement, CConnection)):
+                element = element.GetObject()
+            if element.HasVisualAttribute(property):
+                if (self.picDrawingArea.GetDiagram().HasElementObject(element)
+                    or self.picDrawingArea.GetDiagram().HasConnection(element)):
+                    self.picDrawingArea.Paint()
+                self.twProjectView.UpdateElement(element)
 
     @event("tbToolBox", "toggled")
     def on_tbToolBox_toggled(self, widget, ItemId, ItemType):

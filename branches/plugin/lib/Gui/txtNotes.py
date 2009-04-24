@@ -54,3 +54,9 @@ class CtxtNotes(CWidget):
             elif isinstance(self.element.GetObject(), CConnectionObject):
                 self.element.GetObject().SetAttribute(self.attr, buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter()))
                 self.application.GetBus().emit('content-update', self.element, self.attr)
+                
+    @event('application.bus', 'content-update')
+    def on_content_update(self, widget, element, property):
+        if element is self.element or not isinstance(self.element, CDiagram) and element is self.GetObject():
+            self.Fill(self.element)
+    

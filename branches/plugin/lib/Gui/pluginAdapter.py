@@ -15,5 +15,3 @@ class CPluginAdapter(CGuiObject):
     
     def plugin_change_domain_value(self, element, property):
         self.application.GetBus().emit('content-update', element, property)
-        #~ self.frmMain.on_nbProperties_content_update(self, element, property)
-        #~ self.frmMain.nbProperties.lwProperties.
