@@ -96,7 +96,7 @@ class CElementObject(object):
         @return: project node of this element
         @rtype:  L{CProjectNode<lib.Project.Node.CProjectNode>}
         """
-        return self.node
+        return self.node()
         
     def AddConnection(self, connection):
         """
