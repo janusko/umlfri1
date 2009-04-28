@@ -57,6 +57,7 @@ class CtxtNotes(CWidget):
                 
     @event('application.bus', 'content-update')
     def on_content_update(self, widget, element, property):
-        if element is self.element or not isinstance(self.element, CDiagram) and element is self.GetObject():
+        if (self.element is not None and (element is self.element 
+            or not isinstance(self.element, CDiagram) and element is self.element.GetObject())):
             self.Fill(self.element)
     

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ConnectionType id="Include" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Icon path="icons/include_arrow.png" />
+    <SrcArrow possible="0" default="0" />
+    <DestArrow possible="1" default="1" />
+    <Domain id="include" identity="name" />
+    <Appearance>
+        <LineStyle style="dot" color="/Styles/Connection/LineColor" />
+        <ArrowStyle style="simple" fill="/Styles/Connection/ArrowFillColor" color="/Styles/Connection/ArrowColor" />
+		<Label position="center">
+			<HBox>
+                   <Align align="center">
+                        <Rectangle fill="/Styles/Connection/TextFill">
+                            <VBox>
+                                <TextBox text="&#171;" font="/Styles/Connection/TextFont" color="/Styles/Connection/TextColor" />
+                                <TextBox text="include" font="/Styles/Connection/TextFont" color="/Styles/Connection/TextColor" />
+                                <TextBox text="&#187;" font="/Styles/Connection/TextFont" color="/Styles/Connection/TextColor" />
+                            </VBox>
+                        </Rectangle>
+                    </Align>
+            </HBox>
+		</Label>
+ </Appearance>
+</ConnectionType>

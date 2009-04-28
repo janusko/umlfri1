@@ -12,5 +12,7 @@
         <Item value="Generalization" />
         <Item value="Association" />
         <Item value="Note Link" />
+		<Item value="Include"/>
+		<Item value="Extend"/>
     </Connections>
 </DiagramType>

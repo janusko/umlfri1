@@ -37,3 +37,6 @@ class ParamMissingError(PluginCommunicationError):
 
 class ErrorDuringExecution(PluginCommunicationError):
     pass
+
+class UnknowMethodError(PluginCommunicationError):
+    pass

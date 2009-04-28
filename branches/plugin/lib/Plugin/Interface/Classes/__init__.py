@@ -4,3 +4,4 @@ import ElementObject
 import ConnectionVisual
 import ConnectionObject
 import Diagram
+import ConLabelInfo

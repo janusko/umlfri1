@@ -11,7 +11,7 @@ class CGuiManager(object):
         self.lock = thread.allocate()
         self.app = app
         frmMain = self.app.GetWindow('frmMain')
-        self.menupaths = {\
+        self.menupaths = {
             'mnuMenubar': frmMain.mnuMenubar,
             'mnuMenubar/mItemFile': frmMain.mItemFile.get_submenu(),
             'mnuMenubar/mItemEdit': frmMain.mItemEdit.get_submenu(),
@@ -25,7 +25,7 @@ class CGuiManager(object):
             'mnuTree': frmMain.twProjectView.menuTreeElement,
         }
         self.menuitems = {}
-        self.buttonpaths = {\
+        self.buttonpaths = {
             'hndCommandBar': frmMain.hndCommandBar.get_children()[0],
         }
         self.buttonitems = {}

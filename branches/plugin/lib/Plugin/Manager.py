@@ -1,5 +1,6 @@
 from Communication.AcceptServer import CAcceptServer
 from Communication.SocketWrapper import CSocketWrapper
+from Communication.ComSpec import *
 from Proxy import CProxy
 from lib.consts import *
 from lib.Gui import CGuiManager
@@ -42,8 +43,21 @@ class CPluginManager(object):
         return self.guimanager
     
     def Send(self, addr, code, **params):
-        self.connection[addr].Send(code, '', params)
+        if addr not in self.connection:
+            return
+        if self.connection[addr].Opened():
+            self.connection[addr].Send(code, '', params)
+        else:
+            del self.connection[addr]
     
-    def DomainValueChanged(self, element, property):
-        print element, element.GetPluginId(), property
+    def SendToAll(self, code, **params):
+        try:
+            self.conlock.acquire()
+            for addr in self.connection.keys(): #this must use list, not iterator (beware in python 3.x)
+                self.Send(addr, code, **params)
+        finally:
+            self.conlock.release()
+    
+    def DomainValueChanged(self, element, path):
+        self.SendToAll(RESP_DOMAIN_VALUE_CHANGED, element = r_object(element), path = path)
     

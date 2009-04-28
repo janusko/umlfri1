@@ -1,32 +1,35 @@
-from base import IBase
+from DomainObject import IDomainObject
 from lib.Plugin.Communication.ComSpec import *
 from lib.Plugin.Interface.decorators import *
 from lib.Elements.Object import CElementObject
 from lib.Connections.Object import CConnectionObject
 from lib.Domains.Object import CDomainObject
 from lib.Exceptions import *
+from lib.Project import CProjectNode
 
-class IElementObject(IBase):
+class IElementObject(IDomainObject):
     __cls__ = CElementObject
     
+    @constructor
+    @parameter('type', t_elementType)
+    def Create(type):
+        return CElementObject(type)
+    
     @parameter('con', t_classobject(CConnectionObject))
-    def AddConnection(self, con):
-        return self.AddConnection(con)
+    def AddConnection(him, con):
+        return him.AddConnection(con)
     
-    def GetName(self):
-        return self.GetName()
     
-    def GetValue(self, path):
-        try:
-            res = self.GetValue(path)
-            if isinstance(res, CDomainObject):
-                return `res.GetSaveInfo()`
-            elif isinstance(res, list):
-                return '[' + ','.join(`i.GetSaveInfo()` for i in res) + ']'
-            else:
-                return `res`
-        except (DomainObjectException,):
-            raise 
+    @result(r_objectlist)
+    def GetDiagrams(him):
+        node = him.GetNode()
+        if node is not None:
+            return node.GetDiagrams()
     
-    def GetSaveInfo(self):
-        return `self.GetSaveInfo()`
+    @parameter('child', t_classobject(CElementObject))
+    def AddChild(him, child):
+        node = him.GetNode()
+        if node is not None:
+            node.AddChild(CProjectNode(object = child))
+            
+    

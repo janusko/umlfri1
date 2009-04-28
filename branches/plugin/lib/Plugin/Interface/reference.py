@@ -6,6 +6,7 @@ class Reference(object):
     __pluginIdReferences = weakref.WeakValueDictionary()
     __lastPluginId = 0
     __pluginIdLock = thread.allocate()
+    __project = lambda: None
     
     def __init__(self):
         Reference.__pluginIdLock.acquire()
@@ -18,5 +19,13 @@ class Reference(object):
         return self.__pluginID
     
     @classmethod
-    def GetObject(self, id):
+    def GetObject(cls, id):
         return Reference.__pluginIdReferences[id] if id in Reference.__pluginIdReferences else None
+    
+    @classmethod
+    def SetProject(cls, proj):
+        Reference.__project = weakref.ref(proj) if proj else lambda: None
+        
+    @classmethod
+    def GetProject(cls):
+        return Reference.__project()

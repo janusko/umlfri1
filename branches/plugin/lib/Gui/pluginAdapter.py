@@ -7,6 +7,7 @@ class CPluginAdapter(CGuiObject):
     def __init__(self, app):
         CGuiObject.__init__(self, app)
         self.manager = app.GetPluginManager()
+        self.app = app
         IBase.SetAdapter(self)
         
     @event('application.bus', 'content-update')
@@ -15,3 +16,6 @@ class CPluginAdapter(CGuiObject):
     
     def plugin_change_domain_value(self, element, property):
         self.application.GetBus().emit('content-update', element, property)
+    
+    def GetCanvas(self):
+        return self.app.GetWindow('frmMain').picDrawingArea.canvas

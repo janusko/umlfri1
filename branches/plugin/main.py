@@ -24,6 +24,7 @@ from lib.consts import SPLASH_TIMEOUT
 
 from lib.Exceptions import UserException
 from lib.Plugin.Manager import CPluginManager
+from lib.Plugin import Reference
 
 __version__ = '1.0-beta20090309'
 
@@ -80,6 +81,7 @@ class Application(CApplication):
     def ProjectInit(self):
         if self.project is None:
             self.project = CProject(self)
+            Reference.SetProject(self.project)
             
     def ProjectDelete(self):
         self.project = None

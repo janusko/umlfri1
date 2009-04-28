@@ -1,5 +1,4 @@
 import thread, time, sys, socket, re
-from interface import interface
 from lib.Depend.gtk2 import gtk
 from Communication.ComSpec import *
 from lib.Exceptions import *
@@ -22,7 +21,7 @@ class CProxy(object):
     def Command(self, command, params, data, addr):
         print 'Command', command, params, data
         
-        if command['version'] == '1.0':
+        if command['version'] == '0.1':
             try:
                 com = command['command'].lower()
                 
@@ -47,7 +46,7 @@ class CProxy(object):
             self.manager.Send(addr, RESP_UNSUPPORTED_VERSION, version = command['version'])
     
     def _exec(self, com, params, addr):
-        #~ try:
+        try:
             match = re.match(r'(?P<id>([a-zA-Z_][a-zA-Z0-9_]*|#[0-9]+)).(?P<fname>\w+)$', com)
             if match is None:
                 self.manager.Send(addr, RESP_INVALID_COMMAND_TYPE, command = 'exec', type = com)
@@ -55,28 +54,19 @@ class CProxy(object):
             identifier = match.groupdict()['id']
             fname = match.groupdict()['fname']
             callid = params.pop('__id__', None)
-            
-            if identifier.startswith('#'):
-                obj = t_object(identifier)
-            elif identifier == 'project':
-                obj = self.app.GetProject()
+            obj = t_object(identifier)
             
             if obj is None:
                 self.manager.Send(addr, RESP_INVALID_OBJECT, id = identifier)
                 return
             
-            desc = Meta.GetMethod(obj.__class__, fname)
-            if desc is None:
-                self.manager.Send(addr, RESP_UNKNOWN_METHOD, id = identifier, fname = fname)
-                return
-            else:
-                params[desc[0].func_code.co_varnames[0]] = obj
-            
-            params = dict((key, desc[1]['params'].get(key, lambda x: x)(params[key])) for key in params)
-            result = desc[0](**params)
+            result = Meta.Execute(obj, fname, params)
             
             if callid is not None:
-                self.manager.Send(addr, RESP_RESULT, __id__ = callid, result = desc[1]['result'](result))
+                self.manager.Send(addr, RESP_RESULT, __id__ = callid, result = result)
+        
+        except (UnknowMethodError, ), e:
+            self.manager.Send(addr, RESP_UNKNOWN_METHOD, id = identifier, fname = fname)
             
         #~ except (TypeError, ), e:
             #~ raise ParamMissingError()

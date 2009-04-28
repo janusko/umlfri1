@@ -1,5 +1,6 @@
-from base import IBase
+from DomainObject import IDomainObject
 from lib.Connections import CConnectionObject
 
-class IConnectionObject(IBase):
+class IConnectionObject(IDomainObject):
     __cls__ = CConnectionObject
+    

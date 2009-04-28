@@ -8,33 +8,33 @@ from lib.Elements.Object import CElementObject
 class IProject(IBase):
     __cls__ = CProject
     
-    def GetFileName(self):
-        return self.GetFileName()
+    def GetFileName(him):
+        return him.GetFileName()
     
     @result(r_object)
-    def GetRoot(self):
-        return self.GetRoot().GetObject()
+    def GetRoot(him):
+        return him.GetRoot().GetObject()
     
     @result(r_object)
-    def GetNode(self, path):
+    def GetNode(him, path):
         try:
-            return self.GetNode(path).GetObject()
+            return him.GetNode(path).GetObject()
         except (ProjectError, ):
             raise ErrorDuringExecution()
     
     @result(r_objectlist)
-    def GetDefaultDiagrams(self):
-        return self.GetDefaultDiagrams()
+    def GetDefaultDiagrams(him):
+        return him.GetDefaultDiagrams()
     
-    def GetFileName(self):
-        return self.GetFileName()
+    def GetFileName(him):
+        return him.GetFileName()
     
     @parameter('node', t_classobject(CElementObject))
-    def RemoveNode(self, node):
+    def RemoveNode(him, node):
         node = node.GetNode()
         if node is not None:
-            self.RemoveNode(node)
+            him.RemoveNode(node)
     
     @result(r_object)
-    def GetCurrentDiagram(self):
-        return self.app.GetWindow('frmMain').picDrawingArea.GetDiagram()
+    def GetCurrentDiagram(him):
+        return him.app.GetWindow('frmMain').picDrawingArea.GetDiagram()
