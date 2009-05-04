@@ -1,8 +1,9 @@
 from lib.config import config
+import weakref
 
 class CVisualObject:
     def __init__(self):
-        self.parent = None
+        CVisualObject.SetParent(self,None)
     
     def __GetAttrs(self, value, names):
         for name in names:
@@ -41,10 +42,13 @@ class CVisualObject:
         return context.CacheSize(self, size)
 
     def GetParent(self):
-        return self.parent
+        return self.parent()
 
     def Paint(self, context):
         pass
 
     def SetParent(self, parent):
-        self.parent = parent
+        if parent is None:
+            self.parent = lambda: None
+        else:
+            self.parent = weakref.ref(parent)

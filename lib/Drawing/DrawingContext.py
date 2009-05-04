@@ -1,3 +1,5 @@
+import weakref
+
 class CDrawingContext(object):
     def __init__(self, canvas, element, pos, size = (None, None)):
         self.canvas = canvas
