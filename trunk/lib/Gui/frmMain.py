@@ -16,7 +16,9 @@ from frmFindInDiagram import CFindInDiagram
 from tabStartPage import CtabStartPage
 from lib.config import config
 from lib.colors import colors
+from lib.Gui.diagramPrint import CDiagramPrint
 from lib.Exceptions import UserException
+
 
 class CfrmMain(CWindow):
     name = 'frmMain'
@@ -24,7 +26,7 @@ class CfrmMain(CWindow):
         #menu
         #############
         'mItemFile',
-        'mnuOpen', 'mnuSave', 'mnuSaveAs', 'mnuQuit',
+        'mnuOpen', 'mnuSave', 'mnuSaveAs', 'mnuPrint', 'mnuProperties', 'mnuQuit',
         #############
         'mItemEdit',
         'mnuCut', 'mnuCopy', 'mnuPaste', 'mnuDelete',
@@ -60,12 +62,10 @@ class CfrmMain(CWindow):
 
     def __init__(self, app, wTree):
         CWindow.__init__(self, app, wTree)
-        
+        self.diagramPrint = CDiagramPrint()
         self.form.maximize()
-        
         self.__sensitivity_project = None
         self.UpdateMenuSensitivity(project = False)
-        
         self.ReloadTitle()
         
     def SetSensitiveMenuChilds(self, MenuItem, value):
@@ -119,6 +119,7 @@ class CfrmMain(CWindow):
         self.SetSensitiveMenuChilds(self.mItemElement, element)
         self.mnuSave.set_sensitive(project)
         self.mnuSaveAs.set_sensitive(project)
+        self.mnuPrint.set_sensitive(project)
         self.cmdSave.set_sensitive(project)
         self.cmdCopy.set_sensitive(element)
         self.cmdCut.set_sensitive(element)
@@ -397,6 +398,14 @@ class CfrmMain(CWindow):
             self.application.GetProject().SaveProject(filename, isZippedFile)
             self.ReloadTitle()
 
+    @event("mnuProperties", "activate")
+    def ActionProperties(self, widget):
+        self.diagramPrint.printPropertiesSetup()
+
+    @event("mnuPrint", "activate")
+    def ActionPrint(self, widget):
+        self.diagramPrint.printStart(self.picDrawingArea.GetDiagram())
+
     @event("mnuDelete","activate")
     def on_mnuDelete_click(self, widget):
         self.picDrawingArea.DeleteElements()
@@ -621,4 +630,5 @@ class CfrmMain(CWindow):
         if (event.state & gtk.gdk.CONTROL_MASK):
             self.UpdateMenuSensitivity()
 
-    
+
+

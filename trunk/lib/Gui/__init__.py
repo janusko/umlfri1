@@ -8,3 +8,4 @@ from frmSave import CfrmSave
 from frmFindInDiagram import CFindInDiagram
 from frmOptions import CfrmOptions
 from frmException import CfrmException
+from diagramPrint import CDiagramPrint
