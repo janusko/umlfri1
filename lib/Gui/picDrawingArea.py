@@ -11,11 +11,10 @@ from lib.Drawing import CDiagram, CElement, CConnection, CConLabelInfo
 from lib.Elements import CElementObject
 from lib.Connections import CConnectionObject
 from lib.Exceptions.UserException import *
-
 from lib.Drawing.Canvas import CGtkCanvas, CSvgCanvas, CCairoCanvas, CExportCanvas
 from lib.Drawing import Element
-
 import thread
+
 
 targets = [('document/uml', 0, gtk.TARGET_SAME_WIDGET)]
 
@@ -56,7 +55,6 @@ class CpicDrawingArea(CWidget):
         self.canvas = None
         CWidget.__init__(self, app, wTree)
         self.keydragPosition = None
-
         self.__invalidated = False
         self.__NewConnection = None
         self.dnd = None
@@ -186,7 +184,7 @@ class CpicDrawingArea(CWidget):
         finally:
             self.paintlock.release()
         
-    
+
     def Paint(self, changed = True):
         try:
             self.paintlock.acquire()
@@ -251,7 +249,7 @@ class CpicDrawingArea(CWidget):
         tmp.upper = dasy
         tmp.page_size = wisy
         self.picVBar.set_adjustment(tmp)
-    
+
     def Export(self, filename, export_type):
         self.Diagram.DeselectAll()
         #what u see export(only currently visible area will be exported): sizeX, sizeY = self.GetWindowSize() 
@@ -306,10 +304,7 @@ class CpicDrawingArea(CWidget):
     @event("picEventBox", "button-press-event")
     def on_picEventBox_button_press_event(self, widget, event):
         self.picDrawingArea.grab_focus() 
-            
-                
         pos = self.GetAbsolutePos((event.x, event.y))
-
         if event.button == 1 and event.type == gtk.gdk._2BUTTON_PRESS:
             if len(tuple(self.Diagram.GetSelected())) == 1:
                 for Element in self.Diagram.GetSelected():
@@ -564,8 +559,6 @@ class CpicDrawingArea(CWidget):
             self.Diagram.MoveSelection(delta, self.canvas)
             self.dnd = None
             self.Paint()
-            
-            
 
     @event("picEventBox", "motion-notify-event")
     def on_motion_notify_event(self, widget, event):
