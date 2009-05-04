@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ElementType id="Boundary" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Icon path="icons/boundary_element.png" />
+    <Domain id="boundary" identity="name" />
+    <Connections>
+    </Connections>
+    <Appearance>
+        <HBox>            
+            <Rectangle fill="white" border="/Styles/Element/LineColor">
+                <HBox>
+                    <Sizer minheight="300" minwidth="300">
+                        <Padding padding="5">
+                            <HBox>
+                                <Align align="center">
+                                    <HBox>
+                                        <TextBox text="#name" font="/Styles/Element/NameTextFont" color="/Styles/Element/NameTextColor" />                                       
+                                    </HBox>
+                                </Align>
+                            </HBox>                        
+                        </Padding>
+                    </Sizer>
+                </HBox>
+            </Rectangle>
+        </HBox>
+    </Appearance>
+    <Options>
+    </Options>
+</ElementType>
