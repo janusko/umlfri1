@@ -8,6 +8,7 @@ from SelectableObject import CSelectableObject
 from ConLabelInfo import CConLabelInfo
 from lib.consts import LABELS_CLICKABLE
 from DrawingContext import CDrawingContext
+import weakref
 
 class CConnection(CCacheableObject, CSelectableObject):
     '''Graphical representation of connection
@@ -63,8 +64,8 @@ class CConnection(CCacheableObject, CSelectableObject):
         @type  points: list
         '''
         
-        self.diagram = diagram
-        self.diagram.AddConnection(self)
+        self.diagram = weakref.ref(diagram)
+        self.diagram().AddConnection(self)
         self.object = obj
         if points is None:
             self.points = []
@@ -72,8 +73,8 @@ class CConnection(CCacheableObject, CSelectableObject):
                 self.points = []
         else:
             self.points = points
-        self.source = source
-        self.destination = destination
+        self.source = weakref.ref(source)
+        self.destination = weakref.ref(destination)
         self.labels = dict((id, CConLabelInfo(self, value[0], value[1])) for id, value in enumerate(self.object.GetType().GetLabels()))
         self.selpoint = None
         self.object.AddAppears(diagram)
@@ -158,7 +159,7 @@ class CConnection(CCacheableObject, CSelectableObject):
         @return: self.source
         @rtype: L{CElement<CElement>}
         '''
-        return self.source
+        return self.source()
         
     def GetDestination(self):
         '''
@@ -167,7 +168,7 @@ class CConnection(CCacheableObject, CSelectableObject):
         @return: self.destination
         @rtype: L{CElement<CElement>}
         '''
-        return self.destination
+        return self.destination()
         
     def GetSourceObject(self):
         """
@@ -199,11 +200,11 @@ class CConnection(CCacheableObject, CSelectableObject):
         if not (0 < index  <= len(self.points)):
             raise ConnectionError("PointNotExists")
         if index == 1:
-            previous = self.source.GetCenter(canvas)
+            previous = self.source().GetCenter(canvas)
         else:
             previous = self.points[index - 2]
         if index == len(self.points):
-            next = self.destination.GetCenter(canvas)
+            next = self.destination().GetCenter(canvas)
         else:
             next = self.points[index]
         return previous, next
@@ -515,27 +516,27 @@ class CConnection(CCacheableObject, CSelectableObject):
         @param canvas: Canvas on which its being drawn
         @type  canvas: L{CCairoCanvas<CCairoCanvas>}
         '''
-        if self.source is self.destination and len(self.points) == 0:
-            topleft, bottomright = self.source.GetSquare(canvas)
+        if self.source() is self.destination() and len(self.points) == 0:
+            topleft, bottomright = self.source().GetSquare(canvas)
             y = bottomright[1] + 30
             xc = (topleft[0] + bottomright[0])/2
             self.points = [(xc - 10, y),( xc + 10, y)]
         if index == 0:
-            center = self.source.GetCenter(canvas)
+            center = self.source().GetCenter(canvas)
             if len(self.points) == 0:
-                point = self.destination.GetCenter(canvas)
+                point = self.destination().GetCenter(canvas)
             else:
                 point = self.points[0]
-            return self.__ComputeIntersect(canvas, self.source, center, point)
+            return self.__ComputeIntersect(canvas, self.source(), center, point)
         elif index - 1 < len(self.points):
             return self.points[index - 1]
         elif index - 1 == len(self.points) :
-            center = self.destination.GetCenter(canvas)
+            center = self.destination().GetCenter(canvas)
             if len(self.points) == 0:
-                point = self.source.GetCenter(canvas)
+                point = self.source().GetCenter(canvas)
             else:
                 point = self.points[-1]
-            return self.__ComputeIntersect(canvas, self.destination, center, point)
+            return self.__ComputeIntersect(canvas, self.destination(), center, point)
         else:
             raise ConnectionError("PointNotExists")
         
@@ -544,7 +545,7 @@ class CConnection(CCacheableObject, CSelectableObject):
             yield point
 
     def GetDiagram(self):
-        return self.diagram
+        return self.diagram()
         
     def __ComputeIntersect(self, canvas, element, center, point):
         '''
