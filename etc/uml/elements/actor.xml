@@ -3,7 +3,7 @@
     <Icon path="icons/actor.png" />
     <Domain id="actor" identity="name" />
     <Connections>
-        <Item value="Association" />
+        <Item value="AssociationUseCase" />
         <Item value="Generalization" with="Actor" allowrecursive="0" />
     </Connections>
     <Appearance>
