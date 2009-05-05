@@ -9,16 +9,23 @@
         <ArrowStyle style="simple" fill="/Styles/Connection/ArrowFillColor" color="/Styles/Connection/ArrowColor" />
 		<Label position="center">
 			<HBox>
-                   <Align align="center">
+                <Condition condition="#name" type="empty" negate="1">
+                    <Align align="center">
                         <Rectangle fill="/Styles/Connection/TextFill">
-                            <VBox>
-                                <TextBox text="&#171;" font="/Styles/Connection/TextFont" color="/Styles/Connection/TextColor" />
-                                <TextBox text="include" font="/Styles/Connection/TextFont" color="/Styles/Connection/TextColor" />
-                                <TextBox text="&#187;" font="/Styles/Connection/TextFont" color="/Styles/Connection/TextColor" />
-                            </VBox>
+                            <TextBox text="#name" font="/Styles/Connection/NameTextFont" color="/Styles/Connection/NameTextColor" />
                         </Rectangle>
                     </Align>
+                </Condition>
+                <Align align="center">
+                    <Rectangle fill="/Styles/Connection/TextFill">
+                        <VBox>
+                            <TextBox text="&#171;" font="/Styles/Connection/TextFont" color="/Styles/Connection/TextColor" />
+                            <TextBox text="include" font="/Styles/Connection/TextFont" color="/Styles/Connection/TextColor" />
+                            <TextBox text="&#187;" font="/Styles/Connection/TextFont" color="/Styles/Connection/TextColor" />
+                        </VBox>
+                    </Rectangle>
+                </Align>
             </HBox>
 		</Label>
- </Appearance>
+    </Appearance>
 </ConnectionType>

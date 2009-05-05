@@ -10,8 +10,8 @@
         <Item value="Boundary" />
     </Elements>
     <Connections>
-        <Item value="Generalization" />
-        <Item value="Association" />
+        <Item value="Generalization" />       
+        <Item value="AssociationUseCase" />
         <Item value="Note Link" />
 		<Item value="Include"/>
 		<Item value="Extend"/>
