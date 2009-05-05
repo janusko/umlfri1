@@ -10,6 +10,7 @@ from lib.Connections.Object import CConnectionObject
 class IDiagram(IBase):
     __cls__ = CDiagram
     
+    @result(r_str)
     def GetName(him):
         return him.GetName()
     
@@ -23,9 +24,11 @@ class IDiagram(IBase):
     def GetConnection(him, obj):
         return him.GetConnection(obj)
     
+    @result(r_str)
     def GetPath(him):
         return him.GetPath()
     
+    @result(r_str)
     def GetType(him):
         return him.GetType().GetId()
     
@@ -42,10 +45,12 @@ class IDiagram(IBase):
     def GetSelectedConnections(him): 
         return list(him.GetSelectedConnections)
         
+    @result(r_2x2intTuple)
     def GetSelectSquare(him):
         return him.GetSelectSquare(IBase.adapter.GetCanvas())
     
     @parameter('pos', t_2intTuple)
+    @result(r_object)
     def GetElementAtPosition(him, pos): 
         return him.GetElementAtPosition(IBase.adapter.GetCanvas(), pos)
     
@@ -56,21 +61,32 @@ class IDiagram(IBase):
     def GetElementsInRange(him, topleft, bottomright, includeall = True):
         return list(him.GetElementsInRange(IBase.adapter.GetCanvas(), topleft, bottomright, includeall))
     
+    @result(r_2x2intTuple)
     def GetSizeSquare(him):
         return him.GetSizeSquare(IBase.adapter.GetCanvas())
     
+    @result(r_objectlist)
+    def GetElements(him):
+        return list(him.GetElements())
+        
+    @result(r_objectlist)
+    def GetConnections(him):
+        return list(him.GetConnections)
+    
     # WRITE METHODS
     
+    @result(r_none)
+    @parameter('name', t_str)
     def SetName(him, name):
         him.SetName(name)
         IBase.adapter.plugin_change_domain_value(him, CDiagram.NAME_PROPERY)
     
-    @parameter('connection', t_classobject(CConnection))
-    def AddConnection(him, connection): 
-        him.AddConnection(connection)
+    #~ @parameter('connection', t_classobject(CConnection))
+    #~ def AddConnection(him, connection): 
+        #~ him.AddConnection(connection)
     
-    @parameter('item', t_classobject(CElement))
-    def DeleteElement(him, item):
-        him.DeleteItem(item)
+    #~ @parameter('item', t_classobject(CElement))
+    #~ def DeleteElement(him, item):
+        #~ him.DeleteItem(item)
     
 

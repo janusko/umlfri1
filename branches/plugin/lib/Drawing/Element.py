@@ -3,6 +3,7 @@ from Connection import CConnection
 from DrawingContext import CDrawingContext
 from VisibleObject import CVisibleObject
 from lib.Plugin import Reference
+import weakref
 
 class CElement(CVisibleObject, Reference):
     def __init__(self, diagram, obj, isLoad = False):
@@ -11,8 +12,8 @@ class CElement(CVisibleObject, Reference):
         self.isLoad = isLoad
         self.object = obj
         self.squares = []
-        self.diagram = diagram
-        self.diagram.AddElement(self)
+        self.diagram = weakref.ref(diagram)
+        self.diagram().AddElement(self)
         self.object.AddAppears(diagram)
         self.__AddExistingConnections()
     
@@ -20,11 +21,11 @@ class CElement(CVisibleObject, Reference):
         if not self.isLoad:
             for i in self.object.GetConnections():
                 if i.GetSource() is not self.object:
-                    if self.diagram.HasElementObject(i.GetSource()) is not None:
-                        CConnection(self.diagram,i,self.diagram.HasElementObject(i.GetSource()),self)
+                    if self.diagram().HasElementObject(i.GetSource()) is not None:
+                        CConnection(self.diagram(),i,self.diagram().HasElementObject(i.GetSource()),self)
                 elif i.GetDestination() is not self.object:
-                    if self.diagram.HasElementObject(i.GetDestination()) is not None:
-                        CConnection(self.diagram,i,self,self.diagram.HasElementObject(i.GetDestination()))
+                    if self.diagram().HasElementObject(i.GetDestination()) is not None:
+                        CConnection(self.diagram(),i,self,self.diagram().HasElementObject(i.GetDestination()))
                     
     def __AddSquare(self, index, x, y, posx, posy):
         size = config['/Styles/Selection/PointsSize']
@@ -77,7 +78,7 @@ class CElement(CVisibleObject, Reference):
 
     def GetConnections(self):
         for c1 in self.GetObject().GetConnections(): #ConnectionObject
-            for c2 in self.diagram.GetConnections(): # Connection
+            for c2 in self.diagram().GetConnections(): # Connection
                 if c2.GetObject() is c1:
                     yield c2
 

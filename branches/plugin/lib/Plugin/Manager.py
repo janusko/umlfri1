@@ -1,7 +1,7 @@
 from Communication.AcceptServer import CAcceptServer
 from Communication.SocketWrapper import CSocketWrapper
 from Communication.ComSpec import *
-from Proxy import CProxy
+from Core import CCore
 from lib.consts import *
 from lib.Gui import CGuiManager
 import thread
@@ -18,7 +18,7 @@ class CPluginManager(object):
         self.connection = {}
         self.app = app
         self.guimanager = CGuiManager(app)
-        self.proxy = CProxy(self, app)
+        self.proxy = CCore(self, app)
         self.acceptserver = CAcceptServer(('localhost', PLUGIN_SOCKET), self.NewConnection)
         self.acceptserver.Start()
         print "PORT:", self.acceptserver.sock.getsockname()[1]

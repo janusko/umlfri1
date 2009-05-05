@@ -6,4 +6,3 @@ from lib.Drawing.ConLabelInfo import CConLabelInfo
 class IConLabelInfo(IVisibleObject):
     __cls__ = CConLabelInfo
     
-    

@@ -1,41 +1,43 @@
 import re
 from lib.Exceptions import *
+from lib.Plugin.Client import classes
+from lib.Plugin.Client.Proxy import CProxy
 #from lib.Plugin.Communication.ComSpec import *
 
 class Meta(type):
     
     interface = {}
     names = {}
-    default_result = lambda self, x: x
     constructor = '__init__'
+    implicit = lambda self, x: x
     
     def __init__(self, name, bases, dictionary):
         type.__init__(self, name, bases, dictionary)
         if not hasattr(self, '__cls__'):
             return
-        check = self.__checkclass(dictionary['__cls__'])
         if getattr(self, '__cls__') is not None:
             self.interface[dictionary['__cls__']] = dict(
                 (('__class__', self),) +
                 tuple((fname if not getattr(getattr(self, fname), '_constructor', False) else Meta.constructor, 
                     {'params': self.__joindict(
-                        {getattr(self, fname).func_code.co_varnames[0]: check}, 
+                        {getattr(self, fname).func_code.co_varnames[0]: self.implicit}, 
                         getattr(self, fname)._params if hasattr(getattr(self, fname), '_params') else {}),
-                     'result': getattr(self, fname)._result if hasattr(getattr(self, fname), '_result') else self.default_result,
+                     'result': getattr(self, fname)._result,
                      'fname': fname})
                 for fname in dir(self)
                 if (callable(getattr(self, fname)) 
                     and self.__valid_fname(fname) 
-                    and not getattr(getattr(self, fname), '_not_iterface', False)
-                ))
-            )
+                    and not getattr(getattr(self, fname), '_not_iterface', False))))
             self.names[name] = dictionary['__cls__']
+            classes[name] = type(name, (CProxy, ), {'Meta': Meta})
         for fname, fun in dictionary.iteritems():
             if callable(fun) and self.__valid_fname(fname):
                 setattr(self, fname, staticmethod(fun))
             
     @classmethod
     def GetMethod(cls, hisclass, fname):
+        if isinstance(hisclass, str):
+            hisclass = cls.names.get(hisclass)
         desc = cls.interface.get(hisclass)
         if desc is not None and fname in desc:
             return getattr(desc['__class__'], desc[fname]['fname']), desc[fname]
@@ -44,7 +46,6 @@ class Meta(type):
     
     @classmethod
     def Execute(cls, obj, fname, params, isobject = True):
-        print obj, fname, params, isobject
         if isobject:
             fun, desc = cls.GetMethod(obj.__class__, fname)
             if getattr(fun, '_constructor', False):
@@ -59,8 +60,7 @@ class Meta(type):
             params[fun.func_code.co_varnames[0]] = obj
         else:
             params = dict(zip(fun.func_code.co_varnames, params))
-        params = dict((key, desc['params'].get(key, lambda x: x)(params[key])) for key in params)
-        print obj, fname, params, isobject
+        params = dict((key, desc['params'][key](params[key])) for key in params)
         return desc['result'](fun(**params))
         
     @classmethod
@@ -68,9 +68,23 @@ class Meta(type):
         return cls.Execute(cls.names.get(hisclass), cls.constructor, params, False)
     
     @classmethod
+    def GetMethodDescription(cls, classname, fname):
+        dict = cls.interface.get(cls.names.get(classname))
+        if dict is not None:
+            return dict.get(fname)
+    
+    @classmethod
     def HasConstructor(cls, classname):
         return classname in cls.names and cls.constructor in cls.interface[cls.names[classname]]
-            
+    
+    @classmethod
+    def GetClassName(cls, object):
+        desc = cls.interface.get(object.__class__)
+        if desc:
+            return desc['__class__'].__name__
+        else:
+            return None
+    
     @staticmethod
     def __checkclass(cls):
         def check(obj):
@@ -82,7 +96,7 @@ class Meta(type):
     @staticmethod
     def __joindict(d1, d2):
         d1.update(d2)
-        return d2
+        return d1
     
     @staticmethod
     def __valid_fname(fname):

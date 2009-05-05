@@ -4,7 +4,7 @@ from Communication.ComSpec import *
 from lib.Exceptions import *
 from Interface import Reference, Meta
 
-class CProxy(object):
+class CCore(object):
     
     def __init__(self, manager, app):
         self.manager = manager
@@ -21,52 +21,51 @@ class CProxy(object):
     def Command(self, command, params, data, addr):
         print 'Command', command, params, data
         
-        if command['version'] == '0.1':
+        if command['version'] == VERSION:
             try:
                 com = command['command'].lower()
-                
+                callid = params.pop('__id__', None)
                 if com == 'gui':
-                    self._gui(command['type'].lower(), params, addr)
+                    self._gui(command['type'].lower(), params, addr, callid)
                 
                 elif com == 'metamodel':
-                    self._metamodel(command['type'].lower(), params, addr)
+                    self._metamodel(command['type'].lower(), params, addr, callid)
                 
                 elif com == 'exec':
-                    self._exec(command['type'], params, addr)
+                    self._exec(command['type'], params, addr, callid)
                     
                 else:
-                    self.manager.Send(addr, RESP_UNKONWN_COMMAND, command = com)
+                    self.manager.Send(addr, RESP_UNKONWN_COMMAND, command = com, __id__ = callid)
             
             except (ParamValueError, ), e:
-                self.manager.Send(addr, RESP_INVALID_PARAMETER, params = [i for i in e])
+                self.manager.Send(addr, RESP_INVALID_PARAMETER, params = [i for i in e], __id__ = callid)
             except (ParamMissingError, ), e:
-                self.manager.Send(addr, RESP_MISSING_PARAMETER, param = e[0])
+                self.manager.Send(addr, RESP_MISSING_PARAMETER, param = e[0], __id__ = callid)
         
         else:
-            self.manager.Send(addr, RESP_UNSUPPORTED_VERSION, version = command['version'])
+            self.manager.Send(addr, RESP_UNSUPPORTED_VERSION, version = command['version'], __id__ = callid)
     
-    def _exec(self, com, params, addr):
+    def _exec(self, com, params, addr, callid):
         try:
             match = re.match(r'(?P<id>([a-zA-Z_][a-zA-Z0-9_]*|#[0-9]+)).(?P<fname>\w+)$', com)
             if match is None:
-                self.manager.Send(addr, RESP_INVALID_COMMAND_TYPE, command = 'exec', type = com)
+                self.manager.Send(addr, RESP_INVALID_COMMAND_TYPE, command = 'exec', type = com, __id__ = callid)
                 return
             identifier = match.groupdict()['id']
             fname = match.groupdict()['fname']
-            callid = params.pop('__id__', None)
+            
             obj = t_object(identifier)
             
             if obj is None:
-                self.manager.Send(addr, RESP_INVALID_OBJECT, id = identifier)
+                self.manager.Send(addr, RESP_INVALID_OBJECT, id = identifier, __id__ = callid)
                 return
             
             result = Meta.Execute(obj, fname, params)
             
-            if callid is not None:
-                self.manager.Send(addr, RESP_RESULT, __id__ = callid, result = result)
+            self.manager.Send(addr, RESP_RESULT, __id__ = callid, result = result)
         
         except (UnknowMethodError, ), e:
-            self.manager.Send(addr, RESP_UNKNOWN_METHOD, id = identifier, fname = fname)
+            self.manager.Send(addr, RESP_UNKNOWN_METHOD, id = identifier, fname = fname, __id__ = callid)
             
         #~ except (TypeError, ), e:
             #~ raise ParamMissingError()
@@ -74,7 +73,7 @@ class CProxy(object):
         #~ except (ValueError, ), e:
             #~ raise ParamValueError()
     
-    def _metamodel(self, com, params, addr):
+    def _metamodel(self, com, params, addr, callid):
         try:
             ctype = com.split('.', 1)
             assert (len(ctype) == 2 and ctype[0] in ('list', 'detail') and 
@@ -83,7 +82,7 @@ class CProxy(object):
             if self.app.GetProject() is not None:
                 metamodel = self.app.GetProject().GetMetamodel()
             else:
-                self.manager.Send(addr, RESP_PROJECT_NOT_LOADED)
+                self.manager.Send(addr, RESP_PROJECT_NOT_LOADED, __id__ = callid)
                 return
             
             
@@ -97,7 +96,7 @@ class CProxy(object):
                     result = [c.GetId() for c in metamodel.GetConnectionFactory().IterTypes()]
                 elif ctype[1] == 'domain':
                     result = [d.GetName() for d in metamodel.GetDomainFactory().IterTypes()]
-                self.manager.Send(addr, RESP_METAMODEL_DESCRIPTION, type = com, result = result)
+                self.manager.Send(addr, RESP_METAMODEL_DESCRIPTION, type = com, result = result, __id__ = callid)
             
             if ctype[0] == 'detail':
                 if ctype[1] == 'metamodel':
@@ -127,15 +126,15 @@ class CProxy(object):
                         domain = metamodel.GetDomainFactory().GetDomain(name)
                         result = {'attributes': [dict(id = attr, **domain.GetAttribute(attr)) for attr in domain.IterAttributeIDs()],
                                   'parsers':  list(domain.IterParsers()),}
-                self.manager.Send(addr, RESP_METAMODEL_DESCRIPTION, type = com, result = result, name = name)
+                self.manager.Send(addr, RESP_METAMODEL_DESCRIPTION, type = com, result = result, name = name, __id__ = callid)
         
         except (AssertionError, ), e:
-            self.manager.Send(addr, RESP_INVALID_COMMAND_TYPE, command = 'metamodel', type = com)
+            self.manager.Send(addr, RESP_INVALID_COMMAND_TYPE, command = 'metamodel', type = com, __id__ = callid)
         
         except (FactoryError, ), e:
             raise ParamValueError('name')
     
-    def _gui(self, ctype, params, addr):
+    def _gui(self, ctype, params, addr, callid):
         try:
             if ctype == 'add':
                 mtype = params.pop('type')
@@ -145,21 +144,21 @@ class CProxy(object):
                 else:
                     name = params.pop('name')
                 self.guimanager.AddItem(mtype, path, name, self._guiactivated, addr, **params)
-                self.manager.Send(addr, RESP_GUI_ADDED, type = mtype, fullname = path + '/' + (name or ''))
+                self.manager.Send(addr, RESP_GUI_ADDED, type = mtype, fullname = path + '/' + (name or ''), __id__ = callid)
             
             elif ctype == 'sensitive':
                 self.guimanager.SetSensitive(params['path'], True)
-                self.manager.Send(addr, RESP_GUI_SENSITIVE, path = params['path'])
+                self.manager.Send(addr, RESP_GUI_SENSITIVE, path = params['path'], __id__ = callid)
             
             elif ctype == 'insensitive':
                 self.guimanager.SetSensitive(params['path'], False)
-                self.manager.Send(addr, RESP_GUI_INSENSITIVE, path = params['path'])
+                self.manager.Send(addr, RESP_GUI_INSENSITIVE, path = params['path'], __id__ = callid)
                 
             else:
-                self.manager.Send(addr, RESP_INVALID_COMMAND_TYPE, command = 'gui', type = ctype)
+                self.manager.Send(addr, RESP_INVALID_COMMAND_TYPE, command = 'gui', type = ctype, __id__ = callid)
         except (KeyError, ), e:
             raise ParamMissingError(e.message)
         
     def _guiactivated(self, item, path, addr):
         print 'GuiActivated', path, addr
-        self.manager.Send(addr, RESP_GUI_ACTIVATED, path = path)
+        self.manager.Send(addr, RESP_GUI_ACTIVATED, path = path, __id__ = callid)

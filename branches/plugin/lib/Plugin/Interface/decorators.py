@@ -1,5 +1,3 @@
-from lib.Plugin.Communication.ComSpec import *
-
 def parameter(name, transform):
     def transformation(fun):
         if not hasattr(fun, '_params'):
@@ -21,4 +19,12 @@ def not_interface(fun):
 
 def constructor(fun):
     fun._constructor = True
+    fun._result = lambda x: x
     return fun
+
+def reverse(transform):
+    def transformation(fun):
+        fun._reverse = transform
+        return fun
+    return transformation
+    

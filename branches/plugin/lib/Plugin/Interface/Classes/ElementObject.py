@@ -10,26 +10,35 @@ from lib.Project import CProjectNode
 class IElementObject(IDomainObject):
     __cls__ = CElementObject
     
-    @constructor
-    @parameter('type', t_elementType)
-    def Create(type):
-        return CElementObject(type)
-    
-    @parameter('con', t_classobject(CConnectionObject))
-    def AddConnection(him, con):
-        return him.AddConnection(con)
-    
-    
     @result(r_objectlist)
     def GetDiagrams(him):
         node = him.GetNode()
         if node is not None:
             return node.GetDiagrams()
     
-    @parameter('child', t_classobject(CElementObject))
-    def AddChild(him, child):
-        node = him.GetNode()
-        if node is not None:
-            node.AddChild(CProjectNode(object = child))
-            
+    @result(r_objectlist)
+    def GetConnections(him):
+        return list(him.GetConnections())
+        
+    
+    #destructive
+    
+    #~ @constructor
+    #~ @parameter('type', t_elementType)
+    #~ def Create(type):
+        #~ return CElementObject(type)
+    
+    #~ @parameter('child', t_classobject(CElementObject))
+    #~ def AddChild(him, child):
+        #~ node = him.GetNode()
+        #~ if node is not None:
+            #~ node.AddChild(CProjectNode(object = child))
+    
+    #~ @parameter('con', t_classobject(CConnectionObject))
+    #~ def AddConnection(him, con):
+        #~ return him.AddConnection(con)
+    
+    #~ @parameter('con', t_classobject(CConnectionObject))
+    #~ def Disconnect(him, con):
+        #~ him.Disconnect(con)
     

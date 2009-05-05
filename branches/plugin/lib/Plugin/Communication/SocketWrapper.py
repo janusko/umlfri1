@@ -48,11 +48,11 @@ class CSocketWrapper(object):
                     
                 if self.client:
                     if type:
-                        fline = '%s/1.0 %i %s' % (IDENTIFIER, command, type)
+                        fline = '%s/%s %i %s' % (IDENTIFIER, VERSION, command, type)
                     else:
-                        fline = '%s/1.0 %i' % (IDENTIFIER, command, )
+                        fline = '%s/%s %i' % (IDENTIFIER, VERSION, command, )
                 else:
-                    fline = '%s %s %s/1.0' % (command, type, IDENTIFIER)
+                    fline = '%s %s %s/%s' % (command, type, IDENTIFIER, VERSION)
                 
                 pline = '\n'.join( (str(key) + ': ' + str(value)) for key, value in params.iteritems())
                 

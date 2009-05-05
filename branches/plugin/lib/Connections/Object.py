@@ -1,6 +1,7 @@
 from lib.Exceptions.UserException import *
 from lib.Domains import CDomainObject
 from lib.Plugin import Reference
+import weakref
 
 class CConnectionObject(Reference):
     """
@@ -20,8 +21,8 @@ class CConnectionObject(Reference):
         @type  dest: L{CElementObject<lib.Elements.Object.CElementObject>}
         """
         Reference.__init__(self)
-        self.source = None
-        self.destination = None
+        self.__SetWeakSource(None)
+        self.__SetWeakDestination(None)
         self.revision = 0
         self.appears = []
         self.type = type
@@ -29,9 +30,9 @@ class CConnectionObject(Reference):
         try:
             self.SetDestination(dest)
         except:
-            if self.source is not None:
-                self.source.RemoveConnection(self)
-            self.source = None
+            if self.GetSource() is not None:
+                self.GetSource().RemoveConnection(self)
+            self.__SetWeakSource(None)
             raise
         self.domainobject = CDomainObject(self.type.GetDomain())
     
@@ -39,8 +40,8 @@ class CConnectionObject(Reference):
         """
         Validate connection for recursion
         """
-        source = self.source
-        dest = self.destination
+        source = self.GetSource()
+        dest = self.GetDestination()
         type = self.type
         
         if source is None or dest is None:
@@ -61,11 +62,11 @@ class CConnectionObject(Reference):
         Validate connection
         """
         if reversed:
-            source = self.source
-            dest = self.destination
+            source = self.GetSource()
+            dest = self.GetDestination()
         else:
-            source = self.destination
-            dest = self.source
+            source = self.GetDestination()
+            dest = self.GetSource()
         type = self.type
         
         if source is None or dest is None:
@@ -113,7 +114,7 @@ class CConnectionObject(Reference):
         @rtype:  iterator over L{CDiagram<lib.Drawing.Diagram.CDiagram>}
         """
         for i in self.appears:
-            yield i
+            yield i()
 
     def AddAppears(self, diagram):
         """
@@ -122,7 +123,7 @@ class CConnectionObject(Reference):
         @param diagram: Diagram
         @type  diagram: L{CDiagram<lib.Drawing.Diagram.CDiagram>}
         """
-        self.appears.append(diagram)
+        self.appears.append(weakref.ref(diagram))
 
     def RemoveAppears(self, diagram):
         """
@@ -133,7 +134,9 @@ class CConnectionObject(Reference):
         
         @raise ValueError: if given diagram is not found
         """
-        self.appears.remove(diagram)
+        for id, value in enumerate(self.appears):
+            if value() is diagram:
+                del self.appears[id]
 
     def GetType(self):
         """
@@ -163,10 +166,10 @@ class CConnectionObject(Reference):
         @return: other object
         @rtype:  L{CElementObject<lib.Elements.Object.CElementObject>}
         """
-        if self.source is object:
-            return self.destination
-        elif self.destination is object:
-            return self.source
+        if self.GetWeakSource is object:
+            return self.GetWeakDestination
+        elif self.GetWeakDestination is object:
+            return self.GetWeakSource
         else:
             return None
         
@@ -177,7 +180,7 @@ class CConnectionObject(Reference):
         @return: connection destination
         @rtype:  L{CElementObject<lib.Elements.Object.CElementObject>}
         """
-        return self.destination
+        return self.destination()
 
     def GetSource(self):
         """
@@ -186,7 +189,7 @@ class CConnectionObject(Reference):
         @return: connection source
         @rtype:  L{CElementObject<lib.Elements.Object.CElementObject>}
         """
-        return self.source
+        return self.source()
 
     def SetDestination(self, dest):
         """
@@ -195,19 +198,34 @@ class CConnectionObject(Reference):
         @param dest: object which has to be set as destination
         @type  dest: L{CElementObject<lib.Elements.Object.CElementObject>}
         """
-        if self.destination and self.destination is not self.source:
-            self.destination.RemoveConnection(self)
-        old = self.destination
-        self.destination = dest
+        if self.GetDestination() and self.GetDestination() is not self.GetSource():
+            self.GetDestination().RemoveConnection(self)
+        old = self.GetDestination()
+        self.__SetWeakDestination(dest)
         try:
             self.__DoCheck()
         except:
-            self.destination = old
+            self.__SetWeakDestination(old)
             raise
         if dest is not None:
             dest.AddConnection(self)
         self.revision += 1
 
+    def __SetWeakSource(self, source):
+        if source is None:
+            self.source = lambda: None
+        else:
+            self.source = weakref.ref(source)
+            
+    
+        
+    def __SetWeakDestination(self, destination):
+        if destination is None:
+            self.destination = lambda: None
+        else:
+            self.destination = weakref.ref(destination)
+   
+        
     def SetSource(self, source):
         """
         Set source object of this connection
@@ -215,14 +233,14 @@ class CConnectionObject(Reference):
         @param source: object which has to be set as source
         @type  source: L{CElementObject<lib.Elements.Object.CElementObject>}
         """
-        if self.source and self.destination is not self.source:
-            self.source.RemoveConnection(self)
-        old = self.source
-        self.source = source
+        if self.GetSource() and self.GetDestination() is not self.GetSource():
+            self.GetSource().RemoveConnection(self)
+        old = self.GetSource()
+        self.__SetWeakSource(source)
         try:
             self.__DoCheck()
         except:
-            self.source = old
+            self.__SetWeakSource(old)
             raise
         if source is not None:
             source.AddConnection(self)
@@ -232,11 +250,11 @@ class CConnectionObject(Reference):
         """
         Disconnect self from other objects
         """
-        if self.source is self.destination:
-            self.source.RemoveConnection(self)
+        if self.GetSource() is self.GetkDestination():
+            self.GetSource().RemoveConnection(self)
         else:
-            self.source.RemoveConnection(self)
-            self.destination.RemoveConnection(self)            
+            self.GetSource().RemoveConnection(self)
+            self.GetDestination().RemoveConnection(self)            
     
     def Paint(self, context):
         """
