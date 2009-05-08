@@ -71,7 +71,7 @@ class IDiagram(IBase):
         
     @result(r_objectlist)
     def GetConnections(him):
-        return list(him.GetConnections)
+        return list(him.GetConnections())
     
     # WRITE METHODS
     

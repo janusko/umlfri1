@@ -6,7 +6,7 @@ class Reference(object):
     __pluginIdReferences = weakref.WeakValueDictionary()
     __lastPluginId = 0
     __pluginIdLock = thread.allocate()
-    __project = lambda: None
+    __project = staticmethod(lambda: None)
     
     def __init__(self):
         Reference.__pluginIdLock.acquire()

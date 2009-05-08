@@ -1,6 +1,7 @@
 from base import IBase
 from lib.Plugin.Communication.ComSpec import *
 from lib.Plugin.Interface.decorators import *
+from lib.Domains.Object import CDomainObject
 
 class IDomainObject(IBase):
     __cls__ = None
@@ -14,15 +15,15 @@ class IDomainObject(IBase):
     def GetValue(him, path):
             res = him.GetValue(path)
             if isinstance(res, CDomainObject):
-                return `res.GetSaveInfo()`
+                return str(res.GetSaveInfo())
             elif isinstance(res, list):
-                return '[' + ','.join(`i.GetSaveInfo()` for i in res) + ']'
+                return '[' + ','.join(str(i.GetSaveInfo()) for i in res) + ']'
             else:
-                return `res`
+                return str(res)
     
     @result(r_str)
     def GetSaveInfo(him):
-        return `him.GetSaveInfo()`
+        return str(him.GetSaveInfo())
     
     @result(r_str)
     def GetType(him):

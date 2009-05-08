@@ -1,3 +1,5 @@
+from ExceptionCarrier import CExceptionCarrier
+
 class CFuture(object):
     
     def __init__(self, lock, dict, key, dictlock):
@@ -16,7 +18,10 @@ class CFuture(object):
             self.dictlock.acquire()
             del self.dict[self.key]
             self.dictlock.release()
-        return self.result
+        if isinstance(self.result, CExceptionCarrier):
+            self.result.throw()
+        else:
+            return self.result
     
     def IsReady(self):
         return self.hasresult or not self.lock.locked()

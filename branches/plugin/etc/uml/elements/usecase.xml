@@ -3,7 +3,7 @@
     <Icon path="icons/usecase.png" />
     <Domain id="usecase" identity="name" />
     <Connections>
-        <Item value="Association" />
+        <Item value="AssociationUseCase" />
         <Item value="Generalization" with="UseCase" allowrecursive="0" />
 		<Item value="Include"/>
 		<Item value="Extend"/>

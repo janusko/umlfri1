@@ -53,6 +53,9 @@ class Application(CApplication):
     def GetBus(self):
         return self.bus
     
+    def GetPluginAdapter(self):
+        return self.pluginAdapter
+    
     @argument("-o", "--open", True)
     def DoOpen(self, value):
         "Opens selected project file"
@@ -123,4 +126,5 @@ class Application(CApplication):
         return self.pluginManager
 
 if __name__ == '__main__':
+    gobject.threads_init()
     Application().Main()

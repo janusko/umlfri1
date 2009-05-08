@@ -153,6 +153,10 @@ class CCore(object):
             elif ctype == 'insensitive':
                 self.guimanager.SetSensitive(params['path'], False)
                 self.manager.Send(addr, RESP_GUI_INSENSITIVE, path = params['path'], __id__ = callid)
+            
+            elif ctype == 'warning':
+                self.app.GetPluginAdapter().plugin_display_warning(params['text'])
+                self.manager.Send(addr, RESP_OK, __id__ = callid)
                 
             else:
                 self.manager.Send(addr, RESP_INVALID_COMMAND_TYPE, command = 'gui', type = ctype, __id__ = callid)
@@ -161,4 +165,4 @@ class CCore(object):
         
     def _guiactivated(self, item, path, addr):
         print 'GuiActivated', path, addr
-        self.manager.Send(addr, RESP_GUI_ACTIVATED, path = path, __id__ = callid)
+        self.manager.Send(addr, RESP_GUI_ACTIVATED, path = path)

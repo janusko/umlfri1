@@ -12,3 +12,4 @@ class CCairoCanvas(CCairoBaseCanvas):
     def Clear(self):
         gc = self.widget.get_style().white_gc
         self.window.draw_rectangle(gc, True, 0, 0, *self.window.get_size())
+

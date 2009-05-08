@@ -3,6 +3,7 @@ import thread
 from ComSpec import *
 from SocketWrapper import CSocketWrapper
 from Future import CFuture
+from ExceptionCarrier import CExceptionCarrier
 
 class CConnection(object):
     
@@ -14,6 +15,7 @@ class CConnection(object):
             sock = socket.socket()
             sock.connect(('', port))
             self.wrapper = CSocketWrapper(sock, self, None, False)
+            self.guicallback = {}
         
         #~ except socket.error
     
@@ -22,10 +24,9 @@ class CConnection(object):
             print command, params, data, addr
             self.lock.acquire()
             code = int(command['code'])
-            if 200 <= code <= 299:
-                if '__id__' in params:
-                    __id__ = params['__id__']
-                else:
+            if 200 <= code <= 299 or 400 <= code <= 499:
+                __id__ = params.pop('__id__', None)
+                if __id__ is None:
                     return
                 lck = self.results[__id__]
                 
@@ -35,7 +36,16 @@ class CConnection(object):
                 elif code in (RESP_OK, RESP_GUI_ADDED, RESP_GUI_SENSITIVE, RESP_GUI_INSENSITIVE):
                     self.results[__id__] = True
                 
+                elif 400 <= code <= 499:
+                    self.results[__id__] = CExceptionCarrier(Exception, *params.values())
+                
                 lck.release()
+            elif code == RESP_GUI_ACTIVATED:
+                path = params['path']
+                if path in self.guicallback:
+                    thread.start_new(self.guicallback[path], (path, ))
+            
+            
         finally:
             self.lock.release()
     
@@ -57,5 +67,12 @@ class CConnection(object):
             self.wrapper.Send(command, type, params = params)
             return CFuture(self.results[__id__], self.results, __id__, self.lock)
         
+        finally:
+            self.lock.release()
+    
+    def SetGuiCallback(self, path, callback):
+        try:
+            self.lock.acquire()
+            self.guicallback[path] = callback
         finally:
             self.lock.release()

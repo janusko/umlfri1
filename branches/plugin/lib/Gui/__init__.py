@@ -11,3 +11,4 @@ from frmException import CfrmException
 from pluginAdapter import CPluginAdapter
 from Bus import CBus
 from GuiManager import CGuiManager
+from diagramPrint import CDiagramPrint

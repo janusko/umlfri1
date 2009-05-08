@@ -15,7 +15,10 @@ class CPluginAdapter(CGuiObject):
         self.manager.DomainValueChanged(element, property)
     
     def plugin_change_domain_value(self, element, property):
-        self.application.GetBus().emit('content-update', element, property)
+        gobject.idle_add(self.application.GetBus().emit, 'content-update', element, property)
+    
+    def plugin_display_warning(self, text):
+        gobject.idle_add(self.application.GetBus().emit, 'run-dialog', 'warning', text)
     
     def GetCanvas(self):
         return self.app.GetWindow('frmMain').picDrawingArea.canvas
