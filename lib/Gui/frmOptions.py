@@ -6,7 +6,8 @@ from common import event
 
 class CfrmOptions(common.CWindow):
     #widgets = ('labelOptions',)
-    widgets = ('cbElementLine', 'cbElementFill', 'cbElementFill2', 'cbElementFill3', 'cbElementShadow', 'cbElementNameText', 'cbElementText', 'fbElementNameText','fbElementText' ,'cbConnectionLine', 'cbConnectionArrow', 'cbConnectionArrowFill', 'cbConnectionNameText', 'cbConnectionText', 'fbConnectionNameText', 'fbConnectionText', 'sbSelectionPointsSize', 'cbSelectionPoints', 'cbSelectionRectangle' ,'sbSelectionRectangleWidth', 'cbDragRectangle', 'sbDragRectangleWidth', 'txtRootPath', 'txtTemplatesPath', 'txtImagesPath', 'txtGuiPath', 'txtLocalesPath', 'txtUserDirPath', 'txtUserConfigDirPath', 'txtRecentFilesPath', 'expElement', 'expSelection', 'expConnection', 'expDrag')
+    widgets = ('cbElementLine', 'cbElementFill', 'cbElementFill2', 'cbElementFill3', 'cbElementShadow', 'cbElementNameText', 'cbElementText', 'fbElementNameText','fbElementText' ,'cbConnectionLine', 'cbConnectionArrow', 'cbConnectionArrowFill', 'cbConnectionNameText', 'cbConnectionText', 'fbConnectionNameText', 'fbConnectionText', 'sbSelectionPointsSize', 'cbSelectionPoints', 'cbSelectionRectangle' ,'sbSelectionRectangleWidth', 'cbDragRectangle', 'sbDragRectangleWidth', 'txtRootPath', 'txtTemplatesPath', 'txtImagesPath', 'txtGuiPath', 'txtLocalesPath', 'txtUserDirPath', 'txtUserConfigDirPath', 'txtRecentFilesPath', 'expElement', 'expSelection', 'expConnection', 'expDrag',
+               'cmdDefaultOptions')
     name = 'frmOptions'
     
     def GtkColorToStr(self, color):
@@ -15,14 +16,9 @@ class CfrmOptions(common.CWindow):
 
 
     def Show(self):
-        #self.labelAbout.get_use_markup(True)
-        #nText = self.__GetAboutText()
-        #self.labelAbout.get_label(nText)
-        #self.form.get_transient_for(parent.form)
+        self.__Load()
         
         if self.form.run() == gtk.RESPONSE_OK:
-            #config['/Styles/Element/LineColor'] = self.cbElementLine.get_color()
-            #(gtk.gdk.color_parse(config['/Styles/Element/NameTextColor'])
             config['/Styles/Element/LineColor'] = self.GtkColorToStr(self.cbElementLine.get_color())
             config['/Styles/Element/FillColor'] = self.GtkColorToStr(self.cbElementFill.get_color())
             config['/Styles/Element/Fill2Color'] = self.GtkColorToStr(self.cbElementFill2.get_color())
@@ -55,7 +51,39 @@ class CfrmOptions(common.CWindow):
             config['/Paths/RecentFiles'] = self.txtRecentFilesPath.get_text()
 
         self.Hide()
-        
+    
+    def __Load(self):
+        self.cbElementLine.set_color(gtk.gdk.color_parse(config['/Styles/Element/LineColor']))
+        self.cbElementFill.set_color(gtk.gdk.color_parse(config['/Styles/Element/FillColor']))
+        self.cbElementFill2.set_color(gtk.gdk.color_parse(config['/Styles/Element/Fill2Color']))
+        self.cbElementFill3.set_color(gtk.gdk.color_parse(config['/Styles/Element/Fill3Color']))
+        self.cbElementShadow.set_color(gtk.gdk.color_parse(config['/Styles/Element/ShadowColor']))
+        self.cbElementNameText.set_color(gtk.gdk.color_parse(config['/Styles/Element/NameTextColor']))
+        self.cbElementText.set_color(gtk.gdk.color_parse(config['/Styles/Element/TextColor']))
+        self.cbConnectionLine.set_color(gtk.gdk.color_parse(config['/Styles/Connection/LineColor']))
+        self.cbConnectionArrow.set_color(gtk.gdk.color_parse(config['/Styles/Connection/ArrowColor']))
+        self.cbConnectionArrowFill.set_color(gtk.gdk.color_parse(config['/Styles/Connection/ArrowFillColor']))
+        self.cbConnectionNameText.set_color(gtk.gdk.color_parse(config['/Styles/Connection/NameTextColor']))
+        self.cbConnectionText.set_color(gtk.gdk.color_parse(config['/Styles/Connection/TextColor']))
+        self.cbSelectionPoints.set_color(gtk.gdk.color_parse(config['/Styles/Selection/PointsColor']))
+        self.cbSelectionRectangle.set_color(gtk.gdk.color_parse(config['/Styles/Selection/RectangleColor']))
+        self.cbDragRectangle.set_color(gtk.gdk.color_parse(config['/Styles/Drag/RectangleColor']))
+        self.fbElementNameText.set_font_name(config['/Styles/Element/NameTextFont'])
+        self.fbElementText.set_font_name(config['/Styles/Element/TextFont'])
+        self.fbConnectionNameText.set_font_name(config['/Styles/Connection/NameTextFont'])
+        self.fbConnectionText.set_font_name(config['/Styles/Connection/TextFont'])
+        self.sbSelectionPointsSize.set_value(config['/Styles/Selection/PointsSize'])
+        self.sbSelectionRectangleWidth.set_value(config['/Styles/Selection/RectangleWidth'])
+        self.sbDragRectangleWidth.set_value(config['/Styles/Drag/RectangleWidth'])
+        self.txtRootPath.set_text(config['/Paths/Root'])
+        self.txtTemplatesPath.set_text(config['/Paths/Templates'])
+        self.txtImagesPath.set_text(config['/Paths/Images'])
+        self.txtGuiPath.set_text(config['/Paths/Gui'])
+        self.txtLocalesPath.set_text(config['/Paths/Locales'])
+        self.txtUserDirPath.set_text(config['/Paths/UserDir'])
+        self.txtUserConfigDirPath.set_text(config['/Paths/UserConfig'])
+        self.txtRecentFilesPath.set_text(config['/Paths/RecentFiles'])
+    
     @event("expElement", "activate")
     @event("expConnection", "activate")
     @event("expSelection", "activate")
@@ -81,3 +109,8 @@ class CfrmOptions(common.CWindow):
             self.expConnection.set_expanded(False)
             self.expSelection.set_expanded(False)
             #self.expDrag.set_expanded(False)
+    
+    @event("cmdDefaultOptions", "clicked")
+    def on_cmdDefaultOptions_clicked(self, widget):
+        config.LoadDefaults()
+        self.form.response(gtk.RESPONSE_CANCEL)
