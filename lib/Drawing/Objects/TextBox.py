@@ -11,12 +11,14 @@ class CTextBox(CVisualObject):
 
     def ComputeSize(self, context):
         txt, font = self.GetVariables(context, 'text', 'font')
+        txt = unicode(txt)
         font = font.split()
         font = font[0], font[1:-1], int(font[-1])
         return context.GetCanvas().GetTextSize(txt, font)
 
     def Paint(self, context):
         txt, color, font = self.GetVariables(context, 'text', 'color', 'font')
+        txt = unicode(txt)
         shadowcolor = context.GetShadowColor()
         if shadowcolor is not None:
             color = shadowcolor
