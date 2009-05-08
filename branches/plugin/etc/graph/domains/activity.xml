@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Domain id="activity" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" >
+    <Attribute id="name" type="str" name="Name" />
+    <Attribute id="duration" type="float" name="Duration" />
+    <Attribute id="index" type="int" name="Index" />
+    <Attribute id="minstart" type="float" name="Minimal Start" />
+    <Attribute id="minend" type="float" name="Minimal End" />
+    <Attribute id="maxstart" type="float" name="Maximal Start" />
+    <Attribute id="maxend" type="float" name="Maximal End" />
+    <Attribute id="critical" type="bool" name="Critical" />
+</Domain>

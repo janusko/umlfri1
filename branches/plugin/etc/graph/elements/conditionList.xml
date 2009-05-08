@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ElementType id="conditionList" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Icon path="icons/conditionList.png" />
+    <Domain id="conditionList"/>
+    <Connections>
+    </Connections>
+    <Appearance>
+        <Shadow padding="3" color="/Styles/Element/ShadowColor">
+            <Rectangle fill="/Styles/Element/FillColor" border="/Styles/Element/LineColor">
+                <Sizer minwidth="60" minheight="30">
+                    <HBox>
+                        <Padding padding="10">
+                            <TextBox text="Conditionlist" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                        </Padding>
+                        <Line type="horizontal" color="/Styles/Element/LineColor" />
+                        <Padding padding="10">
+                            <VBox>
+                                <HBox>
+                                    <Loop collection="conditions">
+                                        <TextBox text="@name" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                    </Loop>
+                                </HBox>
+                                <HBox>
+                                    <Loop collection="conditions">
+                                        <TextBox text=" = " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                    </Loop>
+                                </HBox>
+                                <HBox>
+                                    <Loop collection="conditions">
+                                        <TextBox text="@value" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                    </Loop>
+                                </HBox>
+                            </VBox>
+                        </Padding>
+                    </HBox>
+                </Sizer>
+            </Rectangle>
+        </Shadow>
+    </Appearance>
+    <Options>
+    </Options>
+</ElementType>
