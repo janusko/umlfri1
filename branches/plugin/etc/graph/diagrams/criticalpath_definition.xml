@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DiagramType id="Critical Path diagram" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Icon path="icons/criticalPathDiagram.png" />
+    <Special swimlines="0" lifelines="0" />
+    <Elements>
+        <Item value="activity" />
+        <Item value="condition" />
+        <Item value="conditionList" />
+    </Elements>
+    <Connections>
+        <Item value="transition" />
+    </Connections>
+</DiagramType>
