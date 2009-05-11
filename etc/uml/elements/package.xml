@@ -5,6 +5,7 @@
     <Connections>
         <!--Item value="Association" />
         <Item value="Generalization" with="Class" allowrecursive="0" /-->
+        <Item value="Dependency" />
     </Connections>
     <Appearance>
         <Shadow padding="3" color="/Styles/Element/ShadowColor">
