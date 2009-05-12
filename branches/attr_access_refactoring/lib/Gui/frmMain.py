@@ -15,7 +15,9 @@ from tabs import CTabs
 from frmFindInDiagram import CFindInDiagram
 from tabStartPage import CtabStartPage
 from lib.config import config
+from lib.Gui.diagramPrint import CDiagramPrint
 from lib.Exceptions import UserException
+
 
 class CfrmMain(CWindow):
     name = 'frmMain'
@@ -23,7 +25,7 @@ class CfrmMain(CWindow):
         #menu
         #############
         'mItemFile',
-        'mnuOpen', 'mnuSave', 'mnuSaveAs', 'mnuQuit',
+        'mnuOpen', 'mnuSave', 'mnuSaveAs', 'mnuPrint', 'mnuProperties', 'mnuQuit',
         #############
         'mItemEdit',
         'mnuCut', 'mnuCopy', 'mnuPaste', 'mnuDelete',
@@ -59,12 +61,10 @@ class CfrmMain(CWindow):
 
     def __init__(self, app, wTree):
         CWindow.__init__(self, app, wTree)
-        
+        self.diagramPrint = CDiagramPrint()
         self.form.maximize()
-        
         self.__sensitivity_project = None
         self.UpdateMenuSensitivity(project = False)
-        
         self.ReloadTitle()
         
     def SetSensitiveMenuChilds(self, MenuItem, value):
@@ -118,10 +118,13 @@ class CfrmMain(CWindow):
         self.SetSensitiveMenuChilds(self.mItemElement, element)
         self.mnuSave.set_sensitive(project)
         self.mnuSaveAs.set_sensitive(project)
+        self.mnuPrint.set_sensitive(project)
         self.cmdSave.set_sensitive(project)
         self.cmdCopy.set_sensitive(element)
         self.cmdCut.set_sensitive(element)
-        self.cmdPaste.set_sensitive(diagram and not self.application.GetClipboard().IsEmpty())
+        self.cmdPaste.set_sensitive(
+            diagram and not self.application.GetClipboard().IsEmpty() and
+            not bool(set(i.GetObject() for i in self.picDrawingArea.GetDiagram().GetElements()).intersection(set(i.GetObject() for i in self.application.GetClipboard().GetContent()))))
         self.cmdZoomIn.set_sensitive(diagram)
         self.cmdZoomOut.set_sensitive(diagram)
         self.mnuSave.set_sensitive(project)
@@ -359,10 +362,18 @@ class CfrmMain(CWindow):
 
     @event("mnuSaveAs", "activate")
     def ActionSaveAs(self, widget):
-        filename = self.application.GetWindow("frmSave").ShowDialog(self)
+        filename, isZippedFile = self.application.GetWindow("frmSave").ShowDialog(self)
         if filename is not None:
-            self.application.GetProject().SaveProject(filename)
+            self.application.GetProject().SaveProject(filename, isZippedFile)
             self.ReloadTitle()
+
+    @event("mnuProperties", "activate")
+    def ActionProperties(self, widget):
+        self.diagramPrint.printPropertiesSetup()
+
+    @event("mnuPrint", "activate")
+    def ActionPrint(self, widget):
+        self.diagramPrint.printStart(self.picDrawingArea.GetDiagram())
 
     @event("mnuDelete","activate")
     def on_mnuDelete_click(self, widget):
@@ -537,6 +548,7 @@ class CfrmMain(CWindow):
             diagram = self.picDrawingArea.GetDiagram()
             try:
                 Element = CElement(diagram, node.GetObject()).SetPosition(position)
+                self.UpdateMenuSensitivity()
             except UserException, e:
                 if e.GetName() == "ElementAlreadyExists":
                     return CWarningDialog(self.form, _('Unable to insert element')).run()
@@ -561,7 +573,7 @@ class CfrmMain(CWindow):
     def on_show_open_specification(self, widget, Element):
         tmp = self.application.GetWindow('frmProperties')
         tmp.SetParent(self.application.GetWindow('frmMain'))
-        tmp.ShowProperties('',Element)
+        tmp.ShowProperties('', Element, self.picDrawingArea)
         self.picDrawingArea.Paint()
     
     #Z-Order 
@@ -587,4 +599,5 @@ class CfrmMain(CWindow):
         if (event.state & gtk.gdk.CONTROL_MASK):
             self.UpdateMenuSensitivity()
 
-    
+
+

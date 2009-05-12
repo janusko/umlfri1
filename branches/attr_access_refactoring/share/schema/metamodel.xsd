@@ -652,6 +652,7 @@
 		<xs:complexType>
 			<xs:choice minOccurs="0" maxOccurs="unbounded">
 				<xs:element name="Parse" type="ParseType" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="Join" type="JoinType" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="Attribute" minOccurs="0" maxOccurs="unbounded">
 					<xs:complexType>
 						<xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -693,6 +694,16 @@
 		<xs:attribute name="regexp" type="xs:string" use="optional">
 			<xs:annotation>
 				<xs:documentation>Define regular expration for parser</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="JoinType">
+		<xs:annotation>
+			<xs:documentation>type of Join</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="joiner" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>Define join string</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>

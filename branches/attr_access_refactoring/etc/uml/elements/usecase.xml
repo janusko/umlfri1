@@ -2,8 +2,10 @@
     <Icon path="icons/usecase.png"/>
     <Domain id="usecase" identity="name"/>
     <Connections>
-        <Item value="Association"/>
-        <Item value="Generalization" with="UseCase" allowrecursive="0"/>
+        <Item value="AssociationUseCase" />
+        <Item value="Generalization" with="UseCase" allowrecursive="0" />
+		<Item value="Include"/>
+		<Item value="Extend"/>
     </Connections>
     <Appearance>
         <Shadow padding="3" color="#cfg.Styles.Element.ShadowColor">
@@ -12,17 +14,17 @@
                     <Padding padding="8">
                         <Align align="center center">
                             <HBox>
-                                <Condition condition="#stereotype">
+                                <Condition condition="#self.stereotype">
                                     <Align align="center">
                                         <VBox>
                                             <TextBox text="&#171;" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
-                                            <TextBox text="#stereotype" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                                            <TextBox text="#self.stereotype" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
                                             <TextBox text="&#187;" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
                                         </VBox>
                                     </Align>
                                 </Condition>
                                 <Align align="center">
-                                    <TextBox text="#name" font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/>
+                                    <TextBox text="#self.name" font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/>
                                 </Align>
                             </HBox>
                         </Align>

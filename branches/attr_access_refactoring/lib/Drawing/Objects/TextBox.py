@@ -4,7 +4,7 @@ from lib.datatypes import CColor, CFont
 
 class CTextBox(CVisualObject):
     types = {
-        'text': str,
+        'text': unicode,
         'color': CColor,
         'font': CFont
     }
@@ -20,6 +20,7 @@ class CTextBox(CVisualObject):
 
     def Paint(self, context):
         txt, color, font = self.GetVariables(context, 'text', 'color', 'font')
+        txt = unicode(txt)
         shadowcolor = context.GetShadowColor()
         if shadowcolor is not None:
             color = shadowcolor

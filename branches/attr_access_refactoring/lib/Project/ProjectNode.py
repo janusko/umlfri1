@@ -1,8 +1,10 @@
 from lib.Exceptions.UserException import *
+import weakref
 
 class CProjectNode(object):
+    
     def __init__(self, parent = None, object = None, path = None):
-        self.parent = parent
+        self.SetParent(parent)
         self.childs = []
         self.diagrams = []
         self.object = object
@@ -11,8 +13,8 @@ class CProjectNode(object):
         self.object.Assign(self)
 
     def Change(self):
-        if self.parent is not None:
-            parentPath = self.parent.GetPath()+ "/"
+        if self.GetParent is not None:  
+            parentPath = self.GetParent().GetPath()+ "/"
         else:
             parentPath = ""
 
@@ -58,7 +60,7 @@ class CProjectNode(object):
     def AddChild(self, child):
         if child not in self.childs:
             self.childs.append(child)
-            child.parent = self
+            child.SetParent(self)
             self.object.AddRevision()
         else:
             raise ProjectError("ExistsChild")
@@ -75,8 +77,8 @@ class CProjectNode(object):
         newNode.diagrams.append(diagram)
     
     def MoveNode(self, parentNode):
-        self.parent.RemoveChild(self)
-        self.parent = parentNode
+        self.GetParent().RemoveChild(self)
+        self.SetParent(parentNode)
         parentNode.AddChild(self)
         self.SetPath(parentNode.GetPath() + "/" + self.GetPath().split('/')[-1])
     
@@ -108,7 +110,13 @@ class CProjectNode(object):
         return len(self.childs) > 0
 
     def GetParent(self):
-        return self.parent
+        return self.parent()
+        
+    def SetParent(self,parent):
+        if parent is None:
+            self.parent = lambda: None
+        else:
+            self.parent = weakref.ref(parent) 
 
     def RemoveChild(self, child):
         if child in self.childs:
@@ -122,8 +130,5 @@ class CProjectNode(object):
             self.diagrams.remove(diagram)
         else:
             raise ProjectError("AreaNotExists")
-
-    def SetParent(self, parent):
-        self.parent = parent
 
     Parent = property(GetParent,SetParent)

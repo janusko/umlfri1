@@ -54,7 +54,6 @@ class CCairoBaseCanvas(CAbstractCanvas):
         self.cr = pangocairo.CairoContext(self.cairo_context)
         self.pango_layout = self.cr.create_layout()
         self.fonts = {}
-        self.cr.save()
 
     def ToLogical(self, pos):
         pos = (int(pos[0]/self.scale),int(pos[1]/self.scale))     

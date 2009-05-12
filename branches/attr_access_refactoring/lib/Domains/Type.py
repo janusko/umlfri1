@@ -1,6 +1,7 @@
 import re
 from Object import CDomainObject
 from lib.Exceptions import DomainTypeError
+import weakref
 
 class CDomainType(object):
     '''
@@ -26,8 +27,9 @@ class CDomainType(object):
         self.name = name
         self.imports = []
         self.attributes = {}
-        self.factory = factory
+        self.factory = weakref.ref(factory)
         self.parsers = []
+        self.joiners = []
         self.attributeorder = []
     
     def GetFactory(self):
@@ -35,7 +37,7 @@ class CDomainType(object):
         @retrun: Current domain factory
         @rtype: L{CDomainFactory<Factory.CDomainFactory>}
         '''
-        return self.factory
+        return self.factory()
     
     def AppendAttribute(self, id, name, type = None, default = None):
         '''
@@ -138,6 +140,9 @@ class CDomainType(object):
         self.parsers.append(parser)
 
 
+    def AppendJoiner(self, joiner):
+        self.joiners.append(joiner)
+        
     def __InnerImportLoop(self, name):
         '''
         Inner recursive loop of self.HasImportLoop
@@ -152,7 +157,7 @@ class CDomainType(object):
             if name == imported: 
                 return self.name + ' - ' + name
             else:
-                result = self.factory.GetDomain(imported).__InnerImportLoop(name)
+                result = self.GetFactory().GetDomain(imported).__InnerImportLoop(name)
                 if result:
                     return self.name + ' - ' + result
         return False
@@ -180,7 +185,7 @@ class CDomainType(object):
         @return: list of the domain names that are imported but not recognized
         @rtype: list
         '''
-        return ([name for name in self.imports if not self.factory.HasDomain(name)])
+        return ([name for name in self.imports if not self.GetFactory().HasDomain(name)])
     
     def CheckMissingInfo(self):
         '''
@@ -198,7 +203,7 @@ class CDomainType(object):
                         'domain, but has no "list" definition'&(self.name, id))
                 elif ('parser' in info['list'] and 
                     not self.IsAtomic(domain = info['list']['type']) and 
-                    len(list(self.factory.GetDomain(info['list']['type']).IterParsers())) == 0):
+                    len(list(self.GetFactory().GetDomain(info['list']['type']).IterParsers())) == 0):
                     raise DomainTypeError('"%s.%s" is list with parser, but used domain "%s" '
                         'has no parser.' % (self.name, id, info['list']['type']))
     
@@ -243,6 +248,10 @@ class CDomainType(object):
         for parser in self.parsers:
             yield parser
     
+    def IterJoiners(self):
+        for joiner in self.joiners:
+            yield joiner
+            
     def GetName(self):
         '''
         @return: name of current domain
@@ -274,7 +283,7 @@ class CDomainType(object):
                 raise DomainTypeError('Unknown identifier %s'%(id, ))
             type = self.attributes[id]['type']
         
-        elif domain is not None and (self.IsAtomic(domain=domain) or self.factory.HasDomain(domain)):
+        elif domain is not None and (self.IsAtomic(domain=domain) or self.GetFactory().HasDomain(domain)):
             type = domain
         
         else:
@@ -295,7 +304,7 @@ class CDomainType(object):
             elif type == 'enum':
                 return self.attributes[id]['default'] or self.attributes[id]['enum'][0]
         else:
-            return CDomainObject(self.factory.GetDomain(type))
+            return CDomainObject(self.GetFactory().GetDomain(type))
     
     def IsAtomic(self, id=None, domain=None):
         '''
@@ -428,7 +437,7 @@ class CDomainType(object):
     
     def __GetList(self, value, type, parser=None):
         if isinstance(value, (str, unicode)) and parser is not None : 
-            domain = self.factory.GetDomain(type)
+            domain = self.GetFactory().GetDomain(type)
             atempt = [False]
             
             for itemparser in domain.IterParsers():
@@ -448,7 +457,7 @@ class CDomainType(object):
 
     
     def __GetNonAtomic(self, value, type):
-        domain = self.factory.GetDomain(type)
+        domain = self.GetFactory().GetDomain(type)
         if isinstance(value, CDomainObject):
             if value.GetType().GetName() == type:
                 return value

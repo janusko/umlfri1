@@ -7,10 +7,13 @@
         <Item value="UseCase" />
         <Item value="Actor" />
         <Item value="Note" />
+        <Item value="Boundary" />
     </Elements>
     <Connections>
-        <Item value="Generalization" />
-        <Item value="Association" />
+        <Item value="Generalization" />       
+        <Item value="AssociationUseCase" />
         <Item value="Note Link" />
+		<Item value="Include"/>
+		<Item value="Extend"/>
     </Connections>
 </DiagramType>

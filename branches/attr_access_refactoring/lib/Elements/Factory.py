@@ -48,6 +48,8 @@ class CElementFactory(object):
         @param type: Element type name
         @type  type: string
         """
+        if not type in self.types:
+            raise FactoryError('unrecognized elementType name "%s"' % type)
         return self.types[type]
     
     def IterTypes(self):
@@ -97,6 +99,8 @@ class CElementFactory(object):
                 for item in element:
                     name = item.tag.split('}')[1]
                     value = item.text
+                    if name == 'DirectAdd':
+                        value = value.lower() == 'true'
                     obj.AppendOptions(name, value)
         
         self.types[root.get('id')] = obj

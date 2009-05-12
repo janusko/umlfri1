@@ -13,29 +13,29 @@
                 <HBox>
                     <Padding padding="5">
                         <HBox>
-                            <Condition condition="#stereotype">
+                            <Condition condition="#self.stereotype">
                                 <Align align="center">
                                     <VBox>
                                         <TextBox text="&#171;" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
-                                        <TextBox text="#stereotype" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                                        <TextBox text="#self.stereotype" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
                                         <TextBox text="&#187;" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
                                     </VBox>
                                 </Align>
                             </Condition>
                             <Align align="center">
                                 <HBox>
-                                    <TextBox text="#name" font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/>
+                                    <TextBox text="#self.name" font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/>
                                     <Line type="horizontal" color="#cfg.Styles.Element.NameTextColor"/>
                                 </HBox>
                             </Align>
                         </HBox>
                     </Padding>
-                    <Condition condition="#attributes">
+                    <Condition condition="#self.attributes">
                         <HBox>
                             <Line type="horizontal" color="#cfg.Styles.Element.LineColor"/>
                             <Padding padding="5">
                                 <HBox>
-                                    <Loop collection="attributes">
+                                    <Loop collection="#self.attributes">
                                         <Condition condition="#name">
                                             <VBox>
                                                 <Switch value="#scope">

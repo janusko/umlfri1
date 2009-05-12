@@ -1,3 +1,4 @@
+from __future__ import with_statement
 from lib.Depend.gtk2 import gtk
 from lib.Depend.gtk2 import pango
 import lib.Depend
@@ -6,15 +7,17 @@ from common import CWindow
 from lib.config import config
 from lib.Gui.dialogs import CWarningDialog
 import sys, os, time, tarfile, traceback, cStringIO, datetime, urllib, urllib2
+import os.path
 
 EXCEPTION_PROJECT_FILE = 'error.frip'
 
 
 class CfrmException(CWindow):
-      
     widgets = ('tviewErrorLog','tviewSysInfo','btnCancel', 'btnSend',  'btnReport', 'ntbkException', 'lblMail', 'tviewUsrComment', 'chbtnIncludeProject',)
     name = 'frmException'
-
+    
+    __modPaths = [os.path.abspath(dir).replace(os.path.sep, "/") for dir in sys.path]
+    __modPaths.sort(key=len, reverse=True)
 
     def __init__(self, app, wTree):
         CWindow.__init__(self, app, wTree)
@@ -34,11 +37,25 @@ class CfrmException(CWindow):
             buff.create_tag("mono", family="monospace")
         
         iter = buff.get_iter_at_offset(0)
-        begin = ''
+        buff.insert_with_tags_by_name(iter, "UML .FRI:\t\t", "bold")
+        buff.insert_with_tags_by_name(iter, self.application.GetVersion(), "mono")
+        try:
+            with open(lib.consts.ROOT_PATH + '/.svn/entries') as svn:
+                result = []
+                for idx, line in enumerate(svn):
+                    if idx in [3, 4, 10]: 
+                        result.append(line[:-1])
+                    if idx > 10:
+                        break
+                result = '%s@%s (%s)' % (result[1], result[2], result[0])
+                buff.insert_with_tags_by_name(iter, "\nUML .FRI (svn):\t\t", "bold")
+                buff.insert_with_tags_by_name(iter, result, "mono")
+        except IOError:
+            pass
+            
         for name, version in lib.Depend.version():
-            buff.insert_with_tags_by_name(iter, begin+"%s:\t\t"%name, "bold")
+            buff.insert_with_tags_by_name(iter, "\n%s:\t\t"%name, "bold")
             buff.insert_with_tags_by_name(iter, version, "mono")
-            begin = '\n'
     
     def OnChbtnIncludeProjectToogled(self, widget, event, data=None):
         if self.append_project == False:
@@ -147,9 +164,6 @@ class CfrmException(CWindow):
         buff = self.tviewErrorLog.get_buffer()
         s, e = buff.get_bounds()
         buff.delete(s,e)
-        buff = self.tviewSysInfo.get_buffer()
-        s, e = buff.get_bounds()
-        buff.delete(s,e)
         buff = self.tviewUsrComment.get_buffer()
         s, e = buff.get_bounds()
         buff.delete(s,e)
@@ -167,6 +181,11 @@ class CfrmException(CWindow):
             buff.create_tag("mono", family="monospace")
 
         for filename, line_num, fun_name, text in traceback.extract_tb(tb)[1:]:
+            filename = os.path.abspath(filename).replace(os.path.sep, "/")
+            for dir in self.__modPaths:
+                if filename.startswith(dir):
+                    filename = filename[len(dir)+1:]
+                    break
             buff.insert_with_tags_by_name(iter, 'File ', "bold")
             buff.insert_with_tags_by_name(iter, filename,      "mono")
             buff.insert_with_tags_by_name(iter, ' line ',   "bold")

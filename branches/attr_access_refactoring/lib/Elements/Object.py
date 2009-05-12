@@ -49,7 +49,7 @@ class CElementObject(object):
         @rtype:  iterator over L{CDiagram<lib.Drawing.Diagram.CDiagram>}
         """
         for i in self.appears:
-            yield i
+            yield i()
 
     def AddAppears(self, diagram):
         """
@@ -58,7 +58,7 @@ class CElementObject(object):
         @param diagram: Diagram on which element appears
         @type  diagram: L{CDiagram<lib.Drawing.Diagram.CDiagram>}
         """
-        self.appears.append(diagram)
+        self.appears.append(weakref.ref(diagram))
 
     def RemoveAppears(self, diagram):
         """
@@ -69,7 +69,9 @@ class CElementObject(object):
         
         @raise ValueError: if given diagram is not found
         """
-        self.appears.remove(diagram)
+        for id, value in enumerate(self.appears):
+            if value() is diagram:
+                del self.appears[id]
     
     def GetPath(self):
         """

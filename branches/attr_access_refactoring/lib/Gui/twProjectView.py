@@ -83,7 +83,7 @@ class CtwProjectView(CWidget):
             self.mnuTreeAddElement.remove(item)
         
         for item in self.application.GetProject().GetMetamodel().GetElementFactory().IterTypes():
-            if ('DirectAdd', 'true') in item.GetOptions().items():
+            if item.GetOptions().get('DirectAdd', False):
                 newItem = gtk.ImageMenuItem(item.GetId())
                 self.mnuTreeAddElement.append(newItem)
                 newItem.connect("activate", self.on_mnuAddElement_activate, item.GetId())
