@@ -32,7 +32,7 @@ class CCommandProcessor:
                 descriptionList.append(str(redo))
             
         if limitation:
-            return descriptionList[:limitation]
+            return descriptionList[-limitation:]
         
         return descriptionList
  

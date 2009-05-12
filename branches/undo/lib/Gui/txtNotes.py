@@ -4,14 +4,15 @@ from lib.Drawing import CDiagram
 import gobject
 from lib.Elements.Object import CElementObject
 from lib.Connections.Object import CConnectionObject
+from lib.Commands.PropertiesCommands import CElementChangeCmd
+
 
 class CtxtNotes(CWidget):
     name = 'txtNotes'
     widgets = ('txtNotes', )
     
     __gsignals__ = {
-        'content-update':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
-            (gobject.TYPE_PYOBJECT, gobject.TYPE_STRING)),
+        'history-entry':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),        
     }
     
     def __init__(self, app, wTree):
@@ -54,6 +55,8 @@ class CtxtNotes(CWidget):
             if isinstance(self.element, CDiagram):
                 pass    #maybe, In the future, We can add notes to diagram
             elif isinstance(self.element.GetObject(), (CElementObject, CConnectionObject)):
+                #noteChange = CElementChangeCmd(self.element, 'note', buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter()))            
+                #self.emit('history-entry', noteChange)                
                 self.element.GetObject().SetValue('note', buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter()))
                 self.emit('content_update', self.element, 'note')
             elif isinstance(self.element.GetObject(), CConnectionObject):

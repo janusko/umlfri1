@@ -13,7 +13,6 @@ class CMoveSelectionCmd(CBaseCommand):
 
 
     def do (self):
-        
         self.selection = []
         for s in self.diagram.GetSelected():
             self.selection.append(s)
@@ -34,7 +33,9 @@ class CMoveSelectionCmd(CBaseCommand):
     def undo(self):
         oldSelection = self.diagram.GetSelected()
         self.diagram.DeselectAll()
-        self.diagram.selected = self.selection
+        for s in self.selection:
+            self.diagram.AddToSelection(s)        
+        #self.diagram.selected = self.selection
         self.diagram.MoveSelection((-self.delta[0], -self.delta[1]), self.canvas)
         self.diagram.DeselectAll()
         for s in oldSelection:

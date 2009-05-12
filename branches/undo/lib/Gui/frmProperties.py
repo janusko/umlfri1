@@ -83,24 +83,19 @@ class CfrmProperties(CWindow):
             for i in self.__connections:
                 con = self.element.GetDiagram().GetConnection(i)
                 if con is not None:
-                    
                     d = CDeleteItemCmd(self.element.GetDiagram(), con)
                     self.groupCmd.add(d)
-                    ##self.element.GetDiagram().DeleteConnection(con)
                 else:
-                    
                     diagram = self.element.GetDiagram()
                     if i.GetSource() is not self.__elementObj:
                         sour = diagram.HasElementObject(i.GetSource())
                         if sour is not None:
                             addConnection = CAddConnectionCmd(diagram, i, sour, self.element)
                             self.groupCmd.add(addConnection)
-                            #CConnection(diagram,i,sour,self.element)
                     elif i.GetDestination is not self.__elementObj:
                         dest = diagram.HasElementObject(i.GetDestination())
                         if dest is not None:
                             addConnection = CAddConnectionCmd(diagram, i, self.element, dest)
                             self.groupCmd.add(addConnection)
-                            #CConnection(diagram,i,self.element,dest)
             self.__connections = []
             self.__saved = True
