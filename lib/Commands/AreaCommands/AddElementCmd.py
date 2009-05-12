@@ -14,13 +14,11 @@ class CAddElementCmd(CBaseCommand):
         self.parentElement = parentElement
         self.pos = pos
         self.application = application 
-        self.delCon = []
 
     def do (self):
-
+        
         self.element.SetPosition(self.pos)
         if self.application is not None:
-            
             if self.parentElement is None:
                 path = self.diagram.GetPath()
             else:
@@ -30,38 +28,22 @@ class CAddElementCmd(CBaseCommand):
             self.node = CProjectNode(self.parent, self.element.GetObject(), self.parent.GetPath() + "/" + self.element.GetObject().GetName() + ":" + self.element.GetObject().GetType().GetId())
             self.application.GetProject().AddNode(self.node, self.parent)
             
-            
         if self.description == None:
             self.description = _('Adding %s to %s') %(self.element.GetObject().GetName(), self.diagram.GetName())
 
 
     def undo(self):
-        
         self.element.Deselect()
-        #self.element.GetObject().RemoveAppears(self.diagram)
-
-        
-        for con in self.diagram.GetConnections():
-                if (con.GetSource() is self.element) or (con.GetDestination() is self.element):
-                    #con.GetObject().RemoveAppears(self.diagram)
-                    self.delCon.append(con)
-                    
         self.element.GetObject().RemoveAppears(self.diagram)
         self.diagram.DeleteElement(self.element)        
-        
-        
         
         if self.application is not None:
             self.application.GetProject().RemoveNode(self.node)
         
         
     def redo(self):
-
         self.do()
         self.diagram.AddElement(self.element)
         self.element.GetObject().AddAppears(self.diagram)
-        for con in self.delCon:
-            if con not in self.diagram.connections:
-                self.diagram.AddConnection(con)
-        
+       
  

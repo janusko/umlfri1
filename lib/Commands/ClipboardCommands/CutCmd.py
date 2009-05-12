@@ -16,7 +16,6 @@ class CCutCmd(CBaseCommand):
             if isinstance(el, CElement):
                 self.content.append(el)
 
-
     def do (self):
         if self.content:
             self.diagram.DeselectAll()

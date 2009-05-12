@@ -46,10 +46,3 @@ class CDeleteItemCmd(CBaseCommand):
         elif isinstance(self.item , CConnection):
             if self.item not in self.diagram.connections: 
                 self.diagram.AddConnection(self.item )
-                
-    def redo(self):
-        self.do()
-        #self.diagram.DeleteItem(self.item ) 
-        #if isinstance(self.item , CElement):
-            #self.item.GetObject().RemoveAppears(self.diagram)
-

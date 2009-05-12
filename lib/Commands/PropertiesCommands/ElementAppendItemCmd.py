@@ -4,9 +4,6 @@ from lib.Drawing import  CElement
 from lib.Drawing import CDiagram
 
 
-
-
-
 class CElementAppendItemCmd(CBaseCommand):
     
     def __init__(self, element, key, description = None): 

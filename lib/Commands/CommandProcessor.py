@@ -41,7 +41,7 @@ class CCommandProcessor:
         '''
         Adds a new object to applications history undo stack
         
-        @param o: instance to be added to undo stack  or group !
+        @param commandObject: instance to be added to undo stack  or group !
         @type type: L{CBaseCommand<lib.Commands.BaseCommand.CBaseCommand>} 
         '''
         
@@ -56,7 +56,7 @@ class CCommandProcessor:
                    self.undoStack = self.undoStack[-lib.consts.STACK_MAX_SIZE:]
           
         else: 
-            raise HistoryError(_('Invalid History object. Must be a child of lib.Commands.CBaseCommand'))
+            raise HistoryError(_('Invalid Command object. Must be a child of lib.Commands.CBaseCommand'))
 
 
 
