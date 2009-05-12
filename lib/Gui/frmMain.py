@@ -64,18 +64,12 @@ class CfrmMain(CWindow):
                       CtabStartPage, CFindInDiagram)
 
     def __init__(self, app, wTree):
-        
         self.history = CCommandProcessor()
-        
-        
         CWindow.__init__(self, app, wTree)
         self.form.maximize()
         self.__sensitivity_project = None
         self.UpdateMenuSensitivity(project = False)
         self.ReloadTitle()
-        #
-        # undo/redo tag    
-        #
         self.cmdUndo.set_menu(gtk.Menu())
         self.cmdRedo.set_menu(gtk.Menu())
         
@@ -120,9 +114,6 @@ class CfrmMain(CWindow):
         changes += zoomout != self.__sensitivity_project[4]
         self.__sensitivity_project[3] = zoomin
         self.__sensitivity_project[4] = zoomout
-        #
-        # undo/redo tag    
-        #
         changes += self.history.canUndo() != self.__sensitivity_project[5]
         changes += self.history.canRedo() != self.__sensitivity_project[6]
         self.__sensitivity_project[5] = self.history.canUndo()
@@ -162,8 +153,6 @@ class CfrmMain(CWindow):
         self.mnuUndo.set_sensitive(self.history.canUndo())
         self.cmdRedo.set_sensitive(self.history.canRedo())
         self.mnuRedo.set_sensitive(self.history.canRedo())
-         
-        
         
     
     def LoadProject(self, filename, copy):
@@ -505,30 +494,17 @@ class CfrmMain(CWindow):
         parentElement = self.twProjectView.GetSelectedNode()
         if parentElement == None:
             parentElement = self.twProjectView.GetRootNode()
-        #
-        # undo/redo tag    
-        # 
-        
-        
         ElementType = self.application.GetProject().GetMetamodel().GetElementFactory().GetElement(element)
         ElementObject = CElementObject(ElementType)
         self.twProjectView.AddElement(ElementObject, None, parentElement)
 
-    @event("picDrawingArea", "add-element")
-    def on_add_element(self, widget, Element, diagram, parentElement):
-        #
-        # undo/redo tag    
-        # 
-
-        # look if it s needed
-        self.twProjectView.AddElement(Element, diagram, parentElement)
+    #@event("picDrawingArea", "add-element")
+    #def on_add_element(self, widget, Element, diagram, parentElement):
+        #self.twProjectView.AddElement(Element, diagram, parentElement)
 
     @event("mnuItems", "create-diagram")
     @event("twProjectView","create-diagram")
     def on_mnuItems_create_diagram(self, widget, diagramId):
-        #
-        # undo/redo tag    
-        # 
         diagram = CDiagram(self.application.GetProject().GetMetamodel().GetDiagramFactory().GetDiagram(diagramId))
         self.twProjectView.AddDiagram(diagram)
         self.nbTabs.AddTab(diagram)
@@ -574,12 +550,9 @@ class CfrmMain(CWindow):
         else:
             self.nbProperties.Fill(None)
 
-    @event("picDrawingArea","delete-element-from-all")
-    def on_picDrawingArea_delete_selected_item(self, widget, selected):
-        #
-        # undo/redo tag    
-        #   
-        self.twProjectView.DeleteElement(selected)
+    #@event("picDrawingArea","delete-element-from-all")
+    #def on_picDrawingArea_delete_selected_item(self, widget, selected):
+        #self.twProjectView.DeleteElement(selected)
 
     @event("twProjectView", "selected-item-tree")
     def on_twTreeView_selected_item(self, widget, selected):
@@ -603,15 +576,15 @@ class CfrmMain(CWindow):
     def on_show_frmFindInDiagram(self, widget, diagrams, object):
         self.frmFindInDiagram.ShowDialog(diagrams, object)
 
-    @event("nbProperties", "content-update")
-    def on_nbProperties_content_update(self, widget, element, property):
-        if isinstance(element, CDiagram):
-            self.twProjectView.UpdateElement(element)
-            self.nbTabs.RefreshTab(element)
-        else:
-            if element.GetObject().HasVisualAttribute(property):
-                self.picDrawingArea.Paint()
-                self.twProjectView.UpdateElement(element.GetObject())
+    #@event("nbProperties", "content-update")
+    #def on_nbProperties_content_update(self, widget, element, property):
+        #if isinstance(element, CDiagram):
+            #self.twProjectView.UpdateElement(element)
+            #self.nbTabs.RefreshTab(element)
+        #else:
+            #if element.GetObject().HasVisualAttribute(property):
+                #self.picDrawingArea.Paint()
+                #self.twProjectView.UpdateElement(element.GetObject())
 
     @event("tbToolBox", "toggled")
     def on_tbToolBox_toggled(self, widget, ItemId, ItemType):
@@ -623,16 +596,9 @@ class CfrmMain(CWindow):
         if node is not None:
             diagram = self.picDrawingArea.GetDiagram()
             try:
-                Element = CElement(diagram, node.GetObject())# .SetPosition(position)
-                #
-                # undo/redo tag    
-                #  
+                Element = CElement(diagram, node.GetObject())
                 addElement = CAddElementCmd(Element, position)
-                #addElement.do()
                 self.on_history_insert(None, addElement)
-                #self.history.add(addElement)
-                #Element = CElement(diagram, node.GetObject()).SetPosition(position)
-                self.UpdateMenuSensitivity()
             except UserException, e:
                 if e.GetName() == "ElementAlreadyExists":
                     return CWarningDialog(self.form, _('Unable to insert element')).run()
@@ -661,25 +627,23 @@ class CfrmMain(CWindow):
         self.frmProp.ShowProperties('', Element, self.picDrawingArea, groupCmd)
         self.on_history_insert(None, groupCmd)
 
- 
-#
-# undo/redo tag    
-#
-    def update_all(self):
-       # basically update everything :)
-       # should be replaced with the update method
-       # tomas has created for the plugin system
-       selected = self.picDrawingArea.GetDiagram().selected
-       self.picDrawingArea.Paint()
-       self.UpdateMenuSensitivity(element = len(selected) > 0)
-       self.twProjectView.Redraw()
-       self.nbTabs.RefreshAllTabs()
-       if len(selected) == 1:
-            for e in self.picDrawingArea.GetDiagram().GetSelected():
-                self.nbProperties.Fill(e)
-       else:
-            self.nbProperties.Fill(None)
-      
+
+    def update_all(self, alsoProperties = True):
+        # basically update everything :)
+        # should be replaced with the new update method
+        # created for the plugin system
+        selected = self.picDrawingArea.GetDiagram().selected
+        self.picDrawingArea.Paint()
+        self.UpdateMenuSensitivity(element = len(selected) > 0)
+        self.twProjectView.Redraw()
+        self.nbTabs.RefreshAllTabs()
+        if alsoProperties:
+            if len(selected) == 1:
+                for e in self.picDrawingArea.GetDiagram().GetSelected():
+                    self.nbProperties.Fill(e)
+            else:
+                self.nbProperties.Fill(None)
+            
     
     @event("cmdUndo","show-menu")
     def on_show_undo_menu(self, widget):
@@ -723,23 +687,13 @@ class CfrmMain(CWindow):
             self.history.redo()
         self.update_all()
 
-    ##@event("nbProperties", "history-start-group")
-    #@event("picDrawingArea","history-start-group")
-    #def on_history_start_group(self, widget):
-        #self.history.startGroup()
-        
-    ##@event("nbProperties", "history-end-group")
-    #@event("picDrawingArea","history-end-group")
-    #def on_history_end_group(self, widget):
-        #self.history.endGroup()
 
     @event("twProjectView", "history-entry")
     @event("nbProperties", "history-entry")
     @event("picDrawingArea","history-entry")
-    #@event("frmProperties","history-entry")    
     def on_history_insert(self, widget, command):
         self.history.add(command)
-        self.update_all()
+        self.update_all(False)
 
 
     #Z-Order 

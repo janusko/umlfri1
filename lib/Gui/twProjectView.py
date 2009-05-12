@@ -256,37 +256,11 @@ class CtwProjectView(CWidget):
             path = diagram.GetPath()
         else:
             path = parentElement.GetPath()
-
-
-
         parent = self.application.GetProject().GetNode(path)
         node = CProjectNode(parent, element, parent.GetPath() + "/" + element.GetName() + ":" + element.GetType().GetId())
-        #self.application.GetProject().AddNode(node, parent)
-        
-        #
-        # undo/redo tag    
-        #
-
         addDiagram = CAddTwElementCmd(self.application, node, parent)            
         self.emit('history-entry', addDiagram)         
         
-        #novy = self.TreeStore.append(self.get_iter_from_path(self.twProjectView.get_model(), self.twProjectView.get_model().get_iter_root() ,path))
-        #self.TreeStore.set(novy, 0, element.GetName() , 1, PixmapFromPath(self.application.GetProject().GetMetamodel().GetStorage(), element.GetType().GetIcon()), 2, element.GetType().GetId(),3,node)
-        
-
-    def GetNode(self):
-        iter = self.twProjectView.get_selection().get_selected()[1]
-        if iter is None:
-            iter = self.twProjectView.get_model().get_iter_root()
-            self.twProjectView.get_selection().select_iter(iter)
-        model = self.twProjectView.get_model()
-        
-        if model.get(iter,2)[0] == "=Diagram=":
-            iter = model.iter_parent(iter)
-            
-        node = model.get(iter,3)[0]
-        return node
-
 
     def AddDiagram(self, diagram):
         iter = self.twProjectView.get_selection().get_selected()[1]
@@ -299,24 +273,8 @@ class CtwProjectView(CWidget):
             iter = model.iter_parent(iter)
             
         node = model.get(iter,3)[0]
-        #diagram.SetPath(node.GetPath() + "/" + diagram.GetName() + ":=Diagram=")
-        #node.AddDiagram(diagram)        
-        
-        #
-        # undo/redo tag    
-        #
         addDiagram = CAddDiagramCmd(diagram, node)            
         self.emit('history-entry', addDiagram) 
-          
-        
-        ##novy = self.TreeStore.append(iter)
-        #self.TreeStore.set(novy, 0, diagram.GetName() , 1, PixmapFromPath(self.application.GetProject().GetMetamodel().GetStorage(), diagram.GetType().GetIcon()), 2, '=Diagram=',3,diagram)
-        #path = self.TreeStore.get_path(novy)
-        #self.Redraw()
-        #self.twProjectView.expand_to_path(path)
-        #self.twProjectView.get_selection().select_iter(novy)
-        #self.emit('history-entry', elementChange) 
-        #self.Redraw()
         
     
     def UpdateElement(self, object):
@@ -427,27 +385,15 @@ class CtwProjectView(CWidget):
         model = self.twProjectView.get_model()
         if model.get(iter,2)[0] != "=Diagram=":
             node = model.get(iter,3)[0]
-            #self.TreeStore.remove(iter)
-            #self.RemoveFromArea(node)
-            #self.application.GetProject().RemoveNode(node)
-            
-            
             deleteElement = CDeleteTwElementCmd(self.application, node)
-            
             self.emit('history-entry',deleteElement)            
-            
-
-            #self.emit('repaint')
         else:
             diagram = model.get(iter,3)[0]
             itr = model.iter_parent(iter)
             node = model.get(itr,3)[0]
-            #node.RemoveDiagram(diagram)
-            
             deleteDiagram = CDeleteDiagramCmd(diagram, node)
             self.emit('history-entry',deleteDiagram)
-            #self.TreeStore.remove(iter)
-            #self.emit('close-diagram',diagram)
+
         
     @event("mnuTreeFindInDiagrams","activate")
     def on_mnuTreeFindInDiagrams(self, menuItem):
@@ -461,8 +407,6 @@ class CtwProjectView(CWidget):
             self.emit('selected_diagram_and_select_element',list(node.GetAppears())[0], node.GetObject())
         elif cnt > 1:
             self.emit('show_frmFindInDiagram', list(node.GetAppears()), node.GetObject())
-
-
 
     def GetSelectedNode(self):
         iter = self.twProjectView.get_selection().get_selected()[1]
@@ -486,8 +430,6 @@ class CtwProjectView(CWidget):
         model, iter = treeselection.get_selected()
         data = model.get_value(iter, 0)
         selection_data.set(selection_data.target, 8, data)
-
-        
     
     def CheckSanity(self, model, iter_to_copy, target_iter):
         path_of_iter_to_copy = model.get_path(iter_to_copy)

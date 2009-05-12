@@ -6,11 +6,7 @@ from lib.Gui.common import CWidget, CellRendererButton, event
 from lib.Drawing import CDiagram
 from lib.Elements.Object import CElementObject
 from lib.Connections.Object import CConnectionObject
-
-#
-# undo/redo tag    
-#
-from lib.Commands.PropertiesCommands import CElementChangeCmd, CDiagramChangeCmd, CElementAppendItemCmd,CElementDeleteItemCmd
+from lib.Commands.PropertiesCommands import *
 
 
 ID_ID, ID_NAME, ID_VALUE, ID_TEXT_VISIBLE, ID_COMBO_VISIBLE, ID_EDITABLE, ID_BUTTON_VISIBLE, ID_BUTTON_TEXT, ID_ACTION = range(9)
@@ -21,8 +17,6 @@ class ClwProperties(CWidget):
     
     __gsignals__ = {
         'history-entry':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
-        'content_update':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
-            (gobject.TYPE_PYOBJECT, gobject.TYPE_STRING)),      
     }
     
     def __init__(self, app, wTree):
@@ -227,7 +221,7 @@ class ClwProperties(CWidget):
             #elementChange.do()
             self.emit('history-entry', elementChange)
             
-            self.emit('content_update', self.element, key)
+            #self.emit('content_update', self.element, key)
     
     def on_listadd(self, key, iter):
         #self.element.GetObject().AppendItem(key)
@@ -238,11 +232,7 @@ class ClwProperties(CWidget):
         elementChange = CElementAppendItemCmd(self.element, key)            
         #elementChange.do()
         self.emit('history-entry', elementChange)
-                
-        
-        
-        
-        
+
         self._FillListItem(self.element.GetObject(), iter, key, len(self.element.GetObject().GetValue(key)) - 1)
         #self.emit('content_update', self.element, key)
         
@@ -255,12 +245,15 @@ class ClwProperties(CWidget):
             self.lwProperties.collapse_row(parent_path)
             self.on_listadd(parent_key, parent_iter)
         #self.element.GetObject().RemoveItem(key)
+        #print 'Delete key: ', key
         #
         # undo/redo tag    
         #
         elementChange = CElementDeleteItemCmd(self.element, key)            
         #elementChange.do()
         self.emit('history-entry', elementChange)
+        
+        
         
         self.treeStore.remove(iter)
         for idx in xrange(int(path.rsplit(':', 1)[-1]), len(self.element.GetObject().GetValue(parent_key))):
@@ -269,7 +262,7 @@ class ClwProperties(CWidget):
             self.treeStore.set(niter,
                 ID_ID, '[%i]' % idx,
                 ID_NAME, str(idx))
-        self.emit('content_update', self.element, key)
+        #self.emit('content_update', self.element, key)
     
     @event("ButtonRenderer", "click")
     def on_change_button(self, cellrenderer, path):

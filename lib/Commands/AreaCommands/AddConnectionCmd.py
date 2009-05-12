@@ -5,7 +5,6 @@ from lib.Drawing import CConnection
 
 
 class CAddConnectionCmd(CBaseCommand):
-    #def __init__(self, diagram, connectionData, destination, description = None): 
     def __init__(self, diagram, connectionObject, source, destination, points= None, description = None):     
         CBaseCommand.__init__(self, description)
         self.diagram = diagram
@@ -13,15 +12,10 @@ class CAddConnectionCmd(CBaseCommand):
         self.source = source
         self.destination = destination
         self.points = points
-        #self.connectionData = connectionData
-        #self.destination = destination
         
 
     def do (self):
-        #(type, points, source) = self.connectionData 
-        #self.connectionObject = CConnectionObject(type, source.GetObject(), self.destination.GetObject())
         self.connection = CConnection(self.diagram, self.connectionObject, self.source, self.destination, self.points)
-        
         if self.description == None:
             self.description = _('Adding %s connection to %s') %(self.connection.GetObject().GetType().GetId(), self.diagram.GetName())
 
@@ -37,7 +31,5 @@ class CAddConnectionCmd(CBaseCommand):
        
         if self.connection not in self.diagram.connections:
             self.diagram.AddConnection(self.connection)
-            
-
             
     
