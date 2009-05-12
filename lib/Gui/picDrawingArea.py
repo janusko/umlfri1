@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from lib.Depend.gtk2 import gtk
 from lib.Depend.gtk2 import gobject
 
@@ -19,11 +20,9 @@ import thread
 #
 # undo/redo tag    
 #
-from lib.History.DrawingHistory import CAddElementCmd, CDeleteItemCmd, CResizeElemntCmd, CMoveSelectionCmd
-from lib.History.DrawingHistory import CAddConnectionCmd, CInsertConnectionPointCmd, CMoveConnectionPointCmd, CPurgeConnectionCmd
-from lib.History import CApplicationHistory
-
-
+from lib.Commands.AreaCommands import *
+from lib.Commands.ClipboardCommands import *
+from lib.Commands import CCompositeCommand
 
 
 
@@ -252,8 +251,8 @@ class CpicDrawingArea(CWidget):
             self.__DrawResRect((None, None), True, False)  
         elif self.dnd == 'rect':
             self.__DrawDragRect((None, None), True, False)
-        elif self.dnd == 'point':
-            self.__DrawDragPoint((None, None), True, False)
+        #elif self.dnd == 'point':
+            #self.__DrawDragPoint((None, None), False, False)
         elif self.dnd == 'selection':
             self.__DrawDragSel((None, None), True, False)
         if self.__NewConnection is not None:
@@ -431,24 +430,12 @@ class CpicDrawingArea(CWidget):
         if toolBtnSel[0] == 'Element':
             ElementType = self.application.GetProject().GetMetamodel().GetElementFactory().GetElement(toolBtnSel[1])
             ElementObject = CElementObject(ElementType)
-
-            #
-            # undo/redo tag    
-            #
-            newElement = CElement(self.Diagram, ElementObject)            
-            addElement = CAddElementCmd(newElement, pos)
-            addElement.do()
-            self.emit('history-entry',addElement)
-            
-            
-            self.AdjustScrollBars()
-            self.emit('set-selected', None)
-            #here, I get prent element of selected elements (if element is on (over) another element)
+            newElement = CElement(self.Diagram, ElementObject)   
             minzorder = 9999999
             parentElement = None
             
             
-            # include this to history command !!!!!!!!!!!
+            #include this to history command !!!!!!!!!!!
             
             for el in self.Diagram.GetSelectedElements():
                 pos1, pos2 = el.GetSquare(self.canvas)
@@ -458,11 +445,35 @@ class CpicDrawingArea(CWidget):
                         if self.Diagram.elements.index(el2) < minzorder:        #get element with minimal zorder
                             minzorder = self.Diagram.elements.index(el2)
                             parentElement = el2.GetObject()
+
+            #
+            # undo/redo tag    
+            #
+         
+            addElement = CAddElementCmd(newElement, pos, parentElement, self.application)
+            #addElement.do()
+            self.emit('history-entry',addElement)
+            
+            
+            self.AdjustScrollBars()
+            self.emit('set-selected', None)
+            #here, I get prent element of selected elements (if element is on (over) another element)
+            #minzorder = 9999999
+            #parentElement = None
+            ## include this to history command !!!!!!!!!!!
+            ##for el in self.Diagram.GetSelectedElements():
+                ##pos1, pos2 = el.GetSquare(self.canvas)
+                ##zorder = self.Diagram.elements.index(el)
+                ##if newElement.AreYouInRange(self.canvas, pos1, pos2, True):
+                    ##for el2 in self.Diagram.GetElementsInRange(self.canvas, pos1, pos2, True):
+                        ##if self.Diagram.elements.index(el2) < minzorder:        #get element with minimal zorder
+                            ##minzorder = self.Diagram.elements.index(el2)
+                            ##parentElement = el2.GetObject()
                     
             self.Diagram.DeselectAll()
             self.Diagram.AddToSelection(newElement)
             
-            self.emit('add-element', ElementObject, self.Diagram, parentElement)
+            #self.emit('add-element', ElementObject, self.Diagram, parentElement)
             self.emit('selected-item', list(self.Diagram.GetSelected()))
             self.Paint()
 
@@ -494,7 +505,7 @@ class CpicDrawingArea(CWidget):
                 # undo/redo tag    
                 #
                 resizeElemnt = CResizeElemntCmd(self.selElem,self.canvas, delta, self.selSq)
-                resizeElemnt.do()
+                #resizeElemnt.do()
                 self.emit('history-entry', resizeElemnt) 
                 self.selElem = None
                 self.selSq = None
@@ -506,7 +517,7 @@ class CpicDrawingArea(CWidget):
                 #
                 if delta != (0,0):
                     moveSelection = CMoveSelectionCmd(self.Diagram, self.canvas, delta)
-                    moveSelection.do()
+                    #moveSelection.do()
                     self.emit('history-entry', moveSelection)
                 self.dnd = None
             elif self.dnd == 'point':
@@ -515,7 +526,7 @@ class CpicDrawingArea(CWidget):
                 #       
                 point = self.GetAbsolutePos((event.x, event.y))
                 moveConnectionPoint = CMoveConnectionPointCmd(self.DragPoint, self.canvas, point) 
-                moveConnectionPoint.do()
+                #moveConnectionPoint.do()
                 self.emit('history-entry', moveConnectionPoint)
                 self.dnd = None
             elif self.dnd == 'line':
@@ -524,7 +535,7 @@ class CpicDrawingArea(CWidget):
                 # undo/redo tag    
                 #                
                 insertConnectionPoint = CInsertConnectionPointCmd(self.DragPoint, self.canvas, point) 
-                insertConnectionPoint.do()
+                #insertConnectionPoint.do()
                 self.emit('history-entry', insertConnectionPoint)
                 self.dnd = None
             elif self.dnd == 'move':
@@ -551,11 +562,15 @@ class CpicDrawingArea(CWidget):
                     self.__DrawNewConnection((None, None))
                 elif itemSel is not self.__NewConnection[2] or len(self.__NewConnection[1]) > 2:
                     (type, points, source), destination = self.__NewConnection, itemSel
-                    #
+                    obj = CConnectionObject(type, source.GetObject(), destination.GetObject())
+#
                     # undo/redo tag    
                     #
-                    addConnection = CAddConnectionCmd(self.Diagram, self.__NewConnection, itemSel)
-                    addConnection.do()
+
+                    #addConnection = CAddConnectionCmd(self.Diagram, self.__NewConnection, itemSel)
+                    addConnection = CAddConnectionCmd(self.Diagram, obj, source, destination, points[1:]) 
+                    #x = CConnection(self.Diagram, obj, source, destination, points[1:])
+                    #addConnection.do()
                     self.emit('history-entry', addConnection) 
                     self.__NewConnection = None
                     self.emit('set-selected', None)
@@ -578,36 +593,48 @@ class CpicDrawingArea(CWidget):
         self.pressedKeys.add(event.keyval)
         if event.keyval == gtk.keysyms.Delete:
             if event.state == gtk.gdk.SHIFT_MASK:
-                self.emit('history-start-group')
+                #self.emit('history-start-group')
+                groupCmd = CCompositeCommand()
+                                
                 for sel in self.Diagram.GetSelected():
                     
-                    self.emit('history-start-group')
+                    #self.emit('history-start-group')
                     
                     if isinstance(sel, Element.CElement):
                         #
                         # undo/redo tag    
-                        #    
-                        self.emit('delete-element-from-all',sel.GetObject())
+                        #  
+                        
+                        purgeElement =  CPurgeElementCmd(sel, self.application)
+                        #purgeElement.do()
+                        groupCmd.add(purgeElement)
+                        
+                        
+                        #self.emit('delete-element-from-all',sel.GetObject())
        
                     else:
                         purgeConnection = CPurgeConnectionCmd(sel)
-                        purgeConnection.do()
-                        self.emit('history-entry',purgeConnection)
+                        #purgeConnection.do()
+                        groupCmd.add(purgeConnection)
+                        #self.emit('history-entry',purgeConnection)
                         #self.Diagram.ShiftDeleteConnection(sel)
-                    self.emit('history-end-group')                      
-   
+                    
+                self.emit('history-entry', groupCmd)      
+                    
+                    #self.emit('history-end-group')                      
             else:
                 #
                 # undo/redo tag    
                 #    
-                self.emit('history-start-group')
-                
+                #self.emit('history-start-group')
+                groupCmd = CCompositeCommand()
                 for sel in self.Diagram.GetSelected():
                     deleteItem = CDeleteItemCmd(self.Diagram, sel)
-                    deleteItem.do()
-                    self.emit('history-entry',deleteItem)
+                    #deleteItem.do()
+                    groupCmd.add(deleteItem)
+                self.emit('history-entry',groupCmd)
                 
-                self.emit('history-end-group')    
+                #self.emit('history-end-group')    
                                 
             self.emit('selected-item', list(self.Diagram.GetSelected()))
             self.Paint()
@@ -910,16 +937,22 @@ class CpicDrawingArea(CWidget):
                     self.emit('open-specification',Element)
         
     # Z-Order menu:  
+    
+    # NEPOTREBUJEM
     def Shift_activate(self, actionName):
-        if (actionName == 'SendBack'):
-            self.Diagram.ShiftElementsBack(self.canvas)
-        elif (actionName == 'BringForward'):
-            self.Diagram.ShiftElementsForward(self.canvas)
-        elif (actionName == 'ToBottom'):
-            self.Diagram.ShiftElementsToBottom()
-        elif (actionName == 'ToTop'):
-            self.Diagram.ShiftElementsToTop()
-        self.Paint()
+        zorderCmd =  CZOrderCmd(self.Diagram, actionName, self.canvas)
+        self.emit('history-entry', zorderCmd)
+        
+        #if (actionName == 'SendBack'):
+            
+            #self.Diagram.ShiftElementsBack(self.canvas)
+        #elif (actionName == 'BringForward'):
+            #self.Diagram.ShiftElementsForward(self.canvas)
+        #elif (actionName == 'ToBottom'):
+            #self.Diagram.ShiftElementsToBottom()
+        #elif (actionName == 'ToTop'):
+            #self.Diagram.ShiftElementsToTop()
+        #self.Paint()
     
     @event("pmShift_SendBack","activate")
     def on_pmShift_SendBack_activate(self, menuItem):
@@ -939,34 +972,60 @@ class CpicDrawingArea(CWidget):
     
     @event("mnuCtxCopy","activate")
     def ActionCopy(self, widget = None):
-        self.Diagram.CopySelection(self.application.GetClipboard())
+        #
+        # undo/redo tag    
+        # 
+       
+        copyCmd =  CCopyCmd(self.Diagram, self.application.GetClipboard())
+        #copyCmd.do()
+        self.emit('history-entry', copyCmd)
+        #self.Diagram.CopySelection(self.application.GetClipboard())
     
     @event("mnuCtxCut", "activate")
     def ActionCut(self, widget = None):
-        self.Diagram.CutSelection(self.application.GetClipboard())
-        self.Paint()
-        self.emit('selected-item', list(self.Diagram.GetSelected()))
+        #
+        # undo/redo tag    
+        # 
+        #self.Diagram.CutSelection(self.application.GetClipboard())
+        cutCmd =  CCutCmd(self.Diagram, self.application.GetClipboard())
+        #cutCmd.do()
+        self.emit('history-entry', cutCmd)
+        
+        #self.Paint()
+        #self.emit('selected-item', list(self.Diagram.GetSelected()))
     
     @event("mnuCtxPaste","activate")
     def ActionPaste(self, widget = None):
-        self.Diagram.PasteSelection(self.application.GetClipboard())
-        self.Paint()
-        self.emit('selected-item', list(self.Diagram.GetSelected()))
+        #
+        # undo/redo tag    
+        # 
+        pasteCmd =  CPasteCmd(self.Diagram, self.application.GetClipboard())
+        #pasteCmd.do()
+        self.emit('history-entry', pasteCmd)
+        
+        #self.Diagram.PasteSelection(self.application.GetClipboard())
+        #self.Paint()
+        #self.emit('selected-item', list(self.Diagram.GetSelected()))
         
     @event("mnuCtxShiftDelete","activate")
     def onMnuCtxShiftDelteActivate(self, menuItem):
         #
         # undo/redo tag    
         #
-        self.emit('history-start-group')
+        groupCmd = CCompositeCommand()
         for sel in self.Diagram.GetSelected():
+            
             if isinstance(sel, Element.CElement):
-                self.emit('delete-element-from-all',sel.GetObject())
+                purgeElement =  CPurgeElementCmd(sel, self.application)
+                #purgeElement.do()
+                groupCmd.add(purgeElement)
+                
                 #self.emit('delete-element-from-all',sel.GetObject())
             else:
                 purgeConnection = CPurgeConnectionCmd(sel)
-                purgeConnection.do()
-                self.emit('history-entry',purgeConnection)
+                #purgeConnection.do()
+                groupCmd.add(purgeConnection)
                 #self.Diagram.ShiftDeleteConnection(sel)
-        self.emit('history-end-group')
+        
+        self.emit('history-entry', groupCmd)
         self.Paint()

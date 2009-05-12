@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from lib.Depend.gtk2 import gobject
 from lib.Depend.gtk2 import gtk
 
@@ -13,6 +14,7 @@ class ClwProperties(CWidget):
     widgets = ('lwProperties',)
     
     __gsignals__ = {
+        'history-entry':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
         'content_update':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
             (gobject.TYPE_PYOBJECT, gobject.TYPE_STRING)),      
     }

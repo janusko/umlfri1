@@ -183,7 +183,12 @@ class CElementObject(object):
             self.connections.remove(connection)
         else:
             raise ConnectionError("ConnectionNotFound")
-    
+
+
+    def InsertItem(self, key, pos):
+        self.domainobject.InsertItem(key, pos)
+        self.revision += 1
+
     def AppendItem(self, key):
         self.domainobject.AppendItem(key)
         self.revision += 1

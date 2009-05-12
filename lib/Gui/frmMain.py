@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from lib.Depend.gtk2 import gtk
 from common import CWindow, event
 import common
@@ -17,9 +18,9 @@ from tabStartPage import CtabStartPage
 from lib.config import config
 from lib.colors import colors
 from lib.Exceptions import UserException
-from lib.History import CApplicationHistory
-from lib.History.DrawingHistory import CAddElementCmd
-
+from lib.Commands import CCommandProcessor
+from lib.Commands.AreaCommands import CAddElementCmd
+from lib.Commands import CCompositeCommand
 
 
 class CfrmMain(CWindow):
@@ -64,7 +65,7 @@ class CfrmMain(CWindow):
 
     def __init__(self, app, wTree):
         
-        self.history = CApplicationHistory()
+        self.history = CCommandProcessor()
         
         
         CWindow.__init__(self, app, wTree)
@@ -72,7 +73,6 @@ class CfrmMain(CWindow):
         self.__sensitivity_project = None
         self.UpdateMenuSensitivity(project = False)
         self.ReloadTitle()
-
         #
         # undo/redo tag    
         #
@@ -120,7 +120,6 @@ class CfrmMain(CWindow):
         changes += zoomout != self.__sensitivity_project[4]
         self.__sensitivity_project[3] = zoomin
         self.__sensitivity_project[4] = zoomout
-
         #
         # undo/redo tag    
         #
@@ -159,9 +158,6 @@ class CfrmMain(CWindow):
         self.cmdZoomOut.set_sensitive(zoomout)
         self.mnuBestFit.set_sensitive(diagram)
         self.mnuFullscreen.set_sensitive(diagram)
-        #
-        # undo/redo tag    
-        #
         self.cmdUndo.set_sensitive(self.history.canUndo())
         self.mnuUndo.set_sensitive(self.history.canUndo())
         self.cmdRedo.set_sensitive(self.history.canRedo())
@@ -454,25 +450,17 @@ class CfrmMain(CWindow):
         self.picDrawingArea.IncScale(lib.consts.SCALE_INCREASE)
         self.UpdateMenuSensitivity()
 
-    #
-    # undo/redo tag    
-    #
-
     @event("cmdUndo", "clicked")
     @event("mnuUndo","activate")
     def on_mnuUndo_click(self, widget):
         self.history.undo()
-        self.picDrawingArea.Paint()
-        self.UpdateMenuSensitivity()
-        print 'Undo stack size: ', len(self.history.undoStack)
+        self.update_all()
         
     @event("cmdRedo", "clicked")
     @event("mnuRedo","activate")
     def on_mnuRedo_click(self, widget):
         self.history.redo()
-        self.picDrawingArea.Paint()
-        self.UpdateMenuSensitivity()
-
+        self.update_all()
 
     @event("cmdCut", "clicked")
     @event("mnuCut","activate")
@@ -517,7 +505,11 @@ class CfrmMain(CWindow):
         parentElement = self.twProjectView.GetSelectedNode()
         if parentElement == None:
             parentElement = self.twProjectView.GetRootNode()
-
+        #
+        # undo/redo tag    
+        # 
+        
+        
         ElementType = self.application.GetProject().GetMetamodel().GetElementFactory().GetElement(element)
         ElementObject = CElementObject(ElementType)
         self.twProjectView.AddElement(ElementObject, None, parentElement)
@@ -527,11 +519,16 @@ class CfrmMain(CWindow):
         #
         # undo/redo tag    
         # 
+
+        # look if it s needed
         self.twProjectView.AddElement(Element, diagram, parentElement)
 
     @event("mnuItems", "create-diagram")
     @event("twProjectView","create-diagram")
     def on_mnuItems_create_diagram(self, widget, diagramId):
+        #
+        # undo/redo tag    
+        # 
         diagram = CDiagram(self.application.GetProject().GetMetamodel().GetDiagramFactory().GetDiagram(diagramId))
         self.twProjectView.AddDiagram(diagram)
         self.nbTabs.AddTab(diagram)
@@ -581,9 +578,7 @@ class CfrmMain(CWindow):
     def on_picDrawingArea_delete_selected_item(self, widget, selected):
         #
         # undo/redo tag    
-        #
-        # re-think the emit koncept 
-       
+        #   
         self.twProjectView.DeleteElement(selected)
 
     @event("twProjectView", "selected-item-tree")
@@ -633,8 +628,9 @@ class CfrmMain(CWindow):
                 # undo/redo tag    
                 #  
                 addElement = CAddElementCmd(Element, position)
-                addElement.do()
-                self.history.add(addElement)
+                #addElement.do()
+                self.on_history_insert(None, addElement)
+                #self.history.add(addElement)
                 #Element = CElement(diagram, node.GetObject()).SetPosition(position)
                 self.UpdateMenuSensitivity()
             except UserException, e:
@@ -659,14 +655,31 @@ class CfrmMain(CWindow):
     
     @event("picDrawingArea","open-specification")
     def on_show_open_specification(self, widget, Element):
-        tmp = self.application.GetWindow('frmProperties')
-        tmp.SetParent(self.application.GetWindow('frmMain'))
-        tmp.ShowProperties('', Element, self.picDrawingArea)
-        self.picDrawingArea.Paint()
+        groupCmd = CCompositeCommand()
+        self.frmProp = self.application.GetWindow('frmProperties')
+        self.frmProp.SetParent(self.application.GetWindow('frmMain'))
+        self.frmProp.ShowProperties('', Element, self.picDrawingArea, groupCmd)
+        self.on_history_insert(None, groupCmd)
+
  
-    #
-    # undo/redo tag    
-    #
+#
+# undo/redo tag    
+#
+    def update_all(self):
+       # basically update everything :)
+       # should be replaced with the update method
+       # tomas has created for the plugin system
+       selected = self.picDrawingArea.GetDiagram().selected
+       self.picDrawingArea.Paint()
+       self.UpdateMenuSensitivity(element = len(selected) > 0)
+       self.twProjectView.Redraw()
+       self.nbTabs.RefreshAllTabs()
+       if len(selected) == 1:
+            for e in self.picDrawingArea.GetDiagram().GetSelected():
+                self.nbProperties.Fill(e)
+       else:
+            self.nbProperties.Fill(None)
+      
     
     @event("cmdUndo","show-menu")
     def on_show_undo_menu(self, widget):
@@ -688,8 +701,7 @@ class CfrmMain(CWindow):
     def on_undo_menuitem_response(self, widget, iteration):
         for i in range(iteration):
             self.history.undo()
-        self.picDrawingArea.Paint()
-        self.UpdateMenuSensitivity()
+        self.update_all()
 
    
     @event("cmdRedo","show-menu")
@@ -709,29 +721,27 @@ class CfrmMain(CWindow):
     def on_redo_menuitem_response(self, widget, iteration):
         for i in range(iteration):
             self.history.redo()
-        self.picDrawingArea.Paint()
-        self.UpdateMenuSensitivity()
+        self.update_all()
 
+    ##@event("nbProperties", "history-start-group")
+    #@event("picDrawingArea","history-start-group")
+    #def on_history_start_group(self, widget):
+        #self.history.startGroup()
+        
+    ##@event("nbProperties", "history-end-group")
+    #@event("picDrawingArea","history-end-group")
+    #def on_history_end_group(self, widget):
+        #self.history.endGroup()
 
-    @event("picDrawingArea","history-start-group")
-    def on_history_start_group(self, widget):
-        self.history.startGroup()
-
-    @event("picDrawingArea","history-end-group")
-    def on_history_end_group(self, widget):
-        self.history.endGroup()
-
-    
+    @event("twProjectView", "history-entry")
+    @event("nbProperties", "history-entry")
     @event("picDrawingArea","history-entry")
+    #@event("frmProperties","history-entry")    
     def on_history_insert(self, widget, command):
         self.history.add(command)
-        self.UpdateMenuSensitivity()
-        print 'Undo stack size: ', len(self.history.undoStack)
+        self.update_all()
 
 
-
-
-   
     #Z-Order 
     # 'mmShift_SendBack', 'mmShift_BringForward', 'mmShift_ToBottom', 'mmShift_ToTop'    
     @event("mmShift_SendBack", "activate")

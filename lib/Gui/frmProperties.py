@@ -3,6 +3,10 @@ from lib.Depend.gtk2 import gobject
 
 from common import CWindow, event
 from lib.Drawing import CElement, CConnection
+from lib.Commands.AreaCommands import CAddConnectionCmd, CDeleteItemCmd
+
+
+
 
 class CfrmProperties(CWindow):
     widgets = ('nbProProperties', 'twConnections', )
@@ -19,7 +23,7 @@ class CfrmProperties(CWindow):
         self.twConnections.append_column(gtk.TreeViewColumn(_("Visible"), renderer, active = 2))
         
         self.twConnections.set_model(self.connModel)
-    
+        
     
     def __fixed_toggled(self, cell, path):
         iter = self.connModel.get_iter((int(path),))
@@ -30,8 +34,11 @@ class CfrmProperties(CWindow):
         else:
             self.__connections.remove(con)
     
-    def ShowProperties(self, what, elementObject, picDrawingArea):
+    def ShowProperties(self, what, elementObject, picDrawingArea, compositeCommand):
         self.__saved = False
+        # this way of obtaining the composite command is a bit dorky,
+        # but event nor connect can be used :(
+        self.groupCmd = compositeCommand
         if isinstance(elementObject, CElement):
             isElement = True
             self.__elementObj = elementObject.GetObject()
@@ -58,7 +65,7 @@ class CfrmProperties(CWindow):
                 self.connModel.set(self.connModel.append(), 0, obj.GetName(), 1, i.GetType().GetId(), 2, self.element.GetDiagram().HasConnection(i))
             else:
                 self.connModel.set(self.connModel.append(), 0, obj.GetName(), 1, i.GetType().GetId())
-        
+       
         response = self.form.run()
         while response == gtk.RESPONSE_APPLY:
             self.__Save()
@@ -67,24 +74,33 @@ class CfrmProperties(CWindow):
         if response == gtk.RESPONSE_OK:
             self.__Save()
         self.Hide()
-        
+        self.groupCmd = None
         return self.__saved
     
     def __Save(self):
         if self.__connections is not None:
+            
             for i in self.__connections:
                 con = self.element.GetDiagram().GetConnection(i)
                 if con is not None:
-                    self.element.GetDiagram().DeleteConnection(con)
+                    
+                    d = CDeleteItemCmd(self.element.GetDiagram(), con)
+                    self.groupCmd.add(d)
+                    ##self.element.GetDiagram().DeleteConnection(con)
                 else:
+                    
                     diagram = self.element.GetDiagram()
                     if i.GetSource() is not self.__elementObj:
                         sour = diagram.HasElementObject(i.GetSource())
                         if sour is not None:
-                            CConnection(diagram,i,sour,self.element)
+                            addConnection = CAddConnectionCmd(diagram, i, sour, self.element)
+                            self.groupCmd.add(addConnection)
+                            #CConnection(diagram,i,sour,self.element)
                     elif i.GetDestination is not self.__elementObj:
                         dest = diagram.HasElementObject(i.GetDestination())
                         if dest is not None:
-                            CConnection(diagram,i,self.element,dest)
+                            addConnection = CAddConnectionCmd(diagram, i, self.element, dest)
+                            self.groupCmd.add(addConnection)
+                            #CConnection(diagram,i,self.element,dest)
             self.__connections = []
-        self.__saved = True
+            self.__saved = True

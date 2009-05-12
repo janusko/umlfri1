@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from lib.Exceptions import DomainObjectError
 import re
 from lib.consts import DEFAULT_IDENTITY
@@ -82,6 +83,18 @@ class CDomainObject(object):
         @type id: str
         '''
         self._TracePath(id, 'append')
+        
+    def InsertItem(self, id, position):
+        '''
+        Insert next object to the attribute with type list
+        
+        @param id: path to the attribute
+        @type id: str
+        
+        @param position: position where object should be inserted
+        @type position: int
+        '''
+        self._TracePath(id, 'insert', position)
     
     def RemoveItem(self, id):
         '''
@@ -136,6 +149,12 @@ class CDomainObject(object):
                 else:
                     raise DomainObjectError('Attribute %s of domain %s is not of type "list"'%\
                     (path[0], self.type.GetName()))
+            elif action == 'insert':
+                if self.type.GetAttribute(path[0])['type'] == 'list':
+                    self.values[path[0]].insert(value, self.type.GetDefaultValue(domain = self.type.GetAttribute(path[0])['list']['type']))
+                else:
+                    raise DomainObjectError('Attribute %s of domain %s is not of type "list"'%\
+                    (path[0], self.type.GetName()))            
             elif action == 'remove':
                 raise DomainObjectError('RemoveItem is allowed on item of a list only')
             elif action == 'visual':
@@ -176,6 +195,7 @@ class CDomainObject(object):
                         (path[0], self.type.GetName()))
                 elif action == 'remove':
                     self.values[path[0]].pop(idx)
+                    #print 'HODNOTA: ',self.values[path[0]]
                 elif action == 'visual':
                     return self.type.HasVisualAttribute(path[0])
                 

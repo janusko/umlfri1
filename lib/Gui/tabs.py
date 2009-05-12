@@ -23,7 +23,7 @@ class CTabs(CWidget):
     
     def __init__(self, app, wTree):
         CWidget.__init__(self, app, wTree)
-        diagram = CDiagram(None,'StartPage')
+        diagram = CDiagram(None,'Start page')
         self.diagrams = [diagram]
         self.__Current = 0
         self.__StartPage = 0
@@ -193,7 +193,26 @@ class CTabs(CWidget):
             self.tbDrawingArea.get_parent().remove(self.tbDrawingArea)
         for diagram in self.diagrams[:]:
             self.CloseTab(diagram)
-
+            
+    def RefreshAllTabs(self):
+        num = 0
+        allDiagrams = []
+        for b in self.application.GetProject().GetRoot().GetAllDiagrams():
+            allDiagrams.append(b)
+        
+        for diagram in self.diagrams:
+            if diagram not in allDiagrams:
+                if diagram.GetName() != 'Start page':
+                    self.CloseTab(diagram)
+        for diagram in self.diagrams:
+            page = self.nbTabs.get_nth_page(num) #ebPage = event box Page
+            page_label = self.nbTabs.get_tab_label(page)
+            for l in page_label:
+                if isinstance(l, gtk.Label):
+                    label = l
+            label.set_text(diagram.GetName())
+            num += 1
+            
     def RefreshTab(self, diagram):
         if diagram in self.diagrams:
             num = self.diagrams.index(diagram)
