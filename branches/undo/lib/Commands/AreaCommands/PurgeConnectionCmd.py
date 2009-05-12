@@ -9,7 +9,6 @@ class CPurgeConnectionCmd(CBaseCommand):
         CBaseCommand.__init__(self, description)
         self.connection = connection
         self.diagram = self.connection.diagram 
-        
         self.source = self.connection.GetObject().GetSource()
         self.destination = self.connection.GetObject().GetDestination()
 
@@ -18,28 +17,15 @@ class CPurgeConnectionCmd(CBaseCommand):
         
         for appear in self.connection.GetObject().GetAppears():
             appear.DeleteConnectionObject(self.connection.GetObject())
-                
         
         if self.connection.GetObject() in self.source.connections:
             self.source.RemoveConnection(self.connection.GetObject())
         if self.connection.GetObject() in self.destination.connections:
             self.destination.RemoveConnection(self.connection.GetObject())
-        
-        
-        #for appear in self.connection.GetObject().GetAppears():
-        #if self.connection in self.diagram.connections:
-            #self.diagram.ShiftDeleteConnection(self.connection)  
-        #self.destination.RemoveConnection(self.connection.GetObject()) 
-        #self.source.RemoveConnection(self.connection.GetObject())               
+           
         if self.description == None:
             self.description = _('Deleting %s connection from project') %(self.connection.GetObject().GetType().GetId())
 
-
-    def redo(self):
-        self.do()
-        #self.connection.Deselect()
-        #self.diagram.ShiftDeleteConnection(self.connection)      
-        
         
     def undo(self):
         

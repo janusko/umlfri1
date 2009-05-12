@@ -3,9 +3,6 @@ from lib.Commands import CBaseCommand
 from lib.Drawing import  CElement, CConnection
 
 
-
-
-
 class CElementChangeCmd(CBaseCommand):
     
     def __init__(self, element, key, value, description = None): 

@@ -53,8 +53,3 @@ class CMoveSelectionCmd(CBaseCommand):
             self.diagram.AddToSelection(s)
 
 
-
-
-
-
-

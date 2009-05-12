@@ -37,11 +37,3 @@ class CInsertConnectionPointCmd(CBaseCommand):
         else: 
             pass
   
-    def redo(self):
-        self.do()
-
-
-    def isEnabled(self):
-        return self.enabled
-
-
