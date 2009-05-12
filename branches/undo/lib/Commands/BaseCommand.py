@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
-from lib.Depend.gtk2 import gobject
 
-# CBaseCommand
-
-class CBaseCommand(gobject.GObject):
+class CBaseCommand:
     '''Super class for all undoable operations
     
     All the children classes have to implement (overload) these methods so the AplicationHistory will be able 
@@ -12,7 +9,6 @@ class CBaseCommand(gobject.GObject):
     fed throught the __ini__ constructor
     '''    
     def __init__(self, description = None):
-        gobject.GObject.__init__(self)    
         self.description = description
         self.enabled = True 
         
