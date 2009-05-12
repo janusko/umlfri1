@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-from lib.History import CHistoryOperation
+from lib.Commands import CBaseCommand
 
 
 
-class CInsertConnectionPointCmd(CHistoryOperation):
+class CInsertConnectionPointCmd(CBaseCommand):
 
     def __init__(self, DragPoint, canvas, point, description = None): 
-        CHistoryOperation.__init__(self, description) 
+        CBaseCommand.__init__(self, description) 
         self.connection, self.index = DragPoint
         self.canvas = canvas
         self.point = point
@@ -26,7 +26,7 @@ class CInsertConnectionPointCmd(CHistoryOperation):
             else:
                 self.old_len = len(self.connection.points)
                 if self.description == None:
-                    self.description = _('Inserting point to %s connection ') %(self.connection.GetObject().GetType().GetId())
+                    self.description = _('Inserting point into %s connection ') %(self.connection.GetObject().GetType().GetId())
         else:
             self.enabled = False    
   

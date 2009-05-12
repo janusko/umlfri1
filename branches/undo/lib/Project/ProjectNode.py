@@ -24,6 +24,18 @@ class CProjectNode(object):
         for i in self.childs:
             i.Change()
 
+    def GetAllDiagrams(self):
+        diagrams = []
+        for d in self.diagrams:
+            diagrams.append(d)
+        
+        for child in self.childs:
+            for diagram in child.GetAllDiagrams():
+                diagrams.append(diagram)
+                
+        for diagram in diagrams:
+            yield diagram
+
 
     def GetAppears(self):
         return self.GetObject().GetAppears()

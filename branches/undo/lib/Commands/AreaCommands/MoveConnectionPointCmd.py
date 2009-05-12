@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
-from lib.History import CHistoryOperation
+from lib.Commands import CBaseCommand
 
 
 
-class CMoveConnectionPointCmd(CHistoryOperation):
+class CMoveConnectionPointCmd(CBaseCommand):
     def __init__(self, DragPoint, canvas, point, description = None): 
-        CHistoryOperation.__init__(self, description) 
+        CBaseCommand.__init__(self, description) 
         self.connection, self.index = DragPoint
         self.canvas = canvas
         self.point = point
         self.enabled = True
-        self.delted = False
-        
+       
 
     def do (self):
         

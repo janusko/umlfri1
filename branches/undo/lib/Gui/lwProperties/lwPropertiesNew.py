@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from lib.Depend.gtk2 import gobject
 from lib.Depend.gtk2 import gtk
 
@@ -6,6 +7,12 @@ from lib.Drawing import CDiagram
 from lib.Elements.Object import CElementObject
 from lib.Connections.Object import CConnectionObject
 
+#
+# undo/redo tag    
+#
+from lib.Commands.PropertiesCommands import CElementChangeCmd, CDiagramChangeCmd, CElementAppendItemCmd,CElementDeleteItemCmd
+
+
 ID_ID, ID_NAME, ID_VALUE, ID_TEXT_VISIBLE, ID_COMBO_VISIBLE, ID_EDITABLE, ID_BUTTON_VISIBLE, ID_BUTTON_TEXT, ID_ACTION = range(9)
 
 class ClwProperties(CWidget):
@@ -13,6 +20,7 @@ class ClwProperties(CWidget):
     widgets = ('lwProperties',)
     
     __gsignals__ = {
+        'history-entry':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
         'content_update':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
             (gobject.TYPE_PYOBJECT, gobject.TYPE_STRING)),      
     }
@@ -145,6 +153,7 @@ class ClwProperties(CWidget):
             return
         else:
             self._FillBody(self.element.GetObject(), None, '')
+
     
     def Clear(self):
         self.element = None
@@ -180,12 +189,27 @@ class ClwProperties(CWidget):
         model.set(iter, ID_VALUE, new_value) 
         if isinstance(self.element, CDiagram):
             name, = model.get(iter, ID_NAME)
-            self.element.SetName(new_value)
-            self.emit('content_update', self.element, name)
+            #self.element.SetName(new_value)
+            #
+            # undo/redo tag    
+            #
+            diagramChange = CDiagramChangeCmd(self.element, new_value)            
+            #diagramChange.do()
+            self.emit('history-entry', diagramChange)
+            
+            
+           # self.emit('content_update', self.element, name)
         else:
             key = self.get_key(path)
-            self.element.GetObject().SetValue(key, new_value)
-            self.emit('content_update', self.element, key)
+            #self.element.GetObject().SetValue(key, new_value)
+            
+            #
+            # undo/redo tag    
+            #
+            elementChange = CElementChangeCmd(self.element, key, new_value)            
+            #elementChange.do()
+            self.emit('history-entry', elementChange)
+            #self.emit('content_update', self.element, key)
         
     @event("ComboRenderer", "edited")
     def on_change_combo(self, cellrenderer, path, new_value):
@@ -194,13 +218,33 @@ class ClwProperties(CWidget):
             iter = model.get_iter_from_string(path)
             model.set(iter, ID_VALUE, new_value)
             key = self.get_key(path)
-            self.element.GetObject().SetValue(key, new_value)
+            #self.element.GetObject().SetValue(key, new_value)
+                       
+            #
+            # undo/redo tag    
+            #
+            elementChange = CElementChangeCmd(self.element, key, new_value)            
+            #elementChange.do()
+            self.emit('history-entry', elementChange)
+            
             self.emit('content_update', self.element, key)
     
     def on_listadd(self, key, iter):
-        self.element.GetObject().AppendItem(key)
+        #self.element.GetObject().AppendItem(key)
+        
+        #
+        # undo/redo tag    
+        #
+        elementChange = CElementAppendItemCmd(self.element, key)            
+        #elementChange.do()
+        self.emit('history-entry', elementChange)
+                
+        
+        
+        
+        
         self._FillListItem(self.element.GetObject(), iter, key, len(self.element.GetObject().GetValue(key)) - 1)
-        self.emit('content_update', self.element, key)
+        #self.emit('content_update', self.element, key)
         
     def on_listdel(self, key, iter, path):
         model = self.lwProperties.get_model()
@@ -210,7 +254,14 @@ class ClwProperties(CWidget):
         if len(self.element.GetObject().GetValue(parent_key)) == 1:
             self.lwProperties.collapse_row(parent_path)
             self.on_listadd(parent_key, parent_iter)
-        self.element.GetObject().RemoveItem(key)
+        #self.element.GetObject().RemoveItem(key)
+        #
+        # undo/redo tag    
+        #
+        elementChange = CElementDeleteItemCmd(self.element, key)            
+        #elementChange.do()
+        self.emit('history-entry', elementChange)
+        
         self.treeStore.remove(iter)
         for idx in xrange(int(path.rsplit(':', 1)[-1]), len(self.element.GetObject().GetValue(parent_key))):
             npath = parent_path + ':' + str(idx)

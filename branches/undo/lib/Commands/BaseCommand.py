@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from lib.Depend.gtk2 import gobject
 
+# CBaseCommand
 
-
-class CHistoryOperation(gobject.GObject):
+class CBaseCommand(gobject.GObject):
     '''Super class for all undoable operations
     
     All the children classes have to implement (overload) these methods so the AplicationHistory will be able 
@@ -33,12 +33,12 @@ class CHistoryOperation(gobject.GObject):
         '''steps needed to redo the command, in some cases could be the same as the do() method
         should _not_ have any arguments, nor return values
         '''
-        pass
+        self.do()
     
     def isEnabled(self):
-        '''Should return True if the history action (undo or redo) can be done, otherwise return False
-        Instance should be marked as not enabled if during the commands operations it found out that this user action is
-        illegal - wont be done so logically should be part of history
+        '''Returns True if the history action (undo or redo) is valid, otherwise return False
+        Instance should be marked as not enabled, if during the commands operations it found out, that this user action is
+        illegal - wont be done so logically shouldn't be part of the history
         
         @note: if an instance is marked as not enabled, it wont be added to undo stack
         '''
@@ -46,7 +46,7 @@ class CHistoryOperation(gobject.GObject):
     
 
     def __str__(self):
-        '''should return a string containing the description of the action of the command.
+        '''Returns a string containing the description of the command.
         Mandatory - shows the user undo/redoable steps
         '''
         if self.description == None:

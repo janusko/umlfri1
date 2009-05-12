@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-from lib.History import CHistoryOperation
+from lib.Commands import CBaseCommand
 
 
-class CResizeElemntCmd(CHistoryOperation):
+class CResizeElemntCmd(CBaseCommand):
     def __init__(self, element, canvas, delta, selSq, description = None): 
-        CHistoryOperation.__init__(self, description)
+        CBaseCommand.__init__(self, description)
         self.element = element
         self.canvas = canvas
         self.delta = delta
@@ -14,7 +14,7 @@ class CResizeElemntCmd(CHistoryOperation):
     def do (self):
         self.element.Resize(self.canvas, self.delta, self.selSq)
         if self.description == None:
-            self.description = _('Resize %s element on %s') %(self.element.GetObject().GetName(), self.element.diagram.GetName())
+            self.description = _('Resizing %s on %s') %(self.element.GetObject().GetName(), self.element.diagram.GetName())
 
 
     def undo(self):

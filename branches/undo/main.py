@@ -111,4 +111,11 @@ class Application(CApplication):
         self.recentFiles.SaveRecentFiles()
 
 if __name__ == '__main__':
+    print '''
+*********************************************************
+*                                                       *
+*               undo testing branch                     * 
+*                                                       *
+*********************************************************
+'''    
     Application().Main()
