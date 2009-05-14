@@ -31,7 +31,9 @@ class CPurgeConnectionCmd(CBaseCommand):
         
         self.destination.AddConnection(self.connection.GetObject()) 
         self.source.AddConnection(self.connection.GetObject()) 
-        for appear in self.connection.GetObject().GetAppears():
-            if self.connection not in appear.connections:
-                appear.AddConnection(self.connection)
+        if self.connection not in self.diagram.connections:
+            self.diagram.AddConnection(self.connection)
+        #for appear in self.connection.GetObject().GetAppears():
+            #if self.connection not in appear.connections:
+                #appear.AddConnection(self.connection)
             
