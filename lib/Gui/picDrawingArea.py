@@ -280,16 +280,23 @@ class CpicDrawingArea(CWidget):
     
     @event("mnuCtxDelete","activate")
     def DeleteElements(self, widget = None):
+        # to do: commad for deleting points
+        # thist cool feature should be also available 
+        # from the right click menu !
+        #for sel in self.Diagram.GetSelected():
+            #if isinstance(sel, CConnection):
+                #index = sel.GetSelectedPoint()
+                #if index is not None and (sel.GetSource() != sel.GetDestination() or len(tuple(sel.GetMiddlePoints())) > 2):
+                    #sel.RemovePoint(self.canvas, index)
+                    #self.Diagram.DeselectAll()
+                    #self.Paint()
+                    #return
+        groupCmd = CCompositeCommand()            
         for sel in self.Diagram.GetSelected():
-            if isinstance(sel, CConnection):
-                index = sel.GetSelectedPoint()
-                if index is not None and (sel.GetSource() != sel.GetDestination() or len(tuple(sel.GetMiddlePoints())) > 2):
-                    sel.RemovePoint(self.canvas, index)
-                    self.Diagram.DeselectAll()
-                    self.Paint()
-                    return
-        for sel in self.Diagram.GetSelected():
-            self.Diagram.DeleteItem(sel)
+            deleteItem = CDeleteItemCmd(self.Diagram, sel)
+            groupCmd.add(deleteItem)
+            #self.Diagram.DeleteItem(sel)
+        self.emit('history-entry',groupCmd)
         self.Diagram.DeselectAll()
         self.emit('selected-item', list(self.Diagram.GetSelected()))
         self.Paint()

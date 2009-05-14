@@ -213,6 +213,3 @@ class ClwProperties(CWidget):
             
         elif action == 'listdel':
             self.on_listdel(key, iter, path)
-        
-        
-        

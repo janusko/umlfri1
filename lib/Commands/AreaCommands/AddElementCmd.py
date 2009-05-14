@@ -14,6 +14,7 @@ class CAddElementCmd(CBaseCommand):
         self.parentElement = parentElement
         self.pos = pos
         self.application = application 
+        self.delCon = []
 
     def do (self):
         
@@ -33,17 +34,28 @@ class CAddElementCmd(CBaseCommand):
 
 
     def undo(self):
+        self.delCon = []
+        for con in self.diagram.GetConnections():
+            if (con.GetSource() is self.element) or (con.GetDestination() is self.element):
+                self.delCon.append(con)         
+        
         self.element.Deselect()
         self.element.GetObject().RemoveAppears(self.diagram)
         self.diagram.DeleteElement(self.element)        
         
         if self.application is not None:
             self.application.GetProject().RemoveNode(self.node)
+        else:
+            pass
         
         
     def redo(self):
         self.do()
         self.diagram.AddElement(self.element)
         self.element.GetObject().AddAppears(self.diagram)
+        if self.delCon:
+            for con in self.delCon:
+                if con not in self.diagram.connections: 
+                    self.diagram.AddConnection(con)
        
  

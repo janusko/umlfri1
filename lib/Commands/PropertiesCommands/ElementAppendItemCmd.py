@@ -15,6 +15,8 @@ class CElementAppendItemCmd(CBaseCommand):
     def do (self):
         
         self.element.GetObject().AppendItem(self.key)
+        self.attList = self.element.GetObject().GetValue(self.key)
+        self.appendedItem = self.attList[-1:][0]
         
         if self.description == None:
             if isinstance(self.element, CElement):
@@ -25,12 +27,10 @@ class CElementAppendItemCmd(CBaseCommand):
            
            
     def undo(self):
-        value = self.element.GetObject().GetValue(self.key) 
-        value.pop(len(value)-1)
-
-
+        self.attList.remove(self.appendedItem)
+            
     def redo(self):
-        self.element.GetObject().AppendItem(self.key)
+        self.attList.append(self.appendedItem)
  
 
 

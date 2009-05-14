@@ -16,12 +16,11 @@ class CElementDeleteItemCmd(CBaseCommand):
         
         if len(self.attList) <= 1: # this will never happen... shouldn't at least :)
             self.enabled = False
-       
+      
         else:
             self.itemToDelete = self.element.GetObject().GetValue(self.key) 
             self.myIndex = self.attList.index(self.itemToDelete)
             self.attList.remove(self.itemToDelete)
-            
                        
             if self.description == None:
                 if isinstance(self.element, CElement):
@@ -38,11 +37,8 @@ class CElementDeleteItemCmd(CBaseCommand):
            
     def undo(self):
         self.attList.insert(self.myIndex, self.itemToDelete)
-        
+
 
     def redo(self):
         self.attList.remove(self.itemToDelete)
- 
-
-
 

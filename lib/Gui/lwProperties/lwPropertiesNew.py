@@ -183,27 +183,12 @@ class ClwProperties(CWidget):
         model.set(iter, ID_VALUE, new_value) 
         if isinstance(self.element, CDiagram):
             name, = model.get(iter, ID_NAME)
-            #self.element.SetName(new_value)
-            #
-            # undo/redo tag    
-            #
             diagramChange = CDiagramChangeCmd(self.element, new_value)            
-            #diagramChange.do()
             self.emit('history-entry', diagramChange)
-            
-            
-           # self.emit('content_update', self.element, name)
         else:
             key = self.get_key(path)
-            #self.element.GetObject().SetValue(key, new_value)
-            
-            #
-            # undo/redo tag    
-            #
             elementChange = CElementChangeCmd(self.element, key, new_value)            
-            #elementChange.do()
             self.emit('history-entry', elementChange)
-            #self.emit('content_update', self.element, key)
         
     @event("ComboRenderer", "edited")
     def on_change_combo(self, cellrenderer, path, new_value):
@@ -212,29 +197,13 @@ class ClwProperties(CWidget):
             iter = model.get_iter_from_string(path)
             model.set(iter, ID_VALUE, new_value)
             key = self.get_key(path)
-            #self.element.GetObject().SetValue(key, new_value)
-                       
-            #
-            # undo/redo tag    
-            #
             elementChange = CElementChangeCmd(self.element, key, new_value)            
-            #elementChange.do()
             self.emit('history-entry', elementChange)
-            
-            #self.emit('content_update', self.element, key)
     
     def on_listadd(self, key, iter):
-        #self.element.GetObject().AppendItem(key)
-        
-        #
-        # undo/redo tag    
-        #
         elementChange = CElementAppendItemCmd(self.element, key)            
-        #elementChange.do()
         self.emit('history-entry', elementChange)
-
         self._FillListItem(self.element.GetObject(), iter, key, len(self.element.GetObject().GetValue(key)) - 1)
-        #self.emit('content_update', self.element, key)
         
     def on_listdel(self, key, iter, path):
         model = self.lwProperties.get_model()
@@ -244,17 +213,8 @@ class ClwProperties(CWidget):
         if len(self.element.GetObject().GetValue(parent_key)) == 1:
             self.lwProperties.collapse_row(parent_path)
             self.on_listadd(parent_key, parent_iter)
-        #self.element.GetObject().RemoveItem(key)
-        #print 'Delete key: ', key
-        #
-        # undo/redo tag    
-        #
         elementChange = CElementDeleteItemCmd(self.element, key)            
-        #elementChange.do()
         self.emit('history-entry', elementChange)
-        
-        
-        
         self.treeStore.remove(iter)
         for idx in xrange(int(path.rsplit(':', 1)[-1]), len(self.element.GetObject().GetValue(parent_key))):
             npath = parent_path + ':' + str(idx)
@@ -262,7 +222,6 @@ class ClwProperties(CWidget):
             self.treeStore.set(niter,
                 ID_ID, '[%i]' % idx,
                 ID_NAME, str(idx))
-        #self.emit('content_update', self.element, key)
     
     @event("ButtonRenderer", "click")
     def on_change_button(self, cellrenderer, path):
@@ -275,6 +234,3 @@ class ClwProperties(CWidget):
             
         elif action == 'listdel':
             self.on_listdel(key, iter, path)
-        
-        
-        
