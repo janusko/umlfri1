@@ -3,9 +3,13 @@ from lib.Commands import CBaseCommand
 from lib.Exceptions.DevException import HistoryError
 import lib.consts
 
+   
 
-# CCommandProcessor
+
 class CCommandProcessor:
+    '''Class representing the application history, groups
+    command objects and performs operations with them. 
+    '''    
     
     def __init__(self):
         self.undoStack = []
@@ -18,8 +22,11 @@ class CCommandProcessor:
         
         @param redo: True if redo descriptions are wanted, undo otherwise (by default)
         @type redo: bool
+
+        @param limitation: number of command descriptions to be returned, if 0 return all
+        @type limitation: int
         
-        @return: list containing all the stack descriptions
+        @return: list containing stack descriptions
         @rtype: list
         '''
         descriptionList = []
@@ -59,8 +66,11 @@ class CCommandProcessor:
             raise HistoryError(_('Invalid Command object. Must be a child of lib.Commands.CBaseCommand'))
 
 
-
     def undo(self):
+        '''
+        Undo the last command in the undo stack
+        and append it to the redo stack
+        '''        
         if self.canUndo():
             undoStackItem = self.undoStack.pop()
             undoStackItem.undo()
@@ -68,29 +78,66 @@ class CCommandProcessor:
             
 
     def redo(self):
-         if self.canRedo():
+        '''
+        Redo the last command in the redo stack
+        and append it to the undo stack
+        '''                
+        if self.canRedo():
             redoStackItem = self.redoStack.pop()
             redoStackItem.redo()       
             self.undoStack.append(redoStackItem)
 
 
     def getUndoDesc(self, limitation = 0):
+        '''
+        Gets a description list from the undo stack
+       
+        @param limitation: number of undo command descriptions to be returned, if 0 return all
+        @type limitation: int
+        
+        @return: list containing the undo stack descriptions
+        @rtype: list
+        '''        
         return self.__getStackDesc(False, limitation)
 
 
     def getRedoDesc(self, limitation = 0):
+        '''
+        Gets a description list from the redo stack
+       
+        @param limitation: number of redo command descriptions to be returned, if 0 return all
+        @type limitation: int
+        
+        @return: list containing the redo stack descriptions
+        @rtype: list
+        '''        
         return self.__getStackDesc(True, limitation)
 
 
     def canUndo(self):
+        '''
+        Returns true if undo can be performed
+
+        @return: True if undo stack is not empty, else False
+        @rtype: bool
+        '''                
         return len(self.undoStack) > 0
 
 
     def canRedo(self):
+        '''
+        Returns true if redo can be performed
+
+        @return: True if redo stack is not empty, else False
+        @rtype: bool
+        '''           
         return len(self.redoStack) > 0
 
 
     def clear(self):
+        '''
+        Clears the history - undo and redo stacks
+        '''           
         self.undoStack = []
         self.redoStack = []
  
