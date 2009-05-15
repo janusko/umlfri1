@@ -1,19 +1,34 @@
 # -*- coding: utf-8 -*-
 from lib.Commands import CBaseCommand
 
-#CCompositeCommand
+
 class CCompositeCommand(CBaseCommand):
+    '''Class used for grouping other commands
     
+    New commands can be add using the add() method.
+    Commands will be executed after calling the do() method. If no
+    description is provided it will be constructed using the 
+    grouped commands descriptions.
+    '''      
     def __init__(self):
         CBaseCommand.__init__(self, _('Group Operation:'))
         self.stack = []
 
 
     def add(self, commandObject):
+        '''
+        Adds a new object to stack
+        
+        @param commandObject: instance to be added to stack
+        @type type: L{CBaseCommand<lib.Commands.BaseCommand.CBaseCommand>} 
+        '''        
         if isinstance(commandObject, CBaseCommand):
             self.stack.append(commandObject)
   
     def do(self):
+        '''
+        Iterates over the stacked commands and executes their do() method
+        '''        
         for command in self.stack:
             command.do()
             if command.isEnabled():                
@@ -28,11 +43,17 @@ class CCompositeCommand(CBaseCommand):
 
 
     def undo(self):
+        '''
+        Iterates over the stacked commands and executes their undo() method
+        '''        
         for command in self.stack:
             command.undo()
 
 
     def redo(self):
+        '''
+        Iterates over the stacked commands and executes their redo() method
+        '''        
         for command in self.stack:
             command.redo()        
 
@@ -41,14 +62,18 @@ class CCompositeCommand(CBaseCommand):
         
         
     def setDesc(self, description):
+        '''
+        Sets a custom description
+        
+        @param description: new description
+        @type description: str                
+        '''        
         self.description = description
-
-
-    def getStackMembers(self):
-        for command in self.stack:
-            yield command
-
 
     def __str__(self):
         return self.description
 
+
+    #def getStackMembers(self):
+        #for command in self.stack:
+            #yield command
