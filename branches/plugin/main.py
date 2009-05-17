@@ -129,8 +129,11 @@ class Application(CApplication):
     
     def StartPlugins(self):
         for item in os.listdir(config['/Paths/Plugins']):
-            if os.path.isdir(config['/Paths/Plugins'] + item):
-                os.system('./pl_runner.py %i %s &' % (self.pluginManager.GetPort(), item))
+            if os.path.isdir(config['/Paths/Plugins'] + item) and not item.startswith('.'):
+                if os.name == 'nt': 
+                    os.system('start /B pl_runner.py %i %s' % (self.pluginManager.GetPort(), item))
+                else:
+                    os.system('./pl_runner.py %i %s &' % (self.pluginManager.GetPort(), item))
 
 if __name__ == '__main__':
     gobject.threads_init()

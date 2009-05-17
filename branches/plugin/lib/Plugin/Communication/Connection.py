@@ -14,7 +14,7 @@ class CConnection(object):
             self.lastid = 0
             self.results = {}
             sock = socket.socket()
-            sock.connect(('', port))
+            sock.connect(('localhost', port))
             self.wrapper = CSocketWrapper(sock, self, None, False)
             self.guicallback = {}
             self.finalized = thread.allocate()
