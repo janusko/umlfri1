@@ -12,15 +12,25 @@
                     <Padding padding="12">
                         <Align align="center center">
                             <HBox>
-                                <Condition condition="#critical" type="equal" value="True">
-                                    <TextBox text="CRITICAL" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                </Condition>
-                                <VBox>
-                                    <Condition condition="#negate" type="equal" value="True">
-                                        <TextBox text="NOT " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                <Align align="center center">
+                                    <TextBox text="#index" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                </Align>
+                                <Align align="center center">
+                                    <Condition condition="#critical" type="equal" value="True">
+                                        <TextBox text="CRITICAL" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
                                     </Condition>
-                                    <TextBox text="#condition" font="/Styles/Element/NameTextFont" color="/Styles/Element/NameTextColor" />
-                                </VBox>
+                                </Align>
+                                <Align align="center center">
+                                    <VBox>
+                                        <Condition condition="#negate" type="equal" value="True">
+                                            <TextBox text="NOT " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                        </Condition>
+                                        <TextBox text="#condition" font="/Styles/Element/NameTextFont" color="/Styles/Element/NameTextColor" />
+                                    </VBox>
+                                </Align>
+                                <Align align="center center">
+                                    <TextBox text="#value" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                </Align>
                             </HBox>
                         </Align>
                     </Padding>

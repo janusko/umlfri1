@@ -57,6 +57,7 @@ types = {
     "/Paths/UserConfig": path_type,
     "/Paths/RecentFiles": path_type,
     "/Paths/UserGui": path_type,
+    "/Paths/Plugins": path_type,
     "/Page/Width": int,
     "/Page/Height": int,
 }
@@ -122,6 +123,13 @@ class CConfig(object):
         """
         self.cfgs = {}
         self.revision = 0
+    
+    def LoadDefaults(self):
+        """
+        Loads the default config values
+        """
+        self.cfgs = self.original.copy()
+        self.revision += 1
     
     def __setitem__(self, path, value):
         """

@@ -1,6 +1,7 @@
 import socket
 import thread
 from ComSpec import *
+from lib.Exceptions import *
 from SocketWrapper import CSocketWrapper
 from Future import CFuture
 from ExceptionCarrier import CExceptionCarrier
@@ -16,15 +17,17 @@ class CConnection(object):
             sock.connect(('', port))
             self.wrapper = CSocketWrapper(sock, self, None, False)
             self.guicallback = {}
+            self.finalized = thread.allocate()
+            self.finalized.acquire()
         
         #~ except socket.error
     
     def Command(self, command, params, data, addr):
         try:
-            print command, params, data, addr
+            #print command, params, data, addr
             self.lock.acquire()
             code = int(command['code'])
-            if 200 <= code <= 299 or 400 <= code <= 499:
+            if 200 <= code <= 299 or 400 <= code <= 599:
                 __id__ = params.pop('__id__', None)
                 if __id__ is None:
                     return
@@ -36,14 +39,29 @@ class CConnection(object):
                 elif code in (RESP_OK, RESP_GUI_ADDED, RESP_GUI_SENSITIVE, RESP_GUI_INSENSITIVE):
                     self.results[__id__] = True
                 
-                elif 400 <= code <= 499:
-                    self.results[__id__] = CExceptionCarrier(Exception, *params.values())
+                elif 400 <= code <= 599:
+                    self.results[__id__] = CExceptionCarrier({
+                        RESP_UNKONWN_COMMAND: PluginUnknownCommand,
+                        RESP_UNSUPPORTED_VERSION: PluginUnsupportedVersion,
+                        RESP_INVALID_COMMAND_TYPE: PluginInvalidCommandType,
+                        RESP_MISSING_PARAMETER: PluginMissingParameter,
+                        RESP_INVALID_PARAMETER: PluginInvalidParameter,
+                        RESP_INVALID_OBJECT: PluginInvalidObject,
+                        RESP_UNKNOWN_METHOD: PluginUnknownMethod,
+                        RESP_PROJECT_NOT_LOADED: PluginProjectNotLoaded,
+                        RESP_UNKNOWN_CONSTRUCTOR: PluginUnknownConstructor,
+                        RESP_UNHANDELED_EXCEPTION: UMLException,
+                        }[code], 
+                        *((code,) + tuple(params.values())))
                 
                 lck.release()
             elif code == RESP_GUI_ACTIVATED:
                 path = params['path']
                 if path in self.guicallback:
                     thread.start_new(self.guicallback[path], (path, ))
+            
+            elif code == RESP_FINALIZE:
+                self.finalized.release()
             
             
         finally:
@@ -76,3 +94,8 @@ class CConnection(object):
             self.guicallback[path] = callback
         finally:
             self.lock.release()
+    
+    def WaitTillClosed(self):
+        self.finalized.acquire()
+        self.finalized.release()
+        return

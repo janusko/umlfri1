@@ -238,6 +238,11 @@
 									<xs:documentation>Path of dir where gui of usere is stored</xs:documentation>
 								</xs:annotation>
 							</xs:element>
+							<xs:element name="Plugins" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Path of dir where gui of usere is stored</xs:documentation>
+								</xs:annotation>
+							</xs:element>
 						</xs:all>
 					</xs:complexType>
 				</xs:element>

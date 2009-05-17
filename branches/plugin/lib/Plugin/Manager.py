@@ -1,7 +1,7 @@
 from Communication.AcceptServer import CAcceptServer
 from Communication.SocketWrapper import CSocketWrapper
 from Communication.ComSpec import *
-from Core import CCore
+from Interface.Core import CCore
 from lib.consts import *
 from lib.Gui import CGuiManager
 import thread
@@ -60,4 +60,10 @@ class CPluginManager(object):
     
     def DomainValueChanged(self, element, path):
         self.SendToAll(RESP_DOMAIN_VALUE_CHANGED, element = r_object(element), path = path)
+    
+    def KillAll(self):
+        self.SendToAll(RESP_FINALIZE)
+        
+    def GetPort(self):
+        return self.acceptserver.sock.getsockname()[1]
     

@@ -48,6 +48,7 @@
         <UserConfig>~/.uml_fri/config.xml</UserConfig>
         <RecentFiles>~/.uml_fri/RecentFiles.xml</RecentFiles>
         <UserGui>~/.uml_fri/UserGui.xml</UserGui>
+        <Plugins>&apppath;/plugins</Plugins>
     </Paths>
     <Page>
         <Width>797</Width>

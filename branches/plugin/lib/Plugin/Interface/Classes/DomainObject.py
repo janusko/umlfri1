@@ -21,7 +21,7 @@ class IDomainObject(IBase):
             else:
                 return str(res)
     
-    @result(r_str)
+    @result(r_eval)
     def GetSaveInfo(him):
         return str(him.GetSaveInfo())
     

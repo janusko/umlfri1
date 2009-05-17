@@ -210,7 +210,7 @@ class ClwProperties(CWidget):
         elif action == 'listdel':
             self.on_listdel(key, iter, path)
         
-    @event('application.bus', 'content-update')
+    #@event('application.bus', 'content-update')
     def on_content_update(self, widget, element, property):
         if (self.element is not None and (element is self.element 
             or not isinstance(self.element, CDiagram) and element is self.element.GetObject())):

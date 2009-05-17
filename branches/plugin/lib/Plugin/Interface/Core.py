@@ -1,8 +1,9 @@
 import thread, time, sys, socket, re
 from lib.Depend.gtk2 import gtk
-from Communication.ComSpec import *
+from lib.Plugin.Communication.ComSpec import *
 from lib.Exceptions import *
-from Interface import Reference, Meta
+from reference import Reference
+from meta import Meta
 
 class CCore(object):
     
@@ -12,14 +13,13 @@ class CCore(object):
         self.guimanager = manager.GetGuiManager()
     
     def Error(self, addr):
-        print 'ERROR', addr
+        pass
     
     def Stopped(self, id):
-        print 'Stopped', id
         return True
     
     def Command(self, command, params, data, addr):
-        print 'Command', command, params, data
+        #print 'Command', command, params, data
         
         if command['version'] == VERSION:
             try:
@@ -41,6 +41,9 @@ class CCore(object):
                 self.manager.Send(addr, RESP_INVALID_PARAMETER, params = [i for i in e], __id__ = callid)
             except (ParamMissingError, ), e:
                 self.manager.Send(addr, RESP_MISSING_PARAMETER, param = e[0], __id__ = callid)
+                
+            except (UMLException, ), e:
+                self.manager.Send(addr, RESP_UNHANDELED_EXCEPTION, params = [i for i in e], __id__ = callid)
         
         else:
             self.manager.Send(addr, RESP_UNSUPPORTED_VERSION, version = command['version'], __id__ = callid)
@@ -164,5 +167,4 @@ class CCore(object):
             raise ParamMissingError(e.message)
         
     def _guiactivated(self, item, path, addr):
-        print 'GuiActivated', path, addr
         self.manager.Send(addr, RESP_GUI_ACTIVATED, path = path)

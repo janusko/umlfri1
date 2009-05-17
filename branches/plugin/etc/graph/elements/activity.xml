@@ -7,43 +7,71 @@
     </Connections>
     <Appearance>
         <Shadow padding="3" color="/Styles/Element/ShadowColor">
-            <Rectangle fill="/Styles/Element/FillColor" border="/Styles/Element/LineColor" right="10 rounded" left="10 rounded">
-                <Sizer minheight="50">
-                    <Align align="center center">
+            <Rectangle fill="/Styles/Element/FillColor" border="/Styles/Element/LineColor">
+                <HBox expand="2">
+                    <Padding padding="5">
+                        <Align align="center">
+                            <VBox>
+                                <Condition condition="#critical" type="equal" value="True">
+                                    <TextBox text="CRITICAL" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                </Condition>
+                                <Condition condition="#critical" type="equal" value="False">
+                                    <TextBox text=" " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                </Condition>
+                            </VBox>
+                        </Align>
+                    </Padding>
+                    <Line type="horizontal" color="/Styles/Element/LineColor" />
+                    <VBox expand="0">
                         <Padding padding="5">
-                            <HBox>
-                                <Align align="center">
-                                    <Condition condition="#critical" type="equal" value="True">
-                                        <TextBox text="CRITICAL" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                    </Condition>
-                                </Align>
-                                <VBox>
-                                    <TextBox text="#name" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                    <TextBox text=" (" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                    <TextBox text="#index" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                    <TextBox text=") = " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                    <TextBox text="#duration" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                </VBox>
-                                <Align align="center">
-                                    <VBox>
-                                        <HBox>
-                                            <TextBox text="#minstart" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                            <TextBox text="#maxstart" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                        </HBox>
-                                        <HBox>
-                                            <TextBox text=" -> " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                            <TextBox text=" -> " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                        </HBox>
-                                        <HBox>
-                                            <TextBox text="#minend" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                            <TextBox text="#maxend" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                                        </HBox>
-                                    </VBox>
-                                </Align>
-                            </HBox>
+                            <Align align="center center">
+                                <TextBox text="#name" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                            </Align>
                         </Padding>
-                    </Align>
-                </Sizer>
+                        <Line type="vertical" color="/Styles/Element/LineColor" />
+                        <Padding padding="5">
+                            <Align align="center center">
+                                <TextBox text="#index" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                            </Align>
+                        </Padding>
+                        <Line type="vertical" color="/Styles/Element/LineColor" />
+                        <Padding padding="5">
+                            <Align align="center center">
+                                <TextBox text="#duration" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                            </Align>
+                        </Padding>
+                    </VBox>
+                    <Line type="horizontal" color="/Styles/Element/LineColor" />
+                    <VBox expand="2">
+                        <HBox>
+                            <Padding padding="5">
+                                <Align align="center center">
+                                    <TextBox text="#minstart" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                </Align>
+                            </Padding>
+                            <Line type="horizontal" color="/Styles/Element/LineColor" />
+                            <Padding padding="5">
+                                <Align align="center center">
+                                    <TextBox text="#maxstart" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                </Align>
+                            </Padding>
+                        </HBox>
+                        <Line type="vertical" color="/Styles/Element/LineColor" />
+                        <HBox>
+                            <Padding padding="5">
+                                <Align align="center center">
+                                    <TextBox text="#minend" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                </Align>
+                            </Padding>
+                            <Line type="horizontal" color="/Styles/Element/LineColor" />
+                            <Padding padding="5">
+                                <Align align="center center">
+                                    <TextBox text="#maxend" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                </Align>
+                            </Padding>
+                        </HBox>
+                    </VBox>
+                </HBox>
             </Rectangle>
         </Shadow>
     </Appearance>

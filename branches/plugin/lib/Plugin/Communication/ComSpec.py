@@ -15,6 +15,8 @@ EMPTY_LINE = re.compile(r'(\r|\n|\r\n)$')
 RESP_NOTIFY = 100
 RESP_GUI_ACTIVATED = 101
 RESP_DOMAIN_VALUE_CHANGED = 102
+RESP_FINALIZE = 103
+
 
 RESP_OK = 200
 RESP_GUI_ADDED = 201
@@ -159,5 +161,11 @@ def r_none(val, conn = None):
         return 'None'
     else:
         raise ValueError()
+
+def rc_eval(val, con=None):
+    return eval(val, {}, {'__builtins__': {}})
     
+@reverse(rc_eval)
+def r_eval(val, con=None):
+    return str(val)
 

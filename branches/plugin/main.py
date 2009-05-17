@@ -49,6 +49,7 @@ class Application(CApplication):
         self.pluginAdapter = CPluginAdapter(self)
         
         gobject.timeout_add(SPLASH_TIMEOUT, self.GetWindow('frmSplash').Hide)
+        self.StartPlugins()
     
     def GetBus(self):
         return self.bus
@@ -117,6 +118,7 @@ class Application(CApplication):
             win.Show()
     
     def Quit(self):
+        self.pluginManager.KillAll()
         self.UserGui.SaveConfig()
         CApplication.Quit(self)
         config.Save()
@@ -124,6 +126,11 @@ class Application(CApplication):
     
     def GetPluginManager(self):
         return self.pluginManager
+    
+    def StartPlugins(self):
+        for item in os.listdir(config['/Paths/Plugins']):
+            if os.path.isdir(config['/Paths/Plugins'] + item):
+                os.system('./pl_runner.py %i %s &' % (self.pluginManager.GetPort(), item))
 
 if __name__ == '__main__':
     gobject.threads_init()

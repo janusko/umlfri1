@@ -7,6 +7,9 @@ class CInterface(object):
         self.connection = CConnection(port)
         self.project = classes['IProject']('project', self.connection)
     
+    def WaitTillClosed(self):
+        return self.connection.WaitTillClosed()
+    
     def GetProject(self):
         return self.project
         
