@@ -1,4 +1,4 @@
-import platform
+import platform, os
 
 def check():
     """
@@ -7,7 +7,10 @@ def check():
     @raise AssertionError: if platform configuration is insufficient
     """
     
-    assert tuple(platform.python_version_tuple()) >= (2, 5)
+    if os.name == 'nt':
+        assert tuple(int(i) for i in platform.python_version_tuple()) >= (2, 6), "You will need at least Python 2.6 to run UML .FRI on Windows"
+    else:
+        assert tuple(int(i) for i in platform.python_version_tuple()) >= (2, 5), "You will need at least Python 2.5 to run UML .FRI on %s system" % (os.name, )
 
 def version():
     """
