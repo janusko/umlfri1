@@ -4,14 +4,17 @@ def check():
     
     @raise AssertionError: if something missing
     """
-    
-    import sysplatform
-    import etree
-    import gtk2
-    
-    sysplatform.check()
-    etree.check()
-    gtk2.check()
+    try:
+        import sysplatform
+        import etree
+        import gtk2
+        
+        sysplatform.check()
+        etree.check()
+        gtk2.check()
+    except (AssertionError, ), e:
+        import sys
+        sys.exit(e)
 
 def version():
     import sysplatform
