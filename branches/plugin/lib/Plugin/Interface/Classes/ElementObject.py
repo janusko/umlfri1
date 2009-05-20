@@ -23,7 +23,7 @@ class IElementObject(IDomainObject):
     
     #destructive
     
-    #~ @constructor
+    #~ @factory
     #~ @parameter('type', t_elementType)
     #~ def Create(type):
         #~ return CElementObject(type)

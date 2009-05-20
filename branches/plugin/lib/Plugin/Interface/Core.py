@@ -78,9 +78,9 @@ class CCore(object):
     
     def _metamodel(self, com, params, addr, callid):
         try:
-            ctype = com.split('.', 1)
-            assert (len(ctype) == 2 and ctype[0] in ('list', 'detail') and 
-                ctype[1] in ('metamodel', 'element', 'diagram', 'connection', 'domain'))
+            item, detail = com.split('.', 1)
+            assert (detail in ('list', 'detail') and 
+                item in ('metamodel', 'element', 'diagram', 'connection', 'domain'))
             
             if self.app.GetProject() is not None:
                 metamodel = self.app.GetProject().GetMetamodel()
@@ -89,20 +89,20 @@ class CCore(object):
                 return
             
             
-            if ctype[0] == 'list':
-                assert ctype[1] != 'metamodel'
-                if ctype[1] == 'diagram':
+            if detail == 'list':
+                assert item != 'metamodel'
+                if item == 'diagram':
                     result = list(metamodel.GetDiagrams())
-                elif ctype[1] == 'element':
+                elif item == 'element':
                     result = [e.GetId() for e in metamodel.GetElementFactory().IterTypes()]
-                elif ctype[1] == 'connection':
+                elif item == 'connection':
                     result = [c.GetId() for c in metamodel.GetConnectionFactory().IterTypes()]
-                elif ctype[1] == 'domain':
+                elif item == 'domain':
                     result = [d.GetName() for d in metamodel.GetDomainFactory().IterTypes()]
                 self.manager.Send(addr, RESP_METAMODEL_DESCRIPTION, type = com, result = result, __id__ = callid)
             
-            if ctype[0] == 'detail':
-                if ctype[1] == 'metamodel':
+            if detail == 'detail':
+                if item == 'metamodel':
                     result = {'uri': metamodel.GetUri(), 'version': metamodel.GetVersion()}
                     name = 'metamodel'
                 else:
@@ -110,28 +110,28 @@ class CCore(object):
                         name = params['name']
                     else:
                         raise ParamMissingError('name')
-                    if ctype[1] == 'diagram':
+                    if item == 'diagram':
                         diagram = metamodel.GetDiagramFactory().GetDiagram(name)
                         result = {'connection': list(diagram.GetConnections()),
                                   'element': list( diagram.GetElements())}
-                    if ctype[1] == 'element':
+                    if item == 'element':
                         element = metamodel.GetElementFactory().GetElement(name)
                         result = {'connection': list(element.GetConnections()),
                                   'domain':     element.GetDomain().GetName(),
                                   'identity':   element.GetIdentity(),
                                   'options':    element.GetOptions(),
                                   'resizable':  element.GetResizable()}
-                    if ctype[1] == 'connection':
+                    if item == 'connection':
                         connection = metamodel.GetConnectionFactory().GetConnection(name)
                         result = {'domain':   connection.GetDomain().GetName(),
                                   'identity': connection.GetConnectionIdentity()}
-                    if ctype[1] == 'domain':
+                    if item == 'domain':
                         domain = metamodel.GetDomainFactory().GetDomain(name)
                         result = {'attributes': [dict(id = attr, **domain.GetAttribute(attr)) for attr in domain.IterAttributeIDs()],
                                   'parsers':  list(domain.IterParsers()),}
                 self.manager.Send(addr, RESP_METAMODEL_DESCRIPTION, type = com, result = result, name = name, __id__ = callid)
         
-        except (AssertionError, ), e:
+        except (AssertionError, ValueError), e:
             self.manager.Send(addr, RESP_INVALID_COMMAND_TYPE, command = 'metamodel', type = com, __id__ = callid)
         
         except (FactoryError, ), e:

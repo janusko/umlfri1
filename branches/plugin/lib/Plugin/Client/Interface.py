@@ -29,25 +29,28 @@ class CInterface(object):
         return eval(res(), {}, {'__builtins__': {}})
     
     def DetailMetamodel(self):
-        return self._metamodel('detail.metamodel', {})
+        return self._metamodel('metamodel.detail', {})
     
     def DetailDiagram(self, name):
-        return self._metamodel('detail.diagram', {'name': name})
+        return self._metamodel('diagram.detail', {'name': name})
     
     def DetailElement(self, name):
-        return self._metamodel('detail.element', {'name': name})
+        return self._metamodel('element.detail', {'name': name})
     
     def DetailConnection(self, name):
-        return self._metamodel('detail.connection', {'name': name})
+        return self._metamodel('connection.detail', {'name': name})
     
     def DetailDomain(self, name):
-        return self._metamodel('detail.domain', {'name': name})
+        return self._metamodel('domain.detail', {'name': name})
     
     def ListElement(self):
-        return self._metamodel('list.element')
+        return self._metamodel('element.list')
     
     def ListConnection(self):
-        return self._metamodel('list.connection')
+        return self._metamodel('connection.list')
     
     def ListDomain(self):
-        return self._metamodel('list.domain')
+        return self._metamodel('domain.list')
+        
+    def ListDiagram(self):
+        return self._metamodel('diagram.list')

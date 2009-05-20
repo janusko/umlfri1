@@ -17,7 +17,7 @@ def not_interface(fun):
     fun._not_iterface = True
     return fun
 
-def constructor(fun):
+def factory(fun):
     fun._constructor = True
     fun._result = lambda x: x
     return fun

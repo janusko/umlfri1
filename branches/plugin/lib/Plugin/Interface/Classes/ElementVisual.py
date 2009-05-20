@@ -15,7 +15,7 @@ class IElementVisual(IVisibleObject):
     #~ @parameter('diagram', t_classobject(CDiagram))
     #~ @parameter('obj', t_classobject(CElementObject))
     #~ @parameter('pos', t_2intTuple)
-    #~ @constructor
+    #~ @factory
     #~ def Create(diagram, obj, pos):
         #~ if diagram is None or obj is None:
             #~ raise ValueError()
