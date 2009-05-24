@@ -28,21 +28,27 @@ class CfrmExport(CWindow):
     @event("tbtnPNG", "toggled")
     @event("tbtnPS", "toggled")
     @event("tbtnSVG", "toggled")    
-    def OnToogleButtonToogle(self, widget):
+    def OnToggleButtonToggle(self, widget):
     # just makes sure that at least one export type
     # is selected -- the default export type is SVG
-        isSomeToogled = False
-        for toogleBtn in self.hbuttonboxExportType.get_children():
-            if toogleBtn.get_active():
-                isSomeToogled = True
+        isSomeToggled = False
+        for toggleBtn in self.hbuttonboxExportType.get_children():
+            if toggleBtn.get_active():
+                isSomeToggled = True
                 break
-            
-        if not isSomeToogled:
+        if not isSomeToggled:
             self.tbtnSVG.set_active(True)
             
 
+    @event("entExportFileName", "focus-out-event")
+    def OnEntExportFileNameFocusLost(self, widget, event):
+        
+        if self.entExportFileName.get_text().strip(' ') == '':
+            self.entExportFileName.set_text(self.picDrawingArea.GetDiagram().GetName())
+
+
     @event("btnExport", "clicked")
-    def OnLbtnProjectWebClicked(self, widget):
+    def OnBtnExportClicked(self, widget):
         
         filename = os.path.join(self.fcbDirectorySelect.get_current_folder(), self.entExportFileName.get_text())
         
