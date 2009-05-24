@@ -46,8 +46,8 @@ class CfrmAbout(CWindow):
         
     @event("lbtnProjectWeb", "clicked")
     def OnLbtnProjectWebClicked(self, widget):
-        from webbrowser import open_new
-        open_new(lib.consts.WEB)
+        from webbrowser import open_new_tab
+        open_new_tab(lib.consts.WEB)
         self.form.run()
         self.Hide()
 

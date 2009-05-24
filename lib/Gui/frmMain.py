@@ -58,7 +58,7 @@ class CfrmMain(CWindow):
         )
 
     complexWidgets = (CtbToolBox, CtwProjectView, CmnuItems, CpicDrawingArea, CnbProperties, CTabs,
-                      CtabStartPage, CFindInDiagram)
+                      CtabStartPage, CFindInDiagram,  )
 
     def __init__(self, app, wTree):
         CWindow.__init__(self, app, wTree)
@@ -119,7 +119,7 @@ class CfrmMain(CWindow):
         self.SetSensitiveMenuChilds(self.mItemElement, element)
         self.mnuSave.set_sensitive(project)
         self.mnuSaveAs.set_sensitive(project)
-        self.mnuPrint.set_sensitive(project)
+        self.mnuPrint.set_sensitive(diagram)
         self.cmdSave.set_sensitive(project)
         self.cmdCopy.set_sensitive(element)
         self.cmdCut.set_sensitive(element)
@@ -236,54 +236,10 @@ class CfrmMain(CWindow):
     @event('nbTabs','export-svg-from-TabMenu')
     @event('mnuExport', 'activate')
     def on_mnuExport_activate(self, widget):
-        filedlg = gtk.FileChooserDialog(_('Export diagram'), self.form, gtk.FILE_CHOOSER_ACTION_SAVE, (gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
-        # SVG filter
-        filter = gtk.FileFilter()
-        filter.set_name("SVG vector image")
-        filter.add_pattern('*.svg')
-        filedlg.add_filter(filter)
-        # PNG filter
-        filter = gtk.FileFilter()
-        filter.set_name("PNG image")
-        filter.add_pattern('*.png')
-        filedlg.add_filter(filter)
-        # PDF filter
-        filter = gtk.FileFilter()
-        filter.set_name("PDF file")
-        filter.add_pattern('*.pdf')
-        filedlg.add_filter(filter)
-        # PS filter
-        filter = gtk.FileFilter()
-        filter.set_name("PostScript")
-        filter.add_pattern('*.ps')
-        filedlg.add_filter(filter)
-        tmp = None
-
-        try:
-            while True:
-                if filedlg.run() == gtk.RESPONSE_OK: 
-                    name =  filedlg.get_filter().get_name()
-
-                    if name == "SVG vector image":
-                        tmp = 'svg'
-                    elif name == "PNG image":
-                        tmp = 'png'
-                    elif name == "PDF file":
-                        tmp = 'pdf'
-                    elif name == "PostScript":
-                        tmp = 'ps'
-
-                    filename = filedlg.get_filename()
-
-                    if '.' not in os.path.basename(filename):
-                        filename += '.' + tmp
-                    if not os.path.isdir(filename):
-                        self.picDrawingArea.Export(filename, tmp)
-                        return
-                else:
-                    return
-        finally:
-            filedlg.destroy()
+        exportDialog = self.application.GetWindow('frmExport')
+        exportDialog.setArea(self.picDrawingArea)        
+        exportDialog.SetParent(self)
+        exportDialog.Show()
 
     def ReloadTitle(self):
         if self.application.GetProject() is None or self.application.GetProject().GetFileName() is None:
