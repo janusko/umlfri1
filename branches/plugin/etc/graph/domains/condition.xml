@@ -2,7 +2,8 @@
 <Domain id="condition" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" >
     <Attribute id="condition" type="str" name="Condition" />
     <Attribute id="negate" type="bool" name="Negate" />
-    <Attribute id="index" type="int" name="Index" />
-    <Attribute id="critical" type="bool" name="Critical" />
-    <Attribute id="value" type="bool" name="Value" />
+    <Attribute id="index" type="int" name="Index" hidden="true"/>
+    <Attribute id="critical" type="bool" name="Critical" hidden="true"/>
+    <Attribute id="value" type="bool" name="Value" hidden="true"/>
+    <Attribute id="note" type="text" name="Note"/>
 </Domain>

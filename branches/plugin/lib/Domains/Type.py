@@ -39,7 +39,7 @@ class CDomainType(object):
         '''
         return self.factory()
     
-    def AppendAttribute(self, id, name, type = None, default = None):
+    def AppendAttribute(self, id, name, type = None, default = None, hidden=False):
         '''
         Add attribute the domain
         
@@ -55,6 +55,9 @@ class CDomainType(object):
         @param type: default value for attribute
         @type type: str
         
+        @param hidden: wheter attribute should not be shown in GUI
+        @type hidden: bool
+        
         @raise DomainTypeError: if type is not atomic or one of imported domains
         '''
         
@@ -62,7 +65,8 @@ class CDomainType(object):
             raise DomainTypeError('Used type "%s" is not imported '
                 'in definition of "%s.%s"'%(type, self.name, id))
         
-        self.attributes[id] = {'name': name, 'type':type, 'default': default}
+        self.attributes[id] = {'name': name, 'type':type, 'default': default, 
+            'hidden': (hidden in ('true', '1'))}
         self.attributeorder.append(id)
     
     def HasAttribute(self, id):
@@ -332,6 +336,23 @@ class CDomainType(object):
             return domain in self.ATOMIC
         else:
             raise DomainTypeError("Invalid input parameters")
+    
+    def IsHidden(self, id):
+        '''
+        Test on hidden attribute of domain
+        
+        Hidden attributes are not shown in GUI, thus not editable by user
+        
+        @return: True if attribute is hidden
+        @rtype: bool
+        
+        @param id: name of attribute
+        @type id: str
+        '''
+        
+        if id not in self.attributes:
+            raise DomainTypeError('Unknown identifier "%s"'%(id, ))
+        return self.attributes[id]['hidden']
     
     def TransformValue(self, value, id = None, domain = None):
         '''

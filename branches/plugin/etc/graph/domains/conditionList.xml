@@ -4,6 +4,7 @@
         <Domain>
             <Attribute id="name" type="str" name="Name" default="(none)" />
             <Attribute id="value" type="bool" name="Value" />
+            <Attribute id="note" type="text" name="Note"/>
         </Domain>
     </Attribute>
 </Domain>

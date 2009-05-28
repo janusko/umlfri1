@@ -73,6 +73,9 @@ class ClwProperties(CWidget):
         DType = object.GetDomainType(prefix)
         
         for attrID in DType.IterAttributeIDs():
+            if DType.IsHidden(attrID):
+                continue
+                
             row = self.treeStore.append(parent)
             identifier = ('.' if prefix else '') + attrID
             type = DType.GetAttribute(attrID)['type']

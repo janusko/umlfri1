@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Domain id="transition" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" >
-    <Attribute id="critical" type="bool" name="Critical" />
+    <Attribute id="critical" type="bool" name="Critical" hidden="true"/>
+    <Attribute id="note" type="text" name="Note"/>
 </Domain>
