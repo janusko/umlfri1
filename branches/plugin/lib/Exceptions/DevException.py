@@ -40,3 +40,6 @@ class ErrorDuringExecution(PluginCommunicationError):
 
 class UnknowMethodError(PluginCommunicationError):
     pass
+
+class UnknownClassNameError(PluginCommunicationError):
+    pass

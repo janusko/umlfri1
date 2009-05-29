@@ -30,5 +30,12 @@ class CProxy(object):
             raise AttributeError()
         return CCallable(self.id, name, fun, desc, self.connection)
     
+    def __getattribute__(self, name):
+        res = object.__getattribute__(self, name)
+        if name == '__dict__':
+            lst = self.Meta.GetMethodList(self.__class__.__name__)
+            res.update(dict((item, self.__getattr__(item)) for item in lst))
+        return res
+    
     def GetId(self):
         return self.id

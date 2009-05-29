@@ -85,6 +85,13 @@ class Meta(type):
         else:
             return None
     
+    @classmethod
+    def GetMethodList(cls, classname):
+        desc = cls.interface.get(cls.names.get(classname))
+        if desc is None:
+            raise UnknownClassNameError(classname)
+        return [name for name in desc if cls.__valid_fname(name)]
+    
     @staticmethod
     def __checkclass(cls):
         def check(obj):
