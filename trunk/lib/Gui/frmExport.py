@@ -2,8 +2,7 @@ from lib.Depend.gtk2 import pango
 import lib.Depend
 
 from common import CWindow, event
-from lib.config import config
-import lib.consts, os
+import os
 
 class CfrmExport(CWindow):
     widgets = ('entExportFileName','fcbDirectorySelect', 'tbtnPDF', 'tbtnPNG', 'tbtnPS', 'tbtnSVG',
