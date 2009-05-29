@@ -318,7 +318,7 @@ class CDiagram:
         
     def PaintSelected(self, canvas):
         '''Paints _only_ selected items (elements + connections)
-        as if the were deselected. Used for pixbuf copying.
+        as if they were deselected. Used for pixbuf copying.
         '''        
         canvas.Clear()
         old_selected =  self.selected
