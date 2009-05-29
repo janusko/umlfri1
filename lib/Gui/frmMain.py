@@ -361,26 +361,32 @@ class CfrmMain(CWindow):
     @event("cmdCut", "clicked")
     @event("mnuCut","activate")
     def on_mnuCut_click(self, widget):
-        self.picDrawingArea.ActionCut()
+        if self.picDrawingArea.HasFocus():
+            self.picDrawingArea.ActionCut()
+        else:
+            pass
  
     @event("cmdCopy", "clicked")
     @event("mnuCopy","activate")
     def on_mnuCopy_click(self, widget):
-        self.picDrawingArea.ActionCopy()
-        self.UpdateMenuSensitivity()
+        if self.picDrawingArea.HasFocus():
+            gtk.clipboard_get(gtk.gdk.SELECTION_CLIPBOARD).set_image(self.picDrawingArea.GetSelectionPixbuf())
+            self.picDrawingArea.ActionCopy()
+            self.UpdateMenuSensitivity()
     
     @event("cmdPaste", "clicked")
     @event("mnuPaste","activate")
     def on_mnuPaste_click(self, widget):
-        try:
-            self.picDrawingArea.ActionPaste()
-        except UserException, e:
-            if e.GetName() == "ElementAlreadyExists":
-                return CWarningDialog(self.form, _('Element is already in this diagram')).run()
-            elif e.GetName() == "DiagramHasNotThisElement":
-                return CWarningDialog(self.form, _('Wrong element: ') + e.GetParameter(1).GetObject().GetType().GetId()).run()
-            else:
-                return CWarningDialog(self.form, e.GetName()).run()
+        if self.picDrawingArea.HasFocus():
+            try:
+                self.picDrawingArea.ActionPaste()
+            except UserException, e:
+                if e.GetName() == "ElementAlreadyExists":
+                    return CWarningDialog(self.form, _('Element is already in this diagram')).run()
+                elif e.GetName() == "DiagramHasNotThisElement":
+                    return CWarningDialog(self.form, _('Wrong element: ') + e.GetParameter(1).GetObject().GetType().GetId()).run()
+                else:
+                    return CWarningDialog(self.form, e.GetName()).run()
     
     def ActionLoadToolBar(self, widget):
         pass
