@@ -878,6 +878,6 @@ class CpicDrawingArea(CWidget):
        
         pixbuf =  gtk.gdk.Pixbuf(gtk.gdk.COLORSPACE_RGB, True, 8, sizeX, sizeY)
         pixbuf.get_from_drawable(self.buffer, self.buffer.get_colormap(), x, y, 0, 0, sizeX, sizeY)
-        
+        self.Paint()
         # lets assume that we have a white background... so white colour pixels will be fully transparent
         return pixbuf.add_alpha(True, chr(255), chr(255),chr(255))
