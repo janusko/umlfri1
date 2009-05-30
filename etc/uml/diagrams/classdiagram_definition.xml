@@ -6,6 +6,7 @@
         <Item value="Note" />
         <Item value="Package" />
         <Item value="Class" />
+        <Item value="Interface" />
         <Item value="Object" />
     </Elements>
     <Connections>

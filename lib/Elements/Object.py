@@ -1,6 +1,7 @@
 from lib.Exceptions.UserException import *
 import weakref
 from lib.Domains import CDomainObject
+from Alias import CElementAlias
 from lib.consts import DEFAULT_IDENTITY
 
 class CElementObject(object):
@@ -12,17 +13,23 @@ class CElementObject(object):
         Initialize element object and set it into default state
         
         @param type: Type of the new element
-        @type  type: L{CElementType<Type.CElementType>}
+        @type  type: L{CElementType<Type.CElementType>} or L{CElementType<Type.CElementAlias>}
         """
         self.revision = 0
-        self.type = type
+        if isinstance(type, CElementAlias):
+            self.type = type.GetAliasType()
+        else:
+            self.type = type
         self.domainobject = CDomainObject(self.type.GetDomain())
         self.path = None
         self.connections = []
         self.node = lambda: None
         self.appears = []
         if self.type.GetIdentity() is None or self.domainobject.GetType().HasAttribute(self.type.GetIdentity()):
-            self.domainobject.SetValue(self.type.GetIdentity() or DEFAULT_IDENTITY, self.type.GenerateName() or DEFAULT_IDENTITY)
+            self.domainobject.SetValue(self.type.GetIdentity() or DEFAULT_IDENTITY, type.GenerateName())
+        if isinstance(type, CElementAlias):
+            for path, value in type.GetDefaultValues():
+                self.domainobject.SetValue(path, value)
     
     def GetRevision(self):
         """

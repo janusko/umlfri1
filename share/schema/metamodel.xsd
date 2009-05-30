@@ -62,6 +62,43 @@
 			</xs:attribute>
 		</xs:complexType>
 	</xs:element>
+	<xs:element name="ElementAlias">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Icon">
+					<xs:annotation>
+						<xs:documentation>Define icon of element</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:attribute name="path" type="xs:string"/>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="DefaultValues">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Item">
+								<xs:complexType>
+									<xs:attribute name="path" type="xs:string" use="required"/>
+									<xs:attribute name="value" use="required"/>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Options" type="OptionType" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Define options of element. Is not required</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="id" type="xs:string" use="required">
+				<xs:annotation>
+					<xs:documentation>Element ID is required</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="alias" use="required"/>
+		</xs:complexType>
+	</xs:element>
 	<xs:complexType name="SimpleObjectContainer">
 		<xs:annotation>
 			<xs:documentation>Simple container for Visual Objects</xs:documentation>
@@ -495,6 +532,34 @@
 				</xs:element>
 			</xs:choice>
 			<xs:attribute name="id" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ConnectionAlias">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Icon">
+					<xs:annotation>
+						<xs:documentation>Define icon of connection</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:attribute name="path" type="xs:string"/>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="DefaultValues">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Item">
+								<xs:complexType>
+									<xs:attribute name="path" type="xs:string" use="required"/>
+									<xs:attribute name="value" use="required"/>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="id" use="required"/>
+			<xs:attribute name="alias" use="required"/>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="DiagramType">

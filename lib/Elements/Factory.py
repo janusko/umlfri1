@@ -2,6 +2,7 @@ import os
 import os.path
 from lib.Exceptions.DevException import *
 from Type import CElementType
+from Alias import CElementAlias
 from lib.config import config
 from lib.consts import METAMODEL_NAMESPACE
 from lib.Drawing.Objects import ALL
@@ -76,6 +77,33 @@ class CElementFactory(object):
             if not xmlschema.validate(root):
                 raise FactoryError("XMLError", xmlschema.error_log.last_error)
 
+        if root.tag == METAMODEL_NAMESPACE + 'ElementType':
+            self.__LoadType(root)
+        elif root.tag == METAMODEL_NAMESPACE + 'ElementAlias':
+            self.__LoadAlias(root)
+    
+    def __LoadAlias(self, root):
+        obj = CElementAlias(self, root.get('id'), root.get('alias'))
+        
+        for element in root:
+            if element.tag == METAMODEL_NAMESPACE + 'Icon':
+                obj.SetIcon(element.get('path'))
+            
+            elif element.tag == METAMODEL_NAMESPACE + 'DefaultValues':
+                for item in element:
+                    obj.SetDefaultValue(item.get('path'), item.get('value'))
+            
+            elif element.tag == METAMODEL_NAMESPACE + 'Options':
+                for item in element:
+                    name = item.tag.split('}')[1]
+                    value = item.text
+                    if name == 'DirectAdd':
+                        value = value.lower() == 'true'
+                    obj.AppendOptions(name, value)
+        
+        self.types[root.get('id')] = obj
+    
+    def __LoadType(self, root):
         obj = CElementType(root.get('id'))
         
         for element in root:

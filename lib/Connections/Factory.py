@@ -4,6 +4,7 @@ import os
 import os.path
 from lib.Exceptions.DevException import *
 from Type import CConnectionType
+from Alias import CConnectionAlias
 from Line import CConnectionLine
 from Arrow import CConnectionArrow
 from lib.consts import METAMODEL_NAMESPACE
@@ -77,6 +78,25 @@ class CConnectionFactory(object):
             if not xmlschema.validate(root):
                 raise FactoryError("XMLError", xmlschema.error_log.last_error)
 
+        if root.tag == METAMODEL_NAMESPACE + 'ConnectionType':
+            self.__LoadType(root)
+        elif root.tag == METAMODEL_NAMESPACE + 'ConnectionAlias':
+            self.__LoadAlias(root)
+    
+    def __LoadAlias(self, root):
+        obj = CConnectionAlias(self, root.get('id'), root.get('alias'))
+        
+        for element in root:
+            if element.tag == METAMODEL_NAMESPACE + 'Icon':
+                obj.SetIcon(element.get('path'))
+            
+            elif element.tag == METAMODEL_NAMESPACE + 'DefaultValues':
+                for item in element:
+                    obj.SetDefaultValue(item.get('path'), item.get('value'))
+        
+        self.types[root.get('id')] = obj
+    
+    def __LoadType(self, root):
         id = root.get('id')
         
         sarr = {}
