@@ -223,6 +223,11 @@
 									<xs:documentation>Path of dir of user</xs:documentation>
 								</xs:annotation>
 							</xs:element>
+							<xs:element name="UserMetamodelList" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Path of dir of user</xs:documentation>
+								</xs:annotation>
+							</xs:element>
 							<xs:element name="UserConfig" type="xs:string">
 								<xs:annotation>
 									<xs:documentation>Path of config file of user</xs:documentation>
