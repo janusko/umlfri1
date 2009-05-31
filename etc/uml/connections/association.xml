@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ConnectionType id="Association" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
     <Icon path="icons/associate.png" />
-    <SrcArrow possible="1" default="0" />
-    <DestArrow possible="1" default="0" />
     <Domain id="association" identity="name" />
+    
     <Appearance>
-        <LineStyle style="solid" color="/Styles/Connection/LineColor" />
-        <ArrowStyle style="simple" fill="/Styles/Connection/ArrowFillColor" color="/Styles/Connection/ArrowColor" />
+        <ConnectionLine style="solid" color="/Styles/Connection/LineColor" />
+        <Switch value="#direction">
+            <Case condition="Source to Destination">
+                <ConnectionArrow index="-1" style="simple" color="/Styles/Connection/ArrowColor" />
+            </Case>
+            <Case condition="Destination to Source">
+                <ConnectionArrow index="0" style="simple" color="/Styles/Connection/ArrowColor" />
+            </Case>
+            <Case condition="Bidirectional">
+                <ConnectionArrow index="-1" style="simple" color="/Styles/Connection/ArrowColor" />
+                <ConnectionArrow index="0" style="simple" color="/Styles/Connection/ArrowColor" />
+            </Case>
+        </Switch>
+        
         <Label position="center">
             <HBox>
                 <Condition condition="#stereotype" type="empty" negate="1">

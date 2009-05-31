@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ConnectionType id="ActivityFlow" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
     <Icon path="icons/state_transition.png" />
-    <SrcArrow possible="0" default="0" />
-    <DestArrow possible="1" default="1" />
     <Domain id="activity_flow" identity="name" />
+    
     <Appearance>
-        <LineStyle style="solid" color="/Styles/Connection/LineColor" />
-        <ArrowStyle style="simple" fill="/Styles/Connection/ArrowFillColor" color="/Styles/Connection/ArrowColor" />
+        <ConnectionLine style="solid" color="/Styles/Connection/LineColor" />
+        <ConnectionArrow index="-1" style="simple" color="/Styles/Connection/ArrowColor" />
+        
         <Label position="center">
             <HBox>
                 <Condition condition="#stereotype" type="empty" negate="1">
