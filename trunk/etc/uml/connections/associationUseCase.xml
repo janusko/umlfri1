@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ConnectionType id="AssociationUseCase" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
     <Icon path="icons/associate.png" />
-    <SrcArrow possible="1" default="0" />
-    <DestArrow possible="1" default="0" />
     <Domain id="associationUseCase" identity="name" />
+    
     <Appearance>
-        <LineStyle style="solid" color="/Styles/Connection/LineColor" />
-        <ArrowStyle style="simple" fill="/Styles/Connection/ArrowFillColor" color="/Styles/Connection/ArrowColor" />
+        <ConnectionLine style="solid" color="/Styles/Connection/LineColor" />
+        
         <Label position="center">
             <Condition condition="#name" type="empty" negate="1">
                 <Align align="center">

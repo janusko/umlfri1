@@ -1,5 +1,3 @@
-from lib.Depend.gtk2 import gtk
-
 from VisualObject import CVisualObject
 from VBox import CVBox
 

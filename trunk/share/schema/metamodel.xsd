@@ -486,43 +486,17 @@
 						<xs:attribute name="identity" type="xs:string"/>
 					</xs:complexType>
 				</xs:element>
-				<xs:element name="SrcArrow" type="ArrowType"/>
-				<xs:element name="DestArrow" type="ArrowType"/>
 				<xs:element name="Appearance">
 					<xs:complexType>
 						<xs:sequence>
-							<xs:element name="LineStyle">
-								<xs:complexType>
-									<xs:attribute name="style" use="required">
-										<xs:simpleType>
-											<xs:restriction base="xs:string">
-												<xs:enumeration value="solid"/>
-												<xs:enumeration value="dot"/>
-												<xs:enumeration value="doubledot"/>
-											</xs:restriction>
-										</xs:simpleType>
-									</xs:attribute>
-									<xs:attribute name="color" type="xs:string" use="required"/>
-								</xs:complexType>
-							</xs:element>
-							<xs:element name="ArrowStyle">
-								<xs:complexType>
-									<xs:attribute name="style" use="required">
-										<xs:simpleType>
-											<xs:restriction base="xs:string">
-												<xs:enumeration value="simple"/>
-												<xs:enumeration value="triangle"/>
-												<xs:enumeration value="ftriagle"/>
-												<xs:enumeration value="diamond"/>
-												<xs:enumeration value="fdiamond"/>
-												<xs:enumeration value="crosscircle"/>
-											</xs:restriction>
-										</xs:simpleType>
-									</xs:attribute>
-									<xs:attribute name="fill" type="xs:string" use="required"/>
-									<xs:attribute name="color" type="xs:string" use="required"/>
-								</xs:complexType>
-							</xs:element>
+							<xs:choice minOccurs="0" maxOccurs="unbounded">
+								<xs:element name="ConnectionArrow" type="ConnectionArrowType"/>
+								<xs:element name="ConnectionLine" type="ConnectionLineType"/>
+								<xs:element name="Condition" type="ConnectionConditionType"/>
+								<xs:element name="Loop" type="ConnectionLoopType"/>
+								<xs:element name="Shadow" type="ConnectionShadowType"/>
+								<xs:element name="Switch" type="ConnectionSwitchType"/>
+							</xs:choice>
 							<xs:element name="Label" minOccurs="0" maxOccurs="unbounded">
 								<xs:complexType>
 									<xs:complexContent>
@@ -545,6 +519,70 @@
 			<xs:attribute name="id" use="required"/>
 		</xs:complexType>
 	</xs:element>
+	<xs:complexType name="ConnectionComplexType">
+		<xs:choice maxOccurs="unbounded">
+			<xs:element name="ConnectionArrow" type="ConnectionArrowType"/>
+			<xs:element name="ConnectionLine" type="ConnectionLineType"/>
+			<xs:element name="Condition" type="ConnectionConditionType"/>
+			<xs:element name="Loop" type="ConnectionLoopType"/>
+			<xs:element name="Shadow" type="ConnectionShadowType"/>
+			<xs:element name="Switch" type="ConnectionSwitchType"/>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="ConnectionArrowType">
+		<xs:attribute name="index" type="xs:string" use="required"/>
+		<xs:attribute name="direction" type="xs:string"/>
+		<xs:attribute name="style" type="xs:string" default="simple"/>
+		<xs:attribute name="color" type="xs:string" default="black"/>
+		<xs:attribute name="fill" type="xs:string"/>
+		<xs:attribute name="size" type="xs:string" default="10"/>
+	</xs:complexType>
+	<xs:complexType name="ConnectionLineType">
+		<xs:attribute name="color" type="xs:string" default="black"/>
+		<xs:attribute name="style" type="xs:string" default="solid"/>
+		<xs:attribute name="width" type="xs:string" default="1"/>
+	</xs:complexType>
+	<xs:complexType name="ConnectionConditionType">
+		<xs:complexContent>
+			<xs:extension base="ConnectionComplexType">
+				<xs:attribute name="condition" type="xs:string" use="required"/>
+				<xs:attribute name="type" type="xs:string" default="equal"/>
+				<xs:attribute name="negate" type="xs:string" default="false"/>
+				<xs:attribute name="value" type="xs:string"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ConnectionLoopType">
+		<xs:complexContent>
+			<xs:extension base="ConnectionComplexType">
+				<xs:attribute name="collection" type="xs:string" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ConnectionShadowType">
+		<xs:complexContent>
+			<xs:extension base="ConnectionComplexType">
+				<xs:attribute name="padding" type="xs:string" use="required"/>
+				<xs:attribute name="color" type="xs:string" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ConnectionSwitchType">
+		<xs:sequence>
+			<xs:element name="Case" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="ConnectionComplexType">
+							<xs:attribute name="type" type="xs:string" default="equal"/>
+							<xs:attribute name="negate" type="xs:string" default="false"/>
+							<xs:attribute name="condition" type="xs:string"/>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="value" type="xs:string" use="required"/>
+	</xs:complexType>
 	<xs:element name="ConnectionAlias">
 		<xs:complexType>
 			<xs:sequence>
