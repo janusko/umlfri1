@@ -171,10 +171,10 @@ class CConnectionObject(object):
         @return: other object
         @rtype:  L{CElementObject<lib.Elements.Object.CElementObject>}
         """
-        if self.GetWeakSource is object:
-            return self.GetWeakDestination
-        elif self.GetWeakDestination is object:
-            return self.GetWeakSource
+        if self.GetSource() is object:
+            return self.GetDestination()
+        elif self.GetDestination() is object:
+            return self.GetSource()
         else:
             return None
         
