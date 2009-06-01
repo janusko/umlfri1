@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ConnectionType id="Extend" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Icon path="icons/extend_arrow.png" />
+    <Domain id="extend" identity="name" />
+    
+    <Appearance>
+        <ConnectionLine style="dot" color="/Styles/Connection/LineColor" />
+        <ConnectionArrow index="-1" style="simple" color="/Styles/Connection/ArrowColor" />
+        
+		<Label position="center">
+			<HBox>
+                <Condition condition="#name" type="empty" negate="1">
+                    <Align align="center">
+                        <Rectangle fill="/Styles/Connection/TextFill">
+                            <TextBox text="#name" font="/Styles/Connection/NameTextFont" color="/Styles/Connection/NameTextColor" />
+                        </Rectangle>
+                    </Align>
+                </Condition>
+                <Align align="center">
+                    <Rectangle fill="/Styles/Connection/TextFill">
+                        <VBox>
+                            <TextBox text="&#171;" font="/Styles/Connection/TextFont" color="/Styles/Connection/TextColor" />
+                            <TextBox text="extend" font="/Styles/Connection/TextFont" color="/Styles/Connection/TextColor" />
+                            <TextBox text="&#187;" font="/Styles/Connection/TextFont" color="/Styles/Connection/TextColor" />
+                        </VBox>
+                    </Rectangle>
+                </Align>
+            </HBox>
+		</Label>
+    </Appearance>
+</ConnectionType>

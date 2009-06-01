@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ElementType id="Input Output" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Icon path="icons/InputOutput.png" />
+    <Domain id="InputOutput" />
+    <Connections>
+        <Item value="Note Link" with="Note" />
+        <Item value="Flow Line" />
+    </Connections>
+    <Appearance>
+        <Shadow padding="3" color="/Styles/Element/ShadowColor">
+            <Rectangle fill="/Styles/Element/FillColor" border="/Styles/Element/LineColor" right="10 sidelong" left="10 sidelong" >
+                <Sizer minheight="50" minwidth="100"> 
+                    <Padding padding="10">             
+                        <Align align="center center">
+                            <VBox> 
+                                <Switch value="#type">
+                                    <Case condition="Input">
+                                        <TextBox text="Read " font="/Styles/Element/NameTextFont" color="/Styles/Element/TextColor" />
+                                    </Case>
+                                    <Case condition="Output">
+                                        <TextBox text="Write " font="/Styles/Element/NameTextFont" color="/Styles/Element/TextColor" />
+                                    </Case>                                                   
+                                </Switch>    
+                                <TextBox text="#variables" font="/Styles/Element/NameTextFont" color="/Styles/Element/NameTextColor" /> 
+                            </VBox>
+                        </Align>         
+                    </Padding>    
+                </Sizer>
+            </Rectangle>
+        </Shadow>
+    </Appearance>
+    <Options>
+    </Options>
+</ElementType>
