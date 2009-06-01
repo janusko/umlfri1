@@ -14,7 +14,7 @@ ETC_PATH = join(ROOT_PATH, 'etc')
 MAIN_CONFIG_PATH = join(ETC_PATH, 'config.xml')
 USERGUI_PATH ='/Paths/UserDir/usergui.xml'
 
-SPLASH_TIMEOUT = 0
+SPLASH_TIMEOUT = 5000
 
 VERSIONS_PATH = 'versions'
 DIAGRAMS_PATH = 'diagrams'
@@ -48,7 +48,7 @@ WEB = 'http://umlfri.org/'
 MAIL = 'projekt@umlfri.org'
 ERROR_LOG_ADDRESS = 'http://umlfri.org/errors/log.php'  
 
-DEBUG = True                    # turn DEBUG to true for some more information, e.g. user exceptions will be shown with traceback
+DEBUG = False                   # turn DEBUG to true for some more information, e.g. user exceptions will be shown with traceback
 ERROR_TO_CONSOLE = False        # only if DEBUG is true, instead of showing the exception in a window it will be printed to console
  
 LABELS_CLICKABLE = True         # used to ignore labels at drawing area
