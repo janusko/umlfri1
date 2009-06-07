@@ -1,4 +1,0 @@
-<Domain id="PreparationEnd" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" >
-    <Attribute id="variable" type="str" name="Variable Name" />
-    <Attribute id="note" type="text" name="Note" />
-</Domain>
