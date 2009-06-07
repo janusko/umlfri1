@@ -2,7 +2,7 @@ from lib.config import config
 from lib.Drawing import CConnection
 from CacheableObject import CCacheableObject
 from SelectableObject import CSelectableObject
-from DrawingContext import CDrawingContext
+from Context import CDrawingContext
 
 class CVisibleObject(CCacheableObject, CSelectableObject):
     '''

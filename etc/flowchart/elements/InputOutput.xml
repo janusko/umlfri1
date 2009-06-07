@@ -1,27 +1,26 @@
-<?xml version="1.0" encoding="utf-8"?>
 <ElementType id="Input Output" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
-    <Icon path="icons/InputOutput.png" />
-    <Domain id="InputOutput" />
+    <Icon path="icons/InputOutput.png"/>
+    <Domain id="InputOutput"/>
     <Connections>
-        <Item value="Note Link" with="Note" />
-        <Item value="Flow Line" />
+        <Item value="Note Link" with="Note"/>
+        <Item value="Flow Line"/>
     </Connections>
     <Appearance>
-        <Shadow padding="3" color="/Styles/Element/ShadowColor">
-            <Rectangle fill="/Styles/Element/FillColor" border="/Styles/Element/LineColor" right="10 sidelong" left="10 sidelong" >
+        <Shadow padding="3" color="#cfg.Styles.Element.ShadowColor">
+            <Rectangle fill="#cfg.Styles.Element.FillColor" border="#cfg.Styles.Element.LineColor" right="10 sidelong" left="10 sidelong">
                 <Sizer minheight="50" minwidth="100"> 
                     <Padding padding="10">             
                         <Align align="center center">
                             <VBox> 
-                                <Switch value="#type">
+                                <Switch value="#self.type">
                                     <Case condition="Input">
-                                        <TextBox text="Read " font="/Styles/Element/NameTextFont" color="/Styles/Element/TextColor" />
+                                        <TextBox text="Read " font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.TextColor"/>
                                     </Case>
                                     <Case condition="Output">
-                                        <TextBox text="Write " font="/Styles/Element/NameTextFont" color="/Styles/Element/TextColor" />
+                                        <TextBox text="Write " font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.TextColor"/>
                                     </Case>                                                   
                                 </Switch>    
-                                <TextBox text="#variables" font="/Styles/Element/NameTextFont" color="/Styles/Element/NameTextColor" /> 
+                                <TextBox text="#self.variables" font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/> 
                             </VBox>
                         </Align>         
                     </Padding>    

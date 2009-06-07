@@ -118,7 +118,7 @@ class CConnectionType(object):
         Paint connection of given type on canvas
         
         @param context: context in which is connection being drawn
-        @type  context: L{CDrawingContext<lib.Drawing.DrawingContext.CDrawingContext>}
+        @type  context: L{CDrawingContext<lib.Drawing.Context.DrawingContext.CDrawingContext>}
         """
         self.appearance.Paint(context)
     

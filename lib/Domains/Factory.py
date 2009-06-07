@@ -5,7 +5,6 @@ from lib.Exceptions.DevException import *
 from Type import CDomainType
 from lib.config import config
 from lib.consts import METAMODEL_NAMESPACE
-from lib.Drawing.Objects import ALL
 from Parser import CDomainParser
 from Joiner import CDomainJoiner
 from lib.Exceptions import DomainFactoryError

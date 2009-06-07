@@ -1,17 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ConnectionType id="Flow Line" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
-    <Icon path="icons/FlowLine.png" />
-    <Domain id="FlowLine" identity="name" />
+<ConnectionType xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" id="Flow Line">
+    <Icon path="icons/FlowLine.png"/>
+    <Domain id="FlowLine" identity="name"/>
+    
     <Appearance>
-        <ConnectionLine style="solid" color="/Styles/Connection/LineColor" />
-        <ConnectionArrow index="-1" style="simple" color="/Styles/Connection/ArrowColor" />
+        <ConnectionLine style="solid" color="#cfg.Styles.Connection.LineColor"/>
+        <ConnectionArrow index="-1" style="simple" color="#cfg.Styles.Connection.ArrowColor"/>
         
         <Label position="center">
             <HBox>
-                <Condition condition="#name" type="empty" negate="1">
+                <Condition condition="#name">
                     <Align align="center">
-                        <Rectangle fill="/Styles/Connection/TextFill">
-                            <TextBox text="#name" font="/Styles/Connection/NameTextFont" color="/Styles/Connection/NameTextColor" />
+                        <Rectangle fill="#cfg.Styles.Connection.TextFill">
+                            <TextBox text="#name" font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>
                         </Rectangle>
                     </Align>
                 </Condition>

@@ -2,6 +2,11 @@ from Align import CAlign
 from lib.Exceptions.UserException import *
 
 class CProportional(CAlign):
+    types = {
+        'ratio': str,
+        'align': str,
+        'size': str
+    }
     def __init__(self, ratio, align = (None, None), size = "maximal"):
         CAlign.__init__(self, align)
         
