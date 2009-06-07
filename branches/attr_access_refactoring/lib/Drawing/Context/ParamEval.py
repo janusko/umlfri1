@@ -38,18 +38,21 @@ def TupleWrap(type):
 
 def BuildParam(value, type = None):
     if type is bool:
-        type = BoolWrap
-    if isinstance(type, tuple):
-        type = TupleWrap(type)
+        type2 = BoolWrap
+    elif isinstance(type, tuple):
+        type2 = TupleWrap(type)
+        type = tuple
+    else:
+        type2 = type
     if isinstance(value, (str, unicode)) and value.startswith('#'):
         if value.startswith('##'):
-            if type is not None:
-                return type(value[1:])
+            if type2 is not None:
+                return type2(value[1:])
             else:
                 return value[1:]
         else:
             return CParamEval(value[1:], type)
-    elif type is not None:
-        return type(value)
+    elif type2 is not None:
+        return type2(value)
     else:
         return value

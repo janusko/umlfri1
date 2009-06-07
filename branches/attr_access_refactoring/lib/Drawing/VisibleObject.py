@@ -63,6 +63,6 @@ class CVisibleObject(CCacheableObject, CSelectableObject):
         self.position = pos
         
     def GetDiagram(self):
-        return self.diagram
+        return self.diagram()
         
 

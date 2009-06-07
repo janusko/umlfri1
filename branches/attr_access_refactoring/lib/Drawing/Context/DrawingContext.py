@@ -80,7 +80,9 @@ class CDrawingContext(object):
         self.shadowcolor = color
     
     def GetPoints(self):
-        return self.element.GetPoints(self.canvas)
+        dx, dy = self.pos
+        for x, y in self.element.GetPoints(self.canvas):
+            yield x + dx, y + dy
     
     def GetLoopPath(self):
         return tuple(i[5] for i in self.stack) + (self.line, )

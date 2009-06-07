@@ -1,11 +1,11 @@
 <ConnectionType xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" id="Include">
     <Icon path="icons/include_arrow.png"/>
-    <SrcArrow possible="0" default="0"/>
-    <DestArrow possible="1" default="1"/>
     <Domain id="include" identity="name"/>
+    
     <Appearance>
-        <LineStyle style="dot" color="#cfg.Styles.Connection.LineColor"/>
-        <ArrowStyle style="simple" fill="#cfg.Styles.Connection.ArrowFillColor" color="#cfg.Styles.Connection.ArrowColor"/>
+        <ConnectionLine style="dot" color="#cfg.Styles.Connection.LineColor"/>
+        <ConnectionArrow index="-1" style="simple" color="#cfg.Styles.Connection.ArrowColor"/>
+        
 		<Label position="center">
 			<HBox>
                 <Condition condition="#self.name">
@@ -18,9 +18,9 @@
                 <Align align="center">
                     <Rectangle fill="#cfg.Styles.Connection.TextFill">
                         <VBox>
-                            <TextBox text="&#xAB;" font="#cfg.Styles.Connection.TextFont" color="#cfg.Styles.Connection.TextColor"/>
+                            <TextBox text="&#171;" font="#cfg.Styles.Connection.TextFont" color="#cfg.Styles.Connection.TextColor"/>
                             <TextBox text="include" font="#cfg.Styles.Connection.TextFont" color="#cfg.Styles.Connection.TextColor"/>
-                            <TextBox text="&#xBB;" font="#cfg.Styles.Connection.TextFont" color="#cfg.Styles.Connection.TextColor"/>
+                            <TextBox text="&#187;" font="#cfg.Styles.Connection.TextFont" color="#cfg.Styles.Connection.TextColor"/>
                         </VBox>
                     </Rectangle>
                 </Align>

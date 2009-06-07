@@ -4,7 +4,7 @@ from VBox import CVBox
 from lib.Exceptions.UserException import *
 
 class CLoop(CSimpleContainer):
-    params = {
+    types = {
         'collection': None # collection can be any iterator
     }
     def __init__(self, collection):

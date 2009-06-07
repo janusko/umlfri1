@@ -2,7 +2,7 @@ from SimpleContainer import CSimpleContainer
 
 
 class CCondition(CSimpleContainer):
-    params = {
+    types = {
         'condition': bool,
     }
     def __init__(self, condition):

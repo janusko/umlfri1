@@ -2,7 +2,7 @@ from SimpleContainer import CSimpleContainer
 from lib.Exceptions.UserException import *
 
 class CAlign(CSimpleContainer):
-    params = {
+    types = {
         'align': str
     }
     def __init__(self, align):

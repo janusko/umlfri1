@@ -2,7 +2,7 @@ from VisualObject import CVisualObject
 import sys
 
 class CIcon(CVisualObject):
-    params = {
+    types = {
         'filename': str
     }
     def __init__(self, filename):

@@ -2,7 +2,7 @@ from SimpleContainer import CSimpleContainer
 from lib.datatypes import CColor
 
 class CEllipse(CSimpleContainer):
-    params = {
+    types = {
         'fill': CColor,
         'border': CColor,
         'borderwidth': int

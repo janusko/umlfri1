@@ -5,7 +5,7 @@ from lib.config import config
 from lib.Storages import open_storage
 from Metamodel import CMetamodel
 import os.path
-from lib.consts import ROOT_PATH, METAMODEL_PATH, METAMODEL_LIST_NAMESPACE
+from lib.consts import ROOT_PATH, METAMODEL_PATH, METAMODEL_NAMESPACE, METAMODEL_LIST_NAMESPACE
 
 #if lxml.etree is imported successfully, we use xml validation with xsd schema
 if HAVE_LXML:
@@ -16,10 +16,12 @@ class CMetamodelManager(object):
     def __init__(self):
         self.__metamodels = {}
         self.__LoadList(config['/Paths/MetamodelList'])
+        if os.path.exists(config['/Paths/UserMetamodelList']):
+            self.__LoadList(config['/Paths/UserMetamodelList'])
     
     def GetMetamodel(self, uri, version):
         storage = open_storage(self.__metamodels[(uri, version)])
-        return self.__LoadMetamodel(storage, uri, version)
+        return self.__LoadMetamodel(storage)
     
     def __LoadList(self, path):
         root = etree.XML(file(path).read())
@@ -34,20 +36,26 @@ class CMetamodelManager(object):
                 elif info.tag == METAMODEL_LIST_NAMESPACE+'Version':
                     version = info.text
                 elif info.tag == METAMODEL_LIST_NAMESPACE+'Path':
-                    path = info.text.replace(u'\xFF', ROOT_PATH)
+                    path = os.path.expanduser(info.text.replace(u'\xFF', ROOT_PATH))
             self.__metamodels[(uri, version)] = path
     
-    def __LoadMetamodel(self, storage, uri, version):
-        metamodel = CMetamodel(storage, uri, version)
-        
+    def __LoadMetamodel(self, storage):
         root = etree.XML(storage.read_file(METAMODEL_PATH))
         #xml (version) file is validate with xsd schema (metamodel.xsd)
         if HAVE_LXML:
             if not xmlschema.validate(root):
                 raise FactoryError("XMLError", xmlschema.error_log.last_error)
         
+        for info in root[0]:
+            if info.tag == METAMODEL_NAMESPACE+'Uri':
+                uri = info.text
+            elif info.tag == METAMODEL_NAMESPACE+'Version':
+                version = info.text
+        
+        metamodel = CMetamodel(storage, uri, version)
+        
         #Iterate over the descendants of root element (only element with tag=Item)
-        for element in root[0]:
+        for element in root[1]:
             diagName = element.get('value')
             metamodel.AddDiagram(diagName)
         

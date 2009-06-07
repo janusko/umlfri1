@@ -1,11 +1,9 @@
-from lib.Depend.gtk2 import gtk
-
 from VisualObject import CVisualObject
 from VBox import CVBox
 from lib.datatypes import CColor
 
 class CLine(CVisualObject):
-    params = {
+    types = {
         'type': str,
         'color': CColor
     }

@@ -57,6 +57,7 @@ types = {
     "/Paths/Schema": path_type,
     "/Paths/UserDir": path_type,
     "/Paths/UserConfig": path_type,
+    "/Paths/UserMetamodelList": path_type,
     "/Paths/RecentFiles": path_type,
     "/Paths/UserGui": path_type,
     "/Page/Width": int,

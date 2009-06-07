@@ -1,5 +1,6 @@
 from lib.Exceptions.UserException import *
 from lib.Domains import CDomainObject
+from Alias import CConnectionAlias
 import weakref
 
 class CConnectionObject(object):
@@ -11,7 +12,7 @@ class CConnectionObject(object):
         Initialize connection object
         
         @param type: Type of connection
-        @type  type: L{CConnectionType<Type.CConnectionType>}
+        @type  type: L{CConnectionType<Type.CConnectionType>} or L{CConnectionType<Type.CConnectionAlias>}
         
         @param source: Source element of connection
         @type  source: L{CElementObject<lib.Elements.Object.CElementObject>}
@@ -23,7 +24,10 @@ class CConnectionObject(object):
         self.__SetWeakDestination(None)
         self.revision = 0
         self.appears = []
-        self.type = type
+        if isinstance(type, CConnectionAlias):
+            self.type = type.GetAliasType()
+        else:
+            self.type = type
         self.SetSource(source)
         try:
             self.SetDestination(dest)
@@ -33,6 +37,9 @@ class CConnectionObject(object):
             self.__SetWeakSource(None)
             raise
         self.domainobject = CDomainObject(self.type.GetDomain())
+        if isinstance(type, CConnectionAlias):
+            for path, value in type.GetDefaultValues():
+                self.domainobject.SetValue(path, value)
     
     def __CheckRecursiveConnection(self):
         """
@@ -164,10 +171,10 @@ class CConnectionObject(object):
         @return: other object
         @rtype:  L{CElementObject<lib.Elements.Object.CElementObject>}
         """
-        if self.GetWeakSource is object:
-            return self.GetWeakDestination
-        elif self.GetWeakDestination is object:
-            return self.GetWeakSource
+        if self.GetSource() is object:
+            return self.GetDestination()
+        elif self.GetDestination() is object:
+            return self.GetSource()
         else:
             return None
         

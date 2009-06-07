@@ -5,7 +5,7 @@ from lib.Exceptions.UserException import *
 from lib.datatypes import CColor
 
 class CDiamond(CSimpleContainer):
-    params = {
+    types = {
         'fill': CColor,
         'border': CColor
     }
