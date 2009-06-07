@@ -4,6 +4,7 @@ from lib.Exceptions.UserException import *
 from math import pi, atan2
 
 from lib.Math2D import Path, TransformMatrix
+from lib.datatypes import CColor
 
 from lib.config import config
 
@@ -14,16 +15,24 @@ arrows = {
 }
 
 class CConnectionArrow(CVisualObject):
-    def __init__(self, index, direction = None, style = 'simple', color = 'black', fill = None, size = 10):
+    types = {
+        'index': int,
+        'direction': str,
+        'style': str,
+        'color': CColor,
+        'fill': CColor,
+        'size': int
+    }
+    def __init__(self, index, direction = None, style = 'simple', color = CColor('black'), fill = None, size = 10):
         CVisualObject.__init__(self)
         
         assert direction in (None, 'rev', 'fwd')
         
         self.style = style
         self.fill = fill
-        self.size = int(size)
+        self.size = size
         self.color = color
-        self.index = int(index)
+        self.index = index
         if direction is None:
             if index == 0:
                 self.direction = 'rev'

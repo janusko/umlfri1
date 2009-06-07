@@ -3,6 +3,7 @@ from lib.Depend.gtk2 import gtk
 import common
 from lib.config import config
 from common import event
+from lib.datatypes import CColor, CFont
 
 class CfrmOptions(common.CWindow):
     #widgets = ('labelOptions',)
@@ -10,34 +11,41 @@ class CfrmOptions(common.CWindow):
                'cmdDefaultOptions')
     name = 'frmOptions'
     
-    def GtkColorToStr(self, color):
-        return '#%02x%02x%02x'%(color.red >> 8, color.green >> 8, 
-            color.blue >> 8)
-
+    def CColorToGtkColor(self, color):
+        return gtk.gdk.color_parse(str(color))
+    
+    def CFontToFontString(self, font):
+        return str(font)
+    
+    def GtkColorToCColor(self, color):
+        return CColor('#%02x%02x%02x'%(color.red >> 8, color.green >> 8, color.blue >> 8))
+    
+    def FontStringToCFont(self, font):
+        return CFont(font)
 
     def Show(self):
         self.__Load()
         
         if self.form.run() == gtk.RESPONSE_OK:
-            config['/Styles/Element/LineColor'] = self.GtkColorToStr(self.cbElementLine.get_color())
-            config['/Styles/Element/FillColor'] = self.GtkColorToStr(self.cbElementFill.get_color())
-            config['/Styles/Element/Fill2Color'] = self.GtkColorToStr(self.cbElementFill2.get_color())
-            config['/Styles/Element/Fill3Color'] = self.GtkColorToStr(self.cbElementFill3.get_color())
-            config['/Styles/Element/ShadowColor'] = self.GtkColorToStr(self.cbElementShadow.get_color())
-            config['/Styles/Element/NameTextColor'] = self.GtkColorToStr(self.cbElementNameText.get_color())
-            config['/Styles/Element/TextColor'] = self.GtkColorToStr(self.cbElementText.get_color())
-            config['/Styles/Connection/LineColor'] = self.GtkColorToStr(self.cbConnectionLine.get_color())
-            config['/Styles/Connection/ArrowColor'] = self.GtkColorToStr(self.cbConnectionArrow.get_color())
-            config['/Styles/Connection/ArrowFillColor'] = self.GtkColorToStr(self.cbConnectionArrowFill.get_color())
-            config['/Styles/Connection/NameTextColor'] = self.GtkColorToStr(self.cbConnectionNameText.get_color())
-            config['/Styles/Connection/TextColor'] = self.GtkColorToStr(self.cbConnectionText.get_color())
-            config['/Styles/Selection/PointsColor'] = self.GtkColorToStr(self.cbSelectionPoints.get_color())
-            config['/Styles/Selection/RectangleColor'] = self.GtkColorToStr(self.cbSelectionRectangle.get_color())
-            config['/Styles/Drag/RectangleColor'] = self.GtkColorToStr(self.cbDragRectangle.get_color())
-            config['/Styles/Element/NameTextFont'] = self.fbElementNameText.get_font_name()
-            config['/Styles/Element/TextFont'] = self.fbElementText.get_font_name()
-            config['/Styles/Connection/NameTextFont'] = self.fbConnectionNameText.get_font_name()
-            config['/Styles/Connection/TextFont'] = self.fbConnectionText.get_font_name()
+            config['/Styles/Element/LineColor'] = self.GtkColorToCColor(self.cbElementLine.get_color())
+            config['/Styles/Element/FillColor'] = self.GtkColorToCColor(self.cbElementFill.get_color())
+            config['/Styles/Element/Fill2Color'] = self.GtkColorToCColor(self.cbElementFill2.get_color())
+            config['/Styles/Element/Fill3Color'] = self.GtkColorToCColor(self.cbElementFill3.get_color())
+            config['/Styles/Element/ShadowColor'] = self.GtkColorToCColor(self.cbElementShadow.get_color())
+            config['/Styles/Element/NameTextColor'] = self.GtkColorToCColor(self.cbElementNameText.get_color())
+            config['/Styles/Element/TextColor'] = self.GtkColorToCColor(self.cbElementText.get_color())
+            config['/Styles/Connection/LineColor'] = self.GtkColorToCColor(self.cbConnectionLine.get_color())
+            config['/Styles/Connection/ArrowColor'] = self.GtkColorToCColor(self.cbConnectionArrow.get_color())
+            config['/Styles/Connection/ArrowFillColor'] = self.GtkColorToCColor(self.cbConnectionArrowFill.get_color())
+            config['/Styles/Connection/NameTextColor'] = self.GtkColorToCColor(self.cbConnectionNameText.get_color())
+            config['/Styles/Connection/TextColor'] = self.GtkColorToCColor(self.cbConnectionText.get_color())
+            config['/Styles/Selection/PointsColor'] = self.GtkColorToCColor(self.cbSelectionPoints.get_color())
+            config['/Styles/Selection/RectangleColor'] = self.GtkColorToCColor(self.cbSelectionRectangle.get_color())
+            config['/Styles/Drag/RectangleColor'] = self.GtkColorToCColor(self.cbDragRectangle.get_color())
+            config['/Styles/Element/NameTextFont'] = self.FontStringToCFont(self.fbElementNameText.get_font_name())
+            config['/Styles/Element/TextFont'] = self.FontStringToCFont(self.fbElementText.get_font_name())
+            config['/Styles/Connection/NameTextFont'] = self.FontStringToCFont(self.fbConnectionNameText.get_font_name())
+            config['/Styles/Connection/TextFont'] = self.FontStringToCFont(self.fbConnectionText.get_font_name())
             config['/Styles/Selection/PointsSize'] = self.sbSelectionPointsSize.get_value_as_int()
             config['/Styles/Selection/RectangleWidth'] = self.sbSelectionRectangleWidth.get_value_as_int()
             config['/Styles/Drag/RectangleWidth'] = self.sbDragRectangleWidth.get_value_as_int()

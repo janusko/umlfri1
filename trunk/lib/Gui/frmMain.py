@@ -15,7 +15,6 @@ from tabs import CTabs
 from frmFindInDiagram import CFindInDiagram
 from tabStartPage import CtabStartPage
 from lib.config import config
-from lib.colors import colors
 from lib.Gui.diagramPrint import CDiagramPrint
 from lib.Exceptions import UserException
 

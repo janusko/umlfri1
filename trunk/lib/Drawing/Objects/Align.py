@@ -2,6 +2,9 @@ from SimpleContainer import CSimpleContainer
 from lib.Exceptions.UserException import *
 
 class CAlign(CSimpleContainer):
+    types = {
+        'align': str
+    }
     def __init__(self, align):
         CSimpleContainer.__init__(self)
         self.alignx = None

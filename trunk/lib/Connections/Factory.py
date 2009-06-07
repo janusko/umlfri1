@@ -7,6 +7,7 @@ from Type import CConnectionType
 from Alias import CConnectionAlias
 from lib.consts import METAMODEL_NAMESPACE
 from lib.Drawing.Objects import ALL, ALL_CONNECTION, CContainer, CSimpleContainer
+from lib.Drawing.Context import BuildParam
 from lib.config import config
 
 #if lxml.etree is imported successfully, we use xml validation with xsd schema
@@ -143,7 +144,7 @@ class CConnectionFactory(object):
         
         params = {}
         for attr in root.attrib.items():
-            params[attr[0]] = attr[1]
+            params[attr[0]] = BuildParam(attr[1], cls.types.get(attr[0], None))
         ret = obj = cls(**params)
         
         if hasattr(obj, "LoadXml"):
@@ -174,7 +175,7 @@ class CConnectionFactory(object):
         cls = ALL[root.tag.split("}")[1]]
         params = {}
         for attr in root.attrib.items():
-            params[attr[0]] = attr[1]
+            params[attr[0]] = BuildParam(attr[1], cls.types.get(attr[0], None))
         obj = cls(**params)
         if hasattr(obj, "LoadXml"):
             obj.LoadXml(root)

@@ -1,5 +1,3 @@
-import weakref
-
 class CDrawingContext(object):
     def __init__(self, canvas, element, pos, size = (None, None)):
         self.canvas = canvas
@@ -9,12 +7,13 @@ class CDrawingContext(object):
         self.variables = {}
         self.stack = []
         self.shadowcolor = None
+        self.line = 0
     
     def Push(self):
-        self.stack.append((self.pos, self.size, self.variables, self.stack, self.shadowcolor))
+        self.stack.append((self.pos, self.size, self.variables.copy(), self.stack, self.shadowcolor, self.line))
     
     def Pop(self):
-        self.pos, self.size, self.variables, self.stack, self.shadowcolor = self.stack.pop()
+        self.pos, self.size, self.variables, self.stack, self.shadowcolor, self.line = self.stack.pop()
     
     def ComputeSize(self, object):
         size = self.size
@@ -41,14 +40,24 @@ class CDrawingContext(object):
     def GetShadowColor(self):
         return self.shadowcolor
     
+    def GetLine(self):
+        return self.line
+    
     def GetVariable(self, varname):
         return self.variables[varname]
     
     def GetVariables(self):
         return self.variables
     
-    def GetAttribute(self, varname):
-        return self.element.GetObject().GetVisualProperty(varname)
+    def GetProjectNode(self):
+        obj = self.element.GetObject()
+        if hasattr(obj, 'GetNode'):
+            return obj.GetNode()
+        else:
+            return None
+    
+    def GetDomainObject(self):
+        return self.element.GetObject().GetDomainObject()
     
     __getitem__ = GetVariable
     
@@ -62,7 +71,10 @@ class CDrawingContext(object):
         self.pos = newpos
     
     def SetVariables(self, vars):
-        self.variables = vars
+        self.variables.update(vars)
+    
+    def SetLine(self, line):
+        self.line = line
     
     def SetShadowColor(self, color):
         self.shadowcolor = color
@@ -73,4 +85,4 @@ class CDrawingContext(object):
             yield x + dx, y + dy
     
     def GetLoopPath(self):
-        return tuple(i[2].get('line') for i in self.stack) + (self.variables.get('line'), )
+        return tuple(i[5] for i in self.stack) + (self.line, )

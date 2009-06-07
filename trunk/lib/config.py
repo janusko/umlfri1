@@ -7,6 +7,7 @@ import colors
 from lib import Indent
 from Exceptions.DevException import *
 from Exceptions import XMLError
+from datatypes import CFont, CColor
 import sys
 
 def expanduser(path):
@@ -21,31 +22,32 @@ def path_type(val):
         val += os.sep
     return val
 
-def color_type(val):
-    return colors.colors.get(val, val)
-
 types = {
-    "/Styles/Element/LineColor": color_type,
-    "/Styles/Element/FillColor": color_type,
-    "/Styles/Element/Fill2Color": color_type,
-    "/Styles/Element/Fill3Color": color_type,
-    "/Styles/Element/ShadowColor": color_type,
-    "/Styles/Element/NameTextColor": color_type,
-    "/Styles/Element/TextColor": color_type,
+    "/Styles/Element/LineColor": CColor,
+    "/Styles/Element/FillColor": CColor,
+    "/Styles/Element/Fill2Color": CColor,
+    "/Styles/Element/Fill3Color": CColor,
+    "/Styles/Element/ShadowColor": CColor,
+    "/Styles/Element/NameTextColor": CColor,
+    "/Styles/Element/TextColor": CColor,
+    "/Styles/Element/NameTextFont": CFont,
+    "/Styles/Element/Textfont": CFont,
     "/Styles/Connection/ArrowAngleSteps": int,
     "/Styles/Connection/MinimalAngle": float,
-    "/Styles/Connection/LineColor": color_type,
-    "/Styles/Connection/ArrowColor": color_type,
-    "/Styles/Connection/ArrowFillColor": color_type,
-    "/Styles/Connection/NameTextColor": color_type,
-    "/Styles/Connection/TextColor": color_type,
-    "/Styles/Connection/TextFill": color_type,
+    "/Styles/Connection/LineColor": CColor,
+    "/Styles/Connection/ArrowColor": CColor,
+    "/Styles/Connection/ArrowFillColor": CColor,
+    "/Styles/Connection/NameTextColor": CColor,
+    "/Styles/Connection/TextColor": CColor,
+    "/Styles/Connection/TextFill": CColor,
+    "/Styles/Connection/NameTextFont": CFont,
+    "/Styles/Connection/Textfont": CFont,
     "/Styles/Selection/PointsSize": int,
     "/Styles/Selection/RectangleWidth": int,
-    "/Styles/Selection/PointsColor": color_type,
-    "/Styles/Selection/RectangleColor": color_type,
+    "/Styles/Selection/PointsColor": CColor,
+    "/Styles/Selection/RectangleColor": CColor,
     "/Styles/Drag/RectangleWidth": int,
-    "/Styles/Drag/RectangleColor": color_type,
+    "/Styles/Drag/RectangleColor": CColor,
     "/Paths/Root": path_type,
     "/Paths/MetamodelList": path_type,
     "/Paths/Templates": path_type,

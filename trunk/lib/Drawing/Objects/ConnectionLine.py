@@ -1,12 +1,19 @@
 from VisualObject import CVisualObject
 
+from lib.datatypes import CColor
+
 class CConnectionLine(CVisualObject):
-    def __init__(self, color = 'black', style = 'solid', width = 1):
+    types = {
+        'color': CColor,
+        'style': str,
+        'width': int
+    }
+    def __init__(self, color = CColor('black'), style = 'solid', width = 1):
         CVisualObject.__init__(self)
         
         self.color = color
         self.style = style
-        self.width = int(width)
+        self.width = width
 
     def ComputeSize(self, context):
         return 0, 0

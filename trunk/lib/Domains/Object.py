@@ -203,3 +203,7 @@ class CDomainObject(object):
                 self.GetValue(key).SetSaveInfo(value)
             elif isinstance(value, (list, str, unicode)):
                 self.SetValue(key, value)
+    
+    def __iter__(self):
+        for id in self.type.IterAttributeIDs():
+            yield id, self.values[id]
