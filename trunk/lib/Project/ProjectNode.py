@@ -13,7 +13,7 @@ class CProjectNode(object):
         self.object.Assign(self)
 
     def Change(self):
-        if self.GetParent is not None:  
+        if self.GetParent() is not None:  
             parentPath = self.GetParent().GetPath()+ "/"
         else:
             parentPath = ""
