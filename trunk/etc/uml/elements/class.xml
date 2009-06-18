@@ -3,7 +3,7 @@
     <Icon path="icons/class.png" />
     <Domain id="class" identity="name" />
     <Connections>
-        <Item value="Association"/>
+        <Item value="Association" allowrecursive="1"/>
         <Item value="Generalization" with="Class" allowrecursive="0"/>
         <Item value="Agregation" with="Class" allowrecursive="1"/>
         <Item value="Compose" with="Class" allowrecursive="0"/>
