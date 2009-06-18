@@ -403,6 +403,8 @@ class CDomainType(object):
     def __GetStr(self, value):
         if isinstance(value, (str, unicode)):
             return value
+        elif value is None:
+            return ''
         else:
             return str(value)
     
