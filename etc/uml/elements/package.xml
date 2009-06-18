@@ -3,8 +3,7 @@
     <Icon path="icons/package.png" />
     <Domain id="package" identity="name" />
     <Connections>
-        <!--Item value="Association" />
-        <Item value="Generalization" with="Class" allowrecursive="0" /-->
+        <Item value="Association" with="Package" />
         <Item value="Dependency" />
     </Connections>
     <Appearance>
