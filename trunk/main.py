@@ -24,7 +24,7 @@ from lib.consts import SPLASH_TIMEOUT
 
 from lib.Exceptions import UserException
 
-__version__ = '1.0-beta20090309'
+__version__ = '1.0-beta20090601'
 
 class Application(CApplication):
     windows = (CfrmSplash, CfrmMain, CfrmAbout, CfrmProperties, CfrmOpen, CfrmSave, CfrmOptions, CfrmException, CfrmExport)
