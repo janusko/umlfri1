@@ -543,9 +543,6 @@
 		<xs:complexContent>
 			<xs:extension base="ConnectionComplexType">
 				<xs:attribute name="condition" type="xs:string" use="required"/>
-				<xs:attribute name="type" type="xs:string" default="equal"/>
-				<xs:attribute name="negate" type="xs:string" default="false"/>
-				<xs:attribute name="value" type="xs:string"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
