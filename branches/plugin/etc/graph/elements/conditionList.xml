@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ElementType id="conditionList" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
     <Icon path="icons/conditionList.png" />
-    <Domain id="conditionList"/>
+    <Domain id="conditionList" />
     <Connections>
     </Connections>
     <Appearance>
-        <Shadow padding="3" color="/Styles/Element/ShadowColor">
-            <Rectangle fill="/Styles/Element/FillColor" border="/Styles/Element/LineColor">
+        <Shadow padding="3" color="#cfg.Styles.Element.ShadowColor">
+            <Rectangle fill="#cfg.Styles.Element.FillColor" border="#cfg.Styles.Element.LineColor">
                 <Sizer minwidth="60" minheight="30">
                     <HBox>
                         <Padding padding="10">
-                            <TextBox text="Conditionlist" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                            <TextBox text="Conditionlist" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor" />
                         </Padding>
-                        <Line type="horizontal" color="/Styles/Element/LineColor" />
+                        <Line type="horizontal" color="#cfg.Styles.Element.LineColor" />
                         <Padding padding="10">
                             <VBox>
                                 <HBox>
-                                    <Loop collection="conditions">
-                                        <TextBox text="@name" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                    <Loop collection="#self.conditions">
+                                        <TextBox text="#name" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor" />
                                     </Loop>
                                 </HBox>
                                 <HBox>
-                                    <Loop collection="conditions">
-                                        <TextBox text=" = " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                    <Loop collection="#self.conditions">
+                                        <TextBox text=" = " font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor" />
                                     </Loop>
                                 </HBox>
                                 <HBox>
-                                    <Loop collection="conditions">
-                                        <TextBox text="@value" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                    <Loop collection="#self.conditions">
+                                        <TextBox text="#value" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor" />
                                     </Loop>
                                 </HBox>
                             </VBox>

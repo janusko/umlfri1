@@ -2,9 +2,11 @@ import os
 import os.path
 from lib.Exceptions.DevException import *
 from Type import CElementType
+from Alias import CElementAlias
 from lib.config import config
 from lib.consts import METAMODEL_NAMESPACE
 from lib.Drawing.Objects import ALL
+from lib.Drawing.Context import BuildParam
 from lib.Depend.etree import etree, HAVE_LXML
 
 #if lxml.etree is imported successfully, we use xml validation with xsd schema
@@ -76,6 +78,33 @@ class CElementFactory(object):
             if not xmlschema.validate(root):
                 raise FactoryError("XMLError", xmlschema.error_log.last_error)
 
+        if root.tag == METAMODEL_NAMESPACE + 'ElementType':
+            self.__LoadType(root)
+        elif root.tag == METAMODEL_NAMESPACE + 'ElementAlias':
+            self.__LoadAlias(root)
+    
+    def __LoadAlias(self, root):
+        obj = CElementAlias(self, root.get('id'), root.get('alias'))
+        
+        for element in root:
+            if element.tag == METAMODEL_NAMESPACE + 'Icon':
+                obj.SetIcon(element.get('path'))
+            
+            elif element.tag == METAMODEL_NAMESPACE + 'DefaultValues':
+                for item in element:
+                    obj.SetDefaultValue(item.get('path'), item.get('value'))
+            
+            elif element.tag == METAMODEL_NAMESPACE + 'Options':
+                for item in element:
+                    name = item.tag.split('}')[1]
+                    value = item.text
+                    if name == 'DirectAdd':
+                        value = value.lower() == 'true'
+                    obj.AppendOptions(name, value)
+        
+        self.types[root.get('id')] = obj
+    
+    def __LoadType(self, root):
         obj = CElementType(root.get('id'))
         
         for element in root:
@@ -119,7 +148,7 @@ class CElementFactory(object):
         cls = ALL[root.tag.split("}")[1]]
         params = {}
         for attr in root.attrib.items():    #return e.g. attr == ('id', '1') => attr[0] == 'id', attr[1] == '1'
-            params[attr[0]] = attr[1]
+            params[attr[0]] = BuildParam(attr[1], cls.types.get(attr[0], None))
         obj = cls(**params)
         if hasattr(obj, "LoadXml"):
             obj.LoadXml(root)

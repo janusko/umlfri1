@@ -44,9 +44,9 @@ METAMODEL_LIST_NAMESPACE = '{http://umlfri.kst.fri.uniza.sk/xmlschema/metamodelL
 USERGUI_NAMESPACE='http://umlfri.kst.fri.uniza.sk/xmlschema/usergui.xsd'
 
 # UML. FRI server - web page, mail address and address for error logs
-WEB = 'http://umlfri.kst.fri.uniza.sk/'
-MAIL = 'projekt@umlfri.kst.fri.uniza.sk'
-ERROR_LOG_ADDRESS = 'http://umlfri.kst.fri.uniza.sk/errors/log.php'  
+WEB = 'http://umlfri.org/'
+MAIL = 'projekt@umlfri.org'
+ERROR_LOG_ADDRESS = 'http://umlfri.org/errors/log.php'  
 
 DEBUG = True                    # turn DEBUG to true for some more information, e.g. user exceptions will be shown with traceback
 ERROR_TO_CONSOLE = False        # only if DEBUG is true, instead of showing the exception in a window it will be printed to console

@@ -2,6 +2,14 @@ from SimpleContainer import CSimpleContainer
 from lib.Exceptions.UserException import *
 
 class CSizer(CSimpleContainer):
+    types = {
+        'minwidth': int,
+        'minheight': int,
+        'maxwidth': int,
+        'maxheight': int,
+        'width': int,
+        'height': int
+    }
     def __init__(self, minwidth = None, minheight = None, maxwidth = None, maxheight = None, width = None, height = None):
         CSimpleContainer.__init__(self)
         
@@ -13,27 +21,27 @@ class CSizer(CSimpleContainer):
         if minwidth is None:
             self.minwidth = None
         else:
-            self.minwidth = int(minwidth)
+            self.minwidth = minwidth
         if maxwidth is None:
             self.maxwidth = None
         else:
-            self.maxwidth = int(maxwidth)
+            self.maxwidth = maxwidth
         if minheight is None:
             self.minheight = None
         else:
-            self.minheight = int(minheight)
+            self.minheight = minheight
         if maxheight is None:
             self.maxheight = None
         else:
-            self.maxheight = int(maxheight)
+            self.maxheight = maxheight
         if width is None:
             self.width = None
         else:
-            self.width = int(width)
+            self.width = width
         if height is None:
             self.height = None
         else:
-            self.height = int(height)
+            self.height = height
     
     def GetResizable(self):
         if self.width is None or self.height is None:

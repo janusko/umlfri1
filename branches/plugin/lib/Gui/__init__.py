@@ -12,3 +12,4 @@ from pluginAdapter import CPluginAdapter
 from Bus import CBus
 from GuiManager import CGuiManager
 from diagramPrint import CDiagramPrint
+from frmExport import CfrmExport

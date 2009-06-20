@@ -3,32 +3,32 @@
     <Icon path="icons/final.png" />
     <Domain id="state" identity="name" />
     <Connections>		
-        <Item value="StateTransition" with="State" />
-        <Item value="ActivityFlow" with="Activity,Decision" />
+        <Item value="StateTransition" with="State"/>
+        <Item value="ActivityFlow" with="Activity,Decision"/>
     </Connections>		
     <Appearance>
         <HBox expand="0">
             <Proportional ratio="1:1" align="center center" size="minimal">
-                <Ellipse fill="/Styles/Element/FillColor" border="/Styles/Element/LineColor">
+                <Ellipse fill="#cfg.Styles.Element.FillColor" border="#cfg.Styles.Element.LineColor">
                     <Padding padding="10">
-                        <Ellipse fill="/Styles/Element/Fill3Color">
-                            <Sizer width="15" height="15" />
+                        <Ellipse fill="#cfg.Styles.Element.Fill3Color">
+                            <Sizer width="15" height="15"/>
                         </Ellipse>
                     </Padding>
                 </Ellipse>
             </Proportional>
             <HBox>
-                <Condition condition="#stereotype" type="empty" negate="1">
+                <Condition condition="#self.stereotype">
                     <Align align="center">
                         <VBox>
-                            <TextBox text="&#171;" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                            <TextBox text="#stereotype" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
-                            <TextBox text="&#187;" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                            <TextBox text="&#171;" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                            <TextBox text="#self.stereotype" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                            <TextBox text="&#187;" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
                         </VBox>
                     </Align>
                 </Condition>
                 <Align align="center">
-                    <TextBox text="#name" font="/Styles/Element/NameTextFont" color="/Styles/Element/NameTextColor" />
+                    <TextBox text="#self.name" font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/>
                 </Align>
             </HBox>
         </HBox>

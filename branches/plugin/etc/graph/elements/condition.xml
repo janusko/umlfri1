@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ElementType id="condition" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
     <Icon path="icons/condition.png" />
-    <Domain id="condition"/>
+    <Domain id="condition" />
     <Connections>
         <Item value="transition" />
     </Connections>
     <Appearance>
-        <Shadow padding="3" color="/Styles/Element/ShadowColor">
-            <Diamond fill="/Styles/Element/FillColor" border="/Styles/Element/LineColor">
+        <Shadow padding="3" color="#cfg.Styles.Element.ShadowColor">
+            <Diamond fill="#cfg.Styles.Element.FillColor" border="#cfg.Styles.Element.LineColor">
                 <Proportional ratio="2:1">
                     <Padding padding="12">
                         <Align align="center center">
                             <HBox>
                                 <Align align="center center">
-                                    <TextBox text="#index" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                    <TextBox text="#self.index" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor" />
                                 </Align>
                                 <Align align="center center">
-                                    <Condition condition="#critical" type="equal" value="True">
-                                        <TextBox text="CRITICAL" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                    <Condition condition="#self.critical">
+                                        <TextBox text="CRITICAL" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor" />
                                     </Condition>
                                 </Align>
                                 <Align align="center center">
                                     <VBox>
-                                        <Condition condition="#negate" type="equal" value="True">
-                                            <TextBox text="NOT " font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                        <Condition condition="#self.negate">
+                                            <TextBox text="NOT " font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor" />
                                         </Condition>
-                                        <TextBox text="#condition" font="/Styles/Element/NameTextFont" color="/Styles/Element/NameTextColor" />
+                                        <TextBox text="#self.condition" font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor" />
                                     </VBox>
                                 </Align>
                                 <Align align="center center">
-                                    <TextBox text="#value" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                    <TextBox text="#self.value" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor" />
                                 </Align>
                             </HBox>
                         </Align>

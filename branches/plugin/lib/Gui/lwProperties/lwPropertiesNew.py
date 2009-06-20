@@ -5,6 +5,7 @@ from lib.Gui.common import CWidget, CellRendererButton, event
 from lib.Drawing import CDiagram
 from lib.Elements.Object import CElementObject
 from lib.Connections.Object import CConnectionObject
+from lib.Exceptions import *
 
 ID_ID, ID_NAME, ID_VALUE, ID_TEXT_VISIBLE, ID_COMBO_VISIBLE, ID_EDITABLE, ID_BUTTON_VISIBLE, ID_BUTTON_TEXT, ID_ACTION = range(9)
 
@@ -182,7 +183,11 @@ class ClwProperties(CWidget):
             self.application.GetBus().emit('content-update', self.element, name)
         else:
             key = self.get_key(path)
-            self.element.GetObject().SetValue(key, new_value)
+            try:
+                self.element.GetObject().SetValue(key, new_value)
+            except (DomainTypeError, ), e:
+                model.set(iter, ID_VALUE, str(self.element.GetObject().GetValue(key)))
+                raise ParserError(*e.params)
             self.application.GetBus().emit('content-update', self.element, key)
         
     @event("ComboRenderer", "edited")
@@ -192,7 +197,11 @@ class ClwProperties(CWidget):
             iter = model.get_iter_from_string(path)
             model.set(iter, ID_VALUE, new_value)
             key = self.get_key(path)
-            self.element.GetObject().SetValue(key, new_value)
+            try:
+                self.element.GetObject().SetValue(key, new_value)
+            except (DomainTypeError, ), e:
+                model.set(iter, ID_VALUE, str(self.element.GetObject().GetValue(key)))
+                raise ParserError(*e.params)
             self.application.GetBus().emit('content-update', self.element, key)
     
     def on_listadd(self, key, iter):

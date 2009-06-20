@@ -1,6 +1,6 @@
 from lib.config import config
 from Connection import CConnection
-from DrawingContext import CDrawingContext
+from Context import CDrawingContext
 from VisibleObject import CVisibleObject
 from lib.Plugin import Reference
 import weakref

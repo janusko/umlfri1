@@ -1,12 +1,18 @@
 from SimpleContainer import CSimpleContainer
+from lib.datatypes import CColor
 
 class CEllipse(CSimpleContainer):
-    def __init__(self, fill = None, border = "white", borderwidth = 1):
+    types = {
+        'fill': CColor,
+        'border': CColor,
+        'borderwidth': int
+    }
+    def __init__(self, fill = None, border = CColor("white"), borderwidth = 1):
         CSimpleContainer.__init__(self)
         self.fill = fill
         self.border = border
         
-        self.borderwidth = int(borderwidth)
+        self.borderwidth = borderwidth
     
     def GetResizable(self):
         return True, True

@@ -1,6 +1,9 @@
 from Container import CContainer
 
 class CVBox(CContainer):
+    types = {
+        'expand': str
+    }
     def __init__(self, expand=""):
         CContainer.__init__(self)
         self.expand = tuple(int(cell) for cell in expand.split())

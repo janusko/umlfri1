@@ -2,7 +2,6 @@ from lib.Depend.gtk2 import gtk
 from lib.Depend.gtk2 import gobject
 
 import lib.consts
-from lib.colors import invert
 from lib.config import config
 
 from common import CWidget, event
@@ -68,7 +67,7 @@ class CpicDrawingArea(CWidget):
         self.buffer = gtk.gdk.Pixmap(self.picDrawingArea.window, *self.buffer_size[1])
         self.Diagram = CDiagram(None,_("Start page"))
         cmap = self.picDrawingArea.window.get_colormap()
-        self.DragGC = self.picDrawingArea.window.new_gc(foreground = cmap.alloc_color(invert(config['/Styles/Drag/RectangleColor'])),
+        self.DragGC = self.picDrawingArea.window.new_gc(foreground = cmap.alloc_color(str(config['/Styles/Drag/RectangleColor'].Invert())),
             function = gtk.gdk.XOR, line_width = config['/Styles/Drag/RectangleWidth'])
 
         self.TARGETS = [
@@ -862,3 +861,22 @@ class CpicDrawingArea(CWidget):
             else:
                 self.Diagram.ShiftDeleteConnection(sel)
         self.Paint()
+
+    def HasFocus(self):
+        return self.picDrawingArea.is_focus()
+
+    def GetSelectionPixbuf(self):
+        (x, y), (sizeX, sizeY) = self.Diagram.GetSelectSquare(self.canvas)
+        # to do: shouldn't this be implemented in the diagram method in the first place ?
+        x = x * self.GetScale()
+        y = y * self.GetScale()
+        # 4 is the size of shadow -- do we have a constant or config value for this ?
+        sizeX = (sizeX + 4) * self.GetScale() 
+        sizeY = (sizeY + 4) * self.GetScale()
+        self.Diagram.PaintSelected(self.canvas)   
+       
+        pixbuf =  gtk.gdk.Pixbuf(gtk.gdk.COLORSPACE_RGB, True, 8, sizeX, sizeY)
+        pixbuf.get_from_drawable(self.buffer, self.buffer.get_colormap(), x, y, 0, 0, sizeX, sizeY)
+        self.Paint()
+        # lets assume that we have a white background... so white colour pixels will be fully transparent
+        return pixbuf.add_alpha(True, chr(255), chr(255),chr(255))

@@ -269,6 +269,7 @@ class CDiagram(Reference):
         return result
         
     def GetDrawable(self):
+        # wtf ?
         return self.drawable        
         
     def GetElementAtPosition(self, canvas, pos):
@@ -310,12 +311,26 @@ class CDiagram(Reference):
                 c.Paint(canvas, delta = (-x, -y))
             
     def PaintFull(self, canvas):
+        '''Paints the whole diagram. Used
+        for exporting.
+        '''               
         canvas.Clear()
         for e in self.elements:
             e.Paint(canvas)
         for c in self.connections:
             c.Paint(canvas)
-    
+        
+    def PaintSelected(self, canvas):
+        '''Paints _only_ selected items (elements + connections)
+        as if they were deselected. Used for pixbuf copying.
+        '''        
+        canvas.Clear()
+        old_selected =  self.selected
+        self.DeselectAll()
+        for e in old_selected:
+            e.Paint(canvas)
+            self.AddToSelection(e)
+ 
     def GetElements(self):
         for e in self.elements:
             yield e

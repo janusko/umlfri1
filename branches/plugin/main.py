@@ -16,7 +16,7 @@ import os.path
 from lib.Project import CProject
 from lib.Project import CRecentFiles
 
-from lib.Gui import CfrmSplash, CfrmMain, CfrmAbout, CfrmProperties, CfrmOpen, CfrmSave, CfrmOptions, CfrmException, CPluginAdapter, CBus
+from lib.Gui import CfrmSplash, CfrmMain, CfrmAbout, CfrmProperties, CfrmOpen, CfrmSave, CfrmOptions, CfrmException, CfrmExport, CPluginAdapter, CBus
 from lib.Gui.dialogs import CExceptionDialog
 
 from lib.config import config
@@ -26,10 +26,10 @@ from lib.Exceptions import UserException
 from lib.Plugin.Manager import CPluginManager
 from lib.Plugin import Reference
 
-__version__ = '1.0-beta20090309'
+__version__ = '1.0-beta20090601'
 
 class Application(CApplication):
-    windows = (CfrmSplash, CfrmMain, CfrmAbout, CfrmProperties, CfrmOpen, CfrmSave, CfrmOptions, CfrmException)
+    windows = (CfrmSplash, CfrmMain, CfrmAbout, CfrmProperties, CfrmOpen, CfrmSave, CfrmOptions, CfrmException, CfrmExport)
     glade = os.path.join(config['/Paths/Gui'], 'gui.glade')
     main_window = 'frmMain'
     textdomain = 'uml_fri'

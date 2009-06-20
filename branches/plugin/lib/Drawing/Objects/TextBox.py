@@ -1,19 +1,21 @@
 from VisualObject import CVisualObject
 import sys
+from lib.datatypes import CColor, CFont
 
 class CTextBox(CVisualObject):
-    def __init__(self, text, linestart = "", color = "black", font = "Arial 10"):
+    types = {
+        'text': unicode,
+        'color': CColor,
+        'font': CFont
+    }
+    def __init__(self, text, color = CColor("black"), font = CFont("Arial 10")):
         CVisualObject.__init__(self)
         self.text = text
-        self.linestart = linestart
         self.color = color
         self.font = font
 
     def ComputeSize(self, context):
         txt, font = self.GetVariables(context, 'text', 'font')
-        txt = unicode(txt)
-        font = font.split()
-        font = font[0], font[1:-1], int(font[-1])
         return context.GetCanvas().GetTextSize(txt, font)
 
     def Paint(self, context):
@@ -23,6 +25,4 @@ class CTextBox(CVisualObject):
         if shadowcolor is not None:
             color = shadowcolor
         
-        font = font.split()
-        font = font[0], font[1:-1], int(font[-1])
         context.GetCanvas().DrawText(context.GetPos(), txt, font, color)

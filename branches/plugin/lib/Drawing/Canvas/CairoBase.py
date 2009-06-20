@@ -4,7 +4,6 @@ from lib.Depend.gtk2 import cairo
 
 from lib.Exceptions.UserException import *
 from Abstract import CAbstractCanvas
-from lib import colors
 
 import os
 import sys
@@ -35,14 +34,15 @@ def PixmapFromPath(storage, path):
 def HexToRGB(hexcolor):
     #converts Hex colors(HTML format) to RGB, used to set fg, bg, font color
 
-    if not hexcolor[0] == '#': # if hexcolor is a word 
-        hexcolor = colors.colors[hexcolor]
-    hexcolor = hexcolor.strip()
-    hexcolor = hexcolor[1:]
-    if len(hexcolor) != 6:
-        raise DrawingError('Invalid hex color, use #RRGGBB format or color name.')
-    r, g, b = hexcolor[:2], hexcolor[2:4], hexcolor[4:]
-    r, g, b = [int(n, 16) for n in (r, g, b)]
+    #if not hexcolor[0] == '#': # if hexcolor is a word 
+    #    hexcolor = colors.colors[hexcolor]
+    #hexcolor = hexcolor.strip()
+    #hexcolor = hexcolor[1:]
+    #if len(hexcolor) != 6:
+    #    raise DrawingError('Invalid hex color, use #RRGGBB format or color name.')
+    #r, g, b = hexcolor[:2], hexcolor[2:4], hexcolor[4:]
+    #r, g, b = [int(n, 16) for n in (r, g, b)]
+    r, g, b = hexcolor.GetRed(), hexcolor.GetGreen(), hexcolor.GetBlue()
     return (float(r)/255, float(g)/255, float(b)/255)
 
 class CCairoBaseCanvas(CAbstractCanvas):
@@ -73,42 +73,24 @@ class CCairoBaseCanvas(CAbstractCanvas):
         if alpha >= 0.0 and alpha <= 1.0:
             self.alpha = alpha
 
-    def __SetFont(self, (family, style, size), returndesc = False):
-        underline = 'underline' in style
-        strikeout = 'strike' in style
-        font = [family]
+    def __SetFont(self, font, returndesc = False):
+        underline = 'underline' in font.GetStyle()
+        strikeout = 'strike' in font.GetStyle()
+        desc = [font.GetFamily()]
         # some (supported) font styles, append order is important
-        if 'Pitch' in style:
-            font.append('Pitch')
+        if 'bold' in font.GetStyle():
+            desc.append('Bold')
 
-        if 'Sans' in style:
-            font.append('Sans')
+        if 'italic' in font.GetStyle():
+            desc.append('Italic')
 
-        if 'Mono' in style:
-            font.append('Mono')
+        desc.append('%dpx'%font.GetSize())
+        desc = ' '.join(desc)
 
-        if 'Serif' in style:
-            font.append('Serif')
-
-        if 'Bold' in style:
-            font.append('Bold')
-
-        if 'Italic' in style:
-            font.append('Italic')
-
-        if 'Oblique' in style:
-            font.append('Oblique')
-
-        if 'Semi-Condensed' in style:
-            font.append('Semi-Condensed')
-
-        font.append(str(size)+'px')
-        font = ' '.join(font)
-
-        if font in self.fonts:
-            fontobj = self.fonts[font]
+        if desc in self.fonts:
+            fontobj = self.fonts[desc]
         else:
-            self.fonts[font] = fontobj = pango.FontDescription(font)
+            self.fonts[desc] = fontobj = pango.FontDescription(desc)
 
         if returndesc:
             return fontobj

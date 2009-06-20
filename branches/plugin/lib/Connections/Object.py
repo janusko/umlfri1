@@ -1,6 +1,7 @@
 from lib.Exceptions.UserException import *
 from lib.Domains import CDomainObject
 from lib.Plugin import Reference
+from Alias import CConnectionAlias
 import weakref
 
 class CConnectionObject(Reference):
@@ -12,7 +13,7 @@ class CConnectionObject(Reference):
         Initialize connection object
         
         @param type: Type of connection
-        @type  type: L{CConnectionType<Type.CConnectionType>}
+        @type  type: L{CConnectionType<Type.CConnectionType>} or L{CConnectionType<Type.CConnectionAlias>}
         
         @param source: Source element of connection
         @type  source: L{CElementObject<lib.Elements.Object.CElementObject>}
@@ -25,7 +26,10 @@ class CConnectionObject(Reference):
         self.__SetWeakDestination(None)
         self.revision = 0
         self.appears = []
-        self.type = type
+        if isinstance(type, CConnectionAlias):
+            self.type = type.GetAliasType()
+        else:
+            self.type = type
         self.SetSource(source)
         try:
             self.SetDestination(dest)
@@ -35,6 +39,9 @@ class CConnectionObject(Reference):
             self.__SetWeakSource(None)
             raise
         self.domainobject = CDomainObject(self.type.GetDomain())
+        if isinstance(type, CConnectionAlias):
+            for path, value in type.GetDefaultValues():
+                self.domainobject.SetValue(path, value)
     
     def __CheckRecursiveConnection(self):
         """
@@ -166,10 +173,10 @@ class CConnectionObject(Reference):
         @return: other object
         @rtype:  L{CElementObject<lib.Elements.Object.CElementObject>}
         """
-        if self.GetWeakSource is object:
-            return self.GetWeakDestination
-        elif self.GetWeakDestination is object:
-            return self.GetWeakSource
+        if self.GetSource() is object:
+            return self.GetDestination()
+        elif self.GetDestination() is object:
+            return self.GetSource()
         else:
             return None
         
@@ -261,7 +268,7 @@ class CConnectionObject(Reference):
         Paint self on canvas
         
         @param context: context in which is connection being drawn
-        @type  context: L{CDrawingContext<lib.Drawing.DrawingContext.CDrawingContext>}
+        @type  context: L{CDrawingContext<lib.Drawing.Context.DrawingContext.CDrawingContext>}
         """
         self.type.Paint(context)
     
@@ -270,6 +277,9 @@ class CConnectionObject(Reference):
     
     def GetDomainType(self, key=''):
         return self.domainobject.GetType(key)
+    
+    def GetDomainObject(self):
+        return self.domainobject
     
     def GetValue(self, key):
         return self.domainobject.GetValue(key)
@@ -283,9 +293,6 @@ class CConnectionObject(Reference):
     
     def SetSaveInfo(self, value):
         return self.domainobject.SetSaveInfo(value)
-        
-    def GetVisualProperty(self, key):
-        return self.domainobject.GetValue(key)
     
     def HasVisualAttribute(self, key):
         return self.domainobject.HasVisualAttribute(key)

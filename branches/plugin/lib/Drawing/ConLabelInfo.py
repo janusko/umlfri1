@@ -1,7 +1,7 @@
 from lib.Math2D import CPoint, CPolyLine, CLine
 from math import pi, sqrt
 from CacheableObject import CCacheableObject
-from DrawingContext import CDrawingContext
+from Context import CDrawingContext
 from lib.Plugin import Reference
 import weakref
 

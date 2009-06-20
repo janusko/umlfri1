@@ -24,7 +24,7 @@ if HAVE_LXML:
 
 
 class CProject(object):
-    SaveVersion = '1.0' # save file format version
+    SaveVersion = (1, 0) # save file format version
     
     def __init__(self, app):
         self.root = None
@@ -216,7 +216,7 @@ class CProject(object):
         
         elements, connections = self.searchCE(self.root)
         
-        rootNode = etree.XML('<umlproject saveversion="%s" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/umlproject.xsd"></umlproject>'%self.SaveVersion)
+        rootNode = etree.XML('<umlproject saveversion="%s" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/umlproject.xsd"></umlproject>'%('.'.join(str(i) for i in self.SaveVersion)))
         
         metamodelNode = etree.Element(UMLPROJECT_NAMESPACE+'metamodel')
         objectsNode = etree.Element(UMLPROJECT_NAMESPACE+'objects')
@@ -357,6 +357,11 @@ class CProject(object):
         if HAVE_LXML:
             if not xmlschema.validate(root):
                 raise XMLError(xmlschema.error_log.last_error)
+        
+        savever = tuple(int(i) for i in root.get('saveversion').split('.'))
+        
+        if savever > self.SaveVersion:
+            raise ProjectError("this version of UML .FRI cannot open this file")
         
         for element in root:
             if element.tag == UMLPROJECT_NAMESPACE+'metamodel':
