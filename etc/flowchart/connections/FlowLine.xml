@@ -8,10 +8,10 @@
         
         <Label position="center">
             <HBox>
-                <Condition condition="#name">
+                <Condition condition="#self.name">
                     <Align align="center">
                         <Rectangle fill="#cfg.Styles.Connection.TextFill">
-                            <TextBox text="#name" font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>
+                            <TextBox text="#self.name" font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>
                         </Rectangle>
                     </Align>
                 </Condition>

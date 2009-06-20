@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ElementType id="Note" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
     <Icon path="icons/Note.png" />
-    <Domain id="Note" identity="name" />
+    <Domain id="Note"/>
     <Connections>
         <Item value="Note Link" with="*"/>
     </Connections>
