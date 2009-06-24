@@ -3,6 +3,7 @@ from lib.Exceptions.UMLException import UMLException
 from lib.config import config
 import Connection, Element, ConLabelInfo
 import lib.Math2D
+import operator
 from lib.Math2D import CRectangle
 from lib.Math2D import CPoint
 
@@ -297,6 +298,20 @@ class CDiagram:
     def Paint(self, canvas):
         ((x, y), (w, h)) = self.viewport
         canvas.Clear()
+        var = set([])
+        for e in self.elements:#here is created a set of layer values
+            var.add(int(e.GetObject().GetType().GetOptions().get('Layer', 0)))
+        var=list(var)
+        var.sort()#sorted list of layer values
+        num=0
+        for k in var:
+            for e in self.elements:#elements are ordered depending on their layer (if they have one or their layer is set to default value)
+                if(int(e.GetObject().GetType().GetOptions().get('Layer',0))==k):
+                    if not isinstance(e, ConLabelInfo.CConLabelInfo):
+                        selectedIdx = self.elements.index(e)
+                        del self.elements[selectedIdx]
+                        self.elements.insert(num, e);
+                        num+=1
         for e in self.elements:
             ((ex1, ey1), (ex2, ey2)) = e.GetSquare(canvas)
             if not (ex2 < x or x + w < ex1 or ey2 < y or y + w < ey1):
