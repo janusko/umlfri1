@@ -15,5 +15,6 @@
         </Rectangle>
     </Appearance>
     <Options>
+        <Layer>-1</Layer>
     </Options>
 </ElementType>
