@@ -11,4 +11,9 @@
         <Version>0.0.1</Version>
         <Path>&apppath;/etc/flowchart/</Path>
     </Metamodel>
+    <Metamodel>
+        <Uri>http://umlfri.kst.fri.uniza.sk/metamodel/dfd.frim</Uri>
+        <Version>0.0.1</Version>
+        <Path>&apppath;/etc/dfd/</Path>
+    </Metamodel>
 </Metamodels>
