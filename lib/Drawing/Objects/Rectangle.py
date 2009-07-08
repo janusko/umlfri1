@@ -12,7 +12,7 @@ cornerDefs = {
 sideDefs = {
     'rounded': 'M 0,0 C -0.554,0 -1,-0.223 -1,-0.5 C -1,-0.777 -0.554,-1 0,-1',
     'sidelong' : 'M -1,0 L 0,-1',
-    'beak' : 'M 0,-1 L -1,-0.5 L 0,0'    
+    'beak' : 'M 0,-1 L -1,-0.5 L 0,0'
 }
 
 class CRectangle(CSimpleContainer):
