@@ -3,9 +3,13 @@
     <Icon path="icons/logodfd.png" />
     <Special swimlines="0" lifelines="0" />
     <Elements>
-
+	<Item value="Function"/>
+	<Item value="InputOutput"/>
+	<Item value="FileDatabase"/>
+	<Item value="Note"/>
     </Elements>
     <Connections>
-
+	<Item value="FlowLine"/>
+	<Item value="NoteLink"/>
     </Connections>
 </DiagramType>
