@@ -6,8 +6,8 @@
         <Item value="FlowLine"/>
     </Connections>
     <Appearance>
-	<HBox expand="1">
-	    <Line />
+        <HBox expand="1">
+            <Line />
             <Rectangle fill="#cfg.Styles.Element.FillColor">
                 <Sizer minheight="50" minwidth="100">
                     <Padding padding="5">             
@@ -17,7 +17,7 @@
                     </Padding>    
                 </Sizer>
             </Rectangle>
-	    <Line />
+            <Line />
         </HBox> 
     </Appearance>
     <Options>

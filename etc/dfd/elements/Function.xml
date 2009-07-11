@@ -10,9 +10,9 @@
             <Ellipse fill="#cfg.Styles.Element.FillColor" border="#cfg.Styles.Element.LineColor">
                 <Proportional ratio="1:1" align="center center">
                     <Padding padding="20">
-			<Align align="center center">
-                                <TextBox text="#self.functionname" font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/>
-			</Align>
+                        <Align align="center center">
+                            <TextBox text="#self.functionname" font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/>
+                        </Align>
                     </Padding>
                 </Proportional>
             </Ellipse>

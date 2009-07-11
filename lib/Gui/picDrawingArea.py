@@ -500,12 +500,11 @@ class CpicDrawingArea(CWidget):
             event.keyval not in (gtk.keysyms.Right, gtk.keysyms.Left, gtk.keysyms.Up, gtk.keysyms.Down)):
             return True
         self.pressedKeys.add(event.keyval)
-	if (event.keyval==gtk.keysyms.a) : 
-	    if event.state == gtk.gdk.CONTROL_MASK: #zaroven drzim Control
-		self.Diagram.SelectAll() #oznacenie vsetkych elementov diagramu
-		self.emit('selected-item', list(self.Diagram.GetSelected()))
-		self.Paint()
-        if event.keyval == gtk.keysyms.Delete:
+        if event.keyval==gtk.keysyms.a and event.state == gtk.gdk.CONTROL_MASK:
+            self.Diagram.SelectAll()
+            self.emit('selected-item', list(self.Diagram.GetSelected()))
+            self.Paint()
+        elif event.keyval == gtk.keysyms.Delete:
             if event.state == gtk.gdk.SHIFT_MASK:
                 for sel in self.Diagram.GetSelected():
                     if isinstance(sel, Element.CElement):

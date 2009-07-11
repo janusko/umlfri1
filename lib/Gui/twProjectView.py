@@ -35,16 +35,13 @@ class CtwProjectView(CWidget):
     def __init__(self, app, wTree):
         CWidget.__init__(self, app, wTree)
         
-        # vytvorime si model
         self.TreeStore = gtk.TreeStore(str, gtk.gdk.Pixbuf, str, object)
         self.EventButton = (0,0)
         
-        #spravime jeden column
         self.Column = gtk.TreeViewColumn(_('Elements'))
         self.twProjectView.append_column(self.Column)
         self.twProjectView.set_reorderable(True)
         
-        #nastavime renderer
         self.StrRenderer = gtk.CellRendererText()
         self.PbRenderer = gtk.CellRendererPixbuf()
         
@@ -55,7 +52,6 @@ class CtwProjectView(CWidget):
             
         
         self.twProjectView.set_model(self.TreeStore)
-        #povolenie oznacit jeden prvkov
         self.twProjectView.get_selection().set_mode(gtk.SELECTION_SINGLE)
         
         self.TARGETS = [

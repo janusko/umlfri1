@@ -177,9 +177,6 @@ class PathSingle(object):
     
     def __iter__(self):
         return (point for part in self.path for point in part)
-        #for part in self.path:
-        #    for point in part:
-        #        yield point
     
     def __getitem__(self, index):
         if type(index) is slice:
@@ -334,8 +331,6 @@ class Path(object):
     
     def __iter__(self):
         return (single for single in self.path)
-        #for single in self.path:
-        #    yield single
     
     def __str__(self):
         return ' '.join([str(i) for i in self.path])
