@@ -81,7 +81,6 @@ class CElement(CVisibleObject):
                     yield c2
 
     
-    # Vrati poziciu obvodoveho(resizing) stvorceka na pozicii
     def GetSquareAtPosition(self, pos):
         x, y = pos
         for sq in self.squares:
@@ -92,7 +91,6 @@ class CElement(CVisibleObject):
             if (x >= sqbx and x <= sqex and y >= sqby and y <= sqey):
                 return sq[0]
     
-    # Zmena velkosti(pripadne pozicie) elementu
     def Resize(self, canvas, delta, selSquareIdx):
         resRect = self.GetResizedRect(canvas, delta, selSquareIdx)
         minSize = self.GetMinimalSize(canvas)
@@ -105,9 +103,6 @@ class CElement(CVisibleObject):
     def SetSizeRelative(self, relatSize):
         self.deltaSize = relatSize
     
-    # Zistenie novej polohy a velkosti pri resizingu
-        # delta = relativna zmena velkosti
-        # selSquareIdx = index uchytavacieho-resizovacieho bodu
     def GetResizedRect(self, canvas, delta, mult):
         pos = list(self.GetPosition())
         size = list(self.GetSize(canvas))

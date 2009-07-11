@@ -73,7 +73,6 @@ class CProjectNode(object):
     
     def MoveDiagramToNewNode(self, newNode, diagram):
         self.RemoveDiagram(diagram)
-        #newNode.AddDiagram(diagram)
         newNode.diagrams.append(diagram)
     
     def MoveNode(self, parentNode):

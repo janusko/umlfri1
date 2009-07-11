@@ -21,8 +21,8 @@
                                 <TextBox text=" " font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/> 
                                 <TextBox text="#self.endvalue" font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/>                                
                             </VBox>
-                        </Align>        
-                    </Padding>    				
+                        </Align>
+                    </Padding>
                 </Sizer>
             </Rectangle>
         </Shadow>
