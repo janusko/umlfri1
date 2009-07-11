@@ -375,7 +375,7 @@ class CProject(object):
                 
                 if not uri or not version:
                     raise XMLError("Bad metamodel definition")
-                self.__metamodel = self.__metamodelManager.GetMetamodel(uri, version)
+                self.__metamodel = self.__metamodelManager.GetMetamodel(uri, version, filename)
             elif element.tag == UMLPROJECT_NAMESPACE+'objects':
                 for subelem in element:
                     if subelem.tag == UMLPROJECT_NAMESPACE+'object':
