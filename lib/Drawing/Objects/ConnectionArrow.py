@@ -33,19 +33,19 @@ class CConnectionArrow(CVisualObject):
         self.size = size
         self.color = color
         self.index = index
-        if direction is None:
-            if index == 0:
-                self.direction = 'rev'
-            else:
-                self.direction = 'fwd'
-        else:
-            self.direction = direction
+        self.direction = direction
 
     def ComputeSize(self, context):
         return 0, 0
 
     def Paint(self, context):
         index, direction, style, fill, size, color = self.GetVariables(context, 'index', 'direction', 'style', 'fill', 'size', 'color')
+        
+        if direction is None:
+            if index == 0:
+                direction = 'rev'
+            else:
+                direction = 'fwd'
         
         points = list(context.GetPoints())
         last = len(points) - 1
