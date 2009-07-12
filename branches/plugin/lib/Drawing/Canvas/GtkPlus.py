@@ -15,10 +15,17 @@ def PixmapFromPath(storage, path):
         tmp = pixmaps[(storage, path)]
     else:
         if storage is None:
-            pathx = path
+            tmp = gtk.gdk.pixbuf_new_from_file(unicode(path))
         else:
-            pathx = storage.get_file_path(path)
-        tmp = gtk.gdk.pixbuf_new_from_file(unicode(pathx))
+            pathx = storage.file(path)
+            loader = gtk.gdk.PixbufLoader()
+            while True:
+                tmp = pathx.read(102400)
+                if not tmp:
+                    break
+                loader.write(tmp)
+            loader.close()
+            tmp = loader.get_pixbuf()
         pixmaps[(storage, path)] = tmp
     return tmp
 

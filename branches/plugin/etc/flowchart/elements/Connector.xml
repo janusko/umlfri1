@@ -8,13 +8,11 @@
     <Appearance>
         <Shadow padding="3" color="#cfg.Styles.Element.ShadowColor">
             <Ellipse fill="#cfg.Styles.Element.FillColor" border="#cfg.Styles.Element.LineColor">
-                <Proportional ratio="1:1" align="center center" size="minimal">
+                <Proportional ratio="1:1" align="center center">
                     <Padding padding="20">
-                        <HBox>
                             <Align align="center center">
                                 <TextBox text="#self.connectorid" font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/>
                             </Align>
-                        </HBox>
                     </Padding>
                 </Proportional>
             </Ellipse>

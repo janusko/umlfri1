@@ -18,7 +18,10 @@ class CWidget(CGuiObject):
                 raise Exception, '%s cannot be used in %s (allready used in %s)'%(widgetName, self.__class__.__name__, self.__allWidgets[widgetName])
             else:
                 self.__allWidgets[widgetName] = self.__class__.__name__
-            setattr(self, widgetName, wTree.get_widget(widgetName))
+            obj = wTree.get_widget(widgetName)
+            if obj is None:
+                raise Exception, '%s could not be loaded'%(widgetName, )
+            setattr(self, widgetName, obj)
         for widgetClass in self.complexWidgets:
             setattr(self, widgetClass.name, widgetClass(app, wTree))
         

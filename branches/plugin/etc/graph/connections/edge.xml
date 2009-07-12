@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ConnectionType id="edge" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Icon path="icons/edge.png" />
+    <Domain id="edge" />
+    
+    <Appearance>
+        <ConnectionLine style="solid" color="black" />
+        <Condition condition="#self.directed">
+            <ConnectionArrow index="#(0 if self.reversed else -1)" style="simple" color="red" fill="red" />
+        </Condition>
+        <Label position="center">
+            <Rectangle fill="white">
+                <TextBox text="#self.value" color="black" font="Arial 20" />
+            </Rectangle>
+        </Label>
+    </Appearance>
+</ConnectionType>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Domain id="node" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" >
+    <Attribute id="shortest" type="float" name="shortest" hidden="true" default="inf" />
+    <Attribute id="previous" type="str" name="previous" hidden="true" />
+    <Attribute id="final" type="bool" name="final" hidden="true" />
+    <Attribute id="current" type="bool" name="current" hidden="true" />
+</Domain>

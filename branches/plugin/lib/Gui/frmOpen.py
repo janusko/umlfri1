@@ -95,12 +95,16 @@ class CfrmOpen(common.CWindow):
         self.fwOpenExisting.set_current_folder_uri(self.fwOpenExisting.get_current_folder_uri())
         
         self.ivOpenModel.clear()
-        for filename in os.listdir(config['/Paths/Templates']):
+        templates = []
+        for dirname in (config['/Paths/Templates'], config['/Paths/UserTemplates']):
+            if os.path.exists(dirname):
+                templates.extend((dirname, filename) for filename in os.listdir(dirname))
+        for dirname, filename in templates:
             if filename.endswith(lib.consts.PROJECT_TPL_EXTENSION):
                 iter = self.ivOpenModel.append()
                 self.ivOpenModel.set(iter, 0, filename[:-len(lib.consts.PROJECT_TPL_EXTENSION)],
-                                           1, self.__GetIcon(os.path.join(config['/Paths/Templates'], filename)),
-                                           2, os.path.join(config['/Paths/Templates'], filename))
+                                           1, self.__GetIcon(os.path.join(dirname, filename)),
+                                           2, os.path.join(dirname, filename))
         
         self.__ReloadOpenRecentList()
         self.form.set_transient_for(parent.form)

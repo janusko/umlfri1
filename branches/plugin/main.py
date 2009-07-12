@@ -133,7 +133,7 @@ class Application(CApplication):
                 if os.name == 'nt': 
                     os.system('start /B pl_runner.py %i %s' % (self.pluginManager.GetPort(), item))
                 else:
-                    os.system('./pl_runner.py %i %s &' % (self.pluginManager.GetPort(), item))
+                    os.system(config['/Paths/Root'] + 'pl_runner.py %i %s &' % (self.pluginManager.GetPort(), item))
 
 if __name__ == '__main__':
     gobject.threads_init()

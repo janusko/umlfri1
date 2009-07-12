@@ -12,8 +12,13 @@
         <Path>&apppath;/etc/flowchart/</Path>
     </Metamodel>
     <Metamodel>
-        <Uri>http://umlfri.kst.fri.uniza.sk/metamodel/graph.frim</Uri>
+        <Uri>http://umlfri.kst.fri.uniza.sk/metamodel/graphTheory.frim</Uri>
         <Version>0.0.1</Version>
         <Path>&apppath;/etc/graph/</Path>
+    </Metamodel>
+    <Metamodel>
+        <Uri>http://umlfri.kst.fri.uniza.sk/metamodel/dfd.frim</Uri>
+        <Version>0.0.1</Version>
+        <Path>&apppath;/etc/dfd/</Path>
     </Metamodel>
 </Metamodels>

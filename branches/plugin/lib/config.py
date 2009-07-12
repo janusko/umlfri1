@@ -58,6 +58,7 @@ types = {
     "/Paths/UserDir": path_type,
     "/Paths/UserConfig": path_type,
     "/Paths/UserMetamodelList": path_type,
+    "/Paths/UserTemplates": path_type,
     "/Paths/RecentFiles": path_type,
     "/Paths/UserGui": path_type,
     "/Paths/Plugins": path_type,

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <glade-interface>
-  <!-- interface-requires gtk+ 2.16 -->
-  <!-- interface-naming-policy toplevel-contextual -->
+<!-- interface-requires gtk+ 2.16 -->
+<!-- interface-naming-policy toplevel-contextual -->
   <widget class="GtkWindow" id="frmMain">
     <property name="width_request">640</property>
     <property name="height_request">480</property>
@@ -1240,7 +1240,8 @@ application. You too can contribute in many ways:
 * Report us your wishes or desired features.
 * Join our development team.
 * Contribute art work, like new icons, logos.
-* Translate
+* Help us with localization to other languages.
+
 &lt;i&gt;Visit our web page for more information. &lt;/i&gt;</property>
                         <property name="use_markup">True</property>
                         <property name="wrap">True</property>
@@ -3691,7 +3692,7 @@ Protected</property>
             <property name="layout_style">end</property>
             <child>
               <widget class="GtkButton" id="cmdDefaultOptions">
-                <property name="label" translatable="yes">gtk-revert-to-saved</property>
+                <property name="label">gtk-revert-to-saved</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -4045,7 +4046,7 @@ Protected</property>
             </child>
             <child>
               <widget class="GtkButton" id="btnReport">
-                <property name="label" translatable="yes">gtk-home</property>
+                <property name="label">gtk-home</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -4059,7 +4060,7 @@ Protected</property>
             </child>
             <child>
               <widget class="GtkButton" id="btnCancel">
-                <property name="label" translatable="yes">gtk-close</property>
+                <property name="label">gtk-close</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -4539,7 +4540,7 @@ Protected</property>
             <property name="layout_style">edge</property>
             <child>
               <widget class="GtkButton" id="btnCancelExport">
-                <property name="label" translatable="yes">gtk-cancel</property>
+                <property name="label">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>

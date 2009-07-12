@@ -40,6 +40,8 @@ class CGuiManager(object):
                 if mtype == 'ImageMenuItem':
                     if 'stock_id' in params:
                         item = gtk.ImageMenuItem(stock_id = params['stock_id'])
+                        if 'text' in params:
+                            item.set_label(params['text'])
                     else:
                         item = gtk.ImageMenuItem(params['text'])
                         image = gtk.Image()
@@ -55,6 +57,8 @@ class CGuiManager(object):
             elif mtype == 'ToolButton':
                 if 'stock_id' in params:
                     item = gtk.ToolButton(params['stock_id'])
+                    if 'text' in params:
+                        item.set_label(params['text'])
                 else:
                     if 'filename' in params:
                         image = gtk.Image()

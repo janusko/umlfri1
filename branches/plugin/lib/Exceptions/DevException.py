@@ -43,3 +43,6 @@ class UnknowMethodError(PluginCommunicationError):
 
 class UnknownClassNameError(PluginCommunicationError):
     pass
+
+class MetamodelValidationError(DevException):
+    pass
