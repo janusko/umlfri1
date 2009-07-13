@@ -1102,6 +1102,7 @@
   </widget>
   <widget class="GtkDialog" id="frmAbout">
     <property name="title" translatable="yes">About</property>
+    <property name="modal">True</property>
     <property name="window_position">center</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -2272,6 +2273,7 @@ Protected</property>
   </widget>
   <widget class="GtkDialog" id="frmOpen">
     <property name="title" translatable="yes">Open Project</property>
+    <property name="modal">True</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <widget class="GtkVBox" id="dialog-vbox6">
@@ -2623,6 +2625,7 @@ Protected</property>
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Preferences</property>
+    <property name="modal">True</property>
     <property name="window_position">center-on-parent</property>
     <property name="default_width">300</property>
     <property name="default_height">200</property>
@@ -3750,6 +3753,7 @@ Protected</property>
   <widget class="GtkDialog" id="frmException">
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Exception handler</property>
+    <property name="modal">True</property>
     <property name="window_position">center-on-parent</property>
     <property name="type_hint">dialog</property>
     <property name="has_separator">False</property>
@@ -4372,6 +4376,7 @@ Protected</property>
   <widget class="GtkDialog" id="frmExport">
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Diagram Export</property>
+    <property name="modal">True</property>
     <property name="window_position">center-on-parent</property>
     <property name="type_hint">dialog</property>
     <property name="has_separator">False</property>
