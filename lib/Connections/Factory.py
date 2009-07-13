@@ -1,5 +1,3 @@
-from lib.Depend.etree import etree, HAVE_LXML
-
 import os
 import os.path
 from lib.Exceptions.DevException import *
@@ -9,60 +7,14 @@ from lib.consts import METAMODEL_NAMESPACE
 from lib.Drawing.Objects import ALL, ALL_CONNECTION, CContainer, CSimpleContainer
 from lib.Drawing.Context import BuildParam
 from lib.config import config
+from lib.Generic import CGenericFactory
 
-#if lxml.etree is imported successfully, we use xml validation with xsd schema
-if HAVE_LXML:
-    xmlschema_doc = etree.parse(os.path.join(config['/Paths/Schema'], "metamodel.xsd"))
-    xmlschema = etree.XMLSchema(xmlschema_doc)
-
-
-class CConnectionFactory(object):
+class CConnectionFactory(CGenericFactory):
     """
     Creates connection types from metamodel XMLs
     """
-    def __init__(self, storage, path, domainfactory):
-        """
-        Parse metamodel XMLs and creates connection types
-        
-        @param storage: Storage in which is file located
-        @type  storage: L{CAbstractStorage<lib.Storages.AbstractStorage.CAbstractStorage>}
-        
-        @param path: Path to directory with connection metamodel XMLs
-        @type path: string
-        """
-        self.types = {}
-        self.path = path
-        self.domainfactory = domainfactory
-        
-        self.storage = storage
-        for file in storage.listdir(self.path):
-            if file.endswith('.xml'):
-                self.__Load(os.path.join(self.path, file))
-
-    def GetConnection(self, type):
-        """
-        Gets connection type by its name
-        
-        @param type: Name of connection type
-        @type  type: string
-        
-        @return: Connection type of given name
-        @rtype:  L{CConnectionType<Type.CConnectionType>}
-        """
-        if not type in self.types:
-            raise FactoryError('unrecognized connectionType name "%s"' % type)
-        return self.types[type]
     
-    def IterTypes(self):
-        '''
-        iterator over connection types
-        
-        @rtype: L{CConnectionType<CConnectionType>}
-        '''
-        for type in self.types.itervalues():
-            yield type
-            
-    def __Load(self, file_path):
+    def Load(self, root):
         """
         Load an XMLs from given path
         
@@ -70,20 +22,15 @@ class CConnectionFactory(object):
         @type  file_path: string
         """
         
-        root = etree.XML(self.storage.read_file(file_path))
-
-        #xml (version) file is validate with xsd schema (metamodel.xsd)
-        if HAVE_LXML:
-            if not xmlschema.validate(root):
-                raise FactoryError("XMLError", xmlschema.error_log.last_error)
-
         if root.tag == METAMODEL_NAMESPACE + 'ConnectionType':
             self.__LoadType(root)
         elif root.tag == METAMODEL_NAMESPACE + 'ConnectionAlias':
             self.__LoadAlias(root)
     
+    
     def __LoadAlias(self, root):
         obj = CConnectionAlias(self, root.get('id'), root.get('alias'))
+        self._AddType(root.get('id'), obj)
         
         for element in root:
             if element.tag == METAMODEL_NAMESPACE + 'Icon':
@@ -93,7 +40,6 @@ class CConnectionFactory(object):
                 for item in element:
                     obj.SetDefaultValue(item.get('path'), item.get('value'))
         
-        self.types[root.get('id')] = obj
     
     def __LoadType(self, root):
         id = root.get('id')
@@ -119,10 +65,10 @@ class CConnectionFactory(object):
                         labels.append((child.get('position'), self.__LoadLabelAppearance(child[0])))
                     else:
                         visualObj.AppendChild(self.__LoadAppearance(child))
-
-        tmp = self.types[id] = CConnectionType(id, visualObj, icon, domain, identity)
+        obj = CConnectionType(id, visualObj, icon, domain, identity)
+        self._AddType(root.get('id'), obj)
         for pos, lbl in labels:
-            tmp.AddLabel(pos, lbl)
+            obj.AddLabel(pos, lbl)
     
     def __LoadAppearance(self, root):
         """

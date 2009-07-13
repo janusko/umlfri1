@@ -12,8 +12,8 @@
                     <Padding padding="10"> 
                         <Align align="center center">                        
                             <TextBox text="#self.variable" font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/>                         
-                        </Align>        
-                    </Padding>    				
+                        </Align>
+                    </Padding>
                 </Sizer>
             </Rectangle>
         </Shadow>

@@ -24,9 +24,9 @@ def PixmapFromPath(storage, path):
         if storage is None:
             pathx = path
         else:
-            pathx = storage.get_file_path(path)
+            pathx = storage.file(path)
 
-        tmp = cairo.ImageSurface.create_from_png(unicode(pathx).encode(sys.getfilesystemencoding()))
+        tmp = cairo.ImageSurface.create_from_png(pathx)
         pixmaps[(storage, path)] = tmp
 
     return tmp

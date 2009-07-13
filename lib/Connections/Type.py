@@ -1,11 +1,12 @@
 from math import atan2
 from lib.Exceptions.UserException import *
+from lib.Generic import CIconType, CVisualType
 
-class CConnectionType(object):
+class CConnectionType(CIconType, CVisualType):
     """
     Contains part of metamodel that represents connection type
     """
-    def __init__(self, id, appearance, icon = None, domain = None, identity = None):
+    def __init__(self, id, appearance, icon = None, identity = None):
         """
         Initialize connection type and fill its properties
         
@@ -18,55 +19,9 @@ class CConnectionType(object):
         @param identity: Name of property acting as unique identifier of connection
         @type  identity: string
         """
-        self.id = id
-        self.icon = icon
+        CIconType.__init__(self, id, icon)
+        CVisualType.__init__(self, id, identity, appearance)
         self.labels = []
-        self.domain = domain
-        self.identity = identity
-        self.appearance = appearance
-    
-    def GetDomain(self):
-        '''
-        @return: current domain type
-        @rtype: L{CDomainType<lib.Domain.Type.CDomainType>}
-        '''
-        return self.domain
-    
-    def SetDomain(self, domain):
-        '''
-        Set current domain type
-        
-        @param domain: new domain type
-        @type domain: L{CDomainType<lib.Domain.Type.CDomainType>}
-        '''
-        self.domain = domain
-    
-    def GetConnectionIdentity(self):
-        '''
-        Determine connection identity
-        
-        @return: Name of property acting as unique identifier of connection
-        @rtype: L{CDomainType<lib.Domain.Type.CDomainType>}
-        '''
-        return self.identity
-    
-    def SetDomain(self, identity):
-        '''
-        Change identity of connection
-        
-        @param identity: Name of property acting as unique identifier of connection
-        @type identity: string
-        '''
-        self.identity = identity
-    
-    def SetIcon(self, value):
-        """
-        Set icon path to new value
-        
-        @param value: icon path
-        @type  value: string
-        """
-        self.icon = value
     
     def AddLabel(self, position, label):
         """
@@ -95,33 +50,6 @@ class CConnectionType(object):
         else:
             raise ConnectionError("LabelNotExists")
     
-    def GetIcon(self):
-        """
-        Get the icon of this connection
-        
-        @return: icon path within metamodel storage
-        @rtype:  string
-        """
-        return self.icon
-    
-    def GetId(self):
-        """
-        Return name (Id) of this connection type
-        
-        @return: name of connection
-        @rtype:  string
-        """
-        return self.id
-
-    def Paint(self, context):
-        """
-        Paint connection of given type on canvas
-        
-        @param context: context in which is connection being drawn
-        @type  context: L{CDrawingContext<lib.Drawing.Context.DrawingContext.CDrawingContext>}
-        """
-        self.appearance.Paint(context)
-    
     def GetLabels(self):
         """
         Get list of all labels on this connection type
@@ -144,11 +72,3 @@ class CConnectionType(object):
         """
         return self.labels[idx]
     
-    def HasVisualAttribute(self, name):
-        '''
-        @note: This is fake function for interface compatibility reasons
-        
-        @return: True if name points to anything but "text" domain attribute
-        @rtype: bool
-        '''
-        return self.GetDomain().GetAttribute(name)['type'] != 'text'
