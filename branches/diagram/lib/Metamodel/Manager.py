@@ -15,16 +15,24 @@ if HAVE_LXML:
 class CMetamodelManager(object):
     def __init__(self):
         self.__metamodels = {}
-        self.__LoadList(config['/Paths/MetamodelList'])
+        self.__metamodels.update(self.__LoadList(file(config['/Paths/MetamodelList'])))
         if os.path.exists(config['/Paths/UserMetamodelList']):
-            self.__LoadList(config['/Paths/UserMetamodelList'])
+            self.__metamodels.update(self.__LoadList(file(config['/Paths/UserMetamodelList'])))
     
-    def GetMetamodel(self, uri, version):
+    def GetMetamodel(self, uri, version, project_file = None):
+        if project_file is not None:
+            storage = open_storage(project_file)
+            if storage and storage.exists('metamodels.xml'):
+                metamodels = self.__LoadList(storage.file('metamodels.xml'))
+                if (uri, version) in metamodels:
+                    storage = open_storage(os.path.join(project_file, metamodels[(uri, version)]))
+                    return self.__LoadMetamodel(storage)
         storage = open_storage(self.__metamodels[(uri, version)])
         return self.__LoadMetamodel(storage)
     
-    def __LoadList(self, path):
-        root = etree.XML(file(path).read())
+    def __LoadList(self, file):
+        root = etree.XML(file.read())
+        metamodels = {}
         
         for node in root:
             uri = None
@@ -37,7 +45,8 @@ class CMetamodelManager(object):
                     version = info.text
                 elif info.tag == METAMODEL_LIST_NAMESPACE+'Path':
                     path = os.path.expanduser(info.text.replace(u'\xFF', ROOT_PATH))
-            self.__metamodels[(uri, version)] = path
+            metamodels[(uri, version)] = path
+        return metamodels
     
     def __LoadMetamodel(self, storage):
         root = etree.XML(storage.read_file(METAMODEL_PATH))

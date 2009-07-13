@@ -1,9 +1,10 @@
 import re
 from Object import CDomainObject
+from lib.Generic.GenericType import CGenericType
 from lib.Exceptions import DomainTypeError
 import weakref
 
-class CDomainType(object):
+class CDomainType(CGenericType):
     '''
     @cvar ATOMIC: list of names of atomic attribute types
     @ivar name: name/id of domain
@@ -16,15 +17,16 @@ class CDomainType(object):
     
     ATOMIC = 'int', 'float', 'str', 'text', 'bool', 'enum', 'list'
     
-    def __init__(self, name, factory):
+    def __init__(self, id, factory):
         '''
-        @param name: Domain identifier
-        @type name: str
+        @param id: Domain identifier
+        @type id: str
 
         @param factory: domain factory that already loaded all the domains
         @type factory: L{CDomainFactory<Factory.CDomainFactory>}
         '''
-        self.name = name
+        
+        CGenericType.__init__(self, id)
         self.imports = []
         self.attributes = {}
         self.factory = weakref.ref(factory)
@@ -60,7 +62,7 @@ class CDomainType(object):
         
         if type is not None and type not in self.ATOMIC and type not in self.imports:
             raise DomainTypeError('Used type "%s" is not imported '
-                'in definition of "%s.%s"'%(type, self.name, id))
+                'in definition of "%s.%s"'%(type, self.GetId(), id))
         
         self.attributes[id] = {'name': name, 'type':type, 'default': default}
         self.attributeorder.append(id)
@@ -124,7 +126,7 @@ class CDomainType(object):
         if type is not None:
             if type not in self.ATOMIC and type not in self.imports:
                 raise DomainTypeError('Used type "%s" is not imported '
-                    'in list definition of "%s.%s"'%(type, self.name, id))
+                    'in list definition of "%s.%s"'%(type, self.GetId(), id))
             list['type'] = type
         if parser is not None:
             list['parser'] = parser
@@ -155,11 +157,11 @@ class CDomainType(object):
         '''
         for imported in self.imports:
             if name == imported: 
-                return self.name + ' - ' + name
+                return self.GetId() + ' - ' + name
             else:
                 result = self.GetFactory().GetDomain(imported).__InnerImportLoop(name)
                 if result:
-                    return self.name + ' - ' + result
+                    return self.GetId() + ' - ' + result
         return False
 
     def HasImportLoop(self):
@@ -167,7 +169,7 @@ class CDomainType(object):
         @return: False if no loop detected, string with loop description otherwise
         @rtype: bool / str
         '''
-        return self.__InnerImportLoop(self.name)
+        return self.__InnerImportLoop(self.GetId())
     
     def EmptyTypes(self):
         '''
@@ -196,16 +198,16 @@ class CDomainType(object):
         for id, info in self.attributes.iteritems():
             if info['type'] == 'enum' and len(info.get('enum',[])) == 0:
                 raise DomainTypeError('In domain "&s" is attribute "&s" of enum '
-                    'domain, but has no "enum" values defined'&(self.name, id))
+                    'domain, but has no "enum" values defined'&(self.GetId(), id))
             elif info['type'] == 'list':
                 if 'list' not in info:
                     raise DomainTypeError('In domain "&s" is attribute "&s" of list '
-                        'domain, but has no "list" definition'&(self.name, id))
+                        'domain, but has no "list" definition'&(self.GetId(), id))
                 elif ('parser' in info['list'] and 
                     not self.IsAtomic(domain = info['list']['type']) and 
                     len(list(self.GetFactory().GetDomain(info['list']['type']).IterParsers())) == 0):
                     raise DomainTypeError('"%s.%s" is list with parser, but used domain "%s" '
-                        'has no parser.' % (self.name, id, info['list']['type']))
+                        'has no parser.' % (self.GetId(), id, info['list']['type']))
     
     def CheckDefault(self):
         '''
@@ -252,13 +254,6 @@ class CDomainType(object):
         for joiner in self.joiners:
             yield joiner
             
-    def GetName(self):
-        '''
-        @return: name of current domain
-        @rtype: str
-        '''
-        return self.name
-    
     def GetImports(self):
         '''
         @return: list of imported domains
@@ -369,14 +364,14 @@ class CDomainType(object):
                 except KeyError:
                     raise DomainTypeError(
                         'In domain "%s" is attribute "%s" of type "enum", '
-                        'but has no defined values'%(self.name, id))
+                        'but has no defined values'%(self.GetId(), id))
             elif type == 'list':
                 try:
                     return self.__GetList(value, **self.attributes[id]['list'])
                 except KeyError:
                     raise DomainTypeError(
                         'In domain "%s" is attribute "%s" of type "list", '
-                        'but has no list definition'%(self.name, id))
+                        'but has no list definition'%(self.GetId(), id))
         else:
             return self.__GetNonAtomic(value, type)
     

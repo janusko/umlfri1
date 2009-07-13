@@ -16,12 +16,6 @@ USERGUI_PATH ='/Paths/UserDir/usergui.xml'
 
 SPLASH_TIMEOUT = 0
 
-VERSIONS_PATH = 'versions'
-DIAGRAMS_PATH = 'diagrams'
-ELEMENTS_PATH = 'elements'
-CONNECTIONS_PATH = 'connections'
-ICONS_PATH = 'icons'
-DOMAINS_PATH = 'domains'
 METAMODEL_PATH = 'metamodel.xml'
 
 ARROW_IMAGE = 'arrow.png'

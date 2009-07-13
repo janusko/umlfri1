@@ -11,16 +11,44 @@ import os
 class CMetamodel(object):
     def __init__(self, storage, uri, version):
         self.__Storage = storage
-        self.__DomainFactory = CDomainFactory(self.__Storage, DOMAINS_PATH)
-        self.__ElementFactory = CElementFactory(self.__Storage, ELEMENTS_PATH, self.__DomainFactory)
-        self.__DiagramFactory = CDiagramFactory(self.__Storage, DIAGRAMS_PATH)
-        self.__ConnectionFactory = CConnectionFactory(self.__Storage, CONNECTIONS_PATH, self.__DomainFactory)
+        self.__DomainFactory = CDomainFactory(self.__Storage)
+        self.__ElementFactory = CElementFactory(self.__Storage, self.__DomainFactory)
+        self.__DiagramFactory = CDiagramFactory(self.__Storage, self.__DomainFactory)
+        self.__ConnectionFactory = CConnectionFactory(self.__Storage, self.__DomainFactory)
         self.__MetamodelVersion = version
         self.__MetamodelUri = uri
         self.__diagramsList = []
         
+        self.__Load()
+        
+        self.__Validate()
+        
         # Metamodel validation
         # Diagram connections are valid
+        
+        # Valid diagrams in metamodel
+        # not yet implemented
+        
+    def __Load(self):
+        for dirname, dirs, files in self.__Storage.walk():
+            if '.svn' in dirs:
+                dirs.remove('.svn')
+            for fname in files:
+                if fname.endswith('.xml'):
+                    root = etree.XML(self.storage.read_file(os.join(dirname, fname)))
+                    if HAVE_LXML:
+                        if not xmlschema.validate(root):
+                            raise FactoryError("XMLError", xmlschema.error_log.last_error)
+                    if root.tag in (METAMODEL_NAMESPACE + 'ConnectionType', METAMODEL_NAMESPACE + 'ConnectionAlias'):
+                        self.__ConnectionFactory.load(root, self.__DomainFactory)
+                    elif root.tag == METAMODEL_NAMESPACE + 'DiagramType':
+                        self.__DiagramFactory.Load(root, self.__DomainFactory)
+                    elif root.tag == METAMODEL_NAMESPACE + 'Domain':
+                        self.__DomainFactory.Load(root)
+                    elif root.tag in (METAMODEL_NAMESPACE + 'ElementType', METAMODEL_NAMESPACE + 'ElementAlias'):
+                        self.__ElementFactory.Load(root, self.__DomainFactory)
+    
+    def __Validate(self):
         connectionIds = []
         for connection in self.__ConnectionFactory.types.values():
             connectionIds.append(connection.GetId())
@@ -44,10 +72,7 @@ class CMetamodel(object):
             for element in diagram.elements:
                 if not element in elementIds:
                     raise MetamodelValidationError('Element "%s" of diagram "%s" is not valid'%(element,diagram.GetId()))
-        
-        # Valid diagrams in metamodel
-        # not yet implemented
-        
+    
     
     def GetStorage(self):
         return self.__Storage

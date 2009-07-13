@@ -120,7 +120,7 @@ class CConnectionObject(object):
         """
         for i in self.appears:
             yield i()
-
+    
     def AddAppears(self, diagram):
         """
         Add diagram, connection is appeared on
@@ -129,7 +129,7 @@ class CConnectionObject(object):
         @type  diagram: L{CDiagram<lib.Drawing.Diagram.CDiagram>}
         """
         self.appears.append(weakref.ref(diagram))
-
+    
     def RemoveAppears(self, diagram):
         """
         Remove diagram, connection was appeared on, from the list
@@ -142,7 +142,7 @@ class CConnectionObject(object):
         for id, value in enumerate(self.appears):
             if value() is diagram:
                 del self.appears[id]
-
+    
     def GetType(self):
         """
         Return type of connection
@@ -186,7 +186,7 @@ class CConnectionObject(object):
         @rtype:  L{CElementObject<lib.Elements.Object.CElementObject>}
         """
         return self.destination()
-
+    
     def GetSource(self):
         """
         Get source of this connection
@@ -195,7 +195,7 @@ class CConnectionObject(object):
         @rtype:  L{CElementObject<lib.Elements.Object.CElementObject>}
         """
         return self.source()
-
+    
     def SetDestination(self, dest):
         """
         Set destination object of this connection
@@ -215,7 +215,7 @@ class CConnectionObject(object):
         if dest is not None:
             dest.AddConnection(self)
         self.revision += 1
-
+    
     def __SetWeakSource(self, source):
         if source is None:
             self.source = lambda: None
@@ -229,7 +229,6 @@ class CConnectionObject(object):
             self.destination = lambda: None
         else:
             self.destination = weakref.ref(destination)
-   
         
     def SetSource(self, source):
         """

@@ -4,8 +4,8 @@
     <Connections>
         <Item value="AssociationUseCase" />
         <Item value="Generalization" with="UseCase" allowrecursive="0" />
-		<Item value="Include"/>
-		<Item value="Extend"/>
+        <Item value="Include"/>
+        <Item value="Extend"/>
     </Connections>
     <Appearance>
         <Shadow padding="3" color="#cfg.Styles.Element.ShadowColor">

@@ -7,77 +7,17 @@ from lib.config import config
 from lib.consts import METAMODEL_NAMESPACE
 from lib.Drawing.Objects import ALL
 from lib.Drawing.Context import BuildParam
-from lib.Depend.etree import etree, HAVE_LXML
+from lib.Generic import CGenericFactory
 
-#if lxml.etree is imported successfully, we use xml validation with xsd schema
-if HAVE_LXML:
-    xmlschema_doc = etree.parse(os.path.join(config['/Paths/Schema'], "metamodel.xsd"))
-    xmlschema = etree.XMLSchema(xmlschema_doc)
-
-
-class CElementFactory(object):
+class CElementFactory(CGenericFactory):
     """
     Factory, that creates element type objects
     """
-    def __init__(self, storage, path, domainfactory):
-        """
-        Create the element factory
-        
-        @param storage: Storage in which is file located
-        @type  storage: L{CAbstractStorage<lib.Storages.AbstractStorage.CAbstractStorage>}
-        
-        @param path: Path to directory with connection metamodel XMLs
-        @type path: string
-        
-        @param domainfactory: factory that has already loaded all the domains
-        from current metamodel
-        @type domainfactory: L{CDomainFactory<lib.Domains.Factory.CDomainFactory>}
-        """
-        self.types = {}
-        self.path = path
-        self.domainfactory = domainfactory
-        
-        self.storage = storage
-        for file in storage.listdir(self.path):
-            if file.endswith('.xml'):
-                self.__Load(os.path.join(self.path, file))
-
-    def GetElement(self, type):
-        """
-        Get element type by name
-        
-        @param type: Element type name
-        @type  type: string
-        """
-        if not type in self.types:
-            raise FactoryError('unrecognized elementType name "%s"' % type)
-        return self.types[type]
     
-    def IterTypes(self):
-        '''
-        iterator over element types
-        
-        @rtype: L{CElementType<CElementType>}
-        '''
-        for type in self.types.itervalues():
-            yield type
-    
-    def HasType(self, id):
-        return id in self.types
-
-    def __Load(self, file_path):
+    def Load(self, root):
         """
         Load an XMLs from given path
-        
-        @param file_path: Path to connections metamodel (within storage)
-        @type  file_path: string
         """
-        root = etree.XML(self.storage.read_file(file_path))
-        #xml (version) file is validate with xsd schema (metamodel.xsd)
-        if HAVE_LXML:
-            if not xmlschema.validate(root):
-                raise FactoryError("XMLError", xmlschema.error_log.last_error)
-
         if root.tag == METAMODEL_NAMESPACE + 'ElementType':
             self.__LoadType(root)
         elif root.tag == METAMODEL_NAMESPACE + 'ElementAlias':
@@ -102,7 +42,7 @@ class CElementFactory(object):
                         value = value.lower() == 'true'
                     obj.AppendOptions(name, value)
         
-        self.types[root.get('id')] = obj
+        self._AddType(root.get('id'), obj)
     
     def __LoadType(self, root):
         obj = CElementType(root.get('id'))
@@ -131,7 +71,7 @@ class CElementFactory(object):
                         value = value.lower() == 'true'
                     obj.AppendOptions(name, value)
         
-        self.types[root.get('id')] = obj
+        self._AddType(root.get('id'), obj)
     
     def __LoadAppearance(self, root):
         """

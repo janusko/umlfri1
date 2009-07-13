@@ -8,107 +8,20 @@ from lib.consts import METAMODEL_NAMESPACE
 from Parser import CDomainParser
 from Joiner import CDomainJoiner
 from lib.Exceptions import DomainFactoryError
-from lib.Depend.etree import etree, HAVE_LXML
+from lib.Generic import CGenericFactory
 
-#if lxml.etree is imported successfully, we use xml validation with xsd schema
-if HAVE_LXML:
-    xmlschema_doc = etree.parse(os.path.join(config['/Paths/Schema'], "metamodel.xsd"))
-    xmlschema = etree.XMLSchema(xmlschema_doc)
-
-
-class CDomainFactory(object):
+class CDomainFactory(CGenericFactory):
     '''
     Factory to create Domains
     
     @ivar domains: dictionary with domain names as keys and domain types as values
     '''
     IDENTIFIER = re.compile('[a-zA-Z][a-zA-Z0-9_]*')
-    def __init__(self, storage, path):
-        """
-        Create the domain factory
-        
-        @param storage: Storage in which is file located
-        @type  storage: L{CAbstractStorage<lib.Storages.AbstractStorage.CAbstractStorage>}
-        
-        @param path: Path to directory with connection metamodel XMLs
-        @type path: string
-        """
-        
-        self.domains = {}
-        self.path = path
-        
-        self.storage = storage
-        for file in storage.listdir(self.path):
-            if file.endswith('.xml'):
-                self.__Load(os.path.join(self.path, file))
-        
-        for domain in self.domains.itervalues():
-            result = domain.EmptyTypes()
-            if result:
-                raise DomainFactoryError(
-                    'Domain "%s" has attribute "%s" without type: "%s" '%(
-                    domain.GetName(), ('s' if len(result) > 1 else ''),
-                    ', '.join([('"%s"'%item) for item in result])))
-            
-            result = domain.UndefinedImports()
-            if result:
-                raise DomainFactoryError(
-                    'Domain "%s" imports unknown domain%s: %s '%(
-                    domain.GetName(), ('s' if len(result) > 1 else ''),
-                    ', '.join([('"%s"'%item) for item in result])))
-            
-            loop = domain.HasImportLoop()
-            if loop:
-                raise DomainFactoryError('Import loop detected: ' + loop)
-            
-            domain.CheckMissingInfo()
-            domain.CheckDefault()
     
-    def GetDomain(self, id):
-        """
-        @return: Domain type by name
-        @rtype: L{CDomainType<Type.CDomainType>}
-        
-        @param id: Element type name
-        @type  id: string
-        """
-        if not id in self.domains:
-            raise DomainFactoryError('unrecognized domain name "%s"' % id)
-        
-        return self.domains[id]
-    
-    def IterTypes(self):
-        '''
-        iterator over domain types
-        
-        @rtype: L{CDomainType<CDomainType>}
-        '''
-        for type in self.domains.itervalues():
-            yield type
-            
-    def HasDomain(self, id):
-        '''
-        @return: True if domain identifier is registered in current factory
-        @rtype: bool
-        
-        @param id: Element type name
-        @type  id: string
-        '''
-        return id in self.domains
-    
-    def __Load(self, path):
+    def Load(self, root):
         '''
         Load XML from given path
-        
-        @param path: path to the XML file
-        @type path: str
         '''
-        
-        root = etree.XML(self.storage.read_file(path))
-        
-        if HAVE_LXML:
-            if not xmlschema.validate(root):
-                raise FactoryError("XMLError", xmlschema.error_log.last_error)
         
         if root.tag == METAMODEL_NAMESPACE + 'Domain':
             self.__LoadDomain(root)
@@ -132,7 +45,7 @@ class CDomainFactory(object):
             raise DomainFactoryError('Domain id not allowed in nested domain "%s"' % name)
         
         obj = CDomainType(name, self)
-        self.domains[name] = obj
+        self._AddType(name, obj)
         
         for node in root:
             if node.tag == METAMODEL_NAMESPACE + 'Import':
