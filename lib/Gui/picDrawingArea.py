@@ -514,8 +514,7 @@ class CpicDrawingArea(CWidget):
             else:
                 for sel in self.Diagram.GetSelected():
                     self.Diagram.DeleteItem(sel)
-                    sel.GetObject().RemoveAppears(self.Diagram)
-            self.emit('selected-item', list(self.Diagram.GetSelected()))
+                    self.emit('selected-item', list(self.Diagram.GetSelected()))
             self.Paint()
         elif event.keyval == gtk.keysyms.Escape:
             self.ResetAction()
@@ -862,6 +861,8 @@ class CpicDrawingArea(CWidget):
         for sel in self.Diagram.GetSelected():
             if isinstance(sel, Element.CElement):
                 self.emit('delete-element-from-all',sel.GetObject())
+            elif isinstance(sel, CConLabelInfo):
+                self.Diagram.ShiftDeleteConLabel(sel)
             else:
                 self.Diagram.ShiftDeleteConnection(sel)
         self.Paint()
