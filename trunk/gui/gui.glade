@@ -404,7 +404,7 @@
                   <widget class="GtkMenu" id="mItemHelp_menu">
                     <child>
                       <widget class="GtkImageMenuItem" id="mnuWebsite">
-                        <property name="label" translatable="yes">_UML. FRI Homepage</property>
+                        <property name="label" translatable="yes">_UML .FRI Homepage</property>
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">False</property>
@@ -1185,7 +1185,7 @@
                     <child>
                       <widget class="GtkLabel" id="lblAboutSysInformation">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Basic information about Your system</property>
+                        <property name="label" translatable="yes">Basic information about your system</property>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
@@ -1322,7 +1322,7 @@ application. You too can contribute in many ways:
 
 UML .FRI is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License along with UML. FRI; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</property>
+You should have received a copy of the GNU General Public License along with UML .FRI; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</property>
                       </widget>
                     </child>
                   </widget>
@@ -4438,8 +4438,7 @@ Protected</property>
               <widget class="GtkLabel" id="lblPomSpace">
                 <property name="height_request">16</property>
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">
-</property>
+                <property name="label"></property>
               </widget>
               <packing>
                 <property name="position">2</property>

@@ -43,7 +43,7 @@ CONFIG_NAMESPACE = '{http://umlfri.kst.fri.uniza.sk/xmlschema/config.xsd}'
 METAMODEL_LIST_NAMESPACE = '{http://umlfri.kst.fri.uniza.sk/xmlschema/metamodelList.xsd}'
 USERGUI_NAMESPACE='http://umlfri.kst.fri.uniza.sk/xmlschema/usergui.xsd'
 
-# UML. FRI server - web page, mail address and address for error logs
+# UML .FRI server - web page, mail address and address for error logs
 WEB = 'http://umlfri.org/'
 MAIL = 'projekt@umlfri.org'
 ERROR_LOG_ADDRESS = 'http://umlfri.org/errors/log.php'  
