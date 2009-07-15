@@ -133,7 +133,7 @@ class CfrmException(CWindow):
                
                 # if everything goes well
                 if response.code == 200:
-                    t = _('File successfully send...\n\nThank you for helping improving UML. FRI')
+                    t = _('File successfully send...\n\nThank you for helping improving UML .FRI')
                     self.btnSend.set_sensitive(False)
                 
                 # not so well, but at least we could get a response :)                

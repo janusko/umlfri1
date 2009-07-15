@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: UML .FRI 1.0-beta20081013-r2\n"
+"Project-Id-Version: UML .FRI 1.0-beta20090601\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-23 10:07+0100\n"
+"POT-Creation-Date: 2009-07-15 21:29+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,7 +26,7 @@ msgid "<b>project e-mail address</b>"
 msgstr ""
 
 msgid ""
-"<span size=\"xx-large\">UML. FRI</span>\n"
+"<span size=\"xx-large\">UML .FRI</span>\n"
 "<b>Version "
 msgstr ""
 
@@ -48,6 +48,9 @@ msgstr ""
 msgid "All files"
 msgstr ""
 
+msgid "An error during printing has occured."
+msgstr ""
+
 msgid "An exception has occured"
 msgstr ""
 
@@ -63,10 +66,7 @@ msgstr ""
 msgid "Attribute"
 msgstr ""
 
-msgid "Attributes"
-msgstr ""
-
-msgid "Basic information about Your system"
+msgid "Basic information about your system"
 msgstr ""
 
 msgid "Bring Forward"
@@ -114,13 +114,13 @@ msgstr ""
 msgid "Date"
 msgstr ""
 
-msgid "Delete"
-msgstr ""
-
 msgid "Delete from Project"
 msgstr ""
 
 msgid "Derived"
+msgstr ""
+
+msgid "Diagram Export"
 msgstr ""
 
 msgid "Diagram name"
@@ -162,7 +162,7 @@ msgstr ""
 msgid "Export diagram"
 msgstr ""
 
-msgid "Export format"
+msgid "Export file format"
 msgstr ""
 
 msgid "File does not exist"
@@ -174,7 +174,7 @@ msgstr ""
 msgid ""
 "File successfully send...\n"
 "\n"
-"Thank you for helping improving UML. FRI"
+"Thank you for helping improving UML .FRI"
 msgstr ""
 
 msgid "Fill color"
@@ -184,9 +184,6 @@ msgid "Fill color 2"
 msgstr ""
 
 msgid "Fill color 3"
-msgstr ""
-
-msgid "Fill the name and type fields"
 msgstr ""
 
 msgid "Find in diagrams"
@@ -258,22 +255,13 @@ msgstr ""
 msgid "Operation"
 msgstr ""
 
-msgid "Operations"
-msgstr ""
-
-msgid "P_DF"
-msgstr ""
-
 msgid "P_NG"
 msgstr ""
 
-msgid "P_ostScript"
+msgid "P_S"
 msgstr ""
 
 msgid "Pages"
-msgstr ""
-
-msgid "Parameters"
 msgstr ""
 
 msgid "Parameters:"
@@ -282,13 +270,22 @@ msgstr ""
 msgid "Paths"
 msgstr ""
 
-msgid "Please help us improve the UML. FRI application by sending us this log."
+msgid "Please help us improve the UML .FRI application by sending us this log."
 msgstr ""
 
 msgid "Points color"
 msgstr ""
 
 msgid "Points size"
+msgstr ""
+
+msgid "Portable Document Format"
+msgstr ""
+
+msgid "Portable Network Graphics"
+msgstr ""
+
+msgid "PostScript"
 msgstr ""
 
 msgid "Preferences"
@@ -333,7 +330,7 @@ msgstr ""
 msgid "Save Project As"
 msgstr ""
 
-msgid "Scope"
+msgid "Scalable Vector Graphics"
 msgstr ""
 
 msgid "Scope:"
@@ -345,7 +342,7 @@ msgstr ""
 msgid "Select a directory"
 msgstr ""
 
-msgid "Select directory & file name"
+msgid "Select export directory & file name"
 msgstr ""
 
 msgid "Selection"
@@ -402,9 +399,6 @@ msgid ""
 "See the Help tab for more info."
 msgstr ""
 
-msgid "Type"
-msgstr ""
-
 msgid "Type:"
 msgstr ""
 
@@ -428,18 +422,18 @@ msgid "UML .FRI designer [%s]"
 msgstr ""
 
 msgid ""
-"UML. FRI is free software; you can redistribute it and/or modify it under "
+"UML .FRI is free software; you can redistribute it and/or modify it under "
 "the terms of the GNU General Public License as published by the Free "
 "Software Foundation; either version 2 of the License, or (at your option) "
 "any later version.\n"
 "\n"
-"UML. FRI is distributed in the hope that it will be useful, but WITHOUT ANY "
+"UML .FRI is distributed in the hope that it will be useful, but WITHOUT ANY "
 "WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
 "FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
 "details.\n"
 "\n"
 "You should have received a copy of the GNU General Public License along with "
-"UML. FRI; if not, write to the Free Software Foundation, Inc., 51 Franklin "
+"UML .FRI; if not, write to the Free Software Foundation, Inc., 51 Franklin "
 "Street, Fifth Floor, Boston, MA 02110-1301, USA."
 msgstr ""
 
@@ -454,10 +448,10 @@ msgstr ""
 
 msgid ""
 "Use the <i>Send</i> button to send this error information directly on our "
-"server. If the <i>Include project</i> option is chcecked Your current "
+"server. If the <i>Include project</i> option is chcecked your current "
 "project will be send to the server as well. You can also write some some "
-"basic information about what were You doing when this exception occured in "
-"the <i>User comments</i> tab to help us recreate it. Or You can use the "
+"basic information about what were you doing when this exception occured in "
+"the <i>User comments</i> tab to help us recreate it. Or you can use the "
 "<i>Home</i> button to post this error directly on our websites bugreport. In "
 "case of problems, feel free to write us an email on :"
 msgstr ""
@@ -492,7 +486,7 @@ msgstr ""
 
 msgid ""
 "We are looking for people willing to help us improve our\n"
-"application. You can contribute in many ways:\n"
+"application. You too can contribute in many ways:\n"
 "\n"
 "* Report us your wishes or desired features.\n"
 "* Join our development team.\n"
@@ -502,7 +496,7 @@ msgid ""
 "<i>Visit our web page for more information. </i>"
 msgstr ""
 
-msgid "What were You doing when this exception occured ?"
+msgid "What were you doing when this exception occured ?"
 msgstr ""
 
 msgid "Wrong element: "
@@ -511,25 +505,7 @@ msgstr ""
 msgid "Z-Order"
 msgstr ""
 
-msgid "Zoom _In"
-msgstr ""
-
-msgid "Zoom _Out"
-msgstr ""
-
-msgid "_Actual Size"
-msgstr ""
-
 msgid "_Add diagram"
-msgstr ""
-
-msgid "_Automatically add extension"
-msgstr ""
-
-msgid "_Best Fit"
-msgstr ""
-
-msgid "_Cancel"
 msgstr ""
 
 msgid "_Commandbar"
@@ -571,6 +547,9 @@ msgstr ""
 msgid "_Open Existing Project"
 msgstr ""
 
+msgid "_PDF"
+msgstr ""
+
 msgid "_Project"
 msgstr ""
 
@@ -580,7 +559,7 @@ msgstr ""
 msgid "_Toolbox"
 msgstr ""
 
-msgid "_UML. FRI Homepage"
+msgid "_UML .FRI Homepage"
 msgstr ""
 
 msgid "_User comments"
@@ -592,29 +571,11 @@ msgstr ""
 msgid "_Z-Order"
 msgstr ""
 
-msgid "architecture"
-msgstr ""
-
 msgid "default file name"
-msgstr ""
-
-msgid "gtk version"
-msgstr ""
-
-msgid "machine"
 msgstr ""
 
 msgid "none"
 msgstr ""
 
-msgid "platform"
-msgstr ""
-
 msgid "project web"
-msgstr ""
-
-msgid "pygtk version"
-msgstr ""
-
-msgid "python version"
 msgstr ""
