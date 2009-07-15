@@ -75,6 +75,9 @@ class CConLabelInfo(CCacheableObject):
         '''
         return self.connection().GetObject()
     
+    def GetConnection(self):
+        return self.connection()
+    
     def GetPosition(self, canvas):
         '''
         @return: absolute position of top-left corner in 2-tuple (x, y)
