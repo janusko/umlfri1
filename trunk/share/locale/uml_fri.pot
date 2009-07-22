@@ -17,8 +17,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 msgid ""
-"</b>\n"
-"\n"
 "Free python-based CASE tool."
 msgstr ""
 
@@ -26,8 +24,7 @@ msgid "<b>project e-mail address</b>"
 msgstr ""
 
 msgid ""
-"<span size=\"xx-large\">UML .FRI</span>\n"
-"<b>Version "
+"Version "
 msgstr ""
 
 msgid "About"
