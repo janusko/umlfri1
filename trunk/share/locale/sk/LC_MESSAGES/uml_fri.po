@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: UML .FRI 1.0-beta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-15 21:29+0200\n"
-"PO-Revision-Date: 2009-07-22 09:18+0100\n"
-"Last-Translator: Peter <pasikavec@gmail.com>\n"
+"POT-Creation-Date: 2009-07-22 16:42+0200\n"
+"PO-Revision-Date: 2009-07-22 16:43+0100\n"
+"Last-Translator: Ján Janech <janech@kios.sk>\n"
 "Language-Team: uml_fri <uml@kst.fri.utc.sk>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -13,30 +13,18 @@ msgstr ""
 "X-Poedit-Country: SLOVAKIA\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-msgid ""
-"</b>\n"
-"\n"
-"Free python-based CASE tool."
-msgstr ""
-"</b>\n"
-"\n"
-"Voľne šíriteľný CASE nástroj vyvíjaný v pythone."
-
 msgid "<b>project e-mail address</b>"
 msgstr "<b>e-mail adresa projektu</b>"
-
-msgid ""
-"<span size=\"xx-large\">UML .FRI</span>\n"
-"<b>Version "
-msgstr ""
-"<span size=\"xx-large\">UML .FRI</span>\n"
-"<b>Verzia "
 
 msgid "About"
 msgstr "O projekte"
 
 msgid "Abstract"
 msgstr "Abstract"
+
+#, python-format
+msgid "Academic year %s:"
+msgstr "Akademický rok %s"
 
 msgid "Add _element"
 msgstr "Pridať _element"
@@ -58,6 +46,9 @@ msgstr "Výnimku vyvolalo"
 
 msgid "An exception has occured:"
 msgstr "Výnimku vyvolalo:"
+
+msgid "Architecture"
+msgstr "Architektúra"
 
 msgid "Arrow color"
 msgstr "Farba šípky"
@@ -170,6 +161,9 @@ msgstr "Exportovať diagram"
 msgid "Export file format"
 msgstr "Formát exportného súboru"
 
+msgid "Fakulty of Management Science and Informatics"
+msgstr "Fakulta riadenia a informatiky"
+
 msgid "File does not exist"
 msgstr "Súbor nebol nájdený"
 
@@ -200,6 +194,12 @@ msgstr "Nájdi v diagramoch"
 msgid "Find in diagrams ..."
 msgstr "Nájdi v diagramoch ..."
 
+msgid "Free python-based CASE tool."
+msgstr "Voľne šíriteľný CASE nástroj vyvíjaný v pythone."
+
+msgid "GTK+ version"
+msgstr "Verzia GTK+:"
+
 msgid "Gui"
 msgstr "Gui"
 
@@ -223,6 +223,9 @@ msgstr "Farba čiary"
 
 msgid "Locales"
 msgstr "Preklady"
+
+msgid "Machine"
+msgstr "Počítač"
 
 msgid "Name"
 msgstr "Názov"
@@ -278,6 +281,9 @@ msgstr "Parametre"
 msgid "Paths"
 msgstr "Priečinky"
 
+msgid "Platform"
+msgstr "Platforma"
+
 msgid "Please help us improve the UML .FRI application by sending us this log."
 msgstr "Prosím, pomôžte nám zdokonaliť UML .FRI aplikáciu a pošlite nám túto správu."
 
@@ -299,6 +305,12 @@ msgstr "PostScript"
 msgid "Preferences"
 msgstr "Nastavenia"
 
+msgid "Programmed by:"
+msgstr "Programátori:"
+
+msgid "Programmed for:"
+msgstr "Naprogramované pre:"
+
 msgid "Properties"
 msgstr "Vlastnosti"
 
@@ -307,6 +319,12 @@ msgstr "Property"
 
 msgid "Pure"
 msgstr "Pure"
+
+msgid "PyGTK version"
+msgstr "Verzia PyGTK:"
+
+msgid "Python version"
+msgstr "Verzia jazyka Python"
 
 msgid "Question"
 msgstr "Otázka"
@@ -383,6 +401,9 @@ msgstr "Stereotyp:"
 msgid "Styles"
 msgstr "Štýl"
 
+msgid "Supervised by:"
+msgstr "Pod vedením:"
+
 msgid "Synchronized"
 msgstr "Synchronized"
 
@@ -451,6 +472,9 @@ msgstr "UML.fri"
 msgid "Unable to insert element"
 msgstr "Nemôžem vložiť daný element"
 
+msgid "University of Žilina"
+msgstr "Žilinská univerzita"
+
 msgid "Unset default diagram"
 msgstr "Zrušiť nastavenie východzieho diagramu"
 
@@ -477,6 +501,9 @@ msgstr ""
 
 msgid "Value"
 msgstr "Hodnota"
+
+msgid "Version"
+msgstr "Verzia"
 
 #, python-format
 msgid "Version: %s"
@@ -587,9 +614,19 @@ msgstr "_Poradie"
 msgid "default file name"
 msgstr "Východzie meno súboru"
 
+msgid "etree version"
+msgstr "Verzia knižnice etree"
+
 msgid "none"
 msgstr "nič"
 
 msgid "project web"
 msgstr "Web projektu"
+
+#~ msgid ""
+#~ "<span size=\"xx-large\">UML .FRI</span>\n"
+#~ "<b>Version "
+#~ msgstr ""
+#~ "<span size=\"xx-large\">UML .FRI</span>\n"
+#~ "<b>Verzia "
 
