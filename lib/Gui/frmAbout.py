@@ -1,13 +1,21 @@
+# -*- coding: utf-8 -*-
+
 from lib.Depend.gtk2 import pango
 import lib.Depend
 
 from common import CWindow, event
 from lib.config import config
 import lib.consts
+import re
 
 class CfrmAbout(CWindow):
     widgets = ('tviewCredits','tviewAboutSysInfo', 'lblAboutUmlfri', 'lbtnProjectWeb', )
     name = 'frmAbout'
+    
+    reProgrammedFor = re.compile('^Programmed for:$')
+    reProgrammedBy = re.compile('^Programmed by:$')
+    reSupervisedBy = re.compile('^Supervised by:$')
+    reAcademicYear = re.compile('^  Academic year ([0-9]{4}):$')
     
     def __init__(self, app, wTree):
         CWindow.__init__(self, app, wTree)
@@ -22,8 +30,13 @@ class CfrmAbout(CWindow):
         
         iter = buff.get_iter_at_offset(0)
         begin = ''
+        
+        l = 0
         for name, version in lib.Depend.version():
-            buff.insert_with_tags_by_name(iter, begin+"%s:\t\t"%name, "bold")
+            l = max(l, len(name.decode('utf8')))
+        
+        for name, version in lib.Depend.version():
+            buff.insert_with_tags_by_name(iter, begin+((u"%%-%ds  : "%l)%name.decode('utf8')).encode('utf8'), "bold")
             buff.insert_with_tags_by_name(iter, version, "mono")
             begin = '\n'
     
@@ -50,6 +63,13 @@ class CfrmAbout(CWindow):
         open_new_tab(lib.consts.WEB)
         self.form.run()
         self.Hide()
+    
+    def __Replace(self, line, re, txt):
+        match = re.match(line)
+        if match:
+            return txt%match.groups(), True
+        else:
+            return line, False
 
     def __SetCredits(self):
         buff = self.tviewCredits.get_buffer()
@@ -59,19 +79,25 @@ class CfrmAbout(CWindow):
         if tag_tab.lookup("bold") is None:
             buff.create_tag("bold", weight=pango.WEIGHT_BOLD)
 
-        lines = [line for line in file(config['/Paths/Root']+'ABOUT') if not line.strip().startswith('-')]
+        lines = [line.rstrip() for line in file(config['/Paths/Root']+'ABOUT') if not line.strip().startswith('-')]
  
         for line in lines:
-            if ((line[0].isspace() == False) or (line.strip().startswith('Academic'))):
-                buff.insert_with_tags_by_name(iter, line, "bold")
-            else: buff.insert(iter, line)
-
-
-
-
-
-
-
-
-
-
+            i = self.reProgrammedFor.match(line) is not None
+            replaced = False
+            for re, txt in [
+                                (self.reAcademicYear, '  '+_('Academic year %s:')),
+                                (self.reProgrammedBy, _('Programmed by:')),
+                                (self.reProgrammedFor, _('Programmed for:')),
+                                (self.reSupervisedBy, _('Supervised by:')),
+                            ]:
+                if not replaced:
+                    line, replaced = self.__Replace(line, re, txt)
+            if replaced:
+                ignore = i
+                buff.insert_with_tags_by_name(iter, line+'\n', "bold")
+            elif not ignore:
+                buff.insert(iter, line+'\n')
+            if i:
+                buff.insert(iter, '    '+_(u'University of Žilina')+'\n')
+                buff.insert(iter, '    '+_('Fakulty of Management Science and Informatics')+'\n')
+                buff.insert(iter, '\n')
