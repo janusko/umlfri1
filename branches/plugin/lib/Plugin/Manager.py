@@ -2,6 +2,7 @@ from Communication.AcceptServer import CAcceptServer
 from Communication.SocketWrapper import CSocketWrapper
 from Communication.ComSpec import *
 from Interface.Core import CCore
+from Interface.Transaction import CTransaction
 from lib.consts import *
 from lib.Gui import CGuiManager
 import thread
@@ -16,6 +17,7 @@ class CPluginManager(object):
     def __init__(self, app):
         self.conlock = thread.allocate()
         self.connection = {}
+        self.transaction = {}
         self.app = app
         self.guimanager = CGuiManager(app)
         self.proxy = CCore(self, app)
@@ -32,7 +34,9 @@ class CPluginManager(object):
         '''
         try:
             self.conlock.acquire()
+            self.transaction[addr] = CTransaction()
             self.connection[addr] = CSocketWrapper(sock, self.proxy, addr, True)
+            #print self.transaction.keys()
         finally:
             self.conlock.release()
     
@@ -49,6 +53,7 @@ class CPluginManager(object):
             self.connection[addr].Send(code, '', params)
         else:
             del self.connection[addr]
+            
     
     def SendToAll(self, code, **params):
         try:
@@ -57,7 +62,7 @@ class CPluginManager(object):
                 self.Send(addr, code, **params)
         finally:
             self.conlock.release()
-    
+            
     def DomainValueChanged(self, element, path):
         self.SendToAll(RESP_DOMAIN_VALUE_CHANGED, element = r_object(element), path = path)
     
@@ -66,4 +71,7 @@ class CPluginManager(object):
         
     def GetPort(self):
         return self.acceptserver.sock.getsockname()[1]
+    
+    def GetTransaction(self, addr):
+        return self.transaction[addr]
     

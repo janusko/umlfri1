@@ -23,7 +23,9 @@ class Meta(type):
                         {getattr(self, fname).func_code.co_varnames[0]: self.implicit}, 
                         getattr(self, fname)._params if hasattr(getattr(self, fname), '_params') else {}),
                      'result': getattr(self, fname)._result,
-                     'fname': fname})
+                     'fname': fname,
+                     'destructive': getattr(getattr(self, fname), '_destructive', False)
+                    })
                 for fname in dir(self)
                 if (callable(getattr(self, fname)) 
                     and self.__valid_fname(fname) 
@@ -76,7 +78,15 @@ class Meta(type):
     @classmethod
     def HasConstructor(cls, classname):
         return classname in cls.names and cls.constructor in cls.interface[cls.names[classname]]
-    
+        
+    @classmethod
+    def IsDestructive(cls, obj, fname):
+        desc = cls.GetMethod(obj.__class__, fname)[1]
+        if desc is None:
+            raise UnknowMethodError()
+        else:
+            return desc['destructive']
+            
     @classmethod
     def GetClassName(cls, object):
         desc = cls.interface.get(object.__class__)

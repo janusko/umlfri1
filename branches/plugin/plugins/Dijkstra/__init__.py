@@ -81,40 +81,41 @@ class Plugin(object):
         
     def onReset(self, *args):
         try:
-            metamodel = self.interface.DetailMetamodel()
-            if (metamodel['uri'] != 'http://umlfri.kst.fri.uniza.sk/metamodel/graphTheory.frim' 
-            or metamodel['version'] != '0.0.1'):
-                self.interface.DisplayWarning('Not supported metamodel')
-                return
-            
-            diagram = self.interface.GetProject().GetCurrentDiagram()
-            if diagram.GetType() != 'Graph':
-                self.interface.DisplayWarning('This is not a Graph')
-                return
-            
-            s = [i.GetId() for i in diagram.GetSelected()]
-            if len(s) > 1:
-                self.interface.DisplayWarning('Too many nodes selected')
-                return
-            for e in diagram.GetElements():
-                n = Node(e)
-                if n.id in s:
-                    n.shortest = 0.0
-                    n.previous = ''
-                    n.final = True
-                    n.current = True
-                else:
-                    n.shortest = float('inf')
-                    n.previous = ''
-                    n.final = False
-                    n.current = False
-                n.Save()
-            
-            for c in diagram.GetConnections():
-                e = Edge(c)
-                e.directed = False
-                e.reversed = False
-                e.Save()
+            with self.interface.GetTransaction():
+                metamodel = self.interface.DetailMetamodel()
+                if (metamodel['uri'] != 'http://umlfri.kst.fri.uniza.sk/metamodel/graphTheory.frim' 
+                or metamodel['version'] != '0.0.1'):
+                    self.interface.DisplayWarning('Not supported metamodel')
+                    return
+                
+                diagram = self.interface.GetProject().GetCurrentDiagram()
+                if diagram.GetType() != 'Graph':
+                    self.interface.DisplayWarning('This is not a Graph')
+                    return
+                
+                s = [i.GetId() for i in diagram.GetSelected()]
+                if len(s) > 1:
+                    self.interface.DisplayWarning('Too many nodes selected')
+                    return
+                for e in diagram.GetElements():
+                    n = Node(e)
+                    if n.id in s:
+                        n.shortest = 0.0
+                        n.previous = ''
+                        n.final = True
+                        n.current = True
+                    else:
+                        n.shortest = float('inf')
+                        n.previous = ''
+                        n.final = False
+                        n.current = False
+                    n.Save()
+                
+                for c in diagram.GetConnections():
+                    e = Edge(c)
+                    e.directed = False
+                    e.reversed = False
+                    e.Save()
             
         
         except PluginProjectNotLoaded:
@@ -123,61 +124,62 @@ class Plugin(object):
     
     def onStep(self, *args):
         try:
-            metamodel = self.interface.DetailMetamodel()
-            if (metamodel['uri'] != 'http://umlfri.kst.fri.uniza.sk/metamodel/graphTheory.frim' 
-            or metamodel['version'] != '0.0.1'):
-                self.interface.DisplayWarning('Not supported metamodel')
-                return
-            
-            diagram = self.interface.GetProject().GetCurrentDiagram()
-            if diagram.GetType() != 'Graph':
-                self.interface.DisplayWarning('This is not a Graph')
-                return
-            
-            nodes = {}
-            edges = {}
-            cur = None
-            
-            for e in diagram.GetElements():
-                n = Node(e)
-                nodes[n.id] = n
-                if n.current:
-                    cur = n
-            
-            for c in diagram.GetConnections():
-                e = Edge(c)
-                s = nodes[c.GetSource().id]
-                d = nodes[c.GetDestination().id]
-                edges[c.id] = e
-                s.AddConnection(e)
-                d.AddConnection(e)
-                e.AddEdge(s)
-                e.AddEdge(d)
-            
-            for e in cur.connections:
-                n = e.Next(cur)
-                if n.shortest > cur.shortest + e.value:
-                    n.shortest = cur.shortest + e.value
-                    n.previous = cur.id
-            
-            m = None
-            for n in nodes.values():
-                if not n.final:
-                    if m is None:
-                        m = n
-                    elif m.shortest > n.shortest:
-                        m = n
-            if m is not None:
-                m.final = True
-                cur.current = False
-                m.current = True
+            with self.interface.GetTransaction():
+                metamodel = self.interface.DetailMetamodel()
+                if (metamodel['uri'] != 'http://umlfri.kst.fri.uniza.sk/metamodel/graphTheory.frim' 
+                or metamodel['version'] != '0.0.1'):
+                    self.interface.DisplayWarning('Not supported metamodel')
+                    return
                 
-            for n in nodes.values():
-                n.Save()
-            
-            for e in edges.values():
-                e.Directions()
-                e.Save()
+                diagram = self.interface.GetProject().GetCurrentDiagram()
+                if diagram.GetType() != 'Graph':
+                    self.interface.DisplayWarning('This is not a Graph')
+                    return
+                
+                nodes = {}
+                edges = {}
+                cur = None
+                
+                for e in diagram.GetElements():
+                    n = Node(e)
+                    nodes[n.id] = n
+                    if n.current:
+                        cur = n
+                
+                for c in diagram.GetConnections():
+                    e = Edge(c)
+                    s = nodes[c.GetSource().id]
+                    d = nodes[c.GetDestination().id]
+                    edges[c.id] = e
+                    s.AddConnection(e)
+                    d.AddConnection(e)
+                    e.AddEdge(s)
+                    e.AddEdge(d)
+                
+                for e in cur.connections:
+                    n = e.Next(cur)
+                    if n.shortest > cur.shortest + e.value:
+                        n.shortest = cur.shortest + e.value
+                        n.previous = cur.id
+                
+                m = None
+                for n in nodes.values():
+                    if not n.final:
+                        if m is None:
+                            m = n
+                        elif m.shortest > n.shortest:
+                            m = n
+                if m is not None:
+                    m.final = True
+                    cur.current = False
+                    m.current = True
+                    
+                for n in nodes.values():
+                    n.Save()
+                
+                for e in edges.values():
+                    e.Directions()
+                    e.Save()
         
         except PluginProjectNotLoaded:
             self.interface.DisplayWarning('Project is not loaded')

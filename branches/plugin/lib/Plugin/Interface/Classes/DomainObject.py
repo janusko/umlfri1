@@ -38,6 +38,7 @@ class IDomainObject(IBase):
     @parameter('path', t_str)
     @parameter('value', t_str)
     @result(r_none)
+    @destructive
     def SetValue(him, path, value):
         him.SetValue(path, value)
         IBase.adapter.plugin_change_domain_value(him, path)

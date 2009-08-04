@@ -17,10 +17,16 @@ def not_interface(fun):
     fun._not_iterface = True
     return fun
 
+def destructive(fun):
+    fun._destructive = True
+    return fun
+
 def factory(fun):
     fun._constructor = True
     fun._result = lambda x: x
+    fun._destructive = True
     return fun
+    
 
 def reverse(transform):
     def transformation(fun):

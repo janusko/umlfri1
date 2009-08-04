@@ -50,6 +50,9 @@ class CConnection(object):
                         RESP_UNKNOWN_METHOD: PluginUnknownMethod,
                         RESP_PROJECT_NOT_LOADED: PluginProjectNotLoaded,
                         RESP_UNKNOWN_CONSTRUCTOR: PluginUnknownConstructor,
+                        RESP_TRANSACTION_PENDING: TransactionPendingError,
+                        RESP_OUT_OF_TRANSACTION: OutOfTransactionError,
+                        RESP_TRANSACTION_MODE_UNSPECIFIED: TransactionModeUnspecifiedError,
                         RESP_UNHANDELED_EXCEPTION: UMLException,
                         }[code], 
                         *((code,) + tuple(params.values())))

@@ -1,11 +1,13 @@
 from lib.Plugin.Client import classes
 from lib.Plugin.Communication.Connection import CConnection
+from Transaction import CTransaction
 
 class CInterface(object):
     
     def __init__(self, port):
         self.connection = CConnection(port)
         self.project = classes['IProject']('project', self.connection)
+        
     
     def WaitTillClosed(self):
         return self.connection.WaitTillClosed()
@@ -54,3 +56,18 @@ class CInterface(object):
         
     def ListDiagram(self):
         return self._metamodel('diagram.list')
+        
+    def StartAutocommit(self):
+        return self.connection.Execute('transaction', 'autocommit', {})()
+    
+    def BeginTransaction(self):
+        return self.connection.Execute('transaction', 'begin', {})()
+    
+    def CommitTransaction(self):
+        return self.connection.Execute('transaction', 'commit', {})()
+        
+    def RollbackTransaction(self):
+        return self.connection.Execute('transaction', 'rollback', {})()
+    
+    def GetTransaction(self):
+        return CTransaction(self)

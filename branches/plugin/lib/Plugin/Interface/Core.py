@@ -26,19 +26,32 @@ class CCore(object):
                 com = command['command'].lower()
                 callid = params.pop('__id__', None)
                 if com == 'gui':
-                    self._gui(command['type'].lower(), params, addr, callid)
+                    self._gui(command['type'], params, addr, callid)
                 
                 elif com == 'metamodel':
-                    self._metamodel(command['type'].lower(), params, addr, callid)
+                    self._metamodel(command['type'], params, addr, callid)
                 
                 elif com == 'exec':
                     self._exec(command['type'], params, addr, callid)
+                
+                elif com == 'transaction':
+                    self._transaction(command['type'], params, addr, callid)
                     
                 else:
                     self.manager.Send(addr, RESP_UNKONWN_COMMAND, command = com, __id__ = callid)
             
+            except TransactionModeUnspecifiedError:
+                self.manager.Send(addr, RESP_TRANSACTION_MODE_UNSPECIFIED, __id__ = callid)
+            
+            except TransactionPendingError:
+                self.manager.Send(addr, RESP_TRANSACTION_PENDING, __id__ = callid)
+                
+            except OutOfTransactionError:
+                self.manager.Send(addr, RESP_OUT_OF_TRANSACTION, __id__ = callid)
+            
             except (ParamValueError, ), e:
                 self.manager.Send(addr, RESP_INVALID_PARAMETER, params = [i for i in e], __id__ = callid)
+            
             except (ParamMissingError, ), e:
                 self.manager.Send(addr, RESP_MISSING_PARAMETER, param = e[0], __id__ = callid)
                 
@@ -47,6 +60,25 @@ class CCore(object):
         
         else:
             self.manager.Send(addr, RESP_UNSUPPORTED_VERSION, version = command['version'], __id__ = callid)
+    
+    def _transaction(self, com, params, addr, callid):
+        if com == 'autocommit':
+            self.manager.GetTransaction(addr).StartAutocommit()
+        
+        elif com == 'begin':
+            self.manager.GetTransaction(addr).BeginTransaction()
+        
+        elif com == 'commit':
+            self.manager.GetTransaction(addr).CommitTransaction()
+        
+        elif com == 'rollback':
+            self.manager.GetTransaction(addr).RollbackTransaction()
+        
+        else:
+            self.manager.Send(addr, RESP_INVALID_COMMAND_TYPE, command = 'transaction', type = com, __id__ = callid)
+        
+        self.manager.Send(addr, RESP_OK, __id__ = callid)
+        
     
     def _exec(self, com, params, addr, callid):
         try:
@@ -63,7 +95,11 @@ class CCore(object):
                 self.manager.Send(addr, RESP_INVALID_OBJECT, id = identifier, __id__ = callid)
                 return
             
-            result = Meta.Execute(obj, fname, params)
+            if Meta.IsDestructive(obj, fname):
+                result = None
+                self.manager.GetTransaction(addr).Action(Meta.Execute, (obj, fname, params))
+            else:
+                result = Meta.Execute(obj, fname, params)
             
             self.manager.Send(addr, RESP_RESULT, __id__ = callid, result = result)
         

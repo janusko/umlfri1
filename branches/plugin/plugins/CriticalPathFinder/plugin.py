@@ -14,6 +14,7 @@ class CCriticalPathFinder(object):
     def __init__(self, interface):
         
         self.interface = interface
+        self.interface.StartAutocommit()
         try:
             self.interface.AddMenu('MenuItem', 'mnuMenubar', 'graphtools', None, text = 'Graph Tools')
             self.interface.AddMenu('submenu', 'mnuMenubar/graphtools', None, None)

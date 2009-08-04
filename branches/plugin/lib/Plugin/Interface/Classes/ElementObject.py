@@ -23,10 +23,10 @@ class IElementObject(IDomainObject):
     
     #destructive
     
-    #~ @factory
-    #~ @parameter('type', t_elementType)
-    #~ def Create(type):
-        #~ return CElementObject(type)
+    @factory
+    @parameter('type', t_elementType)
+    def Create(type):
+        return CElementObject(type)
     
     #~ @parameter('child', t_classobject(CElementObject))
     #~ def AddChild(him, child):

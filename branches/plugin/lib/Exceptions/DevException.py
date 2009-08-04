@@ -43,6 +43,19 @@ class UnknowMethodError(PluginCommunicationError):
 
 class UnknownClassNameError(PluginCommunicationError):
     pass
+    
+class TransactionError(PluginCommunicationError):
+    pass
+    
+class TransactionModeUnspecifiedError(TransactionError):
+    pass
+
+class TransactionPendingError(TransactionError):
+    pass
+    
+class OutOfTransactionError(TransactionError):
+    pass
 
 class MetamodelValidationError(DevException):
     pass
+    
