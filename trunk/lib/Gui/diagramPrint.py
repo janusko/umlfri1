@@ -36,6 +36,7 @@ class CDiagramPrint(gobject.GObject):
         self.use_margins = use_margins
         self.diagram = diagram
         self.print_operation = gtk.PrintOperation()
+        self.print_operation.set_unit(gtk.UNIT_POINTS)
         # do we really need this ? no...
         # self.print_operation.set_job_name(_("UML .FRI diagram print"))
         
