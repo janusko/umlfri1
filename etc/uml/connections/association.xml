@@ -1,7 +1,6 @@
 <ConnectionType xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" id="Association">
     <Icon path="icons/associate.png"/>
-    <Domain id="association" identity="name"/>
-    
+    <Domain id="association" identity="name"/>    
     <Appearance>
         <ConnectionLine style="solid" color="#cfg.Styles.Connection.LineColor"/>
         <Switch value="#self.direction">
@@ -15,8 +14,7 @@
                 <ConnectionArrow index="-1" style="simple" color="#cfg.Styles.Connection.ArrowColor"/>
                 <ConnectionArrow index="0" style="simple" color="#cfg.Styles.Connection.ArrowColor"/>
             </Case>
-        </Switch>
-        
+        </Switch>        
         <Label position="center">
             <HBox>
                 <Condition condition="#self.stereotype">
