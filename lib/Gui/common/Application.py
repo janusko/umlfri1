@@ -3,10 +3,12 @@ from lib.Depend.gtk2 import gobject
 from lib.Depend.gtk2 import pango
 
 import sys
+import os
 from os.path import abspath
 import gettext
 import getopt
 import traceback
+import locale
 
 class CApplication(gobject.GObject):
     windows = ()
@@ -103,9 +105,9 @@ class CApplication(gobject.GObject):
         
         if self.textdomain is not None:
             try:
-                translation = gettext.translation(self.textdomain, self.localespath)
+                translation = gettext.translation(self.textdomain, self.localespath, [self.FindLanguage()])
                 translation.install()
-            except:
+            except IOError:
                 if isinstance(__builtins__, dict):
                     __builtins__['_'] = lambda text: text
                 else:
@@ -191,3 +193,9 @@ class CApplication(gobject.GObject):
     
     def Quit(self):
         gtk.main_quit()
+    
+    def FindLanguage(self):
+        for e in ('LANGUAGE', 'LC_ALL', 'LC_MESSAGES', 'LANG'):
+            if e in os.environ:
+                return os.environ[e]
+        return '.'.join(locale.getdefaultlocale())
