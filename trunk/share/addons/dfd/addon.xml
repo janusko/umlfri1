@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<AddOn xmlns="http://umlfri.org/xmlschema/addon.xml">
+    <Identity uri="http://umlfri.kst.fri.uniza.sk/metamodel/dfd.frim" />
+    <FriendlyName name="DFD" version="0.0.1" />
+    <Author>
+        <Name name="UML .FRI team" />
+        <Homepage url="http://umlfri.org" />
+        
+        <commonLicense name="GPL" />
+    </Author>
+    
+    <Icon path="icons/dfd_icon.png" />
+    
+    <Metamodel>
+        <Path path="." />
+    </Metamodel>
+</AddOn>

@@ -4,9 +4,11 @@ import zipfile
 import cStringIO
 import re
 
-reMulSep = re.compile('/{2,}')
+import StorageList
 
 from AbstractStorage import CAbstractStorage
+
+reMulSep = re.compile('/{2,}')
 
 class CZipStorage(CAbstractStorage):
     @staticmethod
@@ -32,20 +34,32 @@ class CZipStorage(CAbstractStorage):
         return CZipStorage(f, '/'.join(path))
     
     def __init__(self, file, path):
-        self.zip = zipfile.ZipFile(file, 'r')
+        if isinstance(file, zipfile.ZipFile):
+            self.zip = file
+        else:
+            self.zip = zipfile.ZipFile(file, 'r')
         self.path = path
     
+    def __convertPath(path):
+        return reMulSep.sub('/', '/'.join((self.path, path)).rstrip('/\\'))
+    
     def listdir(self, path):
-        path = reMulSep.sub('/', '/'.join((self.path, path)).rstrip('/\\'))
+        path = self.__convertPath(path)
         return [os.path.basename(name) for name in self.zip.namelist() if os.path.dirname(name) == path]
     
     def file(self, path):
         return cStringIO.StringIO(self.read_file(path))
     
     def read_file(self, path):
-        path = reMulSep.sub('/', '/'.join((self.path, path))).lstrip('/')
+        path = self.__convertPath(path)
         return self.zip.read(path)
     
     def exists(self, path):
-        path = reMulSep.sub('/', '/'.join((self.path, path))).lstrip('/')
+        path = self.__convertPath(path)
         return path in self.zip.namelist()
+    
+    def subopen(self, path):
+        path = self.__convertPath(path)
+        return CZipStorage(self.zip, path)
+
+StorageList.classes.append(CZipStorage)

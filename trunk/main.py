@@ -15,6 +15,7 @@ import os.path
 
 from lib.Project import CProject
 from lib.Project import CRecentFiles
+from lib.Addons import CAddonManager
 
 from lib.Gui import CfrmSplash, CfrmMain, CfrmAbout, CfrmProperties, CfrmOpen, CfrmSave, CfrmOptions, CfrmException, CfrmExport
 from lib.Gui.dialogs import CExceptionDialog
@@ -39,6 +40,7 @@ class Application(CApplication):
     def __init__(self):
         self.recentFiles = CRecentFiles()
         self.clipboard = CClipboard()
+        self.addonManager = CAddonManager()
         
         CApplication.__init__(self)
         self.UserGui= CUserGui(self)
@@ -72,7 +74,7 @@ class Application(CApplication):
     
     def ProjectInit(self):
         if self.project is None:
-            self.project = CProject()
+            self.project = CProject(self.addonManager)
             
     def ProjectDelete(self):
         self.project = None

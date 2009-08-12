@@ -17,3 +17,6 @@ class CAbstractStorage(object):
     
     def exists(self, path):
         return False
+    
+    def subopen(self, path):
+        return None
