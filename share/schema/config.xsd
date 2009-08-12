@@ -188,9 +188,9 @@
 									<xs:documentation>Path of root</xs:documentation>
 								</xs:annotation>
 							</xs:element>
-							<xs:element name="MetamodelList" type="xs:string">
+							<xs:element name="Addons" type="xs:string">
 								<xs:annotation>
-									<xs:documentation>Path to the metamodels list</xs:documentation>
+									<xs:documentation>Path to the addon directory</xs:documentation>
 								</xs:annotation>
 							</xs:element>
 							<xs:element name="Templates" type="xs:string">
@@ -223,9 +223,9 @@
 									<xs:documentation>Path of dir of user</xs:documentation>
 								</xs:annotation>
 							</xs:element>
-							<xs:element name="UserMetamodelList" type="xs:string">
+							<xs:element name="UserAddons" type="xs:string">
 								<xs:annotation>
-									<xs:documentation>Path of users metamodel list</xs:documentation>
+									<xs:documentation>Path of user's addon directory</xs:documentation>
 								</xs:annotation>
 							</xs:element>
 							<xs:element name="UserTemplates" type="xs:string">

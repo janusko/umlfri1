@@ -9,12 +9,12 @@
 			<xs:sequence>
 				<xs:element name="metamodel">
 					<xs:annotation>
-						<xs:documentation>In trhis block, metamodel is defined. E.g. uri and version are defined. </xs:documentation>
+						<xs:documentation>In this block, metamodel is defined. E.g. uri and version are defined. </xs:documentation>
 					</xs:annotation>
 					<xs:complexType>
 						<xs:sequence>
 							<xs:element name="uri" type="xs:string"/>
-							<xs:element name="version" type="xs:string"/>
+							<xs:element name="version" type="xs:string" />
 						</xs:sequence>
 					</xs:complexType>
 				</xs:element>

@@ -1,6 +1,8 @@
 import os.path
 import os
 
+import StorageList
+
 from AbstractStorage import CAbstractStorage
 
 class CDirectory(CAbstractStorage):
@@ -23,4 +25,9 @@ class CDirectory(CAbstractStorage):
         return self.file(path).read()
     
     def exists(self, path):
-        return os.path.is_file(path)
+        return os.path.isfile(os.path.join(self.path, path))
+    
+    def subopen(self, path):
+        return StorageList.open_storage(os.path.join(self.path, path))
+
+StorageList.classes.append(CDirectory)

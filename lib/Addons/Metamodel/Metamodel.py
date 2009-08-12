@@ -5,7 +5,6 @@ from lib.Connections.Factory import CConnectionFactory
 from lib.consts import VERSIONS_PATH, DIAGRAMS_PATH, ELEMENTS_PATH, CONNECTIONS_PATH, DOMAINS_PATH
 from lib.Exceptions import MetamodelValidationError
 from lib.Elements import CElementType
-from lib.Depend.etree import etree, HAVE_LXML
 import os
 
 class CMetamodel(object):
@@ -15,8 +14,8 @@ class CMetamodel(object):
         self.__ElementFactory = CElementFactory(self.__Storage, ELEMENTS_PATH, self.__DomainFactory)
         self.__DiagramFactory = CDiagramFactory(self.__Storage, DIAGRAMS_PATH)
         self.__ConnectionFactory = CConnectionFactory(self.__Storage, CONNECTIONS_PATH, self.__DomainFactory)
-        self.__MetamodelVersion = version
         self.__MetamodelUri = uri
+        self.__MetamodelVersion = version
         self.__diagramsList = []
         
         # Metamodel validation

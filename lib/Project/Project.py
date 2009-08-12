@@ -11,7 +11,6 @@ from lib.Drawing import CConnection
 from lib.Elements.Type import CElementType
 from lib.Elements.Object import CElementObject
 from lib.Connections.Object import CConnectionObject
-from lib.Metamodel import CMetamodelManager
 from lib.Drawing import CDiagram
 import os.path
 from lib.consts import UMLPROJECT_NAMESPACE, PROJECT_EXTENSION, PROJECT_CLEARXML_EXTENSION
@@ -26,10 +25,10 @@ if HAVE_LXML:
 class CProject(object):
     SaveVersion = (1, 0) # save file format version
     
-    def __init__(self):
+    def __init__(self, addonManager):
         self.root = None
         
-        self.__metamodelManager = CMetamodelManager()
+        self.__addonManager = addonManager
         self.__metamodel = None
         self.defaultDiagram = None
         
@@ -375,7 +374,13 @@ class CProject(object):
                 
                 if not uri or not version:
                     raise XMLError("Bad metamodel definition")
-                self.__metamodel = self.__metamodelManager.GetMetamodel(uri, version, filename)
+                addon = self.__addonManager.GetAddon(uri)
+                if addon is None:
+                    raise XMLError("Project using unknown metamodel")
+                if addon.GetType() != 'metamodel':
+                    raise XMLError("Given URI identifier is not metamodel")
+                self.__metamodel = addon.GetComponent().LoadMetamodel()
+                
             elif element.tag == UMLPROJECT_NAMESPACE+'objects':
                 for subelem in element:
                     if subelem.tag == UMLPROJECT_NAMESPACE+'object':
