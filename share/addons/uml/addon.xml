@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<AddOn xmlns="http://umlfri.org/xmlschema/addon.xml">
+<AddOn xmlns="http://umlfri.org/xmlschema/addon.xsd">
     <Identity uri="http://umlfri.kst.fri.uniza.sk/metamodel/uml.frim" />
     <FriendlyName name="UML 1.4" version="0.1" />
     <Author>
@@ -10,6 +10,13 @@
     </Author>
     
     <Icon path="icons/uml_icon.png" />
+    <Description>
+        Unified Modeling Language (UML) is a standardized general-purpose
+        modeling language in the field of software engineering.
+        
+        UML includes a set of graphical notation techniques to create
+        abstract models of specific systems.
+    </Description>
     
     <Metamodel>
         <Path path="." />

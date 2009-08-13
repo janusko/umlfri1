@@ -1,5 +1,5 @@
 class CAddon(object):
-    def __init__(self, storage, uri, component, name, version = None, icon = None):
+    def __init__(self, storage, uri, component, name, version = None, icon = None, description = None):
         self.__storage = storage
         self.__uri = uri
         
@@ -10,6 +10,7 @@ class CAddon(object):
         self.__version = version
         
         self.__icon = icon
+        self.__description = description
     
     def GetStorage(self):
         return self.__storage
@@ -31,3 +32,6 @@ class CAddon(object):
     
     def GetIcon(self):
         return self.__icon
+    
+    def GetDescription(self):
+        return self.__description

@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<AddOn xmlns="http://umlfri.org/xmlschema/addon.xml">
+<AddOn xmlns="http://umlfri.org/xmlschema/addon.xsd">
     <Identity uri="http://umlfri.kst.fri.uniza.sk/metamodel/flowchart.frim" />
     <FriendlyName name="Flowchart" version="0.0.1" />
     <Author>
@@ -10,6 +10,11 @@
     </Author>
     
     <Icon path="icons/flowchart_icon.png" />
+    <Description>
+        A flowchart is a common type of chart, that represents an
+        algorithm or process, showing the steps as boxes of various kinds,
+        and their order by connecting these with arrows.
+    </Description>
     
     <Metamodel>
         <Path path="." />
