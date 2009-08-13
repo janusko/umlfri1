@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: UML .FRI 1.0-beta20090601\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-22 16:42+0200\n"
+"POT-Creation-Date: 2009-08-13 20:25+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,9 +22,6 @@ msgstr ""
 msgid "About"
 msgstr ""
 
-msgid "Abstract"
-msgstr ""
-
 #, python-format
 msgid "Academic year %s:"
 msgstr ""
@@ -36,6 +33,9 @@ msgid "Add diagram"
 msgstr ""
 
 msgid "Add element"
+msgstr ""
+
+msgid "Addons"
 msgstr ""
 
 msgid "All files"
@@ -59,9 +59,6 @@ msgstr ""
 msgid "Arrow fill color"
 msgstr ""
 
-msgid "Attribute"
-msgstr ""
-
 msgid "Basic information about your system"
 msgstr ""
 
@@ -69,12 +66,6 @@ msgid "Bring Forward"
 msgstr ""
 
 msgid "Bring To Top"
-msgstr ""
-
-msgid ""
-"By Reference\n"
-"By Value\n"
-"Not Specified"
 msgstr ""
 
 msgid "C_ontribute"
@@ -95,12 +86,6 @@ msgstr ""
 msgid "Connections"
 msgstr ""
 
-msgid "Const"
-msgstr ""
-
-msgid "Containment: "
-msgstr ""
-
 msgid "Create New Project"
 msgstr ""
 
@@ -113,9 +98,6 @@ msgstr ""
 msgid "Delete from Project"
 msgstr ""
 
-msgid "Derived"
-msgstr ""
-
 msgid "Diagram Export"
 msgstr ""
 
@@ -125,10 +107,10 @@ msgstr ""
 msgid "Diagram type"
 msgstr ""
 
-msgid "Do you want to save project?"
+msgid "Disable"
 msgstr ""
 
-msgid "Documentation:"
+msgid "Do you want to save project?"
 msgstr ""
 
 msgid "Drag"
@@ -141,6 +123,9 @@ msgid "Element is already in this diagram"
 msgstr ""
 
 msgid "Elements"
+msgstr ""
+
+msgid "Enable"
 msgstr ""
 
 msgid "Error opening file"
@@ -206,13 +191,10 @@ msgstr ""
 msgid "Images"
 msgstr ""
 
-msgid "Initial:"
+msgid "Install"
 msgstr ""
 
 msgid "Invalid connection"
-msgstr ""
-
-msgid "Is Query"
 msgstr ""
 
 msgid "Line color"
@@ -222,6 +204,9 @@ msgid "Locales"
 msgstr ""
 
 msgid "Machine"
+msgstr ""
+
+msgid "Metamodels"
 msgstr ""
 
 msgid "Name"
@@ -234,9 +219,6 @@ msgid "Name text color"
 msgstr ""
 
 msgid "Name text font"
-msgstr ""
-
-msgid "Name:"
 msgstr ""
 
 msgid "Notes"
@@ -260,9 +242,6 @@ msgstr ""
 msgid "Open specification ..."
 msgstr ""
 
-msgid "Operation"
-msgstr ""
-
 msgid "P_NG"
 msgstr ""
 
@@ -272,9 +251,6 @@ msgstr ""
 msgid "Pages"
 msgstr ""
 
-msgid "Parameters:"
-msgstr ""
-
 msgid "Paths"
 msgstr ""
 
@@ -282,6 +258,9 @@ msgid "Platform"
 msgstr ""
 
 msgid "Please help us improve the UML .FRI application by sending us this log."
+msgstr ""
+
+msgid "Plugins"
 msgstr ""
 
 msgid "Points color"
@@ -311,12 +290,6 @@ msgstr ""
 msgid "Properties"
 msgstr ""
 
-msgid "Property"
-msgstr ""
-
-msgid "Pure"
-msgstr ""
-
 msgid "PyGTK version"
 msgstr ""
 
@@ -338,12 +311,6 @@ msgstr ""
 msgid "Rectangle width"
 msgstr ""
 
-msgid "Return Array"
-msgstr ""
-
-msgid "Return Type:"
-msgstr ""
-
 msgid "Root"
 msgstr ""
 
@@ -354,12 +321,6 @@ msgid "Save Project As"
 msgstr ""
 
 msgid "Scalable Vector Graphics"
-msgstr ""
-
-msgid "Scope:"
-msgstr ""
-
-msgid "Scope: "
 msgstr ""
 
 msgid "Select a directory"
@@ -386,22 +347,19 @@ msgstr ""
 msgid "Show in project view"
 msgstr ""
 
+msgid "Start"
+msgstr ""
+
 msgid "Start page"
 msgstr ""
 
-msgid "Static"
-msgstr ""
-
-msgid "Stereotype:"
+msgid "Stop"
 msgstr ""
 
 msgid "Styles"
 msgstr ""
 
 msgid "Supervised by:"
-msgstr ""
-
-msgid "Synchronized"
 msgstr ""
 
 msgid "System _info"
@@ -425,10 +383,10 @@ msgid ""
 "See the Help tab for more info."
 msgstr ""
 
-msgid "Type:"
+msgid "UML .FRI"
 msgstr ""
 
-msgid "UML .FRI"
+msgid "UML .FRI Addons"
 msgstr ""
 
 msgid "UML .FRI Clear XML Projects"
@@ -467,6 +425,9 @@ msgid "UML.fri"
 msgstr ""
 
 msgid "Unable to insert element"
+msgstr ""
+
+msgid "Uninstall"
 msgstr ""
 
 msgid "University of Žilina"
