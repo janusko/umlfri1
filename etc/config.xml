@@ -48,6 +48,7 @@
         <UserConfig>~/.uml_fri/config.xml</UserConfig>
         <UserAddons>~/.uml_fri/addons/</UserAddons>
         <UserTemplates>~/.uml_fri/templates/</UserTemplates>
+        <UserEnabledAddons>~/.uml_fri/addons.xml</UserEnabledAddons>
         <RecentFiles>~/.uml_fri/RecentFiles.xml</RecentFiles>
         <UserGui>~/.uml_fri/UserGui.xml</UserGui>
     </Paths>

@@ -376,10 +376,12 @@ class CProject(object):
                     raise XMLError("Bad metamodel definition")
                 addon = self.__addonManager.GetAddon(uri)
                 if addon is None:
-                    raise XMLError("Project using unknown metamodel")
+                    raise ProjectError("Project using unknown metamodel")
                 if addon.GetType() != 'metamodel':
-                    raise XMLError("Given URI identifier is not metamodel")
+                    raise ProjectError("Given URI identifier is not metamodel")
                 self.__metamodel = addon.GetComponent().LoadMetamodel()
+                if self.__metamodel is None:
+                    raise ProjectError("This metamodel is disabled")
                 
             elif element.tag == UMLPROJECT_NAMESPACE+'objects':
                 for subelem in element:
