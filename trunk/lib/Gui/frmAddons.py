@@ -1,4 +1,4 @@
-from lib.Depend.gtk2 import gtk, glib, pango
+from lib.Depend.gtk2 import gtk, pango
 
 from lib.Drawing.Canvas.GtkPlus import PixmapFromPath
 
@@ -78,11 +78,7 @@ class CfrmAddons(CWindow):
             enabled = addon.IsEnabled()
             uri = addon.GetUri()
             
-            twStore.append(None, (icon, "<b>%s</b>     %s\n%s"%(
-                glib.markup_escape_text(name),
-                glib.markup_escape_text(version),
-                glib.markup_escape_text(description)
-            ), enabled, uri))
+            twStore.append(None, (icon, "<b>%s</b>     %s\n%s"%(name, version, description), enabled, uri))
     
     def __GetSelectedAddon(self, treeView):
         iter = treeView.get_selection().get_selected()[1]
