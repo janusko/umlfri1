@@ -75,7 +75,7 @@ class CfrmAddons(CWindow):
             name = addon.GetName()
             version = addon.GetVersion()
             description = addon.GetDescription() or ""
-            enabled = True
+            enabled = addon.IsEnabled()
             uri = addon.GetUri()
             
             twStore.append(None, (icon, "<b>%s</b>     %s\n%s"%(
@@ -83,3 +83,47 @@ class CfrmAddons(CWindow):
                 glib.markup_escape_text(version),
                 glib.markup_escape_text(description)
             ), enabled, uri))
+    
+    def __GetSelectedAddon(self, treeView):
+        iter = treeView.get_selection().get_selected()[1]
+        if iter is None:
+            return None
+        
+        selected = treeView.get_model().get(iter, 3)[0]
+        return self.application.addonManager.GetAddon(selected)
+    
+    @event("cmdEnableMetamodel", "clicked")
+    def on_cmdEnableMetamodel_click(self, button):
+        addon = self.__GetSelectedAddon(self.twMetamodelList)
+        if addon is None:
+            return
+        
+        iter = self.twMetamodelList.get_selection().get_selected()[1]
+        self.__MetamodelStore.set(iter, 2, True)
+        
+        addon.Enable()
+        self.MetamodelChanged()
+    
+    @event("cmdDisableMetamodel", "clicked")
+    def on_cmdDisableMetamodel_click(self, button):
+        addon = self.__GetSelectedAddon(self.twMetamodelList)
+        
+        if addon is None:
+            return
+        
+        iter = self.twMetamodelList.get_selection().get_selected()[1]
+        self.__MetamodelStore.set(iter, 2, False)
+        
+        addon.Disable()
+        self.MetamodelChanged()
+    
+    @event("twMetamodelList", "cursor-changed")
+    def MetamodelChanged(self, treeView = None):
+        addon = self.__GetSelectedAddon(self.twMetamodelList)
+        
+        if addon is None:
+            self.cmdEnableMetamodel.set_sensitive(False)
+            self.cmdDisableMetamodel.set_sensitive(False)
+        else:
+            self.cmdEnableMetamodel.set_sensitive(not addon.IsEnabled())
+            self.cmdDisableMetamodel.set_sensitive(addon.IsEnabled())

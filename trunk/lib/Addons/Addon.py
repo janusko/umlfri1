@@ -1,10 +1,14 @@
 class CAddon(object):
-    def __init__(self, storage, uri, component, name, version = None, icon = None, description = None):
+    def __init__(self, manager, storage, uri, component, enabled, name, version = None, icon = None, description = None):
+        self.__manager = manager
+        
         self.__storage = storage
         self.__uri = uri
         
         self.__component = component
         component._SetAddon(self)
+        
+        self.__enabled = enabled
         
         self.__name = name
         self.__version = version
@@ -17,6 +21,17 @@ class CAddon(object):
     
     def GetUri(self):
         return self.__uri
+    
+    def IsEnabled(self):
+        return self.__enabled
+    
+    def Enable(self):
+        self.__enabled = True
+        self.__manager._RefreshAddonEnabled(self)
+    
+    def Disable(self):
+        self.__enabled = False
+        self.__manager._RefreshAddonEnabled(self)
     
     def GetName(self):
         return self.__name

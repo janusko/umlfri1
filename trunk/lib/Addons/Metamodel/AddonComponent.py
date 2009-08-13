@@ -24,6 +24,9 @@ class CMetamodelAddonComponent(object):
         self.__addon = addon
     
     def LoadMetamodel(self):
+        if not self.__addon.IsEnabled():
+            return None
+        
         if self.__metamodel == None:
             storage = self.__addon.GetStorage().subopen(self.__path)
             

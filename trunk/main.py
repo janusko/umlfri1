@@ -110,6 +110,7 @@ class Application(CApplication):
         self.UserGui.SaveConfig()
         CApplication.Quit(self)
         config.Save()
+        self.addonManager.Save()
         self.recentFiles.SaveRecentFiles()
 
 if __name__ == '__main__':
