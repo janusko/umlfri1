@@ -42,7 +42,7 @@ UMLPROJECT_NAMESPACE = '{http://umlfri.kst.fri.uniza.sk/xmlschema/umlproject.xsd
 RECENTFILES_NAMESPACE = '{http://umlfri.kst.fri.uniza.sk/xmlschema/recentfiles.xsd}'
 CONFIG_NAMESPACE = '{http://umlfri.kst.fri.uniza.sk/xmlschema/config.xsd}'
 METAMODEL_LIST_NAMESPACE = '{http://umlfri.kst.fri.uniza.sk/xmlschema/metamodelList.xsd}'
-ADDON_NAMESPACE = "{http://umlfri.org/xmlschema/addon.xml}"
+ADDON_NAMESPACE = "{http://umlfri.org/xmlschema/addon.xsd}"
 USERGUI_NAMESPACE='http://umlfri.kst.fri.uniza.sk/xmlschema/usergui.xsd'
 
 # UML .FRI server - web page, mail address and address for error logs

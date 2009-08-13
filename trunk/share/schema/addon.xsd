@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Papi Raton (Pirate Bay) -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/addon.xsd" targetNamespace="http://umlfri.kst.fri.uniza.sk/xmlschema/addon.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
-	<xs:element name="addon">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://umlfri.org/xmlschema/addon.xsd" targetNamespace="http://umlfri.org/xmlschema/addon.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="AddOn">
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element name="Identity">
@@ -13,11 +13,6 @@
 					<xs:complexType>
 						<xs:attribute name="name" type="xs:string" use="required"/>
 						<xs:attribute name="version" type="xs:string"/>
-					</xs:complexType>
-				</xs:element>
-				<xs:element name="Icon" minOccurs="0">
-					<xs:complexType>
-						<xs:attribute name="path" type="xs:string" use="required"/>
 					</xs:complexType>
 				</xs:element>
 				<xs:element name="Author">
@@ -55,6 +50,12 @@
 						</xs:sequence>
 					</xs:complexType>
 				</xs:element>
+				<xs:element name="Icon" minOccurs="0">
+					<xs:complexType>
+						<xs:attribute name="path" type="xs:string" use="required"/>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Description" type="xs:string" minOccurs="0"/>
 				<xs:element name="Compatibility" minOccurs="0">
 					<xs:complexType>
 						<xs:sequence>
@@ -89,7 +90,15 @@
 				</xs:element>
 				<xs:choice>
 					<xs:element name="Metamodel">
-						<xs:complexType/>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="Path">
+									<xs:complexType>
+										<xs:attribute name="path" use="required"/>
+									</xs:complexType>
+								</xs:element>
+							</xs:sequence>
+						</xs:complexType>
 					</xs:element>
 				</xs:choice>
 			</xs:sequence>

@@ -39,7 +39,7 @@ class CfrmMain(CWindow):
         'mnuViewTools', 'mnuViewCommands', 'mnuNormalSize', 'mnuZoomIn','mnuZoomOut', 'mnuBestFit',
         'hndCommandBar',
         #############
-        'mnuOptions',
+        'mnuAddons', 'mnuOptions',
         #############
         'mItemHelp',
         'mnuAbout',
@@ -205,6 +205,12 @@ class CfrmMain(CWindow):
             self.nbTabs.Show()
             self.vpaRight.show()
             self.form.window.unfullscreen()
+
+    @event("mnuAddons", "activate")
+    def on_mnuAddons_activate(self, mnu):
+        tmp = self.application.GetWindow('frmAddons')
+        tmp.SetParent(self)
+        tmp.Show()
 
     # Preferencies
     @event("mnuOptions", "activate")

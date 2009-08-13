@@ -1,3 +1,4 @@
+from frmAddons import CfrmAddons
 from frmMain import CfrmMain
 from frmSplash import CfrmSplash
 from frmAbout import CfrmAbout
