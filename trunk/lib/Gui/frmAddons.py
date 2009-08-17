@@ -76,7 +76,7 @@ class CfrmAddons(CWindow):
             version = addon.GetVersion()
             description = addon.GetDescription() or ""
             enabled = addon.IsEnabled()
-            uri = addon.GetUri()
+            uri = addon.GetDefaultUri()
             
             twStore.append(None, (icon, "<b>%s</b>     %s\n%s"%(name, version, description), enabled, uri))
     
@@ -113,6 +113,16 @@ class CfrmAddons(CWindow):
         addon.Disable()
         self.MetamodelChanged()
     
+    @event("cmdUninstallMetamodel", "clicked")
+    def on_cmdUninstallMetamodel_click(self, button):
+        addon = self.__GetSelectedAddon(self.twMetamodelList)
+        
+        if addon is None:
+            return
+        
+        addon.Uninstall()
+        self.__Load()
+    
     @event("twMetamodelList", "cursor-changed")
     def MetamodelChanged(self, treeView = None):
         addon = self.__GetSelectedAddon(self.twMetamodelList)
@@ -120,6 +130,8 @@ class CfrmAddons(CWindow):
         if addon is None:
             self.cmdEnableMetamodel.set_sensitive(False)
             self.cmdDisableMetamodel.set_sensitive(False)
+            self.cmdUninstallMetamodel.set_sensitive(False)
         else:
             self.cmdEnableMetamodel.set_sensitive(not addon.IsEnabled())
             self.cmdDisableMetamodel.set_sensitive(addon.IsEnabled())
+            self.cmdUninstallMetamodel.set_sensitive(addon.IsUninstallable())

@@ -1,6 +1,8 @@
 <?xml version="1.0" ?>
 <AddOn xmlns="http://umlfri.org/xmlschema/addon.xsd">
-    <Identity uri="http://umlfri.kst.fri.uniza.sk/metamodel/flowchart.frim" />
+    <Identity uri="urn:umlfri.org:metamodel:flowchart" />
+    <Identity uri="http://umlfri.kst.fri.uniza.sk/metamodel/flowchart.frim" /> <!-- Only for compatibility with old save files -->
+    
     <FriendlyName name="Flowchart" version="0.0.1" />
     <Author>
         <Name name="UML .FRI team" />

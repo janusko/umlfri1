@@ -1,5 +1,6 @@
 import os.path
 import os
+import shutil
 
 import StorageList
 
@@ -29,5 +30,8 @@ class CDirectory(CAbstractStorage):
     
     def subopen(self, path):
         return StorageList.open_storage(os.path.join(self.path, path))
+    
+    def destroy(self):
+        shutil.rmtree(self.path)
 
 StorageList.classes.append(CDirectory)

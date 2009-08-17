@@ -4,7 +4,7 @@
 	<xs:element name="AddOn">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element name="Identity">
+				<xs:element name="Identity" maxOccurs="unbounded">
 					<xs:complexType>
 						<xs:attribute name="uri" type="xs:anyURI" use="required"/>
 					</xs:complexType>

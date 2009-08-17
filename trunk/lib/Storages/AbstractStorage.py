@@ -20,3 +20,6 @@ class CAbstractStorage(object):
     
     def subopen(self, path):
         return None
+    
+    def destroy(self):
+        pass
