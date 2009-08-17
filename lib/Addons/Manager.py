@@ -22,10 +22,11 @@ if HAVE_LXML:
 
 class CAddonManager(object):
     reSpaces = re.compile(' +')
+    
     def __init__(self):
         self.__enabledAddons = self.__LoadEnabledAddons(config['/Paths/UserEnabledAddons'])
-        self.__addons = self.__LoadAllAddons(open_storage(config['/Paths/Addons']))
-        self.__addons.update(self.__LoadAllAddons(open_storage(config['/Paths/UserAddons'])))
+        self.__addons = self.__LoadAllAddons(open_storage(config['/Paths/Addons']), False)
+        self.__addons.update(self.__LoadAllAddons(open_storage(config['/Paths/UserAddons']), True))
     
     def __LoadEnabledAddons(self, path):
         ret = {}
@@ -61,7 +62,7 @@ class CAddonManager(object):
         print>>f, '<?xml version="1.0" encoding="utf-8"?>'
         print>>f, etree.tostring(root, encoding='utf-8')
     
-    def __LoadAllAddons(self, storage):
+    def __LoadAllAddons(self, storage, uninstallable):
         tmp = {}
         
         if storage is None:
@@ -73,13 +74,14 @@ class CAddonManager(object):
             
             addonStorage = storage.subopen(addon)
             if addonStorage is not None:
-                addon = self.__LoadAddon(addonStorage)
+                addon = self.__LoadAddon(addonStorage, uninstallable)
                 if addon is not None:
-                    tmp[addon.GetUri()] = addon
+                    for uri in addon.GetUris():
+                        tmp[uri] = addon
         
         return tmp
     
-    def __LoadAddon(self, storage):
+    def __LoadAddon(self, storage, uninstallable):
         if not storage.exists(ADDON_PATH):
             return None
         
@@ -88,7 +90,7 @@ class CAddonManager(object):
             if not xmlschema.validate(root):
                 raise FactoryError("XMLError", xmlschema.error_log.last_error)
         
-        uri = None
+        uris = []
         name = None
         version = None
         component = None
@@ -97,7 +99,7 @@ class CAddonManager(object):
         
         for node in root:
             if node.tag == ADDON_NAMESPACE+'Identity':
-                uri = node.attrib["uri"]
+                uris.append(node.attrib["uri"])
             elif node.tag == ADDON_NAMESPACE+'FriendlyName':
                 name = node.attrib["name"]
                 version = node.attrib.get("version")
@@ -112,7 +114,9 @@ class CAddonManager(object):
                         path = node.attrib["icon"]
                 component = CMetamodelAddonComponent(path)
         
-        return CAddon(self, storage, uri, component, self.__enabledAddons.get(uri, True), name, version, icon, description)
+        return CAddon(self, storage, uris, component,
+            all(self.__enabledAddons.get(uri, True) for uri in uris),
+            uninstallable, name, version, icon, description)
     
     def __FormatMultilineText(self, text):
         ret = []
@@ -127,7 +131,17 @@ class CAddonManager(object):
         return '\n'.join(ret)
     
     def _RefreshAddonEnabled(self, addon):
-        self.__enabledAddons[addon.GetUri()] = addon.IsEnabled()
+        for uri in addon.GetUris():
+            if uri in self.__enabledAddons:
+                del self.__enabledAddons[uri]
+        
+        self.__enabledAddons[addon.GetDefaultUri()] = addon.IsEnabled()
+    
+    def _DeleteAddon(self, addon):
+        for uri in addon.GetUris():
+            if uri in self.__enabledAddons:
+                del self.__enabledAddons[uri]
+            del self.__addons[uri]
     
     def GetAddon(self, uri):
         if uri in self.__addons:
@@ -140,6 +154,7 @@ class CAddonManager(object):
             l = self.__addons.values()
         else:
             l = [addon for addon in self.__addons.itervalues() if addon.GetType() == type]
+        l = list(set(l))
         l.sort(key = lambda x: x.GetName())
         for addon in l:
             yield addon

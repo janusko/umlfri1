@@ -1,6 +1,8 @@
 <?xml version="1.0" ?>
 <AddOn xmlns="http://umlfri.org/xmlschema/addon.xsd">
-    <Identity uri="http://umlfri.kst.fri.uniza.sk/metamodel/uml.frim" />
+    <Identity uri="urn:umlfri.org:metamodel:uml" />
+    <Identity uri="http://umlfri.kst.fri.uniza.sk/metamodel/uml.frim" /> <!-- Only for compatibility with old save files -->
+    
     <FriendlyName name="UML 1.4" version="0.1" />
     <Author>
         <Name name="UML .FRI team" />

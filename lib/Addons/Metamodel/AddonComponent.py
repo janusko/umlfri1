@@ -36,7 +36,7 @@ class CMetamodelAddonComponent(object):
                 if not xmlschema.validate(root):
                     raise FactoryError("XMLError", xmlschema.error_log.last_error)
             
-            self.__metamodel = CMetamodel(storage, self.__addon.GetUri(), self.__addon.GetVersion())
+            self.__metamodel = CMetamodel(storage, self.__addon.GetDefaultUri(), self.__addon.GetVersion())
             
             #Iterate over the descendants of root element (only element with tag=Item)
             for element in root[0]:

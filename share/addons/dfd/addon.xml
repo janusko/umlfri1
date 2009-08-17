@@ -1,6 +1,7 @@
 <?xml version="1.0" ?>
 <AddOn xmlns="http://umlfri.org/xmlschema/addon.xsd">
-    <Identity uri="http://umlfri.kst.fri.uniza.sk/metamodel/dfd.frim" />
+    <Identity uri="urn:umlfri.org:metamodel:dfd" />
+    
     <FriendlyName name="DFD" version="0.0.1" />
     <Author>
         <Name name="UML .FRI team" />

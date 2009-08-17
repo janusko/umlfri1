@@ -5,8 +5,9 @@ import cStringIO
 import re
 
 import StorageList
-
 from AbstractStorage import CAbstractStorage
+
+from lib.Exceptions import *
 
 reMulSep = re.compile('/{2,}')
 
@@ -40,8 +41,8 @@ class CZipStorage(CAbstractStorage):
             self.zip = zipfile.ZipFile(file, 'r')
         self.path = path
     
-    def __convertPath(path):
-        return reMulSep.sub('/', '/'.join((self.path, path)).rstrip('/\\'))
+    def __convertPath(self, path):
+        return reMulSep.sub('/', '/'.join((self.path, path)).strip('/\\'))
     
     def listdir(self, path):
         path = self.__convertPath(path)
@@ -56,10 +57,17 @@ class CZipStorage(CAbstractStorage):
     
     def exists(self, path):
         path = self.__convertPath(path)
+        print path, self.zip.namelist()
         return path in self.zip.namelist()
     
     def subopen(self, path):
         path = self.__convertPath(path)
         return CZipStorage(self.zip, path)
+    
+    def destroy(self):
+        if self.path != '':
+            raise StorageDestroyError("Cannot destroy storage from within zip file")
+        
+        os.unlink(self.zip.filename)
 
 StorageList.classes.append(CZipStorage)
