@@ -1,5 +1,7 @@
 class CAddon(object):
-    def __init__(self, manager, storage, uris, component, enabled, uninstallable, name, version = None, icon = None, description = None):
+    def __init__(self, manager, storage, uris, component, enabled, uninstallable,
+                    author, name, version = "", license = (None, None), homepage = None,
+                    icon = None, description = None):
         self.__manager = manager
         
         self.__storage = storage
@@ -10,6 +12,10 @@ class CAddon(object):
         
         self.__enabled = enabled
         self.__uninstallable = uninstallable
+        
+        self.__author = author
+        self.__license = license
+        self.__homepage = homepage
         
         self.__name = name
         self.__version = version
@@ -37,6 +43,18 @@ class CAddon(object):
     def Disable(self):
         self.__enabled = False
         self.__manager._RefreshAddonEnabled(self)
+    
+    def GetAuthor(self):
+        return self.__author
+    
+    def GetLicense(self):
+        return self.__license[1]
+    
+    def GetLicenseName(self):
+        return self.__license[0]
+    
+    def GetHomepage(self):
+        return self.__homepage
     
     def GetName(self):
         return self.__name

@@ -13,6 +13,21 @@ class CDirectory(CAbstractStorage):
             return None
         return CDirectory(path)
     
+    @staticmethod
+    def duplicate(storage, path):
+        root = path
+        
+        os.makedirs(root)
+        
+        for path, dirs, files in storage.walk():
+            for dname in dirs:
+                os.mkdir(os.path.join(root, path, dname))
+            
+            for fname in files:
+                file(os.path.join(root, path, fname), 'w').write(storage.read_file(os.path.join(path, fname)))
+        
+        return CDirectory(root)
+    
     def __init__(self, path):
         self.path = path
     
@@ -33,5 +48,8 @@ class CDirectory(CAbstractStorage):
     
     def destroy(self):
         shutil.rmtree(self.path)
+    
+    def walk(self):
+        return os.walk(self.path)
 
 StorageList.classes.append(CDirectory)

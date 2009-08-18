@@ -3,9 +3,10 @@ from lib.Depend.etree import etree, HAVE_LXML
 import re
 import os
 import os.path
+import uuid
 
 from lib.lib import Indent
-from lib.Storages import open_storage
+from lib.Storages import open_storage, CDirectory
 from Addon import CAddon
 from Metamodel import CMetamodelAddonComponent
 from lib.consts import ADDON_NAMESPACE, ADDON_LIST_NAMESPACE, ADDON_PATH
@@ -22,6 +23,7 @@ if HAVE_LXML:
 
 class CAddonManager(object):
     reSpaces = re.compile(' +')
+    reIlegalCharacters = re.compile('[^a-z0-9A-Z]')
     
     def __init__(self):
         self.__enabledAddons = self.__LoadEnabledAddons(config['/Paths/UserEnabledAddons'])
@@ -74,10 +76,17 @@ class CAddonManager(object):
             
             addonStorage = storage.subopen(addon)
             if addonStorage is not None:
-                addon = self.__LoadAddon(addonStorage, uninstallable)
-                if addon is not None:
-                    for uri in addon.GetUris():
-                        tmp[uri] = addon
+                tmp.update(self.__LoadAddonToDict(addonStorage, uninstallable))
+        
+        return tmp
+    
+    def __LoadAddonToDict(self, storage, uninstallable):
+        tmp = {}
+        
+        addon = self.__LoadAddon(storage, uninstallable)
+        if addon is not None:
+            for uri in addon.GetUris():
+                tmp[uri] = addon
         
         return tmp
     
@@ -96,6 +105,9 @@ class CAddonManager(object):
         component = None
         icon = None
         description = None
+        author = []
+        license = None, None
+        homepage = None
         
         for node in root:
             if node.tag == ADDON_NAMESPACE+'Identity':
@@ -103,6 +115,21 @@ class CAddonManager(object):
             elif node.tag == ADDON_NAMESPACE+'FriendlyName':
                 name = node.attrib["name"]
                 version = node.attrib.get("version")
+            elif node.tag == ADDON_NAMESPACE+'Author':
+                for info in node:
+                    if info.tag == ADDON_NAMESPACE+'Name':
+                        author.append(info.attrib["name"])
+                    elif info.tag == ADDON_NAMESPACE+'Homepage':
+                        homepage = info.attrib["url"]
+                    elif info.tag == ADDON_NAMESPACE+'CommonLicense':
+                        if "file" in info.attrib:
+                            license = info.attrib["name"], storage.read_file(info.attrib["file"])
+                        else:
+                            license = info.attrib["name"], None
+                    elif info.tag == ADDON_NAMESPACE+'License':
+                        license = None, info.text
+                    elif info.tag == ADDON_NAMESPACE+'ExternalLicense':
+                        license = None, storage.read_file(info.attrib["file"])
             elif node.tag == ADDON_NAMESPACE+'Icon':
                 icon = node.attrib["path"]
             elif node.tag == ADDON_NAMESPACE+'Description':
@@ -116,7 +143,8 @@ class CAddonManager(object):
         
         return CAddon(self, storage, uris, component,
             all(self.__enabledAddons.get(uri, True) for uri in uris),
-            uninstallable, name, version, icon, description)
+            uninstallable, author, name, version, license, homepage,
+            icon, description)
     
     def __FormatMultilineText(self, text):
         ret = []
@@ -161,3 +189,13 @@ class CAddonManager(object):
     
     def Save(self):
         self.__SaveEnabledAddons(config['/Paths/UserEnabledAddons'], self.__enabledAddons)
+    
+    def LoadAddon(self, path):
+        return self.__LoadAddon(open_storage(path), False)
+    
+    def InstallAddon(self, addon):
+        dirname = str(uuid.uuid5(uuid.NAMESPACE_URL, addon.GetDefaultUri()))
+        path = os.path.join(config['/Paths/UserAddons'], dirname)
+        storage = CDirectory.duplicate(addon.GetStorage(), path)
+        
+        self.__addons.update(self.__LoadAddonToDict(storage, True))

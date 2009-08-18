@@ -3,6 +3,10 @@ class CAbstractStorage(object):
     def create(path):
         return None
     
+    @staticmethod
+    def duplicate(storage, path):
+        return None
+    
     def __init__(self):
         pass
     
@@ -22,4 +26,7 @@ class CAbstractStorage(object):
         return None
     
     def destroy(self):
+        pass
+    
+    def walk(self):
         pass
