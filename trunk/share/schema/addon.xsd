@@ -34,18 +34,18 @@
 								</xs:complexType>
 							</xs:element>
 							<xs:choice minOccurs="0">
-								<xs:element name="commonLicense">
+								<xs:element name="CommonLicense">
 									<xs:complexType>
 										<xs:attribute name="name" use="required"/>
 										<xs:attribute name="file" type="xs:string"/>
 									</xs:complexType>
 								</xs:element>
-								<xs:element name="externalLicense">
+								<xs:element name="ExternalLicense">
 									<xs:complexType>
 										<xs:attribute name="file" type="xs:string" use="required"/>
 									</xs:complexType>
 								</xs:element>
-								<xs:element name="license" type="xs:string"/>
+								<xs:element name="License" type="xs:string"/>
 							</xs:choice>
 						</xs:sequence>
 					</xs:complexType>

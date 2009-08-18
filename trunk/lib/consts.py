@@ -33,6 +33,7 @@ STARTPAGE_IMAGE = 'startpage.png'
 GRAB_CURSOR = 'grab.png'
 GRABBING_CURSOR = 'grabbing.png'
 # extensions
+ADDON_EXTENSION = '.fria'
 PROJECT_EXTENSION = '.frip'
 PROJECT_TPL_EXTENSION = '.frit'
 PROJECT_CLEARXML_EXTENSION ='.fripx'

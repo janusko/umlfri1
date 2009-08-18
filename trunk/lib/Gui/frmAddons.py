@@ -1,8 +1,11 @@
 from lib.Depend.gtk2 import gtk, pango
 
+import os.path
+
 from lib.Drawing.Canvas.GtkPlus import PixmapFromPath
 
 from common import event, CWindow
+from dialogs import CQuestionDialog
 
 class CfrmAddons(CWindow):
     widgets = (
@@ -113,6 +116,25 @@ class CfrmAddons(CWindow):
         addon.Disable()
         self.MetamodelChanged()
     
+    @event("cmdInstallMetamodel", "clicked")
+    def on_cmdInstallMetamodel_click(self, button):
+        addonFile, type = self.application.GetWindow("frmSelectAddon").ShowDialog(self)
+        
+        if addonFile is None:
+            return
+        
+        if type == 'projectMetamodel':
+            addonFile = os.path.join(addonFile, 'metamodel')
+        
+        addon = self.application.addonManager.LoadAddon(addonFile)
+        
+        if addon is None:
+            return
+        
+        if self.application.GetWindow("frmInstallAddon").ShowDialog(self, addon):
+            self.application.addonManager.InstallAddon(addon)
+            self.__Load()
+    
     @event("cmdUninstallMetamodel", "clicked")
     def on_cmdUninstallMetamodel_click(self, button):
         addon = self.__GetSelectedAddon(self.twMetamodelList)
@@ -120,8 +142,9 @@ class CfrmAddons(CWindow):
         if addon is None:
             return
         
-        addon.Uninstall()
-        self.__Load()
+        if CQuestionDialog(self.form, _("Do you really want to uninstall addon '%s %s'?\nThis is pernament.")%(addon.GetName(), addon.GetVersion())).run():
+            addon.Uninstall()
+            self.__Load()
     
     @event("twMetamodelList", "cursor-changed")
     def MetamodelChanged(self, treeView = None):

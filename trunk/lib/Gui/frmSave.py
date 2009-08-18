@@ -7,7 +7,6 @@ import os.path
 class CfrmSave(common.CWindow):
     name = 'frmSave'
     
-    
     def __init__(self, app, wTree):
         common.CWindow.__init__(self, app, wTree)
         

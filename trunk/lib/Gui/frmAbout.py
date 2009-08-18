@@ -6,7 +6,9 @@ import lib.Depend
 from common import CWindow, event
 from lib.config import config
 import lib.consts
+
 import re
+import webbrowser
 
 class CfrmAbout(CWindow):
     widgets = ('tviewCredits','tviewAboutSysInfo', 'lblAboutUmlfri', 'lbtnProjectWeb', )
@@ -59,8 +61,7 @@ class CfrmAbout(CWindow):
         
     @event("lbtnProjectWeb", "clicked")
     def OnLbtnProjectWebClicked(self, widget):
-        from webbrowser import open_new_tab
-        open_new_tab(lib.consts.WEB)
+        webbrowser.open_new_tab(lib.consts.WEB)
         self.form.run()
         self.Hide()
     

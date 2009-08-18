@@ -7,7 +7,7 @@
         <Name name="UML .FRI team" />
         <Homepage url="http://umlfri.org" />
         
-        <commonLicense name="GPL" />
+        <CommonLicense name="GPL-2" />
     </Author>
     
     <Icon path="icons/dfd_icon.png" />
