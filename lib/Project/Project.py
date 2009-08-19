@@ -374,7 +374,14 @@ class CProject(object):
                 
                 if not uri or not version:
                     raise XMLError("Bad metamodel definition")
+                
                 addon = self.__addonManager.GetAddon(uri)
+                
+                if addon is None and self.isZippedFile and ('metamodel/addon.xml' in file.namelist()):
+                    addon = self.__addonManager.LoadAddon(os.path.join(filename, 'metamodel'))
+                    if uri not in addon.GetUris():
+                        addon = None
+                
                 if addon is None:
                     raise ProjectError("Project using unknown metamodel")
                 if addon.GetType() != 'metamodel':

@@ -17,13 +17,8 @@ class CfrmSelectAddon(common.CWindow):
         self.form.add_filter(filter)
         
         filter = gtk.FileFilter()
-        filter.set_name(_("UML .FRI Project with embedded addons"))
+        filter.set_name(_("UML .FRI Project with embedded metamodels"))
         filter.add_pattern('*'+PROJECT_EXTENSION)
-        self.form.add_filter(filter)
-        
-        filter = gtk.FileFilter()
-        filter.set_name(_("All files"))
-        filter.add_pattern("*")
         self.form.add_filter(filter)
     
     def ShowDialog(self, parent):
@@ -35,7 +30,7 @@ class CfrmSelectAddon(common.CWindow):
                     return None, None
                 filter = self.form.get_filter().get_name()
                 
-                if filter == _("UML .FRI Project with embedded addons"):
+                if filter == _("UML .FRI Project with embedded metamodels"):
                     type = 'projectMetamodel'
                 else:
                     type = 'addon'

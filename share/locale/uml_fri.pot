@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: UML .FRI 1.0-beta20090601\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-13 20:25+0200\n"
+"POT-Creation-Date: 2009-08-19 20:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -59,6 +59,9 @@ msgstr ""
 msgid "Arrow fill color"
 msgstr ""
 
+msgid "Author:"
+msgstr ""
+
 msgid "Basic information about your system"
 msgstr ""
 
@@ -98,6 +101,9 @@ msgstr ""
 msgid "Delete from Project"
 msgstr ""
 
+msgid "Description:"
+msgstr ""
+
 msgid "Diagram Export"
 msgstr ""
 
@@ -108,6 +114,18 @@ msgid "Diagram type"
 msgstr ""
 
 msgid "Disable"
+msgstr ""
+
+msgid ""
+"Do you really want to install this addon?\n"
+"<i>This operation could be potencionaly dangerous, so do it only if you know "
+"what are you doing.</i>"
+msgstr ""
+
+#, python-format
+msgid ""
+"Do you really want to uninstall addon '%(name)s %(version)s'?\n"
+"This is pernament."
 msgstr ""
 
 msgid "Do you want to save project?"
@@ -185,6 +203,9 @@ msgstr ""
 msgid "Gui"
 msgstr ""
 
+msgid "Homepage:"
+msgstr ""
+
 msgid "I_nclude project"
 msgstr ""
 
@@ -195,6 +216,9 @@ msgid "Install"
 msgstr ""
 
 msgid "Invalid connection"
+msgstr ""
+
+msgid "License:"
 msgstr ""
 
 msgid "Line color"
@@ -323,6 +347,9 @@ msgstr ""
 msgid "Scalable Vector Graphics"
 msgstr ""
 
+msgid "Select Addon"
+msgstr ""
+
 msgid "Select a directory"
 msgstr ""
 
@@ -383,7 +410,13 @@ msgid ""
 "See the Help tab for more info."
 msgstr ""
 
+msgid "Type:"
+msgstr ""
+
 msgid "UML .FRI"
+msgstr ""
+
+msgid "UML .FRI Addon"
 msgstr ""
 
 msgid "UML .FRI Addons"
@@ -393,6 +426,9 @@ msgid "UML .FRI Clear XML Projects"
 msgstr ""
 
 msgid "UML .FRI Project templates"
+msgstr ""
+
+msgid "UML .FRI Project with embedded metamodels"
 msgstr ""
 
 msgid "UML .FRI Projects"
@@ -534,6 +570,9 @@ msgstr ""
 msgid "_Help"
 msgstr ""
 
+msgid "_Install"
+msgstr ""
+
 msgid "_License"
 msgstr ""
 
@@ -568,6 +607,9 @@ msgid "default file name"
 msgstr ""
 
 msgid "etree version"
+msgstr ""
+
+msgid "metamodel"
 msgstr ""
 
 msgid "none"
