@@ -9,11 +9,6 @@ class CtxtNotes(CWidget):
     name = 'txtNotes'
     widgets = ('txtNotes', )
     
-    __gsignals__ = {
-        'content-update':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
-            (gobject.TYPE_PYOBJECT, gobject.TYPE_STRING)),
-    }
-    
     def __init__(self, app, wTree):
         CWidget.__init__(self, app, wTree)
         self.txtNotes.set_sensitive(False)
@@ -55,7 +50,14 @@ class CtxtNotes(CWidget):
                 pass    #maybe, In the future, We can add notes to diagram
             elif isinstance(self.element.GetObject(), (CElementObject, CConnectionObject)):
                 self.element.GetObject().SetValue('note', buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter()))
-                self.emit('content_update', self.element, 'note')
+                self.application.GetBus().emit('content-update', self.element, 'note')
             elif isinstance(self.element.GetObject(), CConnectionObject):
                 self.element.GetObject().SetAttribute(self.attr, buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter()))
-                self.emit('content_update', self.element, self.attr)
+                self.application.GetBus().emit('content-update', self.element, self.attr)
+                
+    @event('application.bus', 'content-update')
+    def on_content_update(self, widget, element, property):
+        if (self.element is not None and (element is self.element 
+            or not isinstance(self.element, CDiagram) and element is self.element.GetObject())):
+            self.Fill(self.element)
+    

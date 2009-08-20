@@ -17,7 +17,7 @@ from lib.Project import CProject
 from lib.Project import CRecentFiles
 from lib.Addons import CAddonManager
 
-from lib.Gui import CfrmSplash, CfrmMain, CfrmAbout, CfrmProperties, CfrmOpen, CfrmSave, CfrmOptions, CfrmException, CfrmExport, CfrmAddons, CfrmSelectAddon, CfrmInstallAddon
+from lib.Gui import CfrmSplash, CfrmMain, CfrmAbout, CfrmProperties, CfrmOpen, CfrmSave, CfrmOptions, CfrmException, CfrmExport, CBus, CfrmAddons, CfrmSelectAddon, CfrmInstallAddon
 from lib.Gui.dialogs import CExceptionDialog
 
 from lib.config import config
@@ -40,12 +40,16 @@ class Application(CApplication):
     def __init__(self):
         self.recentFiles = CRecentFiles()
         self.clipboard = CClipboard()
+        self.bus = CBus()
         self.addonManager = CAddonManager()
         
         CApplication.__init__(self)
         self.UserGui= CUserGui(self)
         
         gobject.timeout_add(SPLASH_TIMEOUT, self.GetWindow('frmSplash').Hide)
+    
+    def GetBus(self):
+        return self.bus
     
     @argument("-o", "--open", True)
     def DoOpen(self, value):

@@ -495,7 +495,7 @@ class CfrmMain(CWindow):
     def on_show_frmFindInDiagram(self, widget, diagrams, object):
         self.frmFindInDiagram.ShowDialog(diagrams, object)
 
-    @event("nbProperties", "content-update")
+    @event('application.bus', 'content-update')
     def on_nbProperties_content_update(self, widget, element, property):
         if isinstance(element, CDiagram):
             self.twProjectView.UpdateElement(element)
@@ -526,6 +526,7 @@ class CfrmMain(CWindow):
                     return CWarningDialog(e.GetName()).run()
             
     
+    @event('application.bus', 'run-dialog')
     @event("picDrawingArea", "run-dialog")
     def on_run_dialog(self, widget, type, message):
         if type == 'warning':

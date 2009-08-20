@@ -15,11 +15,6 @@ class ClwProperties(CWidget):
     name = 'lwProperties'
     widgets = ('lwProperties',)
     
-    __gsignals__ = {
-        'content_update':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
-            (gobject.TYPE_PYOBJECT, gobject.TYPE_STRING)),      
-    }
-    
     def __init__(self, app, wTree):
         
         self.treeStore = gtk.TreeStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_BOOLEAN, gobject.TYPE_BOOLEAN, gobject.TYPE_BOOLEAN, gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING)
@@ -186,7 +181,7 @@ class ClwProperties(CWidget):
         if isinstance(self.element, CDiagram):
             name, = model.get(iter, ID_NAME)
             self.element.SetName(new_value)
-            self.emit('content_update', self.element, name)
+            self.application.GetBus().emit('content-update', self.element, name)
         else:
             key = self.get_key(path)
             try:
@@ -194,7 +189,7 @@ class ClwProperties(CWidget):
             except (DomainTypeError, ), e:
                 model.set(iter, ID_VALUE, str(self.element.GetObject().GetValue(key)))
                 raise ParserError(*e.params)
-            self.emit('content_update', self.element, key)
+            self.application.GetBus().emit('content-update', self.element, key)
         
     @event("ComboRenderer", "edited")
     def on_change_combo(self, cellrenderer, path, new_value):
@@ -208,12 +203,12 @@ class ClwProperties(CWidget):
             except (DomainTypeError, ), e:
                 model.set(iter, ID_VALUE, str(self.element.GetObject().GetValue(key)))
                 raise ParserError(*e.params)
-            self.emit('content_update', self.element, key)
+            self.application.GetBus().emit('content-update', self.element, key)
     
     def on_listadd(self, key, iter):
         self.element.GetObject().AppendItem(key)
         self._FillListItem(self.element.GetObject(), iter, key, len(self.element.GetObject().GetValue(key)) - 1)
-        self.emit('content_update', self.element, key)
+        self.application.GetBus().emit('content-update', self.element, key)
         
     def on_listdel(self, key, iter, path):
         model = self.lwProperties.get_model()
@@ -231,7 +226,7 @@ class ClwProperties(CWidget):
             self.treeStore.set(niter,
                 ID_ID, '[%i]' % idx,
                 ID_NAME, str(idx))
-        self.emit('content_update', self.element, key)
+        self.application.GetBus().emit('content-update', self.element, key)
     
     @event("ButtonRenderer", "click")
     def on_change_button(self, cellrenderer, path):
@@ -244,3 +239,10 @@ class ClwProperties(CWidget):
             
         elif action == 'listdel':
             self.on_listdel(key, iter, path)
+        
+    #@event('application.bus', 'content-update')
+    def on_content_update(self, widget, element, property):
+        if (self.element is not None and (element is self.element 
+            or not isinstance(self.element, CDiagram) and element is self.element.GetObject())):
+            self.Fill(self.element)
+        
