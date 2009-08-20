@@ -30,10 +30,14 @@ class CProject(object):
         
         self.__addonManager = addonManager
         self.__metamodel = None
+        self.__addon = None
         self.defaultDiagram = None
         
         self.filename = None
         self.isZippedFile = None
+    
+    def GetAddon(self):
+        return self.__addon
     
     def GetDefaultDiagrams(self):
         if self.defaultDiagram is not None:
@@ -375,12 +379,15 @@ class CProject(object):
                 if not uri or not version:
                     raise XMLError("Bad metamodel definition")
                 
+                self.__addon = None
+                
                 addon = self.__addonManager.GetAddon(uri)
                 
                 if addon is None and self.isZippedFile and ('metamodel/addon.xml' in file.namelist()):
                     addon = self.__addonManager.LoadAddon(os.path.join(filename, 'metamodel'))
                     if uri not in addon.GetUris():
                         addon = None
+                    self.__addon = addon
                 
                 if addon is None:
                     raise ProjectError("Project using unknown metamodel")
@@ -419,6 +426,3 @@ class CProject(object):
                         self.GetMetamodel().GetElementFactory().GetElement(item.get('id')).SetCounter(int(item.get('value')))
                     elif self.GetMetamodel().GetDiagramFactory().HasType(item.get('id')):
                         self.GetMetamodel().GetDiagramFactory().GetDiagram(item.get('id')).SetCounter(int(item.get('value')))
-                        
-    Root = property(GetRoot, SetRoot)
-    

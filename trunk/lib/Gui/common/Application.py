@@ -10,6 +10,8 @@ import getopt
 import traceback
 import locale
 
+from Window import CWindow
+
 class CApplication(gobject.GObject):
     windows = ()
     glade = None
@@ -121,7 +123,12 @@ class CApplication(gobject.GObject):
         if self.glade is not None:
             self.wTrees[abspath(self.glade)] = self.wTrees[None] = gtk.glade.XML(self.glade)
         
-        for windowClass in self.windows:
+        if isinstance(self.windows, (list, tuple)):
+            windows = self.windows
+        else:
+            windows = [win for win in self.windows.__dict__.values() if isinstance(win, type) and issubclass(win, CWindow)]
+        
+        for windowClass in windows:
             if windowClass.glade is None:
                 glade = None
             else:

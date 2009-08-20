@@ -118,15 +118,25 @@ class CfrmAddons(CWindow):
     
     @event("cmdInstallMetamodel", "clicked")
     def on_cmdInstallMetamodel_click(self, button):
-        addonFile, type = self.application.GetWindow("frmSelectAddon").ShowDialog(self)
+        addon = None
         
-        if addonFile is None:
-            return
+        if self.application.GetProject() is not None and self.application.GetProject().GetAddon() is not None:
+            t = self.application.GetWindow("frmSelectAddonSource").ShowDialog(self)
+            if t is None:
+                return
+            elif t == 'project':
+                addon = self.application.GetProject().GetAddon()
         
-        if type == 'projectMetamodel':
-            addonFile = os.path.join(addonFile, 'metamodel')
-        
-        addon = self.application.addonManager.LoadAddon(addonFile)
+        if addon is None:
+            addonFile, type = self.application.GetWindow("frmSelectAddon").ShowDialog(self)
+            
+            if addonFile is None:
+                return
+            
+            if type == 'projectMetamodel':
+                addonFile = os.path.join(addonFile, 'metamodel')
+            
+            addon = self.application.addonManager.LoadAddon(addonFile)
         
         if addon is None:
             return
