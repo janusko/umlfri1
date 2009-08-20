@@ -12,7 +12,6 @@ from mnuItems import CmnuItems
 from picDrawingArea import CpicDrawingArea
 from nbProperties import CnbProperties
 from tabs import CTabs
-from frmFindInDiagram import CFindInDiagram
 from tabStartPage import CtabStartPage
 from lib.config import config
 from lib.Gui.diagramPrint import CDiagramPrint
@@ -57,7 +56,7 @@ class CfrmMain(CWindow):
         )
 
     complexWidgets = (CtbToolBox, CtwProjectView, CmnuItems, CpicDrawingArea, CnbProperties, CTabs,
-                      CtabStartPage, CFindInDiagram,  )
+                      CtabStartPage, )
 
     def __init__(self, app, wTree):
         CWindow.__init__(self, app, wTree)
@@ -483,7 +482,7 @@ class CfrmMain(CWindow):
     def on_repaint_picDravingArea(self, widget):
         self.picDrawingArea.Paint()
     
-    @event("frmFindInDiagram","selected_diagram_and_Element")
+#    @event("frmFindInDiagram","selected_diagram_and_Element")
     @event("twProjectView","selected_diagram_and_select_element")
     def on_select_diagram_and_element(self, widget, diagram, object):
         self.picDrawingArea.SetDiagram(diagram)
@@ -491,9 +490,10 @@ class CfrmMain(CWindow):
         diagram.AddToSelection(diagram.HasElementObject(object))
         self.picDrawingArea.Paint()
     
-    @event("twProjectView","show_frmFindInDiagram")
-    def on_show_frmFindInDiagram(self, widget, diagrams, object):
-        self.frmFindInDiagram.ShowDialog(diagrams, object)
+    # this is very stupid way to do things
+#    @event("twProjectView","show_frmFindInDiagram")
+#    def on_show_frmFindInDiagram(self, widget, diagrams, object):
+#        self.frmFindInDiagram.ShowDialog(diagrams, object)
 
     @event('application.bus', 'content-update')
     def on_nbProperties_content_update(self, widget, element, property):

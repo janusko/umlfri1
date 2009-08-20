@@ -1,4 +1,5 @@
 from frmAddons import CfrmAddons
+from frmSelectAddonSource import CfrmSelectAddonSource
 from frmSelectAddon import CfrmSelectAddon
 from frmInstallAddon import CfrmInstallAddon
 from frmMain import CfrmMain

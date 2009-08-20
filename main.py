@@ -17,7 +17,8 @@ from lib.Project import CProject
 from lib.Project import CRecentFiles
 from lib.Addons import CAddonManager
 
-from lib.Gui import CfrmSplash, CfrmMain, CfrmAbout, CfrmProperties, CfrmOpen, CfrmSave, CfrmOptions, CfrmException, CfrmExport, CBus, CfrmAddons, CfrmSelectAddon, CfrmInstallAddon
+import lib.Gui
+from lib.Gui import CBus
 from lib.Gui.dialogs import CExceptionDialog
 
 from lib.config import config
@@ -28,7 +29,7 @@ from lib.Exceptions import UserException
 __version__ = '1.0-beta20090601'
 
 class Application(CApplication):
-    windows = (CfrmSplash, CfrmMain, CfrmAbout, CfrmProperties, CfrmOpen, CfrmSave, CfrmOptions, CfrmException, CfrmExport, CfrmAddons, CfrmSelectAddon, CfrmInstallAddon)
+    windows = lib.Gui
     glade = os.path.join(config['/Paths/Gui'], 'gui.glade')
     main_window = 'frmMain'
     textdomain = 'uml_fri'
