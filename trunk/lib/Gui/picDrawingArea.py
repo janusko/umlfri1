@@ -321,13 +321,13 @@ class CpicDrawingArea(CWidget):
                 return True
             
             itemSel = self.Diagram.GetElementAtPosition(self.canvas, pos)
-            if itemSel is not None: #ak som nieco trafil:
+            if itemSel is not None: #something is hit:
                 if itemSel in self.Diagram.GetSelected(): # deselecting:
                     if (event.state & gtk.gdk.CONTROL_MASK) or (event.state & gtk.gdk.SHIFT_MASK):
                         self.Diagram.RemoveFromSelection(itemSel)
                         self.Paint()
                         self.emit('selected-item', list(self.Diagram.GetSelected()))
-                    elif isinstance(itemSel, CConnection): #selectnuta ciara
+                    elif isinstance(itemSel, CConnection): #Connection is selected
                         i = itemSel.GetPointAtPosition(pos)
                         if i is not None:
                             itemSel.SelectPoint(i)
@@ -338,7 +338,7 @@ class CpicDrawingArea(CWidget):
                             self.__BeginDragLine(event, itemSel, i)
                         self.Paint()    
                         self.emit('selected-item', list(self.Diagram.GetSelected()))
-                    else: #selektnute elementy
+                    else: #elements are selected
                         self.__BeginDragRect(event)
                 elif not (event.state & gtk.gdk.CONTROL_MASK) and not (event.state & gtk.gdk.SHIFT_MASK):
                     self.Diagram.DeselectAll()
@@ -687,7 +687,8 @@ class CpicDrawingArea(CWidget):
 
     def __DrawDragSel(self, pos, erase = True, draw = True):
         if erase:
-            self.picDrawingArea.window.draw_rectangle(self.DragGC, False, *self.__oldsel)
+            if hasattr(self, '__oldsel'):
+                self.picDrawingArea.window.draw_rectangle(self.DragGC, False, *self.__oldsel)
         if draw:
             x1, y1 = self.DragSel
             x2, y2 = self.GetAbsolutePos(pos)

@@ -13,3 +13,4 @@ from frmOptions import CfrmOptions
 from frmException import CfrmException
 from diagramPrint import CDiagramPrint
 from frmExport import CfrmExport
+from Bus import CBus
