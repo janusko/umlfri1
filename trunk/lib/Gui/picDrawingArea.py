@@ -687,8 +687,7 @@ class CpicDrawingArea(CWidget):
 
     def __DrawDragSel(self, pos, erase = True, draw = True):
         if erase:
-            if hasattr(self, '__oldsel'):
-                self.picDrawingArea.window.draw_rectangle(self.DragGC, False, *self.__oldsel)
+            self.picDrawingArea.window.draw_rectangle(self.DragGC, False, *self.__oldsel)
         if draw:
             x1, y1 = self.DragSel
             x2, y2 = self.GetAbsolutePos(pos)
