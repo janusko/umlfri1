@@ -7,6 +7,7 @@ from lib.consts import ADDON_EXTENSION, PROJECT_EXTENSION
 
 class CfrmSelectAddonSource(common.CWindow):
     name = 'frmSelectAddonSource'
+    glade = 'addons.glade'
     
     widgets = ('optInstallFromProject', 'optInstallFromFile')
     

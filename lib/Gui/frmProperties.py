@@ -5,8 +5,10 @@ from common import CWindow, event
 from lib.Drawing import CElement, CConnection
 
 class CfrmProperties(CWindow):
-    widgets = ('nbProProperties', 'twConnections', )
     name = 'frmProperties'
+    glade = 'properties.glade'
+    
+    widgets = ('nbProProperties', 'twConnections', )
     
     def __init__(self, app, wTree):
         CWindow.__init__(self, app, wTree)

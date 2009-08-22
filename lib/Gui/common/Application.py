@@ -4,7 +4,7 @@ from lib.Depend.gtk2 import pango
 
 import sys
 import os
-from os.path import abspath
+import os.path
 import gettext
 import getopt
 import traceback
@@ -121,7 +121,8 @@ class CApplication(gobject.GObject):
         
         self.wTrees = {}
         if self.glade is not None:
-            self.wTrees[abspath(self.glade)] = self.wTrees[None] = gtk.glade.XML(self.glade)
+            glade = os.path.join(self.guipath, self.glade)
+            self.wTrees[os.path.abspath(glade)] = self.wTrees[None] = gtk.glade.XML(glade)
         
         if isinstance(self.windows, (list, tuple)):
             windows = self.windows
@@ -132,11 +133,11 @@ class CApplication(gobject.GObject):
             if windowClass.glade is None:
                 glade = None
             else:
-                glade = abspath(windowClass.glade)
+                glade = os.path.join(self.guipath, windowClass.glade)
             if glade not in self.wTrees:
                 if glade is None:
                     raise Exception("Glade file is not set for window '%s'"%windowClass.name)
-                wTree = self.wTrees[glade] = gtk.glade.XML(glade)
+                wTree = self.wTrees[os.path.abspath(glade)] = gtk.glade.XML(glade)
             else:
                 wTree = self.wTrees[glade]
             self.wins[windowClass.name] = windowClass(self, wTree)

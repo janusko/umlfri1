@@ -30,10 +30,11 @@ __version__ = '1.0-beta20090601'
 
 class Application(CApplication):
     windows = lib.Gui
-    glade = os.path.join(config['/Paths/Gui'], 'gui.glade')
     main_window = 'frmMain'
     textdomain = 'uml_fri'
     localespath = config['/Paths/Locales']
+    
+    guipath = config['/Paths/Gui']
 
     project = None
     canopen = True

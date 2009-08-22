@@ -7,12 +7,9 @@ import common
 
 class CFindInDiagram(CWindow):
     name = 'frmFindInDiagram'
+    glade = 'project.glade'
     
     widgets = ("twFindInDiagram", )
-    
-    __gsignals__ = {
-        'selected_diagram_and_Element': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT)), 
-    }
     
     
     def __init__(self, app, wTree):
@@ -39,12 +36,12 @@ class CFindInDiagram(CWindow):
         while True:
             if response != gtk.RESPONSE_OK:
                 self.form.hide()
-                return
+                return None
 
             iter = self.twFindInDiagram.get_selection().get_selected()[1]
             if iter is not None:
                 self.form.hide()
-                return self.emit('selected_diagram_and_Element',self.diagrams[self.twFindInDiagram.get_model().get_path(iter)[0]],self.object)
+                return self.diagrams[self.twFindInDiagram.get_model().get_path(iter)[0]]
             else:
                 response = self.form.run()
                 
@@ -55,6 +52,4 @@ class CFindInDiagram(CWindow):
     
     @event("twFindInDiagram", "row-activated")
     def on_twFindInDiagram_doubleclick(self, treeView, path, column):
-        self.emit('selected_diagram_and_Element',self.diagrams[path[0]],self.object)
-        
-    
+        self.form.response(gtk.RESPONSE_OK)

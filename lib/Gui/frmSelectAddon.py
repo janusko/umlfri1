@@ -7,6 +7,7 @@ from lib.consts import ADDON_EXTENSION, PROJECT_EXTENSION
 
 class CfrmSelectAddon(common.CWindow):
     name = 'frmSelectAddon'
+    glade = 'addons.glade'
     
     def __init__(self, app, wTree):
         common.CWindow.__init__(self, app, wTree)

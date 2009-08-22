@@ -13,8 +13,10 @@ EXCEPTION_PROJECT_FILE = 'error.frip'
 
 
 class CfrmException(CWindow):
-    widgets = ('tviewErrorLog','tviewSysInfo','btnCancel', 'btnSend',  'btnReport', 'ntbkException', 'lblMail', 'tviewUsrComment', 'chbtnIncludeProject',)
     name = 'frmException'
+    glade = 'misc.glade'
+    
+    widgets = ('tviewErrorLog','tviewSysInfo','btnCancel', 'btnSend',  'btnReport', 'ntbkException', 'lblMail', 'tviewUsrComment', 'chbtnIncludeProject',)
     
     __modPaths = [os.path.abspath(dir).replace(os.path.sep, "/") for dir in sys.path]
     __modPaths.sort(key=len, reverse=True)

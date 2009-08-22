@@ -1,7 +1,10 @@
 from lib.Depend.gtk2 import gtk
 from lib.Depend.gtk2 import pango
 
+import os.path
+
 from common import CWindow, event
+from lib.config import config
 from lib.consts import SPLASH_IMAGE
 
 gtk.rc_parse_string("""
@@ -13,6 +16,8 @@ gtk.rc_parse_string("""
 
 class CfrmSplash(CWindow):
     name = 'frmSplash'
+    glade = 'misc.glade'
+    
     widgets = ('fixMain', 'lblVersion', )
     
     def __init__(self, app, wTree):
@@ -21,7 +26,7 @@ class CfrmSplash(CWindow):
         self.lblVersion.set_label(('<span foreground="white" font_desc="Arial bold 9">'+_("Version: %s")+'</span>')%self.application.GetVersion())
         
         style = self.form.get_style().copy()
-        pixbuf = gtk.gdk.pixbuf_new_from_file(self.GetRelativeFile(SPLASH_IMAGE))
+        pixbuf = gtk.gdk.pixbuf_new_from_file(os.path.join(config['/Paths/Images'], SPLASH_IMAGE))
         pixmap = gtk.gdk.Pixmap(self.form.window, pixbuf.get_width(), pixbuf.get_height())
         gc = self.fixMain.window.new_gc()
         pixbuf.render_to_drawable(pixmap, gc, 0, 0, 0, 0, -1, -1, 0, 0, 0)

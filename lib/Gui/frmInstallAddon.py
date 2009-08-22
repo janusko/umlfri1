@@ -8,6 +8,9 @@ from dialogs import CQuestionDialog
 import webbrowser
 
 class CfrmInstallAddon(CWindow):
+    name = 'frmInstallAddon'
+    glade = 'addons.glade'
+    
     widgets = (
         'cmdInstallAddonYes', 'lblInstallAddonCounter',
         'lblInstallAddonHomepageLabel', 'lblInstallAddonLicenseLabel', 'lblInstallAddonDescriptionLabel',
@@ -17,8 +20,6 @@ class CfrmInstallAddon(CWindow):
         'lblInstallAddonAuthor', 'lbInstallAddonHomepage', 'lblInstallAddonLicense',
         'lblInstallAddonDescription',
     )
-    
-    name = 'frmInstallAddon'
     
     def counter(self):
         if self.__cnt <= 0:

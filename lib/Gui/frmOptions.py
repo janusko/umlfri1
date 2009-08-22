@@ -6,10 +6,11 @@ from common import event
 from lib.datatypes import CColor, CFont
 
 class CfrmOptions(common.CWindow):
-    #widgets = ('labelOptions',)
+    name = 'frmOptions'
+    glade = 'appSettings.glade'
+    
     widgets = ('cbElementLine', 'cbElementFill', 'cbElementFill2', 'cbElementFill3', 'cbElementShadow', 'cbElementNameText', 'cbElementText', 'fbElementNameText','fbElementText' ,'cbConnectionLine', 'cbConnectionArrow', 'cbConnectionArrowFill', 'cbConnectionNameText', 'cbConnectionText', 'fbConnectionNameText', 'fbConnectionText', 'sbSelectionPointsSize', 'cbSelectionPoints', 'cbSelectionRectangle' ,'sbSelectionRectangleWidth', 'cbDragRectangle', 'sbDragRectangleWidth', 'txtRootPath', 'txtTemplatesPath', 'txtImagesPath', 'txtGuiPath', 'txtLocalesPath', 'txtUserDirPath', 'txtUserConfigDirPath', 'txtRecentFilesPath', 'expElement', 'expSelection', 'expConnection', 'expDrag',
                'cmdDefaultOptions')
-    name = 'frmOptions'
     
     def CColorToGtkColor(self, color):
         return gtk.gdk.color_parse(str(color))
