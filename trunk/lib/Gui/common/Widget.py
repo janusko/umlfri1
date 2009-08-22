@@ -1,4 +1,6 @@
-from lib.Depend.gtk2 import gobject
+from lib.Depend.gtk2 import gobject, gtk
+
+from os.path import abspath
 
 class CWidget(gobject.GObject):
     widgets = ()
@@ -9,11 +11,6 @@ class CWidget(gobject.GObject):
     
     def __init__(self, app, wTree):
         gobject.GObject.__init__(self)
-        if self.glade is not None:
-            if abspath(self.glade) in app.wTrees:
-                wTree = app.wTrees[abspath(self.glade)] = gtk.glade.XML(self.glade)
-            else:
-                wTree = app.wTrees[abspath(self.glade)]
         events = {}
         for fnc in dir(self):
             fnc = getattr(self, fnc)

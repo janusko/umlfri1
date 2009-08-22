@@ -6,6 +6,7 @@ import os.path
 
 class CfrmSave(common.CWindow):
     name = 'frmSave'
+    glade = 'project.glade'
     
     def __init__(self, app, wTree):
         common.CWindow.__init__(self, app, wTree)

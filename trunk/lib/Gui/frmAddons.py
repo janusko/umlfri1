@@ -8,11 +8,12 @@ from common import event, CWindow
 from dialogs import CQuestionDialog
 
 class CfrmAddons(CWindow):
+    name = 'frmAddons'
+    glade = 'addons.glade'
+    
     widgets = (
         'twMetamodelList', 'cmdInstallMetamodel', 'cmdUninstallMetamodel', 'cmdEnableMetamodel', 'cmdDisableMetamodel'
     )
-    
-    name = 'frmAddons'
     
     def __init__(self, app, wTree):
         CWindow.__init__(self, app, wTree)

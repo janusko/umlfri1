@@ -28,6 +28,8 @@ ADDON_PATH = 'addon.xml'
 ARROW_IMAGE = 'arrow.png'
 
 DEFAULT_TEMPLATE_ICON = 'default_icon.png'
+MAIN_ICON = "app_icon.png"
+MAIN_LOGO = "app_logo.png"
 SPLASH_IMAGE = 'splash.png'
 STARTPAGE_IMAGE = 'startpage.png'
 GRAB_CURSOR = 'grab.png'

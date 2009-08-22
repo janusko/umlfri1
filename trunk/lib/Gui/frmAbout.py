@@ -6,13 +6,16 @@ import lib.Depend
 from common import CWindow, event
 from lib.config import config
 import lib.consts
+import os.path
 
 import re
 import webbrowser
 
 class CfrmAbout(CWindow):
-    widgets = ('tviewCredits','tviewAboutSysInfo', 'lblAboutUmlfri', 'lbtnProjectWeb', )
     name = 'frmAbout'
+    glade = 'help.glade'
+    
+    widgets = ('tviewCredits','tviewAboutSysInfo', 'lblAboutUmlfri', 'lbtnProjectWeb', 'imgLogo')
     
     reProgrammedFor = re.compile('^Programmed for:$')
     reProgrammedBy = re.compile('^Programmed by:$')
@@ -21,7 +24,9 @@ class CfrmAbout(CWindow):
     
     def __init__(self, app, wTree):
         CWindow.__init__(self, app, wTree)
-
+        
+        self.imgLogo.set_from_file(os.path.join(config['/Paths/Images'], lib.consts.MAIN_LOGO))
+        
         buff = self.tviewAboutSysInfo.get_buffer()  
         tag_tab = buff.get_tag_table()
 
