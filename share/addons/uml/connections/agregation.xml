@@ -4,7 +4,7 @@
     
     <Appearance>
         <ConnectionLine style="solid" color="#cfg.Styles.Connection.LineColor"/>
-        <ConnectionArrow index="-1" style="diamond" fill="#cfg.Styles.Connection.ArrowFillColor" color="#cfg.Styles.Connection.ArrowColor"/>
+        <ConnectionArrow index="-1" style="diamond_arrow" fill="#cfg.Styles.Connection.ArrowFillColor" color="#cfg.Styles.Connection.ArrowColor"/>
         
         <Label position="center">
             <HBox>

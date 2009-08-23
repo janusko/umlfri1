@@ -7,7 +7,7 @@
     </Connections>
     <Appearance>
         <Shadow padding="3" color="#cfg.Styles.Element.ShadowColor">
-            <Rectangle fill="#cfg.Styles.Element.FillColor" border="#cfg.Styles.Element.LineColor" right="10 beak" left="10 beak">
+            <Rectangle fill="#cfg.Styles.Element.FillColor" border="#cfg.Styles.Element.LineColor" right="10 beak_side" left="10 beak_side">
                 <Sizer minheight="30" minwidth="100">
                     <Padding padding="10"> 
                         <Align align="center center">

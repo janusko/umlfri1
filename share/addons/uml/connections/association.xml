@@ -5,14 +5,14 @@
         <ConnectionLine style="solid" color="#cfg.Styles.Connection.LineColor"/>
         <Switch value="#self.direction">
             <Case condition="Source to Destination">
-                <ConnectionArrow index="-1" style="simple" color="#cfg.Styles.Connection.ArrowColor"/>
+                <ConnectionArrow index="-1" style="simple_arrow" color="#cfg.Styles.Connection.ArrowColor"/>
             </Case>
             <Case condition="Destination to Source">
-                <ConnectionArrow index="0" style="simple" color="#cfg.Styles.Connection.ArrowColor"/>
+                <ConnectionArrow index="0" style="simple_arrow" color="#cfg.Styles.Connection.ArrowColor"/>
             </Case>
             <Case condition="Bidirectional">
-                <ConnectionArrow index="-1" style="simple" color="#cfg.Styles.Connection.ArrowColor"/>
-                <ConnectionArrow index="0" style="simple" color="#cfg.Styles.Connection.ArrowColor"/>
+                <ConnectionArrow index="-1" style="simple_arrow" color="#cfg.Styles.Connection.ArrowColor"/>
+                <ConnectionArrow index="0" style="simple_arrow" color="#cfg.Styles.Connection.ArrowColor"/>
             </Case>
         </Switch>        
         <Label position="center">

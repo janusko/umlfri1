@@ -7,7 +7,7 @@
     </Connections>
     <Appearance>
         <Shadow padding="3" color="#cfg.Styles.Element.ShadowColor">
-            <Rectangle fill="#cfg.Styles.Element.FillColor" border="#cfg.Styles.Element.LineColor" righttop="10 rounded" rightbottom="10 rounded" lefttop="10 rounded" leftbottom="10 rounded">
+            <Rectangle fill="#cfg.Styles.Element.FillColor" border="#cfg.Styles.Element.LineColor" righttop="10 rounded_corner" rightbottom="10 rounded_corner" lefttop="10 rounded_corner" leftbottom="10 rounded_corner">
                 <Sizer minheight="50">
                     <HBox>
                         <Padding padding="5">

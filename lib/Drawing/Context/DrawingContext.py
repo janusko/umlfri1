@@ -86,3 +86,6 @@ class CDrawingContext(object):
     
     def GetLoopPath(self):
         return tuple(i[5] for i in self.stack) + (self.line, )
+    
+    def GetMetamodel(self):
+        return self.element.GetObject().GetType().GetMetamodel()

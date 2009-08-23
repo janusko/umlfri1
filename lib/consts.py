@@ -23,6 +23,7 @@ CONNECTIONS_PATH = 'connections'
 ICONS_PATH = 'icons'
 DOMAINS_PATH = 'domains'
 METAMODEL_PATH = 'metamodel.xml'
+PATHS_PATH = 'paths.xml'
 ADDON_PATH = 'addon.xml'
 
 ARROW_IMAGE = 'arrow.png'
