@@ -1,11 +1,13 @@
 from math import atan2
 from lib.Exceptions.UserException import *
 
+import weakref
+
 class CConnectionType(object):
     """
     Contains part of metamodel that represents connection type
     """
-    def __init__(self, id, appearance, icon = None, domain = None, identity = None):
+    def __init__(self, factory, id, appearance, icon = None, domain = None, identity = None):
         """
         Initialize connection type and fill its properties
         
@@ -24,6 +26,7 @@ class CConnectionType(object):
         self.domain = domain
         self.identity = identity
         self.appearance = appearance
+        self.factory = weakref.ref(factory)
     
     def GetDomain(self):
         '''
@@ -152,3 +155,6 @@ class CConnectionType(object):
         @rtype: bool
         '''
         return self.GetDomain().GetAttribute(name)['type'] != 'text'
+    
+    def GetMetamodel(self):
+        return self.factory().GetMetamodel()

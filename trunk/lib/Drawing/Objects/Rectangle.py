@@ -53,6 +53,7 @@ class CRectangle(CSimpleContainer):
         return True, True
 
     def Paint(self, context):
+        paths = context.GetMetamodel().GetPathFactory()
         size = context.ComputeSize(self)
         shadowcolor = context.GetShadowColor()
         if shadowcolor is None:
@@ -66,7 +67,7 @@ class CRectangle(CSimpleContainer):
                 if len(c) == 2:
                     c = c[0], c[1], None
                 trans = TransformMatrix.mk_scale(int(c[0]))*TransformMatrix.mk_rotation(i*math.pi/2)
-                c = c[2], trans*Path(cornerDefs.get(c[1], c[1]))
+                c = c[2], trans*paths.GetPath(c[1])
             corners.append(c)
         
         sides = []
@@ -75,7 +76,7 @@ class CRectangle(CSimpleContainer):
                 if len(s) == 2:
                     s = s[0], s[1], None
                 trans = TransformMatrix.mk_rotation((i+1)*math.pi/2)
-                s = str(s[2]), trans*Path(sideDefs.get(s[1], s[1])), int(s[0])
+                s = str(s[2]), trans*paths.GetPath(s[1]), int(s[0])
             sides.append(s)
         
         canvas = context.GetCanvas()

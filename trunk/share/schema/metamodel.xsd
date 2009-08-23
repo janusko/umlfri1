@@ -812,4 +812,16 @@
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
+	<xs:element name="Paths">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Path" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:attribute name="id" use="required"/>
+						<xs:attribute name="path" use="required"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
 </xs:schema>

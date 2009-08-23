@@ -4,7 +4,7 @@
     
     <Appearance>
         <ConnectionLine style="solid" color="#cfg.Styles.Connection.LineColor"/>
-        <ConnectionArrow index="-1" style="simple" color="#cfg.Styles.Connection.ArrowColor"/>
+        <ConnectionArrow index="-1" style="simple_arrow" color="#cfg.Styles.Connection.ArrowColor"/>
         
         <Label position="center">
             <Condition condition="#self.name or self.stereotype">

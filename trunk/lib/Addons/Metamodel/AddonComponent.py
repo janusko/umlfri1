@@ -46,7 +46,3 @@ class CMetamodelAddonComponent(object):
     
     def GetType(self):
         return 'metamodel'
-    
-    def __LoadMetamodel(self, storage, uri, version):
-        
-        return metamodel
