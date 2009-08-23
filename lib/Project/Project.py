@@ -11,7 +11,6 @@ from lib.Drawing import CConnection
 from lib.Elements.Type import CElementType
 from lib.Elements.Object import CElementObject
 from lib.Connections.Object import CConnectionObject
-from lib.Metamodel import CMetamodelManager
 from lib.Drawing import CDiagram
 import os.path
 from lib.consts import UMLPROJECT_NAMESPACE, PROJECT_EXTENSION, PROJECT_CLEARXML_EXTENSION
@@ -24,12 +23,12 @@ if HAVE_LXML:
 
 
 class CProject(object):
-    SaveVersion = '1.0' # save file format version
+    SaveVersion = (1, 0, 1) # save file format version
     
-    def __init__(self):
+    def __init__(self, addonManager):
         self.root = None
         
-        self.__metamodelManager = CMetamodelManager()
+        self.__addonManager = addonManager
         self.__metamodel = None
         self.defaultDiagram = None
         
@@ -196,18 +195,18 @@ class CProject(object):
                         dw, dh = e.GetSizeRelative()
                         elementNode = etree.Element(UMLPROJECT_NAMESPACE+'element', id=unicode(id(e.GetObject())), x=unicode(pos[0]), y=unicode(pos[1]), dw=unicode(dw), dh=unicode(dh))
                         diagramNode.append(elementNode)
-
+                        
                     for c in area.GetConnections():
                         connectionNode = etree.Element(UMLPROJECT_NAMESPACE+'connection', id=unicode(id(c.GetObject())))
                         for pos in c.GetMiddlePoints():
                             pointNode = etree.Element(UMLPROJECT_NAMESPACE+'point', x=unicode(pos[0]), y=unicode(pos[1]))
                             connectionNode.append(pointNode)
-
+                            
                         for num, info in enumerate(c.GetAllLabelPositions()):
                             connectionNode.append(etree.Element(UMLPROJECT_NAMESPACE+'label', 
                                 dict(map(lambda x: (x[0], unicode(x[1])), info.iteritems())), #transform {key:value, ...} -> {key:unicode(value), ...}
                                 num=unicode(num)))
-
+                                
                         diagramNode.append(connectionNode)
                     diagramsNode.append(diagramNode)
             nodeNode.append(diagramsNode)
@@ -215,7 +214,7 @@ class CProject(object):
         
         elements, connections = self.searchCE(self.root)
         
-        rootNode = etree.XML('<umlproject saveversion="%s" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/umlproject.xsd"></umlproject>'%self.SaveVersion)
+        rootNode = etree.XML('<umlproject saveversion="%s" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/umlproject.xsd"></umlproject>'%('.'.join(str(i) for i in self.SaveVersion)))
         
         metamodelNode = etree.Element(UMLPROJECT_NAMESPACE+'metamodel')
         objectsNode = etree.Element(UMLPROJECT_NAMESPACE+'objects')
@@ -260,25 +259,10 @@ class CProject(object):
         if HAVE_LXML:
             if not xmlschema.validate(rootNode):
                 raise XMLError(xmlschema.error_log.last_error)
-
+        
         #make human-friendly tree
         Indent(rootNode)
         
-        #save Recent File Tree into ZIP file if it is .frip
-
-#This part of code is commented out and substituted with code in lines 283-286 just during testing period
-#        if (("." + filename.rsplit('.',1)[-1]) != PROJECT_CLEARXML_EXTENSION):
-#            fZip = ZipFile(filename, 'w', ZIP_DEFLATED)
-#            fZip.writestr('content.xml', '<?xml version="1.0" encoding="utf-8"?>\n'+etree.tostring(rootNode, encoding='utf-8'))
-#            fZip.close()
-#        else:                                       #no zipped - clear xml file
-#            f = open(filename, 'w')
-#            f.write('<?xml version="1.0" encoding="utf-8"?>\n'+etree.tostring(rootNode, encoding='utf-8'))
-#            f.close()
-#Quoobik-debug info
-#        if ((filename.rsplit('.',1)[-1]) != PROJECT_CLEARXML_EXTENSION):
-#            raise ProjectError("Nespravny format otvaraneho suboru!")
-
         if isZippedFile :
             fZip = ZipFile(filename, 'w', ZIP_DEFLATED)
             fZip.writestr('content.xml', '<?xml version="1.0" encoding="utf-8"?>\n'+etree.tostring(rootNode, encoding='utf-8'))
@@ -287,24 +271,68 @@ class CProject(object):
             f = open(filename, 'w')
             f.write('<?xml version="1.0" encoding="utf-8"?>\n'+etree.tostring(rootNode, encoding='utf-8'))
             f.close()
-
+    
+    
+    def __CreateTree(self, ListObj, ListCon, root, parentNode):
+        for elem in root:
+            if elem.tag == UMLPROJECT_NAMESPACE+'childs':
+                for node in elem:
+                    proNode = CProjectNode(parentNode,ListObj[node.get("id")],parentNode.GetPath() + "/" + ListObj[node.get("id")].GetName() + ":" + ListObj[node.get("id")].GetType().GetId())
+                    self.AddNode(proNode,parentNode)
+                    self.__CreateTree(ListObj, ListCon, node,proNode)
+                    
+            elif elem.tag == UMLPROJECT_NAMESPACE+'diagrams':
+                for area in elem:
+                    if area.tag == UMLPROJECT_NAMESPACE+'diagram':
+                        diagram = CDiagram(self.GetMetamodel().GetDiagramFactory().GetDiagram(area.get("type")),area.get("name"))
+                        diagram.SetPath(parentNode.GetPath() + "/" + diagram.GetName() + ":=Diagram=")
+                        if 'default' in area.attrib and area.attrib['default'].lower() in ('1', 'true'):
+                            self.defaultDiagram = diagram
+                        parentNode.AddDiagram(diagram)
+                        for pic in area:
+                            if pic.tag == UMLPROJECT_NAMESPACE+"element":
+                                element = CElement(diagram,ListObj[pic.get("id")],True)
+                                element.SetPosition((int(pic.get("x")),int(pic.get("y"))))
+                                dw = int(pic.get("dw"))
+                                dh = int(pic.get("dh"))
+                                element.SetSizeRelative((dw, dh))
+                            elif pic.tag == UMLPROJECT_NAMESPACE+"connection":
+                                for e in diagram.GetElements():
+                                    if e.GetObject() is ListCon[pic.get("id")].GetSource():
+                                        source = e
+                                    if e.GetObject() is ListCon[pic.get("id")].GetDestination():
+                                        destination = e
+                                conect = CConnection(diagram,ListCon[pic.get("id")],source,destination,[])
+                                for propCon in pic:
+                                    if propCon.tag == UMLPROJECT_NAMESPACE+"point":
+                                        conect.AddPoint((int(propCon.get("x")),int(propCon.get("y"))))
+                                    elif propCon.tag == UMLPROJECT_NAMESPACE+"label":
+                                        data = dict(propCon.items())
+                                        del data["num"]
+                                        conect.RestoreLabelPosition(int(propCon.get("num")), data)
+        
+    @staticmethod
+    def __LoadDomainObjectInfo(element):
+        '''
+        Transform element back to the dictionary readable by 
+        L{CDomainObject.SetSaveInfo<lib.Domains.Object.CDomainObject.SetSaveInfo>}
+        
+        @return: structured dictionary
+        @rtype: dict
+        '''
+        if element.tag == UMLPROJECT_NAMESPACE + 'dict':
+            return dict([(item.get('name'), CProject.__LoadDomainObjectInfo(item)) for item in element])
+        elif element.tag == UMLPROJECT_NAMESPACE + 'list':
+            return [CProject.__LoadDomainObjectInfo(item) for item in element]
+        elif element.tag == UMLPROJECT_NAMESPACE + 'text':
+            return element.text
+        else:
+            raise ProjectError("malformed project file")
+    
     def LoadProject(self, filename, copy = False):
         ListObj = {}
         ListCon = {}
-
-#This part of code is commented out and substituted with code in lines 283-286 just during testing period
-#        ext = filename.split('.')
-#        ext.reverse()
-#        if (("."+ext[0]) != PROJECT_CLEARXML_EXTENSION):
-#            file = ZipFile(filename,'r')
-#            data = file.read('content.xml')
-#        else:
-#            file = open(filename, 'r')
-#            data = file.read()
-#Quoobik-debug info
-#        if ((filename.rsplit('.',1)[-1]) != PROJECT_CLEARXML_EXTENSION):
-#            raise ProjectError("Nespravny format otvaraneho suboru!")
-
+        
         if is_zipfile(filename):
             self.isZippedFile = True
             file = ZipFile(filename,'r')
@@ -313,76 +341,26 @@ class CProject(object):
             self.isZippedFile = False
             file = open(filename, 'r')
             data = file.read()
-
+        
         if copy:
             self.filename = None
         else:
             self.filename = filename
         
-        def LoadDomainObjectInfo(element):
-            '''
-            Transform element back to the dictionary readable by 
-            L{CDomainObject.SetSaveInfo<lib.Domains.Object.CDomainObject.SetSaveInfo>}
-            
-            @return: structured dictionary
-            @rtype: dict
-            '''
-            if element.tag == UMLPROJECT_NAMESPACE + 'dict':
-                return dict([(item.get('name'), LoadDomainObjectInfo(item)) for item in element])
-            elif element.tag == UMLPROJECT_NAMESPACE + 'list':
-                return [LoadDomainObjectInfo(item) for item in element]
-            elif element.tag == UMLPROJECT_NAMESPACE + 'text':
-                return element.text
-            else:
-                raise ProjectError("malformed project file")
-        
-        def CreateTree(root, parentNode):
-            for elem in root:
-                if elem.tag == UMLPROJECT_NAMESPACE+'childs':
-                    for node in elem:
-                        proNode = CProjectNode(parentNode,ListObj[node.get("id")],parentNode.GetPath() + "/" + ListObj[node.get("id")].GetName() + ":" + ListObj[node.get("id")].GetType().GetId())
-                        self.AddNode(proNode,parentNode)
-                        CreateTree(node,proNode)
-
-                elif elem.tag == UMLPROJECT_NAMESPACE+'diagrams':
-                    for area in elem:
-                        if area.tag == UMLPROJECT_NAMESPACE+'diagram':
-                            diagram = CDiagram(self.GetMetamodel().GetDiagramFactory().GetDiagram(area.get("type")),area.get("name"))
-                            diagram.SetPath(parentNode.GetPath() + "/" + diagram.GetName() + ":=Diagram=")
-                            if 'default' in area.attrib and area.attrib['default'].lower() in ('1', 'true'):
-                                self.defaultDiagram = diagram
-                            parentNode.AddDiagram(diagram)
-                            for pic in area:
-                                if pic.tag == UMLPROJECT_NAMESPACE+"element":
-                                    element = CElement(diagram,ListObj[pic.get("id")],True)
-                                    element.SetPosition((int(pic.get("x")),int(pic.get("y"))))
-                                    dw = int(pic.get("dw"))
-                                    dh = int(pic.get("dh"))
-                                    element.SetSizeRelative((dw, dh))
-                                elif pic.tag == UMLPROJECT_NAMESPACE+"connection":
-                                    for e in diagram.GetElements():
-                                        if e.GetObject() is ListCon[pic.get("id")].GetSource():
-                                            source = e
-                                        if e.GetObject() is ListCon[pic.get("id")].GetDestination():
-                                            destination = e
-                                    conect = CConnection(diagram,ListCon[pic.get("id")],source,destination,[])
-                                    for propCon in pic:
-                                        if propCon.tag == UMLPROJECT_NAMESPACE+"point":
-                                            conect.AddPoint((int(propCon.get("x")),int(propCon.get("y"))))
-                                        elif propCon.tag == UMLPROJECT_NAMESPACE+"label":
-                                            data = dict(propCon.items())
-                                            del data["num"]
-                                            conect.RestoreLabelPosition(int(propCon.get("num")), data)
-        
         self.defaultDiagram = None
-
+        
         root = etree.XML(data)
-
+        
         #xml (version) file is validate with xsd schema (metamodel.xsd)
         if HAVE_LXML:
             if not xmlschema.validate(root):
                 raise XMLError(xmlschema.error_log.last_error)
-
+        
+        savever = tuple(int(i) for i in root.get('saveversion').split('.'))
+        
+        if savever > self.SaveVersion:
+            raise ProjectError("this version of UML .FRI cannot open this file")
+        
         for element in root:
             if element.tag == UMLPROJECT_NAMESPACE+'metamodel':
                 uri = None
@@ -396,21 +374,29 @@ class CProject(object):
                 
                 if not uri or not version:
                     raise XMLError("Bad metamodel definition")
-                self.__metamodel = self.__metamodelManager.GetMetamodel(uri, version)
+                addon = self.__addonManager.GetAddon(uri)
+                if addon is None:
+                    raise ProjectError("Project using unknown metamodel")
+                if addon.GetType() != 'metamodel':
+                    raise ProjectError("Given URI identifier is not metamodel")
+                self.__metamodel = addon.GetComponent().LoadMetamodel()
+                if self.__metamodel is None:
+                    raise ProjectError("This metamodel is disabled")
+                
             elif element.tag == UMLPROJECT_NAMESPACE+'objects':
                 for subelem in element:
                     if subelem.tag == UMLPROJECT_NAMESPACE+'object':
                         id = subelem.get("id")
                         object = CElementObject(self.GetMetamodel().GetElementFactory().GetElement(subelem.get("type")))
-                        object.SetSaveInfo(LoadDomainObjectInfo(subelem[0]))
+                        object.SetSaveInfo(CProject.__LoadDomainObjectInfo(subelem[0]))
                         ListObj[id] = object
-
+            
             elif element.tag == UMLPROJECT_NAMESPACE+'connections':
                 for connection in element:
                     if connection.tag == UMLPROJECT_NAMESPACE+'connection':
                         id = connection.get("id")
                         con = CConnectionObject(self.GetMetamodel().GetConnectionFactory().GetConnection(connection.get("type")),ListObj[connection.get("source")],ListObj[connection.get("destination")])
-                        con.SetSaveInfo(LoadDomainObjectInfo(connection[0]))
+                        con.SetSaveInfo(CProject.__LoadDomainObjectInfo(connection[0]))
                         ListCon[id] = con
             
             elif element.tag == UMLPROJECT_NAMESPACE+'projecttree':
@@ -418,7 +404,7 @@ class CProject(object):
                     if subelem.tag == UMLPROJECT_NAMESPACE+'node':
                         proNode = CProjectNode(None,ListObj[subelem.get("id")],ListObj[subelem.get("id")].GetName() + ":" + ListObj[subelem.get("id")].GetType().GetId())
                         self.SetRoot(proNode)
-                        CreateTree(subelem,proNode)
+                        self.__CreateTree(ListObj, ListCon, subelem,proNode)
             
             elif element.tag == UMLPROJECT_NAMESPACE + 'counters':
                 for item in element:
@@ -427,6 +413,5 @@ class CProject(object):
                     elif self.GetMetamodel().GetDiagramFactory().HasType(item.get('id')):
                         self.GetMetamodel().GetDiagramFactory().GetDiagram(item.get('id')).SetCounter(int(item.get('value')))
                         
-        
     Root = property(GetRoot, SetRoot)
     

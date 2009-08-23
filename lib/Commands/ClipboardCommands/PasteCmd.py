@@ -1,10 +1,7 @@
-# -*- coding: utf-8 -*-
 from lib.Commands import CBaseCommand
 from lib.Drawing import  CElement
 from lib.Exceptions.UMLException import UMLException
-
 from lib.Exceptions.UserException import DrawingError
-from lib.Project import CProject, CProjectNode
 
 
 class CPasteCmd(CBaseCommand):
@@ -13,7 +10,6 @@ class CPasteCmd(CBaseCommand):
         CBaseCommand.__init__(self, description)
         self.diagram = diagram
         self.clipboard = clipboard
-        #self.old_content = self.clipboard.content
         
     def do (self):
         if self.clipboard.content:
@@ -26,9 +22,9 @@ class CPasteCmd(CBaseCommand):
                     # used in user exceptions... get rid of the programmer stuff...
                     cause = str(e)
                     if 'DiagramHaveNotThisElement' in cause:
-                        text = 'This diagram can not have this element.'
+                        text = _('This diagram can not have this element.')
                     elif 'ElementAlreadyExists' in cause:
-                        text = 'This element already exists on this diagram'
+                        text = _('This element already exists on this diagram')
                     else:
                         text = cause
                     
@@ -47,7 +43,6 @@ class CPasteCmd(CBaseCommand):
             self.enabled = False
 
     def undo(self):
-        #self.clipboard.content = self.old_content 
         for el in self.pasted:
             el.Deselect()
             el.GetObject().RemoveAppears(self.diagram)
@@ -55,7 +50,6 @@ class CPasteCmd(CBaseCommand):
             
 
     def redo(self):
-        #self.clipboard.content = self.pasted
         for el in self.pasted:
             el.GetObject().AddAppears(self.diagram)
             self.diagram.AddElement(el)

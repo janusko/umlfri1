@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from lib.Commands import CBaseCommand
 from lib.Connections import CConnectionObject
 from lib.Drawing import CConnection
@@ -28,8 +27,8 @@ class CAddConnectionCmd(CBaseCommand):
     def redo(self):
         self.destination.GetObject().AddConnection(self.connection.GetObject()) 
         self.source.GetObject().AddConnection(self.connection.GetObject()) 
-       
-        if self.connection not in self.diagram.connections:
+        
+        if self.connection not in self.diagram.connections: 
             self.diagram.AddConnection(self.connection)
             
     

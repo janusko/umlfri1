@@ -1,7 +1,8 @@
 from lib.config import config
 from Connection import CConnection
-from DrawingContext import CDrawingContext
+from Context import CDrawingContext
 from VisibleObject import CVisibleObject
+import weakref
 
 
 class CElement(CVisibleObject):
@@ -10,8 +11,8 @@ class CElement(CVisibleObject):
         self.isLoad = isLoad
         self.object = obj
         self.squares = []
-        self.diagram = diagram
-        self.diagram.AddElement(self)
+        self.diagram = weakref.ref(diagram)
+        self.diagram().AddElement(self)
         self.object.AddAppears(diagram)
         self.__AddExistingConnections()
     
@@ -19,11 +20,11 @@ class CElement(CVisibleObject):
         if not self.isLoad:
             for i in self.object.GetConnections():
                 if i.GetSource() is not self.object:
-                    if self.diagram.HasElementObject(i.GetSource()) is not None:
-                        CConnection(self.diagram,i,self.diagram.HasElementObject(i.GetSource()),self)
+                    if self.diagram().HasElementObject(i.GetSource()) is not None:
+                        CConnection(self.diagram(),i,self.diagram().HasElementObject(i.GetSource()),self)
                 elif i.GetDestination() is not self.object:
-                    if self.diagram.HasElementObject(i.GetDestination()) is not None:
-                        CConnection(self.diagram,i,self,self.diagram.HasElementObject(i.GetDestination()))
+                    if self.diagram().HasElementObject(i.GetDestination()) is not None:
+                        CConnection(self.diagram(),i,self,self.diagram().HasElementObject(i.GetDestination()))
                     
     def __AddSquare(self, index, x, y, posx, posy):
         size = config['/Styles/Selection/PointsSize']
@@ -76,12 +77,11 @@ class CElement(CVisibleObject):
 
     def GetConnections(self):
         for c1 in self.GetObject().GetConnections(): #ConnectionObject
-            for c2 in self.diagram.GetConnections(): # Connection
+            for c2 in self.diagram().GetConnections(): # Connection
                 if c2.GetObject() is c1:
                     yield c2
 
     
-    # Vrati poziciu obvodoveho(resizing) stvorceka na pozicii
     def GetSquareAtPosition(self, pos):
         x, y = pos
         for sq in self.squares:
@@ -92,7 +92,6 @@ class CElement(CVisibleObject):
             if (x >= sqbx and x <= sqex and y >= sqby and y <= sqey):
                 return sq[0]
     
-    # Zmena velkosti(pripadne pozicie) elementu
     def Resize(self, canvas, delta, selSquareIdx):
         resRect = self.GetResizedRect(canvas, delta, selSquareIdx)
         minSize = self.GetMinimalSize(canvas)
@@ -105,9 +104,6 @@ class CElement(CVisibleObject):
     def SetSizeRelative(self, relatSize):
         self.deltaSize = relatSize
     
-    # Zistenie novej polohy a velkosti pri resizingu
-        # delta = relativna zmena velkosti
-        # selSquareIdx = index uchytavacieho-resizovacieho bodu
     def GetResizedRect(self, canvas, delta, mult):
         pos = list(self.GetPosition())
         size = list(self.GetSize(canvas))

@@ -1,13 +1,12 @@
-# -*- coding: utf-8 -*-
 from lib.Commands import CBaseCommand
 
 
 class CDeleteTwElementCmd(CBaseCommand):
     
-    def __init__(self, application,  node, description = None): 
+    def __init__(self, project,  node, description = None): 
         CBaseCommand.__init__(self, description)
         self.node = node
-        self.application = application
+        self.project = project
         self.parent = self.node.GetParent()
         
 
@@ -39,7 +38,7 @@ class CDeleteTwElementCmd(CBaseCommand):
         self.deletedConnections = []
 
         self.removeFromArea(self.node)
-        self.application.GetProject().RemoveNode(self.node)            
+        self.project.RemoveNode(self.node)            
             
         if self.description == None:
             self.description = _('Removing %s from project') %(self.node.GetObject().GetName())
@@ -47,7 +46,7 @@ class CDeleteTwElementCmd(CBaseCommand):
         
     def undo(self):
 
-        self.application.GetProject().AddNode(self.node, self.parent)
+        self.project.AddNode(self.node, self.parent)
         for element, diagram in self.deletedDiagramElements:
             diagram.AddElement(element)
         

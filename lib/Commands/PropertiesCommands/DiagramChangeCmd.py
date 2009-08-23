@@ -1,8 +1,4 @@
-# -*- coding: utf-8 -*-
 from lib.Commands import CBaseCommand
-from lib.Drawing import  CElement
-from lib.Drawing import CDiagram
-
 
 
 class CDiagramChangeCmd(CBaseCommand):
@@ -19,7 +15,12 @@ class CDiagramChangeCmd(CBaseCommand):
         else:        
             self.diagram.SetName(self.value)
             if self.description == None:
-                self.description = _('Changing diagram name from %s to %s') %(self.old_value, self.value)
+                if self.old_value == '':
+                    self.description = _('Setting diagram name to "%s"') %(self.value)
+                elif self.value == '':
+                    self.description = _('Clearing the old "%s" diagram name') %(self.old_value)                
+                else:
+                    self.description = _('Changing diagram name from "%s" to "%s"') %(self.old_value, self.value)
            
     def undo(self):
 

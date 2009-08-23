@@ -1,7 +1,8 @@
 from lib.Math2D import CPoint, CPolyLine, CLine
 from math import pi, sqrt
 from CacheableObject import CCacheableObject
-from DrawingContext import CDrawingContext
+from Context import CDrawingContext
+import weakref
 
 class EConLabelInfo(Exception): pass
 
@@ -29,7 +30,7 @@ class CConLabelInfo(CCacheableObject):
         self.pos = 0.5
         self.angle = pi/2
         self.position = position
-        self.connection = connection
+        self.connection = weakref.ref(connection)
         self.logicalLabel = logicalLabel
     
     def GetSaveInfo(self):
@@ -65,14 +66,17 @@ class CConLabelInfo(CCacheableObject):
         @return: diagram to which belongs connection (owner)
         @rtype:  L{CDiagram<Diagram.CDiagram>}
         '''
-        return self.connection.GetDiagram()
+        return self.connection().GetDiagram()
     
     def GetObject(self):
         '''
         @return: Logical Label Object
         @rtype: L{CConnectionObject<lib.Connections.Object.CConnectionObject>}
         '''
-        return self.connection.GetObject()
+        return self.connection().GetObject()
+    
+    def GetConnection(self):
+        return self.connection()
     
     def GetPosition(self, canvas):
         '''
@@ -126,7 +130,7 @@ class CConLabelInfo(CCacheableObject):
         @type canvas: L{CCairoCanvas<lib.Drawing.Canvas.CairoCanvas.CCairoCanvas>}
         '''
         
-        context = CDrawingContext(canvas, self.connection, (0, 0))
+        context = CDrawingContext(canvas, self.connection(), (0, 0))
         
         return (self.logicalLabel.GetSize(context) 
             if self.logicalLabel is not None else (0, 0))
@@ -184,7 +188,7 @@ class CConLabelInfo(CCacheableObject):
         @type  canvas: L{CCairoCanvas<lib.Drawing.Canvas.CairoCanvas.CCairoCanvas>}
         '''
         
-        points = list(self.connection.GetPoints(canvas))
+        points = list(self.connection().GetPoints(canvas))
         angle = CLine(points[self.idx], points[self.idx + 1]).Angle()
         scaled = CLine(points[self.idx], points[self.idx + 1]).Scale(self.pos)
         return CLine.CreateAsVector(scaled.GetEnd(), 
@@ -204,7 +208,7 @@ class CConLabelInfo(CCacheableObject):
         @type pos: tuple / NoneType
         '''
         x, y = (pos or self.GetAbsolutePosition(canvas))
-        points = self.connection.GetPoints(canvas)
+        points = self.connection().GetPoints(canvas)
         self.idx, self.pos, self.dist, self.angle = \
             CPolyLine(tuple(points)).Nearest(CPoint((x, y)))
         
@@ -281,7 +285,7 @@ class CConLabelInfo(CCacheableObject):
         @type  position: str
         '''
         
-        points = list(self.connection.GetPoints(canvas))
+        points = list(self.connection().GetPoints(canvas))
         if position.count('+'): # if there is offset specified
             position, offset = position.split('+', 1) # separate them
             try:
@@ -338,24 +342,24 @@ class CConLabelInfo(CCacheableObject):
         '''
         directs call to self.connection
         '''
-        return self.connection.Select()
+        return self.connection().Select()
     
     def Deselect(self):
         '''
         directs call to self.connection
         '''
-        return self.connection.Deselect()
+        return self.connection().Deselect()
     
     def GetSelected(self):
         '''
         directs call to self.connection
         '''
-        return self.connection.GetSelected()
+        return self.connection().GetSelected()
     
     def Paint(self, canvas, delta = (0, 0)):
         if self.position:
             self.SetToDefaultPosition(canvas, self.position)
             self.position = None
         pos = self.GetPosition(canvas)
-        context = CDrawingContext(canvas, self.connection, (pos[0] + delta[0], pos[1] + delta[1]))
+        context = CDrawingContext(canvas, self.connection(), (pos[0] + delta[0], pos[1] + delta[1]))
         self.logicalLabel.Paint(context)

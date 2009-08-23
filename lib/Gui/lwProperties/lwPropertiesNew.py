@@ -1,22 +1,21 @@
-# -*- coding: utf-8 -*-
 from lib.Depend.gtk2 import gobject
 from lib.Depend.gtk2 import gtk
-
 from lib.Gui.common import CWidget, CellRendererButton, event
 from lib.Drawing import CDiagram
 from lib.Elements.Object import CElementObject
-from lib.Connections.Object import CConnectionObject
+from lib.Exceptions import *
 from lib.Commands.PropertiesCommands import *
 
-
 ID_ID, ID_NAME, ID_VALUE, ID_TEXT_VISIBLE, ID_COMBO_VISIBLE, ID_EDITABLE, ID_BUTTON_VISIBLE, ID_BUTTON_TEXT, ID_ACTION = range(9)
+
+EDITABLE_COMBO_TYPES = ('int', 'float', 'text', 'str')
 
 class ClwProperties(CWidget):
     name = 'lwProperties'
     widgets = ('lwProperties',)
     
     __gsignals__ = {
-        'history-entry':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
+        'history-entry':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
     }
     
     def __init__(self, app, wTree):
@@ -33,9 +32,11 @@ class ClwProperties(CWidget):
                  
         self.StrRenderer = gtk.CellRendererText()
         self.StrRenderer.set_property('editable', True)
+        
         self.ComboRenderer = gtk.CellRendererCombo()
         self.ComboRenderer.set_property('text-column', 0)
-        self.ComboRenderer.set_property('editable', True)
+        self.ComboRenderer.set_property('editable', ID_EDITABLE)
+        self.ComboRenderer.set_property('has-entry', ID_EDITABLE)
         self.ComboRenderer.set_property('model', self.combomodel)
         
         self.Column2 = gtk.TreeViewColumn(_('Value'))
@@ -99,7 +100,7 @@ class ClwProperties(CWidget):
                     ID_EDITABLE, False)#Change to True if has parser
                 self._FillBody(object, row, prefix + identifier)
             
-            elif type in ('str', 'int', 'float', 'text'):
+            elif type in EDITABLE_COMBO_TYPES and not DType.GetAttribute(attrID).has_key('enum'):
                 self.treeStore.set(row, 
                     ID_ID, identifier,
                     ID_NAME, name, 
@@ -109,7 +110,7 @@ class ClwProperties(CWidget):
                     ID_BUTTON_VISIBLE, False, 
                     ID_EDITABLE, True)
             
-            elif type in ('enum', 'bool'):
+            elif type in ('enum', 'bool') or (type in EDITABLE_COMBO_TYPES and DType.GetAttribute(attrID).has_key('enum')):
                 self.treeStore.set(row, 
                     ID_ID, identifier,
                     ID_NAME, name, 
@@ -117,7 +118,7 @@ class ClwProperties(CWidget):
                     ID_TEXT_VISIBLE, False, 
                     ID_COMBO_VISIBLE, True, 
                     ID_BUTTON_VISIBLE, False, 
-                    ID_EDITABLE, False)
+                    ID_EDITABLE, type in EDITABLE_COMBO_TYPES)
             
             elif type == 'list':
                 self.treeStore.set(row, 
@@ -147,7 +148,6 @@ class ClwProperties(CWidget):
             return
         else:
             self._FillBody(self.element.GetObject(), None, '')
-
     
     def Clear(self):
         self.element = None
@@ -173,7 +173,7 @@ class ClwProperties(CWidget):
                 key, attr = key.rsplit('.', 1)
             DType = self.element.GetObject().GetDomainType(key)
             type = DType.GetAttribute(attr)['type']
-            for item in (DType.GetAttribute(attr)['enum'] if type == 'enum' else ('True', 'False')):
+            for item in (DType.GetAttribute(attr)['enum'] if type != 'bool' else ('True', 'False')):
                 self.combomodel.set(self.combomodel.append(), 0 , item)
     
     @event("StrRenderer", "edited")
@@ -183,12 +183,18 @@ class ClwProperties(CWidget):
         model.set(iter, ID_VALUE, new_value) 
         if isinstance(self.element, CDiagram):
             name, = model.get(iter, ID_NAME)
-            diagramChange = CDiagramChangeCmd(self.element, new_value)            
-            self.emit('history-entry', diagramChange)
+            diagramChange = CDiagramChangeCmd(self.element, new_value)  
+            self.application.history.add(diagramChange)
+            self.emit('history-entry')            
         else:
             key = self.get_key(path)
-            elementChange = CElementChangeCmd(self.element, key, new_value)            
-            self.emit('history-entry', elementChange)
+            try:
+                elementChange = CElementChangeCmd(self.element, key, new_value) 
+                self.application.history.add(elementChange)
+                self.emit('history-entry')                
+            except (DomainTypeError, ), e:
+                model.set(iter, ID_VALUE, str(self.element.GetObject().GetValue(key)))
+                raise ParserError(*e.params)
         
     @event("ComboRenderer", "edited")
     def on_change_combo(self, cellrenderer, path, new_value):
@@ -197,13 +203,20 @@ class ClwProperties(CWidget):
             iter = model.get_iter_from_string(path)
             model.set(iter, ID_VALUE, new_value)
             key = self.get_key(path)
-            elementChange = CElementChangeCmd(self.element, key, new_value)            
-            self.emit('history-entry', elementChange)
+            try:
+                elementChange = CElementChangeCmd(self.element, key, new_value)
+                self.application.history.add(elementChange)
+                self.emit('history-entry')                
+            except (DomainTypeError, ), e:
+                model.set(iter, ID_VALUE, str(self.element.GetObject().GetValue(key)))
+                raise ParserError(*e.params)
     
     def on_listadd(self, key, iter):
-        elementChange = CElementAppendItemCmd(self.element, key)            
-        self.emit('history-entry', elementChange)
+        elementChange = CElementAppendItemCmd(self.element, key)    
+        self.application.history.add(elementChange)
+        self.emit('history-entry')        
         self._FillListItem(self.element.GetObject(), iter, key, len(self.element.GetObject().GetValue(key)) - 1)
+
         
     def on_listdel(self, key, iter, path):
         model = self.lwProperties.get_model()
@@ -213,8 +226,9 @@ class ClwProperties(CWidget):
         if len(self.element.GetObject().GetValue(parent_key)) == 1:
             self.lwProperties.collapse_row(parent_path)
             self.on_listadd(parent_key, parent_iter)
-        elementChange = CElementDeleteItemCmd(self.element, key)            
-        self.emit('history-entry', elementChange)
+        elementChange = CElementDeleteItemCmd(self.element, key)  
+        self.application.history.add(elementChange)
+        self.emit('history-entry')            
         self.treeStore.remove(iter)
         for idx in xrange(int(path.rsplit(':', 1)[-1]), len(self.element.GetObject().GetValue(parent_key))):
             npath = parent_path + ':' + str(idx)

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from lib.Commands import CBaseCommand
 from lib.Connections import CConnectionObject
 from lib.Drawing import CConnection
@@ -8,7 +7,7 @@ class CPurgeConnectionCmd(CBaseCommand):
     def __init__(self, connection, description = None): 
         CBaseCommand.__init__(self, description)
         self.connection = connection
-        self.diagram = self.connection.diagram 
+        self.diagram = self.connection.diagram() 
         self.source = self.connection.GetObject().GetSource()
         self.destination = self.connection.GetObject().GetDestination()
 
@@ -33,7 +32,4 @@ class CPurgeConnectionCmd(CBaseCommand):
         self.source.AddConnection(self.connection.GetObject()) 
         if self.connection not in self.diagram.connections:
             self.diagram.AddConnection(self.connection)
-        #for appear in self.connection.GetObject().GetAppears():
-            #if self.connection not in appear.connections:
-                #appear.AddConnection(self.connection)
-            
+           

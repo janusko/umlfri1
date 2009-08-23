@@ -1,10 +1,15 @@
 from SimpleContainer import CSimpleContainer
 from lib.Exceptions.UserException import *
+from lib.datatypes import CColor
 
 class CShadow(CSimpleContainer):
+    types = {
+        'padding': int,
+        'color': CColor
+    }
     def __init__(self, padding, color):
         CSimpleContainer.__init__(self)
-        self.padding = int(padding)
+        self.padding = padding
         self.color = color
 
     def Paint(self, context):

@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
 from lib.Commands import CBaseCommand
 from lib.Drawing import  CElement
-
 
 
 class CCutCmd(CBaseCommand):
@@ -17,26 +15,30 @@ class CCutCmd(CBaseCommand):
                 self.content.append(el)
 
     def do (self):
+        self.delCon = []        
         if self.content:
             self.diagram.DeselectAll()
             self.clipboard.content = self.content
             for el in self.content:
                 el.Deselect()
+                for con in self.diagram.GetConnections():
+                    if (con.GetSource() is el) or (con.GetDestination() is el) and (con not in self.delCon):
+                        self.delCon.append(con)                 
                 self.diagram.DeleteElement(el)
                 el.GetObject().RemoveAppears(self.diagram)
-            
             if self.description == None:
                 self.description = _('Cutting selection')
         else:
             self.enabled = False
 
-
     def undo(self):
         for element in self.content:
             self.diagram.AddElement(element)
             element.GetObject().AddAppears(self.diagram)
+        for con in self.delCon:
+            if con not in self.diagram.connections: 
+                self.diagram.AddConnection(con)            
         self.clipboard.content = self.old_content       
-
 
     def redo(self):
         self.do()

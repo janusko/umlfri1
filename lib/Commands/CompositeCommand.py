@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from lib.Commands import CBaseCommand
 
 
@@ -34,12 +33,12 @@ class CCompositeCommand(CBaseCommand):
             if command.isEnabled():                
                 # default way to create composite description is
                 # to put every component description on a new line
-                self.description += '\n\t' + str(command)
+                self.description += '\n\t' + command.getDescription()
             else:
                 self.stack.remove(command)
 
         if len(self.stack) == 1:
-            self.description = str(self.stack[0])
+            self.description = self.stack[0].getDescription()
 
 
     def undo(self):
@@ -70,10 +69,9 @@ class CCompositeCommand(CBaseCommand):
         '''        
         self.description = description
 
-    def __str__(self):
+    def getDescription(self):
+        '''
+        Gets current description
+        '''         
         return self.description
 
-
-    #def getStackMembers(self):
-        #for command in self.stack:
-            #yield command

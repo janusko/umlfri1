@@ -7,6 +7,7 @@ import os.path
 from py2exe.build_exe import py2exe as Cpy2exe
 import re
 from pprint import pprint
+import platform
 
 languages = {
     'sk' : 'slovak'
@@ -24,16 +25,21 @@ def search_for_gtk():
         if os.path.isfile(os.path.join(path, 'libglib-2.0-0.dll')):
             return os.path.normpath(os.path.join(path, '..'))
 
-class CGtkDllPy2Exe(Cpy2exe):
+class CDllPy2Exe(Cpy2exe):
     GTK_PATH = search_for_gtk()
     GTK_needed_files = ['etc/fonts', 'etc/gtk-2.0', 'etc/pango', ('lib/gtk-2.0/*/engines', 'libwimp.dll'),
                         'lib/gtk-2.0/*/immodules', 'lib/gtk-2.0/*/loaders', 'lib/pango/*/modules',
                         'share/themes/MS-Windows/gtk-2.0']
     GTK_dll_fixes = ['bin/iconv.dll']
-
-    def __init__(self, *args, **kw_args):
-        Cpy2exe.__init__(self, *args, **kw_args)
+    
+    VC_PATH = 'c:\\windows\\WinSxS\\x86_microsoft.vc90.crt_1fc8b3b9a1e18e3b_9.0.21022.8_none_bcb86ed6ac711f91'
+    VC_needed_files = ['msvcr90.dll', 'msvcm90.dll', 'msvcp90.dll']
+    VC_MANIFEST = 'c:/Windows/WinSxS/Manifests/x86_microsoft.vc90.crt_1fc8b3b9a1e18e3b_9.0.21022.8_none_bcb86ed6ac711f91.manifest'
+    
+    def fixup_distribution(self):
+        Cpy2exe.fixup_distribution(self)
         self.appendGtkDlls()
+        self.appendVCDlls()
     
     def appendGtkDlls(self):
         for files in self.GTK_needed_files:
@@ -63,6 +69,14 @@ class CGtkDllPy2Exe(Cpy2exe):
             if dll not in dlls:
                 dlls.add(dll)
         return dlls
+    
+    def appendVCDlls(self):
+        if platform.python_version_tuple() < (2, 6):
+            return
+        for name in self.VC_needed_files:
+            self.distribution.data_files.append(('bin', (os.path.join(self.VC_PATH, name), )))
+        file(self.temp_dir+'/Microsoft.VC90.CRT.manifest', 'w').write(file(self.VC_MANIFEST, 'r').read())
+        self.distribution.data_files.append(('bin', (self.temp_dir+'/Microsoft.VC90.CRT.manifest', )))
 
 class CInnoPy2Exe(Cpy2exe):
     def run(self):
@@ -177,9 +191,9 @@ class CInnoPy2Exe(Cpy2exe):
         print>>f, r'[Run]'
         print>>f, r'Filename: "{app}\%s"; Description: "{cm:LaunchProgram,%s}"; Flags: nowait postinstall skipifsilent'%(main_exe, name)
 
-class CGtkDllAndInnoPy2Exe(CGtkDllPy2Exe, CInnoPy2Exe):
+class CDllAndInnoPy2Exe(CDllPy2Exe, CInnoPy2Exe):
     def __init__(self, *args, **kw_args):
-        CGtkDllPy2Exe.__init__(self, *args, **kw_args)
+        CDllPy2Exe.__init__(self, *args, **kw_args)
     
     def run(self, *args, **kw_args):
         CInnoPy2Exe.run(self, *args, **kw_args)
@@ -236,5 +250,5 @@ setup(
         ("img", glob.glob("img/*.png")+glob.glob("img/*.ico")),
         (".", ["ABOUT", "README", "LICENSE"])
     ]+list(get_languages('share/locale', 'uml_fri')),
-    cmdclass = {"py2exe": CGtkDllAndInnoPy2Exe},
+    cmdclass = {"py2exe": CDllAndInnoPy2Exe},
 )

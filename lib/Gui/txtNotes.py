@@ -12,7 +12,7 @@ class CtxtNotes(CWidget):
     widgets = ('txtNotes', )
     
     __gsignals__ = {
-        'history-entry':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),        
+        'history-entry':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),       
     }
     
     def __init__(self, app, wTree):
@@ -55,10 +55,10 @@ class CtxtNotes(CWidget):
             if isinstance(self.element, CDiagram):
                 pass    #maybe, In the future, We can add notes to diagram
             elif isinstance(self.element.GetObject(), (CElementObject, CConnectionObject)):
-                #noteChange = CElementChangeCmd(self.element, 'note', buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter()))            
-                #self.emit('history-entry', noteChange)                
-                self.element.GetObject().SetValue('note', buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter()))
-                self.emit('content_update', self.element, 'note')
+                elementChange = CElementChangeCmd(self.element, 'note', buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter())) 
+                self.application.history.add(elementChange)
+                self.emit('history-entry')
             elif isinstance(self.element.GetObject(), CConnectionObject):
-                self.element.GetObject().SetAttribute(self.attr, buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter()))
-                self.emit('content_update', self.element, self.attr)
+                elementChange = CElementChangeCmd(self.element, self.attr, buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter())) 
+                self.application.history.add(elementChange)
+                self.emit('history-entry')

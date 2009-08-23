@@ -1,0 +1,4 @@
+<Domain id="InputOutput" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" >
+    <Attribute id="iocommand" type="str" name="Input/Output Command" />
+    <Attribute id="note" type="text" name="Note" />
+</Domain>

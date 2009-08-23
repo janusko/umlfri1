@@ -4,10 +4,10 @@ import os
 import os.path
 from lib.Exceptions.DevException import *
 from Type import CConnectionType
-from Line import CConnectionLine
-from Arrow import CConnectionArrow
+from Alias import CConnectionAlias
 from lib.consts import METAMODEL_NAMESPACE
-from lib.Drawing.Objects import ALL
+from lib.Drawing.Objects import ALL, ALL_CONNECTION, CContainer, CSimpleContainer
+from lib.Drawing.Context import BuildParam
 from lib.config import config
 
 #if lxml.etree is imported successfully, we use xml validation with xsd schema
@@ -77,6 +77,25 @@ class CConnectionFactory(object):
             if not xmlschema.validate(root):
                 raise FactoryError("XMLError", xmlschema.error_log.last_error)
 
+        if root.tag == METAMODEL_NAMESPACE + 'ConnectionType':
+            self.__LoadType(root)
+        elif root.tag == METAMODEL_NAMESPACE + 'ConnectionAlias':
+            self.__LoadAlias(root)
+    
+    def __LoadAlias(self, root):
+        obj = CConnectionAlias(self, root.get('id'), root.get('alias'))
+        
+        for element in root:
+            if element.tag == METAMODEL_NAMESPACE + 'Icon':
+                obj.SetIcon(element.get('path'))
+            
+            elif element.tag == METAMODEL_NAMESPACE + 'DefaultValues':
+                for item in element:
+                    obj.SetDefaultValue(item.get('path'), item.get('value'))
+        
+        self.types[root.get('id')] = obj
+    
+    def __LoadType(self, root):
         id = root.get('id')
         
         sarr = {}
@@ -87,47 +106,63 @@ class CConnectionFactory(object):
         attrs = []
         domain = None
         identity = None
+        visualObj = CContainer()
         for element in root:
             if element.tag == METAMODEL_NAMESPACE+'Icon':
                 icon = element.get('path')
-            elif element.tag == METAMODEL_NAMESPACE+'SrcArrow':
-                sarr['possible'] = element.get('possible')
-                sarr['default'] = element.get('default')
-            elif element.tag == METAMODEL_NAMESPACE+'DestArrow':
-                darr['possible'] = element.get('possible')
-                darr['default'] = element.get('default')
             elif element.tag == METAMODEL_NAMESPACE+'Domain':
                 domain = self.domainfactory.GetDomain(element.get('id'))
                 identity = element.get('identity')
             elif element.tag == METAMODEL_NAMESPACE+'Appearance':
-                for subelem in element:
-                    if subelem.tag == METAMODEL_NAMESPACE+'LineStyle':
-                        ls['color'] = subelem.get('color')
-                        ls['style'] = subelem.get('style')
-                        if subelem.get('width') is not None:
-                            ls['width'] = subelem.get('width')
-                    elif subelem.tag == METAMODEL_NAMESPACE+'ArrowStyle':
-                        darr['fill'] = sarr['fill'] = subelem.get('fill')
-                        darr['color'] = sarr['color'] = subelem.get('color')
-                        darr['style'] = sarr['style'] = subelem.get('style')
-                        if subelem.get('size') is not None:
-                            darr['size'] = sarr['size'] = subelem.get('size')
-                    elif subelem.tag == METAMODEL_NAMESPACE+'Label':
-                        tmp = None
-                        for k in subelem:
-                            tmp = k
-                        labels.append((subelem.get('position'), self.__LoadAppearance(tmp)))
+                for child in element:
+                    if root and child.tag == METAMODEL_NAMESPACE+'Label':
+                        labels.append((child.get('position'), self.__LoadLabelAppearance(child[0])))
+                    else:
+                        visualObj.AppendChild(self.__LoadAppearance(child))
 
-        tmp = self.types[id] = CConnectionType(id, CConnectionLine(**ls),
-                                    CConnectionArrow(**sarr), CConnectionArrow(**darr), icon, domain, identity)
+        tmp = self.types[id] = CConnectionType(id, visualObj, icon, domain, identity)
         for pos, lbl in labels:
             tmp.AddLabel(pos, lbl)
-        
+    
     def __LoadAppearance(self, root):
         """
         Loads an appearance section of an XML file
         
-        @param root: Appearance element
+        @param root: Visual object XML definition
+        @type  root: L{Element<lxml.etree.Element>}
+        
+        @return: Visual object representing this section
+        @rtype:  L{CVisualObject<lib.Drawing.Objects.VisualObject.CVisualObject>}
+        """
+        
+        tagName = root.tag.split("}")[1]
+        
+        if tagName not in ALL_CONNECTION:
+            raise FactoryError("XMLError", root.tag)
+        
+        cls = ALL_CONNECTION[tagName]
+        
+        params = {}
+        for attr in root.attrib.items():
+            params[attr[0]] = BuildParam(attr[1], cls.types.get(attr[0], None))
+        ret = obj = cls(**params)
+        
+        if hasattr(obj, "LoadXml"):
+            obj.LoadXml(root)
+        else:
+            if len(root) > 1 and isinstance(obj, CSimpleContainer):
+                tmp = CContainer()
+                obj.SetChild(tmp)
+                obj = tmp
+            for child in root:
+                obj.AppendChild(self.__LoadAppearance(child))
+        return ret
+    
+    def __LoadLabelAppearance(self, root):
+        """
+        Loads the label from an appearance section of an XML file
+        
+        @param root: Label element child
         @type  root: L{Element<lxml.etree.Element>}
         
         @return: Visual object representing this section
@@ -140,11 +175,11 @@ class CConnectionFactory(object):
         cls = ALL[root.tag.split("}")[1]]
         params = {}
         for attr in root.attrib.items():
-            params[attr[0]] = attr[1]
+            params[attr[0]] = BuildParam(attr[1], cls.types.get(attr[0], None))
         obj = cls(**params)
         if hasattr(obj, "LoadXml"):
             obj.LoadXml(root)
         else:
             for child in root:
-                obj.AppendChild(self.__LoadAppearance(child))
+                obj.AppendChild(self.__LoadLabelAppearance(child))
         return obj

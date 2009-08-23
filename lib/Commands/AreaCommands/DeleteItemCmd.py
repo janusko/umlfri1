@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from lib.Commands import CBaseCommand
 from lib.Drawing import CElement, CConnection
 
@@ -10,7 +9,6 @@ class CDeleteItemCmd(CBaseCommand):
         CBaseCommand.__init__(self, description)
         self.diagram = diagram
         self.item = item
-
 
     def do (self):
         self.item.Deselect()
@@ -32,7 +30,7 @@ class CDeleteItemCmd(CBaseCommand):
                 self.diagram.DeleteItem(self.item)
                 
             if self.description == None:
-                self.description = _('Delete %s connection from %s') %(self.item.GetObject().GetType().GetId(), self.diagram.GetName())
+                self.description = _('Deleting %s connection from "%s" diagram') %(self.item.GetObject().GetType().GetId(), self.diagram.GetName())
     
     def undo(self):
         if isinstance(self.item , CElement):
@@ -46,3 +44,4 @@ class CDeleteItemCmd(CBaseCommand):
         elif isinstance(self.item , CConnection):
             if self.item not in self.diagram.connections: 
                 self.diagram.AddConnection(self.item )
+

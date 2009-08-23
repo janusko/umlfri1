@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from lib.Commands import CBaseCommand
 
 
@@ -27,10 +26,13 @@ class CZOrderCmd(CBaseCommand):
         elif (self.action == 'ToTop'):
             self.diagram.ShiftElementsToTop()
         
+        else:
+            self.enabled = False
+            
         if self.description == None:
             if (self.action == 'SendBack'):
                 print_action = 'Sending selection back'
-           
+            
             elif (self.action == 'BringForward'):
                 print_action =  'Bringing selection back'
             
@@ -38,10 +40,7 @@ class CZOrderCmd(CBaseCommand):
                 print_action = 'Sending selection to bottom' 
             
             elif (self.action == 'ToTop'):
-                print_action = 'Bringing selection to top'
-                
-            else:
-                self.enabled = False
+                print_action = 'Bringing selection to top'            
                 
             self.description = _('%s on %s') %(print_action, self.diagram.GetName())
 
@@ -76,5 +75,4 @@ class CZOrderCmd(CBaseCommand):
 
     def redo(self):
         self.do()
-        
         

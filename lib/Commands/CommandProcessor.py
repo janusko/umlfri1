@@ -33,10 +33,10 @@ class CCommandProcessor:
         
         if not redo:
             for undo in self.undoStack:
-                descriptionList.append(str(undo))
+                descriptionList.append(undo.getDescription())
         else:
             for redo in self.redoStack:
-                descriptionList.append(str(redo))
+                descriptionList.append(redo.getDescription())
             
         if limitation:
             return descriptionList[-limitation:]

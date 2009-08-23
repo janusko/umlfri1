@@ -15,8 +15,9 @@ import os.path
 
 from lib.Project import CProject
 from lib.Project import CRecentFiles
+from lib.Addons import CAddonManager
 
-from lib.Gui import CfrmSplash, CfrmMain, CfrmAbout, CfrmProperties, CfrmOpen, CfrmSave, CfrmOptions, CfrmException
+from lib.Gui import CfrmSplash, CfrmMain, CfrmAbout, CfrmProperties, CfrmOpen, CfrmSave, CfrmOptions, CfrmException, CfrmExport, CfrmAddons
 from lib.Gui.dialogs import CExceptionDialog
 
 from lib.config import config
@@ -24,10 +25,10 @@ from lib.consts import SPLASH_TIMEOUT
 
 from lib.Exceptions import UserException
 
-__version__ = '1.0-beta20090309'
+__version__ = '1.0-beta20090601'
 
 class Application(CApplication):
-    windows = (CfrmSplash, CfrmMain, CfrmAbout, CfrmProperties, CfrmOpen, CfrmSave, CfrmOptions, CfrmException)
+    windows = (CfrmSplash, CfrmMain, CfrmAbout, CfrmProperties, CfrmOpen, CfrmSave, CfrmOptions, CfrmException, CfrmExport, CfrmAddons)
     glade = os.path.join(config['/Paths/Gui'], 'gui.glade')
     main_window = 'frmMain'
     textdomain = 'uml_fri'
@@ -39,6 +40,7 @@ class Application(CApplication):
     def __init__(self):
         self.recentFiles = CRecentFiles()
         self.clipboard = CClipboard()
+        self.addonManager = CAddonManager()
         
         CApplication.__init__(self)
         self.UserGui= CUserGui(self)
@@ -72,7 +74,7 @@ class Application(CApplication):
     
     def ProjectInit(self):
         if self.project is None:
-            self.project = CProject()
+            self.project = CProject(self.addonManager)
             
     def ProjectDelete(self):
         self.project = None
@@ -108,6 +110,7 @@ class Application(CApplication):
         self.UserGui.SaveConfig()
         CApplication.Quit(self)
         config.Save()
+        self.addonManager.Save()
         self.recentFiles.SaveRecentFiles()
 
 if __name__ == '__main__':

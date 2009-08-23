@@ -3,6 +3,7 @@ from lib.Exceptions.UMLException import UMLException
 from lib.config import config
 import Connection, Element, ConLabelInfo
 import lib.Math2D
+import operator
 from lib.Math2D import CRectangle
 from lib.Math2D import CPoint
 
@@ -32,8 +33,13 @@ class CDiagram:
     
     def SetVScrollingPos(self, value):
         self.scrollingPos[1] = value
+    
+    def HasElement(self, element):
+        for i in self.elements:
+            if i is element:
+                return i
+        return None
         
-    # Cesta v strome kde sa nachadza diagram
     def HasElementObject(self, object):
         for i in self.elements:
             if i.GetObject() is object:
@@ -193,7 +199,10 @@ class CDiagram:
     
     def DeleteItem(self, item):
         self.size = None
-        if isinstance(item, Connection.CConnection):
+        item.GetObject().RemoveAppears(self)
+        if isinstance(item, ConLabelInfo.CConLabelInfo):
+            self.DeleteConLabel(item)
+        elif isinstance(item, Connection.CConnection):
             self.DeleteConnection(item)
         elif isinstance(item, Element.CElement):
             self.DeleteElement(item)
@@ -218,6 +227,18 @@ class CDiagram:
         else:
             raise DrawingError("ElementDoesNotExists")
         
+    def DeleteConLabel(self,conlabel):
+        self.size = None
+        self.DeleteConnection(conlabel.GetConnection())
+        if conlabel in self.selected:
+            self.selected.remove(conlabel)
+            
+    def ShiftDeleteConLabel(self,conlabel):
+        self.size = None
+        self.ShiftDeleteConnection(conlabel.GetConnection())
+        if conlabel in self.selected:
+            self.selected.remove(conlabel)
+    
     def DeleteConnection(self, connection):
         self.size = None
         if connection in self.connections:
@@ -266,6 +287,7 @@ class CDiagram:
         return result
         
     def GetDrawable(self):
+        # wtf ?
         return self.drawable        
         
     def GetElementAtPosition(self, canvas, pos):
@@ -297,6 +319,20 @@ class CDiagram:
     def Paint(self, canvas):
         ((x, y), (w, h)) = self.viewport
         canvas.Clear()
+        var = set([])
+        for e in self.elements:#here is created a set of layer values
+            var.add(int(e.GetObject().GetType().GetOptions().get('Layer', 0)))
+        var=list(var)
+        var.sort()#sorted list of layer values
+        num=0
+        for k in var:
+            for e in self.elements:#elements are ordered depending on their layer (if they have one or their layer is set to default value)
+                if(int(e.GetObject().GetType().GetOptions().get('Layer',0))==k):
+                    if not isinstance(e, ConLabelInfo.CConLabelInfo):
+                        selectedIdx = self.elements.index(e)
+                        del self.elements[selectedIdx]
+                        self.elements.insert(num, e);
+                        num+=1
         for e in self.elements:
             ((ex1, ey1), (ex2, ey2)) = e.GetSquare(canvas)
             if not (ex2 < x or x + w < ex1 or ey2 < y or y + w < ey1):
@@ -307,12 +343,26 @@ class CDiagram:
                 c.Paint(canvas, delta = (-x, -y))
             
     def PaintFull(self, canvas):
+        '''Paints the whole diagram. Used
+        for exporting.
+        '''               
         canvas.Clear()
         for e in self.elements:
             e.Paint(canvas)
         for c in self.connections:
             c.Paint(canvas)
-    
+        
+    def PaintSelected(self, canvas):
+        '''Paints _only_ selected items (elements + connections)
+        as if they were deselected. Used for pixbuf copying.
+        '''        
+        canvas.Clear()
+        old_selected =  self.selected
+        self.DeselectAll()
+        for e in old_selected:
+            e.Paint(canvas)
+            self.AddToSelection(e)
+ 
     def GetElements(self):
         for e in self.elements:
             yield e
@@ -324,7 +374,6 @@ class CDiagram:
     def Assign(self, cprojNode):
         pass
     
-    # Presunutie elementov uplne dopredu
     def ShiftElementsToTop(self):
         for selectedElement in self.GetSelectedElements():
             if not isinstance(selectedElement, ConLabelInfo.CConLabelInfo):
@@ -332,7 +381,6 @@ class CDiagram:
                 del self.elements[selectedIdx]
                 self.elements.append(selectedElement) 
 
-    # Presunutie elementov uplne dozadu
     def ShiftElementsToBottom(self):
         for selectedElement in self.GetSelectedElements():
             if not isinstance(selectedElement, ConLabelInfo.CConLabelInfo):
@@ -340,7 +388,6 @@ class CDiagram:
                 del self.elements[selectedIdx]
                 self.elements.insert(0, selectedElement);
             
-    # Presunutie elementov o 1 dopredu
     def ShiftElementsForward(self, canvas):
         for selectedElement in self.GetSelectedElements():
             if not isinstance(selectedElement, ConLabelInfo.CConLabelInfo):
@@ -356,10 +403,9 @@ class CDiagram:
                     if len(prienik) > 0:
                         del self.elements[selectedIdx]
                         self.elements.insert(otherElementIdx, selectedElement);
-                        selectedShifted = True # uz je posunuty -> koncim a presuvam dalsi selecnuty
+                        selectedShifted = True
                     otherElementIdx += 1
                 
-    # Presunutie elementov o 1 dozadu
     def ShiftElementsBack(self, canvas):
         for selectedElement in self.GetSelectedElements():
             if not isinstance(selectedElement, ConLabelInfo.CConLabelInfo):
@@ -375,7 +421,7 @@ class CDiagram:
                     if len(prienik) > 0:
                         del self.elements[selectedIdx]
                         self.elements.insert(otherElementIdx, selectedElement);
-                        selectedShifted = True # uz je posunuty -> koncim a presuvam dalsi selecnuty
+                        selectedShifted = True
                     otherElementIdx -= 1
     
     def CutSelection(self, clipboard):
@@ -448,16 +494,6 @@ class CDiagram:
             if posY < y_min:
                 y_min = posY
         for connection in self.connections:
-            #posX, posY = connection.GetSquare(canvas, True)[1]
-            #if posX > x_max:
-                #x_max = posX
-            #if posY > y_max:
-                #y_max = posY
-            #if posX < x_min:
-                #x_min = posX
-            #if posY < y_min:
-                #y_min = posY
-                    
             for point in connection.GetMiddlePoints():
                 posX, posY = point
                 if posX > x_max:

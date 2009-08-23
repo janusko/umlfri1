@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
 from lib.Commands import CBaseCommand
-
 
 
 class CInsertConnectionPointCmd(CBaseCommand):

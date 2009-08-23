@@ -54,6 +54,6 @@ def version():
     @rtype: list of (str, str)
     """
     return [
-        ("GTK+ version", ".".join(str(i) for i in gtk.gtk_version)),
-        ("PyGTK version", ".".join(str(i) for i in gtk.pygtk_version)),
+        (_("GTK+ version"), ".".join(str(i) for i in gtk.gtk_version)),
+        (_("PyGTK version"), ".".join(str(i) for i in gtk.pygtk_version)),
     ]
