@@ -38,7 +38,7 @@
     </Styles>
     <Paths>
         <Root>&apppath;</Root>
-        <MetamodelList>&apppath;/etc/metamodels.xml</MetamodelList>
+        <Addons>&apppath;/share/addons/</Addons>
         <Templates>&apppath;/etc/templates/</Templates>
         <Images>&apppath;/img/</Images>
         <Gui>&apppath;/gui/</Gui>
@@ -46,6 +46,9 @@
         <Schema>&apppath;/share/schema/</Schema>
         <UserDir>~/.uml_fri</UserDir>
         <UserConfig>~/.uml_fri/config.xml</UserConfig>
+        <UserAddons>~/.uml_fri/addons/</UserAddons>
+        <UserTemplates>~/.uml_fri/templates/</UserTemplates>
+        <UserEnabledAddons>~/.uml_fri/addons.xml</UserEnabledAddons>
         <RecentFiles>~/.uml_fri/RecentFiles.xml</RecentFiles>
         <UserGui>~/.uml_fri/UserGui.xml</UserGui>
     </Paths>

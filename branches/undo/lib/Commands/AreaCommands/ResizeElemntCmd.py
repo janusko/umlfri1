@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from lib.Commands import CBaseCommand
 
 
@@ -14,7 +13,7 @@ class CResizeElemntCmd(CBaseCommand):
     def do (self):
         self.element.Resize(self.canvas, self.delta, self.selSq)
         if self.description == None:
-            self.description = _('Resizing %s on %s') %(self.element.GetObject().GetName(), self.element.diagram.GetName())
+            self.description = _('Resizing %s') %(self.element.GetObject().GetName())
 
 
     def undo(self):

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from lib.Commands import CBaseCommand
 
 
@@ -16,10 +15,7 @@ class CAddDiagramCmd(CBaseCommand):
         if self.description == None:
             self.description = _('Adding %s to project') %(self.diagram.GetName())
 
-
     def undo(self):
         self.node.RemoveDiagram(self.diagram)
 
-    def redo(self):
-        self.do()
      

@@ -1,9 +1,5 @@
-# -*- coding: utf-8 -*-
 from lib.Commands import CBaseCommand
 from lib.Drawing import  CElement
-
-from lib.Project import CProject, CProjectNode
-
 
 class CCopyCmd(CBaseCommand):
     

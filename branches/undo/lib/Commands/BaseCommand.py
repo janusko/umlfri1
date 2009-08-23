@@ -41,7 +41,7 @@ class CBaseCommand:
         return self.enabled
     
 
-    def __str__(self):
+    def getDescription(self):
         '''Returns a string containing the description of the command.
         Mandatory - used to show the user what kind of action command does 
         '''

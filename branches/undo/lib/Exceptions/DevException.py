@@ -28,3 +28,7 @@ class DomainParserError(DevException):
 
 class HistoryError(DevException):
     pass
+
+class MetamodelValidationError(DevException):
+    pass
+

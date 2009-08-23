@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from lib.Depend.gtk2 import gtk
 from common import CWindow, event
 import common
@@ -16,12 +15,10 @@ from tabs import CTabs
 from frmFindInDiagram import CFindInDiagram
 from tabStartPage import CtabStartPage
 from lib.config import config
-from lib.colors import colors
+from lib.Gui.diagramPrint import CDiagramPrint
 from lib.Exceptions import UserException
-from lib.Commands import CCommandProcessor
 from lib.Commands.AreaCommands import CAddElementCmd
 from lib.Commands import CCompositeCommand
-
 
 class CfrmMain(CWindow):
     name = 'frmMain'
@@ -29,7 +26,7 @@ class CfrmMain(CWindow):
         #menu
         #############
         'mItemFile',
-        'mnuOpen', 'mnuSave', 'mnuSaveAs', 'mnuQuit',
+        'mnuOpen', 'mnuSave', 'mnuSaveAs', 'mnuPrint', 'mnuProperties', 'mnuQuit',
         #############
         'mItemEdit',
         'mnuUndo', 'mnuRedo', 'mnuCut', 'mnuCopy', 'mnuPaste', 'mnuDelete',
@@ -43,7 +40,7 @@ class CfrmMain(CWindow):
         'mnuViewTools', 'mnuViewCommands', 'mnuNormalSize', 'mnuZoomIn','mnuZoomOut', 'mnuBestFit',
         'hndCommandBar',
         #############
-        'mnuOptions',
+        'mnuAddons', 'mnuOptions',
         #############
         'mItemHelp',
         'mnuAbout',
@@ -61,19 +58,18 @@ class CfrmMain(CWindow):
         )
 
     complexWidgets = (CtbToolBox, CtwProjectView, CmnuItems, CpicDrawingArea, CnbProperties, CTabs,
-                      CtabStartPage, CFindInDiagram)
+                      CtabStartPage, CFindInDiagram,  )
 
     def __init__(self, app, wTree):
-        self.history = CCommandProcessor()
         CWindow.__init__(self, app, wTree)
+        self.diagramPrint = CDiagramPrint()
         self.form.maximize()
         self.__sensitivity_project = None
         self.UpdateMenuSensitivity(project = False)
-        self.ReloadTitle()
         self.cmdUndo.set_menu(gtk.Menu())
         self.cmdRedo.set_menu(gtk.Menu())
+        self.ReloadTitle()
         
-
     def SetSensitiveMenuChilds(self, MenuItem, value):
         for i in MenuItem.get_submenu().get_children():
             i.set_sensitive(value)
@@ -114,10 +110,10 @@ class CfrmMain(CWindow):
         changes += zoomout != self.__sensitivity_project[4]
         self.__sensitivity_project[3] = zoomin
         self.__sensitivity_project[4] = zoomout
-        changes += self.history.canUndo() != self.__sensitivity_project[5]
-        changes += self.history.canRedo() != self.__sensitivity_project[6]
-        self.__sensitivity_project[5] = self.history.canUndo()
-        self.__sensitivity_project[6] = self.history.canRedo()
+        changes += self.application.history.canUndo() != self.__sensitivity_project[5]
+        changes += self.application.history.canRedo() != self.__sensitivity_project[6]
+        self.__sensitivity_project[5] = self.application.history.canUndo()
+        self.__sensitivity_project[6] = self.application.history.canRedo()
         
         if changes == 0:
             return
@@ -129,6 +125,7 @@ class CfrmMain(CWindow):
         self.SetSensitiveMenuChilds(self.mItemElement, element)
         self.mnuSave.set_sensitive(project)
         self.mnuSaveAs.set_sensitive(project)
+        self.mnuPrint.set_sensitive(diagram)
         self.cmdSave.set_sensitive(project)
         self.cmdCopy.set_sensitive(element)
         self.cmdCut.set_sensitive(element)
@@ -149,14 +146,14 @@ class CfrmMain(CWindow):
         self.cmdZoomOut.set_sensitive(zoomout)
         self.mnuBestFit.set_sensitive(diagram)
         self.mnuFullscreen.set_sensitive(diagram)
-        self.cmdUndo.set_sensitive(self.history.canUndo())
-        self.mnuUndo.set_sensitive(self.history.canUndo())
-        self.cmdRedo.set_sensitive(self.history.canRedo())
-        self.mnuRedo.set_sensitive(self.history.canRedo())
-        
+        self.cmdUndo.set_sensitive(self.application.history.canUndo())
+        self.mnuUndo.set_sensitive(self.application.history.canUndo())
+        self.cmdRedo.set_sensitive(self.application.history.canRedo())
+        self.mnuRedo.set_sensitive(self.application.history.canRedo())
+
     
     def LoadProject(self, filename, copy):
-        self.history.clear()
+        self.application.history.clear()
         self.nbTabs.CloseAll()
         self.application.ProjectInit()
         try:
@@ -222,41 +219,17 @@ class CfrmMain(CWindow):
             self.vpaRight.show()
             self.form.window.unfullscreen()
 
+    @event("mnuAddons", "activate")
+    def on_mnuAddons_activate(self, mnu):
+        tmp = self.application.GetWindow('frmAddons')
+        tmp.SetParent(self)
+        tmp.Show()
+
     # Preferencies
     @event("mnuOptions", "activate")
     def on_mnuOptions_activate(self, mnu):
         tmp = self.application.GetWindow('frmOptions')
         tmp.SetParent(self)
-        tmp.cbElementLine.set_color(gtk.gdk.color_parse(config['/Styles/Element/LineColor']))
-        tmp.cbElementFill.set_color(gtk.gdk.color_parse(config['/Styles/Element/FillColor']))
-        tmp.cbElementFill2.set_color(gtk.gdk.color_parse(config['/Styles/Element/Fill2Color']))
-        tmp.cbElementFill3.set_color(gtk.gdk.color_parse(config['/Styles/Element/Fill3Color']))
-        tmp.cbElementShadow.set_color(gtk.gdk.color_parse(config['/Styles/Element/ShadowColor']))
-        tmp.cbElementNameText.set_color(gtk.gdk.color_parse(config['/Styles/Element/NameTextColor']))
-        tmp.cbElementText.set_color(gtk.gdk.color_parse(config['/Styles/Element/TextColor']))
-        tmp.cbConnectionLine.set_color(gtk.gdk.color_parse(config['/Styles/Connection/LineColor']))
-        tmp.cbConnectionArrow.set_color(gtk.gdk.color_parse(config['/Styles/Connection/ArrowColor']))
-        tmp.cbConnectionArrowFill.set_color(gtk.gdk.color_parse(config['/Styles/Connection/ArrowFillColor']))
-        tmp.cbConnectionNameText.set_color(gtk.gdk.color_parse(config['/Styles/Connection/NameTextColor']))
-        tmp.cbConnectionText.set_color(gtk.gdk.color_parse(config['/Styles/Connection/TextColor']))
-        tmp.cbSelectionPoints.set_color(gtk.gdk.color_parse(config['/Styles/Selection/PointsColor']))
-        tmp.cbSelectionRectangle.set_color(gtk.gdk.color_parse(config['/Styles/Selection/RectangleColor']))
-        tmp.cbDragRectangle.set_color(gtk.gdk.color_parse(config['/Styles/Drag/RectangleColor']))
-        tmp.fbElementNameText.set_font_name(config['/Styles/Element/NameTextFont'])
-        tmp.fbElementText.set_font_name(config['/Styles/Element/TextFont'])
-        tmp.fbConnectionNameText.set_font_name(config['/Styles/Connection/NameTextFont'])
-        tmp.fbConnectionText.set_font_name(config['/Styles/Connection/TextFont'])
-        tmp.sbSelectionPointsSize.set_value(config['/Styles/Selection/PointsSize'])
-        tmp.sbSelectionRectangleWidth.set_value(config['/Styles/Selection/RectangleWidth'])
-        tmp.sbDragRectangleWidth.set_value(config['/Styles/Drag/RectangleWidth'])
-        tmp.txtRootPath.set_text(config['/Paths/Root'])
-        tmp.txtTemplatesPath.set_text(config['/Paths/Templates'])
-        tmp.txtImagesPath.set_text(config['/Paths/Images'])
-        tmp.txtGuiPath.set_text(config['/Paths/Gui'])
-        tmp.txtLocalesPath.set_text(config['/Paths/Locales'])
-        tmp.txtUserDirPath.set_text(config['/Paths/UserDir'])
-        tmp.txtUserConfigDirPath.set_text(config['/Paths/UserConfig'])
-        tmp.txtRecentFilesPath.set_text(config['/Paths/RecentFiles'])
         tmp.Show()
         self.PaintAll()
 
@@ -281,54 +254,10 @@ class CfrmMain(CWindow):
     @event('nbTabs','export-svg-from-TabMenu')
     @event('mnuExport', 'activate')
     def on_mnuExport_activate(self, widget):
-        filedlg = gtk.FileChooserDialog(_('Export diagram'), self.form, gtk.FILE_CHOOSER_ACTION_SAVE, (gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK))
-        # SVG filter
-        filter = gtk.FileFilter()
-        filter.set_name("SVG vector image")
-        filter.add_pattern('*.svg')
-        filedlg.add_filter(filter)
-        # PNG filter
-        filter = gtk.FileFilter()
-        filter.set_name("PNG image")
-        filter.add_pattern('*.png')
-        filedlg.add_filter(filter)
-        # PDF filter
-        filter = gtk.FileFilter()
-        filter.set_name("PDF file")
-        filter.add_pattern('*.pdf')
-        filedlg.add_filter(filter)
-        # PS filter
-        filter = gtk.FileFilter()
-        filter.set_name("PostScript")
-        filter.add_pattern('*.ps')
-        filedlg.add_filter(filter)
-        tmp = None
-
-        try:
-            while True:
-                if filedlg.run() == gtk.RESPONSE_OK: 
-                    name =  filedlg.get_filter().get_name()
-
-                    if name == "SVG vector image":
-                        tmp = 'svg'
-                    elif name == "PNG image":
-                        tmp = 'png'
-                    elif name == "PDF file":
-                        tmp = 'pdf'
-                    elif name == "PostScript":
-                        tmp = 'ps'
-
-                    filename = filedlg.get_filename()
-
-                    if '.' not in os.path.basename(filename):
-                        filename += '.' + tmp
-                    if not os.path.isdir(filename):
-                        self.picDrawingArea.Export(filename, tmp)
-                        return
-                else:
-                    return
-        finally:
-            filedlg.destroy()
+        exportDialog = self.application.GetWindow('frmExport')
+        exportDialog.setArea(self.picDrawingArea)        
+        exportDialog.SetParent(self)
+        exportDialog.Show()
 
     def ReloadTitle(self):
         if self.application.GetProject() is None or self.application.GetProject().GetFileName() is None:
@@ -413,6 +342,14 @@ class CfrmMain(CWindow):
             self.application.GetProject().SaveProject(filename, isZippedFile)
             self.ReloadTitle()
 
+    @event("mnuProperties", "activate")
+    def ActionProperties(self, widget):
+        self.diagramPrint.printPropertiesSetup()
+
+    @event("mnuPrint", "activate")
+    def ActionPrint(self, widget):
+        self.diagramPrint.printStart(self.picDrawingArea.GetDiagram())
+
     @event("mnuDelete","activate")
     def on_mnuDelete_click(self, widget):
         self.picDrawingArea.DeleteElements()
@@ -438,42 +375,48 @@ class CfrmMain(CWindow):
     def on_mnuZoomIn_click(self, widget):
         self.picDrawingArea.IncScale(lib.consts.SCALE_INCREASE)
         self.UpdateMenuSensitivity()
-
+        
     @event("cmdUndo", "clicked")
     @event("mnuUndo","activate")
     def on_mnuUndo_click(self, widget):
-        self.history.undo()
+        self.application.history.undo()
         self.update_all()
         
     @event("cmdRedo", "clicked")
     @event("mnuRedo","activate")
     def on_mnuRedo_click(self, widget):
-        self.history.redo()
+        self.application.history.redo()
         self.update_all()
-
+        
     @event("cmdCut", "clicked")
     @event("mnuCut","activate")
     def on_mnuCut_click(self, widget):
-        self.picDrawingArea.ActionCut()
+        if self.picDrawingArea.HasFocus():
+            self.picDrawingArea.ActionCut()
+        else:
+            pass
  
     @event("cmdCopy", "clicked")
     @event("mnuCopy","activate")
     def on_mnuCopy_click(self, widget):
-        self.picDrawingArea.ActionCopy()
-        self.UpdateMenuSensitivity()
+        if self.picDrawingArea.HasFocus():
+            gtk.clipboard_get(gtk.gdk.SELECTION_CLIPBOARD).set_image(self.picDrawingArea.GetSelectionPixbuf())
+            self.picDrawingArea.ActionCopy()
+            self.UpdateMenuSensitivity()
     
     @event("cmdPaste", "clicked")
     @event("mnuPaste","activate")
     def on_mnuPaste_click(self, widget):
-        try:
-            self.picDrawingArea.ActionPaste()
-        except UserException, e:
-            if e.GetName() == "ElementAlreadyExists":
-                return CWarningDialog(self.form, _('Element is already in this diagram')).run()
-            elif e.GetName() == "DiagramHasNotThisElement":
-                return CWarningDialog(self.form, _('Wrong element: ') + e.GetParameter(1).GetObject().GetType().GetId()).run()
-            else:
-                return CWarningDialog(self.form, e.GetName()).run()
+        if self.picDrawingArea.HasFocus():
+            try:
+                self.picDrawingArea.ActionPaste()
+            except UserException, e:
+                if e.GetName() == "ElementAlreadyExists":
+                    return CWarningDialog(self.form, _('Element is already in this diagram')).run()
+                elif e.GetName() == "DiagramHasNotThisElement":
+                    return CWarningDialog(self.form, _('Wrong element: ') + e.GetParameter(1).GetObject().GetType().GetId()).run()
+                else:
+                    return CWarningDialog(self.form, e.GetName()).run()
     
     def ActionLoadToolBar(self, widget):
         pass
@@ -494,13 +437,11 @@ class CfrmMain(CWindow):
         parentElement = self.twProjectView.GetSelectedNode()
         if parentElement == None:
             parentElement = self.twProjectView.GetRootNode()
+
         ElementType = self.application.GetProject().GetMetamodel().GetElementFactory().GetElement(element)
         ElementObject = CElementObject(ElementType)
         self.twProjectView.AddElement(ElementObject, None, parentElement)
 
-    #@event("picDrawingArea", "add-element")
-    #def on_add_element(self, widget, Element, diagram, parentElement):
-        #self.twProjectView.AddElement(Element, diagram, parentElement)
 
     @event("mnuItems", "create-diagram")
     @event("twProjectView","create-diagram")
@@ -550,10 +491,6 @@ class CfrmMain(CWindow):
         else:
             self.nbProperties.Fill(None)
 
-    #@event("picDrawingArea","delete-element-from-all")
-    #def on_picDrawingArea_delete_selected_item(self, widget, selected):
-        #self.twProjectView.DeleteElement(selected)
-
     @event("twProjectView", "selected-item-tree")
     def on_twTreeView_selected_item(self, widget, selected):
         self.picDrawingArea.Diagram.DeselectAll()
@@ -576,16 +513,6 @@ class CfrmMain(CWindow):
     def on_show_frmFindInDiagram(self, widget, diagrams, object):
         self.frmFindInDiagram.ShowDialog(diagrams, object)
 
-    #@event("nbProperties", "content-update")
-    #def on_nbProperties_content_update(self, widget, element, property):
-        #if isinstance(element, CDiagram):
-            #self.twProjectView.UpdateElement(element)
-            #self.nbTabs.RefreshTab(element)
-        #else:
-            #if element.GetObject().HasVisualAttribute(property):
-                #self.picDrawingArea.Paint()
-                #self.twProjectView.UpdateElement(element.GetObject())
-
     @event("tbToolBox", "toggled")
     def on_tbToolBox_toggled(self, widget, ItemId, ItemType):
         self.picDrawingArea.ResetAction()
@@ -598,7 +525,8 @@ class CfrmMain(CWindow):
             try:
                 Element = CElement(diagram, node.GetObject())
                 addElement = CAddElementCmd(Element, position)
-                self.on_history_insert(None, addElement)
+                self.application.history.add(addElement)
+                self.on_history_insert(None)                
             except UserException, e:
                 if e.GetName() == "ElementAlreadyExists":
                     return CWarningDialog(self.form, _('Unable to insert element')).run()
@@ -625,7 +553,8 @@ class CfrmMain(CWindow):
         self.frmProp = self.application.GetWindow('frmProperties')
         self.frmProp.SetParent(self.application.GetWindow('frmMain'))
         self.frmProp.ShowProperties('', Element, self.picDrawingArea, groupCmd)
-        self.on_history_insert(None, groupCmd)
+        self.application.history.add(groupCmd)
+        self.on_history_insert(None)        
 
 
     def update_all(self, alsoProperties = True):
@@ -650,11 +579,10 @@ class CfrmMain(CWindow):
         # empty current menu
         for child in self.cmdUndo.get_menu().get_children():
             self.cmdUndo.get_menu().remove(child)
-        
         # add new undo items and connect them with the on_undo_menuitem_response method
         # note: connect is used... use of @event is impossible
-        i = len(self.history.getUndoDesc(limitation = lib.consts.STACK_SIZE_TO_SHOW))
-        for desc in self.history.getUndoDesc(limitation = lib.consts.STACK_SIZE_TO_SHOW):
+        i = len(self.application.history.getUndoDesc(limitation = lib.consts.STACK_SIZE_TO_SHOW))
+        for desc in self.application.history.getUndoDesc(limitation = lib.consts.STACK_SIZE_TO_SHOW):
             menuItem = gtk.MenuItem(label=desc, use_underline=True)
             self.cmdUndo.get_menu().insert(menuItem,0)
             menuItem.connect("activate", self.on_undo_menuitem_response, i)
@@ -664,7 +592,7 @@ class CfrmMain(CWindow):
         
     def on_undo_menuitem_response(self, widget, iteration):
         for i in range(iteration):
-            self.history.undo()
+            self.application.history.undo()
         self.update_all()
 
    
@@ -673,8 +601,8 @@ class CfrmMain(CWindow):
         
         for child in self.cmdRedo.get_menu().get_children():
             self.cmdRedo.get_menu().remove(child)
-        i = len(self.history.getRedoDesc(limitation = lib.consts.STACK_SIZE_TO_SHOW))
-        for desc in self.history.getRedoDesc(limitation = lib.consts.STACK_SIZE_TO_SHOW):
+        i = len(self.application.history.getRedoDesc(limitation = lib.consts.STACK_SIZE_TO_SHOW))
+        for desc in self.application.history.getRedoDesc(limitation = lib.consts.STACK_SIZE_TO_SHOW):
             menuItem = gtk.MenuItem(label=desc, use_underline=True)
             self.cmdRedo.get_menu().insert(menuItem,0)
             menuItem.connect("activate", self.on_redo_menuitem_response, i)
@@ -684,17 +612,14 @@ class CfrmMain(CWindow):
 
     def on_redo_menuitem_response(self, widget, iteration):
         for i in range(iteration):
-            self.history.redo()
+            self.application.history.redo()
         self.update_all()
-
 
     @event("twProjectView", "history-entry")
     @event("nbProperties", "history-entry")
     @event("picDrawingArea","history-entry")
-    def on_history_insert(self, widget, command):
-        self.history.add(command)
+    def on_history_insert(self, widget):
         self.update_all(False)
-
 
     #Z-Order 
     # 'mmShift_SendBack', 'mmShift_BringForward', 'mmShift_ToBottom', 'mmShift_ToTop'    
@@ -719,4 +644,5 @@ class CfrmMain(CWindow):
         if (event.state & gtk.gdk.CONTROL_MASK):
             self.UpdateMenuSensitivity()
 
-    
+
+

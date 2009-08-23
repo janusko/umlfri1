@@ -27,7 +27,7 @@ class CMoveSelectionCmd(CBaseCommand):
                     else:
                         self.description = _('Moving %s label on %s') %(el.GetObject().GetType().GetId(), self.diagram.GetName())
             else:
-                self.description = _('Moving selection')
+                self.description = _('Moving selection on %s') %(self.diagram.GetName())
                 
 
     def undo(self):
@@ -35,7 +35,6 @@ class CMoveSelectionCmd(CBaseCommand):
         self.diagram.DeselectAll()
         for s in self.selection:
             self.diagram.AddToSelection(s)        
-        #self.diagram.selected = self.selection
         self.diagram.MoveSelection((-self.delta[0], -self.delta[1]), self.canvas)
         self.diagram.DeselectAll()
         for s in oldSelection:

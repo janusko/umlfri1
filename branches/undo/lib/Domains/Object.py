@@ -2,6 +2,7 @@
 from lib.Exceptions import DomainObjectError
 import re
 from lib.consts import DEFAULT_IDENTITY
+from types import NoneType
 
 class CDomainObject(object):
     '''
@@ -221,5 +222,9 @@ class CDomainObject(object):
         for key, value in data.iteritems():
             if isinstance(value, dict):
                 self.GetValue(key).SetSaveInfo(value)
-            elif isinstance(value, (list, str, unicode)):
+            elif isinstance(value, (list, str, unicode, NoneType)):
                 self.SetValue(key, value)
+    
+    def __iter__(self):
+        for id in self.type.IterAttributeIDs():
+            yield id, self.values[id]

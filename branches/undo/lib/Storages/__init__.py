@@ -1,4 +1,3 @@
-import Directory
-
-def open_storage(path):
-    return Directory.CDirectory(path)
+from Directory import CDirectory
+from ZipStorage import CZipStorage
+from StorageList import open_storage

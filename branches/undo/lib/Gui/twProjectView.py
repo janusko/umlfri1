@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from lib.Depend.gtk2 import gobject
 from lib.Depend.gtk2 import gtk
 
@@ -11,7 +10,6 @@ from lib.Drawing.Canvas.GtkPlus import PixmapFromPath
 
 from common import  event
 import common
-
 from lib.Commands.ProjectViewCommands import CAddDiagramCmd, CDeleteDiagramCmd, CDeleteTwElementCmd, CAddTwElementCmd
 
 
@@ -25,7 +23,7 @@ class CtwProjectView(CWidget):
               )
     
     __gsignals__ = {
-        'history-entry':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
+        'history-entry':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
         'selected_diagram':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)), 
         'selected-item-tree':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
         'add-element':   (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_STRING,)),
@@ -39,16 +37,13 @@ class CtwProjectView(CWidget):
     def __init__(self, app, wTree):
         CWidget.__init__(self, app, wTree)
         
-        # vytvorime si model
         self.TreeStore = gtk.TreeStore(str, gtk.gdk.Pixbuf, str, object)
         self.EventButton = (0,0)
         
-        #spravime jeden column
         self.Column = gtk.TreeViewColumn(_('Elements'))
         self.twProjectView.append_column(self.Column)
         self.twProjectView.set_reorderable(True)
         
-        #nastavime renderer
         self.StrRenderer = gtk.CellRendererText()
         self.PbRenderer = gtk.CellRendererPixbuf()
         
@@ -59,7 +54,6 @@ class CtwProjectView(CWidget):
             
         
         self.twProjectView.set_model(self.TreeStore)
-        #povolenie oznacit jeden prvkov
         self.twProjectView.get_selection().set_mode(gtk.SELECTION_SINGLE)
         
         self.TARGETS = [
@@ -118,8 +112,7 @@ class CtwProjectView(CWidget):
         
         # for debug
         #self.__DrawTreeToConsole(root)
-        self.twProjectView.expand_all()
-    
+        self.twProjectView.expand_all()    
 
     def __DrawTree(self, root, parent):
         
@@ -131,7 +124,7 @@ class CtwProjectView(CWidget):
             novy = self.TreeStore.append(parent)
             self.TreeStore.set(novy, 0, node.GetName() , 1, PixmapFromPath(self.application.GetProject().GetMetamodel().GetStorage(), node.GetObject().GetType().GetIcon()), 2, node.GetType(),3,node)
             self.__DrawTree(node, novy)
-
+            
     def __DrawTreeToConsole(self, root, indent = 0):
         if indent == 0:
             print '==============================DEBUG-REDRAW========================================='
@@ -141,8 +134,7 @@ class CtwProjectView(CWidget):
         for node in root.GetChilds():
             print '    '*indent, '%s'%node.GetName()
             self.__DrawTreeToConsole(node, indent = indent+1)
-            
-         
+                  
 
     def get_iter_from_path(self, model, root, path):
         chld = root
@@ -256,12 +248,13 @@ class CtwProjectView(CWidget):
             path = diagram.GetPath()
         else:
             path = parentElement.GetPath()
+
         parent = self.application.GetProject().GetNode(path)
         node = CProjectNode(parent, element, parent.GetPath() + "/" + element.GetName() + ":" + element.GetType().GetId())
-        addDiagram = CAddTwElementCmd(self.application, node, parent)            
-        self.emit('history-entry', addDiagram)         
+        addDiagram = CAddTwElementCmd(self.application.GetProject(), node, parent) 
+        self.application.history.add(addDiagram)
+        self.emit('history-entry')           
         
-
     def AddDiagram(self, diagram):
         iter = self.twProjectView.get_selection().get_selected()[1]
         if iter is None:
@@ -271,10 +264,11 @@ class CtwProjectView(CWidget):
         
         if model.get(iter,2)[0] == "=Diagram=":
             iter = model.iter_parent(iter)
-            
         node = model.get(iter,3)[0]
-        addDiagram = CAddDiagramCmd(diagram, node)            
-        self.emit('history-entry', addDiagram) 
+        
+        addDiagram = CAddDiagramCmd(diagram, node) 
+        self.application.history.add(addDiagram)
+        self.emit('history-entry')         
         
     
     def UpdateElement(self, object):
@@ -362,39 +356,25 @@ class CtwProjectView(CWidget):
         for k in node.GetAppears():
             k.DeleteObject(node.GetObject())
     
-    
-    #def DeleteElement(self, elementObject):
-
-        #iter = self.twProjectView.get_model().get_iter_root()
-        
-        #if elementObject is self.twProjectView.get_model().get(iter,3)[0].GetObject():
-            #return
-        
-        #for i in self.get_iters_from_path(self.twProjectView.get_model(),self.twProjectView.get_model().get_iter_root() ,elementObject.GetPath()):
-            #node = self.twProjectView.get_model().get(i,3)[0]
-            #if elementObject is node.GetObject():
-                #break
-
-        #self.TreeStore.remove(i)
-        #self.RemoveFromArea(node)
-        #self.application.GetProject().RemoveNode(node)
-    
     @event("mnuTreeDelete","activate")
     def on_mnuTreeDelete_activate(self, menuItem):
         iter = self.twProjectView.get_selection().get_selected()[1]
         model = self.twProjectView.get_model()
         if model.get(iter,2)[0] != "=Diagram=":
             node = model.get(iter,3)[0]
-            deleteElement = CDeleteTwElementCmd(self.application, node)
-            self.emit('history-entry',deleteElement)            
+            deleteElement = CDeleteTwElementCmd(self.application.GetProject(), node)
+            self.application.history.add(deleteElement)
+            self.emit('history-entry')            
         else:
             diagram = model.get(iter,3)[0]
             itr = model.iter_parent(iter)
             node = model.get(itr,3)[0]
+            node.RemoveDiagram(diagram)
             deleteDiagram = CDeleteDiagramCmd(diagram, node)
-            self.emit('history-entry',deleteDiagram)
+            self.application.history.add(deleteDiagram)
+            self.emit('history-entry')            
 
-        
+
     @event("mnuTreeFindInDiagrams","activate")
     def on_mnuTreeFindInDiagrams(self, menuItem):
         iter = self.twProjectView.get_selection().get_selected()[1]
@@ -407,6 +387,8 @@ class CtwProjectView(CWidget):
             self.emit('selected_diagram_and_select_element',list(node.GetAppears())[0], node.GetObject())
         elif cnt > 1:
             self.emit('show_frmFindInDiagram', list(node.GetAppears()), node.GetObject())
+
+
 
     def GetSelectedNode(self):
         iter = self.twProjectView.get_selection().get_selected()[1]
@@ -430,6 +412,8 @@ class CtwProjectView(CWidget):
         model, iter = treeselection.get_selected()
         data = model.get_value(iter, 0)
         selection_data.set(selection_data.target, 8, data)
+
+        
     
     def CheckSanity(self, model, iter_to_copy, target_iter):
         path_of_iter_to_copy = model.get_path(iter_to_copy)
@@ -521,4 +505,3 @@ class CtwProjectView(CWidget):
                 context.finish(True, True, etime)
             else:
                 context.finish(False, False, etime)
-

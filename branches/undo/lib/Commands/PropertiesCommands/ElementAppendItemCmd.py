@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
 from lib.Commands import CBaseCommand
 from lib.Drawing import  CElement
-from lib.Drawing import CDiagram
 
 
 class CElementAppendItemCmd(CBaseCommand):

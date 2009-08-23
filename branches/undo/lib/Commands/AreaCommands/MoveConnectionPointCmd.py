@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
 from lib.Commands import CBaseCommand
-
 
 
 class CMoveConnectionPointCmd(CBaseCommand):
@@ -13,7 +11,6 @@ class CMoveConnectionPointCmd(CBaseCommand):
        
 
     def do (self):
-        
         self.old_point = self.connection.GetPoint(self.canvas, self.index)
         self.old_len = len(self.connection.points)
         self.connection.MovePoint(self.canvas, self.point, self.index)
@@ -23,7 +20,7 @@ class CMoveConnectionPointCmd(CBaseCommand):
     
     def undo(self):
         if self.old_len > len(self.connection.points) :
-            self.connection.InsertPoint(self.canvas, self.old_point, self.index-1)  
+            self.connection.InsertPoint(self.canvas, self.old_point, self.index - 1)  
             self.insertedPoint = True
         else:
             self.connection.MovePoint(self.canvas, self.old_point, self.index)

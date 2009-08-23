@@ -1,9 +1,12 @@
 from SimpleContainer import CSimpleContainer
 
 class CPadding(CSimpleContainer):
+    types = {
+        'padding': int
+    }
     def __init__(self, padding):
         CSimpleContainer.__init__(self)
-        self.padding = int(padding)
+        self.padding = padding
 
     def ComputeSize(self, context):
         w, h = CSimpleContainer.ComputeSize(self, context)
