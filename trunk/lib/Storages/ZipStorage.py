@@ -54,7 +54,7 @@ class CZipStorage(CAbstractStorage):
         self.path = path
     
     def __convertPath(self, path):
-        return reMulSep.sub('/', '/'.join((self.path, path)).strip('/\\'))
+        return reMulSep.sub('/', '/'.join((self.path, path)).replace('\\', '/').strip('/'))
     
     def listdir(self, path):
         path = self.__convertPath(path)
