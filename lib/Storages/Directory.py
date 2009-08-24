@@ -24,7 +24,7 @@ class CDirectory(CAbstractStorage):
                 os.mkdir(os.path.join(root, path, dname))
             
             for fname in files:
-                file(os.path.join(root, path, fname), 'w').write(storage.read_file(os.path.join(path, fname)))
+                file(os.path.join(root, path, fname), 'wb').write(storage.read_file(os.path.join(path, fname)))
         
         return CDirectory(root)
     
