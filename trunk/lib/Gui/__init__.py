@@ -2,6 +2,7 @@ from frmAddons import CfrmAddons
 from frmSelectAddonSource import CfrmSelectAddonSource
 from frmSelectAddon import CfrmSelectAddon
 from frmInstallAddon import CfrmInstallAddon
+from frmAboutAddon import CfrmAboutAddon
 from frmMain import CfrmMain
 from frmSplash import CfrmSplash
 from frmAbout import CfrmAbout

@@ -1,6 +1,7 @@
 from lib.Depend.gtk2 import gtk, pango
 
 import os.path
+import webbrowser
 
 from lib.Drawing.Canvas.GtkPlus import PixmapFromPath
 
@@ -12,7 +13,9 @@ class CfrmAddons(CWindow):
     glade = 'addons.glade'
     
     widgets = (
-        'twMetamodelList', 'cmdInstallMetamodel', 'cmdUninstallMetamodel', 'cmdEnableMetamodel', 'cmdDisableMetamodel'
+        'twMetamodelList', 'cmdInstallMetamodel', 'cmdUninstallMetamodel', 'cmdEnableMetamodel', 'cmdDisableMetamodel',
+        'mnuMetamodel', 'mnuUninstallMetamodel', 'mnuEnableMetamodel', 'mnuDisableMetamodel',
+        'mnuHomepageMetamodel', 'mnuAboutMetamodel'
     )
     
     def __init__(self, app, wTree):
@@ -84,8 +87,12 @@ class CfrmAddons(CWindow):
             
             twStore.append(None, (icon, "<b>%s</b>     %s\n%s"%(name, version, description), enabled, uri))
     
-    def __GetSelectedAddon(self, treeView):
-        iter = treeView.get_selection().get_selected()[1]
+    def __GetSelectedAddon(self, treeView, path = None):
+        if path is not None:
+            iter = self.__MetamodelStore.get_iter(path)
+        else:
+            iter = treeView.get_selection().get_selected()[1]
+        
         if iter is None:
             return None
         
@@ -93,6 +100,7 @@ class CfrmAddons(CWindow):
         return self.application.addonManager.GetAddon(selected)
     
     @event("cmdEnableMetamodel", "clicked")
+    @event("mnuEnableMetamodel", "activate")
     def on_cmdEnableMetamodel_click(self, button):
         addon = self.__GetSelectedAddon(self.twMetamodelList)
         if addon is None:
@@ -105,6 +113,7 @@ class CfrmAddons(CWindow):
         self.MetamodelChanged()
     
     @event("cmdDisableMetamodel", "clicked")
+    @event("mnuDisableMetamodel", "activate")
     def on_cmdDisableMetamodel_click(self, button):
         addon = self.__GetSelectedAddon(self.twMetamodelList)
         
@@ -147,6 +156,7 @@ class CfrmAddons(CWindow):
             self.__Load()
     
     @event("cmdUninstallMetamodel", "clicked")
+    @event("mnuUninstallMetamodel", "activate")
     def on_cmdUninstallMetamodel_click(self, button):
         addon = self.__GetSelectedAddon(self.twMetamodelList)
         
@@ -156,6 +166,24 @@ class CfrmAddons(CWindow):
         if CQuestionDialog(self.form, _("Do you really want to uninstall addon '%(name)s %(version)s'?\nThis is pernament.")%{'name': addon.GetName(), 'version': addon.GetVersion()}).run():
             addon.Uninstall()
             self.__Load()
+    
+    @event("mnuHomepageMetamodel", "activate")
+    def on_mnuHomepageMetamodel_click(self, button):
+        addon = self.__GetSelectedAddon(self.twMetamodelList)
+        
+        if addon is None:
+            return
+        
+        webbrowser.open_new_tab(addon.GetHomepage())
+    
+    @event("mnuAboutMetamodel", "activate")
+    def on_mnuAboutMetamodel_click(self, button):
+        addon = self.__GetSelectedAddon(self.twMetamodelList)
+        
+        if addon is None:
+            return
+        
+        self.application.GetWindow("frmAboutAddon").ShowDialog(self, addon)
     
     @event("twMetamodelList", "cursor-changed")
     def MetamodelChanged(self, treeView = None):
@@ -169,3 +197,18 @@ class CfrmAddons(CWindow):
             self.cmdEnableMetamodel.set_sensitive(not addon.IsEnabled())
             self.cmdDisableMetamodel.set_sensitive(addon.IsEnabled())
             self.cmdUninstallMetamodel.set_sensitive(addon.IsUninstallable())
+    
+    @event("twMetamodelList", "button-press-event")
+    def MetamodelPopup(self, treeView, event):
+        if event.button == 3:
+            path = self.twMetamodelList.get_path_at_pos(event.x, event.y)
+            if path is None:
+                return
+            addon = self.__GetSelectedAddon(self.twMetamodelList, path[0])
+            if addon is not None:
+                self.mnuEnableMetamodel.set_sensitive(not addon.IsEnabled())
+                self.mnuDisableMetamodel.set_sensitive(addon.IsEnabled())
+                self.mnuUninstallMetamodel.set_sensitive(addon.IsUninstallable())
+                self.mnuHomepageMetamodel.set_sensitive(addon.GetHomepage() is not None)
+                
+                self.mnuMetamodel.popup(None, None, None, event.button, event.time)
