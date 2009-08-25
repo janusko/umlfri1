@@ -21,7 +21,7 @@ class CPlugin(object):
         return self.__addr is not None
     
     def Start(self):
-        if os.path == 'nt': 
+        if os.name == 'nt': 
             os.system('start /B pl_runner.py %i "%s" "%s" "%s"' % (self.__pluginManager().GetPort(), self.__path, self.__uri, self.__password))
         else:
             os.system(config['/Paths/Root'] + 'pl_runner.py %i "%s" "%s" "%s" &' % (self.__pluginManager().GetPort(), self.__path, self.__uri, self.__password))
