@@ -1,1 +1,1 @@
-import Plugin.Interface.Classes
+import Addons.Plugin.Interface.Classes

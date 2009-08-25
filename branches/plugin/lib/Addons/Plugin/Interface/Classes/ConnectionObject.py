@@ -1,6 +1,6 @@
 from DomainObject import IDomainObject
-from lib.Plugin.Interface.decorators import *
-from lib.Plugin.Communication.ComSpec import *
+from lib.Addons.Plugin.Interface.decorators import *
+from lib.Addons.Plugin.Communication.ComSpec import *
 from lib.Connections import CConnectionObject
 from lib.Elements import CElementObject
 

@@ -1,8 +1,7 @@
 import re
 from lib.Exceptions import *
-from lib.Plugin.Client import classes
-from lib.Plugin.Client.Proxy import CProxy
-#from lib.Plugin.Communication.ComSpec import *
+from lib.Addons.Plugin.Client import classes
+from lib.Addons.Plugin.Client.Proxy import CProxy
 
 class Meta(type):
     

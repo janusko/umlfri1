@@ -1,6 +1,6 @@
 #!/usr/bin/python
 import sys
-from lib.Plugin.Client.Interface import CInterface
+from lib.Addons.Plugin.Client.Interface import CInterface
 
 port = int(sys.argv[1])
 interface = CInterface(port)

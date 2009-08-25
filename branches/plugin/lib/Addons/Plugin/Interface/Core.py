@@ -1,6 +1,6 @@
 import thread, time, sys, socket, re
 from lib.Depend.gtk2 import gtk
-from lib.Plugin.Communication.ComSpec import *
+from lib.Addons.Plugin.Communication.ComSpec import *
 from lib.Exceptions import *
 from reference import Reference
 from meta import Meta

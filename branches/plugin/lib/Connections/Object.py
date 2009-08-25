@@ -1,6 +1,6 @@
 from lib.Exceptions.UserException import *
 from lib.Domains import CDomainObject
-from lib.Plugin import Reference
+from lib.Addons.Plugin import Reference
 from Alias import CConnectionAlias
 import weakref
 

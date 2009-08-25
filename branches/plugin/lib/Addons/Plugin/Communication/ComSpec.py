@@ -1,8 +1,8 @@
 import re
-from lib.Plugin.Interface import Reference
-from lib.Plugin.Interface.decorators import *
-from lib.Plugin.Interface.meta import Meta
-from lib.Plugin.Client import classes
+from lib.Addons.Plugin.Interface import Reference
+from lib.Addons.Plugin.Interface.decorators import *
+from lib.Addons.Plugin.Interface.meta import Meta
+from lib.Addons.Plugin.Client import classes
 
 
 IDENTIFIER = 'UML.FRI'

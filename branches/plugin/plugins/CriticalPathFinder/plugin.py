@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-from lib.Plugin.Client.Interface import CInterface
+from lib.Addons.Plugin.Client.Interface import CInterface
 from lib.Exceptions import *
 import random
 

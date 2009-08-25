@@ -25,9 +25,9 @@ from lib.config import config
 from lib.consts import SPLASH_TIMEOUT
 
 from lib.Exceptions import UserException
-from lib.Plugin.Manager import CPluginManager
-from lib.Plugin.Plugin import CPlugin
-from lib.Plugin import Reference
+from lib.Addons.Plugin.Manager import CPluginManager
+from lib.Addons.Plugin.Plugin import CPlugin
+from lib.Addons.Plugin import Reference
 
 __version__ = '1.0-beta20090601'
 

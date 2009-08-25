@@ -1,5 +1,5 @@
 import random
-from lib.Plugin.Client.Interface import CInterface
+from lib.Addons.Plugin.Client.Interface import CInterface
 from lib.Exceptions import *
 
 

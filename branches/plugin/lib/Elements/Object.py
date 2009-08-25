@@ -3,7 +3,7 @@ import weakref
 from lib.Domains import CDomainObject
 from Alias import CElementAlias
 from lib.consts import DEFAULT_IDENTITY
-from lib.Plugin import Reference
+from lib.Addons.Plugin import Reference
 
 class CElementObject(Reference):
     """

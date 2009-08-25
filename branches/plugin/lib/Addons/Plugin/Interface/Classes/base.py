@@ -1,6 +1,6 @@
-from lib.Plugin.Interface.meta import Meta
-from lib.Plugin.Interface.decorators import *
-from lib.Plugin.Communication.ComSpec import *
+from lib.Addons.Plugin.Interface.meta import Meta
+from lib.Addons.Plugin.Interface.decorators import *
+from lib.Addons.Plugin.Communication.ComSpec import *
 
 class IBase(object):
     __metaclass__ = Meta

@@ -2,7 +2,7 @@ from lib.config import config
 from Connection import CConnection
 from Context import CDrawingContext
 from VisibleObject import CVisibleObject
-from lib.Plugin import Reference
+from lib.Addons.Plugin import Reference
 import weakref
 
 class CElement(CVisibleObject, Reference):

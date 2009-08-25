@@ -1,5 +1,5 @@
-from lib.Plugin.Client import classes
-from lib.Plugin.Communication.Connection import CConnection
+from lib.Addons.Plugin.Client import classes
+from lib.Addons.Plugin.Communication.Connection import CConnection
 from Transaction import CTransaction
 
 class CInterface(object):

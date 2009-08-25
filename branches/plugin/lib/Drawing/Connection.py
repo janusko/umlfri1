@@ -8,7 +8,7 @@ from SelectableObject import CSelectableObject
 from ConLabelInfo import CConLabelInfo
 from lib.consts import LABELS_CLICKABLE
 from Context import CDrawingContext
-from lib.Plugin import Reference
+from lib.Addons.Plugin import Reference
 import weakref
 
 class CConnection(CCacheableObject, CSelectableObject, Reference):

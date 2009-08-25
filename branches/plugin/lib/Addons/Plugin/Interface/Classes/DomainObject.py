@@ -1,6 +1,6 @@
 from base import IBase
-from lib.Plugin.Communication.ComSpec import *
-from lib.Plugin.Interface.decorators import *
+from lib.Addons.Plugin.Communication.ComSpec import *
+from lib.Addons.Plugin.Interface.decorators import *
 from lib.Domains.Object import CDomainObject
 
 class IDomainObject(IBase):

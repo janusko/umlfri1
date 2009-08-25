@@ -1,7 +1,7 @@
 from base import IBase
 from lib.Drawing.Connection import CConnection
-from lib.Plugin.Interface.decorators import *
-from lib.Plugin.Communication.ComSpec import *
+from lib.Addons.Plugin.Interface.decorators import *
+from lib.Addons.Plugin.Communication.ComSpec import *
 
 class IConnectionVisual(IBase):
     __cls__ = CConnection

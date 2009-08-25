@@ -1,4 +1,4 @@
-from lib.Plugin.Interface.Classes.base import IBase
+from lib.Addons.Plugin.Interface.Classes.base import IBase
 from common import CGuiObject, event
 from lib.Depend.gtk2 import gobject
 

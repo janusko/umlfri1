@@ -6,7 +6,7 @@ import lib.Math2D
 import operator
 from lib.Math2D import CRectangle
 from lib.Math2D import CPoint
-from lib.Plugin import Reference
+from lib.Addons.Plugin import Reference
 
 
 class CDiagram(Reference):
