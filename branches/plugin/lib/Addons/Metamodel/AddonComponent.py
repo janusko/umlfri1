@@ -46,3 +46,9 @@ class CMetamodelAddonComponent(object):
     
     def GetType(self):
         return 'metamodel'
+    
+    def Start(self):
+        pass
+    
+    def Stop(self):
+        pass

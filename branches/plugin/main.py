@@ -25,8 +25,6 @@ from lib.config import config
 from lib.consts import SPLASH_TIMEOUT
 
 from lib.Exceptions import UserException
-from lib.Addons.Plugin.Manager import CPluginManager
-from lib.Addons.Plugin.Plugin import CPlugin
 from lib.Addons.Plugin import Reference
 
 __version__ = '1.0-beta20090601'
@@ -46,15 +44,15 @@ class Application(CApplication):
         self.recentFiles = CRecentFiles()
         self.clipboard = CClipboard()
         self.bus = CBus()
-        self.addonManager = CAddonManager()
         
         CApplication.__init__(self)
         self.UserGui= CUserGui(self)
-        self.pluginManager = CPluginManager(self)
+        self.addonManager = CAddonManager(self)
         self.pluginAdapter = CPluginAdapter(self)
         
         gobject.timeout_add(SPLASH_TIMEOUT, self.GetWindow('frmSplash').Hide)
-        self.StartPlugins()
+        
+        self.addonManager.StartAll()
     
     def GetBus(self):
         return self.bus
@@ -98,6 +96,9 @@ class Application(CApplication):
     def GetProject(self):
         return self.project
     
+    def GetAddonManager(self):
+        return self.addonManager
+    
     def GetClipboard(self):
         return self.clipboard
     
@@ -123,23 +124,12 @@ class Application(CApplication):
             win.Show()
     
     def Quit(self):
-        self.pluginManager.KillAll()
+        self.addonManager.StopAll()
         self.UserGui.SaveConfig()
         CApplication.Quit(self)
         config.Save()
         self.addonManager.Save()
         self.recentFiles.SaveRecentFiles()
-    
-    def GetPluginManager(self):
-        return self.pluginManager
-    
-    def StartPlugins(self):
-        for item in os.listdir(config['/Paths/Plugins']):
-            path = os.path.join(config['/Paths/Plugins'], item)
-            if os.path.isdir(path) and not item.startswith('.'):
-                plugin = CPlugin(path, 'urn:unsorted:'+item)
-                self.pluginManager.AddPlugin(plugin)
-                plugin.Start()
 
 if __name__ == '__main__':
     gobject.threads_init()

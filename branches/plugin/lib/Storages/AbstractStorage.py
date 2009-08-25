@@ -30,3 +30,6 @@ class CAbstractStorage(object):
     
     def walk(self):
         pass
+    
+    def get_path(self):
+        return ''

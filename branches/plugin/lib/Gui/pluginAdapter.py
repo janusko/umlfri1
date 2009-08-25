@@ -6,7 +6,7 @@ class CPluginAdapter(CGuiObject):
     
     def __init__(self, app):
         CGuiObject.__init__(self, app)
-        self.manager = app.GetPluginManager()
+        self.manager = app.GetAddonManager().GetPluginManager()
         self.app = app
         IBase.SetAdapter(self)
         

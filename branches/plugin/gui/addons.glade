@@ -224,6 +224,7 @@
             <property name="can_focus">True</property>
             <child>
               <widget class="GtkVBox" id="vbox1">
+                <property name="visible">True</property>
                 <child>
                   <widget class="GtkScrolledWindow" id="scrolledwindow1">
                     <property name="visible">True</property>
@@ -234,6 +235,8 @@
                       <widget class="GtkTreeView" id="twPluginList">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="headers_visible">False</property>
+                        <property name="enable_grid_lines">GTK_TREE_VIEW_GRID_LINES_HORIZONTAL</property>
                       </widget>
                     </child>
                   </widget>
@@ -245,7 +248,6 @@
                     <child>
                       <widget class="GtkButton" id="cmdInstallPlugin">
                         <property name="visible">True</property>
-                        <property name="sensitive">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="response_id">0</property>

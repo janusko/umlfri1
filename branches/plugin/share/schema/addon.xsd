@@ -100,6 +100,20 @@
 							</xs:sequence>
 						</xs:complexType>
 					</xs:element>
+					<xs:element name="Plugin">
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="Code" maxOccurs="unbounded">
+									<xs:complexType>
+										<xs:attribute name="os" type="xs:string" default="all"/>
+										<xs:attribute name="language" type="xs:string" use="required"/>
+										<xs:attribute name="path" type="xs:string" use="required"/>
+									</xs:complexType>
+								</xs:element>
+								<xs:element name="Metamodel" minOccurs="0" maxOccurs="unbounded"/>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
 				</xs:choice>
 			</xs:sequence>
 		</xs:complexType>

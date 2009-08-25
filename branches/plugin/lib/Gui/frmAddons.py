@@ -15,14 +15,20 @@ class CfrmAddons(CWindow):
     widgets = (
         'twMetamodelList', 'cmdInstallMetamodel', 'cmdUninstallMetamodel', 'cmdEnableMetamodel', 'cmdDisableMetamodel',
         'mnuMetamodel', 'mnuUninstallMetamodel', 'mnuEnableMetamodel', 'mnuDisableMetamodel',
-        'mnuHomepageMetamodel', 'mnuAboutMetamodel'
+        'mnuHomepageMetamodel', 'mnuAboutMetamodel',
+        
+        'twPluginList', 'cmdInstallPlugin', 'cmdUninstallPlugin', 'cmdPluginPreferences', 'cmdPluginStart', 'cmdPluginStop',
     )
     
     def __init__(self, app, wTree):
         CWindow.__init__(self, app, wTree)
         
-        self.__MetamodelStore = gtk.TreeStore(gtk.gdk.Pixbuf, str, bool, str)
-        self.twMetamodelList.set_model(self.__MetamodelStore)
+        self.__MetamodelStore = self.__InitTw(self.twMetamodelList)
+        self.__PluginStore = self.__InitTw(self.twPluginList)
+        
+    def __InitTw(self, tw):
+        store = gtk.TreeStore(gtk.gdk.Pixbuf, str, bool, str)
+        tw.set_model(store)
         
         renderer = gtk.CellRendererPixbuf()
         renderer.set_property('yalign', 0)
@@ -31,7 +37,7 @@ class CfrmAddons(CWindow):
         column.pack_start(renderer)
         column.add_attribute(renderer, 'pixbuf', 0)
         column.add_attribute(renderer, 'sensitive', 2)
-        self.twMetamodelList.append_column(column)
+        tw.append_column(column)
         
         renderer = gtk.CellRendererText()
         renderer.set_property('wrap-mode', pango.WRAP_WORD)
@@ -39,8 +45,10 @@ class CfrmAddons(CWindow):
         column.pack_start(renderer)
         column.add_attribute(renderer, 'markup', 1)
         column.add_attribute(renderer, 'sensitive', 2)
-        self.twMetamodelList.append_column(column)
-        self.twMetamodelList.connect_after("size-allocate", self.__DoTextWrap, column, renderer)
+        tw.append_column(column)
+        tw.connect_after("size-allocate", self.__DoTextWrap, column, renderer)
+        
+        return store
 
     def Show(self):
         self.__Load()
@@ -68,9 +76,11 @@ class CfrmAddons(CWindow):
     def __Load(self):
         self.__MetamodelStore.clear()
         
-        for addon in self.application.addonManager.ListAddons():
+        for addon in self.application.GetAddonManager().ListAddons():
             if addon.GetType() == 'metamodel':
                 twStore = self.__MetamodelStore
+            elif addon.GetType() == 'plugin':
+                twStore = self.__PluginStore
             else:
                 continue
             
@@ -97,7 +107,7 @@ class CfrmAddons(CWindow):
             return None
         
         selected = treeView.get_model().get(iter, 3)[0]
-        return self.application.addonManager.GetAddon(selected)
+        return self.application.GetAddonManager().GetAddon(selected)
     
     @event("cmdEnableMetamodel", "clicked")
     @event("mnuEnableMetamodel", "activate")
@@ -126,6 +136,7 @@ class CfrmAddons(CWindow):
         addon.Disable()
         self.MetamodelChanged()
     
+    @event("cmdInstallPlugin", "clicked")
     @event("cmdInstallMetamodel", "clicked")
     def on_cmdInstallMetamodel_click(self, button):
         addon = None
@@ -146,13 +157,13 @@ class CfrmAddons(CWindow):
             if type == 'projectMetamodel':
                 addonFile = os.path.join(addonFile, 'metamodel')
             
-            addon = self.application.addonManager.LoadAddon(addonFile)
+            addon = self.application.GetAddonManager().LoadAddon(addonFile)
         
         if addon is None:
             return
         
         if self.application.GetWindow("frmInstallAddon").ShowDialog(self, addon):
-            self.application.addonManager.InstallAddon(addon)
+            self.application.GetAddonManager().InstallAddon(addon)
             self.__Load()
     
     @event("cmdUninstallMetamodel", "clicked")

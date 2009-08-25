@@ -8,7 +8,11 @@ import uuid
 from lib.lib import Indent
 from lib.Storages import open_storage, CDirectory
 from Addon import CAddon
+
 from Metamodel import CMetamodelAddonComponent
+from Plugin.AddonComponent import CPluginAddonComponent
+from Plugin.Manager import CPluginManager
+
 from lib.consts import ADDON_NAMESPACE, ADDON_LIST_NAMESPACE, ADDON_PATH
 from lib.config import config
 
@@ -25,10 +29,11 @@ class CAddonManager(object):
     reSpaces = re.compile(' +')
     reIlegalCharacters = re.compile('[^a-z0-9A-Z]')
     
-    def __init__(self):
+    def __init__(self, app):
         self.__enabledAddons = self.__LoadEnabledAddons(config['/Paths/UserEnabledAddons'])
         self.__addons = self.__LoadAllAddons(open_storage(config['/Paths/Addons']), False)
         self.__addons.update(self.__LoadAllAddons(open_storage(config['/Paths/UserAddons']), True))
+        self.__pluginManager = CPluginManager(app)
     
     def __LoadEnabledAddons(self, path):
         ret = {}
@@ -140,6 +145,16 @@ class CAddonManager(object):
                     if node.tag == ADDON_NAMESPACE+'Path':
                         path = node.attrib["icon"]
                 component = CMetamodelAddonComponent(path)
+            elif node.tag == ADDON_NAMESPACE+'Plugin':
+                codes = []
+                requiredMetamodels = []
+                
+                for info in node:
+                    if info.tag == ADDON_NAMESPACE+'Code':
+                        codes.append((node.get("os", "all"), info.attrib["language"], info.attrib["path"]))
+                    elif info.tag == ADDON_NAMESPACE+'Metamodel':
+                        requiredMetamodels.append(info.attrib["required"])
+                component = CPluginAddonComponent(codes, requiredMetamodels)
         
         return CAddon(self, storage, uris, component,
             all(self.__enabledAddons.get(uri, True) for uri in uris),
@@ -171,6 +186,9 @@ class CAddonManager(object):
                 del self.__enabledAddons[uri]
             del self.__addons[uri]
     
+    def GetPluginManager(self):
+        return self.__pluginManager
+    
     def GetAddon(self, uri):
         if uri in self.__addons:
             return self.__addons[uri]
@@ -199,3 +217,11 @@ class CAddonManager(object):
         storage = CDirectory.duplicate(addon.GetStorage(), path)
         
         self.__addons.update(self.__LoadAddonToDict(storage, True))
+    
+    def StartAll(self):
+        for addon in self.__addons.itervalues():
+            addon.Start()
+    
+    def StopAll(self):
+        for addon in self.__addons.itervalues():
+            addon.Stop()
