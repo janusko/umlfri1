@@ -122,6 +122,9 @@ class CCriticalPathFinder(object):
         #~ except:
             #~ self.interface.DisplayWarning('Unkown error in plugin')
 
+# selecting plugin main object
+pluginMain = CCriticalPathFinder
+
 if __name__ == '__main__':
     import sys
     interface = CInterface(int(sys.argv[1]))

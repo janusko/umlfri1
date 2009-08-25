@@ -36,6 +36,9 @@ class CCore(object):
                 
                 elif com == 'transaction':
                     self._transaction(command['type'], params, addr, callid)
+                
+                elif com == 'plugin':
+                    self._plugin(command['type'], params, addr, callid)
                     
                 else:
                     self.manager.Send(addr, RESP_UNKONWN_COMMAND, command = com, __id__ = callid)
@@ -204,3 +207,11 @@ class CCore(object):
         
     def _guiactivated(self, item, path, addr):
         self.manager.Send(addr, RESP_GUI_ACTIVATED, path = path)
+    
+    def _plugin(self, ctype, params, addr, callid):
+        if ctype == 'init':
+            self.manager.ConnectPlugin(params['uri'], params['password'], addr)
+            self.manager.Send(addr, RESP_OK, __id__ = callid)
+        else:
+            self.manager.Send(addr, RESP_INVALID_COMMAND_TYPE, command = 'plugin', type = ctype, __id__ = callid)
+            

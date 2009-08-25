@@ -184,7 +184,5 @@ class Plugin(object):
         except PluginProjectNotLoaded:
             self.interface.DisplayWarning('Project is not loaded')
 
-
-def main(interface):
-    pl = Plugin(interface)
-    interface.WaitTillClosed()
+# select plugin main object
+pluginMain = Plugin

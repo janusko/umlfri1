@@ -7,7 +7,9 @@ class CInterface(object):
     def __init__(self, port):
         self.connection = CConnection(port)
         self.project = classes['IProject']('project', self.connection)
-        
+    
+    def _Init(self, uri, password):
+        return self.connection.Execute('plugin', 'init', {'uri': uri, 'password': password})()
     
     def WaitTillClosed(self):
         return self.connection.WaitTillClosed()

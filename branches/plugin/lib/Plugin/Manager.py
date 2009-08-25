@@ -15,6 +15,7 @@ class CPluginManager(object):
     '''
 
     def __init__(self, app):
+        self.__plugins = {}
         self.conlock = thread.allocate()
         self.connection = {}
         self.transaction = {}
@@ -39,6 +40,21 @@ class CPluginManager(object):
             #print self.transaction.keys()
         finally:
             self.conlock.release()
+    
+    def AddPlugin(self, plugin):
+        if plugin.GetUri() in self.__plugins:
+            raise Exception() # TODO: replace with better exception
+        self.__plugins[plugin.GetUri()] = plugin
+        plugin._SetPluginManager(self)
+    
+    def ConnectPlugin(self, uri, password, addr):
+        if self.__plugins[uri].IsInitialized():
+            raise Exception() # TODO: replace with better exception
+        
+        if not self.__plugins[uri]._VerifyPassword(password):
+            raise Exception() # TODO: replace with better exception
+        
+        self.__plugins[uri]._Connect(addr)
     
     def GetGuiManager(self):
         '''

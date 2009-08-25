@@ -24,6 +24,7 @@ from lib.consts import SPLASH_TIMEOUT
 
 from lib.Exceptions import UserException
 from lib.Plugin.Manager import CPluginManager
+from lib.Plugin.Plugin import CPlugin
 from lib.Plugin import Reference
 
 __version__ = '1.0-beta20090601'
@@ -129,11 +130,11 @@ class Application(CApplication):
     
     def StartPlugins(self):
         for item in os.listdir(config['/Paths/Plugins']):
-            if os.path.isdir(config['/Paths/Plugins'] + item) and not item.startswith('.'):
-                if os.name == 'nt': 
-                    os.system('start /B pl_runner.py %i %s' % (self.pluginManager.GetPort(), item))
-                else:
-                    os.system(config['/Paths/Root'] + 'pl_runner.py %i %s &' % (self.pluginManager.GetPort(), item))
+            path = os.path.join(config['/Paths/Plugins'], item)
+            if os.path.isdir(path) and not item.startswith('.'):
+                plugin = CPlugin(path, 'urn:unsorted:'+item)
+                self.pluginManager.AddPlugin(plugin)
+                plugin.Start()
 
 if __name__ == '__main__':
     gobject.threads_init()
