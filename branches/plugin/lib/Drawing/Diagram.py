@@ -197,7 +197,10 @@ class CDiagram(Reference):
     
     def DeleteItem(self, item):
         self.size = None
-        if isinstance(item, Connection.CConnection):
+        item.GetObject().RemoveAppears(self)
+        if isinstance(item, ConLabelInfo.CConLabelInfo):
+            self.DeleteConLabel(item)
+        elif isinstance(item, Connection.CConnection):
             self.DeleteConnection(item)
         elif isinstance(item, Element.CElement):
             self.DeleteElement(item)
@@ -221,6 +224,18 @@ class CDiagram(Reference):
         else:
             raise DrawingError("ElementDoesNotExists")
         
+    def DeleteConLabel(self,conlabel):
+        self.size = None
+        self.DeleteConnection(conlabel.GetConnection())
+        if conlabel in self.selected:
+            self.selected.remove(conlabel)
+            
+    def ShiftDeleteConLabel(self,conlabel):
+        self.size = None
+        self.ShiftDeleteConnection(conlabel.GetConnection())
+        if conlabel in self.selected:
+            self.selected.remove(conlabel)
+    
     def DeleteConnection(self, connection):
         self.size = None
         if connection in self.connections:

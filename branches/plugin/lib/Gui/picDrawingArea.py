@@ -321,13 +321,13 @@ class CpicDrawingArea(CWidget):
                 return True
             
             itemSel = self.Diagram.GetElementAtPosition(self.canvas, pos)
-            if itemSel is not None: #ak som nieco trafil:
+            if itemSel is not None: #something is hit:
                 if itemSel in self.Diagram.GetSelected(): # deselecting:
                     if (event.state & gtk.gdk.CONTROL_MASK) or (event.state & gtk.gdk.SHIFT_MASK):
                         self.Diagram.RemoveFromSelection(itemSel)
                         self.Paint()
                         self.emit('selected-item', list(self.Diagram.GetSelected()))
-                    elif isinstance(itemSel, CConnection): #selectnuta ciara
+                    elif isinstance(itemSel, CConnection): #Connection is selected
                         i = itemSel.GetPointAtPosition(pos)
                         if i is not None:
                             itemSel.SelectPoint(i)
@@ -338,7 +338,7 @@ class CpicDrawingArea(CWidget):
                             self.__BeginDragLine(event, itemSel, i)
                         self.Paint()    
                         self.emit('selected-item', list(self.Diagram.GetSelected()))
-                    else: #selektnute elementy
+                    else: #elements are selected
                         self.__BeginDragRect(event)
                 elif not (event.state & gtk.gdk.CONTROL_MASK) and not (event.state & gtk.gdk.SHIFT_MASK):
                     self.Diagram.DeselectAll()
@@ -514,8 +514,7 @@ class CpicDrawingArea(CWidget):
             else:
                 for sel in self.Diagram.GetSelected():
                     self.Diagram.DeleteItem(sel)
-                    sel.GetObject().RemoveAppears(self.Diagram)
-            self.emit('selected-item', list(self.Diagram.GetSelected()))
+                    self.emit('selected-item', list(self.Diagram.GetSelected()))
             self.Paint()
         elif event.keyval == gtk.keysyms.Escape:
             self.ResetAction()
@@ -862,6 +861,8 @@ class CpicDrawingArea(CWidget):
         for sel in self.Diagram.GetSelected():
             if isinstance(sel, Element.CElement):
                 self.emit('delete-element-from-all',sel.GetObject())
+            elif isinstance(sel, CConLabelInfo):
+                self.Diagram.ShiftDeleteConLabel(sel)
             else:
                 self.Diagram.ShiftDeleteConnection(sel)
         self.Paint()

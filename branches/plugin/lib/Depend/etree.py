@@ -40,5 +40,5 @@ def version():
     @rtype: list of (str, str)
     """
     return [
-        ("etree version", LIBRARY),
+        (_("etree version"), LIBRARY),
     ]

@@ -12,7 +12,6 @@ from mnuItems import CmnuItems
 from picDrawingArea import CpicDrawingArea
 from nbProperties import CnbProperties
 from tabs import CTabs
-from frmFindInDiagram import CFindInDiagram
 from tabStartPage import CtabStartPage
 from lib.config import config
 from lib.Gui.diagramPrint import CDiagramPrint
@@ -21,6 +20,8 @@ from lib.Exceptions import UserException
 
 class CfrmMain(CWindow):
     name = 'frmMain'
+    glade = 'main.glade'
+    
     widgets = (
         #menu
         #############
@@ -39,7 +40,7 @@ class CfrmMain(CWindow):
         'mnuViewTools', 'mnuViewCommands', 'mnuNormalSize', 'mnuZoomIn','mnuZoomOut', 'mnuBestFit',
         'hndCommandBar',
         #############
-        'mnuOptions',
+        'mnuAddons', 'mnuOptions',
         #############
         'mItemHelp',
         'mnuAbout',
@@ -57,10 +58,11 @@ class CfrmMain(CWindow):
         )
 
     complexWidgets = (CtbToolBox, CtwProjectView, CmnuItems, CpicDrawingArea, CnbProperties, CTabs,
-                      CtabStartPage, CFindInDiagram,  )
+                      CtabStartPage, )
 
     def __init__(self, app, wTree):
         CWindow.__init__(self, app, wTree)
+        self.form.set_icon_from_file(os.path.join(config['/Paths/Images'], lib.consts.MAIN_ICON))
         self.diagramPrint = CDiagramPrint()
         self.form.maximize()
         self.__sensitivity_project = None
@@ -205,6 +207,12 @@ class CfrmMain(CWindow):
             self.nbTabs.Show()
             self.vpaRight.show()
             self.form.window.unfullscreen()
+
+    @event("mnuAddons", "activate")
+    def on_mnuAddons_activate(self, mnu):
+        tmp = self.application.GetWindow('frmAddons')
+        tmp.SetParent(self)
+        tmp.Show()
 
     # Preferencies
     @event("mnuOptions", "activate")
@@ -477,7 +485,6 @@ class CfrmMain(CWindow):
     def on_repaint_picDravingArea(self, widget):
         self.picDrawingArea.Paint()
     
-    @event("frmFindInDiagram","selected_diagram_and_Element")
     @event("twProjectView","selected_diagram_and_select_element")
     def on_select_diagram_and_element(self, widget, diagram, object):
         self.picDrawingArea.SetDiagram(diagram)
@@ -487,7 +494,13 @@ class CfrmMain(CWindow):
     
     @event("twProjectView","show_frmFindInDiagram")
     def on_show_frmFindInDiagram(self, widget, diagrams, object):
-        self.frmFindInDiagram.ShowDialog(diagrams, object)
+        diagram = self.application.GetWindow('frmFindInDiagram').ShowDialog(diagrams, object)
+        
+        if diagram is not None:
+            self.picDrawingArea.SetDiagram(diagram)
+            self.nbTabs.AddTab(diagram)
+            diagram.AddToSelection(diagram.HasElementObject(object))
+            self.picDrawingArea.Paint()
     
     @event('application.bus', 'content-update')
     def on_nbProperties_content_update(self, widget, element, property):

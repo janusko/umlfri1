@@ -3,10 +3,14 @@ from lib.Depend.gtk2 import gobject
 from lib.Depend.gtk2 import pango
 
 import sys
-from os.path import abspath
+import os
+import os.path
 import gettext
 import getopt
 import traceback
+import locale
+
+from Window import CWindow
 
 class CApplication(gobject.GObject):
     windows = ()
@@ -103,9 +107,9 @@ class CApplication(gobject.GObject):
         
         if self.textdomain is not None:
             try:
-                translation = gettext.translation(self.textdomain, self.localespath)
+                translation = gettext.translation(self.textdomain, self.localespath, [self.FindLanguage()])
                 translation.install()
-            except:
+            except IOError:
                 if isinstance(__builtins__, dict):
                     __builtins__['_'] = lambda text: text
                 else:
@@ -117,17 +121,23 @@ class CApplication(gobject.GObject):
         
         self.wTrees = {}
         if self.glade is not None:
-            self.wTrees[abspath(self.glade)] = self.wTrees[None] = gtk.glade.XML(self.glade)
+            glade = os.path.join(self.guipath, self.glade)
+            self.wTrees[os.path.abspath(glade)] = self.wTrees[None] = gtk.glade.XML(glade)
         
-        for windowClass in self.windows:
+        if isinstance(self.windows, (list, tuple)):
+            windows = self.windows
+        else:
+            windows = [win for win in self.windows.__dict__.values() if isinstance(win, type) and issubclass(win, CWindow)]
+        
+        for windowClass in windows:
             if windowClass.glade is None:
                 glade = None
             else:
-                glade = abspath(windowClass.glade)
+                glade = os.path.join(self.guipath, windowClass.glade)
             if glade not in self.wTrees:
                 if glade is None:
                     raise Exception("Glade file is not set for window '%s'"%windowClass.name)
-                wTree = self.wTrees[glade] = gtk.glade.XML(glade)
+                wTree = self.wTrees[os.path.abspath(glade)] = gtk.glade.XML(glade)
             else:
                 wTree = self.wTrees[glade]
             self.wins[windowClass.name] = windowClass(self, wTree)
@@ -191,3 +201,9 @@ class CApplication(gobject.GObject):
     
     def Quit(self):
         gtk.main_quit()
+    
+    def FindLanguage(self):
+        for e in ('LANGUAGE', 'LC_ALL', 'LC_MESSAGES', 'LANG'):
+            if e in os.environ:
+                return os.environ[e]
+        return '.'.join(locale.getdefaultlocale())

@@ -25,8 +25,7 @@ class CCriticalPathFinder(object):
     def activity(self, path):
         try:
             metamodel = self.interface.DetailMetamodel()
-            if (metamodel['uri'] != 'http://umlfri.kst.fri.uniza.sk/metamodel/graphTheory.frim' 
-            or metamodel['version'] != '0.0.1'):
+            if metamodel['uri'] != 'urn:umlfri.org:metamodel:graphTheory':
                 self.interface.DisplayWarning('Not supported metamodel')
                 return
             

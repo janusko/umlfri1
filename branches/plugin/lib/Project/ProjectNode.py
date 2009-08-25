@@ -33,9 +33,6 @@ class CProjectNode(object):
     def AddAppears(self, diagram):
         self.GetObject().AddAppears(diagram)
 
-    def RemoveAppears(self, diagram):
-        self.GetObject().RemoveAppears(diagram)
-
     def GetDiagrams(self):
         return self.diagrams
 

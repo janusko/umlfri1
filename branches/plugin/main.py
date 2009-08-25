@@ -15,8 +15,10 @@ import os.path
 
 from lib.Project import CProject
 from lib.Project import CRecentFiles
+from lib.Addons import CAddonManager
 
-from lib.Gui import CfrmSplash, CfrmMain, CfrmAbout, CfrmProperties, CfrmOpen, CfrmSave, CfrmOptions, CfrmException, CfrmExport, CPluginAdapter, CBus
+import lib.Gui
+from lib.Gui import CBus, CPluginAdapter
 from lib.Gui.dialogs import CExceptionDialog
 
 from lib.config import config
@@ -30,11 +32,12 @@ from lib.Plugin import Reference
 __version__ = '1.0-beta20090601'
 
 class Application(CApplication):
-    windows = (CfrmSplash, CfrmMain, CfrmAbout, CfrmProperties, CfrmOpen, CfrmSave, CfrmOptions, CfrmException, CfrmExport)
-    glade = os.path.join(config['/Paths/Gui'], 'gui.glade')
+    windows = lib.Gui
     main_window = 'frmMain'
     textdomain = 'uml_fri'
     localespath = config['/Paths/Locales']
+    
+    guipath = config['/Paths/Gui']
 
     project = None
     canopen = True
@@ -43,6 +46,7 @@ class Application(CApplication):
         self.recentFiles = CRecentFiles()
         self.clipboard = CClipboard()
         self.bus = CBus()
+        self.addonManager = CAddonManager()
         
         CApplication.__init__(self)
         self.UserGui= CUserGui(self)
@@ -85,7 +89,7 @@ class Application(CApplication):
     
     def ProjectInit(self):
         if self.project is None:
-            self.project = CProject(self)
+            self.project = CProject(self.addonManager, self)
             Reference.SetProject(self.project)
             
     def ProjectDelete(self):
@@ -123,6 +127,7 @@ class Application(CApplication):
         self.UserGui.SaveConfig()
         CApplication.Quit(self)
         config.Save()
+        self.addonManager.Save()
         self.recentFiles.SaveRecentFiles()
     
     def GetPluginManager(self):

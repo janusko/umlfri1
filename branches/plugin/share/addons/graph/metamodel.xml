@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Metamodel xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Diagrams>
+        <Item value="Graph" />
+        <Item value="Critical Path diagram" />
+    </Diagrams>
+</Metamodel>

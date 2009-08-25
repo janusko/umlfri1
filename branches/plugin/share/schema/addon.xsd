@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (c) UML.FRI -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://umlfri.org/xmlschema/addon.xsd" targetNamespace="http://umlfri.org/xmlschema/addon.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="AddOn">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Identity" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:attribute name="uri" type="xs:anyURI" use="required"/>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="FriendlyName">
+					<xs:complexType>
+						<xs:attribute name="name" type="xs:string" use="required"/>
+						<xs:attribute name="version" type="xs:string"/>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Author">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Name" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:attribute name="name" type="xs:string" use="required"/>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="Homepage" minOccurs="0">
+								<xs:complexType>
+									<xs:attribute name="url" type="xs:string" use="required"/>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="Copyright" minOccurs="0">
+								<xs:complexType>
+									<xs:attribute name="text" type="xs:string" use="required"/>
+								</xs:complexType>
+							</xs:element>
+							<xs:choice minOccurs="0">
+								<xs:element name="CommonLicense">
+									<xs:complexType>
+										<xs:attribute name="name" use="required"/>
+										<xs:attribute name="file" type="xs:string"/>
+									</xs:complexType>
+								</xs:element>
+								<xs:element name="ExternalLicense">
+									<xs:complexType>
+										<xs:attribute name="file" type="xs:string" use="required"/>
+									</xs:complexType>
+								</xs:element>
+								<xs:element name="License" type="xs:string"/>
+							</xs:choice>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Icon" minOccurs="0">
+					<xs:complexType>
+						<xs:attribute name="path" type="xs:string" use="required"/>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Description" type="xs:string" minOccurs="0"/>
+				<xs:element name="Compatibility" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="UmlFri">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Version" maxOccurs="unbounded">
+											<xs:complexType>
+												<xs:attribute name="min" type="xs:string"/>
+												<xs:attribute name="max" type="xs:string"/>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="AddOn" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Version" maxOccurs="unbounded">
+											<xs:complexType>
+												<xs:attribute name="min" type="xs:string"/>
+												<xs:attribute name="max" type="xs:string"/>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+									<xs:attribute name="uri" use="required"/>
+									<xs:attribute name="required" type="xs:boolean" default="false"/>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:choice>
+					<xs:element name="Metamodel">
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="Path">
+									<xs:complexType>
+										<xs:attribute name="path" use="required"/>
+									</xs:complexType>
+								</xs:element>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+				</xs:choice>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

@@ -13,6 +13,7 @@ import sys
 
 class CfrmOpen(common.CWindow):
     name = 'frmOpen'
+    glade = 'project.glade'
     
     widgets = ("ivOpenNew", "fwOpenExisting", "chkOpenAsCopyExisting", "twOpenRecent", "chkOpenAsCopyRecent", "nbOpen")
     

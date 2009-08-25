@@ -9,6 +9,8 @@ from lib.Exceptions import *
 
 ID_ID, ID_NAME, ID_VALUE, ID_TEXT_VISIBLE, ID_COMBO_VISIBLE, ID_EDITABLE, ID_BUTTON_VISIBLE, ID_MODEL, ID_BUTTON_TEXT, ID_ACTION = range(10)
 
+EDITABLE_COMBO_TYPES = ('int', 'float', 'text', 'str')
+
 class ClwProperties(CWidget):
     name = 'lwProperties'
     widgets = ('lwProperties',)
@@ -25,9 +27,11 @@ class ClwProperties(CWidget):
                  
         self.StrRenderer = gtk.CellRendererText()
         self.StrRenderer.set_property('editable', True)
+        
         self.ComboRenderer = gtk.CellRendererCombo()
         self.ComboRenderer.set_property('text-column', 0)
-        self.ComboRenderer.set_property('editable', True)
+        self.ComboRenderer.set_property('editable', ID_EDITABLE)
+        self.ComboRenderer.set_property('has-entry', ID_EDITABLE)
         
         self.Column2 = gtk.TreeViewColumn(_('Value'))
         self.Column2.pack_start(self.StrRenderer, True)
@@ -93,7 +97,7 @@ class ClwProperties(CWidget):
                     ID_EDITABLE, False)#Change to True if has parser
                 self._FillBody(object, row, prefix + identifier)
             
-            elif type in ('str', 'int', 'float', 'text'):
+            elif type in EDITABLE_COMBO_TYPES and not DType.GetAttribute(attrID).has_key('enum'):
                 self.treeStore.set(row, 
                     ID_ID, identifier,
                     ID_NAME, name, 
@@ -103,9 +107,9 @@ class ClwProperties(CWidget):
                     ID_BUTTON_VISIBLE, False, 
                     ID_EDITABLE, True)
             
-            elif type in ('enum', 'bool'):
+            elif type in ('enum', 'bool') or (type in EDITABLE_COMBO_TYPES and DType.GetAttribute(attrID).has_key('enum')):
                 model = gtk.ListStore(gobject.TYPE_STRING)
-                for item in (DType.GetAttribute(attrID)['enum'] if type == 'enum' else ('True', 'False')):
+                for item in (DType.GetAttribute(attrID)['enum'] if type != 'bool' else ('True', 'False')):
                     model.set(model.append(), 0 , item)
                 self.treeStore.set(row, 
                     ID_ID, identifier,
@@ -114,8 +118,8 @@ class ClwProperties(CWidget):
                     ID_TEXT_VISIBLE, False, 
                     ID_COMBO_VISIBLE, True, 
                     ID_BUTTON_VISIBLE, False, 
-                    ID_EDITABLE, False, 
-                    ID_MODEL, model)
+                    ID_EDITABLE, type in EDITABLE_COMBO_TYPES, 
+                    ID_MODEL, model,)
             
             elif type == 'list':
                 self.treeStore.set(row, 

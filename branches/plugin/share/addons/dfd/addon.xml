@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<AddOn xmlns="http://umlfri.org/xmlschema/addon.xsd">
+    <Identity uri="urn:umlfri.org:metamodel:dfd" />
+    <Identity uri="http://umlfri.kst.fri.uniza.sk/metamodel/dfd.frim" />
+    <FriendlyName name="DFD" version="0.0.1" />
+    <Author>
+        <Name name="UML .FRI team" />
+        <Homepage url="http://umlfri.org" />
+        
+        <CommonLicense name="GPL-2" />
+    </Author>
+    
+    <Icon path="icons/dfd_icon.png" />
+    <Description>
+        A data-flow diagram (DFD) is a graphical representation of the "flow"
+        of data through an information system.
+    </Description>
+    
+    <Metamodel>
+        <Path path="." />
+    </Metamodel>
+</AddOn>

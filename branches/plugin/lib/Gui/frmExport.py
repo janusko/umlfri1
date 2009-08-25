@@ -5,9 +5,11 @@ from common import CWindow, event
 import os
 
 class CfrmExport(CWindow):
+    name = 'frmExport'
+    glade = 'project.glade'
+    
     widgets = ('entExportFileName','fcbDirectorySelect', 'tbtnPDF', 'tbtnPNG', 'tbtnPS', 'tbtnSVG',
     'btnExport', 'btnCancelExport', 'hbuttonboxExportType', )
-    name = 'frmExport'
     
     def __init__(self, app, wTree):
         CWindow.__init__(self, app, wTree)

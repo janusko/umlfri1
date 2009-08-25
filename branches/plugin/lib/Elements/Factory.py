@@ -1,5 +1,7 @@
 import os
 import os.path
+import weakref
+
 from lib.Exceptions.DevException import *
 from Type import CElementType
 from Alias import CElementAlias
@@ -19,7 +21,7 @@ class CElementFactory(object):
     """
     Factory, that creates element type objects
     """
-    def __init__(self, storage, path, domainfactory):
+    def __init__(self, metamodel, storage, path, domainfactory):
         """
         Create the element factory
         
@@ -33,6 +35,7 @@ class CElementFactory(object):
         from current metamodel
         @type domainfactory: L{CDomainFactory<lib.Domains.Factory.CDomainFactory>}
         """
+        self.metamodel = weakref.ref(metamodel)
         self.types = {}
         self.path = path
         self.domainfactory = domainfactory
@@ -105,7 +108,7 @@ class CElementFactory(object):
         self.types[root.get('id')] = obj
     
     def __LoadType(self, root):
-        obj = CElementType(root.get('id'))
+        obj = CElementType(self, root.get('id'))
         
         for element in root:
             if element.tag == METAMODEL_NAMESPACE + 'Icon':
@@ -167,3 +170,6 @@ class CElementFactory(object):
             if item.get('allowrecursive') != None:
                 allow_recursive = item.get('allowrecursive').lower() in ('1', 'true', 'yes')
             obj.AppendConnection(value, with_what, allow_recursive)
+    
+    def GetMetamodel(self):
+        return self.metamodel()

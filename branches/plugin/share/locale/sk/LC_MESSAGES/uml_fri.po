@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: UML .FRI 1.0-beta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-23 10:07+0100\n"
-"PO-Revision-Date: 2009-07-08 10:05+0100\n"
-"Last-Translator: Peter <pasikavec@gmail.com>\n"
+"POT-Creation-Date: 2009-08-20 22:06+0200\n"
+"PO-Revision-Date: 2009-08-20 22:08+0100\n"
+"Last-Translator: Ján Janech <janech@kios.sk>\n"
 "Language-Team: uml_fri <uml@kst.fri.utc.sk>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -13,30 +13,15 @@ msgstr ""
 "X-Poedit-Country: SLOVAKIA\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-msgid ""
-"</b>\n"
-"\n"
-"Free python-based CASE tool."
-msgstr ""
-"</b>\n"
-"\n"
-"Voľne šíriteľný CASE nástroj vyvíjaný v pythone."
-
 msgid "<b>project e-mail address</b>"
 msgstr "<b>e-mail adresa projektu</b>"
-
-msgid ""
-"<span size=\"xx-large\">UML. FRI</span>\n"
-"<b>Version "
-msgstr ""
-"<span size=\"xx-large\">UML.fri</span>\n"
-"<b>Verzia "
 
 msgid "About"
 msgstr "O projekte"
 
-msgid "Abstract"
-msgstr "Abstract"
+#, python-format
+msgid "Academic year %s:"
+msgstr "Akademický rok %s"
 
 msgid "Add _element"
 msgstr "Pridať _element"
@@ -47,8 +32,14 @@ msgstr "Pridať diagram"
 msgid "Add element"
 msgstr "Pridaj element"
 
+msgid "Addons"
+msgstr "Rozšírenia"
+
 msgid "All files"
 msgstr "Všetky súbory"
+
+msgid "An error during printing has occured."
+msgstr "Pri tlačení sa vyskytla neočakávaná chyba."
 
 msgid "An exception has occured"
 msgstr "Výnimku vyvolalo"
@@ -56,19 +47,19 @@ msgstr "Výnimku vyvolalo"
 msgid "An exception has occured:"
 msgstr "Výnimku vyvolalo:"
 
+msgid "Architecture"
+msgstr "Architektúra"
+
 msgid "Arrow color"
 msgstr "Farba šípky"
 
 msgid "Arrow fill color"
 msgstr "Farba výplne šípky"
 
-msgid "Attribute"
-msgstr "Atribút"
+msgid "Author:"
+msgstr "Autor:"
 
-msgid "Attributes"
-msgstr "Atribúty"
-
-msgid "Basic information about Your system"
+msgid "Basic information about your system"
 msgstr "Základné informácie o vašom systéme"
 
 msgid "Bring Forward"
@@ -77,17 +68,8 @@ msgstr "O jeden dopredu  "
 msgid "Bring To Top"
 msgstr "Presunúť dopredu"
 
-msgid ""
-"By Reference\n"
-"By Value\n"
-"Not Specified"
-msgstr ""
-"Referenciou\n"
-"Hodnotou\n"
-"Neurčené"
-
 msgid "C_ontribute"
-msgstr "Prispieť"
+msgstr "Pri_spieť"
 
 msgid "C_redits"
 msgstr "Auto_ri"
@@ -104,12 +86,6 @@ msgstr "Spojenie"
 msgid "Connections"
 msgstr "Spojenia"
 
-msgid "Const"
-msgstr "Const"
-
-msgid "Containment: "
-msgstr "Vlastníctvo:"
-
 msgid "Create New Project"
 msgstr "Vytvoriť nový projekt"
 
@@ -119,14 +95,14 @@ msgstr "Vytvoriť _nový projekt"
 msgid "Date"
 msgstr "Dátum poslednej zmeny"
 
-msgid "Delete"
-msgstr "Odstrániť"
-
 msgid "Delete from Project"
 msgstr "Odstrániť z projektu"
 
-msgid "Derived"
-msgstr "Derived"
+msgid "Description:"
+msgstr "Popis:"
+
+msgid "Diagram Export"
+msgstr "Export diagramu"
 
 msgid "Diagram name"
 msgstr "Názov diagramu"
@@ -134,11 +110,29 @@ msgstr "Názov diagramu"
 msgid "Diagram type"
 msgstr "Typ diagramu"
 
+msgid "Disable"
+msgstr "Zakázať"
+
+msgid ""
+"Do you really want to install this addon?\n"
+"<i>This operation could be potencionaly dangerous, so do it only if you know what are you doing.</i>"
+msgstr ""
+"Naozaj chcete nainštalovať toto rozšírenie?\n"
+"<i>Táto operácia môže byť nebezpečná, preto pokračujte iba ak viete, čo robíte.</i>"
+
+#, python-format
+msgid ""
+"Do you really want to uninstall addon '%(name)s %(version)s'?\n"
+"This is pernament."
+msgstr ""
+"Naozaj chcete odinštalovať rozšírenie '%(name)s %(version)s'?\n"
+"Táto zmena je trvalá."
+
+msgid "Do you want to"
+msgstr "Chcete"
+
 msgid "Do you want to save project?"
 msgstr "Chcete uložiť projekt?"
-
-msgid "Documentation:"
-msgstr "Komentár:"
 
 msgid "Drag"
 msgstr "Ťahať"
@@ -151,6 +145,9 @@ msgstr "Daný element sa v tomto diagrame už nachádza "
 
 msgid "Elements"
 msgstr "Elementy"
+
+msgid "Enable"
+msgstr "Povoliť"
 
 msgid "Error opening file"
 msgstr "Chyba pri otváraní súboru"
@@ -167,8 +164,11 @@ msgstr "Exception traceback (most recent call last)"
 msgid "Export diagram"
 msgstr "Exportovať diagram"
 
-msgid "Export format"
-msgstr "Formát exportu"
+msgid "Export file format"
+msgstr "Formát exportného súboru"
+
+msgid "Fakulty of Management Science and Informatics"
+msgstr "Fakulta riadenia a informatiky"
 
 msgid "File does not exist"
 msgstr "Súbor nebol nájdený"
@@ -179,11 +179,11 @@ msgstr "Názov súboru"
 msgid ""
 "File successfully send...\n"
 "\n"
-"Thank you for helping improving UML. FRI"
+"Thank you for helping improving UML .FRI"
 msgstr ""
 "Súbor úspešne odoslaný...\n"
 "\n"
-"Ďakujeme Vám za pomoc pri vylepšovaní UML. FRI"
+"Ďakujeme Vám za pomoc pri vylepšovaní UML .FRI"
 
 msgid "Fill color"
 msgstr "Farba výplne"
@@ -194,17 +194,23 @@ msgstr "Farba výplne 2"
 msgid "Fill color 3"
 msgstr "Farba výplne 3"
 
-msgid "Fill the name and type fields"
-msgstr "Vyplňte polia s názvom a typom"
-
 msgid "Find in diagrams"
 msgstr "Nájdi v diagramoch"
 
 msgid "Find in diagrams ..."
 msgstr "Nájdi v diagramoch ..."
 
+msgid "Free python-based CASE tool."
+msgstr "Voľne šíriteľný CASE nástroj vyvíjaný v pythone."
+
+msgid "GTK+ version"
+msgstr "Verzia GTK+:"
+
 msgid "Gui"
 msgstr "Gui"
+
+msgid "Homepage:"
+msgstr "Domovská stránka:"
 
 msgid "I_nclude project"
 msgstr "V_lož projekt"
@@ -212,20 +218,32 @@ msgstr "V_lož projekt"
 msgid "Images"
 msgstr "Obrázky"
 
-msgid "Initial:"
-msgstr "Počiatočná hodnota:"
+msgid "Install"
+msgstr "Inštalovať"
+
+msgid "Install addon from file"
+msgstr "Nainštalovať rozšírenie zo súboru"
+
+msgid "Install metamodel from current project"
+msgstr "Nainštalovať metamodel z aktuálneho projektu"
 
 msgid "Invalid connection"
 msgstr "Nepovolené spojenie"
 
-msgid "Is Query"
-msgstr "Is Query"
+msgid "License:"
+msgstr "Licencia:"
 
 msgid "Line color"
 msgstr "Farba čiary"
 
 msgid "Locales"
 msgstr "Preklady"
+
+msgid "Machine"
+msgstr "Počítač"
+
+msgid "Metamodels"
+msgstr "Metamodely"
 
 msgid "Name"
 msgstr "Názov"
@@ -238,9 +256,6 @@ msgstr "Farba názvu"
 
 msgid "Name text font"
 msgstr "Písmo názvu"
-
-msgid "Name:"
-msgstr "Názov:"
 
 msgid "Notes"
 msgstr "Poznámky"
@@ -263,35 +278,26 @@ msgstr "Otvoriť ako _kópiu"
 msgid "Open specification ..."
 msgstr "Vlastnosti ..."
 
-msgid "Operation"
-msgstr "Operácie"
-
-msgid "Operations"
-msgstr "Operácie"
-
-msgid "P_DF"
-msgstr "P_DF"
-
 msgid "P_NG"
 msgstr "P_NG"
 
-msgid "P_ostScript"
-msgstr "P_ostScript"
+msgid "P_S"
+msgstr "P_S"
 
 msgid "Pages"
 msgstr "Záložky"
 
-msgid "Parameters"
-msgstr "Parametre"
-
-msgid "Parameters:"
-msgstr "Parametre"
-
 msgid "Paths"
 msgstr "Priečinky"
 
-msgid "Please help us improve the UML. FRI application by sending us this log."
+msgid "Platform"
+msgstr "Platforma"
+
+msgid "Please help us improve the UML .FRI application by sending us this log."
 msgstr "Prosím, pomôžte nám zdokonaliť UML .FRI aplikáciu a pošlite nám túto správu."
+
+msgid "Plugins"
+msgstr "Zásuvné moduly"
 
 msgid "Points color"
 msgstr "Farba bodu"
@@ -299,17 +305,32 @@ msgstr "Farba bodu"
 msgid "Points size"
 msgstr "Veľkosť bodu"
 
+msgid "Portable Document Format"
+msgstr "Formát prenositeľných dokumentov (PDF)"
+
+msgid "Portable Network Graphics"
+msgstr "Formát prenositeľných obrázkov (PNG)"
+
+msgid "PostScript"
+msgstr "PostScript"
+
 msgid "Preferences"
 msgstr "Nastavenia"
+
+msgid "Programmed by:"
+msgstr "Programátori:"
+
+msgid "Programmed for:"
+msgstr "Naprogramované pre:"
 
 msgid "Properties"
 msgstr "Vlastnosti"
 
-msgid "Property"
-msgstr "Property"
+msgid "PyGTK version"
+msgstr "Verzia PyGTK:"
 
-msgid "Pure"
-msgstr "Pure"
+msgid "Python version"
+msgstr "Verzia jazyka Python"
 
 msgid "Question"
 msgstr "Otázka"
@@ -326,12 +347,6 @@ msgstr "Farba štvoruholníka"
 msgid "Rectangle width"
 msgstr "Šírka štvoruholníka"
 
-msgid "Return Array"
-msgstr "Return Array"
-
-msgid "Return Type:"
-msgstr "Návratový typ"
-
 msgid "Root"
 msgstr "Aplikácia"
 
@@ -341,20 +356,20 @@ msgstr "S_VG"
 msgid "Save Project As"
 msgstr "Uložiť projekt ako"
 
-msgid "Scope"
-msgstr "Platnosť"
+msgid "Scalable Vector Graphics"
+msgstr "Scalable Vector Graphics (SVG)"
 
-msgid "Scope:"
-msgstr "Platnosť:"
-
-msgid "Scope: "
-msgstr "Platnosť:"
+msgid "Select Addon"
+msgstr "Vyberte rozšírenie"
 
 msgid "Select a directory"
 msgstr "Vybrať adresár"
 
-msgid "Select directory & file name"
-msgstr "Vybrať adresár a meno súboru"
+msgid "Select addon source"
+msgstr "Vyberte zdroj pre rozšírenie"
+
+msgid "Select export directory & file name"
+msgstr "Vyberte názov adresára a súboru na export"
 
 msgid "Selection"
 msgstr "Selekcia"
@@ -374,20 +389,20 @@ msgstr "Farba tieňa"
 msgid "Show in project view"
 msgstr "Nájdi v strome projektu"
 
+msgid "Start"
+msgstr "Spustiť"
+
 msgid "Start page"
 msgstr "Úvodná strana"
 
-msgid "Static"
-msgstr "Static"
-
-msgid "Stereotype:"
-msgstr "Stereotyp:"
+msgid "Stop"
+msgstr "Zastaviť"
 
 msgid "Styles"
 msgstr "Štýl"
 
-msgid "Synchronized"
-msgstr "Synchronized"
+msgid "Supervised by:"
+msgstr "Pod vedením:"
 
 msgid "System _info"
 msgstr "Systémové _informácie"
@@ -413,20 +428,26 @@ msgstr ""
 "Toto okno sa zobrazuje iba ak sa niečo pokazilo.\n"
 "Bližšie informácie nájdete v záložke Help."
 
-msgid "Type"
-msgstr "Typ"
-
 msgid "Type:"
 msgstr "Typ:"
 
 msgid "UML .FRI"
 msgstr "UML .FRI"
 
+msgid "UML .FRI Addon"
+msgstr "Rozšírenie UML .FRI"
+
+msgid "UML .FRI Addons"
+msgstr "Rozšírenia UML .FRI"
+
 msgid "UML .FRI Clear XML Projects"
 msgstr "UML .FRI XML Projekt"
 
 msgid "UML .FRI Project templates"
 msgstr "UML .FRI Šablóna projektu"
+
+msgid "UML .FRI Project with embedded metamodels"
+msgstr "Projekt UML .FRI so zabudovaným metamodelom"
 
 msgid "UML .FRI Projects"
 msgstr "UML .FRI Projekt"
@@ -439,15 +460,15 @@ msgid "UML .FRI designer [%s]"
 msgstr "UML .FRI dizajnér [%s]"
 
 msgid ""
-"UML. FRI is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.\n"
+"UML .FRI is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.\n"
 "\n"
-"UML. FRI is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.\n"
+"UML .FRI is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.\n"
 "\n"
-"You should have received a copy of the GNU General Public License along with UML. FRI; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
+"You should have received a copy of the GNU General Public License along with UML .FRI; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
 msgstr ""
-"UML. FRI is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.\n"
+"UML .FRI is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.\n"
 "\n"
-"UML. FRI is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.\n"
+"UML .FRI is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.\n"
 "\n"
 "You should have received a copy of the GNU General Public License along with UML. FRI; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
 
@@ -457,11 +478,16 @@ msgstr "UML.fri"
 msgid "Unable to insert element"
 msgstr "Nemôžem vložiť daný element"
 
+msgid "Uninstall"
+msgstr "Odinštalovať"
+
+msgid "University of Žilina"
+msgstr "Žilinská univerzita"
+
 msgid "Unset default diagram"
 msgstr "Zrušiť nastavenie východzieho diagramu"
 
-#, fuzzy
-msgid "Use the <i>Send</i> button to send this error information directly on our server. If the <i>Include project</i> option is chcecked Your current project will be send to the server as well. You can also write some some basic information about what were You doing when this exception occured in the <i>User comments</i> tab to help us recreate it. Or You can use the <i>Home</i> button to post this error directly on our websites bugreport. In case of problems, feel free to write us an email on :"
+msgid "Use the <i>Send</i> button to send this error information directly on our server. If the <i>Include project</i> option is chcecked your current project will be send to the server as well. You can also write some some basic information about what were you doing when this exception occured in the <i>User comments</i> tab to help us recreate it. Or you can use the <i>Home</i> button to post this error directly on our websites bugreport. In case of problems, feel free to write us an email on :"
 msgstr "Stlač <i>Informuj</i> tlačítko na odoslanie tejto chyby priamo na našu web stránku alebo stlač <i>Save</i> tlačítko pre uloženie chybovej hlášky so základnými systémovými informáciami do súboru. Ak je zaznačené <i>Prilož projekt</i>, váš aktuálny projekt bude priložený k tejto správe. Taktiež môžete napísať základné informácie o tom, čo ste robili, keď došlo k vyvolaniu tejto výnimky v záložke <i>Poznámky užívateľa</i> a tak nám pomocť zreprodukovať vyvolanú výnimku. Prosím, pošlite nám váš uložený textový súbor na náš e-mail:"
 
 msgid "User config"
@@ -485,6 +511,9 @@ msgstr ""
 msgid "Value"
 msgstr "Hodnota"
 
+msgid "Version"
+msgstr "Verzia"
+
 #, python-format
 msgid "Version: %s"
 msgstr "Verzia: %s"
@@ -497,7 +526,7 @@ msgstr "Varovanie"
 
 msgid ""
 "We are looking for people willing to help us improve our\n"
-"application. You can contribute in many ways:\n"
+"application. You too can contribute in many ways:\n"
 "\n"
 "* Report us your wishes or desired features.\n"
 "* Join our development team.\n"
@@ -514,9 +543,9 @@ msgstr ""
 "*Prispejte grafikou, napríklad ikonami, logom a podobne.\n"
 "*Pomôžte nám s lokalizáciou do iných jazykov.\n"
 "\n"
-"<i>Pre viac informácií navštívte našu web stránku.</i>"
+"<i>Viac informácií nájdete na našej webovej stránke:</i>"
 
-msgid "What were You doing when this exception occured ?"
+msgid "What were you doing when this exception occured ?"
 msgstr "Čo ste robili, keď došlo k tejto výnimke?"
 
 msgid "Wrong element: "
@@ -525,26 +554,8 @@ msgstr "Nesprávny element:"
 msgid "Z-Order"
 msgstr "Poradie"
 
-msgid "Zoom _In"
-msgstr "Z_väčšiť"
-
-msgid "Zoom _Out"
-msgstr "Z_menšiť"
-
-msgid "_Actual Size"
-msgstr "_Normálna veľkosť"
-
 msgid "_Add diagram"
 msgstr "Pridať _diagram"
-
-msgid "_Automatically add extension"
-msgstr "_Automaticky pridať príponu"
-
-msgid "_Best Fit"
-msgstr "_Prispôsobiť oknu"
-
-msgid "_Cancel"
-msgstr "_Zrušiť"
 
 msgid "_Commandbar"
 msgstr "_Stavový riadok"
@@ -579,11 +590,17 @@ msgstr "_Celá obrazovka"
 msgid "_Help"
 msgstr "P_omocník"
 
+msgid "_Install"
+msgstr "_Inštalovať"
+
 msgid "_License"
 msgstr "_Licencia"
 
 msgid "_Open Existing Project"
 msgstr "_Otvoriť existujúci projekt"
+
+msgid "_PDF"
+msgstr "_PDF"
 
 msgid "_Project"
 msgstr "_Projekt"
@@ -594,7 +611,7 @@ msgstr "Po_slať"
 msgid "_Toolbox"
 msgstr "_Panel s nástrojmi"
 
-msgid "_UML. FRI Homepage"
+msgid "_UML .FRI Homepage"
 msgstr "_Stránka projektu"
 
 msgid "_User comments"
@@ -606,30 +623,18 @@ msgstr "_Zobraziť"
 msgid "_Z-Order"
 msgstr "_Poradie"
 
-msgid "architecture"
-msgstr "Architektúra:"
-
 msgid "default file name"
 msgstr "Východzie meno súboru"
 
-msgid "gtk version"
-msgstr "GTK+ verzia"
+msgid "etree version"
+msgstr "Verzia knižnice etree"
 
-msgid "machine"
-msgstr "Počítač"
+msgid "metamodel"
+msgstr "metamodel"
 
 msgid "none"
 msgstr "nič"
 
-msgid "platform"
-msgstr "Platforma"
-
 msgid "project web"
 msgstr "Web projektu"
-
-msgid "pygtk version"
-msgstr "PyGTK verzia"
-
-msgid "python version"
-msgstr "Verzia jazyka Python"
 

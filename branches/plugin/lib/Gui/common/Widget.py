@@ -8,11 +8,6 @@ class CWidget(CGuiObject):
     __allWidgets = {}
     
     def __init__(self, app, wTree):
-        if self.glade is not None:
-            if abspath(self.glade) in app.wTrees:
-                wTree = app.wTrees[abspath(self.glade)] = gtk.glade.XML(self.glade)
-            else:
-                wTree = app.wTrees[abspath(self.glade)]
         for widgetName in self.widgets:
             if widgetName in self.__allWidgets:
                 raise Exception, '%s cannot be used in %s (allready used in %s)'%(widgetName, self.__class__.__name__, self.__allWidgets[widgetName])

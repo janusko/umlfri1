@@ -6,7 +6,7 @@ import os.path
 
 class CfrmSave(common.CWindow):
     name = 'frmSave'
-    
+    glade = 'project.glade'
     
     def __init__(self, app, wTree):
         common.CWindow.__init__(self, app, wTree)
@@ -44,7 +44,7 @@ class CfrmSave(common.CWindow):
                 filename = self.form.get_filename()
                 if filename is None:
                     self.form.hide()
-                    return
+                    return None, None
                 else:
                     filename = filename.decode('utf-8')
                 if '.' not in os.path.basename(filename):
@@ -61,5 +61,6 @@ class CfrmSave(common.CWindow):
                 if not os.path.isdir(filename):
                     self.application.GetRecentFiles().AddFile(filename)
                     return filename, isZippedFile
+                
         finally:
             self.form.hide()

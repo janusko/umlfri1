@@ -11,7 +11,6 @@ from lib.Drawing import CConnection
 from lib.Elements.Type import CElementType
 from lib.Elements.Object import CElementObject
 from lib.Connections.Object import CConnectionObject
-from lib.Metamodel import CMetamodelManager
 from lib.Drawing import CDiagram
 import os.path
 from lib.consts import UMLPROJECT_NAMESPACE, PROJECT_EXTENSION, PROJECT_CLEARXML_EXTENSION
@@ -24,18 +23,22 @@ if HAVE_LXML:
 
 
 class CProject(object):
-    SaveVersion = (1, 0) # save file format version
+    SaveVersion = (1, 0, 1) # save file format version
     
-    def __init__(self, app):
+    def __init__(self, addonManager, app):
         self.root = None
         
-        self.__metamodelManager = CMetamodelManager()
+        self.__addonManager = addonManager
         self.__metamodel = None
+        self.__addon = None
         self.defaultDiagram = None
         
         self.filename = None
         self.isZippedFile = None
         self.app = app
+    
+    def GetAddon(self):
+        return self.__addon
     
     def GetDefaultDiagrams(self):
         if self.defaultDiagram is not None:
@@ -376,7 +379,25 @@ class CProject(object):
                 
                 if not uri or not version:
                     raise XMLError("Bad metamodel definition")
-                self.__metamodel = self.__metamodelManager.GetMetamodel(uri, version, filename)
+                
+                self.__addon = None
+                
+                addon = self.__addonManager.GetAddon(uri)
+                
+                if addon is None and self.isZippedFile and ('metamodel/addon.xml' in file.namelist()):
+                    addon = self.__addonManager.LoadAddon(os.path.join(filename, 'metamodel'))
+                    if uri not in addon.GetUris():
+                        addon = None
+                    self.__addon = addon
+                
+                if addon is None:
+                    raise ProjectError("Project using unknown metamodel")
+                if addon.GetType() != 'metamodel':
+                    raise ProjectError("Given URI identifier is not metamodel")
+                self.__metamodel = addon.GetComponent().LoadMetamodel()
+                if self.__metamodel is None:
+                    raise ProjectError("This metamodel is disabled")
+                
             elif element.tag == UMLPROJECT_NAMESPACE+'objects':
                 for subelem in element:
                     if subelem.tag == UMLPROJECT_NAMESPACE+'object':
@@ -406,6 +427,3 @@ class CProject(object):
                         self.GetMetamodel().GetElementFactory().GetElement(item.get('id')).SetCounter(int(item.get('value')))
                     elif self.GetMetamodel().GetDiagramFactory().HasType(item.get('id')):
                         self.GetMetamodel().GetDiagramFactory().GetDiagram(item.get('id')).SetCounter(int(item.get('value')))
-                        
-    Root = property(GetRoot, SetRoot)
-    

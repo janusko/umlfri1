@@ -8,12 +8,6 @@ from lib.datatypes import CColor
 
 from lib.config import config
 
-arrows = {
-    "simple": "M -0.5,-1 L 0,0 L 0.5,-1",
-    "triangle": "M -0.5,-1 L 0,0 L 0.5,-1 z",
-    "diamond": "M -0.5,-1 L 0,0 L 0.5,-1 L 0,-2 z"
-}
-
 class CConnectionArrow(CVisualObject):
     types = {
         'index': int,
@@ -70,5 +64,5 @@ class CConnectionArrow(CVisualObject):
         transMatrix = TransformMatrix.mk_translation(points[index])*TransformMatrix.mk_rotation(angle)* \
                         TransformMatrix.mk_scale(size)
         
-        arrow = transMatrix*Path(arrows.get(style, style))
+        arrow = transMatrix*context.GetMetamodel().GetPathFactory().GetPath(style)
         context.GetCanvas().DrawPath(arrow, color, fill)

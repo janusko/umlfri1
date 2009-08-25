@@ -23,15 +23,20 @@ CONNECTIONS_PATH = 'connections'
 ICONS_PATH = 'icons'
 DOMAINS_PATH = 'domains'
 METAMODEL_PATH = 'metamodel.xml'
+PATHS_PATH = 'paths.xml'
+ADDON_PATH = 'addon.xml'
 
 ARROW_IMAGE = 'arrow.png'
 
 DEFAULT_TEMPLATE_ICON = 'default_icon.png'
+MAIN_ICON = "app_icon.png"
+MAIN_LOGO = "app_logo.png"
 SPLASH_IMAGE = 'splash.png'
 STARTPAGE_IMAGE = 'startpage.png'
 GRAB_CURSOR = 'grab.png'
 GRABBING_CURSOR = 'grabbing.png'
 # extensions
+ADDON_EXTENSION = '.fria'
 PROJECT_EXTENSION = '.frip'
 PROJECT_TPL_EXTENSION = '.frit'
 PROJECT_CLEARXML_EXTENSION ='.fripx'
@@ -41,9 +46,11 @@ UMLPROJECT_NAMESPACE = '{http://umlfri.kst.fri.uniza.sk/xmlschema/umlproject.xsd
 RECENTFILES_NAMESPACE = '{http://umlfri.kst.fri.uniza.sk/xmlschema/recentfiles.xsd}'
 CONFIG_NAMESPACE = '{http://umlfri.kst.fri.uniza.sk/xmlschema/config.xsd}'
 METAMODEL_LIST_NAMESPACE = '{http://umlfri.kst.fri.uniza.sk/xmlschema/metamodelList.xsd}'
+ADDON_NAMESPACE = "{http://umlfri.org/xmlschema/addon.xsd}"
+ADDON_LIST_NAMESPACE = "{http://umlfri.org/xmlschema/addonList.xsd}"
 USERGUI_NAMESPACE='http://umlfri.kst.fri.uniza.sk/xmlschema/usergui.xsd'
 
-# UML. FRI server - web page, mail address and address for error logs
+# UML .FRI server - web page, mail address and address for error logs
 WEB = 'http://umlfri.org/'
 MAIL = 'projekt@umlfri.org'
 ERROR_LOG_ADDRESS = 'http://umlfri.org/errors/log.php'  
