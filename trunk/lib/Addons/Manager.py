@@ -137,8 +137,8 @@ class CAddonManager(object):
             elif node.tag == ADDON_NAMESPACE+'Metamodel':
                 path = ''
                 for info in node:
-                    if node.tag == ADDON_NAMESPACE+'Path':
-                        path = node.attrib["icon"]
+                    if info.tag == ADDON_NAMESPACE+'Path':
+                        path = info.attrib["path"]
                 component = CMetamodelAddonComponent(path)
         
         return CAddon(self, storage, uris, component,
