@@ -133,7 +133,7 @@ class CAddonManager(object):
             elif node.tag == ADDON_NAMESPACE+'Icon':
                 icon = node.attrib["path"]
             elif node.tag == ADDON_NAMESPACE+'Description':
-                description = self.__FormatMultilineText(node.text)
+                description = self.__FormatMultilineText(node.text or '')
             elif node.tag == ADDON_NAMESPACE+'Metamodel':
                 path = ''
                 for info in node:
