@@ -46,11 +46,8 @@ class CPluginManager(object):
         self.__plugins[plugin.GetUri()] = plugin
         plugin._SetPluginManager(self)
     
-    def ConnectPlugin(self, uri, password, addr):
+    def ConnectPlugin(self, uri, addr):
         if self.__plugins[uri].IsInitialized():
-            raise Exception() # TODO: replace with better exception
-        
-        if not self.__plugins[uri]._VerifyPassword(password):
             raise Exception() # TODO: replace with better exception
         
         self.__plugins[uri]._Connect(addr)
@@ -80,9 +77,6 @@ class CPluginManager(object):
             
     def DomainValueChanged(self, element, path):
         self.SendToAll(RESP_DOMAIN_VALUE_CHANGED, element = r_object(element), path = path)
-    
-    def KillAll(self):
-        self.SendToAll(RESP_FINALIZE)
         
     def GetPort(self):
         return self.acceptserver.sock.getsockname()[1]

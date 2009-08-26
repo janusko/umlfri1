@@ -210,7 +210,7 @@ class CCore(object):
     
     def _plugin(self, ctype, params, addr, callid):
         if ctype == 'init':
-            self.manager.ConnectPlugin(params['uri'], params['password'], addr)
+            self.manager.ConnectPlugin(params['uri'], addr)
             self.manager.Send(addr, RESP_OK, __id__ = callid)
         else:
             self.manager.Send(addr, RESP_INVALID_COMMAND_TYPE, command = 'plugin', type = ctype, __id__ = callid)

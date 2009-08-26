@@ -7,24 +7,27 @@ from Communication.ComSpec import *
 from lib.config import config
 
 class CPlugin(object):
-    def __init__(self, path, uri):
+    def __init__(self, path, uri, starter):
         self.__uri = uri
         self.__path = path
         self.__pluginManager = None
-        self.__password = str(uuid.uuid1())
         self.__addr = None
+        self.__starter = starter(self)
     
     def GetUri(self):
         return self.__uri
+    
+    def GetPath(self):
+        return self.__path
+    
+    def GetPluginManager(self):
+        return self.__pluginManager()
     
     def IsInitialized(self):
         return self.__addr is not None
     
     def Start(self):
-        if os.name == 'nt': 
-            os.system('start /B pl_runner.py %i "%s" "%s" "%s"' % (self.__pluginManager().GetPort(), self.__path, self.__uri, self.__password))
-        else:
-            os.system(config['/Paths/Root'] + 'pl_runner.py %i "%s" "%s" "%s" &' % (self.__pluginManager().GetPort(), self.__path, self.__uri, self.__password))
+        self.__starter.Start()
     
     def Stop(self):
         if self.IsInitialized():
@@ -32,9 +35,6 @@ class CPlugin(object):
     
     def _SetPluginManager(self, manager):
         self.__pluginManager = weakref.ref(manager)
-    
-    def _VerifyPassword(self, password):
-        return self.__password == password
     
     def _Connect(self, addr):
         self.__addr = addr

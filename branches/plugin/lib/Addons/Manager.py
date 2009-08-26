@@ -223,7 +223,8 @@ class CAddonManager(object):
     
     def StartAll(self):
         for addon in self.__addons.itervalues():
-            addon.Start()
+            if addon.IsEnabled():
+                addon.Start()
     
     def StopAll(self):
         for addon in self.__addons.itervalues():
