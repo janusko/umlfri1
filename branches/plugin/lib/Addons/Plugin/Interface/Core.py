@@ -7,9 +7,9 @@ from meta import Meta
 
 class CCore(object):
     
-    def __init__(self, manager, app):
+    def __init__(self, manager, pluginAdapter):
         self.manager = manager
-        self.app = app
+        self.pluginAdapter = pluginAdapter
         self.guimanager = manager.GetGuiManager()
     
     def Error(self, addr):
@@ -121,8 +121,8 @@ class CCore(object):
             assert (detail in ('list', 'detail') and 
                 item in ('metamodel', 'element', 'diagram', 'connection', 'domain'))
             
-            if self.app.GetProject() is not None:
-                metamodel = self.app.GetProject().GetMetamodel()
+            if self.pluginAdapter.GetProject() is not None:
+                metamodel = self.pluginAdapter.GetProject().GetMetamodel()
             else:
                 self.manager.Send(addr, RESP_PROJECT_NOT_LOADED, __id__ = callid)
                 return
@@ -197,7 +197,7 @@ class CCore(object):
                 self.manager.Send(addr, RESP_GUI_INSENSITIVE, path = params['path'], __id__ = callid)
             
             elif ctype == 'warning':
-                self.app.GetPluginAdapter().plugin_display_warning(params['text'])
+                self.pluginAdapter.plugin_display_warning(params['text'])
                 self.manager.Send(addr, RESP_OK, __id__ = callid)
                 
             else:

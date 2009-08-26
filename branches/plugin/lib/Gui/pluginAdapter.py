@@ -1,14 +1,27 @@
 from lib.Addons.Plugin.Interface.Classes.base import IBase
 from common import CGuiObject, event
 from lib.Depend.gtk2 import gobject
+from GuiManager import CGuiManager
 
 class CPluginAdapter(CGuiObject):
     
     def __init__(self, app):
         CGuiObject.__init__(self, app)
-        self.manager = app.GetAddonManager().GetPluginManager()
-        self.app = app
+        self.guiManager = CGuiManager(app)
+        self.manager = None
         IBase.SetAdapter(self)
+        
+    def _SetPluginManager(self, pluginManager):
+        self.manager = pluginManager
+        
+    def GetGuiManager(self):
+        return self.guiManager
+        
+    def GetProject(self):
+        return self.application.GetProject()
+    
+    def GetCurrentDiagram(self):
+        self.application.GetWindow('frmMain').picDrawingArea.GetDiagram()
         
     @event('application.bus', 'content-update')
     def gui_change_domain_value(self, widget, element, property):
@@ -21,4 +34,4 @@ class CPluginAdapter(CGuiObject):
         gobject.idle_add(self.application.GetBus().emit, 'run-dialog', 'warning', text)
     
     def GetCanvas(self):
-        return self.app.GetWindow('frmMain').picDrawingArea.canvas
+        return self.application.GetWindow('frmMain').picDrawingArea.canvas

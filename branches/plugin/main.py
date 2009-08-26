@@ -47,8 +47,8 @@ class Application(CApplication):
         
         CApplication.__init__(self)
         self.UserGui= CUserGui(self)
-        self.addonManager = CAddonManager(self)
         self.pluginAdapter = CPluginAdapter(self)
+        self.addonManager = CAddonManager(self.pluginAdapter)
         
         gobject.timeout_add(SPLASH_TIMEOUT, self.GetWindow('frmSplash').Hide)
         
@@ -87,7 +87,7 @@ class Application(CApplication):
     
     def ProjectInit(self):
         if self.project is None:
-            self.project = CProject(self.addonManager, self)
+            self.project = CProject(self.addonManager)
             Reference.SetProject(self.project)
             
     def ProjectDelete(self):

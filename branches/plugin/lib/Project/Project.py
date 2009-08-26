@@ -25,7 +25,7 @@ if HAVE_LXML:
 class CProject(object):
     SaveVersion = (1, 0, 1) # save file format version
     
-    def __init__(self, addonManager, app):
+    def __init__(self, addonManager):
         self.root = None
         
         self.__addonManager = addonManager
@@ -35,7 +35,6 @@ class CProject(object):
         
         self.filename = None
         self.isZippedFile = None
-        self.app = app
     
     def GetAddon(self):
         return self.__addon

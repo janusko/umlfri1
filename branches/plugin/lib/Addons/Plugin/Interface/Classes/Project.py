@@ -28,10 +28,6 @@ class IProject(IBase):
     def GetDefaultDiagrams(him):
         return him.GetDefaultDiagrams()
     
-    @result(r_object)
-    def GetCurrentDiagram(him):
-        return him.app.GetWindow('frmMain').picDrawingArea.GetDiagram()
-        
     #~ @parameter('node', t_classobject(CElementObject))
     #~ def RemoveNode(him, node):
         #~ node = node.GetNode()

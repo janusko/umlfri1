@@ -4,7 +4,6 @@ from Communication.ComSpec import *
 from Interface.Core import CCore
 from Interface.Transaction import CTransaction
 from lib.consts import *
-from lib.Gui import CGuiManager
 import thread
 
 class CPluginManager(object):
@@ -14,14 +13,14 @@ class CPluginManager(object):
     There should be only one instance of this class in application
     '''
 
-    def __init__(self, app):
+    def __init__(self, pluginAdapter):
         self.__plugins = {}
         self.conlock = thread.allocate()
         self.connection = {}
         self.transaction = {}
-        self.app = app
-        self.guimanager = CGuiManager(app)
-        self.proxy = CCore(self, app)
+        self.pluginAdapter = pluginAdapter
+        pluginAdapter._SetPluginManager(self)
+        self.proxy = CCore(self, pluginAdapter)
         self.acceptserver = CAcceptServer(('localhost', PLUGIN_SOCKET), self.NewConnection)
         self.acceptserver.Start()
         print "PORT:", self.acceptserver.sock.getsockname()[1]
@@ -60,7 +59,7 @@ class CPluginManager(object):
         '''
         @return: GuiManager instance
         '''
-        return self.guimanager
+        return self.pluginAdapter.GetGuiManager()
     
     def Send(self, addr, code, **params):
         if addr not in self.connection:

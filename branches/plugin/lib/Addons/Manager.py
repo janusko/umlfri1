@@ -29,11 +29,11 @@ class CAddonManager(object):
     reSpaces = re.compile(' +')
     reIlegalCharacters = re.compile('[^a-z0-9A-Z]')
     
-    def __init__(self, app):
+    def __init__(self, pluginAdapter):
         self.__enabledAddons = self.__LoadEnabledAddons(config['/Paths/UserEnabledAddons'])
         self.__addons = self.__LoadAllAddons(open_storage(config['/Paths/Addons']), False)
         self.__addons.update(self.__LoadAllAddons(open_storage(config['/Paths/UserAddons']), True))
-        self.__pluginManager = CPluginManager(app)
+        self.__pluginManager = CPluginManager(pluginAdapter)
     
     def __LoadEnabledAddons(self, path):
         ret = {}
