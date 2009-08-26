@@ -6,6 +6,7 @@ from lib.Exceptions.DevException import *
 from Type import CDiagramType
 from lib.config import config
 from lib.consts import METAMODEL_NAMESPACE
+import weakref
 
 #if lxml.etree is imported successfully, we use xml validation with xsd schema
 if HAVE_LXML:
@@ -16,7 +17,7 @@ class CDiagramFactory(object):
     """
     Creates diagram types from metamodel XMLs
     """
-    def __init__(self, storage, path):
+    def __init__(self, metamodel, storage, path):
         """
         Parse metamodel and create list of diagram types
         
@@ -29,6 +30,7 @@ class CDiagramFactory(object):
         self.types = {}
         self.path = path
         self.storage = storage
+        self.metamodel = weakref.ref(metamodel)
         
         self.Reload()
         
@@ -82,7 +84,7 @@ class CDiagramFactory(object):
             if not xmlschema.validate(root):
                 raise FactoryError("XMLError", xmlschema.error_log.last_error)
 
-        obj = CDiagramType(root.get('id'))
+        obj = CDiagramType(self, root.get('id'))
         
         for element in root:
             if element.tag == METAMODEL_NAMESPACE+'Icon':
@@ -106,4 +108,7 @@ class CDiagramFactory(object):
                         obj.AppendConnection(value)
         
         self.types[root.get('id')] = obj
+    
+    def GetMetamodel(self):
+        return self.metamodel()
     

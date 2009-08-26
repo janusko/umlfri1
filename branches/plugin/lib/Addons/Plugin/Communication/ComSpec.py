@@ -43,7 +43,7 @@ RESP_UNHANDELED_EXCEPTION = 500
 def tc_object(val, conn = None):
     return val.GetId()
 
-def t_2intTuple(val, conn = None):
+def t_2intTuple(x, conn = None):
     try:
         assert len(x) > 4 and x[0] == '(' and x[-1] == ')'
         result = tuple(int(i)for i in x[1:-1].split(','))
@@ -51,11 +51,31 @@ def t_2intTuple(val, conn = None):
         return result
     except (AssertionError, ):
         raise ValueError()
+        
+def t_bool(val, conn = None):
+    if val == 'True':
+        return True
+    elif val == 'False':
+        return False
+    else:
+        raise ValueError()
+        
+def t_2boolTuple(x, conn = None):
+    if not (len(x) > 4 and x[0] == '(' and x[-1] == ')'):
+        raise ValueError()
+    result = tuple(t_bool(i.strip()) for i in x[1:-1].split(','))
+    if len(result) != 2:
+        raise ValueError()
+    return result
 
 @reverse(tc_object)
 def t_object(val, conn = None):
     if val == 'project':
         return Reference.GetProject()
+    if val == 'metamodel':
+        if Reference.GetProject() is None:
+            return None
+        return Reference.GetProject().GetMetamodel()
     elif re.match(r'#[0-9]+$', val) is not None:
         return Reference.GetObject(int(val[1:]))
     elif val == 'None':
@@ -82,7 +102,6 @@ def t_object(val, conn = None):
         else:
             raise ValueError()
 
-@reverse(tc_object)
 def t_classobject(cls):
     def check(val, conn = None):
         res = t_object(val)
@@ -90,15 +109,8 @@ def t_classobject(cls):
             return res
         else:
             raise ValueError()
+    check = reverse(tc_object)(check)
     return check
-
-def t_bool(val, conn = None):
-    if val == 'True':
-        return True
-    elif val == 'False':
-        return False
-    else:
-        raise ValueError()
 
 def t_str(val, conn = None):
     return str(val)
@@ -125,7 +137,10 @@ def t_2x2intTuple(val, conn = None):
         raise ValueError()
 
 def rc_object(val, connection):
-    return classes[connection.Execute('exec', val+'.GetClass', {})()](val, connection)
+    if val == 'None':
+        return None
+    else:
+        return classes[connection.Execute('exec', val+'.GetClass', {})()](val, connection)
     
 def rc_objectlist(val, connection):
     return [rc_object(i, connection) for i in val[1:-1].split(',') if i != '']
@@ -152,11 +167,19 @@ def r_2intTuple(val, conn = None):
     
 t_2intTuple = reverse(r_2intTuple)(t_2intTuple)
 
+@reverse(t_2boolTuple)
+def r_2boolTuple(val, conn = None):
+    if type(val) != tuple or len(val) != 2 or any(type(i) != bool for i in val):
+        raise ValueError()
+    return str(val)
+
+t_2boolTuple = reverse(r_2boolTuple)(t_2boolTuple)
+
 @reverse(t_2x2intTuple)
 def r_2x2intTuple(val, conn = None):
     return '((%i,%i),(%i,%i))' % (val[0] + val[1])
 
-t_2x2intTuple = reverse(r_2x2intTuple)
+t_2x2intTuple = reverse(r_2x2intTuple)(t_2x2intTuple)
 
 @reverse(lambda val, conn = None: None)
 def r_none(val, conn = None):
@@ -171,4 +194,5 @@ def rc_eval(val, con=None):
 @reverse(rc_eval)
 def r_eval(val, con=None):
     return str(val)
+    
 

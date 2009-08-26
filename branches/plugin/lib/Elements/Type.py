@@ -1,9 +1,10 @@
 from lib.lib import ToBool
 from lib.Exceptions.UserException import *
+from lib.Addons.Plugin import Reference
 
 import weakref
 
-class CElementType(object):
+class CElementType(Reference):
     '''
     Scheme for a class of elements
     '''
@@ -12,6 +13,7 @@ class CElementType(object):
         '''
         create new instance of element type
         '''
+        Reference.__init__(self)
         self.icon = None
         self.id = id
         self.attributes = {}

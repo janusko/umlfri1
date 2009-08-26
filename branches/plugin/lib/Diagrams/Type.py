@@ -1,14 +1,19 @@
-class CDiagramType(object):
+from lib.Addons.Plugin import Reference
+import weakref
+
+class CDiagramType(Reference):
     """
     Type of diagram
     """
-    def __init__(self, id):
+    def __init__(self, factory, id):
         """
         Initialize diagram type
         
         @param id: Name of the diagram type
         @type  id: string
         """
+        Reference.__init__(self)
+        self.factory = weakref.ref(factory)
         self.icon = None
         self.id = id
         self.elements = []
@@ -143,3 +148,9 @@ class CDiagramType(object):
         Set name of this diagram type
         """
         self.id = id
+    
+    def GetFactory(self):
+        return self.factory()
+        
+    def GetMetamodel(self):
+        return self.factory().GetMetamodel()

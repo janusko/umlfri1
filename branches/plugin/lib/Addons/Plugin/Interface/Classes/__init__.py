@@ -5,3 +5,8 @@ import ConnectionVisual
 import ConnectionObject
 import Diagram
 import ConLabelInfo
+import Metamodel
+import ConnectionType
+import DiagramType
+import DomainType
+import ElementType

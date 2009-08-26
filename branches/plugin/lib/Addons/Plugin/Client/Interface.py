@@ -7,6 +7,7 @@ class CInterface(object):
     def __init__(self, port):
         self.connection = CConnection(port)
         self.project = classes['IProject']('project', self.connection)
+        self.metamodel = classes['IMetamodel']('metamodel', self.connection)
     
     def _Init(self, uri):
         return self.connection.Execute('plugin', 'init', {'uri': uri})()
@@ -16,6 +17,9 @@ class CInterface(object):
     
     def GetProject(self):
         return self.project
+    
+    def GetMetamodel(self):
+        return self.metamodel
         
     def AddMenu(self, mtype, path, name, callback, **params):
         if callback is not None:
