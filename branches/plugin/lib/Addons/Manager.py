@@ -148,13 +148,16 @@ class CAddonManager(object):
             elif node.tag == ADDON_NAMESPACE+'Plugin':
                 codes = []
                 requiredMetamodels = []
+                patches = []
                 
                 for info in node:
                     if info.tag == ADDON_NAMESPACE+'Code':
                         codes.append((node.get("os", "all"), info.attrib["language"], info.attrib["path"]))
+                    elif info.tag == ADDON_NAMESPACE+'Patch':
+                        patches.append((info.attrib["path"], info.attrib["module"]))
                     elif info.tag == ADDON_NAMESPACE+'Metamodel':
                         requiredMetamodels.append(info.attrib["required"])
-                component = CPluginAddonComponent(codes, requiredMetamodels)
+                component = CPluginAddonComponent(codes, patches, requiredMetamodels)
         
         return CAddon(self, storage, uris, component,
             all(self.__enabledAddons.get(uri, True) for uri in uris),

@@ -89,33 +89,51 @@
 					</xs:complexType>
 				</xs:element>
 				<xs:choice>
-					<xs:element name="Metamodel">
-						<xs:complexType>
-							<xs:sequence>
-								<xs:element name="Path">
-									<xs:complexType>
-										<xs:attribute name="path" use="required"/>
-									</xs:complexType>
-								</xs:element>
-							</xs:sequence>
-						</xs:complexType>
-					</xs:element>
-					<xs:element name="Plugin">
-						<xs:complexType>
-							<xs:sequence>
-								<xs:element name="Code" maxOccurs="unbounded">
-									<xs:complexType>
-										<xs:attribute name="os" type="xs:string" default="all"/>
-										<xs:attribute name="language" type="xs:string" use="required"/>
-										<xs:attribute name="path" type="xs:string" use="required"/>
-									</xs:complexType>
-								</xs:element>
-								<xs:element name="Metamodel" minOccurs="0" maxOccurs="unbounded"/>
-							</xs:sequence>
-						</xs:complexType>
-					</xs:element>
+					<xs:element name="Metamodel" type="MetamodelType"/>
+					<xs:element name="Plugin" type="PluginType"/>
 				</xs:choice>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
+	<xs:complexType name="MetamodelType">
+		<xs:sequence>
+			<xs:element name="Path">
+				<xs:complexType>
+					<xs:attribute name="path" use="required"/>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PluginType">
+		<xs:sequence>
+			<xs:choice>
+				<xs:sequence>
+					<xs:element name="Code" type="PluginCodeType" maxOccurs="unbounded"/>
+					<xs:element name="Patch" type="PluginPatchType" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+				<xs:element name="Patch" type="PluginPatchType" maxOccurs="unbounded"/>
+			</xs:choice>
+			<xs:element name="Metamodel" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Diagram" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:attribute name="required" type="xs:string" use="required"/>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="required" type="xs:string" use="required"/>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PluginCodeType">
+		<xs:attribute name="os" type="xs:string" default="all"/>
+		<xs:attribute name="language" type="xs:string" use="required"/>
+		<xs:attribute name="path" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="PluginPatchType">
+		<xs:attribute name="path" type="xs:string" use="required"/>
+		<xs:attribute name="module" type="xs:string" use="required"/>
+	</xs:complexType>
 </xs:schema>
