@@ -45,12 +45,18 @@ class CFont(object):
     def GetFamily(self):
         return self.__fontFamily
     
-    def ChangeStyle(self, style):
+    def ChangeStyle(self, style, doIt = True):
+        if not doIt:
+            return self
+        
         tmp = CFont(self)
         tmp.__fontStyle.add(style)
         return tmp
     
-    def ChangeSize(self, delta):
+    def ChangeSize(self, delta, doIt = True):
+        if not doIt:
+            return self
+        
         tmp = CFont(self)
         tmp.__fontSize += delta
         return tmp

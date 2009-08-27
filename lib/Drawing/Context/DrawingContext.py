@@ -5,15 +5,16 @@ class CDrawingContext(object):
         self.pos = pos
         self.size = size
         self.variables = {}
+        self.defaults = {}
         self.stack = []
         self.shadowcolor = None
         self.line = 0
     
     def Push(self):
-        self.stack.append((self.pos, self.size, self.variables.copy(), self.stack, self.shadowcolor, self.line))
+        self.stack.append((self.pos, self.size, self.variables.copy(), self.stack, self.shadowcolor, self.line, self.defaults.copy()))
     
     def Pop(self):
-        self.pos, self.size, self.variables, self.stack, self.shadowcolor, self.line = self.stack.pop()
+        self.pos, self.size, self.variables, self.stack, self.shadowcolor, self.line, self.defaults = self.stack.pop()
     
     def ComputeSize(self, object):
         size = self.size
@@ -89,3 +90,9 @@ class CDrawingContext(object):
     
     def GetMetamodel(self):
         return self.element.GetObject().GetType().GetMetamodel()
+    
+    def SetDefault(self, name, value):
+        self.defaults[name] = value
+    
+    def GetDefault(self, name):
+        return self.defaults.get(name)

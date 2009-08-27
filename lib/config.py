@@ -31,7 +31,7 @@ types = {
     "/Styles/Element/NameTextColor": CColor,
     "/Styles/Element/TextColor": CColor,
     "/Styles/Element/NameTextFont": CFont,
-    "/Styles/Element/Textfont": CFont,
+    "/Styles/Element/TextFont": CFont,
     "/Styles/Connection/ArrowAngleSteps": int,
     "/Styles/Connection/MinimalAngle": float,
     "/Styles/Connection/LineColor": CColor,
