@@ -70,12 +70,8 @@ def t_2boolTuple(x, conn = None):
 
 @reverse(tc_object)
 def t_object(val, conn = None):
-    if val == 'project':
-        return Reference.GetProject()
-    if val == 'metamodel':
-        if Reference.GetProject() is None:
-            return None
-        return Reference.GetProject().GetMetamodel()
+    if val == 'adapter':
+        return Reference.GetAdapter()
     elif re.match(r'#[0-9]+$', val) is not None:
         return Reference.GetObject(int(val[1:]))
     elif val == 'None':
@@ -137,10 +133,18 @@ def t_2x2intTuple(val, conn = None):
         raise ValueError()
 
 def rc_object(val, connection):
-    if val == 'None':
-        return None
+    print val
+    if val.find('::') >= 0:
+        val, cls = val.split('::')
+        if val == 'None':
+            return None
+        else:
+            try:
+                return classes[cls](val, connection)
+            except KeyError:
+                raise ValueError()
     else:
-        return classes[connection.Execute('exec', val+'.GetClass', {})()](val, connection)
+        raise ValueError()
     
 def rc_objectlist(val, connection):
     return [rc_object(i, connection) for i in val[1:-1].split(',') if i != '']
@@ -148,7 +152,8 @@ def rc_objectlist(val, connection):
 
 @reverse(rc_object)
 def r_object(val, conn = None):
-    return '#%i' % (val.GetPluginId(), ) if val is not None else 'None'
+    return ('#%i::%s' % (val.GetPluginId(), Meta.GetClassName(val)) if val is not None else 'None::NoneType') 
+        
 
 @reverse(rc_objectlist)
 def r_objectlist(val, conn = None):

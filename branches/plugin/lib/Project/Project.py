@@ -1,5 +1,6 @@
 from lib.Depend.etree import etree, HAVE_LXML
 
+from lib.Addons.Plugin.Interface.reference import Reference
 from lib.lib import XMLEncode, IDGenerator, Indent
 from ProjectNode import CProjectNode
 from cStringIO import StringIO
@@ -22,10 +23,11 @@ if HAVE_LXML:
     xmlschema = etree.XMLSchema(xmlschema_doc)
 
 
-class CProject(object):
+class CProject(Reference):
     SaveVersion = (1, 0, 1) # save file format version
     
     def __init__(self, addonManager):
+        Reference.__init__(self)
         self.root = None
         
         self.__addonManager = addonManager

@@ -1,7 +1,9 @@
 from lib.Addons.Plugin.Interface.Classes.base import IBase
+from lib.Addons.Plugin.Interface.reference import Reference
 from common import CGuiObject, event
 from lib.Depend.gtk2 import gobject
 from GuiManager import CGuiManager
+
 
 class CPluginAdapter(CGuiObject):
     
@@ -10,6 +12,7 @@ class CPluginAdapter(CGuiObject):
         self.guiManager = CGuiManager(app)
         self.manager = None
         IBase.SetAdapter(self)
+        Reference.SetAdapter(self)
         
     def _SetPluginManager(self, pluginManager):
         self.manager = pluginManager
@@ -21,7 +24,8 @@ class CPluginAdapter(CGuiObject):
         return self.application.GetProject()
     
     def GetCurrentDiagram(self):
-        self.application.GetWindow('frmMain').picDrawingArea.GetDiagram()
+        return self.application.GetWindow('frmMain').picDrawingArea.GetDiagram()
+        
         
     @event('application.bus', 'content-update')
     def gui_change_domain_value(self, widget, element, property):

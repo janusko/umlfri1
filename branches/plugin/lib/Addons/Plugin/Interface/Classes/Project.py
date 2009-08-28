@@ -28,6 +28,10 @@ class IProject(IBase):
     def GetDefaultDiagrams(him):
         return him.GetDefaultDiagrams()
     
+    @result(r_object)
+    def GetMetamodel(him):
+        return him.GetMetamodel()
+    
     #~ @parameter('node', t_classobject(CElementObject))
     #~ def RemoveNode(him, node):
         #~ node = node.GetNode()

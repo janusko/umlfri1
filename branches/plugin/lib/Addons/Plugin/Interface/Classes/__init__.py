@@ -10,3 +10,4 @@ import ConnectionType
 import DiagramType
 import DomainType
 import ElementType
+import Adapter

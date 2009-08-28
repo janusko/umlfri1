@@ -28,8 +28,8 @@ class CCore(object):
                 if com == 'gui':
                     self._gui(command['type'], params, addr, callid)
                 
-                elif com == 'metamodel':
-                    self._metamodel(command['type'], params, addr, callid)
+                #~ elif com == 'metamodel':
+                    #~ self._metamodel(command['type'], params, addr, callid)
                 
                 elif com == 'exec':
                     self._exec(command['type'], params, addr, callid)

@@ -88,7 +88,6 @@ class Application(CApplication):
     def ProjectInit(self):
         if self.project is None:
             self.project = CProject(self.addonManager)
-            Reference.SetProject(self.project)
             
     def ProjectDelete(self):
         self.project = None

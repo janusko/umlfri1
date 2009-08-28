@@ -82,13 +82,18 @@ class Plugin(object):
     def onReset(self, *args):
         try:
             with self.interface.GetTransaction():
-                metamodel = self.interface.DetailMetamodel()
-                if metamodel['uri'] != 'urn:umlfri.org:metamodel:graphTheory':
+                project = self.interface.GetAdapter().GetProject()
+                if project is None:
+                    self.interface.DisplayWarning('No project loaded')
+                    return
+                
+                metamodel = project.GetMetamodel()
+                if metamodel.GetUri() != 'urn:umlfri.org:metamodel:graphTheory':
                     self.interface.DisplayWarning('Not supported metamodel')
                     return
                 
-                diagram = self.interface.GetProject().GetCurrentDiagram()
-                if diagram.GetType() != 'Graph':
+                diagram = self.interface.GetAdapter().GetCurrentDiagram()
+                if diagram is None or diagram.GetType() != 'Graph':
                     self.interface.DisplayWarning('This is not a Graph')
                     return
                 
