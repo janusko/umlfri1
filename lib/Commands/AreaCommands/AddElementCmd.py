@@ -27,8 +27,8 @@ class CAddElementCmd(CBaseCommand):
             self.node = CProjectNode(self.parent, self.element.GetObject(), self.parent.GetPath() + "/" + self.element.GetObject().GetName() + ":" + self.element.GetObject().GetType().GetId())
             self.project.AddNode(self.node, self.parent)
             
-        if self.description == None:
-            self.description = _('Adding %s to %s') %(self.element.GetObject().GetName(), self.diagram.GetName())
+        #if self.description == None:
+            #self.description = _('Adding %s to %s') %(self.element.GetObject().GetName(), self.diagram.GetName())
 
 
     def undo(self):
@@ -56,4 +56,10 @@ class CAddElementCmd(CBaseCommand):
                 if con not in self.diagram.connections: 
                     self.diagram.AddConnection(con)
        
- 
+    def getDescription(self):
+        if self.description != None:
+            return self.description
+        else:
+            return _('Adding %s to %s') %(self.element.GetObject().GetName(), self.diagram.GetName())
+            
+            

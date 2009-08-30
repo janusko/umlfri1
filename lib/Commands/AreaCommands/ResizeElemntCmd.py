@@ -12,8 +12,8 @@ class CResizeElemntCmd(CBaseCommand):
 
     def do (self):
         self.element.Resize(self.canvas, self.delta, self.selSq)
-        if self.description == None:
-            self.description = _('Resizing %s') %(self.element.GetObject().GetName())
+        #if self.description == None:
+            #self.description = _('Resizing %s') %(self.element.GetObject().GetName())
 
 
     def undo(self):
@@ -23,4 +23,9 @@ class CResizeElemntCmd(CBaseCommand):
     def redo(self):
         self.element.Resize(self.canvas, self.delta, self.selSq)
         
-        
+    def getDescription(self):
+        if self.description != None:
+            return self.description
+        else:
+            return _('Resizing %s') %(self.element.GetObject().GetName())
+                

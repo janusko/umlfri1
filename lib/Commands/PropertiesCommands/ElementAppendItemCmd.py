@@ -16,12 +16,12 @@ class CElementAppendItemCmd(CBaseCommand):
         self.attList = self.element.GetObject().GetValue(self.key)
         self.appendedItem = self.attList[-1:][0]
         
-        if self.description == None:
-            if isinstance(self.element, CElement):
-                name = self.element.GetObject().GetName()
-            else:
-                name = self.element.GetObject().GetType().GetId()
-            self.description = _('Adding item to %s %s') %(name, self.key)
+        #if self.description == None:
+            #if isinstance(self.element, CElement):
+                #name = self.element.GetObject().GetName()
+            #else:
+                #name = self.element.GetObject().GetType().GetId()
+            #self.description = _('Adding item to %s %s') %(name, self.key)
            
            
     def undo(self):
@@ -31,7 +31,16 @@ class CElementAppendItemCmd(CBaseCommand):
         self.attList.append(self.appendedItem)
  
 
-
+    def getDescription(self):
+        if self.description != None:
+            return self.description
+        else:
+            if isinstance(self.element, CElement):
+                name = self.element.GetObject().GetName()
+            else:
+                name = self.element.GetObject().GetType().GetId()
+            return _('Adding item to %s %s') %(name, self.key)            
+            
 
 
 

@@ -11,10 +11,14 @@ class CAddTwElementCmd(CBaseCommand):
         
     def do (self):
         self.project.AddNode(self.node, self.parent)
-        if self.description == None:
-            self.description = _('Adding %s to project') %(self.node.GetObject().GetName())
+        #if self.description == None:
+            #self.description = _('Adding %s to project') %(self.node.GetObject().GetName())
 
     def undo(self):
         self.project.RemoveNode(self.node)
 
-     
+    def getDescription(self):
+        if self.description != None:
+            return self.description
+        else:
+            return _('Adding %s to project') %(self.node.GetObject().GetName())

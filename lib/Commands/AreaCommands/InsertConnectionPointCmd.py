@@ -23,8 +23,8 @@ class CInsertConnectionPointCmd(CBaseCommand):
                 self.enabled = False
             else:
                 self.old_len = len(self.connection.points)
-                if self.description == None:
-                    self.description = _('Inserting point into %s connection ') %(self.connection.GetObject().GetType().GetId())
+                #if self.description == None:
+                    #self.description = _('Inserting point into %s connection ') %(self.connection.GetObject().GetType().GetId())
         else:
             self.enabled = False    
   
@@ -35,3 +35,11 @@ class CInsertConnectionPointCmd(CBaseCommand):
         else: 
             pass
   
+    def getDescription(self):
+        if self.description != None:
+            return self.description
+        else:
+            return _('Inserting point into %s connection ') %(self.connection.GetObject().GetType().GetId())
+            
+            
+            

@@ -37,8 +37,8 @@ class CPasteCmd(CBaseCommand):
                 self.pasted.append(el)
 
 
-            if self.description == None:
-                self.description = _('Pasting selection')
+            #if self.description == None:
+                #self.description = _('Pasting selection')
         else:
             self.enabled = False
 
@@ -55,5 +55,10 @@ class CPasteCmd(CBaseCommand):
             self.diagram.AddElement(el)
         
         
-        
-        
+    def getDescription(self):
+        if self.description != None:
+            return self.description
+        else:
+            return _('Pasting selection')
+            
+     

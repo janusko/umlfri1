@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from lib.Commands import CBaseCommand
 from lib.Drawing import CElement, CConnection
 
@@ -19,15 +18,15 @@ class CMoveSelectionCmd(CBaseCommand):
         self.selection = set(self.selection)    
         self.diagram.MoveSelection(self.delta, self.canvas)
                 
-        if self.description == None:
-            if len(self.selection) == 1:
-                for el in self.diagram.GetSelectedElements():
-                    if isinstance(el , CElement):
-                        self.description = _('Moving %s on %s') %(el.GetObject().GetName(), self.diagram.GetName())
-                    else:
-                        self.description = _('Moving %s label on %s') %(el.GetObject().GetType().GetId(), self.diagram.GetName())
-            else:
-                self.description = _('Moving selection on %s') %(self.diagram.GetName())
+        #if self.description == None:
+            #if len(self.selection) == 1:
+                #for el in self.diagram.GetSelectedElements():
+                    #if isinstance(el , CElement):
+                        #self.description = _('Moving %s on %s') %(el.GetObject().GetName(), self.diagram.GetName())
+                    #else:
+                        #self.description = _('Moving %s label on %s') %(el.GetObject().GetType().GetId(), self.diagram.GetName())
+            #else:
+                #self.description = _('Moving selection on %s') %(self.diagram.GetName())
                 
 
     def undo(self):
@@ -51,4 +50,16 @@ class CMoveSelectionCmd(CBaseCommand):
         for s in oldSelection:
             self.diagram.AddToSelection(s)
 
+    def getDescription(self):
+        if self.description != None:
+            return self.description
+        else:
+            if len(self.selection) == 1:
+                for el in self.selection:
+                    if isinstance(el , CElement):
+                        return _('Moving %s on %s') %(el.GetObject().GetName(), self.diagram.GetName())
+                    else:
+                        return _('Moving %s label on %s') %(el.GetObject().GetType().GetId(), self.diagram.GetName())
+            else:
+                return _('Moving selection on %s') %(self.diagram.GetName())            
 

@@ -21,17 +21,17 @@ class CElementDeleteItemCmd(CBaseCommand):
             self.myIndex = self.attList.index(self.itemToDelete)
             self.attList.remove(self.itemToDelete)
                        
-            if self.description == None:
-                if isinstance(self.element, CElement):
-                    name = self.element.GetObject().GetName()
-                else:
-                    name = self.element.GetObject().GetType().GetId()
+            #if self.description == None:
+                #if isinstance(self.element, CElement):
+                    #name = self.element.GetObject().GetName()
+                #else:
+                    #name = self.element.GetObject().GetType().GetId()
                 
-                if '.' in self.myKey:
-                    itemName = self.myKey.rsplit('.',1)[1][:-1]
-                else:
-                    itemName = self.myKey[:-1]
-                self.description = _('Deleting %i. %s from %s') %(self.myIndex, itemName, name)
+                #if '.' in self.myKey:
+                    #itemName = self.myKey.rsplit('.',1)[1][:-1]
+                #else:
+                    #itemName = self.myKey[:-1]
+                ##self.description = _('Deleting %i. %s from %s') %(self.myIndex, itemName, name)
                 
            
     def undo(self):
@@ -41,3 +41,17 @@ class CElementDeleteItemCmd(CBaseCommand):
     def redo(self):
         self.attList.remove(self.itemToDelete)
 
+    def getDescription(self):
+        if self.description != None:
+            return self.description
+        else:
+            if isinstance(self.element, CElement):
+                name = self.element.GetObject().GetName()
+            else:
+                name = self.element.GetObject().GetType().GetId()
+            
+            if '.' in self.myKey:
+                itemName = self.myKey.rsplit('.',1)[1][:-1]
+            else:
+                itemName = self.myKey[:-1]
+            return _('Deleting %i. %s from %s') %(self.myIndex, itemName, name)            

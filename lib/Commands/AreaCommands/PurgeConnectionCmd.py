@@ -22,8 +22,8 @@ class CPurgeConnectionCmd(CBaseCommand):
         if self.connection.GetObject() in self.destination.connections:
             self.destination.RemoveConnection(self.connection.GetObject())
            
-        if self.description == None:
-            self.description = _('Deleting %s connection from project') %(self.connection.GetObject().GetType().GetId())
+        #if self.description == None:
+            #self.description = _('Deleting %s connection from project') %(self.connection.GetObject().GetType().GetId())
 
         
     def undo(self):
@@ -33,3 +33,8 @@ class CPurgeConnectionCmd(CBaseCommand):
         if self.connection not in self.diagram.connections:
             self.diagram.AddConnection(self.connection)
            
+    def getDescription(self):
+        if self.description != None:
+            return self.description
+        else:
+            return _('Deleting %s connection from project') %(self.connection.GetObject().GetType().GetId())
