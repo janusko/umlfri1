@@ -29,20 +29,20 @@ class CZOrderCmd(CBaseCommand):
         else:
             self.enabled = False
             
-        if self.description == None:
-            if (self.action == 'SendBack'):
-                print_action = 'Sending selection back'
+        #if self.description == None:
+            #if (self.action == 'SendBack'):
+                #print_action = 'Sending selection back'
             
-            elif (self.action == 'BringForward'):
-                print_action =  'Bringing selection back'
+            #elif (self.action == 'BringForward'):
+                #print_action =  'Bringing selection back'
             
-            elif (self.action == 'ToBottom'):
-                print_action = 'Sending selection to bottom' 
+            #elif (self.action == 'ToBottom'):
+                #print_action = 'Sending selection to bottom' 
             
-            elif (self.action == 'ToTop'):
-                print_action = 'Bringing selection to top'            
+            #elif (self.action == 'ToTop'):
+                #print_action = 'Bringing selection to top'            
                 
-            self.description = _('%s on %s') %(print_action, self.diagram.GetName())
+            #self.description = _('%s on %s') %(print_action, self.diagram.GetName())
 
 
     def undo(self):
@@ -73,6 +73,21 @@ class CZOrderCmd(CBaseCommand):
             self.diagram.AddToSelection(element)
 
 
-    def redo(self):
-        self.do()
-        
+    def getDescription(self):
+        if self.description != None:
+            return self.description
+        else:
+            if (self.action == 'SendBack'):
+                print_action = 'Sending selection back'
+            
+            elif (self.action == 'BringForward'):
+                print_action =  'Bringing selection back'
+            
+            elif (self.action == 'ToBottom'):
+                print_action = 'Sending selection to bottom' 
+            
+            elif (self.action == 'ToTop'):
+                print_action = 'Bringing selection to top' 
+                
+            return _('%s on %s') %(print_action, self.diagram.GetName())
+            

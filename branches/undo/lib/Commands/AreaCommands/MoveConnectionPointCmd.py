@@ -15,8 +15,8 @@ class CMoveConnectionPointCmd(CBaseCommand):
         self.old_len = len(self.connection.points)
         self.connection.MovePoint(self.canvas, self.point, self.index)
         
-        if self.description == None:
-            self.description = _('Moving %s connection point') %(self.connection.GetObject().GetType().GetId())
+        #if self.description == None:
+            #self.description = _('Moving %s connection point') %(self.connection.GetObject().GetType().GetId())
     
     def undo(self):
         if self.old_len > len(self.connection.points) :
@@ -32,4 +32,9 @@ class CMoveConnectionPointCmd(CBaseCommand):
             self.connection.RemovePoint(self.canvas, self.index)  
         else:
             self.connection.MovePoint(self.canvas, self.point, self.index)
-        
+
+    def getDescription(self):
+        if self.description != None:
+            return self.description
+        else:
+            return _('Moving %s connection point') %(self.connection.GetObject().GetType().GetId())

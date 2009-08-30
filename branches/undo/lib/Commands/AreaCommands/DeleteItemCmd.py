@@ -22,15 +22,15 @@ class CDeleteItemCmd(CBaseCommand):
             if self.item in self.diagram.elements: 
                 self.diagram.DeleteItem(self.item)
             
-            if self.description == None:
-                self.description = _('Deleting %s from %s') %(self.item.GetObject().GetName(), self.diagram.GetName())
+            #if self.description == None:
+                #self.description = _('Deleting %s from %s') %(self.item.GetObject().GetName(), self.diagram.GetName())
             
         elif isinstance(self.item , CConnection):
             if self.item in self.diagram.connections: 
                 self.diagram.DeleteItem(self.item)
                 
-            if self.description == None:
-                self.description = _('Deleting %s connection from "%s" diagram') %(self.item.GetObject().GetType().GetId(), self.diagram.GetName())
+            #if self.description == None:
+                #self.description = _('Deleting %s connection from "%s" diagram') %(self.item.GetObject().GetType().GetId(), self.diagram.GetName())
     
     def undo(self):
         if isinstance(self.item , CElement):
@@ -45,3 +45,16 @@ class CDeleteItemCmd(CBaseCommand):
             if self.item not in self.diagram.connections: 
                 self.diagram.AddConnection(self.item )
 
+    def getDescription(self):
+        if self.description != None:
+            return self.description
+        else:
+            if isinstance(self.item , CElement):
+                return _('Deleting %s from %s') %(self.item.GetObject().GetName(), self.diagram.GetName())
+            elif isinstance(self.item , CConnection):
+                return _('Deleting %s connection from "%s" diagram') %(self.item.GetObject().GetType().GetId(), self.diagram.GetName())
+   
+                
+            
+            
+            

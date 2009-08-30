@@ -12,10 +12,14 @@ class CAddDiagramCmd(CBaseCommand):
     def do (self):
         self.diagram.SetPath(self.path)
         self.node.AddDiagram(self.diagram)
-        if self.description == None:
-            self.description = _('Adding %s to project') %(self.diagram.GetName())
+        #if self.description == None:
+            #self.description = _('Adding %s to project') %(self.diagram.GetName())
 
     def undo(self):
         self.node.RemoveDiagram(self.diagram)
 
-     
+    def getDescription(self):
+        if self.description != None:
+            return self.description
+        else:
+            return _('Adding %s to project') %(self.diagram.GetName())

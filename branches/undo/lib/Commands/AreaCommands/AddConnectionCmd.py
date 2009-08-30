@@ -15,8 +15,8 @@ class CAddConnectionCmd(CBaseCommand):
 
     def do (self):
         self.connection = CConnection(self.diagram, self.connectionObject, self.source, self.destination, self.points)
-        if self.description == None:
-            self.description = _('Adding %s connection to %s') %(self.connection.GetObject().GetType().GetId(), self.diagram.GetName())
+        #if self.description == None:
+            #self.description = _('Adding %s connection to %s') %(self.connection.GetObject().GetType().GetId(), self.diagram.GetName())
 
 
     def undo(self):
@@ -31,4 +31,8 @@ class CAddConnectionCmd(CBaseCommand):
         if self.connection not in self.diagram.connections: 
             self.diagram.AddConnection(self.connection)
             
-    
+    def getDescription(self):
+        if self.description != None:
+            return self.description
+        else:
+            return _('Adding %s connection to %s') %(self.connection.GetObject().GetType().GetId(), self.diagram.GetName()) 

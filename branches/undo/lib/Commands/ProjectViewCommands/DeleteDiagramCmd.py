@@ -11,8 +11,14 @@ class CDeleteDiagramCmd(CBaseCommand):
     def do (self):
         self.node.RemoveDiagram(self.diagram)
 
-        if self.description == None:
-            self.description = _('Deleting %s diagram from project') %(self.diagram.GetName())
+        #if self.description == None:
+            #self.description = _('Deleting %s diagram from project') %(self.diagram.GetName())
 
     def undo(self):
         self.node.AddDiagram(self.diagram)
+
+    def getDescription(self):
+        if self.description != None:
+            return self.description
+        else:
+            return _('Deleting %s diagram from project') %(self.diagram.GetName())

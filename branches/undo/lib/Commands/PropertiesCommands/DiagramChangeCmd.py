@@ -14,13 +14,13 @@ class CDiagramChangeCmd(CBaseCommand):
             self.enabled = False
         else:        
             self.diagram.SetName(self.value)
-            if self.description == None:
-                if self.old_value == '':
-                    self.description = _('Setting diagram name to "%s"') %(self.value)
-                elif self.value == '':
-                    self.description = _('Clearing the old "%s" diagram name') %(self.old_value)                
-                else:
-                    self.description = _('Changing diagram name from "%s" to "%s"') %(self.old_value, self.value)
+            #if self.description == None:
+                #if self.old_value == '':
+                    #self.description = _('Setting diagram name to "%s"') %(self.value)
+                #elif self.value == '':
+                    #self.description = _('Clearing the old "%s" diagram name') %(self.old_value)                
+                #else:
+                    #self.description = _('Changing diagram name from "%s" to "%s"') %(self.old_value, self.value)
            
     def undo(self):
 
@@ -28,4 +28,15 @@ class CDiagramChangeCmd(CBaseCommand):
         
     def redo(self):
         self.diagram.SetName(self.value)
- 
+        
+    def getDescription(self):
+        if self.description != None:
+            return self.description
+        else:
+            if self.old_value == '':
+                return _('Setting diagram name to "%s"') %(self.value)
+            elif self.value == '':
+                return _('Clearing the old "%s" diagram name') %(self.old_value)                
+            else:
+                return _('Changing diagram name from "%s" to "%s"') %(self.old_value, self.value)
+

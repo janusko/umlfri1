@@ -26,8 +26,8 @@ class CCutCmd(CBaseCommand):
                         self.delCon.append(con)                 
                 self.diagram.DeleteElement(el)
                 el.GetObject().RemoveAppears(self.diagram)
-            if self.description == None:
-                self.description = _('Cutting selection')
+            #if self.description == None:
+                #self.description = _('Cutting selection')
         else:
             self.enabled = False
 
@@ -40,7 +40,9 @@ class CCutCmd(CBaseCommand):
                 self.diagram.AddConnection(con)            
         self.clipboard.content = self.old_content       
 
-    def redo(self):
-        self.do()
-        
+    def getDescription(self):
+        if self.description != None:
+            return self.description
+        else:
+            return _('Cutting selection')
         

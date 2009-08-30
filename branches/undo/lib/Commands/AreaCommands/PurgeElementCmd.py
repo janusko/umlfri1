@@ -31,20 +31,20 @@ class CPurgeElementCmd(CBaseCommand):
         
         self.removedAppears = []
         for diagram in self.myAppears:
-            if diagram.HasElement(self.element): 
+            if diagram().HasElement(self.element): 
                 appearedConnections = []
-                for con in diagram.GetConnections():
+                for con in diagram().GetConnections():
                     if (con.GetSource() is self.element) or (con.GetDestination() is self.element):
                         appearedConnections.append(con)
         
                 self.deletedConnections.append(appearedConnections)
                 self.removedAppears.append(diagram)
                 
-            diagram.DeleteObject(self.element.GetObject())
+            diagram().DeleteObject(self.element.GetObject())
         self.project.RemoveNode(self.node)            
         
-        if self.description == None:
-            self.description = _('Deleting "%s" from project') %(self.element.GetObject().GetName())
+        #if self.description == None:
+            #self.description = _('Deleting "%s" from project') %(self.element.GetObject().GetName())
 
     def undo(self):
         for con,s,d in self.ctd:
@@ -53,10 +53,18 @@ class CPurgeElementCmd(CBaseCommand):
         self.project.AddNode(self.node, self.parent)
         i = 0
         for diagram in self.removedAppears:
-            if diagram.HasElement(self.element) == None:
-                diagram.AddElement(self.element)
+            if diagram().HasElement(self.element) == None:
+                diagram().AddElement(self.element)
                 for con in self.deletedConnections[i]:
-                    diagram.AddConnection(con)
+                    diagram().AddConnection(con)
             i =+ 1
        
-   
+    def getDescription(self):
+        if self.description != None:
+            return self.description
+        else:
+            return _('Deleting "%s" from project') %(self.element.GetObject().GetName())
+            
+            
+            
+            

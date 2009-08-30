@@ -20,8 +20,8 @@ class CCopyCmd(CBaseCommand):
             self.old_content = self.clipboard.content
             self.clipboard.content = self.content
            
-            if self.description == None:
-                self.description = _('Copying selection')
+            #if self.description == None:
+                #self.description = _('Copying selection')
         else:
             self.enabled = False
 
@@ -31,4 +31,9 @@ class CCopyCmd(CBaseCommand):
     def redo(self):
         self.clipboard.content = self.content
         
-        
+    def getDescription(self):
+        if self.description != None:
+            return self.description
+        else:
+            return _('Copying selection')
+            

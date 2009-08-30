@@ -7,7 +7,7 @@ class CDeleteTwElementCmd(CBaseCommand):
         CBaseCommand.__init__(self, description)
         self.node = node
         self.project = project
-        self.parent = self.node.GetParent()
+        
         
 
     def removeFromArea(self, node):
@@ -33,6 +33,7 @@ class CDeleteTwElementCmd(CBaseCommand):
 
 
     def do (self):
+        self.parent = self.node.GetParent()
         self.deletedDiagramElements = []
         self.deletedDiagramConnections = []
         self.deletedConnections = []
@@ -40,8 +41,8 @@ class CDeleteTwElementCmd(CBaseCommand):
         self.removeFromArea(self.node)
         self.project.RemoveNode(self.node)            
             
-        if self.description == None:
-            self.description = _('Removing %s from project') %(self.node.GetObject().GetName())
+        #if self.description == None:
+            #self.description = _('Removing %s from project') %(self.node.GetObject().GetName())
 
         
     def undo(self):
@@ -58,3 +59,9 @@ class CDeleteTwElementCmd(CBaseCommand):
             if con not in d.connections: 
                 d.AddConnection(con)       
 
+    def getDescription(self):
+        if self.description != None:
+            return self.description
+        else:
+            return _('Removing %s from project') %(self.node.GetObject().GetName())
+            
