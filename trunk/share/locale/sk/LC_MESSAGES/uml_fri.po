@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: UML .FRI 1.0-beta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-20 22:06+0200\n"
-"PO-Revision-Date: 2009-08-20 22:08+0100\n"
+"POT-Creation-Date: 2009-08-31 19:10+0200\n"
+"PO-Revision-Date: 2009-08-31 19:11+0100\n"
 "Last-Translator: Ján Janech <janech@kios.sk>\n"
 "Language-Team: uml_fri <uml@kst.fri.utc.sk>\n"
 "MIME-Version: 1.0\n"
@@ -85,6 +85,12 @@ msgstr "Spojenie"
 
 msgid "Connections"
 msgstr "Spojenia"
+
+msgid "Copy as image"
+msgstr "Kopírovať ako obrázok"
+
+msgid "Copy without background (transparent)"
+msgstr "Kopírovať bez pozadia (priesvitné)"
 
 msgid "Create New Project"
 msgstr "Vytvoriť nový projekt"
@@ -209,6 +215,9 @@ msgstr "Verzia GTK+:"
 msgid "Gui"
 msgstr "Gui"
 
+msgid "Homepage"
+msgstr "Domovská stránka"
+
 msgid "Homepage:"
 msgstr "Domovská stránka:"
 
@@ -305,15 +314,6 @@ msgstr "Farba bodu"
 msgid "Points size"
 msgstr "Veľkosť bodu"
 
-msgid "Portable Document Format"
-msgstr "Formát prenositeľných dokumentov (PDF)"
-
-msgid "Portable Network Graphics"
-msgstr "Formát prenositeľných obrázkov (PNG)"
-
-msgid "PostScript"
-msgstr "PostScript"
-
 msgid "Preferences"
 msgstr "Nastavenia"
 
@@ -355,9 +355,6 @@ msgstr "S_VG"
 
 msgid "Save Project As"
 msgstr "Uložiť projekt ako"
-
-msgid "Scalable Vector Graphics"
-msgstr "Scalable Vector Graphics (SVG)"
 
 msgid "Select Addon"
 msgstr "Vyberte rozšírenie"
@@ -553,6 +550,9 @@ msgstr "Nesprávny element:"
 
 msgid "Z-Order"
 msgstr "Poradie"
+
+msgid "Zoom:"
+msgstr "Zväčšenie:"
 
 msgid "_Add diagram"
 msgstr "Pridať _diagram"
