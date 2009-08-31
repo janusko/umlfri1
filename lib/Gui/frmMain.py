@@ -29,7 +29,7 @@ class CfrmMain(CWindow):
         'mnuOpen', 'mnuSave', 'mnuSaveAs', 'mnuPrint', 'mnuProperties', 'mnuQuit',
         #############
         'mItemEdit',
-        'mnuCut', 'mnuCopy', 'mnuPaste', 'mnuDelete',
+        'mnuCut', 'mnuCopy', 'mnuCopyAsImage', 'mnuPaste', 'mnuDelete',
         #############
         'mItemProject',
         #############
@@ -131,6 +131,7 @@ class CfrmMain(CWindow):
         self.cmdZoomOut.set_sensitive(diagram)
         self.mnuSave.set_sensitive(project)
         self.mnuCopy.set_sensitive(element)
+        self.mnuCopyAsImage.set_sensitive(element)
         self.mnuCut.set_sensitive(element)
         self.mnuPaste.set_sensitive(diagram and not self.application.GetClipboard().IsEmpty())
         self.mnuDelete.set_sensitive(element)
@@ -377,9 +378,16 @@ class CfrmMain(CWindow):
     @event("mnuCopy","activate")
     def on_mnuCopy_click(self, widget):
         if self.picDrawingArea.HasFocus():
-            gtk.clipboard_get(gtk.gdk.SELECTION_CLIPBOARD).set_image(self.picDrawingArea.GetSelectionPixbuf())
             self.picDrawingArea.ActionCopy()
             self.UpdateMenuSensitivity()
+ 
+    @event("mnuCopyAsImage","activate")
+    def on_mnuCopyAsImage_click(self, widget):
+        if self.picDrawingArea.HasFocus():
+            zoom, bg = self.application.GetWindow('frmCopyImage').Show()
+            if zoom is None:
+                return
+            gtk.clipboard_get(gtk.gdk.SELECTION_CLIPBOARD).set_image(self.picDrawingArea.GetSelectionPixbuf(zoom, bg))
     
     @event("cmdPaste", "clicked")
     @event("mnuPaste","activate")

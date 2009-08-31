@@ -83,7 +83,7 @@ class CRectangle(CSimpleContainer):
         pos = context.GetPos()
         size = context.ComputeSize(self)
         
-        if sides == corners == (None, None, None, None):
+        if all(side is None for side in sides) and all(corner is None for corner in corners):
             canvas.DrawRectangle(pos, size, border, fill)
         else:
             cornerPath = []
