@@ -5,8 +5,10 @@ from common import CWidget, event
 
 from lib.Drawing.Canvas.GtkPlus import PixmapFromPath
 
-from lib.config import config
+from lib.Distconfig import IMAGES_PATH
 from lib.consts import ARROW_IMAGE
+
+import os.path
 
 class CtbToolBox(CWidget):
     name = 'tbToolBox'
@@ -24,7 +26,7 @@ class CtbToolBox(CWidget):
         
         self.tooltips = gtk.Tooltips()
         
-        pixbuf = PixmapFromPath(None, config['/Paths/Images']+ARROW_IMAGE)
+        pixbuf = PixmapFromPath(None, os.path.join(IMAGES_PATH, ARROW_IMAGE))
         newIconWidget = gtk.Image()
         newIconWidget.set_from_pixbuf(pixbuf)
         newIconWidget.show()

@@ -13,7 +13,7 @@ from picDrawingArea import CpicDrawingArea
 from nbProperties import CnbProperties
 from tabs import CTabs
 from tabStartPage import CtabStartPage
-from lib.config import config
+from lib.Distconfig import IMAGES_PATH
 from lib.Gui.diagramPrint import CDiagramPrint
 from lib.Exceptions import UserException
 
@@ -62,7 +62,7 @@ class CfrmMain(CWindow):
 
     def __init__(self, app, wTree):
         CWindow.__init__(self, app, wTree)
-        self.form.set_icon_from_file(os.path.join(config['/Paths/Images'], lib.consts.MAIN_ICON))
+        self.form.set_icon_from_file(os.path.join(IMAGES_PATH, lib.consts.MAIN_ICON))
         self.diagramPrint = CDiagramPrint()
         self.form.maximize()
         self.__sensitivity_project = None

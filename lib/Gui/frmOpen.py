@@ -2,7 +2,7 @@ from lib.Depend.gtk2 import gtk
 
 import common
 import lib.consts
-from lib.config import config
+from lib.Distconfig import TEMPLATES_PATH, IMAGES_PATH, USERDIR_PATH
 import os
 import os.path
 import gobject
@@ -53,7 +53,7 @@ class CfrmOpen(common.CWindow):
     
     def __GetIcon(self, filename):
         if not os.path.isfile(filename):
-            return gtk.gdk.pixbuf_new_from_file(config['/Paths/Images']+lib.consts.DEFAULT_TEMPLATE_ICON)
+            return gtk.gdk.pixbuf_new_from_file(os.path.join(IMAGES_PATH, lib.consts.DEFAULT_TEMPLATE_ICON))
         f = os.tempnam()
         ext = filename.split('.')
         ext.reverse()
@@ -70,7 +70,7 @@ class CfrmOpen(common.CWindow):
             except zipfile.BadZipfile:
                 pass
 
-        return gtk.gdk.pixbuf_new_from_file(config['/Paths/Images']+lib.consts.DEFAULT_TEMPLATE_ICON)
+        return gtk.gdk.pixbuf_new_from_file(os.path.join(IMAGES_PATH, lib.consts.DEFAULT_TEMPLATE_ICON))
     
     def __ReloadOpenRecentList(self):
         self.listStore.clear()
@@ -97,7 +97,7 @@ class CfrmOpen(common.CWindow):
         
         self.ivOpenModel.clear()
         templates = []
-        for dirname in (config['/Paths/Templates'], config['/Paths/UserTemplates']):
+        for dirname in (TEMPLATES_PATH, os.path.join(USERDIR_PATH, 'templates')):
             if os.path.exists(dirname):
                 templates.extend((dirname, filename) for filename in os.listdir(dirname))
         for dirname, filename in templates:

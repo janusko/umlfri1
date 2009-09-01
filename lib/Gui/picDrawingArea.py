@@ -3,6 +3,7 @@ from lib.Depend.gtk2 import gobject
 
 import lib.consts
 from lib.config import config
+from lib.Distconfig import IMAGES_PATH
 
 from common import CWidget, event
 from lib.Drawing import CDiagram, CElement, CConnection, CConLabelInfo
@@ -12,12 +13,12 @@ from lib.Connections import CConnectionObject
 from lib.Exceptions.UserException import *
 from lib.Drawing.Canvas import CGtkCanvas, CSvgCanvas, CCairoCanvas, CExportCanvas
 from lib.Drawing import Element
+
 import thread
+import os.path
 
 
 targets = [('document/uml', 0, gtk.TARGET_SAME_WIDGET)]
-
-PAGE_SIZE=(config["/Page/Width"],config["/Page/Height"])
 
 class Record(object): pass
 
@@ -81,7 +82,12 @@ class CpicDrawingArea(CWidget):
         self.AdjustScrollBars()
         self.cursors = {None: None}
         for name, img in (('grab', lib.consts.GRAB_CURSOR), ('grabbing', lib.consts.GRABBING_CURSOR)):
-            self.cursors[name] = gtk.gdk.Cursor(gtk.gdk.display_get_default(), gtk.gdk.pixbuf_new_from_file(config['/Paths/Images']+img), 0, 0)
+            self.cursors[name] = gtk.gdk.Cursor(
+                gtk.gdk.display_get_default(),
+                gtk.gdk.pixbuf_new_from_file(os.path.join(IMAGES_PATH, img)),
+                0,
+                0
+            )
         self.__invalidated = False
 
     def __SetCursor(self, cursor = None):

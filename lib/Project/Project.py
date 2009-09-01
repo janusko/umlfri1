@@ -14,11 +14,11 @@ from lib.Connections.Object import CConnectionObject
 from lib.Drawing import CDiagram
 import os.path
 from lib.consts import UMLPROJECT_NAMESPACE, PROJECT_EXTENSION, PROJECT_CLEARXML_EXTENSION
-from lib.config import config
+from lib.Distconfig import SCHEMA_PATH
 
 #if lxml.etree is imported successfully, we use xml validation with xsd schema
 if HAVE_LXML:
-    xmlschema_doc = etree.parse(os.path.join(config['/Paths/Schema'], "umlproject.xsd"))
+    xmlschema_doc = etree.parse(os.path.join(SCHEMA_PATH, "umlproject.xsd"))
     xmlschema = etree.XMLSchema(xmlschema_doc)
 
 
