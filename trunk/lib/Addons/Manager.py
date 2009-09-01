@@ -91,6 +91,9 @@ class CAddonManager(object):
         return tmp
     
     def __LoadAddon(self, storage, uninstallable):
+        if storage is None:
+            return None
+        
         if not storage.exists(ADDON_PATH):
             return None
         

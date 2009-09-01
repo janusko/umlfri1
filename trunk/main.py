@@ -19,7 +19,7 @@ from lib.Addons import CAddonManager
 
 import lib.Gui
 from lib.Gui import CBus
-from lib.Gui.dialogs import CExceptionDialog
+from lib.Gui.dialogs import CExceptionDialog, CErrorDialog
 
 from lib.config import config
 from lib.Distconfig import LOCALES_PATH, GUI_PATH
@@ -67,6 +67,21 @@ class Application(CApplication):
         if self.canopen:
             self.GetWindow('frmMain').LoadProject(value, True)
             self.canopen = False
+    
+    @argument(None, "--install-addon", True)
+    def DoInstallAddon(self, value):
+        "Install addon for UML .FRI"
+        if self.canopen:
+            self.canopen = False
+            addon = self.addonManager.LoadAddon(value)
+            
+            if addon is None:
+                CErrorDialog(None, _("Addon could not be installed")).run()
+                return
+            
+            if self.GetWindow("frmInstallAddon").ShowDialog(self.GetWindow("frmMain"), addon):
+                self.addonManager.InstallAddon(addon)
+                return
     
     @argument()
     def DoArguments(self, *files):
