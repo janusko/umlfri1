@@ -14,10 +14,11 @@ if HAVE_LXML:
     xmlschema = etree.XMLSchema(xmlschema_doc)
 
 class CMetamodelAddonComponent(object):
-    def __init__(self, path):
+    def __init__(self, path, templates):
         self.__path = path
         self.__addon = None
         self.__metamodel = None
+        self.__templates = templates
     
     def _SetAddon(self, addon):
         self.__addon = addon
@@ -42,6 +43,10 @@ class CMetamodelAddonComponent(object):
                 diagName = element.get('value')
                 self.__metamodel.AddDiagram(diagName)
         return self.__metamodel
+    
+    def GetTemplates(self):
+        for name, icon, path in self.__templates:
+            yield name, icon, path
     
     def GetType(self):
         return 'metamodel'

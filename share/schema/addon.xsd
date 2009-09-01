@@ -97,6 +97,13 @@
 										<xs:attribute name="path" use="required"/>
 									</xs:complexType>
 								</xs:element>
+								<xs:element name="Template" minOccurs="0" maxOccurs="unbounded">
+									<xs:complexType>
+										<xs:attribute name="name" type="xs:string"/>
+										<xs:attribute name="icon" type="xs:string"/>
+										<xs:attribute name="path" type="xs:string" use="required"/>
+									</xs:complexType>
+								</xs:element>
 							</xs:sequence>
 						</xs:complexType>
 					</xs:element>

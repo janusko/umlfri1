@@ -333,11 +333,17 @@ class CProject(object):
         else:
             raise ProjectError("malformed project file")
     
-    def LoadProject(self, filename, copy = False):
+    def CreateProject(self, template):
+        template.LoadInto(self)
+    
+    def LoadProject(self, filename, copy = False, storage = None):
         ListObj = {}
         ListCon = {}
         
-        if is_zipfile(filename):
+        if storage is not None:
+            self.isZippedFile = True
+            data = storage.read_file(filename)
+        elif is_zipfile(filename):
             self.isZippedFile = True
             file = ZipFile(filename,'r')
             data = file.read('content.xml')
@@ -384,7 +390,10 @@ class CProject(object):
                 addon = self.__addonManager.GetAddon(uri)
                 
                 if addon is None and self.isZippedFile and ('metamodel/addon.xml' in file.namelist()):
-                    addon = self.__addonManager.LoadAddon(os.path.join(filename, 'metamodel'))
+                    if storage is None:
+                        addon = self.__addonManager.LoadAddon(os.path.join(filename, 'metamodel'))
+                    else:
+                        addon = self.__addonManager.LoadAddon(storage.subopen('metamodel'))
                     if uri not in addon.GetUris():
                         addon = None
                     self.__addon = addon

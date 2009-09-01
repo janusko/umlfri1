@@ -19,6 +19,8 @@
     </Description>
     
     <Metamodel>
-        <Path path="." />
+        <Path path="metamodel" />
+        
+        <Template path="templates/simple.fritx" name="Empty flowchart" />
     </Metamodel>
 </AddOn>
