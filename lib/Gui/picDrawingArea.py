@@ -1,7 +1,7 @@
 from lib.Depend.gtk2 import gtk
 from lib.Depend.gtk2 import gobject
 
-import lib.consts
+from lib.consts import BUFFER_SIZE, SCALE_MIN, SCALE_MAX, SCALE_INCREASE
 from lib.config import config
 from lib.Distconfig import IMAGES_PATH
 
@@ -63,7 +63,7 @@ class CpicDrawingArea(CWidget):
         self.selSq = None
         self.pressedKeys = set()
         self.scale = 1.0
-        self.buffer_size = ((0, 0), lib.consts.BUFFER_SIZE)
+        self.buffer_size = ((0, 0), BUFFER_SIZE)
         self.picDrawingArea.realize()
         self.buffer = gtk.gdk.Pixmap(self.picDrawingArea.window, *self.buffer_size[1])
         self.Diagram = CDiagram(None,_("Start page"))
@@ -81,7 +81,7 @@ class CpicDrawingArea(CWidget):
         self.picEventBox.drag_dest_set(gtk.DEST_DEFAULT_ALL, self.TARGETS, gtk.gdk.ACTION_COPY)
         self.AdjustScrollBars()
         self.cursors = {None: None}
-        for name, img in (('grab', lib.consts.GRAB_CURSOR), ('grabbing', lib.consts.GRABBING_CURSOR)):
+        for name, img in (('grab', 'grab.png'), ('grabbing', 'grabbing.png')):
             self.cursors[name] = gtk.gdk.Cursor(
                 gtk.gdk.display_get_default(),
                 gtk.gdk.pixbuf_new_from_file(os.path.join(IMAGES_PATH, img)),
@@ -102,10 +102,10 @@ class CpicDrawingArea(CWidget):
             scale = scaleY
         else : scale = scaleX
         
-        if scale < lib.consts.SCALE_MIN:
-            scale = lib.consts.SCALE_MIN
-        elif scale > lib.consts.SCALE_MAX:
-            scale = lib.consts.SCALE_MAX
+        if scale < SCALE_MIN:
+            scale = SCALE_MIN
+        elif scale > SCALE_MAX:
+            scale = SCALE_MAX
 
         self.SetScale(scale)
         diaSizeMinX, diaSizeMinY = self.canvas.ToPhysical((diaSizeMinX, diaSizeMinY))
@@ -113,15 +113,15 @@ class CpicDrawingArea(CWidget):
         self.picVBar.set_value(diaSizeMinY)
 
     def SetScale(self, scale):
-        if (scale >= lib.consts.SCALE_MIN) and (scale <= lib.consts.SCALE_MAX):
+        if (scale >= SCALE_MIN) and (scale <= SCALE_MAX):
             self.scale = scale
             self.canvas.SetScale(self.scale)
             self.AdjustScrollBars()
             self.Paint()
 
     def IncScale(self, scale):
-        tmp_scale = (lib.consts.SCALE_INCREASE*((self.scale+0.00001)//lib.consts.SCALE_INCREASE))+scale
-        if (tmp_scale+0.00001 >= lib.consts.SCALE_MIN) and (tmp_scale-0.00001 <= lib.consts.SCALE_MAX):
+        tmp_scale = (SCALE_INCREASE*((self.scale+0.00001)//SCALE_INCREASE))+scale
+        if (tmp_scale+0.00001 >= SCALE_MIN) and (tmp_scale-0.00001 <= SCALE_MAX):
             self.scale = tmp_scale
             self.canvas.SetScale(self.scale)
             self.AdjustScrollBars()
@@ -612,10 +612,10 @@ class CpicDrawingArea(CWidget):
     def on_picEventBox_scroll_event(self, widget, event):
         if (event.state & gtk.gdk.CONTROL_MASK):
             if event.direction == gtk.gdk.SCROLL_UP:
-                self.IncScale(lib.consts.SCALE_INCREASE)
+                self.IncScale(SCALE_INCREASE)
                 return
             elif event.direction == gtk.gdk.SCROLL_DOWN:
-                self.IncScale(-lib.consts.SCALE_INCREASE)
+                self.IncScale(-SCALE_INCREASE)
                 return           
 
         if  event.state & gtk.gdk.SHIFT_MASK :

@@ -1,9 +1,6 @@
 from lib.Depend.gtk2 import gtk
 
 import common
-import lib.consts
-import os.path
-from lib.consts import ADDON_EXTENSION, PROJECT_EXTENSION
 
 class CfrmSelectAddonSource(common.CWindow):
     name = 'frmSelectAddonSource'

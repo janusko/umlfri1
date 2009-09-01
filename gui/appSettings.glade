@@ -830,9 +830,9 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkButton" id="cmdOk">
-                <property name="label">gtk-ok</property>
-                <property name="response_id">-5</property>
+              <widget class="GtkButton" id="cmdCancel">
+                <property name="label">gtk-cancel</property>
+                <property name="response_id">-6</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -846,9 +846,9 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkButton" id="cmdCancel">
-                <property name="label">gtk-cancel</property>
-                <property name="response_id">-6</property>
+              <widget class="GtkButton" id="cmdOk">
+                <property name="label">gtk-ok</property>
+                <property name="response_id">-5</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>

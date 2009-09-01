@@ -11,7 +11,9 @@ from lib.Depend.gtk2 import gobject
 
 from lib.Clipboard import CClipboard
 from lib.Gui.common import CApplication, argument
+
 import os.path
+import traceback
 
 from lib.Project import CProject
 from lib.Project import CRecentFiles
@@ -75,6 +77,8 @@ class Application(CApplication):
             self.canopen = False
             addon = self.addonManager.LoadAddon(value)
             
+            self.GetWindow('frmSplash').Hide()
+            
             if addon is None:
                 CErrorDialog(None, _("Addon could not be installed")).run()
                 return
@@ -116,12 +120,12 @@ class Application(CApplication):
         return widget
     
     def DisplayException(self, exccls, excobj, tb):
-        if issubclass(exccls, UserException) and not lib.consts.DEBUG:
+        if issubclass(exccls, UserException) and not __debug__:
             text = _('An exception has occured:')+ '\n\n<b>'+exccls.__name__ +':</b> '+ str(excobj)
             CExceptionDialog(None, text).run()
-        elif lib.consts.ERROR_TO_CONSOLE == True:
-            raise # reraise the exception
-        else: 
+        else:
+            if __debug__:
+                traceback.print_exc()
             win = self.GetWindow('frmException')
             win.SetParent(self.GetWindow('frmMain'))
             win.SetErrorLog(exccls, excobj, tb)

@@ -2,7 +2,7 @@ from __future__ import with_statement
 from lib.Depend.gtk2 import gtk
 from lib.Depend.gtk2 import pango
 import lib.Depend
-import lib.consts
+from lib.consts import MAIL, ERROR_LOG_ADDRESS, WEB
 from common import CWindow
 from lib.Distconfig import USERDIR_PATH, ROOT_PATH
 from lib.Gui.dialogs import CWarningDialog
@@ -27,7 +27,7 @@ class CfrmException(CWindow):
         self.btnReport.connect("clicked", self.OnBtnReportClicked, None)
         self.btnSend.connect("clicked", self.OnBtnSendClicked, None)
         self.chbtnIncludeProject.connect("toggled", self.OnChbtnIncludeProjectToogled, None)
-        self.lblMail.set_label("<span background='white'><b>"+ lib.consts.MAIL + "</b></span>")
+        self.lblMail.set_label("<span background='white'><b>"+ MAIL + "</b></span>")
         self.append_project = True
 
         buff = self.tviewSysInfo.get_buffer()  
@@ -130,7 +130,7 @@ class CfrmException(CWindow):
                 
                 values = {'upfile' : string_to_send}
                 data = urllib.urlencode(values)
-                req = urllib2.Request(lib.consts.ERROR_LOG_ADDRESS, data)
+                req = urllib2.Request(ERROR_LOG_ADDRESS, data)
                 response = urllib2.urlopen(req)
                
                 # if everything goes well
@@ -156,7 +156,7 @@ class CfrmException(CWindow):
 
     def OnBtnReportClicked(self, widget, event, data=None):
         from webbrowser import open_new
-        open_new(lib.consts.WEB)
+        open_new(WEB)
         self.form.run()
         self.Hide()
 

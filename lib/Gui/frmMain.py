@@ -1,7 +1,9 @@
 from lib.Depend.gtk2 import gtk
+
 from common import CWindow, event
-import common
-import lib.consts
+
+from lib.consts import SCALE_MIN, SCALE_MAX, SCALE_INCREASE, WEB
+
 import os.path
 from lib.Drawing import CElement, CDiagram
 from lib.Elements import CElementObject, CElementType
@@ -62,7 +64,7 @@ class CfrmMain(CWindow):
 
     def __init__(self, app, wTree):
         CWindow.__init__(self, app, wTree)
-        self.form.set_icon_from_file(os.path.join(IMAGES_PATH, lib.consts.MAIN_ICON))
+        self.form.set_icon_from_file(os.path.join(IMAGES_PATH, 'app_icon.png'))
         self.diagramPrint = CDiagramPrint()
         self.form.maximize()
         self.__sensitivity_project = None
@@ -102,8 +104,8 @@ class CfrmMain(CWindow):
         if not self.application.GetClipboard().IsEmpty():
              changes += 1
 
-        zoomin = diagram and (self.picDrawingArea.GetScale()+0.00001) < lib.consts.SCALE_MAX
-        zoomout = diagram and (self.picDrawingArea.GetScale()-0.00001) > lib.consts.SCALE_MIN
+        zoomin = diagram and (self.picDrawingArea.GetScale()+0.00001) < SCALE_MAX
+        zoomout = diagram and (self.picDrawingArea.GetScale()-0.00001) > SCALE_MIN
        
         changes += zoomin != self.__sensitivity_project[3]
         changes += zoomout != self.__sensitivity_project[4]
@@ -149,7 +151,7 @@ class CfrmMain(CWindow):
         try:
             self.application.GetProject().LoadProject(filename, copy)
         except Exception:
-            if lib.consts.DEBUG:
+            if __debug__:
                 raise
             self.application.GetRecentFiles().RemoveFile(filename)
             self.application.ProjectDelete()
@@ -234,7 +236,7 @@ class CfrmMain(CWindow):
     @event("mnuWebsite", "activate")
     def on_mnuWebsite_activate(self, mnu):
         from webbrowser import open_new
-        open_new(lib.consts.WEB)
+        open_new(WEB)
 
     @event("mnuError", "activate")
     def on_mnuError_activate(self, mnu):
@@ -357,13 +359,13 @@ class CfrmMain(CWindow):
     @event("cmdZoomOut", "clicked")
     @event("mnuZoomOut","activate")
     def on_mnuZoomOut_click(self, widget):
-        self.picDrawingArea.IncScale(-lib.consts.SCALE_INCREASE)
+        self.picDrawingArea.IncScale(-SCALE_INCREASE)
         self.UpdateMenuSensitivity()
     
     @event("cmdZoomIn", "clicked")
     @event("mnuZoomIn","activate")
     def on_mnuZoomIn_click(self, widget):
-        self.picDrawingArea.IncScale(lib.consts.SCALE_INCREASE)
+        self.picDrawingArea.IncScale(SCALE_INCREASE)
         self.UpdateMenuSensitivity()
 
     @event("cmdCut", "clicked")
