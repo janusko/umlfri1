@@ -1,7 +1,9 @@
 from lib.Depend.gtk2 import gtk
 
 import common
-import lib.consts
+
+from lib.consts import PROJECT_EXTENSION, PROJECT_CLEARXML_EXTENSION, PROJECT_TPL_EXTENSION
+
 from lib.Distconfig import TEMPLATES_PATH, IMAGES_PATH, USERDIR_PATH
 import os
 import os.path
@@ -27,17 +29,17 @@ class CfrmOpen(common.CWindow):
         
         filter = gtk.FileFilter()
         filter.set_name(_("UML .FRI Projects"))
-        filter.add_pattern('*'+lib.consts.PROJECT_EXTENSION)
+        filter.add_pattern('*'+PROJECT_EXTENSION)
         self.fwOpenExisting.add_filter(filter)
         
         filter = gtk.FileFilter()
         filter.set_name(_("UML .FRI Clear XML Projects"))
-        filter.add_pattern('*'+lib.consts.PROJECT_CLEARXML_EXTENSION)
+        filter.add_pattern('*'+PROJECT_CLEARXML_EXTENSION)
         self.fwOpenExisting.add_filter(filter)
         
         filter = gtk.FileFilter()
         filter.set_name(_("UML .FRI Project templates"))
-        filter.add_pattern('*'+lib.consts.PROJECT_TPL_EXTENSION)
+        filter.add_pattern('*'+PROJECT_TPL_EXTENSION)
         self.fwOpenExisting.add_filter(filter)
         
         filter = gtk.FileFilter()
@@ -53,12 +55,12 @@ class CfrmOpen(common.CWindow):
     
     def __GetIcon(self, filename):
         if not os.path.isfile(filename):
-            return gtk.gdk.pixbuf_new_from_file(os.path.join(IMAGES_PATH, lib.consts.DEFAULT_TEMPLATE_ICON))
+            return gtk.gdk.pixbuf_new_from_file(os.path.join(IMAGES_PATH, 'default_icon.png'))
         f = os.tempnam()
         ext = filename.split('.')
         ext.reverse()
         
-        if (("."+ext[0]) != lib.consts.PROJECT_CLEARXML_EXTENSION):
+        if (("."+ext[0]) != PROJECT_CLEARXML_EXTENSION):
             try:
                 z = zipfile.ZipFile(filename)
                 for i in z.namelist():
@@ -70,7 +72,7 @@ class CfrmOpen(common.CWindow):
             except zipfile.BadZipfile:
                 pass
 
-        return gtk.gdk.pixbuf_new_from_file(os.path.join(IMAGES_PATH, lib.consts.DEFAULT_TEMPLATE_ICON))
+        return gtk.gdk.pixbuf_new_from_file(os.path.join(IMAGES_PATH, 'default_icon.png'))
     
     def __ReloadOpenRecentList(self):
         self.listStore.clear()
@@ -101,9 +103,9 @@ class CfrmOpen(common.CWindow):
             if os.path.exists(dirname):
                 templates.extend((dirname, filename) for filename in os.listdir(dirname))
         for dirname, filename in templates:
-            if filename.endswith(lib.consts.PROJECT_TPL_EXTENSION):
+            if filename.endswith(PROJECT_TPL_EXTENSION):
                 iter = self.ivOpenModel.append()
-                self.ivOpenModel.set(iter, 0, filename[:-len(lib.consts.PROJECT_TPL_EXTENSION)],
+                self.ivOpenModel.set(iter, 0, filename[:-len(PROJECT_TPL_EXTENSION)],
                                            1, self.__GetIcon(os.path.join(dirname, filename)),
                                            2, os.path.join(dirname, filename))
         

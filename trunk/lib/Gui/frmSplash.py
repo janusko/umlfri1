@@ -5,7 +5,6 @@ import os.path
 
 from common import CWindow, event
 from lib.Distconfig import IMAGES_PATH
-from lib.consts import SPLASH_IMAGE
 
 gtk.rc_parse_string("""
     style "test"
@@ -26,7 +25,7 @@ class CfrmSplash(CWindow):
         self.lblVersion.set_label(('<span foreground="white" font_desc="Arial bold 9">'+_("Version: %s")+'</span>')%self.application.GetVersion())
         
         style = self.form.get_style().copy()
-        pixbuf = gtk.gdk.pixbuf_new_from_file(os.path.join(IMAGES_PATH, SPLASH_IMAGE))
+        pixbuf = gtk.gdk.pixbuf_new_from_file(os.path.join(IMAGES_PATH, 'splash.png'))
         pixmap = gtk.gdk.Pixmap(self.form.window, pixbuf.get_width(), pixbuf.get_height())
         gc = self.fixMain.window.new_gc()
         pixbuf.render_to_drawable(pixmap, gc, 0, 0, 0, 0, -1, -1, 0, 0, 0)

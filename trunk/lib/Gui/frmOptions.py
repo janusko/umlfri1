@@ -11,6 +11,11 @@ class CfrmOptions(common.CWindow):
     
     widgets = ('cbElementLine', 'cbElementFill', 'cbElementFill2', 'cbElementFill3', 'cbElementShadow', 'cbElementNameText', 'cbElementText', 'fbElementNameText','fbElementText' ,'cbConnectionLine', 'cbConnectionArrow', 'cbConnectionArrowFill', 'cbConnectionNameText', 'cbConnectionText', 'fbConnectionNameText', 'fbConnectionText', 'sbSelectionPointsSize', 'cbSelectionPoints', 'cbSelectionRectangle' ,'sbSelectionRectangleWidth', 'cbDragRectangle', 'sbDragRectangleWidth', 'expElement', 'expSelection', 'expConnection', 'expDrag',
                'cmdDefaultOptions')
+            
+    def __init__(self, app, wTree):
+        common.CWindow.__init__(self, app, wTree)
+        
+        self.form.action_area.child_set_property(self.cmdDefaultOptions, 'secondary', True)
     
     def CColorToGtkColor(self, color):
         return gtk.gdk.color_parse(str(color))

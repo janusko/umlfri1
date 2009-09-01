@@ -4,7 +4,6 @@ import os.path
 from lib.Depend.etree import etree, HAVE_LXML
 
 from lib.Exceptions.DevException import *
-from lib.consts import METAMODEL_PATH
 from lib.Distconfig import SCHEMA_PATH
 
 from Metamodel import CMetamodel
@@ -30,7 +29,7 @@ class CMetamodelAddonComponent(object):
         if self.__metamodel == None:
             storage = self.__addon.GetStorage().subopen(self.__path)
             
-            root = etree.XML(storage.read_file(METAMODEL_PATH))
+            root = etree.XML(storage.read_file('metamodel.xml'))
             #xml (version) file is validate with xsd schema (metamodel.xsd)
             if HAVE_LXML:
                 if not xmlschema.validate(root):

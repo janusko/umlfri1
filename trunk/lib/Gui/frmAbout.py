@@ -5,7 +5,7 @@ import lib.Depend
 
 from common import CWindow, event
 from lib.Distconfig import IMAGES_PATH, DOCS_PATH
-import lib.consts
+from lib.consts import WEB
 import os.path
 
 import re
@@ -25,7 +25,7 @@ class CfrmAbout(CWindow):
     def __init__(self, app, wTree):
         CWindow.__init__(self, app, wTree)
         
-        self.imgLogo.set_from_file(os.path.join(IMAGES_PATH, lib.consts.MAIN_LOGO))
+        self.imgLogo.set_from_file(os.path.join(IMAGES_PATH, 'app_logo.png'))
         
         buff = self.tviewAboutSysInfo.get_buffer()  
         tag_tab = buff.get_tag_table()
@@ -59,14 +59,14 @@ class CfrmAbout(CWindow):
         # set credits
         self.__SetCredits()
         # set web address 
-        self.lbtnProjectWeb.set_uri(lib.consts.WEB)
-        self.lbtnProjectWeb.set_label(lib.consts.WEB)
+        self.lbtnProjectWeb.set_uri(WEB)
+        self.lbtnProjectWeb.set_label(WEB)
         self.form.run()
         self.Hide()
         
     @event("lbtnProjectWeb", "clicked")
     def OnLbtnProjectWebClicked(self, widget):
-        webbrowser.open_new_tab(lib.consts.WEB)
+        webbrowser.open_new_tab(WEB)
         self.form.run()
         self.Hide()
     

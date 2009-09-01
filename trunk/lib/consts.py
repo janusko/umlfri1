@@ -1,24 +1,8 @@
-SPLASH_TIMEOUT = 0
+if __debug__:
+    SPLASH_TIMEOUT = 0
+else:
+    SPLASH_TIMEOUT = 5000
 
-VERSIONS_PATH = 'versions'
-DIAGRAMS_PATH = 'diagrams'
-ELEMENTS_PATH = 'elements'
-CONNECTIONS_PATH = 'connections'
-ICONS_PATH = 'icons'
-DOMAINS_PATH = 'domains'
-METAMODEL_PATH = 'metamodel.xml'
-PATHS_PATH = 'paths.xml'
-ADDON_PATH = 'addon.xml'
-
-ARROW_IMAGE = 'arrow.png'
-
-DEFAULT_TEMPLATE_ICON = 'default_icon.png'
-MAIN_ICON = "app_icon.png"
-MAIN_LOGO = "app_logo.png"
-SPLASH_IMAGE = 'splash.png'
-STARTPAGE_IMAGE = 'startpage.png'
-GRAB_CURSOR = 'grab.png'
-GRABBING_CURSOR = 'grabbing.png'
 # extensions
 ADDON_EXTENSION = '.fria'
 PROJECT_EXTENSION = '.frip'
@@ -39,9 +23,6 @@ USERGUI_NAMESPACE='http://umlfri.kst.fri.uniza.sk/xmlschema/usergui.xsd'
 WEB = 'http://umlfri.org/'
 MAIL = 'projekt@umlfri.org'
 ERROR_LOG_ADDRESS = 'http://umlfri.org/errors/log.php'  
-
-DEBUG = True                    # turn DEBUG to true for some more information, e.g. user exceptions will be shown with traceback
-ERROR_TO_CONSOLE = False        # only if DEBUG is true, instead of showing the exception in a window it will be printed to console
  
 LABELS_CLICKABLE = True         # used to ignore labels at drawing area
 

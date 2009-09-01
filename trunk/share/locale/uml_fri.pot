@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: UML .FRI 1.0-beta20090601\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-31 19:10+0200\n"
+"POT-Creation-Date: 2009-09-01 15:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,6 +33,9 @@ msgid "Add diagram"
 msgstr ""
 
 msgid "Add element"
+msgstr ""
+
+msgid "Addon could not be installed"
 msgstr ""
 
 msgid "Addons"
@@ -155,6 +158,9 @@ msgstr ""
 msgid "Enable"
 msgstr ""
 
+msgid "Error"
+msgstr ""
+
 msgid "Error opening file"
 msgstr ""
 
@@ -209,9 +215,6 @@ msgstr ""
 msgid "GTK+ version"
 msgstr ""
 
-msgid "Gui"
-msgstr ""
-
 msgid "Homepage"
 msgstr ""
 
@@ -219,9 +222,6 @@ msgid "Homepage:"
 msgstr ""
 
 msgid "I_nclude project"
-msgstr ""
-
-msgid "Images"
 msgstr ""
 
 msgid "Install"
@@ -240,9 +240,6 @@ msgid "License:"
 msgstr ""
 
 msgid "Line color"
-msgstr ""
-
-msgid "Locales"
 msgstr ""
 
 msgid "Machine"
@@ -293,9 +290,6 @@ msgstr ""
 msgid "Pages"
 msgstr ""
 
-msgid "Paths"
-msgstr ""
-
 msgid "Platform"
 msgstr ""
 
@@ -332,9 +326,6 @@ msgstr ""
 msgid "Question"
 msgstr ""
 
-msgid "Recent files"
-msgstr ""
-
 msgid "Rectagle width"
 msgstr ""
 
@@ -342,9 +333,6 @@ msgid "Rectangle color"
 msgstr ""
 
 msgid "Rectangle width"
-msgstr ""
-
-msgid "Root"
 msgstr ""
 
 msgid "S_VG"
@@ -399,9 +387,6 @@ msgid "Supervised by:"
 msgstr ""
 
 msgid "System _info"
-msgstr ""
-
-msgid "Templates"
 msgstr ""
 
 msgid "Text Font"
@@ -489,12 +474,6 @@ msgid ""
 "the <i>User comments</i> tab to help us recreate it. Or you can use the "
 "<i>Home</i> button to post this error directly on our websites bugreport. In "
 "case of problems, feel free to write us an email on :"
-msgstr ""
-
-msgid "User config"
-msgstr ""
-
-msgid "User dir"
 msgstr ""
 
 msgid "Uups! An error during sending occured:\n"

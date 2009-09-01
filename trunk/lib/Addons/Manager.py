@@ -9,7 +9,7 @@ from lib.lib import Indent
 from lib.Storages import open_storage, CDirectory
 from Addon import CAddon
 from Metamodel import CMetamodelAddonComponent
-from lib.consts import ADDON_NAMESPACE, ADDON_LIST_NAMESPACE, ADDON_PATH
+from lib.consts import ADDON_NAMESPACE, ADDON_LIST_NAMESPACE
 from lib.Distconfig import SCHEMA_PATH, USERDIR_PATH, ADDONS_PATH
 
 from lib.Exceptions.DevException import *
@@ -94,10 +94,10 @@ class CAddonManager(object):
         if storage is None:
             return None
         
-        if not storage.exists(ADDON_PATH):
+        if not storage.exists('addon.xml'):
             return None
         
-        root = etree.XML(storage.read_file(ADDON_PATH))
+        root = etree.XML(storage.read_file('addon.xml'))
         if HAVE_LXML:
             if not xmlschema.validate(root):
                 raise FactoryError("XMLError", xmlschema.error_log.last_error)
