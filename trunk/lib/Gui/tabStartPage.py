@@ -6,7 +6,7 @@ import os.path
 from common import CWidget
 
 from lib.consts import STARTPAGE_IMAGE
-from lib.config import config
+from lib.Distconfig import IMAGES_PATH
 from common import event
 
 gtk.rc_parse_string("""
@@ -33,7 +33,7 @@ class CtabStartPage(CWidget):
         CWidget.__init__(self, app, wTree)
         
         style = self.ebStartPage.get_style().copy()
-        pixbuf = gtk.gdk.pixbuf_new_from_file(os.path.join(config['/Paths/Images'], STARTPAGE_IMAGE))
+        pixbuf = gtk.gdk.pixbuf_new_from_file(os.path.join(IMAGES_PATH, STARTPAGE_IMAGE))
         pixmap = gtk.gdk.Pixmap(self.ebStartPage.window, 2000, 2000)
         cmap = self.ebStartPage.get_colormap()
         gc = self.ebStartPage.window.new_gc(foreground = cmap.alloc_color("#CDCDFF"))

@@ -4,7 +4,7 @@ from lib.Depend.gtk2 import pango
 import lib.Depend
 
 from common import CWindow, event
-from lib.config import config
+from lib.Distconfig import IMAGES_PATH, DOCS_PATH
 import lib.consts
 import os.path
 
@@ -25,7 +25,7 @@ class CfrmAbout(CWindow):
     def __init__(self, app, wTree):
         CWindow.__init__(self, app, wTree)
         
-        self.imgLogo.set_from_file(os.path.join(config['/Paths/Images'], lib.consts.MAIN_LOGO))
+        self.imgLogo.set_from_file(os.path.join(IMAGES_PATH, lib.consts.MAIN_LOGO))
         
         buff = self.tviewAboutSysInfo.get_buffer()  
         tag_tab = buff.get_tag_table()
@@ -85,7 +85,7 @@ class CfrmAbout(CWindow):
         if tag_tab.lookup("bold") is None:
             buff.create_tag("bold", weight=pango.WEIGHT_BOLD)
 
-        lines = [line.rstrip() for line in file(config['/Paths/Root']+'ABOUT') if not line.strip().startswith('-')]
+        lines = [line.rstrip() for line in file(os.path.join(DOCS_PATH, 'ABOUT')) if not line.strip().startswith('-')]
  
         for line in lines:
             i = self.reProgrammedFor.match(line) is not None

@@ -10,15 +10,15 @@ from lib.Storages import open_storage, CDirectory
 from Addon import CAddon
 from Metamodel import CMetamodelAddonComponent
 from lib.consts import ADDON_NAMESPACE, ADDON_LIST_NAMESPACE, ADDON_PATH
-from lib.config import config
+from lib.Distconfig import SCHEMA_PATH, USERDIR_PATH, ADDONS_PATH
 
 from lib.Exceptions.DevException import *
 
 #if lxml.etree is imported successfully, we use xml validation with xsd schema
 if HAVE_LXML:
-    xmlschema_doc = etree.parse(os.path.join(config['/Paths/Schema'], "addon.xsd"))
+    xmlschema_doc = etree.parse(os.path.join(SCHEMA_PATH, "addon.xsd"))
     xmlschema = etree.XMLSchema(xmlschema_doc)
-    xmlschema_list_doc = etree.parse(os.path.join(config['/Paths/Schema'], "addonList.xsd"))
+    xmlschema_list_doc = etree.parse(os.path.join(SCHEMA_PATH, "addonList.xsd"))
     xmlschema_list = etree.XMLSchema(xmlschema_list_doc)
 
 class CAddonManager(object):
@@ -26,9 +26,9 @@ class CAddonManager(object):
     reIlegalCharacters = re.compile('[^a-z0-9A-Z]')
     
     def __init__(self):
-        self.__enabledAddons = self.__LoadEnabledAddons(config['/Paths/UserEnabledAddons'])
-        self.__addons = self.__LoadAllAddons(open_storage(config['/Paths/Addons']), False)
-        self.__addons.update(self.__LoadAllAddons(open_storage(config['/Paths/UserAddons']), True))
+        self.__enabledAddons = self.__LoadEnabledAddons(os.path.join(USERDIR_PATH, 'addons.xml'))
+        self.__addons = self.__LoadAllAddons(open_storage(ADDONS_PATH), False)
+        self.__addons.update(self.__LoadAllAddons(open_storage(os.path.join(USERDIR_PATH, 'addons')), True))
     
     def __LoadEnabledAddons(self, path):
         ret = {}
@@ -188,14 +188,14 @@ class CAddonManager(object):
             yield addon
     
     def Save(self):
-        self.__SaveEnabledAddons(config['/Paths/UserEnabledAddons'], self.__enabledAddons)
+        self.__SaveEnabledAddons(os.path.join(USERDIR_PATH, 'addons.xml'), self.__enabledAddons)
     
     def LoadAddon(self, path):
         return self.__LoadAddon(open_storage(path), False)
     
     def InstallAddon(self, addon):
         dirname = str(uuid.uuid5(uuid.NAMESPACE_URL, addon.GetDefaultUri()))
-        path = os.path.join(config['/Paths/UserAddons'], dirname)
+        path = os.path.join(USERDIR_PATH, 'addons', dirname)
         storage = CDirectory.duplicate(addon.GetStorage(), path)
         
         self.__addons.update(self.__LoadAddonToDict(storage, True))

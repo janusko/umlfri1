@@ -1,19 +1,3 @@
-from os.path import join, dirname, abspath, expanduser, isdir
-import sys
-import imp
-
-if (hasattr(sys, "frozen") or hasattr(sys, "importers") or imp.is_frozen("__main__")):
-    ROOT_PATH = abspath(join(dirname(sys.executable), '..'))
-else:
-    ROOT_PATH = abspath(join(dirname(__file__), '..'))
-
-ROOT_PATH = ROOT_PATH.decode(sys.getfilesystemencoding())
-
-ETC_PATH = join(ROOT_PATH, 'etc')
-
-MAIN_CONFIG_PATH = join(ETC_PATH, 'config.xml')
-USERGUI_PATH ='/Paths/UserDir/usergui.xml'
-
 SPLASH_TIMEOUT = 0
 
 VERSIONS_PATH = 'versions'
@@ -45,6 +29,7 @@ METAMODEL_NAMESPACE = '{http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd}'
 UMLPROJECT_NAMESPACE = '{http://umlfri.kst.fri.uniza.sk/xmlschema/umlproject.xsd}'
 RECENTFILES_NAMESPACE = '{http://umlfri.kst.fri.uniza.sk/xmlschema/recentfiles.xsd}'
 CONFIG_NAMESPACE = '{http://umlfri.kst.fri.uniza.sk/xmlschema/config.xsd}'
+USERCONFIG_NAMESPACE = '{http://umlfri.kst.fri.uniza.sk/xmlschema/userconfig.xsd}'
 METAMODEL_LIST_NAMESPACE = '{http://umlfri.kst.fri.uniza.sk/xmlschema/metamodelList.xsd}'
 ADDON_NAMESPACE = "{http://umlfri.org/xmlschema/addon.xsd}"
 ADDON_LIST_NAMESPACE = "{http://umlfri.org/xmlschema/addonList.xsd}"

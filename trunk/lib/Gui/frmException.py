@@ -4,7 +4,7 @@ from lib.Depend.gtk2 import pango
 import lib.Depend
 import lib.consts
 from common import CWindow
-from lib.config import config
+from lib.Distconfig import USERDIR_PATH, ROOT_PATH
 from lib.Gui.dialogs import CWarningDialog
 import sys, os, time, tarfile, traceback, cStringIO, datetime, urllib, urllib2
 import os.path
@@ -42,7 +42,7 @@ class CfrmException(CWindow):
         buff.insert_with_tags_by_name(iter, "UML .FRI:\t\t", "bold")
         buff.insert_with_tags_by_name(iter, self.application.GetVersion(), "mono")
         try:
-            with open(lib.consts.ROOT_PATH + '/.svn/entries') as svn:
+            with open(os.path.join(ROOT_PATH, '.svn', 'entries')) as svn:
                 result = []
                 for idx, line in enumerate(svn):
                     if idx in [3, 4, 10]: 
@@ -68,7 +68,7 @@ class CfrmException(CWindow):
        
     def OnBtnSendClicked(self, widget, event, data=None):
         try:
-            log_tar_path = config['/Paths/UserDir'] + str(time.time()) + '.tar'  # path to tar file
+            log_tar_path = os.path.join(USERDIR_PATH, str(time.time()) + '.tar')  # path to tar file
             tar = tarfile.open(log_tar_path, "w")
             tarinfo = tarfile.TarInfo()
             
@@ -115,7 +115,7 @@ class CfrmException(CWindow):
             if self.append_project == True:
                 if self.application.GetProject() is not None:
                     
-                    log_project_path = config['/Paths/UserDir'] + EXCEPTION_PROJECT_FILE
+                    log_project_path = os.path.join(USERDIR_PATH, EXCEPTION_PROJECT_FILE)
                     self.application.GetProject().SaveProject(log_project_path)
                     tar.add(log_project_path,EXCEPTION_PROJECT_FILE)
                     os.remove(log_project_path)

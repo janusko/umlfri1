@@ -10,7 +10,7 @@ from lib.Depend.gtk2 import gtk
 from lib.Depend.gtk2 import gobject
 
 from lib.Clipboard import CClipboard
-from lib.Gui.common import CApplication, argument, CUserGui
+from lib.Gui.common import CApplication, argument
 import os.path
 
 from lib.Project import CProject
@@ -22,6 +22,7 @@ from lib.Gui import CBus
 from lib.Gui.dialogs import CExceptionDialog
 
 from lib.config import config
+from lib.Distconfig import LOCALES_PATH, GUI_PATH
 from lib.consts import SPLASH_TIMEOUT
 
 from lib.Exceptions import UserException
@@ -32,9 +33,9 @@ class Application(CApplication):
     windows = lib.Gui
     main_window = 'frmMain'
     textdomain = 'uml_fri'
-    localespath = config['/Paths/Locales']
+    localespath = LOCALES_PATH
     
-    guipath = config['/Paths/Gui']
+    guipath = GUI_PATH
 
     project = None
     canopen = True
@@ -46,7 +47,6 @@ class Application(CApplication):
         self.addonManager = CAddonManager()
         
         CApplication.__init__(self)
-        self.UserGui= CUserGui(self)
         
         gobject.timeout_add(SPLASH_TIMEOUT, self.GetWindow('frmSplash').Hide)
     
@@ -113,7 +113,6 @@ class Application(CApplication):
             win.Show()
     
     def Quit(self):
-        self.UserGui.SaveConfig()
         CApplication.Quit(self)
         config.Save()
         self.addonManager.Save()
