@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<umlproject xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/umlproject.xsd" saveversion="1.0">
+  <metamodel>
+    <uri>http://umlfri.kst.fri.uniza.sk/metamodel/dfd.frim</uri>
+    <version>0.0.1</version>
+  </metamodel>
+  <objects>
+    <object type="Package" id="0">
+      <dict>
+        <text name="note"></text>
+        <text name="name">Project</text>
+      </dict>
+    </object>
+  </objects>
+  <connections/>
+  <projecttree>
+    <node id="0">
+      <diagrams>
+        <diagram default="true" type="Data Flow Diagram" name="Data Flow Diagram"/>
+      </diagrams>
+    </node>
+  </projecttree>
+  <counters>
+    <count id="Package" value="0"/>
+    <count id="Data Flow Diagram" value="0"/>
+  </counters>
+</umlproject>

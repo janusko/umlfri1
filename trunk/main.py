@@ -17,6 +17,7 @@ import traceback
 
 from lib.Project import CProject
 from lib.Project import CRecentFiles
+from lib.Project.Templates import CTemplateManager
 from lib.Addons import CAddonManager
 
 import lib.Gui
@@ -47,6 +48,7 @@ class Application(CApplication):
         self.clipboard = CClipboard()
         self.bus = CBus()
         self.addonManager = CAddonManager()
+        self.templateManager = CTemplateManager(self.addonManager)
         
         CApplication.__init__(self)
         
@@ -106,6 +108,9 @@ class Application(CApplication):
         
     def GetProject(self):
         return self.project
+    
+    def GetTemplateManager(self):
+        return self.templateManager
     
     def GetClipboard(self):
         return self.clipboard

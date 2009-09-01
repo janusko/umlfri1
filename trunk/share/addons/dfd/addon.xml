@@ -17,6 +17,8 @@
     </Description>
     
     <Metamodel>
-        <Path path="." />
+        <Path path="metamodel" />
+        
+        <Template path="templates/empty.fritx" name="Empty DFD diagram" />
     </Metamodel>
 </AddOn>

@@ -139,10 +139,13 @@ class CAddonManager(object):
                 description = self.__FormatMultilineText(node.text or '')
             elif node.tag == ADDON_NAMESPACE+'Metamodel':
                 path = ''
+                templates = []
                 for info in node:
                     if info.tag == ADDON_NAMESPACE+'Path':
                         path = info.attrib["path"]
-                component = CMetamodelAddonComponent(path)
+                    if info.tag == ADDON_NAMESPACE+'Template':
+                        templates.append((info.attrib.get("name"), info.attrib.get("icon"), info.attrib.get("path")))
+                component = CMetamodelAddonComponent(path, templates)
         
         return CAddon(self, storage, uris, component,
             all(self.__enabledAddons.get(uri, True) for uri in uris),
@@ -193,8 +196,10 @@ class CAddonManager(object):
     def Save(self):
         self.__SaveEnabledAddons(os.path.join(USERDIR_PATH, 'addons.xml'), self.__enabledAddons)
     
-    def LoadAddon(self, path):
-        return self.__LoadAddon(open_storage(path), False)
+    def LoadAddon(self, storage):
+        if isintance(storage, (str, unicde)):
+            storage = open_storage(path)
+        return self.__LoadAddon(storage, False)
     
     def InstallAddon(self, addon):
         dirname = str(uuid.uuid5(uuid.NAMESPACE_URL, addon.GetDefaultUri()))

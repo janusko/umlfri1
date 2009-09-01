@@ -145,15 +145,19 @@ class CfrmMain(CWindow):
         self.mnuBestFit.set_sensitive(diagram)
         self.mnuFullscreen.set_sensitive(diagram)
     
-    def LoadProject(self, filename, copy):
+    def LoadProject(self, filenameOrTemplate, copy = None):
         self.nbTabs.CloseAll()
         self.application.ProjectInit()
         try:
-            self.application.GetProject().LoadProject(filename, copy)
+            if copy is None:
+                self.application.GetProject().CreateProject(filenameOrTemplate)
+            else:
+                self.application.GetProject().LoadProject(filenameOrTemplate, copy)
         except Exception:
             if __debug__:
                 raise
-            self.application.GetRecentFiles().RemoveFile(filename)
+            if copy is not None:
+                self.application.GetRecentFiles().RemoveFile(filename)
             self.application.ProjectDelete()
             self.nbTabs.CloseAll()
             self.twProjectView.ClearProjectView()
@@ -283,14 +287,14 @@ class CfrmMain(CWindow):
     @event("cmdOpen", "clicked")
     @event("mnuOpen", "activate")
     def ActionOpen(self, widget,tab = 0):
-        filename, copy = self.application.GetWindow("frmOpen").ShowDialog(self,tab)
-        if filename is not None:
+        filenameOrTemplate, copy = self.application.GetWindow("frmOpen").ShowDialog(self,tab)
+        if filenameOrTemplate is not None:
             try:
                 if self.application.GetProject() is not None and CQuestionDialog(self.form, _('Do you want to save project?'), True).run():
                     self.ActionSave(widget)
             except ECancelPressed:
                 return
-            self.LoadProject(filename, copy)
+            self.LoadProject(filenameOrTemplate, copy)
             self.tabStartPage.Fill()
     
     @event("form", "key-press-event")
