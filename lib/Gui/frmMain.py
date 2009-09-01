@@ -166,7 +166,7 @@ class CfrmMain(CWindow):
             return CWarningDialog(self.form, _('Error opening file')).run()
             
         self.ReloadTitle()
-        self.twProjectView.Redraw()
+        self.twProjectView.Redraw(True)
         self.mnuItems.Redraw()
         self.nbProperties.Fill(None)
         self.picDrawingArea.Redraw()
