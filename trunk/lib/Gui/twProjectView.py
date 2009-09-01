@@ -67,7 +67,7 @@ class CtwProjectView(CWidget):
     def ClearProjectView(self):
         self.TreeStore.clear()
     
-    def Redraw(self):
+    def Redraw(self, firstTime = False):
         """
         This function load ProjectTree Add menu from enabled diagrams and options of elements
         
@@ -107,7 +107,8 @@ class CtwProjectView(CWidget):
         parent = self.TreeStore.append(None)
         self.TreeStore.set(parent, 0, root.GetName(), 1, PixmapFromPath(self.application.GetProject().GetMetamodel().GetStorage(), root.GetObject().GetType().GetIcon()), 2, root.GetType(), 3, root)
         self.__DrawTree(root, parent)
-    
+        if firstTime:
+            self.twProjectView.expand_to_path(self.TreeStore.get_path(parent))
 
     def __DrawTree(self, root, parent):
         

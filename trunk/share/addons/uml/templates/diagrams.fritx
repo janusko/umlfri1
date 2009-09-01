@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<umlproject xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/umlproject.xsd" saveversion="1.0">
+<umlproject xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/umlproject.xsd" saveversion="1.0.1">
   <metamodel>
-    <uri>http://umlfri.kst.fri.uniza.sk/metamodel/uml.frim</uri>
-    <version>1.4.0</version>
+    <uri>urn:umlfri.org:metamodel:uml</uri>
+    <version>0.1</version>
   </metamodel>
   <objects>
     <object type="Package" id="0">
