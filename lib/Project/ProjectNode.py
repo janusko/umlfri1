@@ -54,9 +54,12 @@ class CProjectNode(object):
     def GetType(self):
         return self.object.GetType().GetId()
 
-    def AddChild(self, child):
+    def AddChild(self, child, pos = None):
         if child not in self.childs:
-            self.childs.append(child)
+            if pos==None or pos<0 or pos>len(self.childs):
+                self.childs.append(child)
+            else:
+                self.childs.insert(pos,child)
             child.SetParent(self)
             self.object.AddRevision()
         else:
@@ -68,14 +71,21 @@ class CProjectNode(object):
             self.diagrams.append(diagram)
             diagram.Assign(self)
     
-    def MoveDiagramToNewNode(self, newNode, diagram):
+    def MoveDiagramToNewNode(self, newNode, diagram, pos = None):
         self.RemoveDiagram(diagram)
-        newNode.diagrams.append(diagram)
+        if pos==None or pos<0 or pos>len(newNode.diagrams):
+            newNode.diagrams.append(diagram)
+        else:
+            newNode.diagrams.insert(pos,diagram)
+        diagram.SetPath(newNode.GetPath()+'/'+diagram.GetPath().split('/')[-1])
     
-    def MoveNode(self, parentNode):
+    def MoveNode(self, parentNode, pos = None):
         self.GetParent().RemoveChild(self)
         self.SetParent(parentNode)
-        parentNode.AddChild(self)
+        if pos==None:
+            parentNode.AddChild(self)
+        else:
+            parentNode.AddChild(self,pos)
         self.SetPath(parentNode.GetPath() + "/" + self.GetPath().split('/')[-1])
     
     def FindDiagram(self, name):
