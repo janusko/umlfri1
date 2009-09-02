@@ -465,13 +465,13 @@ class CpicDrawingArea(CWidget):
                 self.dnd = None
             elif self.dnd == 'point':
                 point = self.GetAbsolutePos((event.x, event.y))
-                moveConnectionPoint = CMoveConnectionPointCmd(self.DragPoint, self.canvas, point) 
+                moveConnectionPoint = CMoveConnectionPointCmd(self.DragPoint[0], self.DragPoint[1], self.canvas, point) 
                 self.application.history.add(moveConnectionPoint)
                 self.emit('history-entry')
                 self.dnd = None
             elif self.dnd == 'line':
                 point = self.GetAbsolutePos((event.x, event.y))
-                insertConnectionPoint = CInsertConnectionPointCmd(self.DragPoint, self.canvas, point) 
+                insertConnectionPoint = CInsertConnectionPointCmd(self.DragPoint[0], self.DragPoint[1], self.canvas, point) 
                 self.application.history.add(insertConnectionPoint)
                 self.emit('history-entry')                
                 self.dnd = None

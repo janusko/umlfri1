@@ -2,8 +2,9 @@ from lib.Commands import CBaseCommand
 
 
 class CZOrderCmd(CBaseCommand):
-    def __init__(self, diagram, action, canvas, description = None): 
-        CBaseCommand.__init__(self, description)
+    
+    def __init__(self, diagram, action, canvas): 
+        CBaseCommand.__init__(self)
         self.diagram = diagram
         self.action = action
         self.canvas = canvas
@@ -12,8 +13,7 @@ class CZOrderCmd(CBaseCommand):
         for element in self.diagram.GetSelected():
             self.selection.append(element)
 
-
-    def do (self):
+    def Do (self):
         if (self.action == 'SendBack'):
             self.diagram.ShiftElementsBack(self.canvas)
                     
@@ -28,24 +28,8 @@ class CZOrderCmd(CBaseCommand):
         
         else:
             self.enabled = False
-            
-        #if self.description == None:
-            #if (self.action == 'SendBack'):
-                #print_action = 'Sending selection back'
-            
-            #elif (self.action == 'BringForward'):
-                #print_action =  'Bringing selection back'
-            
-            #elif (self.action == 'ToBottom'):
-                #print_action = 'Sending selection to bottom' 
-            
-            #elif (self.action == 'ToTop'):
-                #print_action = 'Bringing selection to top'            
-                
-            #self.description = _('%s on %s') %(print_action, self.diagram.GetName())
 
-
-    def undo(self):
+    def Undo(self):
         current_selection=[]
         for element in self.diagram.GetSelected():
             current_selection.append(element)
@@ -72,22 +56,17 @@ class CZOrderCmd(CBaseCommand):
         for element in current_selection:
             self.diagram.AddToSelection(element)
 
-
-    def getDescription(self):
-        if self.description != None:
-            return self.description
-        else:
-            if (self.action == 'SendBack'):
-                print_action = 'Sending selection back'
+    def GetDescription(self):
+        if (self.action == 'SendBack'):
+            print_action = 'Sending selection back'
+        
+        elif (self.action == 'BringForward'):
+            print_action =  'Bringing selection back'
+        
+        elif (self.action == 'ToBottom'):
+            print_action = 'Sending selection to bottom' 
+        
+        elif (self.action == 'ToTop'):
+            print_action = 'Bringing selection to top' 
             
-            elif (self.action == 'BringForward'):
-                print_action =  'Bringing selection back'
-            
-            elif (self.action == 'ToBottom'):
-                print_action = 'Sending selection to bottom' 
-            
-            elif (self.action == 'ToTop'):
-                print_action = 'Bringing selection to top' 
-                
-            return _('%s on %s') %(print_action, self.diagram.GetName())
-            
+        return _('%s on %s') %(print_action, self.diagram.GetName())

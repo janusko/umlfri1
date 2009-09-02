@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 class CBaseCommand:
     '''Super class for all undoable operations
@@ -8,27 +7,26 @@ class CBaseCommand:
     operation, but these methods can't have any arguments. All the necessary data should be 
     fed throught __ini__
     '''    
-    def __init__(self, description = None):
-        self.description = description
+    def __init__(self):
         self.enabled = True 
         
-    def do(self):
+    def Do(self):
         '''steps needed to initially execute the command
         should _not_ have any arguments, nor return values
         '''
-        pass
-     
-    def undo(self):
+        raise NotImplementedError
+             
+    def Undo(self):
         '''steps needed to undo the command
         should _not_ have any arguments, nor return values
         '''
-        pass
+        raise NotImplementedError
     
-    def redo(self):
+    def Redo(self):
         '''steps needed to redo the command, in some cases could be the same as the do() method
         should _not_ have any arguments, nor return values
         '''
-        self.do()
+        self.Do()
     
     def isEnabled(self):
         '''Returns True if the command is valid, otherwise returns False
@@ -39,13 +37,9 @@ class CBaseCommand:
         @note: if an instance is marked as not enabled, it wont be added to undo stack
         '''
         return self.enabled
-    
 
-    def getDescription(self):
+    def GetDescription(self):
         '''Returns a string containing the description of the command.
         Mandatory - used to show the user what kind of action command does 
         '''
-        if self.description == None:
-            return _("History Operation")
-        else:
-            return self.description
+        raise NotImplementedError

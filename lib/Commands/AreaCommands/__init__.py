@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from AddElementCmd import CAddElementCmd
 from AddConnectionCmd import CAddConnectionCmd
 from PurgeElementCmd import CPurgeElementCmd
@@ -9,5 +8,3 @@ from InsertConnectionPointCmd import CInsertConnectionPointCmd
 from ResizeElemntCmd import CResizeElemntCmd
 from MoveSelectionCmd import CMoveSelectionCmd
 from ZOrderCmd import CZOrderCmd
-
-

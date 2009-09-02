@@ -1,10 +1,8 @@
-# -*- coding: utf-8 -*-
 from lib.Commands import CBaseCommand
 from lib.Exceptions.DevException import HistoryError
 import lib.consts
 
    
-
 
 class CCommandProcessor:
     '''Class representing the application history, groups
@@ -14,7 +12,6 @@ class CCommandProcessor:
     def __init__(self):
         self.undoStack = []
         self.redoStack = []
-
 
     def __getStackDesc(self, redo = False, limitation = 0):
         '''
@@ -33,16 +30,15 @@ class CCommandProcessor:
         
         if not redo:
             for undo in self.undoStack:
-                descriptionList.append(undo.getDescription())
+                descriptionList.append(undo.GetDescription())
         else:
             for redo in self.redoStack:
-                descriptionList.append(redo.getDescription())
+                descriptionList.append(redo.GetDescription())
             
         if limitation:
             return descriptionList[-limitation:]
         
         return descriptionList
- 
  
     def add(self, commandObject):
         '''
@@ -53,7 +49,7 @@ class CCommandProcessor:
         '''
         
         if isinstance(commandObject, CBaseCommand):
-            commandObject.do()                              # execute the command
+            commandObject.Do()                              # execute the command
             if commandObject.isEnabled():                   # if all went good...
                 self.redoStack = []                         # emty the redo stack - linear restrictive undo
                 self.undoStack.append(commandObject)        # and add the command to undo undo stack 
@@ -65,28 +61,25 @@ class CCommandProcessor:
         else: 
             raise HistoryError(_('Invalid Command object. Must be a child of lib.Commands.CBaseCommand'))
 
-
-    def undo(self):
+    def Undo(self):
         '''
         Undo the last command in the undo stack
         and append it to the redo stack
         '''        
         if self.canUndo():
             undoStackItem = self.undoStack.pop()
-            undoStackItem.undo()
+            undoStackItem.Undo()
             self.redoStack.append(undoStackItem)
             
-
-    def redo(self):
+    def Redo(self):
         '''
         Redo the last command in the redo stack
         and append it to the undo stack
         '''                
         if self.canRedo():
             redoStackItem = self.redoStack.pop()
-            redoStackItem.redo()       
+            redoStackItem.Redo()       
             self.undoStack.append(redoStackItem)
-
 
     def getUndoDesc(self, limitation = 0):
         '''
@@ -100,7 +93,6 @@ class CCommandProcessor:
         '''        
         return self.__getStackDesc(False, limitation)
 
-
     def getRedoDesc(self, limitation = 0):
         '''
         Gets a description list from the redo stack
@@ -113,7 +105,6 @@ class CCommandProcessor:
         '''        
         return self.__getStackDesc(True, limitation)
 
-
     def canUndo(self):
         '''
         Returns true if undo can be performed
@@ -122,7 +113,6 @@ class CCommandProcessor:
         @rtype: bool
         '''                
         return len(self.undoStack) > 0
-
 
     def canRedo(self):
         '''
@@ -133,7 +123,6 @@ class CCommandProcessor:
         '''           
         return len(self.redoStack) > 0
 
-
     def clear(self):
         '''
         Clears the history - undo and redo stacks
@@ -141,6 +130,3 @@ class CCommandProcessor:
         self.undoStack = []
         self.redoStack = []
  
- 
-
-            

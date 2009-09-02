@@ -379,13 +379,13 @@ class CfrmMain(CWindow):
     @event("cmdUndo", "clicked")
     @event("mnuUndo","activate")
     def on_mnuUndo_click(self, widget):
-        self.application.history.undo()
+        self.application.history.Undo()
         self.update_all()
         
     @event("cmdRedo", "clicked")
     @event("mnuRedo","activate")
     def on_mnuRedo_click(self, widget):
-        self.application.history.redo()
+        self.application.history.Redo()
         self.update_all()
         
     @event("cmdCut", "clicked")
@@ -592,7 +592,7 @@ class CfrmMain(CWindow):
         
     def on_undo_menuitem_response(self, widget, iteration):
         for i in range(iteration):
-            self.application.history.undo()
+            self.application.history.Undo()
         self.update_all()
 
    
@@ -612,7 +612,7 @@ class CfrmMain(CWindow):
 
     def on_redo_menuitem_response(self, widget, iteration):
         for i in range(iteration):
-            self.application.history.redo()
+            self.application.history.Redo()
         self.update_all()
 
     @event("twProjectView", "history-entry")

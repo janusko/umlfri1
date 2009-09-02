@@ -10,9 +10,8 @@ class CCompositeCommand(CBaseCommand):
     grouped commands descriptions.
     '''      
     def __init__(self):
-        CBaseCommand.__init__(self, _('Group Operation:'))
+        CBaseCommand.__init__(self)
         self.stack = []
-
 
     def add(self, commandObject):
         '''
@@ -24,54 +23,45 @@ class CCompositeCommand(CBaseCommand):
         if isinstance(commandObject, CBaseCommand):
             self.stack.append(commandObject)
   
-    def do(self):
+    def Do(self):
         '''
         Iterates over the stacked commands and executes their do() method
         '''        
         for command in self.stack:
-            command.do()
-            if command.isEnabled():                
-                # default way to create composite description is
-                # to put every component description on a new line
-                self.description += '\n\t' + command.getDescription()
-            else:
+            command.Do()
+            if not command.isEnabled():                
                 self.stack.remove(command)
 
-        if len(self.stack) == 1:
-            self.description = self.stack[0].getDescription()
-
-
-    def undo(self):
+    def Undo(self):
         '''
         Iterates over the stacked commands and executes their undo() method
         '''        
         for command in self.stack:
-            command.undo()
+            command.Undo()
 
-
-    def redo(self):
+    def Redo(self):
         '''
         Iterates over the stacked commands and executes their redo() method
         '''        
         for command in self.stack:
-            command.redo()        
+            command.Redo()        
 
     def isEnabled(self):
         return len(self.stack) > 0
-        
-        
-    def setDesc(self, description):
-        '''
-        Sets a custom description
-        
-        @param description: new description
-        @type description: str                
-        '''        
-        self.description = description
 
-    def getDescription(self):
+    def GetDescription(self):
         '''
         Gets current description
-        '''         
-        return self.description
+        ''' 
+        if len(self.stack) == 1:
+            return self.stack[0].getDescription()
+        description = [_('Group Operation:')]
 
+        for command in self.stack:
+            
+            if command.isEnabled():                
+                # default way to create composite description is
+                # to put every component description on a new line
+                description.append(command.getDescription())
+        
+        return '\n\t'.join(description)

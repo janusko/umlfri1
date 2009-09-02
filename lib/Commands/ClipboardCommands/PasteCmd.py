@@ -6,20 +6,18 @@ from lib.Exceptions.UserException import DrawingError
 
 class CPasteCmd(CBaseCommand):
     
-    def __init__(self, diagram, clipboard, description = None): 
-        CBaseCommand.__init__(self, description)
+    def __init__(self, diagram, clipboard): 
+        CBaseCommand.__init__(self)
         self.diagram = diagram
         self.clipboard = clipboard
         
-    def do (self):
+    def Do (self):
         if self.clipboard.content:
             self.pasted = []
             for element in self.clipboard.content:
                 try:
                     el = CElement(self.diagram, element.GetObject())
                 except UMLException, e:
-                    # to do: rewrite exception messages IN TRUNK, so they make sense to user when
-                    # used in user exceptions... get rid of the programmer stuff...
                     cause = str(e)
                     if 'DiagramHaveNotThisElement' in cause:
                         text = _('This diagram can not have this element.')
@@ -36,29 +34,19 @@ class CPasteCmd(CBaseCommand):
                 el.CopyFromElement(element)
                 self.pasted.append(el)
 
-
-            #if self.description == None:
-                #self.description = _('Pasting selection')
         else:
             self.enabled = False
 
-    def undo(self):
+    def Undo(self):
         for el in self.pasted:
             el.Deselect()
             el.GetObject().RemoveAppears(self.diagram)
             self.diagram.DeleteElement(el)
-            
 
-    def redo(self):
+    def Redo(self):
         for el in self.pasted:
             el.GetObject().AddAppears(self.diagram)
             self.diagram.AddElement(el)
-        
-        
-    def getDescription(self):
-        if self.description != None:
-            return self.description
-        else:
-            return _('Pasting selection')
-            
-     
+
+    def GetDescription(self):
+        return _('Pasting selection')

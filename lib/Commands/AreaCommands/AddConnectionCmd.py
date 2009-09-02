@@ -4,35 +4,27 @@ from lib.Drawing import CConnection
 
 
 class CAddConnectionCmd(CBaseCommand):
-    def __init__(self, diagram, connectionObject, source, destination, points= None, description = None):     
-        CBaseCommand.__init__(self, description)
+    def __init__(self, diagram, connectionObject, source, destination, points= None):     
+        CBaseCommand.__init__(self)
         self.diagram = diagram
         self.connectionObject = connectionObject
         self.source = source
         self.destination = destination
         self.points = points
         
-
-    def do (self):
+    def Do (self):
         self.connection = CConnection(self.diagram, self.connectionObject, self.source, self.destination, self.points)
-        #if self.description == None:
-            #self.description = _('Adding %s connection to %s') %(self.connection.GetObject().GetType().GetId(), self.diagram.GetName())
 
-
-    def undo(self):
+    def Undo(self):
         self.connection.Deselect()
         self.diagram.ShiftDeleteConnection(self.connection)      
-        
-        
-    def redo(self):
+
+    def Redo(self):
         self.destination.GetObject().AddConnection(self.connection.GetObject()) 
         self.source.GetObject().AddConnection(self.connection.GetObject()) 
         
         if self.connection not in self.diagram.connections: 
             self.diagram.AddConnection(self.connection)
-            
-    def getDescription(self):
-        if self.description != None:
-            return self.description
-        else:
-            return _('Adding %s connection to %s') %(self.connection.GetObject().GetType().GetId(), self.diagram.GetName()) 
+ 
+    def GetDescription(self):
+        return _('Adding %s connection to %s') %(self.connection.GetObject().GetType().GetId(), self.diagram.GetName())
