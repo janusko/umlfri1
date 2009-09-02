@@ -3,23 +3,17 @@ from lib.Commands import CBaseCommand
 
 class CAddDiagramCmd(CBaseCommand):
     
-    def __init__(self, diagram, node, description = None): 
-        CBaseCommand.__init__(self, description)
+    def __init__(self, diagram, node): 
+        CBaseCommand.__init__(self)
         self.diagram = diagram
         self.node = node
-        self.path = self.node.GetPath() + "/" + self.diagram.GetName() + ":=Diagram="
         
-    def do (self):
-        self.diagram.SetPath(self.path)
+    def Do (self):
+        self.diagram.SetPath(self.node.GetPath() + "/" + self.diagram.GetName() + ":=Diagram=")
         self.node.AddDiagram(self.diagram)
-        #if self.description == None:
-            #self.description = _('Adding %s to project') %(self.diagram.GetName())
-
-    def undo(self):
+       
+    def Undo(self):
         self.node.RemoveDiagram(self.diagram)
 
-    def getDescription(self):
-        if self.description != None:
-            return self.description
-        else:
-            return _('Adding %s to project') %(self.diagram.GetName())
+    def GetDescription(self):
+        return _('Adding %s to project') %(self.diagram.GetName())

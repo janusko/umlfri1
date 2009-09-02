@@ -4,14 +4,14 @@ from lib.Drawing import  CElement
 
 class CElementDeleteItemCmd(CBaseCommand):
     
-    def __init__(self, element, key, description = None): 
-        CBaseCommand.__init__(self, description)
+    def __init__(self, element, key): 
+        CBaseCommand.__init__(self)
         self.element = element
         self.key = key
         self.myKey = self.key.rsplit('[',1)[0]
         self.attList = self.element.GetObject().GetValue(self.myKey)        
 
-    def do (self):
+    def Do (self):
         
         if len(self.attList) <= 1: # this will never happen... shouldn't at least :)
             self.enabled = False
@@ -21,37 +21,22 @@ class CElementDeleteItemCmd(CBaseCommand):
             self.myIndex = self.attList.index(self.itemToDelete)
             self.attList.remove(self.itemToDelete)
                        
-            #if self.description == None:
-                #if isinstance(self.element, CElement):
-                    #name = self.element.GetObject().GetName()
-                #else:
-                    #name = self.element.GetObject().GetType().GetId()
-                
-                #if '.' in self.myKey:
-                    #itemName = self.myKey.rsplit('.',1)[1][:-1]
-                #else:
-                    #itemName = self.myKey[:-1]
-                ##self.description = _('Deleting %i. %s from %s') %(self.myIndex, itemName, name)
-                
            
-    def undo(self):
+    def Undo(self):
         self.attList.insert(self.myIndex, self.itemToDelete)
 
 
-    def redo(self):
+    def Redo(self):
         self.attList.remove(self.itemToDelete)
 
-    def getDescription(self):
-        if self.description != None:
-            return self.description
+    def GetDescription(self):
+        if isinstance(self.element, CElement):
+            name = self.element.GetObject().GetName()
         else:
-            if isinstance(self.element, CElement):
-                name = self.element.GetObject().GetName()
-            else:
-                name = self.element.GetObject().GetType().GetId()
-            
-            if '.' in self.myKey:
-                itemName = self.myKey.rsplit('.',1)[1][:-1]
-            else:
-                itemName = self.myKey[:-1]
-            return _('Deleting %i. %s from %s') %(self.myIndex, itemName, name)            
+            name = self.element.GetObject().GetType().GetId()
+        
+        if '.' in self.myKey:
+            itemName = self.myKey.rsplit('.',1)[1][:-1]
+        else:
+            itemName = self.myKey[:-1]
+        return _('Deleting %i. %s from %s') %(self.myIndex, itemName, name)            

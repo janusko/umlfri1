@@ -126,5 +126,8 @@ class CElement(CVisibleObject):
         self.deltaSize = element.deltaSize
         self.position = element.position
     
+    def GetDiagram(self):
+        return self.diagram()
+        
     def GetObject(self):
         return self.object

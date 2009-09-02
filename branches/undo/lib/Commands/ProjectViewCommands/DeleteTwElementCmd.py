@@ -3,15 +3,12 @@ from lib.Commands import CBaseCommand
 
 class CDeleteTwElementCmd(CBaseCommand):
     
-    def __init__(self, project,  node, description = None): 
-        CBaseCommand.__init__(self, description)
+    def __init__(self, project,  node): 
+        CBaseCommand.__init__(self)
         self.node = node
         self.project = project
-        
-        
 
     def removeFromArea(self, node):
-
         for j in node.GetChilds():
             self.removeFromArea(j)
             
@@ -32,21 +29,15 @@ class CDeleteTwElementCmd(CBaseCommand):
                     diagram.DeleteObject(element.GetObject())            
 
 
-    def do (self):
+    def Do (self):
         self.parent = self.node.GetParent()
         self.deletedDiagramElements = []
         self.deletedDiagramConnections = []
         self.deletedConnections = []
-
         self.removeFromArea(self.node)
         self.project.RemoveNode(self.node)            
-            
-        #if self.description == None:
-            #self.description = _('Removing %s from project') %(self.node.GetObject().GetName())
-
-        
-    def undo(self):
-
+                
+    def Undo(self):
         self.project.AddNode(self.node, self.parent)
         for element, diagram in self.deletedDiagramElements:
             diagram.AddElement(element)
@@ -59,9 +50,5 @@ class CDeleteTwElementCmd(CBaseCommand):
             if con not in d.connections: 
                 d.AddConnection(con)       
 
-    def getDescription(self):
-        if self.description != None:
-            return self.description
-        else:
-            return _('Removing %s from project') %(self.node.GetObject().GetName())
-            
+    def GetDescription(self):
+        return _('Removing %s from project') %(self.node.GetObject().GetName())

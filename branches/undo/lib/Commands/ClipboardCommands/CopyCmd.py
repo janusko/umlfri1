@@ -3,14 +3,13 @@ from lib.Drawing import  CElement
 
 class CCopyCmd(CBaseCommand):
     
-    def __init__(self, diagram, clipboard, description = None): 
-        CBaseCommand.__init__(self, description)
+    def __init__(self, diagram, clipboard): 
+        CBaseCommand.__init__(self)
         self.diagram = diagram
         self.clipboard = clipboard
         self.content = []
-        
 
-    def do (self):
+    def Do(self):
         
         for el in self.diagram.selected:
             if isinstance(el, CElement):
@@ -19,21 +18,14 @@ class CCopyCmd(CBaseCommand):
         if self.content:            
             self.old_content = self.clipboard.content
             self.clipboard.content = self.content
-           
-            #if self.description == None:
-                #self.description = _('Copying selection')
         else:
             self.enabled = False
 
-    def undo(self):
+    def Undo(self):
         self.clipboard.content = self.old_content
    
-    def redo(self):
+    def Redo(self):
         self.clipboard.content = self.content
         
-    def getDescription(self):
-        if self.description != None:
-            return self.description
-        else:
-            return _('Copying selection')
-            
+    def GetDescription(self):
+        return _('Copying selection')

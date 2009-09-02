@@ -3,22 +3,17 @@ from lib.Commands import CBaseCommand
 
 class CAddTwElementCmd(CBaseCommand):
     
-    def __init__(self, project, node, parent, description = None): 
-        CBaseCommand.__init__(self, description)
+    def __init__(self, project, node, parent): 
+        CBaseCommand.__init__(self)
         self.project = project
         self.node = node
         self.parent = parent
         
-    def do (self):
+    def Do (self):
         self.project.AddNode(self.node, self.parent)
-        #if self.description == None:
-            #self.description = _('Adding %s to project') %(self.node.GetObject().GetName())
-
-    def undo(self):
+        
+    def Undo(self):
         self.project.RemoveNode(self.node)
 
-    def getDescription(self):
-        if self.description != None:
-            return self.description
-        else:
-            return _('Adding %s to project') %(self.node.GetObject().GetName())
+    def GetDescription(self):
+        return _('Adding %s to project') %(self.node.GetObject().GetName())

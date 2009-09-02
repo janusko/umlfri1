@@ -4,21 +4,20 @@ from lib.Drawing import  CElement
 
 class CPurgeElementCmd(CBaseCommand):
     
-    def __init__(self, newElement, project, description = None): 
-        CBaseCommand.__init__(self, description)
+    def __init__(self, newElement, project): 
+        CBaseCommand.__init__(self)
         self.element = newElement
         self.project = project  
         self.deletedConnections = []
-        self.node = self.project.Find(self.element.GetObject().GetName())
+        self.node = self.element.GetObject().GetNode()
         self.parent = self.node.GetParent()
 
         self.myAppears = []
         for i in self.element.GetObject().appears:
             self.myAppears.append(i)
         self.element.Deselect()
-        
 
-    def do (self):
+    def Do (self):
         self.ctd = []
         for con in self.element.GetObject().GetConnections():
             source = con.GetSource()
@@ -42,11 +41,8 @@ class CPurgeElementCmd(CBaseCommand):
                 
             diagram().DeleteObject(self.element.GetObject())
         self.project.RemoveNode(self.node)            
-        
-        #if self.description == None:
-            #self.description = _('Deleting "%s" from project') %(self.element.GetObject().GetName())
 
-    def undo(self):
+    def Undo(self):
         for con,s,d in self.ctd:
             s.AddConnection(con)
             d.AddConnection(con)        
@@ -58,13 +54,7 @@ class CPurgeElementCmd(CBaseCommand):
                 for con in self.deletedConnections[i]:
                     diagram().AddConnection(con)
             i =+ 1
-       
-    def getDescription(self):
-        if self.description != None:
-            return self.description
-        else:
-            return _('Deleting "%s" from project') %(self.element.GetObject().GetName())
-            
-            
-            
-            
+
+    def GetDescription(self):
+        return _('Deleting "%s" from project') %(self.element.GetObject().GetName())
+        

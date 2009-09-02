@@ -3,22 +3,16 @@ from lib.Commands import CBaseCommand
 
 class CDeleteDiagramCmd(CBaseCommand):
     
-    def __init__(self, diagram, node, description = None): 
-        CBaseCommand.__init__(self, description)
+    def __init__(self, diagram, node): 
+        CBaseCommand.__init__(self)
         self.diagram = diagram
         self.node = node
         
-    def do (self):
+    def Do (self):
         self.node.RemoveDiagram(self.diagram)
 
-        #if self.description == None:
-            #self.description = _('Deleting %s diagram from project') %(self.diagram.GetName())
-
-    def undo(self):
+    def Undo(self):
         self.node.AddDiagram(self.diagram)
 
-    def getDescription(self):
-        if self.description != None:
-            return self.description
-        else:
-            return _('Deleting %s diagram from project') %(self.diagram.GetName())
+    def GetDescription(self):
+        return _('Deleting %s diagram from project') %(self.diagram.GetName())
