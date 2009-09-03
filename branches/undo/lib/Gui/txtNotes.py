@@ -56,9 +56,9 @@ class CtxtNotes(CWidget):
                 pass    #maybe, In the future, We can add notes to diagram
             elif isinstance(self.element.GetObject(), (CElementObject, CConnectionObject)):
                 elementChange = CElementChangeCmd(self.element, 'note', buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter())) 
-                self.application.history.add(elementChange)
+                self.application.history.Add(elementChange)
                 self.emit('history-entry')
             elif isinstance(self.element.GetObject(), CConnectionObject):
                 elementChange = CElementChangeCmd(self.element, self.attr, buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter())) 
-                self.application.history.add(elementChange)
+                self.application.history.Add(elementChange)
                 self.emit('history-entry')

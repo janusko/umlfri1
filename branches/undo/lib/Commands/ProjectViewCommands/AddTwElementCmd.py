@@ -9,7 +9,7 @@ class CAddTwElementCmd(CBaseCommand):
         self.node = node
         self.parent = parent
         
-    def Do (self):
+    def Do(self):
         self.project.AddNode(self.node, self.parent)
         
     def Undo(self):

@@ -10,7 +10,7 @@ class CResizeElemntCmd(CBaseCommand):
         self.delta = delta
         self.selSq = selSq
 
-    def Do (self):
+    def Do(self):
         self.element.Resize(self.canvas, self.delta, self.selSq)
         
     def Undo(self):

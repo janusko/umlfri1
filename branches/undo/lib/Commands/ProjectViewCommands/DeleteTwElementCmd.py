@@ -8,9 +8,9 @@ class CDeleteTwElementCmd(CBaseCommand):
         self.node = node
         self.project = project
 
-    def removeFromArea(self, node):
+    def _RemoveFromArea(self, node):
         for j in node.GetChilds():
-            self.removeFromArea(j)
+            self._RemoveFromArea(j)
             
         for con in node.GetObject().GetConnections():
             source = con.GetSource()
@@ -29,12 +29,12 @@ class CDeleteTwElementCmd(CBaseCommand):
                     diagram.DeleteObject(element.GetObject())            
 
 
-    def Do (self):
+    def Do(self):
         self.parent = self.node.GetParent()
         self.deletedDiagramElements = []
         self.deletedDiagramConnections = []
         self.deletedConnections = []
-        self.removeFromArea(self.node)
+        self._RemoveFromArea(self.node)
         self.project.RemoveNode(self.node)            
                 
     def Undo(self):

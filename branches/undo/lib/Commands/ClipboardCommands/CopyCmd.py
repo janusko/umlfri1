@@ -10,7 +10,6 @@ class CCopyCmd(CBaseCommand):
         self.content = []
 
     def Do(self):
-        
         for el in self.diagram.selected:
             if isinstance(el, CElement):
                 self.content.append(el)

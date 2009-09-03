@@ -168,13 +168,13 @@ class ClwProperties(CWidget):
         if isinstance(self.element, CDiagram):
             name, = model.get(iter, ID_NAME)
             diagramChange = CDiagramChangeCmd(self.element, new_value)
-            self.application.history.add(diagramChange)
+            self.application.history.Add(diagramChange)
             self.emit('history-entry')            
         else:
             key = self.get_key(path)
             try:
                 elementChange = CElementChangeCmd(self.element, key, new_value)
-                self.application.history.add(elementChange)
+                self.application.history.Add(elementChange)
                 self.emit('history-entry')                
             except (DomainTypeError, ), e:
                 model.set(iter, ID_VALUE, str(self.element.GetObject().GetValue(key)))
@@ -189,7 +189,7 @@ class ClwProperties(CWidget):
         key = self.get_key(path)
         try:
             elementChange = CElementChangeCmd(self.element, key, new_value) 
-            self.application.history.add(elementChange)
+            self.application.history.Add(elementChange)
             self.emit('history-entry')            
         except (DomainTypeError, ), e:
             model.set(iter, ID_VALUE, str(self.element.GetObject().GetValue(key)))
@@ -197,7 +197,7 @@ class ClwProperties(CWidget):
     
     def on_listadd(self, key, iter):
         elementChange = CElementAppendItemCmd(self.element, key)
-        self.application.history.add(elementChange)
+        self.application.history.Add(elementChange)
         self.emit('history-entry')          
         self._FillListItem(self.element.GetObject(), iter, key, len(self.element.GetObject().GetValue(key)) - 1)
         
@@ -210,7 +210,7 @@ class ClwProperties(CWidget):
             self.lwProperties.collapse_row(parent_path)
             self.on_listadd(parent_key, parent_iter)
         elementChange = CElementDeleteItemCmd(self.element, key)
-        self.application.history.add(elementChange)
+        self.application.history.Add(elementChange)
         self.emit('history-entry')        
         self.treeStore.remove(iter)
         for idx in xrange(int(path.rsplit(':', 1)[-1]), len(self.element.GetObject().GetValue(parent_key))):

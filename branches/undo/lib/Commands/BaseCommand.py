@@ -28,7 +28,7 @@ class CBaseCommand:
         '''
         self.Do()
     
-    def isEnabled(self):
+    def IsEnabled(self):
         '''Returns True if the command is valid, otherwise returns False
         Instance should be marked as not enabled, if during the commands do() method
         it's found out, that this user action is illegal - wont be done so logically

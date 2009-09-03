@@ -9,7 +9,7 @@ class CElementAppendItemCmd(CBaseCommand):
         self.element = element
         self.key = key
 
-    def Do (self):
+    def Do(self):
         self.element.GetObject().AppendItem(self.key)
         self.attList = self.element.GetObject().GetValue(self.key)
         self.appendedItem = self.attList[-1:][0]

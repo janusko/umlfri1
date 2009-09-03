@@ -11,7 +11,7 @@ class CPasteCmd(CBaseCommand):
         self.diagram = diagram
         self.clipboard = clipboard
         
-    def Do (self):
+    def Do(self):
         if self.clipboard.content:
             self.pasted = []
             for element in self.clipboard.content:
@@ -33,7 +33,6 @@ class CPasteCmd(CBaseCommand):
                 self.diagram.AddToSelection(el)
                 el.CopyFromElement(element)
                 self.pasted.append(el)
-
         else:
             self.enabled = False
 

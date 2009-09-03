@@ -10,7 +10,7 @@ class CMoveSelectionCmd(CBaseCommand):
         self.canvas = canvas
         self.delta = delta
 
-    def Do (self):
+    def Do(self):
         self.selection = []
         for s in self.diagram.GetSelected():
             self.selection.append(s)
