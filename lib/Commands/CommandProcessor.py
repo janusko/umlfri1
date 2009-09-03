@@ -13,7 +13,7 @@ class CCommandProcessor:
         self.undoStack = []
         self.redoStack = []
 
-    def __getStackDesc(self, redo = False, limitation = 0):
+    def __GetStackDesc(self, redo = False, limitation = 0):
         '''
         Gets a description list from eather the redo or undo stack
         
@@ -40,7 +40,7 @@ class CCommandProcessor:
         
         return descriptionList
  
-    def add(self, commandObject):
+    def Add(self, commandObject):
         '''
         Adds a new object to applications history undo stack
         
@@ -50,7 +50,7 @@ class CCommandProcessor:
         
         if isinstance(commandObject, CBaseCommand):
             commandObject.Do()                              # execute the command
-            if commandObject.isEnabled():                   # if all went good...
+            if commandObject.IsEnabled():                   # if all went good...
                 self.redoStack = []                         # emty the redo stack - linear restrictive undo
                 self.undoStack.append(commandObject)        # and add the command to undo undo stack 
             
@@ -66,7 +66,7 @@ class CCommandProcessor:
         Undo the last command in the undo stack
         and append it to the redo stack
         '''        
-        if self.canUndo():
+        if self.CanUndo():
             undoStackItem = self.undoStack.pop()
             undoStackItem.Undo()
             self.redoStack.append(undoStackItem)
@@ -76,12 +76,12 @@ class CCommandProcessor:
         Redo the last command in the redo stack
         and append it to the undo stack
         '''                
-        if self.canRedo():
+        if self.CanRedo():
             redoStackItem = self.redoStack.pop()
             redoStackItem.Redo()       
             self.undoStack.append(redoStackItem)
 
-    def getUndoDesc(self, limitation = 0):
+    def GetUndoDesc(self, limitation = 0):
         '''
         Gets a description list from the undo stack
        
@@ -91,9 +91,9 @@ class CCommandProcessor:
         @return: list containing the undo stack descriptions
         @rtype: list
         '''        
-        return self.__getStackDesc(False, limitation)
+        return self.__GetStackDesc(False, limitation)
 
-    def getRedoDesc(self, limitation = 0):
+    def GetRedoDesc(self, limitation = 0):
         '''
         Gets a description list from the redo stack
        
@@ -103,9 +103,9 @@ class CCommandProcessor:
         @return: list containing the redo stack descriptions
         @rtype: list
         '''        
-        return self.__getStackDesc(True, limitation)
+        return self.__GetStackDesc(True, limitation)
 
-    def canUndo(self):
+    def CanUndo(self):
         '''
         Returns true if undo can be performed
 
@@ -114,7 +114,7 @@ class CCommandProcessor:
         '''                
         return len(self.undoStack) > 0
 
-    def canRedo(self):
+    def CanRedo(self):
         '''
         Returns true if redo can be performed
 
@@ -123,7 +123,7 @@ class CCommandProcessor:
         '''           
         return len(self.redoStack) > 0
 
-    def clear(self):
+    def Clear(self):
         '''
         Clears the history - undo and redo stacks
         '''           

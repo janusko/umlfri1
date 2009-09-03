@@ -252,7 +252,7 @@ class CtwProjectView(CWidget):
         parent = self.application.GetProject().GetNode(path)
         node = CProjectNode(parent, element, parent.GetPath() + "/" + element.GetName() + ":" + element.GetType().GetId())
         addDiagram = CAddTwElementCmd(self.application.GetProject(), node, parent) 
-        self.application.history.add(addDiagram)
+        self.application.history.Add(addDiagram)
         self.emit('history-entry')           
         
     def AddDiagram(self, diagram):
@@ -267,7 +267,7 @@ class CtwProjectView(CWidget):
         node = model.get(iter,3)[0]
         
         addDiagram = CAddDiagramCmd(diagram, node) 
-        self.application.history.add(addDiagram)
+        self.application.history.Add(addDiagram)
         self.emit('history-entry')         
         
     
@@ -363,7 +363,7 @@ class CtwProjectView(CWidget):
         if model.get(iter,2)[0] != "=Diagram=":
             node = model.get(iter,3)[0]
             deleteElement = CDeleteTwElementCmd(self.application.GetProject(), node)
-            self.application.history.add(deleteElement)
+            self.application.history.Add(deleteElement)
             self.emit('history-entry')            
         else:
             diagram = model.get(iter,3)[0]
@@ -371,7 +371,7 @@ class CtwProjectView(CWidget):
             node = model.get(itr,3)[0]
             node.RemoveDiagram(diagram)
             deleteDiagram = CDeleteDiagramCmd(diagram, node)
-            self.application.history.add(deleteDiagram)
+            self.application.history.Add(deleteDiagram)
             self.emit('history-entry')            
 
 

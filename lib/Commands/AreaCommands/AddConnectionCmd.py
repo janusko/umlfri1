@@ -12,7 +12,7 @@ class CAddConnectionCmd(CBaseCommand):
         self.destination = destination
         self.points = points
         
-    def Do (self):
+    def Do(self):
         self.connection = CConnection(self.diagram, self.connectionObject, self.source, self.destination, self.points)
 
     def Undo(self):

@@ -110,10 +110,10 @@ class CfrmMain(CWindow):
         changes += zoomout != self.__sensitivity_project[4]
         self.__sensitivity_project[3] = zoomin
         self.__sensitivity_project[4] = zoomout
-        changes += self.application.history.canUndo() != self.__sensitivity_project[5]
-        changes += self.application.history.canRedo() != self.__sensitivity_project[6]
-        self.__sensitivity_project[5] = self.application.history.canUndo()
-        self.__sensitivity_project[6] = self.application.history.canRedo()
+        changes += self.application.history.CanUndo() != self.__sensitivity_project[5]
+        changes += self.application.history.CanRedo() != self.__sensitivity_project[6]
+        self.__sensitivity_project[5] = self.application.history.CanUndo()
+        self.__sensitivity_project[6] = self.application.history.CanRedo()
         
         if changes == 0:
             return
@@ -146,14 +146,14 @@ class CfrmMain(CWindow):
         self.cmdZoomOut.set_sensitive(zoomout)
         self.mnuBestFit.set_sensitive(diagram)
         self.mnuFullscreen.set_sensitive(diagram)
-        self.cmdUndo.set_sensitive(self.application.history.canUndo())
-        self.mnuUndo.set_sensitive(self.application.history.canUndo())
-        self.cmdRedo.set_sensitive(self.application.history.canRedo())
-        self.mnuRedo.set_sensitive(self.application.history.canRedo())
+        self.cmdUndo.set_sensitive(self.application.history.CanUndo())
+        self.mnuUndo.set_sensitive(self.application.history.CanUndo())
+        self.cmdRedo.set_sensitive(self.application.history.CanRedo())
+        self.mnuRedo.set_sensitive(self.application.history.CanRedo())
 
     
     def LoadProject(self, filename, copy):
-        self.application.history.clear()
+        self.application.history.Clear()
         self.nbTabs.CloseAll()
         self.application.ProjectInit()
         try:
@@ -525,7 +525,7 @@ class CfrmMain(CWindow):
             try:
                 Element = CElement(diagram, node.GetObject())
                 addElement = CAddElementCmd(Element, position)
-                self.application.history.add(addElement)
+                self.application.history.Add(addElement)
                 self.on_history_insert(None)                
             except UserException, e:
                 if e.GetName() == "ElementAlreadyExists":
@@ -553,7 +553,7 @@ class CfrmMain(CWindow):
         self.frmProp = self.application.GetWindow('frmProperties')
         self.frmProp.SetParent(self.application.GetWindow('frmMain'))
         self.frmProp.ShowProperties('', Element, self.picDrawingArea, groupCmd)
-        self.application.history.add(groupCmd)
+        self.application.history.Add(groupCmd)
         self.on_history_insert(None)        
 
 
@@ -581,8 +581,8 @@ class CfrmMain(CWindow):
             self.cmdUndo.get_menu().remove(child)
         # add new undo items and connect them with the on_undo_menuitem_response method
         # note: connect is used... use of @event is impossible
-        i = len(self.application.history.getUndoDesc(limitation = lib.consts.STACK_SIZE_TO_SHOW))
-        for desc in self.application.history.getUndoDesc(limitation = lib.consts.STACK_SIZE_TO_SHOW):
+        i = len(self.application.history.GetUndoDesc(limitation = lib.consts.STACK_SIZE_TO_SHOW))
+        for desc in self.application.history.GetUndoDesc(limitation = lib.consts.STACK_SIZE_TO_SHOW):
             menuItem = gtk.MenuItem(label=desc, use_underline=True)
             self.cmdUndo.get_menu().insert(menuItem,0)
             menuItem.connect("activate", self.on_undo_menuitem_response, i)
@@ -601,8 +601,8 @@ class CfrmMain(CWindow):
         
         for child in self.cmdRedo.get_menu().get_children():
             self.cmdRedo.get_menu().remove(child)
-        i = len(self.application.history.getRedoDesc(limitation = lib.consts.STACK_SIZE_TO_SHOW))
-        for desc in self.application.history.getRedoDesc(limitation = lib.consts.STACK_SIZE_TO_SHOW):
+        i = len(self.application.history.GetRedoDesc(limitation = lib.consts.STACK_SIZE_TO_SHOW))
+        for desc in self.application.history.GetRedoDesc(limitation = lib.consts.STACK_SIZE_TO_SHOW):
             menuItem = gtk.MenuItem(label=desc, use_underline=True)
             self.cmdRedo.get_menu().insert(menuItem,0)
             menuItem.connect("activate", self.on_redo_menuitem_response, i)

@@ -11,20 +11,16 @@ class CElementDeleteItemCmd(CBaseCommand):
         self.myKey = self.key.rsplit('[',1)[0]
         self.attList = self.element.GetObject().GetValue(self.myKey)        
 
-    def Do (self):
-        
+    def Do(self):
         if len(self.attList) <= 1: # this will never happen... shouldn't at least :)
             self.enabled = False
-      
         else:
             self.itemToDelete = self.element.GetObject().GetValue(self.key) 
             self.myIndex = self.attList.index(self.itemToDelete)
             self.attList.remove(self.itemToDelete)
-                       
-           
+                             
     def Undo(self):
         self.attList.insert(self.myIndex, self.itemToDelete)
-
 
     def Redo(self):
         self.attList.remove(self.itemToDelete)

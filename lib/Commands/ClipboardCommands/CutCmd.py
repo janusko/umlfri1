@@ -10,7 +10,7 @@ class CCutCmd(CBaseCommand):
         self.clipboard = clipboard
         self.content = []
         
-    def Do (self):
+    def Do(self):
         self.old_content = self.clipboard.content
         
         for el in self.diagram.selected:

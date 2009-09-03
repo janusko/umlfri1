@@ -8,7 +8,7 @@ class CDiagramChangeCmd(CBaseCommand):
         self.diagram = diagram
         self.value = value
 
-    def Do (self):
+    def Do(self):
         self.old_value = self.diagram.GetName()
         if self.old_value == self.value:
             self.enabled = False

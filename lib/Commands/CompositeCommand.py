@@ -13,7 +13,7 @@ class CCompositeCommand(CBaseCommand):
         CBaseCommand.__init__(self)
         self.stack = []
 
-    def add(self, commandObject):
+    def Add(self, commandObject):
         '''
         Adds a new object to stack
         
@@ -29,7 +29,7 @@ class CCompositeCommand(CBaseCommand):
         '''        
         for command in self.stack:
             command.Do()
-            if not command.isEnabled():                
+            if not command.IsEnabled():                
                 self.stack.remove(command)
 
     def Undo(self):
@@ -46,7 +46,7 @@ class CCompositeCommand(CBaseCommand):
         for command in self.stack:
             command.Redo()        
 
-    def isEnabled(self):
+    def IsEnabled(self):
         return len(self.stack) > 0
 
     def GetDescription(self):
@@ -54,14 +54,14 @@ class CCompositeCommand(CBaseCommand):
         Gets current description
         ''' 
         if len(self.stack) == 1:
-            return self.stack[0].getDescription()
+            return self.stack[0].GetDescription()
         description = [_('Group Operation:')]
 
         for command in self.stack:
             
-            if command.isEnabled():                
+            if command.IsEnabled():                
                 # default way to create composite description is
                 # to put every component description on a new line
-                description.append(command.getDescription())
+                description.append(command.GetDescription())
         
         return '\n\t'.join(description)

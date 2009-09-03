@@ -10,7 +10,7 @@ class CInsertConnectionPointCmd(CBaseCommand):
         self.canvas = canvas
         self.point = point
 
-    def Do (self):
+    def Do(self):
         pos = max((0, self.point[0])), max((0, self.point[1]))
         prevPoint = self.connection.GetPoint(self.canvas, self.index)
         nextPoint = self.connection.GetPoint(self.canvas, self.index + 1)

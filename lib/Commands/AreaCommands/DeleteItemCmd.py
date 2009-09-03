@@ -9,7 +9,7 @@ class CDeleteItemCmd(CBaseCommand):
         self.diagram = diagram
         self.item = item
 
-    def Do (self):
+    def Do(self):
         self.item.Deselect()
         self.delCon = []
         if isinstance(self.item , CElement):
@@ -34,7 +34,7 @@ class CDeleteItemCmd(CBaseCommand):
 
         elif isinstance(self.item , CConnection):
             if self.item not in self.diagram.connections: 
-                self.diagram.AddConnection(self.item )
+                self.diagram.AddConnection(self.item)
 
     def GetDescription(self):
         if isinstance(self.item , CElement):

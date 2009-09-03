@@ -15,7 +15,7 @@ class CAddElementCmd(CBaseCommand):
         self.project = project 
         self.delCon = []
 
-    def Do (self):
+    def Do(self):
         self.element.SetPosition(self.pos)
         if self.project is not None:
             if self.parentElement is None:
@@ -43,7 +43,7 @@ class CAddElementCmd(CBaseCommand):
             pass
 
     def Redo(self):
-        self.do()
+        self.Do()
         self.diagram.AddElement(self.element)
         self.element.GetObject().AddAppears(self.diagram)
         if self.delCon:

@@ -13,7 +13,7 @@ class CZOrderCmd(CBaseCommand):
         for element in self.diagram.GetSelected():
             self.selection.append(element)
 
-    def Do (self):
+    def Do(self):
         if (self.action == 'SendBack'):
             self.diagram.ShiftElementsBack(self.canvas)
                     

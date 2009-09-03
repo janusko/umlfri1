@@ -12,7 +12,7 @@ class CPurgeConnectionCmd(CBaseCommand):
         self.source = self.connection.GetObject().GetSource()
         self.destination = self.connection.GetObject().GetDestination()
 
-    def Do (self):
+    def Do(self):
         self.connection.Deselect()
         
         for appear in self.connection.GetObject().GetAppears():

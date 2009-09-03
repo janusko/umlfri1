@@ -8,7 +8,7 @@ class CAddDiagramCmd(CBaseCommand):
         self.diagram = diagram
         self.node = node
         
-    def Do (self):
+    def Do(self):
         self.diagram.SetPath(self.node.GetPath() + "/" + self.diagram.GetName() + ":=Diagram=")
         self.node.AddDiagram(self.diagram)
        

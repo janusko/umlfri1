@@ -8,7 +8,7 @@ class CDeleteDiagramCmd(CBaseCommand):
         self.diagram = diagram
         self.node = node
         
-    def Do (self):
+    def Do(self):
         self.node.RemoveDiagram(self.diagram)
 
     def Undo(self):

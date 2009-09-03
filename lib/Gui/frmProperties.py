@@ -6,8 +6,6 @@ from lib.Drawing import CElement, CConnection
 from lib.Commands.AreaCommands import CAddConnectionCmd, CDeleteItemCmd
 
 
-
-
 class CfrmProperties(CWindow):
     widgets = ('nbProProperties', 'twConnections', )
     name = 'frmProperties'
@@ -84,18 +82,18 @@ class CfrmProperties(CWindow):
                 con = self.element.GetDiagram().GetConnection(i)
                 if con is not None:
                     d = CDeleteItemCmd(self.element.GetDiagram(), con)
-                    self.groupCmd.add(d)
+                    self.groupCmd.Add(d)
                 else:
                     diagram = self.element.GetDiagram()
                     if i.GetSource() is not self.__elementObj:
                         sour = diagram.HasElementObject(i.GetSource())
                         if sour is not None:
                             addConnection = CAddConnectionCmd(diagram, i, sour, self.element)
-                            self.groupCmd.add(addConnection)
+                            self.groupCmd.Add(addConnection)
                     elif i.GetDestination is not self.__elementObj:
                         dest = diagram.HasElementObject(i.GetDestination())
                         if dest is not None:
                             addConnection = CAddConnectionCmd(diagram, i, self.element, dest)
-                            self.groupCmd.add(addConnection)
+                            self.groupCmd.Add(addConnection)
             self.__connections = []
             self.__saved = True

@@ -286,8 +286,8 @@ class CpicDrawingArea(CWidget):
         groupCmd = CCompositeCommand()                     
         for sel in self.Diagram.GetSelected():
             deleteItem = CDeleteItemCmd(self.Diagram, sel)
-            groupCmd.add(deleteItem)            
-        self.application.history.add(groupCmd)        
+            groupCmd.Add(deleteItem)            
+        self.application.history.Add(groupCmd)        
         self.emit('history-entry')            
         self.Diagram.DeselectAll()
         self.emit('selected-item', list(self.Diagram.GetSelected()))
@@ -420,7 +420,7 @@ class CpicDrawingArea(CWidget):
                             parentElement = el2.GetObject()
               
             addElement = CAddElementCmd(newElement, pos, parentElement, self.application.GetProject())
-            self.application.history.add(addElement)
+            self.application.history.Add(addElement)
             self.emit('history-entry')   
             self.Diagram.DeselectAll()
             self.Diagram.AddToSelection(newElement)
@@ -451,7 +451,7 @@ class CpicDrawingArea(CWidget):
                 delta = self.__GetDelta((event.x, event.y), True)
                 
                 resizeElemnt = CResizeElemntCmd(self.selElem,self.canvas, delta, self.selSq)
-                self.application.history.add(resizeElemnt)
+                self.application.history.Add(resizeElemnt)
                 self.emit('history-entry')                
                 self.selElem = None
                 self.selSq = None
@@ -460,19 +460,19 @@ class CpicDrawingArea(CWidget):
                 delta = self.__GetDelta((event.x, event.y))                
                 if delta != (0,0):
                     moveSelection = CMoveSelectionCmd(self.Diagram, self.canvas, delta)
-                    self.application.history.add(moveSelection)
+                    self.application.history.Add(moveSelection)
                     self.emit('history-entry')                
                 self.dnd = None
             elif self.dnd == 'point':
                 point = self.GetAbsolutePos((event.x, event.y))
                 moveConnectionPoint = CMoveConnectionPointCmd(self.DragPoint[0], self.DragPoint[1], self.canvas, point) 
-                self.application.history.add(moveConnectionPoint)
+                self.application.history.Add(moveConnectionPoint)
                 self.emit('history-entry')
                 self.dnd = None
             elif self.dnd == 'line':
                 point = self.GetAbsolutePos((event.x, event.y))
                 insertConnectionPoint = CInsertConnectionPointCmd(self.DragPoint[0], self.DragPoint[1], self.canvas, point) 
-                self.application.history.add(insertConnectionPoint)
+                self.application.history.Add(insertConnectionPoint)
                 self.emit('history-entry')                
                 self.dnd = None
             elif self.dnd == 'move':
@@ -501,7 +501,7 @@ class CpicDrawingArea(CWidget):
                     (type, points, source), destination = self.__NewConnection, itemSel
                     obj = CConnectionObject(type, source.GetObject(), destination.GetObject())
                     addConnection = CAddConnectionCmd(self.Diagram, obj, source, destination, points[1:]) 
-                    self.application.history.add(addConnection)
+                    self.application.history.Add(addConnection)
                     self.emit('history-entry')                     
                     self.__NewConnection = None
                     self.emit('set-selected', None)
@@ -532,18 +532,18 @@ class CpicDrawingArea(CWidget):
                 for sel in self.Diagram.GetSelected():
                     if isinstance(sel, Element.CElement):
                         purgeElement =  CPurgeElementCmd(sel, self.application.GetProject())
-                        groupCmd.add(purgeElement)                        
+                        groupCmd.Add(purgeElement)                        
                     else:
                         purgeConnection = CPurgeConnectionCmd(sel)
-                        groupCmd.add(purgeConnection)                        
-                self.application.history.add(groupCmd)
+                        groupCmd.Add(purgeConnection)                        
+                self.application.history.Add(groupCmd)
                 self.emit('history-entry')                        
             else:
                 groupCmd = CCompositeCommand()
                 for sel in self.Diagram.GetSelected():
                     deleteItem = CDeleteItemCmd(self.Diagram, sel)
-                    groupCmd.add(deleteItem)                    
-                self.application.history.add(groupCmd)
+                    groupCmd.Add(deleteItem)                    
+                self.application.history.Add(groupCmd)
                 self.emit('history-entry')
             self.emit('selected-item', list(self.Diagram.GetSelected()))
             self.Paint()
@@ -589,7 +589,7 @@ class CpicDrawingArea(CWidget):
             delta = self.__GetDelta(self.keydragPosition)
             self.keydragPosition = None
             moveSelection = CMoveSelectionCmd(self.Diagram, self.canvas, delta)
-            self.application.history.add(moveSelection)
+            self.application.history.Add(moveSelection)
             self.emit('history-entry')               
             self.dnd = None
 
@@ -846,7 +846,7 @@ class CpicDrawingArea(CWidget):
     # Z-Order menu:  
     def Shift_activate(self, actionName):
         zorderCmd =  CZOrderCmd(self.Diagram, actionName, self.canvas)
-        self.application.history.add(zorderCmd)
+        self.application.history.Add(zorderCmd)
         self.emit('history-entry')        
     
     @event("pmShift_SendBack","activate")
@@ -868,19 +868,19 @@ class CpicDrawingArea(CWidget):
     @event("mnuCtxCopy","activate")
     def ActionCopy(self, widget = None):
         copyCmd =  CCopyCmd(self.Diagram, self.application.GetClipboard())
-        self.application.history.add(copyCmd)
+        self.application.history.Add(copyCmd)
         self.emit('history-entry')
 
     @event("mnuCtxCut", "activate")
     def ActionCut(self, widget = None):
         cutCmd =  CCutCmd(self.Diagram, self.application.GetClipboard())
-        self.application.history.add(cutCmd)
+        self.application.history.Add(cutCmd)
         self.emit('history-entry')        
     
     @event("mnuCtxPaste","activate")
     def ActionPaste(self, widget = None):
         pasteCmd =  CPasteCmd(self.Diagram, self.application.GetClipboard())
-        self.application.history.add(pasteCmd)
+        self.application.history.Add(pasteCmd)
         self.emit('history-entry')        
         
     @event("mnuCtxShiftDelete","activate")
@@ -889,14 +889,14 @@ class CpicDrawingArea(CWidget):
         for sel in self.Diagram.GetSelected():
             if isinstance(sel, Element.CElement):
                 purgeElement =  CPurgeElementCmd(sel, self.application.GetProject())
-                groupCmd.add(purgeElement)                
+                groupCmd.Add(purgeElement)                
             elif isinstance(sel, CConLabelInfo):
                 purgeConnection = CPurgeConnectionCmd(sel.GetConnection())
-                groupCmd.add(purgeConnection)                 
+                groupCmd.Add(purgeConnection)                 
             else:
                 purgeConnection = CPurgeConnectionCmd(sel)
-                groupCmd.add(purgeConnection)                
-        self.application.history.add(groupCmd)
+                groupCmd.Add(purgeConnection)                
+        self.application.history.Add(groupCmd)
         self.emit('history-entry')        
 
 

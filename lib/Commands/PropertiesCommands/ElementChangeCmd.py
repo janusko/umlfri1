@@ -10,7 +10,7 @@ class CElementChangeCmd(CBaseCommand):
         self.key = key
         self.value = value
        
-    def Do (self):
+    def Do(self):
         self.old_value = self.element.GetObject().GetValue(self.key)
                 
         if str(self.old_value) == self.value:
