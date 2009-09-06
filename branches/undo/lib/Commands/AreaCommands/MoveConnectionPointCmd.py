@@ -8,7 +8,6 @@ class CMoveConnectionPointCmd(CBaseCommand):
         self.index = index
         self.canvas = canvas
         self.point = point
-        self.enabled = True
 
     def Do(self):
         self.old_point = self.connection.GetPoint(self.canvas, self.index)

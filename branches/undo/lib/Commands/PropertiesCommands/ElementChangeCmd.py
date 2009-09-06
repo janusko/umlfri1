@@ -14,7 +14,7 @@ class CElementChangeCmd(CBaseCommand):
         self.old_value = self.element.GetObject().GetValue(self.key)
                 
         if str(self.old_value) == self.value:
-            self.enabled = False
+            self._SetEnabled(False)
         else:
             self.element.GetObject().SetValue(self.key, self.value)
                         

@@ -48,17 +48,21 @@ class CtxtNotes(CWidget):
                     self.txtNotes.set_sensitive(True)
                     self.attr = k
                     cnt += 1
-    
-    @event("txtNotes.buffer", "changed")
-    def on_txtNotes_changed(self, buffer):
+    @event("txtNotes", "focus-out-event")
+    def kuk(self, widget, event):
         if self.element is not None:
             if isinstance(self.element, CDiagram):
                 pass    #maybe, In the future, We can add notes to diagram
             elif isinstance(self.element.GetObject(), (CElementObject, CConnectionObject)):
-                elementChange = CElementChangeCmd(self.element, 'note', buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter())) 
+                elementChange = CElementChangeCmd(self.element, 'note', self.txtNotes.get_buffer().get_text(self.txtNotes.get_buffer().get_start_iter(), self.txtNotes.get_buffer().get_end_iter())) 
                 self.application.history.Add(elementChange)
                 self.emit('history-entry')
             elif isinstance(self.element.GetObject(), CConnectionObject):
-                elementChange = CElementChangeCmd(self.element, self.attr, buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter())) 
+                elementChange = CElementChangeCmd(self.element, self.attr, self.txtNotes.get_buffer().get_text(self.txtNotes.get_buffer().get_start_iter(), self.txtNotes.get_buffer().get_end_iter())) 
                 self.application.history.Add(elementChange)
                 self.emit('history-entry')
+
+
+    @event("txtNotes.buffer", "changed")
+    def on_txtNotes_changed(self, buffer):
+        pass

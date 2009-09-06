@@ -20,12 +20,12 @@ class CInsertConnectionPointCmd(CBaseCommand):
             self.connection.InsertPoint(self.canvas, self.point, self.index)
             self.connection.ValidatePoints(self.canvas)
             if old_len == len(self.connection.points):
-                self.enabled = False
+                self._SetEnabled(False)
             else:
                 self.old_len = len(self.connection.points)
 
         else:
-            self.enabled = False    
+            self._SetEnabled(False)    
   
     def Undo(self):
         if self.old_len <= len(self.connection.points):

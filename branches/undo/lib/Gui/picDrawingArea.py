@@ -401,29 +401,11 @@ class CpicDrawingArea(CWidget):
     def __AddItem(self, toolBtnSel, event):
         pos = self.GetAbsolutePos((event.x, event.y))
         if toolBtnSel[0] == 'Element':
-            ElementType = self.application.GetProject().GetMetamodel().GetElementFactory().GetElement(toolBtnSel[1])
-            ElementObject = CElementObject(ElementType)
-            newElement = CElement(self.Diagram, ElementObject)
-            newElement.SetPosition(pos)
             self.AdjustScrollBars()
             self.emit('set-selected', None)
-            #here, I get prent element of selected elements (if element is on (over) another element)
-            minzorder = 9999999
-            parentElement = None
-            for el in self.Diagram.GetSelectedElements():
-                pos1, pos2 = el.GetSquare(self.canvas)
-                zorder = self.Diagram.elements.index(el)
-                if newElement.AreYouInRange(self.canvas, pos1, pos2, True):
-                    for el2 in self.Diagram.GetElementsInRange(self.canvas, pos1, pos2, True):
-                        if self.Diagram.elements.index(el2) < minzorder:        #get element with minimal zorder
-                            minzorder = self.Diagram.elements.index(el2)
-                            parentElement = el2.GetObject()
-              
-            addElement = CAddElementCmd(newElement, pos, parentElement, self.application.GetProject())
+            addElement = CAddElementCmd(self.application.GetProject(), self.Diagram, self.canvas, toolBtnSel[1],  pos)
             self.application.history.Add(addElement)
             self.emit('history-entry')   
-            self.Diagram.DeselectAll()
-            self.Diagram.AddToSelection(newElement)
             self.emit('selected-item', list(self.Diagram.GetSelected()))
             self.Paint()
 
@@ -888,6 +870,7 @@ class CpicDrawingArea(CWidget):
         groupCmd = CCompositeCommand()
         for sel in self.Diagram.GetSelected():
             if isinstance(sel, Element.CElement):
+                #.GetObject().GetNode()
                 purgeElement =  CPurgeElementCmd(sel, self.application.GetProject())
                 groupCmd.Add(purgeElement)                
             elif isinstance(sel, CConLabelInfo):
