@@ -13,7 +13,7 @@ class CElementDeleteItemCmd(CBaseCommand):
 
     def Do(self):
         if len(self.attList) <= 1: # this will never happen... shouldn't at least :)
-            self.enabled = False
+            self._SetEnabled(False)
         else:
             self.itemToDelete = self.element.GetObject().GetValue(self.key) 
             self.myIndex = self.attList.index(self.itemToDelete)

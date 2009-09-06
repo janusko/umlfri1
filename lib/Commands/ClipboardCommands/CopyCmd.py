@@ -18,7 +18,7 @@ class CCopyCmd(CBaseCommand):
             self.old_content = self.clipboard.content
             self.clipboard.content = self.content
         else:
-            self.enabled = False
+            self._SetEnabled(False)
 
     def Undo(self):
         self.clipboard.content = self.old_content

@@ -45,18 +45,25 @@ class CDiagram:
             if i.GetObject() is object:
                 return i
         return None
+
+    def HasConnectionBool(self, connection):
+        if connection in self.connections:
+            return True
+        else:
+            return False
     
+    def HasConnectionObjectBool(self, conObject):
+        for c in self.connections:
+            if c.GetObject() is conObject:
+                return True
+        return False
+
+
     def GetConnection(self, conObject):
         for c in self.connections:
             if c.GetObject() is conObject:
                 return c
         return None
-    
-    def HasConnection(self,conObject):
-        for c in self.connections:
-            if c.GetObject() is conObject:
-                return True
-        return False
         
     def GetPath(self):
         return self.path

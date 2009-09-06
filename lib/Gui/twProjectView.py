@@ -10,7 +10,7 @@ from lib.Drawing.Canvas.GtkPlus import PixmapFromPath
 
 from common import  event
 import common
-from lib.Commands.ProjectViewCommands import CAddDiagramCmd, CDeleteDiagramCmd, CDeleteTwElementCmd, CAddTwElementCmd
+from lib.Commands.ProjectViewCommands import CAddDiagramCmd, CDeleteDiagramCmd, CDeleteElementCmd, CCreateElementCmd
 
 
 class CtwProjectView(CWidget):
@@ -241,20 +241,14 @@ class CtwProjectView(CWidget):
                 break
         self.twProjectView.expand_to_path(self.TreeStore.get_path(iter))
         self.twProjectView.get_selection().select_iter(iter)
-                    
-    
-    def AddElement(self, element, diagram, parentElement = None):
-        if parentElement is None:
-            path = diagram.GetPath()
-        else:
-            path = parentElement.GetPath()
 
-        parent = self.application.GetProject().GetNode(path)
-        node = CProjectNode(parent, element, parent.GetPath() + "/" + element.GetName() + ":" + element.GetType().GetId())
-        addDiagram = CAddTwElementCmd(self.application.GetProject(), node, parent) 
-        self.application.history.Add(addDiagram)
+
+    def AddElement(self, element, diagram, parentElement = None):
+        createElement = CCreateElementCmd(self.application.GetProject(), diagram, element, parentElement)
+        self.application.history.Add(createElement)
         self.emit('history-entry')           
-        
+
+
     def AddDiagram(self, diagram):
         iter = self.twProjectView.get_selection().get_selected()[1]
         if iter is None:
@@ -269,7 +263,7 @@ class CtwProjectView(CWidget):
         addDiagram = CAddDiagramCmd(diagram, node) 
         self.application.history.Add(addDiagram)
         self.emit('history-entry')         
-        
+     
     
     def UpdateElement(self, object):
         if isinstance(object, CElementObject):
@@ -301,9 +295,8 @@ class CtwProjectView(CWidget):
     @event("twProjectView","button-press-event")
     def button_clicked(self, widget, event):
         self.EventButton = (event.button, event.time) 
-        
-        
-    
+
+
     @event("twProjectView", "row-activated")
     def on_twProjectView_set_selected(self, treeView, path, column):
         model = self.twProjectView.get_model()
@@ -314,7 +307,8 @@ class CtwProjectView(CWidget):
                 raise ProjectError("Diagram is None.")
             else:
                 self.emit('selected_diagram',diagram)
-    
+
+
     @event("twProjectView", "cursor-changed")
     def on_twProjectView_change_selection(self, treeView):
         
@@ -338,14 +332,16 @@ class CtwProjectView(CWidget):
             self.menuTreeElement.popup(None,None,None,self.EventButton[0],self.EventButton[1])
         
         self.emit('selected-item-tree',treeView.get_model().get(iter,3)[0])
-            
-    
+
+
     def on_mnuAddElement_activate(self, widget, element):
         self.emit('add-element', element)
-    
+
+
     def on_mnuTreeAddDiagram_activate(self, widget, diagramId):
         self.emit('create-diagram', diagramId)
-    
+
+
     def RemoveFromArea(self,node):
         for i in node.GetDiagrams():
             self.emit('close-diagram',i)
@@ -355,21 +351,21 @@ class CtwProjectView(CWidget):
         
         for k in node.GetAppears():
             k.DeleteObject(node.GetObject())
-    
+
+
     @event("mnuTreeDelete","activate")
     def on_mnuTreeDelete_activate(self, menuItem):
         iter = self.twProjectView.get_selection().get_selected()[1]
         model = self.twProjectView.get_model()
         if model.get(iter,2)[0] != "=Diagram=":
             node = model.get(iter,3)[0]
-            deleteElement = CDeleteTwElementCmd(self.application.GetProject(), node)
+            deleteElement = CDeleteElementCmd(self.application.GetProject(), node)
             self.application.history.Add(deleteElement)
             self.emit('history-entry')            
         else:
             diagram = model.get(iter,3)[0]
             itr = model.iter_parent(iter)
             node = model.get(itr,3)[0]
-            node.RemoveDiagram(diagram)
             deleteDiagram = CDeleteDiagramCmd(diagram, node)
             self.application.history.Add(deleteDiagram)
             self.emit('history-entry')            
@@ -389,7 +385,6 @@ class CtwProjectView(CWidget):
             self.emit('show_frmFindInDiagram', list(node.GetAppears()), node.GetObject())
 
 
-
     def GetSelectedNode(self):
         iter = self.twProjectView.get_selection().get_selected()[1]
         if iter == None:
@@ -399,20 +394,21 @@ class CtwProjectView(CWidget):
             return node
         else:
             return None
-        
+
+
     def GetRootNode(self):
         iter = self.twProjectView.get_model().get_iter_root()
         self.twProjectView.get_selection().select_iter(iter)
         node = self.twProjectView.get_model().get(iter,3)[0]
         return node
-        
+
+
     @event("twProjectView","drag-data-get")
     def on_drag_data_get(self, widget,drag_context, selection_data, info, time):
         treeselection = widget.get_selection()
         model, iter = treeselection.get_selected()
         data = model.get_value(iter, 0)
         selection_data.set(selection_data.target, 8, data)
-
         
     
     def CheckSanity(self, model, iter_to_copy, target_iter):

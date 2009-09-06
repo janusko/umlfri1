@@ -17,7 +17,7 @@ from tabStartPage import CtabStartPage
 from lib.config import config
 from lib.Gui.diagramPrint import CDiagramPrint
 from lib.Exceptions import UserException
-from lib.Commands.AreaCommands import CAddElementCmd
+from lib.Commands.AreaCommands import CDragAndDropElementCmd
 from lib.Commands import CCompositeCommand
 
 class CfrmMain(CWindow):
@@ -118,6 +118,7 @@ class CfrmMain(CWindow):
         if changes == 0:
             return
         
+        self.ReloadTitle()
         self.picDrawingArea.UpdateMenuSensitivity(project, diagram, element)
         
         self.SetSensitiveMenuChilds(self.mItemProject, project)
@@ -263,14 +264,19 @@ class CfrmMain(CWindow):
         if self.application.GetProject() is None or self.application.GetProject().GetFileName() is None:
             self.form.set_title(_('UML .FRI designer'))
         else:
-            self.form.set_title(_('UML .FRI designer [%s]')%self.application.GetProject().GetFileName())
+            if self.application.history.CanUndo():
+                self.form.set_title(_('UML .FRI designer [%s] *')%self.application.GetProject().GetFileName())
+            else:
+                self.form.set_title(_('UML .FRI designer [%s]')%self.application.GetProject().GetFileName())
 
     # Actions
     @event("form", "delete-event")
     @event("mnuQuit", "activate")
     def ActionQuit(self, widget, event = None):
         try:
-            if self.application.GetProject() is not None and CQuestionDialog(self.form, _('Do you want to save project?'), True).run():
+            if not self.application.history.CanUndo():
+                pass
+            elif self.application.GetProject() is not None and CQuestionDialog(self.form, _('Do you want to save project?'), True).run():
                 self.ActionSave(widget)
         except ECancelPressed:
             return True
@@ -280,7 +286,9 @@ class CfrmMain(CWindow):
     def on_open_file(self, widget, filename):
         if filename is not None:
             try:
-                if self.application.GetProject() is not None and CQuestionDialog(self.form, _('Do you want to save project?'), True).run():
+                if not self.application.history.CanUndo():
+                    pass
+                elif self.application.GetProject() is not None and CQuestionDialog(self.form, _('Do you want to save project?'), True).run():
                     self.ActionSave(widget)
             except ECancelPressed:
                 return
@@ -294,7 +302,9 @@ class CfrmMain(CWindow):
         filename, copy = self.application.GetWindow("frmOpen").ShowDialog(self,tab)
         if filename is not None:
             try:
-                if self.application.GetProject() is not None and CQuestionDialog(self.form, _('Do you want to save project?'), True).run():
+                if not self.application.history.CanUndo():
+                    pass
+                elif self.application.GetProject() is not None and CQuestionDialog(self.form, _('Do you want to save project?'), True).run():
                     self.ActionSave(widget)
             except ECancelPressed:
                 return
@@ -524,7 +534,7 @@ class CfrmMain(CWindow):
             diagram = self.picDrawingArea.GetDiagram()
             try:
                 Element = CElement(diagram, node.GetObject())
-                addElement = CAddElementCmd(Element, position)
+                addElement = CDragAndDropElementCmd(Element, position)
                 self.application.history.Add(addElement)
                 self.on_history_insert(None)                
             except UserException, e:

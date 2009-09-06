@@ -1,7 +1,7 @@
 from AddDiagramCmd import CAddDiagramCmd
 from DeleteDiagramCmd import CDeleteDiagramCmd
-from DeleteTwElementCmd import CDeleteTwElementCmd
-from AddTwElementCmd import CAddTwElementCmd
+from DeleteElementCmd import CDeleteElementCmd
+from CreateElementCmd import CCreateElementCmd
 
 
 

@@ -29,7 +29,7 @@ class CCutCmd(CBaseCommand):
                 self.diagram.DeleteElement(el)
                 el.GetObject().RemoveAppears(self.diagram)
         else:
-            self.enabled = False
+            self._SetEnabled(False)
 
     def Undo(self):
         for element in self.content:

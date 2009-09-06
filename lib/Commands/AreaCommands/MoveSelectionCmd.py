@@ -9,6 +9,7 @@ class CMoveSelectionCmd(CBaseCommand):
         self.diagram = diagram
         self.canvas = canvas
         self.delta = delta
+        self._SetEnabled()
 
     def Do(self):
         self.selection = []

@@ -60,16 +60,16 @@ class CfrmProperties(CWindow):
         for i in self.__elementObj.GetConnections():
             obj = i.GetConnectedObject(self.__elementObj)
             if isElement:
-                self.connModel.set(self.connModel.append(), 0, obj.GetName(), 1, i.GetType().GetId(), 2, self.element.GetDiagram().HasConnection(i))
+                self.connModel.set(self.connModel.append(), 0, obj.GetName(), 1, i.GetType().GetId(), 2, self.element.GetDiagram().HasConnectionObjectBool(i))
             else:
                 self.connModel.set(self.connModel.append(), 0, obj.GetName(), 1, i.GetType().GetId())
        
         response = self.form.run()
-        while response == gtk.RESPONSE_APPLY:
-            self.__Save()
-            picDrawingArea.Paint()
-            response = self.form.run()
-        if response == gtk.RESPONSE_OK:
+        #while response == gtk.RESPONSE_APPLY:
+            #self.__Save()
+            #picDrawingArea.Paint()
+            #response = self.form.run()
+        if response == gtk.RESPONSE_OK or response == gtk.RESPONSE_APPLY :
             self.__Save()
         self.Hide()
         self.groupCmd = None

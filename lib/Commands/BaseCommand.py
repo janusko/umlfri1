@@ -8,7 +8,7 @@ class CBaseCommand:
     fed throught __ini__
     '''    
     def __init__(self):
-        self.enabled = True 
+        self._SetEnabled()
         
     def Do(self):
         '''steps needed to initially execute the command
@@ -27,7 +27,17 @@ class CBaseCommand:
         should _not_ have any arguments, nor return values
         '''
         self.Do()
-    
+        
+    def _SetEnabled(self, enabled = True):
+        '''Returns True if the command is valid, otherwise returns False
+        Instance should be marked as not enabled, if during the commands do() method
+        it's found out, that this user action is illegal - wont be done so logically
+        shouldn't be part of the history
+        
+        @note: if an instance is marked as not enabled, it wont be added to undo stack
+        '''
+        self.enabled = enabled
+
     def IsEnabled(self):
         '''Returns True if the command is valid, otherwise returns False
         Instance should be marked as not enabled, if during the commands do() method

@@ -1,5 +1,6 @@
 from AddElementCmd import CAddElementCmd
 from AddConnectionCmd import CAddConnectionCmd
+from DragAndDropElementCmd import CDragAndDropElementCmd
 from PurgeElementCmd import CPurgeElementCmd
 from PurgeConnectionCmd import CPurgeConnectionCmd
 from DeleteItemCmd import CDeleteItemCmd

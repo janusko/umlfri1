@@ -34,7 +34,7 @@ class CPasteCmd(CBaseCommand):
                 el.CopyFromElement(element)
                 self.pasted.append(el)
         else:
-            self.enabled = False
+            self._SetEnabled(False)
 
     def Undo(self):
         for el in self.pasted:

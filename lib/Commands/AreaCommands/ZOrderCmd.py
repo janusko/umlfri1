@@ -27,7 +27,7 @@ class CZOrderCmd(CBaseCommand):
             self.diagram.ShiftElementsToTop()
         
         else:
-            self.enabled = False
+            self._SetEnabled(False)
 
     def Undo(self):
         current_selection=[]
