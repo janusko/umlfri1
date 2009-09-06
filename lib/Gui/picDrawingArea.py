@@ -1,8 +1,9 @@
 from lib.Depend.gtk2 import gtk
 from lib.Depend.gtk2 import gobject
 
-import lib.consts
+from lib.consts import BUFFER_SIZE, SCALE_MIN, SCALE_MAX, SCALE_INCREASE
 from lib.config import config
+from lib.Distconfig import IMAGES_PATH
 
 from common import CWidget, event
 from lib.Drawing import CDiagram, CElement, CConnection, CConLabelInfo
@@ -12,14 +13,16 @@ from lib.Connections import CConnectionObject
 from lib.Exceptions.UserException import *
 from lib.Drawing.Canvas import CGtkCanvas, CSvgCanvas, CCairoCanvas, CExportCanvas
 from lib.Drawing import Element
-import thread
+
 from lib.Commands.AreaCommands import *
 from lib.Commands.ClipboardCommands import *
 from lib.Commands import CCompositeCommand
 
-targets = [('document/uml', 0, gtk.TARGET_SAME_WIDGET)]
+import thread
+import os.path
 
-PAGE_SIZE=(config["/Page/Width"],config["/Page/Height"])
+
+targets = [('document/uml', 0, gtk.TARGET_SAME_WIDGET)]
 
 class Record(object): pass
 
@@ -33,7 +36,7 @@ class CpicDrawingArea(CWidget):
 
     __gsignals__ = {
         'history-entry':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE,
-            ()),        
+            ()),           
         'get-selected':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_PYOBJECT,
             ()),
         'set-selected':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE,
@@ -66,7 +69,7 @@ class CpicDrawingArea(CWidget):
         self.selSq = None
         self.pressedKeys = set()
         self.scale = 1.0
-        self.buffer_size = ((0, 0), lib.consts.BUFFER_SIZE)
+        self.buffer_size = ((0, 0), BUFFER_SIZE)
         self.picDrawingArea.realize()
         self.buffer = gtk.gdk.Pixmap(self.picDrawingArea.window, *self.buffer_size[1])
         self.Diagram = CDiagram(None,_("Start page"))
@@ -84,8 +87,13 @@ class CpicDrawingArea(CWidget):
         self.picEventBox.drag_dest_set(gtk.DEST_DEFAULT_ALL, self.TARGETS, gtk.gdk.ACTION_COPY)
         self.AdjustScrollBars()
         self.cursors = {None: None}
-        for name, img in (('grab', lib.consts.GRAB_CURSOR), ('grabbing', lib.consts.GRABBING_CURSOR)):
-            self.cursors[name] = gtk.gdk.Cursor(gtk.gdk.display_get_default(), gtk.gdk.pixbuf_new_from_file(config['/Paths/Images']+img), 0, 0)
+        for name, img in (('grab', 'grab.png'), ('grabbing', 'grabbing.png')):
+            self.cursors[name] = gtk.gdk.Cursor(
+                gtk.gdk.display_get_default(),
+                gtk.gdk.pixbuf_new_from_file(os.path.join(IMAGES_PATH, img)),
+                0,
+                0
+            )
         self.__invalidated = False
 
     def __SetCursor(self, cursor = None):
@@ -100,10 +108,10 @@ class CpicDrawingArea(CWidget):
             scale = scaleY
         else : scale = scaleX
         
-        if scale < lib.consts.SCALE_MIN:
-            scale = lib.consts.SCALE_MIN
-        elif scale > lib.consts.SCALE_MAX:
-            scale = lib.consts.SCALE_MAX
+        if scale < SCALE_MIN:
+            scale = SCALE_MIN
+        elif scale > SCALE_MAX:
+            scale = SCALE_MAX
 
         self.SetScale(scale)
         diaSizeMinX, diaSizeMinY = self.canvas.ToPhysical((diaSizeMinX, diaSizeMinY))
@@ -111,15 +119,15 @@ class CpicDrawingArea(CWidget):
         self.picVBar.set_value(diaSizeMinY)
 
     def SetScale(self, scale):
-        if (scale >= lib.consts.SCALE_MIN) and (scale <= lib.consts.SCALE_MAX):
+        if (scale >= SCALE_MIN) and (scale <= SCALE_MAX):
             self.scale = scale
             self.canvas.SetScale(self.scale)
             self.AdjustScrollBars()
             self.Paint()
 
     def IncScale(self, scale):
-        tmp_scale = (lib.consts.SCALE_INCREASE*((self.scale+0.00001)//lib.consts.SCALE_INCREASE))+scale
-        if (tmp_scale+0.00001 >= lib.consts.SCALE_MIN) and (tmp_scale-0.00001 <= lib.consts.SCALE_MAX):
+        tmp_scale = (SCALE_INCREASE*((self.scale+0.00001)//SCALE_INCREASE))+scale
+        if (tmp_scale+0.00001 >= SCALE_MIN) and (tmp_scale-0.00001 <= SCALE_MAX):
             self.scale = tmp_scale
             self.canvas.SetScale(self.scale)
             self.AdjustScrollBars()
@@ -239,6 +247,7 @@ class CpicDrawingArea(CWidget):
         if self.canvas is None:
             dasx, dasy = self.GetDiagramSize()
         else : 
+            #dasx, dasy = self.GetDiagramSize()
             dasx, dasy = self.canvas.ToPhysical(self.GetDiagramSize())
                 
         wisx, wisy = self.GetWindowSize()
@@ -272,9 +281,10 @@ class CpicDrawingArea(CWidget):
     
     @event("mnuCtxDelete","activate")
     def DeleteElements(self, widget = None):
-        # to do: commad for deleting points
+        # commad for deleting points
         # thist cool feature should be also available 
-        # from the right click menu !        
+        # from the right click menu !   
+        
         #for sel in self.Diagram.GetSelected():
             #if isinstance(sel, CConnection):
                 #index = sel.GetSelectedPoint()
@@ -331,13 +341,13 @@ class CpicDrawingArea(CWidget):
                 return True
             
             itemSel = self.Diagram.GetElementAtPosition(self.canvas, pos)
-            if itemSel is not None: #ak som nieco trafil:
+            if itemSel is not None: #something is hit:
                 if itemSel in self.Diagram.GetSelected(): # deselecting:
                     if (event.state & gtk.gdk.CONTROL_MASK) or (event.state & gtk.gdk.SHIFT_MASK):
                         self.Diagram.RemoveFromSelection(itemSel)
                         self.Paint()
                         self.emit('selected-item', list(self.Diagram.GetSelected()))
-                    elif isinstance(itemSel, CConnection): #selectnuta ciara
+                    elif isinstance(itemSel, CConnection): #Connection is selected
                         i = itemSel.GetPointAtPosition(pos)
                         if i is not None:
                             itemSel.SelectPoint(i)
@@ -348,7 +358,7 @@ class CpicDrawingArea(CWidget):
                             self.__BeginDragLine(event, itemSel, i)
                         self.Paint()    
                         self.emit('selected-item', list(self.Diagram.GetSelected()))
-                    else: #selektnute elementy
+                    else: #elements are selected
                         self.__BeginDragRect(event)
                 elif not (event.state & gtk.gdk.CONTROL_MASK) and not (event.state & gtk.gdk.SHIFT_MASK):
                     self.Diagram.DeselectAll()
@@ -619,10 +629,10 @@ class CpicDrawingArea(CWidget):
     def on_picEventBox_scroll_event(self, widget, event):
         if (event.state & gtk.gdk.CONTROL_MASK):
             if event.direction == gtk.gdk.SCROLL_UP:
-                self.IncScale(lib.consts.SCALE_INCREASE)
+                self.IncScale(SCALE_INCREASE)
                 return
             elif event.direction == gtk.gdk.SCROLL_DOWN:
-                self.IncScale(-lib.consts.SCALE_INCREASE)
+                self.IncScale(-SCALE_INCREASE)
                 return           
 
         if  event.state & gtk.gdk.SHIFT_MASK :
@@ -829,7 +839,7 @@ class CpicDrawingArea(CWidget):
     def Shift_activate(self, actionName):
         zorderCmd =  CZOrderCmd(self.Diagram, actionName, self.canvas)
         self.application.history.Add(zorderCmd)
-        self.emit('history-entry')        
+        self.emit('history-entry')
     
     @event("pmShift_SendBack","activate")
     def on_pmShift_SendBack_activate(self, menuItem):
@@ -863,7 +873,7 @@ class CpicDrawingArea(CWidget):
     def ActionPaste(self, widget = None):
         pasteCmd =  CPasteCmd(self.Diagram, self.application.GetClipboard())
         self.application.history.Add(pasteCmd)
-        self.emit('history-entry')        
+        self.emit('history-entry') 
         
     @event("mnuCtxShiftDelete","activate")
     def onMnuCtxShiftDelteActivate(self, menuItem):
@@ -880,24 +890,18 @@ class CpicDrawingArea(CWidget):
                 purgeConnection = CPurgeConnectionCmd(sel)
                 groupCmd.Add(purgeConnection)                
         self.application.history.Add(groupCmd)
-        self.emit('history-entry')        
-
+        self.emit('history-entry') 
 
     def HasFocus(self):
         return self.picDrawingArea.is_focus()
 
-    def GetSelectionPixbuf(self):
+    def GetSelectionPixbuf(self, zoom, bg):
         (x, y), (sizeX, sizeY) = self.Diagram.GetSelectSquare(self.canvas)
-        # to do: shouldn't this be implemented in the diagram method in the first place ?
-        x = x * self.GetScale()
-        y = y * self.GetScale()
         # 4 is the size of shadow -- do we have a constant or config value for this ?
-        sizeX = (sizeX + 4) * self.GetScale() 
-        sizeY = (sizeY + 4) * self.GetScale()
-        self.Diagram.PaintSelected(self.canvas)   
-       
-        pixbuf =  gtk.gdk.Pixbuf(gtk.gdk.COLORSPACE_RGB, True, 8, sizeX, sizeY)
-        pixbuf.get_from_drawable(self.buffer, self.buffer.get_colormap(), x, y, 0, 0, sizeX, sizeY)
-        self.Paint()
-        # lets assume that we have a white background... so white colour pixels will be fully transparent
-        return pixbuf.add_alpha(True, chr(255), chr(255),chr(255))
+        sizeX = (sizeX + 4) * zoom
+        sizeY = (sizeY + 4) * zoom
+        canvas = CExportCanvas(self.application.GetProject().GetMetamodel().GetStorage(), 'pixbuf', None, sizeX, sizeY, background = bg)
+        canvas.SetScale(zoom)
+        canvas.MoveBase(x, y)
+        self.Diagram.PaintSelected(canvas)
+        return canvas.Finish()

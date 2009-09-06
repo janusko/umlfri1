@@ -1,38 +1,10 @@
-from os.path import join, dirname, abspath, expanduser, isdir
-import sys
-import imp
-
-if (hasattr(sys, "frozen") or hasattr(sys, "importers") or imp.is_frozen("__main__")):
-    ROOT_PATH = abspath(join(dirname(sys.executable), '..'))
+if __debug__:
+    SPLASH_TIMEOUT = 0
 else:
-    ROOT_PATH = abspath(join(dirname(__file__), '..'))
+    SPLASH_TIMEOUT = 5000
 
-ROOT_PATH = ROOT_PATH.decode(sys.getfilesystemencoding())
-
-ETC_PATH = join(ROOT_PATH, 'etc')
-
-MAIN_CONFIG_PATH = join(ETC_PATH, 'config.xml')
-USERGUI_PATH ='/Paths/UserDir/usergui.xml'
-
-SPLASH_TIMEOUT = 0
-
-VERSIONS_PATH = 'versions'
-DIAGRAMS_PATH = 'diagrams'
-ELEMENTS_PATH = 'elements'
-CONNECTIONS_PATH = 'connections'
-ICONS_PATH = 'icons'
-DOMAINS_PATH = 'domains'
-METAMODEL_PATH = 'metamodel.xml'
-ADDON_PATH = 'addon.xml'
-
-ARROW_IMAGE = 'arrow.png'
-
-DEFAULT_TEMPLATE_ICON = 'default_icon.png'
-SPLASH_IMAGE = 'splash.png'
-STARTPAGE_IMAGE = 'startpage.png'
-GRAB_CURSOR = 'grab.png'
-GRABBING_CURSOR = 'grabbing.png'
 # extensions
+ADDON_EXTENSION = '.fria'
 PROJECT_EXTENSION = '.frip'
 PROJECT_TPL_EXTENSION = '.frit'
 PROJECT_CLEARXML_EXTENSION ='.fripx'
@@ -41,6 +13,7 @@ METAMODEL_NAMESPACE = '{http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd}'
 UMLPROJECT_NAMESPACE = '{http://umlfri.kst.fri.uniza.sk/xmlschema/umlproject.xsd}'
 RECENTFILES_NAMESPACE = '{http://umlfri.kst.fri.uniza.sk/xmlschema/recentfiles.xsd}'
 CONFIG_NAMESPACE = '{http://umlfri.kst.fri.uniza.sk/xmlschema/config.xsd}'
+USERCONFIG_NAMESPACE = '{http://umlfri.kst.fri.uniza.sk/xmlschema/userconfig.xsd}'
 METAMODEL_LIST_NAMESPACE = '{http://umlfri.kst.fri.uniza.sk/xmlschema/metamodelList.xsd}'
 ADDON_NAMESPACE = "{http://umlfri.org/xmlschema/addon.xsd}"
 ADDON_LIST_NAMESPACE = "{http://umlfri.org/xmlschema/addonList.xsd}"
@@ -50,9 +23,6 @@ USERGUI_NAMESPACE='http://umlfri.kst.fri.uniza.sk/xmlschema/usergui.xsd'
 WEB = 'http://umlfri.org/'
 MAIL = 'projekt@umlfri.org'
 ERROR_LOG_ADDRESS = 'http://umlfri.org/errors/log.php'  
-
-DEBUG = True                    # turn DEBUG to true for some more information, e.g. user exceptions will be shown with traceback
-ERROR_TO_CONSOLE = False        # only if DEBUG is true, instead of showing the exception in a window it will be printed to console
  
 LABELS_CLICKABLE = True         # used to ignore labels at drawing area
 

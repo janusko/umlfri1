@@ -39,7 +39,7 @@ class CDeleteElementCmd(CBaseCommand):
                 
             diagram().DeleteObject(self.element_object)
         self.project.RemoveNode(self.node)            
-        print self.removedAppears       
+       
     def Undo(self):
         for con,s,d in self.ctd:
             s.AddConnection(con)

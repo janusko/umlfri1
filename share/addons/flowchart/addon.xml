@@ -1,12 +1,14 @@
 <?xml version="1.0" ?>
 <AddOn xmlns="http://umlfri.org/xmlschema/addon.xsd">
-    <Identity uri="http://umlfri.kst.fri.uniza.sk/metamodel/flowchart.frim" />
+    <Identity uri="urn:umlfri.org:metamodel:flowchart" />
+    <Identity uri="http://umlfri.kst.fri.uniza.sk/metamodel/flowchart.frim" /> <!-- Only for compatibility with old save files -->
+    
     <FriendlyName name="Flowchart" version="0.0.1" />
     <Author>
         <Name name="UML .FRI team" />
         <Homepage url="http://umlfri.org" />
         
-        <commonLicense name="GPL" />
+        <CommonLicense name="GPL-2" />
     </Author>
     
     <Icon path="icons/flowchart_icon.png" />
@@ -17,6 +19,8 @@
     </Description>
     
     <Metamodel>
-        <Path path="." />
+        <Path path="metamodel" />
+        
+        <Template path="templates/simple.fritx" name="Empty flowchart" />
     </Metamodel>
 </AddOn>

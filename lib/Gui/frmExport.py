@@ -1,24 +1,22 @@
-from lib.Depend.gtk2 import pango
-import lib.Depend
-
 from common import CWindow, event
 import os
 
 class CfrmExport(CWindow):
+    name = 'frmExport'
+    glade = 'export.glade'
+    
     widgets = ('entExportFileName','fcbDirectorySelect', 'tbtnPDF', 'tbtnPNG', 'tbtnPS', 'tbtnSVG',
     'btnExport', 'btnCancelExport', 'hbuttonboxExportType', )
-    name = 'frmExport'
     
     def __init__(self, app, wTree):
         CWindow.__init__(self, app, wTree)
         self.picDrawingArea = None        
-        # default values
-        self.tbtnSVG.set_active(True)
     
     def setArea(self, picDrawingArea):
         self.picDrawingArea = picDrawingArea
     
     def Show(self):
+        self.tbtnPNG.set_active(True)
         self.entExportFileName.set_text(self.picDrawingArea.GetDiagram().GetName())
         self.form.run()
         self.Hide()

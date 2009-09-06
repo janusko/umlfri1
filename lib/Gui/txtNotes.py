@@ -6,7 +6,6 @@ from lib.Elements.Object import CElementObject
 from lib.Connections.Object import CConnectionObject
 from lib.Commands.PropertiesCommands import CElementChangeCmd
 
-
 class CtxtNotes(CWidget):
     name = 'txtNotes'
     widgets = ('txtNotes', )
@@ -14,7 +13,7 @@ class CtxtNotes(CWidget):
     __gsignals__ = {
         'history-entry':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),       
     }
-    
+
     def __init__(self, app, wTree):
         CWidget.__init__(self, app, wTree)
         self.txtNotes.set_sensitive(False)
@@ -48,8 +47,9 @@ class CtxtNotes(CWidget):
                     self.txtNotes.set_sensitive(True)
                     self.attr = k
                     cnt += 1
+                    
     @event("txtNotes", "focus-out-event")
-    def kuk(self, widget, event):
+    def on_txtNotes_focus_out_event(self, widget, event):
         if self.element is not None:
             if isinstance(self.element, CDiagram):
                 pass    #maybe, In the future, We can add notes to diagram
@@ -57,12 +57,14 @@ class CtxtNotes(CWidget):
                 elementChange = CElementChangeCmd(self.element, 'note', self.txtNotes.get_buffer().get_text(self.txtNotes.get_buffer().get_start_iter(), self.txtNotes.get_buffer().get_end_iter())) 
                 self.application.history.Add(elementChange)
                 self.emit('history-entry')
+                self.application.GetBus().emit('content-update', self.element, 'note')
             elif isinstance(self.element.GetObject(), CConnectionObject):
                 elementChange = CElementChangeCmd(self.element, self.attr, self.txtNotes.get_buffer().get_text(self.txtNotes.get_buffer().get_start_iter(), self.txtNotes.get_buffer().get_end_iter())) 
                 self.application.history.Add(elementChange)
                 self.emit('history-entry')
-
+                self.application.GetBus().emit('content-update', self.element, self.attr)
 
     @event("txtNotes.buffer", "changed")
     def on_txtNotes_changed(self, buffer):
         pass
+  

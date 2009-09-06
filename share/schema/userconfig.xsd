@@ -109,21 +109,6 @@
 						</xs:all>
 					</xs:complexType>
 				</xs:element>
-				<xs:element name="Paths">
-					<xs:complexType>
-						<xs:all minOccurs="0">
-							<xs:element name="Root" type="xs:string"/>
-							<xs:element name="Templates" type="xs:string"/>
-							<xs:element name="Images" type="xs:string"/>
-							<xs:element name="Gui" type="xs:string"/>
-							<xs:element name="Locales" type="xs:string"/>
-							<xs:element name="Schema" type="xs:string"/>
-							<xs:element name="UserDir" type="xs:string"/>
-							<xs:element name="UserConfig" type="xs:string"/>
-							<xs:element name="RecentFiles" type="xs:string"/>
-						</xs:all>
-					</xs:complexType>
-				</xs:element>
 				<xs:element name="Page">
 					<xs:complexType>
 						<xs:all minOccurs="0">

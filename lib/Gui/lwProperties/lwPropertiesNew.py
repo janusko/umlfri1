@@ -1,8 +1,10 @@
 from lib.Depend.gtk2 import gobject
 from lib.Depend.gtk2 import gtk
+
 from lib.Gui.common import CWidget, CellRendererButton, event
 from lib.Drawing import CDiagram
 from lib.Elements.Object import CElementObject
+from lib.Connections.Object import CConnectionObject
 from lib.Exceptions import *
 from lib.Commands.PropertiesCommands import *
 
@@ -17,7 +19,6 @@ class ClwProperties(CWidget):
     __gsignals__ = {
         'history-entry':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
     }
-    
     def __init__(self, app, wTree):
         
         self.treeStore = gtk.TreeStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_BOOLEAN, gobject.TYPE_BOOLEAN, gobject.TYPE_BOOLEAN, gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING)
@@ -185,16 +186,18 @@ class ClwProperties(CWidget):
             name, = model.get(iter, ID_NAME)
             diagramChange = CDiagramChangeCmd(self.element, new_value)  
             self.application.history.Add(diagramChange)
-            self.emit('history-entry')            
+            self.emit('history-entry')
+            self.application.GetBus().emit('content-update', self.element, name)
         else:
             key = self.get_key(path)
             try:
                 elementChange = CElementChangeCmd(self.element, key, new_value) 
                 self.application.history.Add(elementChange)
-                self.emit('history-entry')                
+                self.emit('history-entry')
             except (DomainTypeError, ), e:
                 model.set(iter, ID_VALUE, str(self.element.GetObject().GetValue(key)))
                 raise ParserError(*e.params)
+            self.application.GetBus().emit('content-update', self.element, key)
         
     @event("ComboRenderer", "edited")
     def on_change_combo(self, cellrenderer, path, new_value):
@@ -204,19 +207,18 @@ class ClwProperties(CWidget):
             model.set(iter, ID_VALUE, new_value)
             key = self.get_key(path)
             try:
-                elementChange = CElementChangeCmd(self.element, key, new_value)
-                self.application.history.Add(elementChange)
-                self.emit('history-entry')                
+                self.element.GetObject().SetValue(key, new_value)
             except (DomainTypeError, ), e:
                 model.set(iter, ID_VALUE, str(self.element.GetObject().GetValue(key)))
                 raise ParserError(*e.params)
+            self.application.GetBus().emit('content-update', self.element, key)
     
     def on_listadd(self, key, iter):
         elementChange = CElementAppendItemCmd(self.element, key)    
         self.application.history.Add(elementChange)
-        self.emit('history-entry')        
+        self.emit('history-entry') 
         self._FillListItem(self.element.GetObject(), iter, key, len(self.element.GetObject().GetValue(key)) - 1)
-
+        self.application.GetBus().emit('content-update', self.element, key)
         
     def on_listdel(self, key, iter, path):
         model = self.lwProperties.get_model()
@@ -228,7 +230,7 @@ class ClwProperties(CWidget):
             self.on_listadd(parent_key, parent_iter)
         elementChange = CElementDeleteItemCmd(self.element, key)  
         self.application.history.Add(elementChange)
-        self.emit('history-entry')            
+        self.emit('history-entry')
         self.treeStore.remove(iter)
         for idx in xrange(int(path.rsplit(':', 1)[-1]), len(self.element.GetObject().GetValue(parent_key))):
             npath = parent_path + ':' + str(idx)
@@ -236,6 +238,7 @@ class ClwProperties(CWidget):
             self.treeStore.set(niter,
                 ID_ID, '[%i]' % idx,
                 ID_NAME, str(idx))
+        self.application.GetBus().emit('content-update', self.element, key)
     
     @event("ButtonRenderer", "click")
     def on_change_button(self, cellrenderer, path):
@@ -248,3 +251,10 @@ class ClwProperties(CWidget):
             
         elif action == 'listdel':
             self.on_listdel(key, iter, path)
+        
+    #@event('application.bus', 'content-update')
+    def on_content_update(self, widget, element, property):
+        if (self.element is not None and (element is self.element 
+            or not isinstance(self.element, CDiagram) and element is self.element.GetObject())):
+            self.Fill(self.element)
+        

@@ -8,11 +8,13 @@ from Alias import CConnectionAlias
 from lib.consts import METAMODEL_NAMESPACE
 from lib.Drawing.Objects import ALL, ALL_CONNECTION, CContainer, CSimpleContainer
 from lib.Drawing.Context import BuildParam
-from lib.config import config
+from lib.Distconfig import SCHEMA_PATH
+
+import weakref
 
 #if lxml.etree is imported successfully, we use xml validation with xsd schema
 if HAVE_LXML:
-    xmlschema_doc = etree.parse(os.path.join(config['/Paths/Schema'], "metamodel.xsd"))
+    xmlschema_doc = etree.parse(os.path.join(SCHEMA_PATH, "metamodel.xsd"))
     xmlschema = etree.XMLSchema(xmlschema_doc)
 
 
@@ -20,7 +22,7 @@ class CConnectionFactory(object):
     """
     Creates connection types from metamodel XMLs
     """
-    def __init__(self, storage, path, domainfactory):
+    def __init__(self, metamodel, storage, path, domainfactory):
         """
         Parse metamodel XMLs and creates connection types
         
@@ -33,6 +35,7 @@ class CConnectionFactory(object):
         self.types = {}
         self.path = path
         self.domainfactory = domainfactory
+        self.metamodel = weakref.ref(metamodel)
         
         self.storage = storage
         for file in storage.listdir(self.path):
@@ -120,7 +123,7 @@ class CConnectionFactory(object):
                     else:
                         visualObj.AppendChild(self.__LoadAppearance(child))
 
-        tmp = self.types[id] = CConnectionType(id, visualObj, icon, domain, identity)
+        tmp = self.types[id] = CConnectionType(self, id, visualObj, icon, domain, identity)
         for pos, lbl in labels:
             tmp.AddLabel(pos, lbl)
     
@@ -183,3 +186,6 @@ class CConnectionFactory(object):
             for child in root:
                 obj.AppendChild(self.__LoadLabelAppearance(child))
         return obj
+    
+    def GetMetamodel(self):
+        return self.metamodel()

@@ -6,10 +6,16 @@ from common import event
 from lib.datatypes import CColor, CFont
 
 class CfrmOptions(common.CWindow):
-    #widgets = ('labelOptions',)
-    widgets = ('cbElementLine', 'cbElementFill', 'cbElementFill2', 'cbElementFill3', 'cbElementShadow', 'cbElementNameText', 'cbElementText', 'fbElementNameText','fbElementText' ,'cbConnectionLine', 'cbConnectionArrow', 'cbConnectionArrowFill', 'cbConnectionNameText', 'cbConnectionText', 'fbConnectionNameText', 'fbConnectionText', 'sbSelectionPointsSize', 'cbSelectionPoints', 'cbSelectionRectangle' ,'sbSelectionRectangleWidth', 'cbDragRectangle', 'sbDragRectangleWidth', 'txtRootPath', 'txtTemplatesPath', 'txtImagesPath', 'txtGuiPath', 'txtLocalesPath', 'txtUserDirPath', 'txtUserConfigDirPath', 'txtRecentFilesPath', 'expElement', 'expSelection', 'expConnection', 'expDrag',
-               'cmdDefaultOptions')
     name = 'frmOptions'
+    glade = 'appSettings.glade'
+    
+    widgets = ('cbElementLine', 'cbElementFill', 'cbElementFill2', 'cbElementFill3', 'cbElementShadow', 'cbElementNameText', 'cbElementText', 'fbElementNameText','fbElementText' ,'cbConnectionLine', 'cbConnectionArrow', 'cbConnectionArrowFill', 'cbConnectionNameText', 'cbConnectionText', 'fbConnectionNameText', 'fbConnectionText', 'sbSelectionPointsSize', 'cbSelectionPoints', 'cbSelectionRectangle' ,'sbSelectionRectangleWidth', 'cbDragRectangle', 'sbDragRectangleWidth', 'expElement', 'expSelection', 'expConnection', 'expDrag',
+               'cmdDefaultOptions')
+            
+    def __init__(self, app, wTree):
+        common.CWindow.__init__(self, app, wTree)
+        
+        self.form.action_area.child_set_property(self.cmdDefaultOptions, 'secondary', True)
     
     def CColorToGtkColor(self, color):
         return gtk.gdk.color_parse(str(color))
@@ -49,14 +55,6 @@ class CfrmOptions(common.CWindow):
             config['/Styles/Selection/PointsSize'] = self.sbSelectionPointsSize.get_value_as_int()
             config['/Styles/Selection/RectangleWidth'] = self.sbSelectionRectangleWidth.get_value_as_int()
             config['/Styles/Drag/RectangleWidth'] = self.sbDragRectangleWidth.get_value_as_int()
-            config['/Paths/Root'] = self.txtRootPath.get_text()
-            config['/Paths/Templates'] = self.txtTemplatesPath.get_text()
-            config['/Paths/Images'] = self.txtImagesPath.get_text()
-            config['/Paths/Gui'] = self.txtGuiPath.get_text()
-            config['/Paths/Locales'] = self.txtLocalesPath.get_text()
-            config['/Paths/UserDir'] = self.txtUserDirPath.get_text()
-            config['/Paths/UserConfig'] = self.txtUserConfigDirPath.get_text()
-            config['/Paths/RecentFiles'] = self.txtRecentFilesPath.get_text()
 
         self.Hide()
     
@@ -83,14 +81,6 @@ class CfrmOptions(common.CWindow):
         self.sbSelectionPointsSize.set_value(config['/Styles/Selection/PointsSize'])
         self.sbSelectionRectangleWidth.set_value(config['/Styles/Selection/RectangleWidth'])
         self.sbDragRectangleWidth.set_value(config['/Styles/Drag/RectangleWidth'])
-        self.txtRootPath.set_text(config['/Paths/Root'])
-        self.txtTemplatesPath.set_text(config['/Paths/Templates'])
-        self.txtImagesPath.set_text(config['/Paths/Images'])
-        self.txtGuiPath.set_text(config['/Paths/Gui'])
-        self.txtLocalesPath.set_text(config['/Paths/Locales'])
-        self.txtUserDirPath.set_text(config['/Paths/UserDir'])
-        self.txtUserConfigDirPath.set_text(config['/Paths/UserConfig'])
-        self.txtRecentFilesPath.set_text(config['/Paths/RecentFiles'])
     
     @event("expElement", "activate")
     @event("expConnection", "activate")

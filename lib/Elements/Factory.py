@@ -1,9 +1,11 @@
 import os
 import os.path
+import weakref
+
 from lib.Exceptions.DevException import *
 from Type import CElementType
 from Alias import CElementAlias
-from lib.config import config
+from lib.Distconfig import SCHEMA_PATH
 from lib.consts import METAMODEL_NAMESPACE
 from lib.Drawing.Objects import ALL
 from lib.Drawing.Context import BuildParam
@@ -11,7 +13,7 @@ from lib.Depend.etree import etree, HAVE_LXML
 
 #if lxml.etree is imported successfully, we use xml validation with xsd schema
 if HAVE_LXML:
-    xmlschema_doc = etree.parse(os.path.join(config['/Paths/Schema'], "metamodel.xsd"))
+    xmlschema_doc = etree.parse(os.path.join(SCHEMA_PATH, "metamodel.xsd"))
     xmlschema = etree.XMLSchema(xmlschema_doc)
 
 
@@ -19,7 +21,7 @@ class CElementFactory(object):
     """
     Factory, that creates element type objects
     """
-    def __init__(self, storage, path, domainfactory):
+    def __init__(self, metamodel, storage, path, domainfactory):
         """
         Create the element factory
         
@@ -33,6 +35,7 @@ class CElementFactory(object):
         from current metamodel
         @type domainfactory: L{CDomainFactory<lib.Domains.Factory.CDomainFactory>}
         """
+        self.metamodel = weakref.ref(metamodel)
         self.types = {}
         self.path = path
         self.domainfactory = domainfactory
@@ -105,7 +108,7 @@ class CElementFactory(object):
         self.types[root.get('id')] = obj
     
     def __LoadType(self, root):
-        obj = CElementType(root.get('id'))
+        obj = CElementType(self, root.get('id'))
         
         for element in root:
             if element.tag == METAMODEL_NAMESPACE + 'Icon':
@@ -167,3 +170,6 @@ class CElementFactory(object):
             if item.get('allowrecursive') != None:
                 allow_recursive = item.get('allowrecursive').lower() in ('1', 'true', 'yes')
             obj.AppendConnection(value, with_what, allow_recursive)
+    
+    def GetMetamodel(self):
+        return self.metamodel()

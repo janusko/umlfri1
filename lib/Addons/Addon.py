@@ -1,14 +1,21 @@
 class CAddon(object):
-    def __init__(self, manager, storage, uri, component, enabled, name, version = None, icon = None, description = None):
+    def __init__(self, manager, storage, uris, component, enabled, uninstallable,
+                    author, name, version = "", license = (None, None), homepage = None,
+                    icon = None, description = None):
         self.__manager = manager
         
         self.__storage = storage
-        self.__uri = uri
+        self.__uris = uris
         
         self.__component = component
         component._SetAddon(self)
         
         self.__enabled = enabled
+        self.__uninstallable = uninstallable
+        
+        self.__author = author
+        self.__license = license
+        self.__homepage = homepage
         
         self.__name = name
         self.__version = version
@@ -19,8 +26,12 @@ class CAddon(object):
     def GetStorage(self):
         return self.__storage
     
-    def GetUri(self):
-        return self.__uri
+    def GetDefaultUri(self):
+        return self.__uris[0]
+    
+    def GetUris(self):
+        for uri in self.__uris:
+            yield uri
     
     def IsEnabled(self):
         return self.__enabled
@@ -32,6 +43,18 @@ class CAddon(object):
     def Disable(self):
         self.__enabled = False
         self.__manager._RefreshAddonEnabled(self)
+    
+    def GetAuthor(self):
+        return self.__author
+    
+    def GetLicense(self):
+        return self.__license[1]
+    
+    def GetLicenseName(self):
+        return self.__license[0]
+    
+    def GetHomepage(self):
+        return self.__homepage
     
     def GetName(self):
         return self.__name
@@ -50,3 +73,10 @@ class CAddon(object):
     
     def GetDescription(self):
         return self.__description
+    
+    def IsUninstallable(self):
+        return self.__uninstallable
+    
+    def Uninstall(self):
+        self.__storage.destroy()
+        self.__manager._DeleteAddon(self)

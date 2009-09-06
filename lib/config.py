@@ -1,26 +1,15 @@
 from Depend.etree import etree, HAVE_LXML, XMLSyntaxError
 
-import consts
-import os.path
-import os
-import colors
+from Distconfig import SCHEMA_PATH, CONFIG_PATH, USERDIR_PATH
+
+from consts import CONFIG_NAMESPACE, USERCONFIG_NAMESPACE
 from lib import Indent
 from Exceptions.DevException import *
 from Exceptions import XMLError
 from datatypes import CFont, CColor
-import sys
 
-def expanduser(path):
-    if path[0] == '~':
-        return os.path.expanduser('~').decode(sys.getfilesystemencoding()) + path[1:]
-    return path
-
-def path_type(val):
-    val = val.replace(u'\xFF', consts.ROOT_PATH)
-    val = os.path.abspath(expanduser(val))
-    if os.path.isdir(val):
-        val += os.sep
-    return val
+import os.path
+import os
 
 types = {
     "/Styles/Element/LineColor": CColor,
@@ -31,7 +20,7 @@ types = {
     "/Styles/Element/NameTextColor": CColor,
     "/Styles/Element/TextColor": CColor,
     "/Styles/Element/NameTextFont": CFont,
-    "/Styles/Element/Textfont": CFont,
+    "/Styles/Element/TextFont": CFont,
     "/Styles/Connection/ArrowAngleSteps": int,
     "/Styles/Connection/MinimalAngle": float,
     "/Styles/Connection/LineColor": CColor,
@@ -48,31 +37,22 @@ types = {
     "/Styles/Selection/RectangleColor": CColor,
     "/Styles/Drag/RectangleWidth": int,
     "/Styles/Drag/RectangleColor": CColor,
-    "/Paths/Root": path_type,
-    "/Paths/Addons": path_type,
-    "/Paths/Templates": path_type,
-    "/Paths/Images": path_type,
-    "/Paths/Gui": path_type,
-    "/Paths/Locales": path_type,
-    "/Paths/Schema": path_type,
-    "/Paths/UserDir": path_type,
-    "/Paths/UserConfig": path_type,
-    "/Paths/UserAddons": path_type,
-    "/Paths/UserEnabledAddons": path_type,
-    "/Paths/UserTemplates": path_type,
-    "/Paths/RecentFiles": path_type,
-    "/Paths/UserGui": path_type,
     "/Page/Width": int,
     "/Page/Height": int,
 }
+
+#if lxml.etree is imported successfully, we use xml validation with xsd schema
+if HAVE_LXML:
+    xmlschema_doc = etree.parse(os.path.join(SCHEMA_PATH, "config.xsd"))
+    xmlschema = etree.XMLSchema(xmlschema_doc)
+    
+    xmlschema_user_doc = etree.parse(os.path.join(SCHEMA_PATH, "userconfig.xsd"))
+    xmlschema_user = etree.XMLSchema(xmlschema_user_doc)
 
 class CConfig(object):
     """
     Automatic config file manager
     """
-    
-    CONFIG_NAMESPACE = 'http://umlfri.kst.fri.uniza.sk/xmlschema/config.xsd'
-    USERCONFIG_NAMESPACE = 'http://umlfri.kst.fri.uniza.sk/xmlschema/userconfig.xsd'
     
     def __init__(self, file):
         """
@@ -87,11 +67,6 @@ class CConfig(object):
         
         tree = etree.XML(open(file).read())
         if HAVE_LXML:
-            xmlschema_path = path_type(tree.find('./{'+self.CONFIG_NAMESPACE+'}Paths/{'+self.CONFIG_NAMESPACE+'}Schema').text)
-            if not xmlschema_path:
-                raise Exception, ("XMLError", "Schema path is not found in config file")
-            xmlschema_doc = etree.parse(os.path.join(xmlschema_path, "config.xsd"))
-            xmlschema = etree.XMLSchema(xmlschema_doc)
             if not xmlschema.validate(tree):
                 raise ConfigError, ("XMLError", xmlschema.error_log.last_error)
         
@@ -101,20 +76,16 @@ class CConfig(object):
         k = self.original.keys()
         k.sort()
         
-        if not os.path.isdir(self['/Paths/UserDir']):
-            os.mkdir(self['/Paths/UserDir'])
-
-        if HAVE_LXML:
-            xmlschema_doc = etree.parse(os.path.join(xmlschema_path, "userconfig.xsd"))
-            self.xmlschema = etree.XMLSchema(xmlschema_doc)
+        if not os.path.isdir(USERDIR_PATH):
+            os.mkdir(USERDIR_PATH)
 
         try:
-            self.file = self['/Paths/UserConfig']
+            self.file = os.path.join(USERDIR_PATH, 'config.xml')
             if os.path.isfile(self.file):
                 tree = etree.XML(open(self.file).read())
                 if HAVE_LXML:
-                    if not self.xmlschema.validate(tree):
-                        raise ConfigError, ("XMLError", self.xmlschema.error_log.last_error)
+                    if not xmlschema_user.validate(tree):
+                        raise ConfigError, ("XMLError", xmlschema_user.error_log.last_error)
                 self.cfgs.update(self.__Load(tree))
         except (XMLSyntaxError, ConfigError):
             print 'WARNING: Your local config file is malformed. Personal settings will be ignored'
@@ -205,7 +176,7 @@ class CConfig(object):
         
         def save(root = save['Config'], node = None, level = 1):
             for part, val in root.iteritems():
-                newNode = etree.Element('{%s}%s'%(self.USERCONFIG_NAMESPACE, part))
+                newNode = etree.Element('%s%s'%(USERCONFIG_NAMESPACE, part))
                 if isinstance(val, dict):
                     save(val, newNode, level+1)
                 else:
@@ -223,13 +194,13 @@ class CConfig(object):
                     tmp = tmp2
                 tmp[path[-1]] = val
         
-        rootNode = etree.XML('<Config xmlns="%s"></Config>'%self.USERCONFIG_NAMESPACE)
+        rootNode = etree.XML('<Config xmlns="%s"></Config>'%USERCONFIG_NAMESPACE[1:-1])
         save(node = rootNode)
         
         #xml tree is validate with xsd schema (recentfile.xsd)
         if HAVE_LXML:
-            if not self.xmlschema.validate(rootNode):
-                raise ConfigError, ("XMLError", self.xmlschema.error_log.last_error)
+            if not xmlschema_user.validate(rootNode):
+                raise ConfigError, ("XMLError", xmlschema_user.error_log.last_error)
         
         #make human-friendly tree
         Indent(rootNode)
@@ -247,4 +218,4 @@ class CConfig(object):
         """
         return self.revision
 
-config = CConfig(consts.MAIN_CONFIG_PATH)
+config = CConfig(CONFIG_PATH)

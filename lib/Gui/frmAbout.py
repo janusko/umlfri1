@@ -4,13 +4,18 @@ from lib.Depend.gtk2 import pango
 import lib.Depend
 
 from common import CWindow, event
-from lib.config import config
-import lib.consts
+from lib.Distconfig import IMAGES_PATH, DOCS_PATH
+from lib.consts import WEB
+import os.path
+
 import re
+import webbrowser
 
 class CfrmAbout(CWindow):
-    widgets = ('tviewCredits','tviewAboutSysInfo', 'lblAboutUmlfri', 'lbtnProjectWeb', )
     name = 'frmAbout'
+    glade = 'help.glade'
+    
+    widgets = ('tviewCredits','tviewAboutSysInfo', 'lblAboutUmlfri', 'lbtnProjectWeb', 'imgLogo')
     
     reProgrammedFor = re.compile('^Programmed for:$')
     reProgrammedBy = re.compile('^Programmed by:$')
@@ -19,7 +24,9 @@ class CfrmAbout(CWindow):
     
     def __init__(self, app, wTree):
         CWindow.__init__(self, app, wTree)
-
+        
+        self.imgLogo.set_from_file(os.path.join(IMAGES_PATH, 'app_logo.png'))
+        
         buff = self.tviewAboutSysInfo.get_buffer()  
         tag_tab = buff.get_tag_table()
 
@@ -52,15 +59,14 @@ class CfrmAbout(CWindow):
         # set credits
         self.__SetCredits()
         # set web address 
-        self.lbtnProjectWeb.set_uri(lib.consts.WEB)
-        self.lbtnProjectWeb.set_label(lib.consts.WEB)
+        self.lbtnProjectWeb.set_uri(WEB)
+        self.lbtnProjectWeb.set_label(WEB)
         self.form.run()
         self.Hide()
         
     @event("lbtnProjectWeb", "clicked")
     def OnLbtnProjectWebClicked(self, widget):
-        from webbrowser import open_new_tab
-        open_new_tab(lib.consts.WEB)
+        webbrowser.open_new_tab(WEB)
         self.form.run()
         self.Hide()
     
@@ -79,7 +85,7 @@ class CfrmAbout(CWindow):
         if tag_tab.lookup("bold") is None:
             buff.create_tag("bold", weight=pango.WEIGHT_BOLD)
 
-        lines = [line.rstrip() for line in file(config['/Paths/Root']+'ABOUT') if not line.strip().startswith('-')]
+        lines = [line.rstrip() for line in file(os.path.join(DOCS_PATH, 'ABOUT')) if not line.strip().startswith('-')]
  
         for line in lines:
             i = self.reProgrammedFor.match(line) is not None
