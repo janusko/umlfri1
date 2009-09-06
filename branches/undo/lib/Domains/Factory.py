@@ -3,7 +3,7 @@ import os.path
 import re
 from lib.Exceptions.DevException import *
 from Type import CDomainType
-from lib.config import config
+from lib.Distconfig import SCHEMA_PATH
 from lib.consts import METAMODEL_NAMESPACE
 from Parser import CDomainParser
 from Joiner import CDomainJoiner
@@ -12,7 +12,7 @@ from lib.Depend.etree import etree, HAVE_LXML
 
 #if lxml.etree is imported successfully, we use xml validation with xsd schema
 if HAVE_LXML:
-    xmlschema_doc = etree.parse(os.path.join(config['/Paths/Schema'], "metamodel.xsd"))
+    xmlschema_doc = etree.parse(os.path.join(SCHEMA_PATH, "metamodel.xsd"))
     xmlschema = etree.XMLSchema(xmlschema_doc)
 
 

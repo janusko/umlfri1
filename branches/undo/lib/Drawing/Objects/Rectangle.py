@@ -4,17 +4,6 @@ import math
 from lib.Exceptions.UserException import *
 from lib.datatypes import CColor
 
-cornerDefs = {
-    'rounded': 'M 0,1 C 0,0.446 0.446,0 1,0',
-    'note': 'M 0,1 L 1,1 L 1,0 L 0,1 z  M 0,1 L 1,0',
-}
-
-sideDefs = {
-    'rounded': 'M 0,0 C -0.554,0 -1,-0.223 -1,-0.5 C -1,-0.777 -0.554,-1 0,-1',
-    'sidelong' : 'M -1,0 L 0,-1',
-    'beak' : 'M 0,-1 L -1,-0.5 L 0,0'
-}
-
 class CRectangle(CSimpleContainer):
     types = {
         'fill': CColor,
@@ -53,6 +42,7 @@ class CRectangle(CSimpleContainer):
         return True, True
 
     def Paint(self, context):
+        paths = context.GetMetamodel().GetPathFactory()
         size = context.ComputeSize(self)
         shadowcolor = context.GetShadowColor()
         if shadowcolor is None:
@@ -66,7 +56,7 @@ class CRectangle(CSimpleContainer):
                 if len(c) == 2:
                     c = c[0], c[1], None
                 trans = TransformMatrix.mk_scale(int(c[0]))*TransformMatrix.mk_rotation(i*math.pi/2)
-                c = c[2], trans*Path(cornerDefs.get(c[1], c[1]))
+                c = c[2], trans*paths.GetPath(c[1])
             corners.append(c)
         
         sides = []
@@ -75,14 +65,14 @@ class CRectangle(CSimpleContainer):
                 if len(s) == 2:
                     s = s[0], s[1], None
                 trans = TransformMatrix.mk_rotation((i+1)*math.pi/2)
-                s = str(s[2]), trans*Path(sideDefs.get(s[1], s[1])), int(s[0])
+                s = str(s[2]), trans*paths.GetPath(s[1]), int(s[0])
             sides.append(s)
         
         canvas = context.GetCanvas()
         pos = context.GetPos()
         size = context.ComputeSize(self)
         
-        if sides == corners == (None, None, None, None):
+        if all(side is None for side in sides) and all(corner is None for corner in corners):
             canvas.DrawRectangle(pos, size, border, fill)
         else:
             cornerPath = []

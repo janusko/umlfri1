@@ -1,29 +1,31 @@
 from lib.Depend.gtk2 import gtk
 
 import common
-import lib.consts
+
+from lib.consts import PROJECT_EXTENSION, PROJECT_CLEARXML_EXTENSION, PROJECT_TPL_EXTENSION
+
 import os.path
 
 class CfrmSave(common.CWindow):
     name = 'frmSave'
-    
+    glade = 'project.glade'
     
     def __init__(self, app, wTree):
         common.CWindow.__init__(self, app, wTree)
         
         filter = gtk.FileFilter()
         filter.set_name(_("UML .FRI Projects"))
-        filter.add_pattern('*'+lib.consts.PROJECT_EXTENSION)
+        filter.add_pattern('*'+PROJECT_EXTENSION)
         self.form.add_filter(filter)
         
         filter = gtk.FileFilter()
         filter.set_name(_("UML .FRI Clear XML Projects"))
-        filter.add_pattern('*'+lib.consts.PROJECT_CLEARXML_EXTENSION)
+        filter.add_pattern('*'+PROJECT_CLEARXML_EXTENSION)
         self.form.add_filter(filter)
         
         filter = gtk.FileFilter()
         filter.set_name(_("UML .FRI Project templates"))
-        filter.add_pattern('*'+lib.consts.PROJECT_TPL_EXTENSION)
+        filter.add_pattern('*'+PROJECT_TPL_EXTENSION)
         self.form.add_filter(filter)
         
         filter = gtk.FileFilter()
@@ -49,13 +51,13 @@ class CfrmSave(common.CWindow):
                     filename = filename.decode('utf-8')
                 if '.' not in os.path.basename(filename):
                     if filter == _("UML .FRI Projects"):
-                        filename += lib.consts.PROJECT_EXTENSION
+                        filename += PROJECT_EXTENSION
                         #isZippedFile = True
                     elif filter == _("UML .FRI Clear XML Projects"):
-                        filename += lib.consts.PROJECT_CLEARXML_EXTENSION
+                        filename += PROJECT_CLEARXML_EXTENSION
                         #isZippedFile = False
                     elif filter == _("UML .FRI Project templates"):
-                        filename += lib.consts.PROJECT_TPL_EXTENSION
+                        filename += PROJECT_TPL_EXTENSION
                         #isZippedFile = True
                 isZippedFile = filter in self.zippedFileExtensions
                 if not os.path.isdir(filename):

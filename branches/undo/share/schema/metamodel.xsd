@@ -198,6 +198,7 @@
 					<xs:documentation>Define diamond of element</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<xs:element name="Default" type="DefaultType"/>
 		</xs:choice>
 	</xs:group>
 	<xs:complexType name="AlignType">
@@ -436,6 +437,14 @@
 		<xs:complexContent>
 			<xs:extension base="ObjectContainer">
 				<xs:attribute name="expand" type="xs:string"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="DefaultType">
+		<xs:complexContent>
+			<xs:extension base="SimpleObjectContainer">
+				<xs:attribute name="textfont" type="xs:string"/>
+				<xs:attribute name="textcolor" type="xs:string"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -812,4 +821,16 @@
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
+	<xs:element name="Paths">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Path" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:attribute name="id" use="required"/>
+						<xs:attribute name="path" use="required"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
 </xs:schema>

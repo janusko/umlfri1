@@ -7,8 +7,10 @@ from lib.Commands.AreaCommands import CAddConnectionCmd, CDeleteItemCmd
 
 
 class CfrmProperties(CWindow):
-    widgets = ('nbProProperties', 'twConnections', )
     name = 'frmProperties'
+    glade = 'properties.glade'
+    
+    widgets = ('nbProProperties', 'twConnections', )
     
     def __init__(self, app, wTree):
         CWindow.__init__(self, app, wTree)
@@ -65,11 +67,11 @@ class CfrmProperties(CWindow):
                 self.connModel.set(self.connModel.append(), 0, obj.GetName(), 1, i.GetType().GetId())
        
         response = self.form.run()
-        #while response == gtk.RESPONSE_APPLY:
-            #self.__Save()
-            #picDrawingArea.Paint()
-            #response = self.form.run()
-        if response == gtk.RESPONSE_OK or response == gtk.RESPONSE_APPLY :
+        while response == gtk.RESPONSE_APPLY:
+            self.__Save()
+            picDrawingArea.Paint()
+            response = self.form.run()
+        if response == gtk.RESPONSE_OK: #or response == gtk.RESPONSE_APPLY :
             self.__Save()
         self.Hide()
         self.groupCmd = None

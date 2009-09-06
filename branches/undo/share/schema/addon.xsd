@@ -4,7 +4,7 @@
 	<xs:element name="AddOn">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element name="Identity">
+				<xs:element name="Identity" maxOccurs="unbounded">
 					<xs:complexType>
 						<xs:attribute name="uri" type="xs:anyURI" use="required"/>
 					</xs:complexType>
@@ -34,18 +34,18 @@
 								</xs:complexType>
 							</xs:element>
 							<xs:choice minOccurs="0">
-								<xs:element name="commonLicense">
+								<xs:element name="CommonLicense">
 									<xs:complexType>
 										<xs:attribute name="name" use="required"/>
 										<xs:attribute name="file" type="xs:string"/>
 									</xs:complexType>
 								</xs:element>
-								<xs:element name="externalLicense">
+								<xs:element name="ExternalLicense">
 									<xs:complexType>
 										<xs:attribute name="file" type="xs:string" use="required"/>
 									</xs:complexType>
 								</xs:element>
-								<xs:element name="license" type="xs:string"/>
+								<xs:element name="License" type="xs:string"/>
 							</xs:choice>
 						</xs:sequence>
 					</xs:complexType>
@@ -95,6 +95,13 @@
 								<xs:element name="Path">
 									<xs:complexType>
 										<xs:attribute name="path" use="required"/>
+									</xs:complexType>
+								</xs:element>
+								<xs:element name="Template" minOccurs="0" maxOccurs="unbounded">
+									<xs:complexType>
+										<xs:attribute name="name" type="xs:string"/>
+										<xs:attribute name="icon" type="xs:string"/>
+										<xs:attribute name="path" type="xs:string" use="required"/>
 									</xs:complexType>
 								</xs:element>
 							</xs:sequence>

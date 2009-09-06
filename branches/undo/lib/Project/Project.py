@@ -14,11 +14,11 @@ from lib.Connections.Object import CConnectionObject
 from lib.Drawing import CDiagram
 import os.path
 from lib.consts import UMLPROJECT_NAMESPACE, PROJECT_EXTENSION, PROJECT_CLEARXML_EXTENSION
-from lib.config import config
+from lib.Distconfig import SCHEMA_PATH
 
 #if lxml.etree is imported successfully, we use xml validation with xsd schema
 if HAVE_LXML:
-    xmlschema_doc = etree.parse(os.path.join(config['/Paths/Schema'], "umlproject.xsd"))
+    xmlschema_doc = etree.parse(os.path.join(SCHEMA_PATH, "umlproject.xsd"))
     xmlschema = etree.XMLSchema(xmlschema_doc)
 
 
@@ -30,10 +30,14 @@ class CProject(object):
         
         self.__addonManager = addonManager
         self.__metamodel = None
+        self.__addon = None
         self.defaultDiagram = None
         
         self.filename = None
         self.isZippedFile = None
+    
+    def GetAddon(self):
+        return self.__addon
     
     def GetDefaultDiagrams(self):
         if self.defaultDiagram is not None:
@@ -329,11 +333,17 @@ class CProject(object):
         else:
             raise ProjectError("malformed project file")
     
-    def LoadProject(self, filename, copy = False):
+    def CreateProject(self, template):
+        template.LoadInto(self)
+    
+    def LoadProject(self, filename, copy = False, storage = None):
         ListObj = {}
         ListCon = {}
         
-        if is_zipfile(filename):
+        if storage is not None:
+            self.isZippedFile = True
+            data = storage.read_file(filename)
+        elif is_zipfile(filename):
             self.isZippedFile = True
             file = ZipFile(filename,'r')
             data = file.read('content.xml')
@@ -374,7 +384,20 @@ class CProject(object):
                 
                 if not uri or not version:
                     raise XMLError("Bad metamodel definition")
+                
+                self.__addon = None
+                
                 addon = self.__addonManager.GetAddon(uri)
+                
+                if addon is None and self.isZippedFile and ('metamodel/addon.xml' in file.namelist()):
+                    if storage is None:
+                        addon = self.__addonManager.LoadAddon(os.path.join(filename, 'metamodel'))
+                    else:
+                        addon = self.__addonManager.LoadAddon(storage.subopen('metamodel'))
+                    if uri not in addon.GetUris():
+                        addon = None
+                    self.__addon = addon
+                
                 if addon is None:
                     raise ProjectError("Project using unknown metamodel")
                 if addon.GetType() != 'metamodel':
@@ -412,6 +435,3 @@ class CProject(object):
                         self.GetMetamodel().GetElementFactory().GetElement(item.get('id')).SetCounter(int(item.get('value')))
                     elif self.GetMetamodel().GetDiagramFactory().HasType(item.get('id')):
                         self.GetMetamodel().GetDiagramFactory().GetDiagram(item.get('id')).SetCounter(int(item.get('value')))
-                        
-    Root = property(GetRoot, SetRoot)
-    

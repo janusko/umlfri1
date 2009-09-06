@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: UML .FRI 1.0-beta20090601\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-13 20:25+0200\n"
+"POT-Creation-Date: 2009-09-01 15:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,6 +35,9 @@ msgstr ""
 msgid "Add element"
 msgstr ""
 
+msgid "Addon could not be installed"
+msgstr ""
+
 msgid "Addons"
 msgstr ""
 
@@ -57,6 +60,9 @@ msgid "Arrow color"
 msgstr ""
 
 msgid "Arrow fill color"
+msgstr ""
+
+msgid "Author:"
 msgstr ""
 
 msgid "Basic information about your system"
@@ -86,6 +92,12 @@ msgstr ""
 msgid "Connections"
 msgstr ""
 
+msgid "Copy as image"
+msgstr ""
+
+msgid "Copy without background (transparent)"
+msgstr ""
+
 msgid "Create New Project"
 msgstr ""
 
@@ -98,6 +110,9 @@ msgstr ""
 msgid "Delete from Project"
 msgstr ""
 
+msgid "Description:"
+msgstr ""
+
 msgid "Diagram Export"
 msgstr ""
 
@@ -108,6 +123,21 @@ msgid "Diagram type"
 msgstr ""
 
 msgid "Disable"
+msgstr ""
+
+msgid ""
+"Do you really want to install this addon?\n"
+"<i>This operation could be potencionaly dangerous, so do it only if you know "
+"what are you doing.</i>"
+msgstr ""
+
+#, python-format
+msgid ""
+"Do you really want to uninstall addon '%(name)s %(version)s'?\n"
+"This is pernament."
+msgstr ""
+
+msgid "Do you want to"
 msgstr ""
 
 msgid "Do you want to save project?"
@@ -126,6 +156,9 @@ msgid "Elements"
 msgstr ""
 
 msgid "Enable"
+msgstr ""
+
+msgid "Error"
 msgstr ""
 
 msgid "Error opening file"
@@ -182,25 +215,31 @@ msgstr ""
 msgid "GTK+ version"
 msgstr ""
 
-msgid "Gui"
+msgid "Homepage"
+msgstr ""
+
+msgid "Homepage:"
 msgstr ""
 
 msgid "I_nclude project"
 msgstr ""
 
-msgid "Images"
+msgid "Install"
 msgstr ""
 
-msgid "Install"
+msgid "Install addon from file"
+msgstr ""
+
+msgid "Install metamodel from current project"
 msgstr ""
 
 msgid "Invalid connection"
 msgstr ""
 
-msgid "Line color"
+msgid "License:"
 msgstr ""
 
-msgid "Locales"
+msgid "Line color"
 msgstr ""
 
 msgid "Machine"
@@ -251,9 +290,6 @@ msgstr ""
 msgid "Pages"
 msgstr ""
 
-msgid "Paths"
-msgstr ""
-
 msgid "Platform"
 msgstr ""
 
@@ -267,15 +303,6 @@ msgid "Points color"
 msgstr ""
 
 msgid "Points size"
-msgstr ""
-
-msgid "Portable Document Format"
-msgstr ""
-
-msgid "Portable Network Graphics"
-msgstr ""
-
-msgid "PostScript"
 msgstr ""
 
 msgid "Preferences"
@@ -299,9 +326,6 @@ msgstr ""
 msgid "Question"
 msgstr ""
 
-msgid "Recent files"
-msgstr ""
-
 msgid "Rectagle width"
 msgstr ""
 
@@ -311,19 +335,19 @@ msgstr ""
 msgid "Rectangle width"
 msgstr ""
 
-msgid "Root"
-msgstr ""
-
 msgid "S_VG"
 msgstr ""
 
 msgid "Save Project As"
 msgstr ""
 
-msgid "Scalable Vector Graphics"
+msgid "Select Addon"
 msgstr ""
 
 msgid "Select a directory"
+msgstr ""
+
+msgid "Select addon source"
 msgstr ""
 
 msgid "Select export directory & file name"
@@ -365,9 +389,6 @@ msgstr ""
 msgid "System _info"
 msgstr ""
 
-msgid "Templates"
-msgstr ""
-
 msgid "Text Font"
 msgstr ""
 
@@ -383,7 +404,13 @@ msgid ""
 "See the Help tab for more info."
 msgstr ""
 
+msgid "Type:"
+msgstr ""
+
 msgid "UML .FRI"
+msgstr ""
+
+msgid "UML .FRI Addon"
 msgstr ""
 
 msgid "UML .FRI Addons"
@@ -393,6 +420,9 @@ msgid "UML .FRI Clear XML Projects"
 msgstr ""
 
 msgid "UML .FRI Project templates"
+msgstr ""
+
+msgid "UML .FRI Project with embedded metamodels"
 msgstr ""
 
 msgid "UML .FRI Projects"
@@ -446,12 +476,6 @@ msgid ""
 "case of problems, feel free to write us an email on :"
 msgstr ""
 
-msgid "User config"
-msgstr ""
-
-msgid "User dir"
-msgstr ""
-
 msgid "Uups! An error during sending occured:\n"
 msgstr ""
 
@@ -498,6 +522,9 @@ msgstr ""
 msgid "Z-Order"
 msgstr ""
 
+msgid "Zoom:"
+msgstr ""
+
 msgid "_Add diagram"
 msgstr ""
 
@@ -534,6 +561,9 @@ msgstr ""
 msgid "_Help"
 msgstr ""
 
+msgid "_Install"
+msgstr ""
+
 msgid "_License"
 msgstr ""
 
@@ -568,6 +598,9 @@ msgid "default file name"
 msgstr ""
 
 msgid "etree version"
+msgstr ""
+
+msgid "metamodel"
 msgstr ""
 
 msgid "none"

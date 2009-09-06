@@ -5,10 +5,9 @@ import cStringIO
 import re
 
 import StorageList
-
 from AbstractStorage import CAbstractStorage
 
-reMulSep = re.compile('/{2,}')
+from lib.Exceptions import *
 
 class CZipStorage(CAbstractStorage):
     @staticmethod
@@ -33,6 +32,18 @@ class CZipStorage(CAbstractStorage):
             f = os.path.sep + f
         return CZipStorage(f, '/'.join(path))
     
+    @staticmethod
+    def duplicate(storage, path):
+        root = path
+        
+        zip = zipfile.ZipFile(root, 'w')
+        for path, files, dirs in storage.walk():
+            for fname in files:
+                zip.writestr('/'.join((path, fname)), storage.read_file(os.path.join(path, fname)))
+        zip.close()
+        
+        return CZipStorage(root, '')
+    
     def __init__(self, file, path):
         if isinstance(file, zipfile.ZipFile):
             self.zip = file
@@ -40,8 +51,15 @@ class CZipStorage(CAbstractStorage):
             self.zip = zipfile.ZipFile(file, 'r')
         self.path = path
     
-    def __convertPath(path):
-        return reMulSep.sub('/', '/'.join((self.path, path)).rstrip('/\\'))
+    def __convertPath(self, path):
+        path = path.replace('\\', '/').split('/')
+        ret = []
+        for part in path:
+            if path == '..':
+                del ret[-1]
+            elif path and path != '.':
+                ret.append(path)
+        return '/'.join(path)
     
     def listdir(self, path):
         path = self.__convertPath(path)
@@ -61,5 +79,55 @@ class CZipStorage(CAbstractStorage):
     def subopen(self, path):
         path = self.__convertPath(path)
         return CZipStorage(self.zip, path)
+    
+    def destroy(self):
+        if self.path != '':
+            raise StorageDestroyError("Cannot destroy storage from within zip file")
+        
+        os.unlink(self.zip.filename)
+    
+    def __walk(self, root, dir):
+        fnames = []
+        dnames = []
+        for name, value in dir.iteritems():
+            if value is None:
+                fnames.append(name)
+            else:
+                dnames.append(name)
+        
+        yield root, dnames, fnames
+        
+        for d in dnames:
+            if root == '':
+                new_root = d
+            else:
+                new_root = root + '/' + d
+                
+            for item in self.__walk(new_root, dir[d]):
+                yield item
+    
+    def walk(self):
+        dir = {}
+        for fname in self.zip.namelist():
+            fname = fname.replace('\\', '/').lstrip('/')
+            if not fname.startswith(self.path):
+                continue
+            
+            fparts = fname[len(self.path):].split('/')
+            
+            while fparts and fparts[0] == '':
+                del fparts[0]
+            
+            if not fparts:
+                continue
+            
+            tmp = dir
+            for part in fparts[:-1]:
+                tmp = tmp.setdefault(part, {})
+            
+            if fparts[-1]:
+                tmp[fparts[-1]] = None
+        
+        return list(self.__walk('', dir))
 
 StorageList.classes.append(CZipStorage)

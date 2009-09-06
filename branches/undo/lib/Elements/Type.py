@@ -1,12 +1,14 @@
 from lib.lib import ToBool
 from lib.Exceptions.UserException import *
 
+import weakref
+
 class CElementType(object):
     '''
     Scheme for a class of elements
     '''
     
-    def __init__(self, id):
+    def __init__(self, factory, id):
         '''
         create new instance of element type
         '''
@@ -21,6 +23,7 @@ class CElementType(object):
         self.counter = 0
         self.options = {}
         self.identity = None
+        self.factory = weakref.ref(factory)
     
     def SetDomain(self, domain):
         '''
@@ -166,3 +169,6 @@ class CElementType(object):
         @rtype: bool
         '''
         return self.GetDomain().GetAttribute(name)['type'] != 'text'
+    
+    def GetMetamodel(self):
+        return self.factory().GetMetamodel()

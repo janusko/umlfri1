@@ -1,12 +1,13 @@
 <?xml version="1.0" ?>
 <AddOn xmlns="http://umlfri.org/xmlschema/addon.xsd">
-    <Identity uri="http://umlfri.kst.fri.uniza.sk/metamodel/dfd.frim" />
+    <Identity uri="urn:umlfri.org:metamodel:dfd" />
+    
     <FriendlyName name="DFD" version="0.0.1" />
     <Author>
         <Name name="UML .FRI team" />
         <Homepage url="http://umlfri.org" />
         
-        <commonLicense name="GPL" />
+        <CommonLicense name="GPL-2" />
     </Author>
     
     <Icon path="icons/dfd_icon.png" />
@@ -16,6 +17,8 @@
     </Description>
     
     <Metamodel>
-        <Path path="." />
+        <Path path="metamodel" />
+        
+        <Template path="templates/empty.fritx" name="Empty DFD diagram" />
     </Metamodel>
 </AddOn>

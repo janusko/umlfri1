@@ -3,20 +3,20 @@ from lib.Depend.etree import etree, HAVE_LXML
 from lib.lib import XMLEncode, Indent
 from lib.Exceptions.UserException import *
 import os.path
-from lib.config import config
+from lib.Distconfig import SCHEMA_PATH, USERDIR_PATH
 import datetime
 from lib.consts import RECENTFILES_NAMESPACE
 
 #if lxml.etree is imported successfully, we use xml validation with xsd schema
 if HAVE_LXML:
-    xmlschema_doc = etree.parse(os.path.join(config['/Paths/Schema'], "recentfiles.xsd"))
+    xmlschema_doc = etree.parse(os.path.join(SCHEMA_PATH, "recentfiles.xsd"))
     xmlschema = etree.XMLSchema(xmlschema_doc)
 
 
 class CRecentFiles(object):
     
     def __init__(self):
-        self.filename = os.path.expanduser(config["/Paths/RecentFiles"])
+        self.filename = os.path.join(USERDIR_PATH, 'RecentFiles.xml')
         
         self.files = []
         self.LoadRecentFiles()

@@ -44,3 +44,15 @@ class CExceptionDialog:
 
     def __del__(self):
         self.dialog.destroy()
+
+class CErrorDialog:
+    def __init__(self, form, message):
+        self.dialog = gtk.MessageDialog(form, 0, gtk.MESSAGE_ERROR, gtk.BUTTONS_OK)
+        self.dialog.set_markup(message)
+        self.dialog.set_title(_("Error"))
+
+    def run(self):
+        self.dialog.run()
+
+    def __del__(self):
+        self.dialog.destroy()
