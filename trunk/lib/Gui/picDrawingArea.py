@@ -202,9 +202,11 @@ class CpicDrawingArea(CWidget):
             if changed:
                 self.__invalidated = True # redraw completly on next configure event
             return
+        
         posx, posy = int(self.picHBar.get_value()), int(self.picVBar.get_value())
-        sizx, sizy = self.GetWindowSize()        
+        sizx, sizy = self.GetWindowSize()    
         ((bposx, bposy), (bsizx, bsizy)) = self.buffer_size
+        (bposx, bposy) = self.canvas.ToPhysical((bposx, bposy))
         
         
         if posx < bposx or bposx + bsizx < posx + sizx or \
@@ -213,6 +215,7 @@ class CpicDrawingArea(CWidget):
             bposx = posx + (sizx - bsizx)//2
             bposy = posy + (sizy - bsizy)//2
                       
+            (bposx, bposy) = self.canvas.ToLogical((bposx, bposy))
             self.buffer_size = ((bposx, bposy), (bsizx, bsizy))
             changed = True
         if changed:
