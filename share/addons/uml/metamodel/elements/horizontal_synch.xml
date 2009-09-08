@@ -4,7 +4,7 @@
     <Domain id="synchronization" identity="name" />
     <Connections>
         <Item value="StateTransition"/>
-        <Item value="ActivityFlow"/>
+        <Item value="Control Flow"/>
     </Connections>
     <Appearance>
         <HBox>
