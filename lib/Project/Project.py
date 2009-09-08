@@ -155,7 +155,7 @@ class CProject(object):
                 element = etree.Element(UMLPROJECT_NAMESPACE+'text')
                 element.text = data
             else:
-                raise Exception("unknown data format")
+                raise ProjectError("unknown data format")
             if name:
                 element.set('name', name)
             return element
@@ -262,7 +262,10 @@ class CProject(object):
         #xml tree is validate with xsd schema (recentfile.xsd)
         if HAVE_LXML:
             if not xmlschema.validate(rootNode):
-                raise XMLError(xmlschema.error_log.last_error)
+                if __debug__:
+                    raise XMLError("Schema validation failed\n" + str(xmlschema.error_log.last_error))
+                else:
+                    raise XMLError("Schema validation failed")
         
         #make human-friendly tree
         Indent(rootNode)
@@ -364,7 +367,10 @@ class CProject(object):
         #xml (version) file is validate with xsd schema (metamodel.xsd)
         if HAVE_LXML:
             if not xmlschema.validate(root):
-                raise XMLError(xmlschema.error_log.last_error)
+                if __debug__:
+                    raise XMLError("Schema validation failed\n" + str(xmlschema.error_log.last_error))
+                else:
+                    raise XMLError("Schema validation failed")
         
         savever = tuple(int(i) for i in root.get('saveversion').split('.'))
         
