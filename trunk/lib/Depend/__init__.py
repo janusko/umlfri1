@@ -26,4 +26,6 @@ def version():
     ret.extend(etree.version())
     ret.extend(gtk2.version())
     
+    ret.append(('__debug__', str(__debug__)))
+    
     return ret

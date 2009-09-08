@@ -3,6 +3,7 @@ from lib.Depend.gtk2 import gtk
 from common import CWindow, event
 
 from lib.consts import SCALE_MIN, SCALE_MAX, SCALE_INCREASE, WEB
+from lib.Exceptions import *
 
 import os.path
 from lib.Drawing import CElement, CDiagram
@@ -153,17 +154,18 @@ class CfrmMain(CWindow):
                 self.application.GetProject().CreateProject(filenameOrTemplate)
             else:
                 self.application.GetProject().LoadProject(filenameOrTemplate, copy)
-        except Exception:
+        except (ProjectError, XMLError), ex:
             if __debug__:
                 raise
+            
             if copy is not None:
-                self.application.GetRecentFiles().RemoveFile(filename)
+                self.application.GetRecentFiles().RemoveFile(filenameOrTemplate)
             self.application.ProjectDelete()
             self.nbTabs.CloseAll()
             self.twProjectView.ClearProjectView()
             self.ReloadTitle()
             self.nbProperties.Fill(None)
-            return CWarningDialog(self.form, _('Error opening file')).run()
+            return CWarningDialog(self.form, _('Error opening file') + '\n' + _(str(ex))).run()
             
         self.ReloadTitle()
         self.twProjectView.Redraw(True)
