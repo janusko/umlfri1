@@ -5,15 +5,16 @@
     <Elements>
         <Item value="Note" />
         <Item value="Package" />
-        <Item value="Activity" />        
+        <Item value="Activity" />
         <Item value="StartState" />
         <Item value="EndState" />
         <Item value="Decision" />
+        <Item value="Merge" />
         <Item value="VerticalSynchronization" />
         <Item value="HorizontalSynchronization" />
     </Elements>
     <Connections>
-        <Item value="ActivityFlow" />
+        <Item value="Control Flow" />
         <Item value="Note Link" />
     </Connections>
 </DiagramType>
