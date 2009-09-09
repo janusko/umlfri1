@@ -20,7 +20,7 @@ def root():
     import imp
     
     if (hasattr(sys, "frozen") or hasattr(sys, "importers") or imp.is_frozen("__main__")):
-        return path(syspath(sys.executable), '..')
+        return path(syspath(sys.executable), '..', '..')
     else:
         return path(dir(__file__), '..', '..')
 
