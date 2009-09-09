@@ -165,6 +165,7 @@ class CfrmMain(CWindow):
             self.twProjectView.ClearProjectView()
             self.ReloadTitle()
             self.nbProperties.Fill(None)
+            self.UpdateMenuSensitivity(project = False)
             return CWarningDialog(self.form, _('Error opening file') + '\n' + _(str(ex))).run()
             
         self.ReloadTitle()
