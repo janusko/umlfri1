@@ -170,41 +170,19 @@ class CCairoBaseCanvas(CAbstractCanvas):
         self.cr.stroke()
         self.cr.restore()
 
-    def DrawLines(self, points, fg, line_width = None, line_style = None):
-        self.cr.save()
-        self.cr.scale(self.scale, self.scale)
-        move_pen = True
-        for x,y in points :
-            if move_pen:
-                self.cr.move_to(x,y)
-                move_pen = False
-            self.cr.line_to(x,y) 
-
-        if fg is not None:
-            temp_color = HexToRGB(fg)
-            self.cr.set_source_rgba(temp_color[0], temp_color[1], temp_color[2], self.alpha)
-
-        if line_width is not None:
-            self.cr.set_line_width(line_width)
-
-        if line_style is not None:
-            self.cr.set_dash(LINE_STYLES[line_style], 0)
-
-        self.cr.stroke()
-        self.cr.restore()
-
-    def DrawPolygon(self, points, fg = None, bg = None, line_width = None, line_style = None):
+    def __DrawPolyAll(self, points, fg, bg, line_width, line_style, closed):
         self.cr.save()
         self.cr.scale(self.scale, self.scale)
         move_pen = True
 
         for x,y in points :
             if move_pen:
-                self.cr.move_to(x,y)
+                self.cr.move_to(x - self.baseX,y - self.baseY)
                 move_pen = False
-            self.cr.line_to(x,y)
+            self.cr.line_to(x - self.baseX,y - self.baseY)
 
-        self.cr.close_path()
+        if closed:
+            self.cr.close_path()
 
         if bg is not None:
             temp_color = HexToRGB(bg)
@@ -223,6 +201,12 @@ class CCairoBaseCanvas(CAbstractCanvas):
 
         self.cr.stroke()
         self.cr.restore()
+
+    def DrawLines(self, points, fg, line_width = None, line_style = None):
+        self.__DrawPolyAll(points, fg, None, line_width, line_style, False)
+
+    def DrawPolygon(self, points, fg = None, bg = None, line_width = None, line_style = None):
+        self.__DrawPolyAll(points, fg, bg, line_width, line_style, True)
 
     def DrawPath(self, path, fg = None, bg = None, line_width = None, line_style = None):
         for single in path:
