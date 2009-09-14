@@ -9,6 +9,7 @@
         <Item value="StartState" />
         <Item value="EndState" />
         <Item value="Decision" />
+        <Item value="Merge" />
         <Item value="VerticalSynchronization" />
         <Item value="HorizontalSynchronization" />
     </Elements>
