@@ -257,7 +257,7 @@ class CtwProjectView(CWidget):
         node = model.get(iter,3)[0]
         diagram.SetPath(node.GetPath() + "/" + diagram.GetName() + ":=Diagram=")
         node.AddDiagram(diagram)
-        novy = self.TreeStore.append(iter)
+        novy = self.TreeStore.insert(iter,len(node.diagrams)-1)
         self.TreeStore.set(novy, 0, diagram.GetName() , 1, PixmapFromPath(self.application.GetProject().GetMetamodel().GetStorage(), diagram.GetType().GetIcon()), 2, '=Diagram=',3,diagram)
         path = self.TreeStore.get_path(novy)
         self.twProjectView.expand_to_path(path)
