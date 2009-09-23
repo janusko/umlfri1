@@ -241,6 +241,8 @@ class CtwProjectView(CWidget):
         self.application.GetProject().AddNode(node, parent)
         novy = self.TreeStore.append(self.get_iter_from_path(self.twProjectView.get_model(), self.twProjectView.get_model().get_iter_root() ,path))
         self.TreeStore.set(novy, 0, element.GetName() , 1, PixmapFromPath(self.application.GetProject().GetMetamodel().GetStorage(), element.GetType().GetIcon()), 2, element.GetType().GetId(),3,node)
+        self.twProjectView.get_selection().select_iter(novy)
+        self.emit('selected-item-tree',self.twProjectView.get_model().get(novy,3)[0])        
         
         
     def AddDiagram(self, diagram):
@@ -258,9 +260,9 @@ class CtwProjectView(CWidget):
         novy = self.TreeStore.append(iter)
         self.TreeStore.set(novy, 0, diagram.GetName() , 1, PixmapFromPath(self.application.GetProject().GetMetamodel().GetStorage(), diagram.GetType().GetIcon()), 2, '=Diagram=',3,diagram)
         path = self.TreeStore.get_path(novy)
-        self.Redraw()
         self.twProjectView.expand_to_path(path)
         self.twProjectView.get_selection().select_iter(novy)
+        self.emit('selected-item-tree',self.twProjectView.get_model().get(novy,3)[0])
         
     
     def UpdateElement(self, object):
@@ -367,6 +369,8 @@ class CtwProjectView(CWidget):
     @event("mnuTreeDelete","activate")
     def on_mnuTreeDelete_activate(self, menuItem):
         iter = self.twProjectView.get_selection().get_selected()[1]
+        self.twProjectView.get_selection().select_iter(self.twProjectView.get_model().iter_parent(iter))
+        self.emit('selected-item-tree',self.twProjectView.get_model().get(self.twProjectView.get_model().iter_parent(iter),3)[0])
         model = self.twProjectView.get_model()
         if model.get(iter,2)[0] != "=Diagram=":
             node = model.get(iter,3)[0]
