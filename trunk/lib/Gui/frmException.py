@@ -68,8 +68,8 @@ class CfrmException(CWindow):
        
     def OnBtnSendClicked(self, widget, event, data=None):
         try:
-            log_tar_path = os.path.join(USERDIR_PATH, str(time.time()) + '.tar')  # path to tar file
-            tar = tarfile.open(log_tar_path, "w")
+            output = cStringIO.StringIO()
+            tar = tarfile.open(None, "w", output)
             tarinfo = tarfile.TarInfo()
             
             # tarinfo properties
@@ -120,19 +120,18 @@ class CfrmException(CWindow):
                     tar.add(log_project_path,EXCEPTION_PROJECT_FILE)
                     os.remove(log_project_path)
             
-            tar.close() # closing the tar file, now we have all we need for sending
 
             ### sending....testing ###
             try:
-                file_to_send = open(log_tar_path, 'r')            
-                string_to_send = file_to_send.read().encode('base64_codec')
-                file_to_send.close()
+                string_to_send = output.getvalue().encode('base64_codec')
+                tar.close() # close tar file
+                output.close() # close cStringIO
                 
                 values = {'upfile' : string_to_send}
                 data = urllib.urlencode(values)
                 req = urllib2.Request(ERROR_LOG_ADDRESS, data)
                 response = urllib2.urlopen(req)
-               
+
                 # if everything goes well
                 if response.code == 200:
                     t = _('File successfully send...\n\nThank you for helping improving UML .FRI')
@@ -145,7 +144,6 @@ class CfrmException(CWindow):
             except urllib2.URLError, e :
                 t = _('Uups! An error during sending occured:\n') + str(e).replace('<','').replace('>','')
             
-            os.remove(log_tar_path)     # remove the tar-ed log file
             CWarningDialog(None, t).run()
             return
 
