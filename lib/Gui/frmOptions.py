@@ -48,10 +48,14 @@ class CfrmOptions(common.CWindow):
             config['/Styles/Selection/PointsColor'] = self.GtkColorToCColor(self.cbSelectionPoints.get_color())
             config['/Styles/Selection/RectangleColor'] = self.GtkColorToCColor(self.cbSelectionRectangle.get_color())
             config['/Styles/Drag/RectangleColor'] = self.GtkColorToCColor(self.cbDragRectangle.get_color())
+            #if self.FontStringToCFont(self.fbElementNameText.get_font_name()).GetSize() > 0 :
             config['/Styles/Element/NameTextFont'] = self.FontStringToCFont(self.fbElementNameText.get_font_name())
+            #if self.FontStringToCFont(self.fbElementText.get_font_name()).GetSize()>0 :
             config['/Styles/Element/TextFont'] = self.FontStringToCFont(self.fbElementText.get_font_name())
+            #if self.FontStringToCFont(self.fbConnectionNameText.get_font_name()).GetSize() > 0 :
             config['/Styles/Connection/NameTextFont'] = self.FontStringToCFont(self.fbConnectionNameText.get_font_name())
-            config['/Styles/Connection/TextFont'] = self.FontStringToCFont(self.fbConnectionText.get_font_name())
+            if self.FontStringToCFont(self.fbConnectionText.get_font_name()).GetSize() > 0 :
+                config['/Styles/Connection/TextFont'] = self.FontStringToCFont(self.fbConnectionText.get_font_name())
             config['/Styles/Selection/PointsSize'] = self.sbSelectionPointsSize.get_value_as_int()
             config['/Styles/Selection/RectangleWidth'] = self.sbSelectionRectangleWidth.get_value_as_int()
             config['/Styles/Drag/RectangleWidth'] = self.sbDragRectangleWidth.get_value_as_int()
@@ -112,3 +116,21 @@ class CfrmOptions(common.CWindow):
     def on_cmdDefaultOptions_clicked(self, widget):
         config.LoadDefaults()
         self.form.response(gtk.RESPONSE_CANCEL)
+        
+    @event("fbElementNameText", "font-set")
+    @event("fbElementText", "font-set")
+    @event("fbConnectionNameText", "font-set")
+    @event("fbConnectionText", "font-set")
+    def on_fontButton_clicked(self, widget):
+        if widget is self.fbElementNameText:
+            if self.FontStringToCFont(self.fbElementNameText.get_font_name()).GetSize() <= 0:
+                self.fbElementNameText.set_font_name(self.CFontToFontString(config['/Styles/Element/NameTextFont']))
+        if widget is self.fbElementText:
+            if self.FontStringToCFont(self.fbElementText.get_font_name()).GetSize() <= 0 :
+                self.fbElementText.set_font_name(self.CFontToFontString(config['/Styles/Element/TextFont']))
+        if widget is self.fbConnectionNameText:
+            if self.FontStringToCFont(self.fbConnectionNameText.get_font_name()).GetSize() <= 0 :
+                self.fbConnectionNameText.set_font_name(self.CFontToFontString(config['/Styles/Connection/NameTextFont']))
+        if widget is self.fbConnectionText:
+            if self.FontStringToCFont(self.fbConnectionText.get_font_name()).GetSize() <= 0 :
+                self.fbConnectionText.set_font_name(self.CFontToFontString(config['/Styles/Connection/TextFont']))
