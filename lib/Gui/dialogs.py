@@ -14,18 +14,18 @@ class CWarningDialog:
 
     def __del__(self):
         self.dialog.destroy()
-
+        
 class CQuestionDialog:
     def __init__(self, form, message, allow_cancel = False):
         self.dialog = gtk.MessageDialog(form, gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT, gtk.MESSAGE_QUESTION, gtk.BUTTONS_YES_NO)
         if allow_cancel:
-             self.dialog.add_buttons(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL)
+            self.dialog.add_buttons(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL)
         self.dialog.set_markup(message)
         self.dialog.set_title(_("Question"))
 
     def run(self):
         tmp = self.dialog.run()
-        if tmp == gtk.RESPONSE_CANCEL:
+        if tmp == gtk.RESPONSE_CANCEL or tmp == gtk.RESPONSE_DELETE_EVENT:
             raise ECancelPressed
         return tmp == gtk.RESPONSE_YES
 
