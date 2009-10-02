@@ -108,6 +108,8 @@ class CLine(object):
             start = CPoint(start)
         if not isinstance(end, CPoint):
             end = CPoint(end)
+        if start == end:
+            raise MathException("Both points of line are at the same position")
         self.start = start
         self.end = end
     
