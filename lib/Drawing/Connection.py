@@ -433,6 +433,7 @@ class CConnection(CCacheableObject, CSelectableObject):
         @type  delta: tuple
         '''
         
+        self.ValidatePoints(canvas)
         self.object.Paint(CDrawingContext(canvas, self, delta))
         
         for lbl in self.labels.values():
