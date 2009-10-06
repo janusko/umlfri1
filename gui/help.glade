@@ -259,7 +259,7 @@ You should have received a copy of the GNU General Public License along with UML
             <property name="layout_style">end</property>
             <child>
               <widget class="GtkButton" id="btnCancelAbout">
-                <property name="label">gtk-cancel</property>
+                <property name="label">gtk-ok</property>
                 <property name="response_id">-5</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
