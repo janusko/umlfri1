@@ -1,5 +1,6 @@
 from common import CWindow, event
 import os
+import re
 
 class CfrmExport(CWindow):
     name = 'frmExport'
@@ -39,11 +40,20 @@ class CfrmExport(CWindow):
 
     @event("entExportFileName", "focus-out-event")
     def OnEntExportFileNameFocusLost(self, widget, event):
-        
+
         if self.entExportFileName.get_text().strip(' ') == '':
             self.entExportFileName.set_text(self.picDrawingArea.GetDiagram().GetName())
+        
 
+    @event("entExportFileName", "changed")
+    def OnEntExportFileNameKeyPress(self, event):
+        #do not allow these characters in filename
+        p = re.compile("[:?\\\/*\"<>|]")
+        filename = self.entExportFileName.get_text()
+        filename = p.sub("", filename)
+        self.entExportFileName.set_text(filename)
 
+        
     @event("btnExport", "clicked")
     def OnBtnExportClicked(self, widget):
         

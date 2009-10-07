@@ -4,6 +4,8 @@ from cStringIO import StringIO
 
 from CairoBase import CCairoBaseCanvas
 
+import sys
+
 class CExportCanvas(CCairoBaseCanvas):
     def __init__(self, storage = None, surface_type = None, filename = None, sizeX = 1000, sizeY = 1000, background = None ):
         self.surface_type = surface_type
@@ -13,6 +15,9 @@ class CExportCanvas(CCairoBaseCanvas):
             self.filename = expanduser("~")
         else: 
             self.filename = filename
+
+        #give filename proper encoding
+        self.filename = self.filename.encode(sys.getfilesystemencoding())
 
         self.sizeX = sizeX 
         self.sizeY = sizeY
