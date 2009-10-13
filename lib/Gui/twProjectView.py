@@ -400,7 +400,16 @@ class CtwProjectView(CWidget):
             self.emit('show_frmFindInDiagram', list(node.GetAppears()), node.GetObject())
 
 
-
+    def GetSelectedDiagram(self):
+        iter = self.twProjectView.get_selection().get_selected()[1]
+        if iter == None:
+            return None
+        node = self.twProjectView.get_model().get(iter,3)[0]
+        if isinstance(node,CDiagram):
+            return node
+        else:
+            return None
+        
     def GetSelectedNode(self):
         iter = self.twProjectView.get_selection().get_selected()[1]
         if iter == None:
