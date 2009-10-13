@@ -41,7 +41,7 @@ class CRecentFiles(object):
     def LoadRecentFiles(self):
         try:
             tree = etree.parse(self.filename)     #try to open and parse recentfile.xml file
-        except IOError, e:
+        except:
             return
         
         root = tree.getroot()
