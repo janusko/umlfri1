@@ -136,7 +136,9 @@ class CfrmMain(CWindow):
         self.mnuCopy.set_sensitive(element)
         self.mnuCopyAsImage.set_sensitive(element)
         self.mnuCut.set_sensitive(element)
-        self.mnuPaste.set_sensitive(diagram and not self.application.GetClipboard().IsEmpty())
+        self.mnuPaste.set_sensitive(
+            diagram and not self.application.GetClipboard().IsEmpty() and
+            not bool(set(i.GetObject() for i in self.picDrawingArea.GetDiagram().GetElements()).intersection(set(i.GetObject() for i in self.application.GetClipboard().GetContent()))))
         self.mnuDelete.set_sensitive(element)
         self.mnuNormalSize.set_sensitive(diagram)
         self.mnuZoomIn.set_sensitive(zoomin)
@@ -428,8 +430,11 @@ class CfrmMain(CWindow):
         @param element: Id (name) of added element
         @type element:  String
         """
-        parentElement = self.twProjectView.GetSelectedNode()
-        if parentElement == None:
+        if self.twProjectView.GetSelectedNode()!=None:
+            parentElement = self.twProjectView.GetSelectedNode()
+        elif self.twProjectView.GetSelectedDiagram()!=None:
+            parentElement = self.twProjectView.GetSelectedDiagram()
+        else:
             parentElement = self.twProjectView.GetRootNode()
 
         ElementType = self.application.GetProject().GetMetamodel().GetElementFactory().GetElement(element)
