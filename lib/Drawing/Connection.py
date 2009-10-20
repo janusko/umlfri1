@@ -257,7 +257,8 @@ class CConnection(CCacheableObject, CSelectableObject):
         @param info: dictionary with parameters to restore label position
         @type  info: dict
         '''
-        self.labels[id].SetSaveInfo(**info)
+        if id in self.labels:
+            self.labels[id].SetSaveInfo(**info)
         
     def InsertPoint(self, canvas, point, index = None):
         '''
