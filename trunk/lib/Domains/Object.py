@@ -200,10 +200,11 @@ class CDomainObject(object):
         @type data: dict
         '''
         for key, value in data.iteritems():
-            if isinstance(value, dict):
-                self.GetValue(key).SetSaveInfo(value)
-            elif isinstance(value, (list, str, unicode, NoneType)):
-                self.SetValue(key, value)
+            if self.type.HasAttribute(key):
+                if isinstance(value, dict):
+                    self.GetValue(key).SetSaveInfo(value)
+                elif isinstance(value, (list, str, unicode, NoneType)):
+                    self.SetValue(key, value)
     
     def __iter__(self):
         for id in self.type.IterAttributeIDs():

@@ -1,6 +1,6 @@
 <ConnectionType xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" id="AssociationInstance">
     <Icon path="icons/state_transition.png"/>
-    <Domain id="association" identity="name"/>
+    <Domain id="associationInstance" identity="name"/>
     
     <Appearance>
         <ConnectionLine style="solid" color="#cfg.Styles.Connection.LineColor"/>
@@ -30,20 +30,6 @@
                     </Align>
                 </Condition>
             </HBox>
-        </Label>
-        <Label position="source">
-            <Condition condition="#self.SCardinality">
-                <Rectangle fill="#cfg.Styles.Connection.TextFill">
-                    <TextBox text="#self.SCardinality" font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>
-                </Rectangle>
-            </Condition>
-        </Label>
-        <Label position="destination">
-            <Condition condition="#self.DCardinality">
-                <Rectangle fill="#cfg.Styles.Connection.TextFill">
-                    <TextBox text="#self.DCardinality" font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>
-                </Rectangle>
-            </Condition>
         </Label>
         <Label position="source+1">
             <Condition condition="#self.SRole">
