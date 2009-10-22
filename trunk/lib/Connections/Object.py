@@ -215,6 +215,12 @@ class CConnectionObject(object):
         if dest is not None:
             dest.AddConnection(self)
         self.revision += 1
+        
+    def ChangeConnection(self):
+        dest = self.GetDestination()
+        sour = self.GetSource()
+        self.__SetWeakSource(dest)
+        self.__SetWeakDestination(sour)
 
     def __SetWeakSource(self, source):
         if source is None:
@@ -255,7 +261,7 @@ class CConnectionObject(object):
         """
         Disconnect self from other objects
         """
-        if self.GetSource() is self.GetkDestination():
+        if self.GetSource() is self.GetDestination():
             self.GetSource().RemoveConnection(self)
         else:
             self.GetSource().RemoveConnection(self)

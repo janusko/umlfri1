@@ -1,6 +1,6 @@
 from lib.Exceptions.UserException import *
 from lib.config import config
-#from lib.Connections.Object import CConnectionObject
+from lib.Connections.Object import CConnectionObject
 from lib.Math2D import CPoint, CLine, CPolyLine, CRectangle
 from math import sqrt, atan2, pi
 from CacheableObject import CCacheableObject
@@ -81,6 +81,14 @@ class CConnection(CCacheableObject, CSelectableObject):
         CCacheableObject.__init__(self)
         CSelectableObject.__init__(self)
     
+    def ChangeConnection(self):
+        # DOROBIT POZICIU LABELU
+        sour = self.GetSource()
+        dest = self.GetDestination()
+        self.SetSource(dest) 
+        self.SetDestination(sour)
+        self.points.reverse()
+        
     def Deselect(self):
         '''Execute L{CSelectableObject.Deselect<CSelectableObject.Deselect>} 
         and L{self.DeselectPoint<self.DeselectPoint>}
@@ -160,7 +168,10 @@ class CConnection(CCacheableObject, CSelectableObject):
         @rtype: L{CElement<CElement>}
         '''
         return self.source()
+    def SetSource (self, sour):
         
+        self.source = weakref.ref(sour)
+
     def GetDestination(self):
         '''
         Get element at the end of connection
@@ -169,7 +180,11 @@ class CConnection(CCacheableObject, CSelectableObject):
         @rtype: L{CElement<CElement>}
         '''
         return self.destination()
+    
+    def SetDestination(self,dest):
         
+        self.destination = weakref.ref(dest)
+
     def GetSourceObject(self):
         """
         Get source object of logical connection
