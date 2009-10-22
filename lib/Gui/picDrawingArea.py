@@ -1,6 +1,8 @@
 from lib.Depend.gtk2 import gtk
 from lib.Depend.gtk2 import gobject
 
+from lib.Project import CProject, CProjectNode
+
 from lib.consts import BUFFER_SIZE, SCALE_MIN, SCALE_MAX, SCALE_INCREASE
 from lib.config import config
 from lib.Distconfig import IMAGES_PATH
@@ -875,7 +877,21 @@ class CpicDrawingArea(CWidget):
             else:
                 self.Diagram.ShiftDeleteConnection(sel)
         self.Paint()
-
+        
+    def ChangeSourceTarget(self):
+        
+        for sel in self.Diagram.GetSelected():
+            if isinstance(sel, CConnection):
+                sel.GetObject().ChangeConnection()
+            project = self.application.GetProject()
+            diagrams = project.GetDiagrams()
+            for d in diagrams:
+                for c in d.GetConnections():
+                    if c.GetObject() == sel.GetObject():
+                        print c
+                        c.ChangeConnection()                        
+                        self.Paint()
+                
     def HasFocus(self):
         return self.picDrawingArea.is_focus()
 

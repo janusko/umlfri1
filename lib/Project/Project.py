@@ -50,6 +50,17 @@ class CProject(object):
         if self.defaultDiagram is diagram:
             self.defaultDiagram = None
     
+    def GetDiagrams(self):
+        stack = [self.root]
+        diagrams = []
+        while len(stack) > 0:
+            node = stack.pop(0)
+            for d in node.GetDiagrams():
+                diagrams.append(d)
+            stack += node.GetChilds()
+        return diagrams
+        
+    
     def GetMetamodel(self):
         return self.__metamodel
     

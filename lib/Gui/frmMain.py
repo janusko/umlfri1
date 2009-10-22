@@ -32,7 +32,7 @@ class CfrmMain(CWindow):
         'mnuOpen', 'mnuSave', 'mnuSaveAs', 'mnuPrint', 'mnuProperties', 'mnuQuit',
         #############
         'mItemEdit',
-        'mnuCut', 'mnuCopy', 'mnuCopyAsImage', 'mnuPaste', 'mnuDelete',
+        'mnuCut', 'mnuCopy', 'mnuCopyAsImage', 'mnuPaste', 'mnuDelete','mnuChangeSourceTarget',
         #############
         'mItemProject',
         #############
@@ -416,7 +416,12 @@ class CfrmMain(CWindow):
     
     def ActionLoadToolBar(self, widget):
         pass
-
+        
+    @event("mnuChangeSourceTarget","activate")
+    def on_mnuChangeSourceTarget_click(self,widget):
+        self.picDrawingArea.ChangeSourceTarget()
+        self.PaintAll()
+        
     # User defined signals
     @event("twProjectView", "add-element")
     @event("mnuItems", "add-element")

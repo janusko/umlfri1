@@ -1240,6 +1240,13 @@
       </widget>
     </child>
     <child>
+      <widget class="GtkMenuItem" id="mnuChangeSourceTarget">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">Change Source and Target</property>
+        <property name="use_underline">True</property>
+      </widget>
+    </child>
+    <child>
       <widget class="GtkMenuItem" id="pmZOrder">
         <property name="visible">True</property>
         <property name="label" translatable="yes">Z-Order</property>
