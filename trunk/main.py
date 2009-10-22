@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
-import warnings
-warnings.simplefilter('ignore', Warning)
+import lib.Warnings.List
+lib.Warnings.List.WarningList.register()
 
 import lib.Depend
 lib.Depend.check()
@@ -44,6 +44,7 @@ class Application(CApplication):
     canopen = True
     
     def __init__(self):
+        self.warnings = lib.Warnings.List.WarningList()
         self.recentFiles = CRecentFiles()
         self.clipboard = CClipboard()
         self.bus = CBus()
