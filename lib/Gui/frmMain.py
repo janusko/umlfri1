@@ -11,6 +11,7 @@ from lib.Elements import CElementObject, CElementType
 from dialogs import CWarningDialog, CQuestionDialog, ECancelPressed
 from tbToolBox import CtbToolBox
 from twProjectView import CtwProjectView
+from twWarnings import CtwWarnings
 from mnuItems import CmnuItems
 from picDrawingArea import CpicDrawingArea
 from nbProperties import CnbProperties
@@ -41,7 +42,7 @@ class CfrmMain(CWindow):
         #############
         'mItemView',
         'mnuViewTools', 'mnuViewCommands', 'mnuNormalSize', 'mnuZoomIn','mnuZoomOut', 'mnuBestFit',
-        'hndCommandBar',
+        'hndCommandBar', 'mnuViewWarnings',
         #############
         'mnuAddons', 'mnuOptions',
         #############
@@ -61,7 +62,7 @@ class CfrmMain(CWindow):
         )
 
     complexWidgets = (CtbToolBox, CtwProjectView, CmnuItems, CpicDrawingArea, CnbProperties, CTabs,
-                      CtabStartPage, )
+                      CtabStartPage, CtwWarnings, )
 
     def __init__(self, app, wTree):
         CWindow.__init__(self, app, wTree)
@@ -195,6 +196,13 @@ class CfrmMain(CWindow):
             self.hndCommandBar.show()
         else:
             self.hndCommandBar.hide()
+    
+    @event("mnuViewWarnings", "activate")
+    def ActionViewWarnings(self, *args):
+        if self.mnuViewWarnings.get_active():
+            self.twWarnings.Show()
+        else:
+            self.twWarnings.Hide()
     
     @event("cmdCloseFullscreen", "clicked")
     def ActionExitFullscreen(self, *args):
