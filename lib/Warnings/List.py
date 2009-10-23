@@ -8,7 +8,13 @@ class WarningList(object):
     
     def __showwarning(self, message, category, filename, lineno, file = None, line = None):
         line = linecache.getline(filename, lineno) if line is None else line
-        self.__list.append((datetime.datetime.now(), message, category, filename, lineno, line))
+        
+        item = (datetime.datetime.now(), message, category, filename, lineno, line)
+        
+        self.__list.append(item)
+        
+        for cb, args in self.__callbacks:
+            cb(item, *args)
     
     def __getitem__(self, item):
         return self.__list[item]
@@ -23,20 +29,33 @@ class WarningList(object):
         return self.__list.__repr__()
     
     @classmethod
-    def register(cls):
+    def handle(cls):
         cls.__old = warnings.showwarning
         warnings.showwarning = cls().__showwarning
     
     @classmethod
-    def unregister(cls):
+    def restore(cls):
         warnings.showwarning = cls.__old
         cls.__old = None
+    
+    def connect(self, callback, *args):
+        self.__callbacks.append((callback, args))
+    
+    def disconnect(self, callback):
+        for id, (cb, args) in enumerate(self.__callbacks):
+            if cb is callback:
+                del self.__callbacks[id]
+                
+                return True
+        
+        return False
     
     def __new__(self):
         self2 = WarningList.__instance
         if self2 is None:
             self = WarningList.__instance = object.__new__(self)
             self.__list = []
+            self.__callbacks = []
         else:
             self = self2
         

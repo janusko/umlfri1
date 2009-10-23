@@ -13,6 +13,7 @@ from frmSave import CfrmSave
 from frmFindInDiagram import CFindInDiagram
 from frmOptions import CfrmOptions
 from frmException import CfrmException
+from frmWarning import CfrmWarning
 from diagramPrint import CDiagramPrint
 from frmExport import CfrmExport
 from frmCopyImage import CfrmCopyImage
