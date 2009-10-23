@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import lib.Warnings.List
-lib.Warnings.List.WarningList.register()
+lib.Warnings.List.WarningList.handle()
 
 import lib.Depend
 lib.Depend.check()
