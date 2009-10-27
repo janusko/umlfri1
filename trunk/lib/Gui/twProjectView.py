@@ -349,9 +349,9 @@ class CtwProjectView(CWidget):
             
         for j in node.GetChilds():
             self.RemoveFromArea(j)
-        
-        for k in node.GetAppears():
-            k.DeleteObject(node.GetObject())
+
+        for d in self.application.GetProject().GetDiagrams():
+            d.DeleteObject(node.GetObject())
     
     
     def DeleteElement(self, elementObject):
