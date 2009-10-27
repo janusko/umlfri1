@@ -219,6 +219,7 @@ class CtwProjectView(CWidget):
             return
         self.twProjectView.expand_to_path(self.TreeStore.get_path(iter))
         self.twProjectView.get_selection().select_iter(iter)
+        self.twProjectView.scroll_to_cell(self.TreeStore.get_path(iter))  
     
     def ShowDiagram(self, diagram):
         for i in self.get_iters_from_path(self.twProjectView.get_model(),self.twProjectView.get_model().get_iter_root() ,diagram.GetPath()):
@@ -242,7 +243,8 @@ class CtwProjectView(CWidget):
         novy = self.TreeStore.append(self.get_iter_from_path(self.twProjectView.get_model(), self.twProjectView.get_model().get_iter_root() ,path))
         self.TreeStore.set(novy, 0, element.GetName() , 1, PixmapFromPath(self.application.GetProject().GetMetamodel().GetStorage(), element.GetType().GetIcon()), 2, element.GetType().GetId(),3,node)
         self.twProjectView.get_selection().select_iter(novy)
-        self.emit('selected-item-tree',self.twProjectView.get_model().get(novy,3)[0])        
+        self.emit('selected-item-tree',self.twProjectView.get_model().get(novy,3)[0])
+        self.twProjectView.scroll_to_cell(self.TreeStore.get_path(novy))        
         
         
     def AddDiagram(self, diagram):
@@ -263,6 +265,7 @@ class CtwProjectView(CWidget):
         self.twProjectView.expand_to_path(path)
         self.twProjectView.get_selection().select_iter(novy)
         self.emit('selected-item-tree',self.twProjectView.get_model().get(novy,3)[0])
+        self.twProjectView.scroll_to_cell(self.TreeStore.get_path(novy))        
         
     
     def UpdateElement(self, object):
@@ -398,7 +401,6 @@ class CtwProjectView(CWidget):
             self.emit('selected_diagram_and_select_element',list(node.GetAppears())[0], node.GetObject())
         elif cnt > 1:
             self.emit('show_frmFindInDiagram', list(node.GetAppears()), node.GetObject())
-
 
     def GetSelectedDiagram(self):
         iter = self.twProjectView.get_selection().get_selected()[1]

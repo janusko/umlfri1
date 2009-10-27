@@ -524,8 +524,9 @@ class CfrmMain(CWindow):
     def on_select_diagram_and_element(self, widget, diagram, object):
         self.picDrawingArea.SetDiagram(diagram)
         self.nbTabs.AddTab(diagram)
-        diagram.AddToSelection(diagram.HasElementObject(object))
-        self.picDrawingArea.Paint()
+        diagram.AddToSelection(diagram.HasElementObject(object))        
+        self.picDrawingArea.SetPos((0,0))
+        self.picDrawingArea.Paint()                
     
     @event("twProjectView","show_frmFindInDiagram")
     def on_show_frmFindInDiagram(self, widget, diagrams, object):
