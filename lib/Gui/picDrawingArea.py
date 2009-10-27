@@ -30,7 +30,7 @@ class CpicDrawingArea(CWidget):
                 'pMenuShift', 
                 'pmShift_SendBack', 'pmShift_BringForward', 'pmShift_ToBottom', 'pmShift_ToTop','pmShowInProjectView',
                 'mnuCtxCut', 'mnuCtxCopy', 'mnuCtxPaste', 'mnuCtxDelete',
-                'pmOpenSpecification', 'mnuCtxShiftDelete')
+                'pmOpenSpecification', 'mnuCtxShiftDelete','mnuChangeSourceTarget')
 
     __gsignals__ = {
         'get-selected':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_PYOBJECT,
@@ -305,6 +305,7 @@ class CpicDrawingArea(CWidget):
         )
         selection = list(self.Diagram.GetSelected())
         self.pmOpenSpecification.set_sensitive(len(selection) == 1 and isinstance(selection[0], CElement))
+        self.mnuChangeSourceTarget.set_sensitive(len(selection) == 1 and isinstance(selection[0], CConnection))
         if (self.application.GetProject() is not None and 
             self.Diagram is not None and
             self.application.GetProject().GetRoot().GetObject() in (
@@ -877,6 +878,12 @@ class CpicDrawingArea(CWidget):
             else:
                 self.Diagram.ShiftDeleteConnection(sel)
         self.Paint()
+        
+    @event("mnuChangeSourceTarget","activate")
+    def on_mnuChangeSourceTarget_click(self,widget):
+        self.ChangeSourceTarget()
+        self.Paint()
+        
         
     def ChangeSourceTarget(self):
         
