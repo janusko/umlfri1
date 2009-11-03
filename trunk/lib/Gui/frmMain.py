@@ -38,7 +38,7 @@ class CfrmMain(CWindow):
         'mItemProject',
         #############
         'mItemDiagram',
-        'mnuExport',
+        'mnuExport', 'mnuAlignLeft', #'mnuAlignRight', 'mnuAlignCenter',
         #############
         'mItemView',
         'mnuViewTools', 'mnuViewCommands', 'mnuNormalSize', 'mnuZoomIn','mnuZoomOut', 'mnuBestFit',
@@ -606,5 +606,19 @@ class CfrmMain(CWindow):
         if (event.state & gtk.gdk.CONTROL_MASK):
             self.UpdateMenuSensitivity()
 
+    #Methods of alignment &tidy
+    @event('mnuAlignLeft', 'activate')
+    def on_mnuAlignLeft_activate(self, widget):
+        if self.picDrawingArea.HasFocus():
+            self.picDrawingArea.AlignLeft()
 
+    #@event('mnuAlignCenter', 'activate')
+    #def on_mnuAlignCenter_activate(self, widget):
+        #if self.picDrawingArea.HasFocus():
+            #self.picDrawingArea.AlignCenter()
+
+    #@event('mnuAlignRight', 'activate')
+    #def on_mnuAlignRight_activate(self, widget):
+        #if self.picDrawingArea.HasFocus():
+            #self.picDrawingArea.AlignRight()
 
