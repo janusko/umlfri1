@@ -274,8 +274,8 @@
                       </widget>
                     </child>
                     <child>
-                      <widget class="GtkImageMenuItem" id="mnuAlignCenter">
-                        <property name="label" translatable="yes">Align _CENTER</property>
+                      <widget class="GtkImageMenuItem" id="mnuAlignTop">
+                        <property name="label" translatable="yes">Align _TOP</property>
                         <property name="visible">True</property>
                         <property name="accel_path">c</property>
                         <property name="use_underline">True</property>
@@ -284,7 +284,22 @@
                         <child internal-child="image">
                           <widget class="GtkImage" id="image12">
                             <property name="visible">True</property>
-                            <property name="stock">gtk-justify-center</property>
+                            <property name="stock">gtk-goto-top</property>
+                          </widget>
+                        </child>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkImageMenuItem" id="mnuAlignBottom">
+                        <property name="label" translatable="yes">Align _BOTTOM</property>
+                        <property name="visible">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">False</property>
+                        <property name="always_show_image">True</property>
+                        <child internal-child="image">
+                          <widget class="GtkImage" id="image13">
+                            <property name="visible">True</property>
+                            <property name="stock">gtk-goto-bottom</property>
                           </widget>
                         </child>
                       </widget>

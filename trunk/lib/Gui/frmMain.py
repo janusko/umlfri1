@@ -38,7 +38,7 @@ class CfrmMain(CWindow):
         'mItemProject',
         #############
         'mItemDiagram',
-        'mnuExport', 'mnuAlignLeft', #'mnuAlignRight', 'mnuAlignCenter',
+        'mnuExport', 'mnuAlignLeft', 'mnuAlignRight', 'mnuAlignTop', 'mnuAlignBottom',
         #############
         'mItemView',
         'mnuViewTools', 'mnuViewCommands', 'mnuNormalSize', 'mnuZoomIn','mnuZoomOut', 'mnuBestFit',
@@ -612,13 +612,17 @@ class CfrmMain(CWindow):
         if self.picDrawingArea.HasFocus():
             self.picDrawingArea.AlignLeft()
 
-    #@event('mnuAlignCenter', 'activate')
-    #def on_mnuAlignCenter_activate(self, widget):
-        #if self.picDrawingArea.HasFocus():
-            #self.picDrawingArea.AlignCenter()
+    @event('mnuAlignRight', 'activate')
+    def on_mnuAlignRight_activate(self, widget):
+        if self.picDrawingArea.HasFocus():
+            self.picDrawingArea.AlignRight()
 
-    #@event('mnuAlignRight', 'activate')
-    #def on_mnuAlignRight_activate(self, widget):
-        #if self.picDrawingArea.HasFocus():
-            #self.picDrawingArea.AlignRight()
+    @event('mnuAlignTop', 'activate')
+    def on_mnuAlignTop_activate(self, widget):
+        if self.picDrawingArea.HasFocus():
+            self.picDrawingArea.AlignTop()
 
+    @event('mnuAlignBottom', 'activate')
+    def on_mnuAlignBottom_activate(self, widget):
+        if self.picDrawingArea.HasFocus():
+            self.picDrawingArea.AlignBottom()
