@@ -81,14 +81,18 @@ class CConnection(CCacheableObject, CSelectableObject):
         CCacheableObject.__init__(self)
         CSelectableObject.__init__(self)
     
-    def ChangeConnection(self):
-        # DOROBIT POZICIU LABELU
+    def ChangeConnection(self,canvas):
+        pos = []
+        for lbl in self.labels.values():
+            pos.append(lbl.GetPosition(canvas))
         sour = self.GetSource()
         dest = self.GetDestination()
         self.SetSource(dest) 
         self.SetDestination(sour)
         self.points.reverse()
-        
+        for lbl in self.labels.values():
+            lbl.SetPosition(pos.pop(0),canvas)
+
     def Deselect(self):
         '''Execute L{CSelectableObject.Deselect<CSelectableObject.Deselect>} 
         and L{self.DeselectPoint<self.DeselectPoint>}

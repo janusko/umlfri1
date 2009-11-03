@@ -895,8 +895,7 @@ class CpicDrawingArea(CWidget):
             for d in diagrams:
                 for c in d.GetConnections():
                     if c.GetObject() == sel.GetObject():
-                        print c
-                        c.ChangeConnection()                        
+                        c.ChangeConnection(self.canvas)                        
                         self.Paint()
                 
     def HasFocus(self):
@@ -910,7 +909,7 @@ class CpicDrawingArea(CWidget):
         canvas = CExportCanvas(self.application.GetProject().GetMetamodel().GetStorage(), 'pixbuf', None, sizeX, sizeY, background = bg)
         canvas.SetScale(zoom)
         canvas.MoveBase(x, y)
-        self.Diagram.PaintSelected(canvas)
+        self.Diagram.PaintSelected(self.canvas)
         return canvas.Finish()
 
     ### Align & tidy methods
