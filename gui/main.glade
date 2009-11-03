@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <glade-interface>
-<!-- interface-requires gtk+ 2.16 -->
-<!-- interface-naming-policy toplevel-contextual -->
+  <!-- interface-requires gtk+ 2.16 -->
+  <!-- interface-naming-policy toplevel-contextual -->
   <widget class="GtkWindow" id="frmMain">
     <property name="width_request">640</property>
     <property name="height_request">480</property>
@@ -11,6 +11,7 @@
     <child>
       <widget class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
+        <property name="orientation">vertical</property>
         <child>
           <widget class="GtkMenuBar" id="mnuMenubar">
             <property name="visible">True</property>
@@ -236,6 +237,54 @@
                           <widget class="GtkImage" id="image3">
                             <property name="visible">True</property>
                             <property name="stock">gtk-convert</property>
+                          </widget>
+                        </child>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkImageMenuItem" id="mnuAlignLeft">
+                        <property name="label" translatable="yes">Align _LEFT</property>
+                        <property name="visible">True</property>
+                        <property name="accel_path">l</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">False</property>
+                        <property name="always_show_image">True</property>
+                        <child internal-child="image">
+                          <widget class="GtkImage" id="image10">
+                            <property name="visible">True</property>
+                            <property name="stock">gtk-justify-left</property>
+                          </widget>
+                        </child>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkImageMenuItem" id="mnuAlignRight">
+                        <property name="label" translatable="yes">Align _RIGHT</property>
+                        <property name="visible">True</property>
+                        <property name="accel_path">r</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">False</property>
+                        <property name="always_show_image">True</property>
+                        <child internal-child="image">
+                          <widget class="GtkImage" id="image11">
+                            <property name="visible">True</property>
+                            <property name="stock">gtk-justify-right</property>
+                          </widget>
+                        </child>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkImageMenuItem" id="mnuAlignCenter">
+                        <property name="label" translatable="yes">Align _CENTER</property>
+                        <property name="visible">True</property>
+                        <property name="accel_path">c</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">False</property>
+                        <property name="always_show_image">True</property>
+                        <child internal-child="image">
+                          <widget class="GtkImage" id="image12">
+                            <property name="visible">True</property>
+                            <property name="stock">gtk-justify-center</property>
                           </widget>
                         </child>
                       </widget>
@@ -613,6 +662,7 @@
                   <widget class="GtkVPaned" id="vpaWarnings">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="orientation">vertical</property>
                     <child>
                       <widget class="GtkNotebook" id="nbTabs">
                         <property name="visible">True</property>
@@ -962,6 +1012,7 @@
                   <widget class="GtkVPaned" id="vpaRight">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="orientation">vertical</property>
                     <property name="position">200</property>
                     <child>
                       <widget class="GtkScrolledWindow" id="scrolledwindow1">

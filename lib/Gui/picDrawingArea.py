@@ -912,3 +912,29 @@ class CpicDrawingArea(CWidget):
         canvas.MoveBase(x, y)
         self.Diagram.PaintSelected(canvas)
         return canvas.Finish()
+
+    ### Align & tidy methods
+    ##  ____________________
+    
+    ## Takes all selected Elements (ONLY Elements, no Labels or Connections!)
+    ## and align them to the most left position occured among them
+    
+    def AlignLeft(self, widget = None):
+        selected = self.Diagram.GetSelectedElements()
+        # at first: initialization &retaking of position of the 1st element
+        try:
+            min_left =selected.next().GetPosition()[0]
+        except StopIteration:
+            return
+        # now the iteration through the rest of SelectedElements
+        temp=0
+        for i in selected:
+            temp = i.GetPosition()[0]
+            if min_left > temp:
+                min_left =temp
+        # now we have the most left location
+        # set the x position of all selected elements to that most left one!
+        for sel in self.Diagram.GetSelectedElements():
+            sel.SetPosition((min_left, sel.GetPosition()[1]))
+        # redraw canvas!
+        self.Paint()
