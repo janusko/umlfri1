@@ -937,3 +937,68 @@ class CpicDrawingArea(CWidget):
             sel.SetPosition((min_left, sel.GetPosition()[1]))
         # redraw canvas!
         self.Paint()
+
+
+    def AlignTop(self, widget = None):
+        selected = self.Diagram.GetSelectedElements()
+        # at first: initialization &retaking of position of the 1st element
+        try:
+            min_top =selected.next().GetPosition()[1]
+        except StopIteration:
+            return
+        # now the iteration through the rest of SelectedElements
+        temp=0
+        for i in selected:
+            temp = i.GetPosition()[1]
+            if min_top > temp:
+                min_top =temp
+        # now we have the most left location
+        # set the x position of all selected elements to that most left one!
+        for sel in self.Diagram.GetSelectedElements():
+            sel.SetPosition(( sel.GetPosition()[0], min_top ))
+        # redraw canvas!
+        self.Paint()
+
+
+    def AlignRight(self, widget = None):
+        selected = self.Diagram.GetSelectedElements()
+        # at first: initialization &retaking of position of the 1st element
+        try:
+            temp = selected.next()
+            max_right = temp.GetPosition()[0] + temp.GetSize(self.Diagram)[0]
+        except StopIteration:
+            return
+        # now the iteration through the rest of SelectedElements
+        temp=0
+        for i in selected:
+            temp = i.GetPosition()[0] + i.GetSize(self.Diagram)[0]
+            if max_right < temp:
+                max_right =temp
+        # now we have the most right location
+        # set the x position of all selected elements to that most right one!
+        for sel in self.Diagram.GetSelectedElements():
+            sel.SetPosition(( max_right - sel.GetSize(self.Diagram)[0] , sel.GetPosition()[1]))
+        # redraw canvas!
+        self.Paint()
+
+
+    def AlignBottom(self, widget = None):
+        selected = self.Diagram.GetSelectedElements()
+        # at first: initialization &retaking of position of the 1st element
+        try:
+            temp = selected.next()
+            max_bottom = temp.GetPosition()[1] + temp.GetSize(self.Diagram)[1]
+        except StopIteration:
+            return
+        # now the iteration through the rest of SelectedElements
+        temp=0
+        for i in selected:
+            temp = i.GetPosition()[1] + i.GetSize(self.Diagram)[1]
+            if max_bottom < temp:
+                max_bottom =temp
+        # now we have the most right location
+        # set the x position of all selected elements to that most right one!
+        for sel in self.Diagram.GetSelectedElements():
+            sel.SetPosition(( sel.GetPosition()[0], max_bottom - sel.GetSize(self.Diagram)[1]))
+        # redraw canvas!
+        self.Paint()
