@@ -519,8 +519,10 @@ class CfrmMain(CWindow):
     def on_select_diagram_and_element(self, widget, diagram, object):
         self.picDrawingArea.SetDiagram(diagram)
         self.nbTabs.AddTab(diagram)
-        diagram.AddToSelection(diagram.HasElementObject(object))        
-        self.picDrawingArea.SetPos((0,0))
+        diagram.AddToSelection(diagram.HasElementObject(object))                
+        y=self.picDrawingArea.canvas.ToPhysical(self.picDrawingArea.Diagram.GetSelected().next().position)[1]-self.picDrawingArea.GetAbsolutePos(self.picDrawingArea.GetWindowSize())[1]/2
+        x=self.picDrawingArea.canvas.ToPhysical(self.picDrawingArea.Diagram.GetSelected().next().position)[0]-self.picDrawingArea.GetAbsolutePos(self.picDrawingArea.GetWindowSize())[0]/2
+        self.picDrawingArea.SetPos((x,y))
         self.picDrawingArea.Paint()                
     
     @event("twProjectView","show_frmFindInDiagram")
