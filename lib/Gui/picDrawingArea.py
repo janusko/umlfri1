@@ -909,7 +909,7 @@ class CpicDrawingArea(CWidget):
         canvas = CExportCanvas(self.application.GetProject().GetMetamodel().GetStorage(), 'pixbuf', None, sizeX, sizeY, background = bg)
         canvas.SetScale(zoom)
         canvas.MoveBase(x, y)
-        self.Diagram.PaintSelected(self.canvas)
+        self.Diagram.PaintSelected(canvas)
         return canvas.Finish()
 
     ### Align & tidy methods
