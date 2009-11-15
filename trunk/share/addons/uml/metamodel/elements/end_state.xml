@@ -4,7 +4,7 @@
     <Domain id="state" identity="name" />
     <Connections>
         <Item value="StateTransition" with="State"/>
-        <Item value="Control Flow" with="Activity,Decision"/>
+        <Item value="Control Flow" with="Activity,Decision,Merge"/>
     </Connections>
     <Appearance>
         <HBox expand="0">

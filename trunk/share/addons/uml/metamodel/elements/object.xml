@@ -59,7 +59,7 @@
                                                 <TextBox text="#name" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
                                                 <Condition condition="#type">
                                                     <VBox>
-                                                        <TextBox text=" :" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                                                        <TextBox text=": " font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
                                                         <TextBox text="#type" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
                                                     </VBox>
                                                 </Condition>
