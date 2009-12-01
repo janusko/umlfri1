@@ -41,6 +41,18 @@ msgstr ""
 msgid "Addons"
 msgstr ""
 
+msgid "Align _bottom"
+msgstr ""
+
+msgid "Align _left"
+msgstr ""
+
+msgid "Align _right"
+msgstr ""
+
+msgid "Align _top"
+msgstr ""
+
 msgid "All files"
 msgstr ""
 
@@ -107,6 +119,9 @@ msgstr ""
 msgid "Date"
 msgstr ""
 
+msgid "Date/Time"
+msgstr ""
+
 msgid "Delete from Project"
 msgstr ""
 
@@ -161,7 +176,13 @@ msgstr ""
 msgid "Error"
 msgstr ""
 
+msgid "Error name"
+msgstr ""
+
 msgid "Error opening file"
+msgstr ""
+
+msgid "Error text"
 msgstr ""
 
 msgid "Exception"
@@ -502,6 +523,9 @@ msgid "Visible"
 msgstr ""
 
 msgid "Warning"
+msgstr ""
+
+msgid "_Warnings"
 msgstr ""
 
 msgid ""
