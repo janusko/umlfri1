@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: UML .FRI 1.0-beta\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-09-01 15:23+0200\n"
-"PO-Revision-Date: 2009-10-27 14:42+0100\n"
+"PO-Revision-Date: 2009-11-24 13:53+0100\n"
 "Last-Translator: Peter <pasikavec@gmail.com>\n"
 "Language-Team: uml_fri <uml@kst.fri.utc.sk>\n"
 "MIME-Version: 1.0\n"
@@ -37,6 +37,18 @@ msgstr "Rozšírenie sa nepodarilo nainštalovať"
 
 msgid "Addons"
 msgstr "Rozšírenia"
+
+msgid "Align _bottom"
+msgstr "Zarovnať do_dola"
+
+msgid "Align _left"
+msgstr "Zarovnať do_ľava"
+
+msgid "Align _right"
+msgstr "Zarovnať do_prava"
+
+msgid "Align _top"
+msgstr "Zarovnať do_hora"
 
 msgid "All files"
 msgstr "Všetky súbory"
@@ -104,6 +116,9 @@ msgstr "Vytvoriť _nový projekt"
 msgid "Date"
 msgstr "Dátum poslednej zmeny"
 
+msgid "Date/Time"
+msgstr "Dátum/Čas"
+
 msgid "Delete from Project"
 msgstr "Odstrániť z projektu"
 
@@ -161,8 +176,14 @@ msgstr "Povoliť"
 msgid "Error"
 msgstr "Chyba"
 
+msgid "Error name"
+msgstr "Názov chyby"
+
 msgid "Error opening file"
 msgstr "Chyba pri otváraní súboru"
+
+msgid "Error text"
+msgstr "Popis chyby"
 
 msgid "Exception"
 msgstr "Výnimka"
@@ -503,6 +524,9 @@ msgstr "Viditeľnosť"
 msgid "Warning"
 msgstr "Varovanie"
 
+msgid "_Warnings"
+msgstr "Zobraziť v_arovania"
+
 msgid ""
 "We are looking for people willing to help us improve our\n"
 "application. You too can contribute in many ways:\n"
@@ -591,7 +615,7 @@ msgid "_Send"
 msgstr "Po_slať"
 
 msgid "_Toolbox"
-msgstr "_Panel s nástrojmi"
+msgstr "Pane_l s nástrojmi"
 
 msgid "_UML .FRI Homepage"
 msgstr "_Stránka projektu"
@@ -619,4 +643,7 @@ msgstr "nič"
 
 msgid "project web"
 msgstr "Web projektu"
+
+#~ msgid "Class diagram"
+#~ msgstr "Diagram tried"
 
