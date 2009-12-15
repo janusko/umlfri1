@@ -46,26 +46,32 @@
                                                 <TextBox text=" + " font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
                                             </Case>
                                         </Switch>
-                                        <Condition condition="#stereotype">
+                                        <Default
+                                    textfont="#cfg.Styles.Element.TextFont.ChangeStyle('underline', static)"
+                                >
                                             <VBox>
-                                                <TextBox text="&#171;" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
-                                                <TextBox text="#stereotype" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
-                                                <TextBox text="&#187;  " font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                                                <Condition condition="#stereotype">
+                                                    <VBox>
+                                                        <TextBox text="&#171;" color="#cfg.Styles.Element.TextColor"/>
+                                                        <TextBox text="#stereotype" color="#cfg.Styles.Element.TextColor"/>
+                                                        <TextBox text="&#187;  " color="#cfg.Styles.Element.TextColor"/>
+                                                    </VBox>
+                                                </Condition>
+                                                <TextBox text="#name" color="#cfg.Styles.Element.TextColor"/>
+                                                <Condition condition="#type">
+                                                    <VBox>
+                                                        <TextBox text=": " color="#cfg.Styles.Element.TextColor"/>
+                                                        <TextBox text="#type" color="#cfg.Styles.Element.TextColor"/>
+                                                    </VBox>
+                                                </Condition>
+                                                <Condition condition="#default">
+                                                    <VBox>
+                                                        <TextBox text=" = " color="#cfg.Styles.Element.TextColor" />
+                                                        <TextBox text="#default" color="#cfg.Styles.Element.TextColor" />
+                                                    </VBox>
+                                                </Condition>
                                             </VBox>
-                                        </Condition>
-                                        <TextBox text="#name" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
-                                        <Condition condition="#type">
-                                            <VBox>
-                                                <TextBox text=": " font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
-                                                <TextBox text="#type" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
-                                            </VBox>
-                                        </Condition>
-                                        <Condition condition="#default">
-                                            <VBox>
-                                                <TextBox text=" = " font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor" />
-                                                <TextBox text="#default" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor" />
-                                            </VBox>
-                                        </Condition>
+                                        </Default>
                                     </VBox>
                                 </Condition>
                             </Loop>
