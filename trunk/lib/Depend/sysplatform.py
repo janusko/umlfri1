@@ -6,8 +6,26 @@ def check():
     
     @raise AssertionError: if platform configuration is insufficient
     """
+    req = [2, 5]
+    ver = []
     
-    assert (int(platform.python_version_tuple()[0]), int(platform.python_version_tuple()[1])) >= (2, 5), "You will need at least Python 2.5 to run UML .FRI"
+    for s in platform.python_version_tuple():
+        i = len(s)
+        while i:
+            try:
+                n = int(s[:i])
+                break
+            except ValueError:
+                i -= 1
+        if i:
+            if i < len(s):
+                n -= .5
+            ver.append(n)
+        else:
+            break
+    
+    if ver < req:
+        raise AssertionError("You will need at least Python 2.5 to run UML .FRI")
 
 def version():
     """
