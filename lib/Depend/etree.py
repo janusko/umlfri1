@@ -3,7 +3,8 @@ try:
     from lxml import etree
     from lxml.etree import XMLSyntaxError
     HAVE_LXML = True
-    LIBRARY="lxml " + etree.__version__
+    LIBRARY=("lxml " + etree.__version__ + 
+        " (libxml " + '.'.join(str(i) for i in etree.LIBXML_VERSION) + ")")
 except ImportError:
     HAVE_LXML = False
     try:
