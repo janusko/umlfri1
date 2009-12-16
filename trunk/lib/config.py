@@ -1,3 +1,5 @@
+from __future__ import with_statement
+
 from Depend.etree import etree, HAVE_LXML, XMLSyntaxError
 
 from Distconfig import SCHEMA_PATH, CONFIG_PATH, USERDIR_PATH
@@ -171,10 +173,8 @@ class CConfig(object):
         Save changes to user config XML file
         """
         out = {}
-        save = {'Config': out}
-        f = file(self.file, 'w')
         
-        def save(root = save['Config'], node = None, level = 1):
+        def save(root = out, node = None, level = 1):
             for part, val in root.iteritems():
                 newNode = etree.Element('%s%s'%(USERCONFIG_NAMESPACE, part))
                 if isinstance(val, dict):
@@ -197,16 +197,21 @@ class CConfig(object):
         rootNode = etree.XML('<Config xmlns="%s"></Config>'%USERCONFIG_NAMESPACE[1:-1])
         save(node = rootNode)
         
-        #xml tree is validate with xsd schema (recentfile.xsd)
-        if HAVE_LXML:
-            if not xmlschema_user.validate(rootNode):
-                raise ConfigError, ("XMLError", xmlschema_user.error_log.last_error)
-        
         #make human-friendly tree
         Indent(rootNode)
         
-        print>>f, '<?xml version="1.0" encoding="utf-8"?>'
-        print>>f, etree.tostring(rootNode, encoding='utf-8')
+        #xml tree is validate with xsd schema (recentfile.xsd)
+        if HAVE_LXML:
+            if not xmlschema_user.validate(rootNode):
+                if __debug__:
+                    with open(self.file + '.error', 'w') as f:
+                        print>>f, '<?xml version="1.0" encoding="utf-8"?>'
+                        print>>f, etree.tostring(rootNode, encoding='utf-8')
+                raise ConfigError, ("XMLError", xmlschema_user.error_log.last_error)
+        
+        with file(self.file, 'w') as f:
+            print>>f, '<?xml version="1.0" encoding="utf-8"?>'
+            print>>f, etree.tostring(rootNode, encoding='utf-8')
    
     def GetRevision(self):
         """
