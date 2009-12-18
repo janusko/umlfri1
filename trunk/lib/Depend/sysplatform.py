@@ -1,4 +1,12 @@
-import platform
+class platform:
+    import sys as __sys
+
+    @classmethod
+    def isA(cls, platform):
+        if platform == "windows":
+            return cls.__sys.platform in ('win32', 'cygwin')
+        else:
+            return cls.__sys.platform == platform
 
 def check():
     """
@@ -6,6 +14,8 @@ def check():
     
     @raise AssertionError: if platform configuration is insufficient
     """
+    import platform
+    
     req = [2, 5]
     ver = []
     
@@ -34,6 +44,8 @@ def version():
     @return: version of python and platform informations
     @rtype: list of (str, str)
     """
+    import platform
+    
     return [
         (_("Machine"), platform.machine()),
         (_("Architecture"), platform.architecture()[0]),
