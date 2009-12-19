@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ElementType id="Actor" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Icon path="icons/actor.png" />
+    <Domain id="actor" identity="name" />
+    <Connections>
+        <Item value="AssociationUseCase" />
+        <Item value="Generalization" with="Actor" allowrecursive="0" />
+    </Connections>
+    <Appearance>
+        <HBox>
+            <Align align="center">
+                <Svg width="745" height="1000" scale="10%">
+                    <g id="layer1">
+                        <path style="fill:none;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-dashoffset:0;stroke-opacity:1" d="M 522.5,150 C 522.5,232.8 455.3,300 372.5,300 C 289.7,300 222.5,232.8 222.5,150 C 222.5,67.2 289.7,1.6653345e-14 372.5,0 C 455.3,-3.3306691e-14 522.5,67.2 522.5,150 z " id="path1307"/>
+                        <path style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" d="M 0,1000 L 372.5,628.5 L 745,1000" id="path3055"/>
+                        <path style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" d="M 372.5,628.5 L 372.5,300" id="path3057"/>
+                        <path style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" d="M 100,340 L 645,340" id="path3060"/>
+                    </g>
+                </Svg>
+            </Align>
+            <HBox>
+                <Condition condition="#self.stereotype">
+                    <Align align="center">
+                        <VBox>
+                            <TextBox text="&#171;" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                            <TextBox text="#self.stereotype" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                            <TextBox text="&#187;" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                        </VBox>
+                    </Align>
+                </Condition>
+                <Align align="center">
+                    <TextBox text="#self.name" font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/>
+                </Align>
+            </HBox>
+        </HBox>
+    </Appearance>
+    <Options>
+    </Options>
+</ElementType>
