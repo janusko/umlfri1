@@ -30,7 +30,7 @@ from lib.consts import SPLASH_TIMEOUT
 
 from lib.Exceptions import UserException
 
-__version__ = '1.0-rc1'
+__version__ = '1.0-rc2'
 
 class Application(CApplication):
     windows = lib.Gui
