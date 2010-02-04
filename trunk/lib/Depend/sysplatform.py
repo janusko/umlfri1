@@ -1,5 +1,3 @@
-from ctypes.wintypes import INT
-from xml.etree.ElementTree import tostring
 class platform:
     import sys as __sys
 
@@ -20,11 +18,11 @@ def check():
     
     req = [2, 5]
     ver = []
-    if type(platform.python_version_tuple()[0])==int:
-        for i in platform.python_version_tuple():
-            ver.append(i)
-    else:        
-        for s in platform.python_version_tuple():
+    
+    for s in platform.python_version_tuple():
+        if isinstance(s, (int, float)):
+            ver.append(s)
+        else:
             i = len(s)
             while i:
                 try:
@@ -37,7 +35,7 @@ def check():
                     n -= .5
                 ver.append(n)
             else:
-                break        
+                break
     
     if ver < req:
         raise AssertionError("You will need at least Python 2.5 to run UML .FRI")
