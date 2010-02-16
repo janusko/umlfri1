@@ -1,17 +1,19 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: UML .FRI 1.0-beta\n"
+"Project-Id-Version: UML .FRI 1.0-beta20090601\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-09-01 15:23+0200\n"
-"PO-Revision-Date: 2009-11-24 13:53+0100\n"
-"Last-Translator: Peter <pasikavec@gmail.com>\n"
-"Language-Team: uml_fri <uml@kst.fri.utc.sk>\n"
+"PO-Revision-Date: 2010-02-16 13:47+0100\n"
+"Last-Translator: tomassino8 <tomassino8@gmail.com>\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Slovak\n"
-"X-Poedit-Country: SLOVAKIA\n"
-"X-Poedit-SourceCharset: utf-8\n"
 
 msgid "<b>project e-mail address</b>"
 msgstr "<b>e-mail adresa projektu</b>"
@@ -493,8 +495,8 @@ msgstr "Žilinská univerzita"
 msgid "Unset default diagram"
 msgstr "Zrušiť nastavenie východzieho diagramu"
 
-msgid "Use the <i>Send</i> button to send this error information directly on our server. If the <i>Include project</i> option is chcecked your current project will be send to the server as well. You can also write some some basic information about what were you doing when this exception occured in the <i>User comments</i> tab to help us recreate it. Or you can use the <i>Home</i> button to post this error directly on our websites bugreport. In case of problems, feel free to write us an email on :"
-msgstr "Stlač <i>Informuj</i> tlačítko na odoslanie tejto chyby priamo na našu web stránku alebo stlač <i>Save</i> tlačítko pre uloženie chybovej hlášky so základnými systémovými informáciami do súboru. Ak je zaznačené <i>Prilož projekt</i>, váš aktuálny projekt bude priložený k tejto správe. Taktiež môžete napísať základné informácie o tom, čo ste robili, keď došlo k vyvolaniu tejto výnimky v záložke <i>Poznámky užívateľa</i> a tak nám pomocť zreprodukovať vyvolanú výnimku. Prosím, pošlite nám váš uložený textový súbor na náš e-mail:"
+msgid "Use the <i>Send</i> button to send this error information directly on our server. If the <i>Include project</i> option is checked your current project will be send to the server as well. You can also write some basic information about what were you doing when this exception occured in the <i>User comments</i> tab to help us recreate it. Or you can use the <i>Home</i> button to post this error directly on our websites bugreport. In case of problems, feel free to write us an email on :"
+msgstr "Stlačte tlačítko <i>Poslať</i> na odoslanie tejto chyby priamo na náš server. Ak je zaznačené <i>Vlož projekt</i>, váš aktuálny projekt bude priložený k tejto správe. Taktiež môžete napísať základné informácie o tom, čo ste robili, keď došlo k vyvolaniu tejto výnimky v záložke <i>Poznámky užívateľa</i> a tak nám pomocť zreprodukovať vyvolanú výnimku. Tlačítko <i>Domov</i> môžete použiť pre zaslanie údajov o tejto chybe do systému správy chýb na našej stránke. V prípade problémov nám napíšte na našu emailovú adresu :"
 
 msgid "Uups! An error during sending occured:\n"
 msgstr "Uups! Počas posielania nastal problém:\n"
@@ -646,4 +648,3 @@ msgstr "Web projektu"
 
 #~ msgid "Class diagram"
 #~ msgstr "Diagram tried"
-

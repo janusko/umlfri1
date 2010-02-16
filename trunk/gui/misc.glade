@@ -227,7 +227,7 @@
                     <child>
                       <widget class="GtkLabel" id="lblExcHelpCont">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Use the &lt;i&gt;Send&lt;/i&gt; button to send this error information directly on our server. If the &lt;i&gt;Include project&lt;/i&gt; option is chcecked your current project will be send to the server as well. You can also write some some basic information about what were you doing when this exception occured in the &lt;i&gt;User comments&lt;/i&gt; tab to help us recreate it. Or you can use the &lt;i&gt;Home&lt;/i&gt; button to post this error directly on our websites bugreport. In case of problems, feel free to write us an email on :</property>
+                        <property name="label" translatable="yes">Use the &lt;i&gt;Send&lt;/i&gt; button to send this error information directly on our server. If the &lt;i&gt;Include project&lt;/i&gt; option is checked your current project will be send to the server as well. You can also write some basic information about what were you doing when this exception occured in the &lt;i&gt;User comments&lt;/i&gt; tab to help us recreate it. Or you can use the &lt;i&gt;Home&lt;/i&gt; button to post this error directly on our websites bugreport. In case of problems, feel free to write us an email on :</property>
                         <property name="use_markup">True</property>
                         <property name="justify">fill</property>
                         <property name="wrap">True</property>
@@ -549,7 +549,7 @@
                     <child>
                       <widget class="GtkLabel" id="lblExcHelpCont1">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Use the &lt;i&gt;Send&lt;/i&gt; button to send this warning information directly on our server. If the &lt;i&gt;Include project&lt;/i&gt; option is chcecked your current project will be send to the server as well. You can also write some some basic information about what were you doing when this warning occured in the &lt;i&gt;User comments&lt;/i&gt; tab to help us recreate it. In case of problems, feel free to write us an email on :</property>
+                        <property name="label" translatable="yes">Use the &lt;i&gt;Send&lt;/i&gt; button to send this warning information directly on our server. If the &lt;i&gt;Include project&lt;/i&gt; option is checked your current project will be send to the server as well. You can also write some basic information about what were you doing when this warning occured in the &lt;i&gt;User comments&lt;/i&gt; tab to help us recreate it. In case of problems, feel free to write us an email on :</property>
                         <property name="use_markup">True</property>
                         <property name="justify">GTK_JUSTIFY_FILL</property>
                         <property name="wrap">True</property>
