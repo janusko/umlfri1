@@ -15,7 +15,8 @@ from frmOptions import CfrmOptions
 from frmException import CfrmException
 from pluginAdapter import CPluginAdapter
 from Bus import CBus
-from GuiManager import CGuiManager
+from frmWarning import CfrmWarning
 from diagramPrint import CDiagramPrint
 from frmExport import CfrmExport
+from frmCopyImage import CfrmCopyImage
 from Bus import CBus

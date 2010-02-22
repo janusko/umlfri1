@@ -1,4 +1,5 @@
 from lib.config import config
+from lib.Distconfig import ROOT_PATH
 
 import os
 import os.path
@@ -11,10 +12,8 @@ class CPythonStarter(object):
         self.__plugin = plugin
     
     def Start(self):
-        rootPath = config['/Paths/Root']
-        
         port = self.__plugin.GetPluginManager().GetPort()
         path = self.__plugin.GetPath()
         uri = self.__plugin.GetUri()
         
-        self.__process = subprocess.Popen([self.__pl_runner, str(port), rootPath, path, uri], shell = (os.name == 'nt'))
+        self.__process = subprocess.Popen([self.__pl_runner, str(port), ROOT_PATH, path, uri], shell = (os.name == 'nt'))

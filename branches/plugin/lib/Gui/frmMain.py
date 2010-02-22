@@ -1,19 +1,23 @@
 from lib.Depend.gtk2 import gtk
+
 from common import CWindow, event
-import common
-import lib.consts
+
+from lib.consts import SCALE_MIN, SCALE_MAX, SCALE_INCREASE, WEB
+from lib.Exceptions import *
+
 import os.path
 from lib.Drawing import CElement, CDiagram, CConnection
 from lib.Elements import CElementObject, CElementType
 from dialogs import CWarningDialog, CQuestionDialog, ECancelPressed
 from tbToolBox import CtbToolBox
 from twProjectView import CtwProjectView
+from twWarnings import CtwWarnings
 from mnuItems import CmnuItems
 from picDrawingArea import CpicDrawingArea
 from nbProperties import CnbProperties
 from tabs import CTabs
 from tabStartPage import CtabStartPage
-from lib.config import config
+from lib.Distconfig import IMAGES_PATH
 from lib.Gui.diagramPrint import CDiagramPrint
 from lib.Exceptions import UserException
 
@@ -29,16 +33,16 @@ class CfrmMain(CWindow):
         'mnuOpen', 'mnuSave', 'mnuSaveAs', 'mnuPrint', 'mnuProperties', 'mnuQuit',
         #############
         'mItemEdit',
-        'mnuCut', 'mnuCopy', 'mnuPaste', 'mnuDelete',
+        'mnuCut', 'mnuCopy', 'mnuCopyAsImage', 'mnuPaste', 'mnuDelete',
         #############
         'mItemProject',
         #############
         'mItemDiagram',
-        'mnuExport',
+        'mnuExport', 'mnuAlignLeft', 'mnuAlignRight', 'mnuAlignTop', 'mnuAlignBottom',
         #############
         'mItemView',
         'mnuViewTools', 'mnuViewCommands', 'mnuNormalSize', 'mnuZoomIn','mnuZoomOut', 'mnuBestFit',
-        'hndCommandBar',
+        'hndCommandBar', 'mnuViewWarnings',
         #############
         'mnuAddons', 'mnuOptions',
         #############
@@ -58,11 +62,11 @@ class CfrmMain(CWindow):
         )
 
     complexWidgets = (CtbToolBox, CtwProjectView, CmnuItems, CpicDrawingArea, CnbProperties, CTabs,
-                      CtabStartPage, )
+                      CtabStartPage, CtwWarnings, )
 
     def __init__(self, app, wTree):
         CWindow.__init__(self, app, wTree)
-        self.form.set_icon_from_file(os.path.join(config['/Paths/Images'], lib.consts.MAIN_ICON))
+        self.form.set_icon_from_file(os.path.join(IMAGES_PATH, 'app_icon.png'))
         self.diagramPrint = CDiagramPrint()
         self.form.maximize()
         self.__sensitivity_project = None
@@ -102,8 +106,8 @@ class CfrmMain(CWindow):
         if not self.application.GetClipboard().IsEmpty():
              changes += 1
 
-        zoomin = diagram and (self.picDrawingArea.GetScale()+0.00001) < lib.consts.SCALE_MAX
-        zoomout = diagram and (self.picDrawingArea.GetScale()-0.00001) > lib.consts.SCALE_MIN
+        zoomin = diagram and (self.picDrawingArea.GetScale()+0.00001) < SCALE_MAX
+        zoomout = diagram and (self.picDrawingArea.GetScale()-0.00001) > SCALE_MIN
        
         changes += zoomin != self.__sensitivity_project[3]
         changes += zoomout != self.__sensitivity_project[4]
@@ -131,8 +135,11 @@ class CfrmMain(CWindow):
         self.cmdZoomOut.set_sensitive(diagram)
         self.mnuSave.set_sensitive(project)
         self.mnuCopy.set_sensitive(element)
+        self.mnuCopyAsImage.set_sensitive(element)
         self.mnuCut.set_sensitive(element)
-        self.mnuPaste.set_sensitive(diagram and not self.application.GetClipboard().IsEmpty())
+        self.mnuPaste.set_sensitive(
+            diagram and not self.application.GetClipboard().IsEmpty() and
+            not bool(set(i.GetObject() for i in self.picDrawingArea.GetDiagram().GetElements()).intersection(set(i.GetObject() for i in self.application.GetClipboard().GetContent()))))
         self.mnuDelete.set_sensitive(element)
         self.mnuNormalSize.set_sensitive(diagram)
         self.mnuZoomIn.set_sensitive(zoomin)
@@ -140,26 +147,32 @@ class CfrmMain(CWindow):
         self.mnuZoomOut.set_sensitive(zoomout)
         self.cmdZoomOut.set_sensitive(zoomout)
         self.mnuBestFit.set_sensitive(diagram)
-        self.mnuFullscreen.set_sensitive(diagram)
+        # self.mnuFullscreen.set_sensitive(diagram)
     
-    def LoadProject(self, filename, copy):
+    def LoadProject(self, filenameOrTemplate, copy = None):
         self.nbTabs.CloseAll()
         self.application.ProjectInit()
         try:
-            self.application.GetProject().LoadProject(filename, copy)
-        except Exception:
-            if lib.consts.DEBUG:
+            if copy is None:
+                self.application.GetProject().CreateProject(filenameOrTemplate)
+            else:
+                self.application.GetProject().LoadProject(filenameOrTemplate, copy)
+        except (ProjectError, XMLError), ex:
+            if __debug__:
                 raise
-            self.application.GetRecentFiles().RemoveFile(filename)
+            
+            if copy is not None:
+                self.application.GetRecentFiles().RemoveFile(filenameOrTemplate)
             self.application.ProjectDelete()
             self.nbTabs.CloseAll()
             self.twProjectView.ClearProjectView()
             self.ReloadTitle()
             self.nbProperties.Fill(None)
-            return CWarningDialog(self.form, _('Error opening file')).run()
+            self.UpdateMenuSensitivity(project = False)
+            return CWarningDialog(self.form, _('Error opening file') + '\n' + _(str(ex))).run()
             
         self.ReloadTitle()
-        self.twProjectView.Redraw()
+        self.twProjectView.Redraw(True)
         self.mnuItems.Redraw()
         self.nbProperties.Fill(None)
         self.picDrawingArea.Redraw()
@@ -183,6 +196,13 @@ class CfrmMain(CWindow):
             self.hndCommandBar.show()
         else:
             self.hndCommandBar.hide()
+    
+    @event("mnuViewWarnings", "activate")
+    def ActionViewWarnings(self, *args):
+        if self.mnuViewWarnings.get_active():
+            self.twWarnings.Show()
+        else:
+            self.twWarnings.Hide()
     
     @event("cmdCloseFullscreen", "clicked")
     def ActionExitFullscreen(self, *args):
@@ -233,7 +253,7 @@ class CfrmMain(CWindow):
     @event("mnuWebsite", "activate")
     def on_mnuWebsite_activate(self, mnu):
         from webbrowser import open_new
-        open_new(lib.consts.WEB)
+        open_new(WEB)
 
     @event("mnuError", "activate")
     def on_mnuError_activate(self, mnu):
@@ -280,14 +300,14 @@ class CfrmMain(CWindow):
     @event("cmdOpen", "clicked")
     @event("mnuOpen", "activate")
     def ActionOpen(self, widget,tab = 0):
-        filename, copy = self.application.GetWindow("frmOpen").ShowDialog(self,tab)
-        if filename is not None:
+        filenameOrTemplate, copy = self.application.GetWindow("frmOpen").ShowDialog(self,tab)
+        if filenameOrTemplate is not None:
             try:
                 if self.application.GetProject() is not None and CQuestionDialog(self.form, _('Do you want to save project?'), True).run():
                     self.ActionSave(widget)
             except ECancelPressed:
                 return
-            self.LoadProject(filename, copy)
+            self.LoadProject(filenameOrTemplate, copy)
             self.tabStartPage.Fill()
     
     @event("form", "key-press-event")
@@ -356,13 +376,13 @@ class CfrmMain(CWindow):
     @event("cmdZoomOut", "clicked")
     @event("mnuZoomOut","activate")
     def on_mnuZoomOut_click(self, widget):
-        self.picDrawingArea.IncScale(-lib.consts.SCALE_INCREASE)
+        self.picDrawingArea.IncScale(-SCALE_INCREASE)
         self.UpdateMenuSensitivity()
     
     @event("cmdZoomIn", "clicked")
     @event("mnuZoomIn","activate")
     def on_mnuZoomIn_click(self, widget):
-        self.picDrawingArea.IncScale(lib.consts.SCALE_INCREASE)
+        self.picDrawingArea.IncScale(SCALE_INCREASE)
         self.UpdateMenuSensitivity()
 
     @event("cmdCut", "clicked")
@@ -377,9 +397,16 @@ class CfrmMain(CWindow):
     @event("mnuCopy","activate")
     def on_mnuCopy_click(self, widget):
         if self.picDrawingArea.HasFocus():
-            gtk.clipboard_get(gtk.gdk.SELECTION_CLIPBOARD).set_image(self.picDrawingArea.GetSelectionPixbuf())
             self.picDrawingArea.ActionCopy()
             self.UpdateMenuSensitivity()
+ 
+    @event("mnuCopyAsImage","activate")
+    def on_mnuCopyAsImage_click(self, widget):
+        if self.picDrawingArea.HasFocus():
+            zoom, bg = self.application.GetWindow('frmCopyImage').Show()
+            if zoom is None:
+                return
+            gtk.clipboard_get(gtk.gdk.SELECTION_CLIPBOARD).set_image(self.picDrawingArea.GetSelectionPixbuf(zoom, bg))
     
     @event("cmdPaste", "clicked")
     @event("mnuPaste","activate")
@@ -397,7 +424,7 @@ class CfrmMain(CWindow):
     
     def ActionLoadToolBar(self, widget):
         pass
-
+        
     # User defined signals
     @event("twProjectView", "add-element")
     @event("mnuItems", "add-element")
@@ -411,8 +438,11 @@ class CfrmMain(CWindow):
         @param element: Id (name) of added element
         @type element:  String
         """
-        parentElement = self.twProjectView.GetSelectedNode()
-        if parentElement == None:
+        if self.twProjectView.GetSelectedNode()!=None:
+            parentElement = self.twProjectView.GetSelectedNode()
+        elif self.twProjectView.GetSelectedDiagram()!=None:
+            parentElement = self.twProjectView.GetSelectedDiagram()
+        else:
             parentElement = self.twProjectView.GetRootNode()
 
         ElementType = self.application.GetProject().GetMetamodel().GetElementFactory().GetElement(element)
@@ -489,8 +519,11 @@ class CfrmMain(CWindow):
     def on_select_diagram_and_element(self, widget, diagram, object):
         self.picDrawingArea.SetDiagram(diagram)
         self.nbTabs.AddTab(diagram)
-        diagram.AddToSelection(diagram.HasElementObject(object))
-        self.picDrawingArea.Paint()
+        diagram.AddToSelection(diagram.HasElementObject(object))                
+        y=self.picDrawingArea.canvas.ToPhysical(self.picDrawingArea.Diagram.GetSelected().next().position)[1]-self.picDrawingArea.GetAbsolutePos(self.picDrawingArea.GetWindowSize())[1]/2
+        x=self.picDrawingArea.canvas.ToPhysical(self.picDrawingArea.Diagram.GetSelected().next().position)[0]-self.picDrawingArea.GetAbsolutePos(self.picDrawingArea.GetWindowSize())[0]/2
+        self.picDrawingArea.SetPos((x,y))
+        self.picDrawingArea.Paint()                
     
     @event("twProjectView","show_frmFindInDiagram")
     def on_show_frmFindInDiagram(self, widget, diagrams, object):
@@ -579,5 +612,23 @@ class CfrmMain(CWindow):
         if (event.state & gtk.gdk.CONTROL_MASK):
             self.UpdateMenuSensitivity()
 
+    #Methods of alignment &tidy
+    @event('mnuAlignLeft', 'activate')
+    def on_mnuAlignLeft_activate(self, widget):
+        if self.picDrawingArea.HasFocus():
+            self.picDrawingArea.AlignLeft()
 
+    @event('mnuAlignRight', 'activate')
+    def on_mnuAlignRight_activate(self, widget):
+        if self.picDrawingArea.HasFocus():
+            self.picDrawingArea.AlignRight()
 
+    @event('mnuAlignTop', 'activate')
+    def on_mnuAlignTop_activate(self, widget):
+        if self.picDrawingArea.HasFocus():
+            self.picDrawingArea.AlignTop()
+
+    @event('mnuAlignBottom', 'activate')
+    def on_mnuAlignBottom_activate(self, widget):
+        if self.picDrawingArea.HasFocus():
+            self.picDrawingArea.AlignBottom()

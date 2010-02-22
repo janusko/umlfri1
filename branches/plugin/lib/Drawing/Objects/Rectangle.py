@@ -4,17 +4,6 @@ import math
 from lib.Exceptions.UserException import *
 from lib.datatypes import CColor
 
-cornerDefs = {
-    'rounded': 'M 0,1 C 0,0.446 0.446,0 1,0',
-    'note': 'M 0,1 L 1,1 L 1,0 L 0,1 z  M 0,1 L 1,0',
-}
-
-sideDefs = {
-    'rounded': 'M 0,0 C -0.554,0 -1,-0.223 -1,-0.5 C -1,-0.777 -0.554,-1 0,-1',
-    'sidelong' : 'M -1,0 L 0,-1',
-    'beak' : 'M 0,-1 L -1,-0.5 L 0,0'
-}
-
 class CRectangle(CSimpleContainer):
     types = {
         'fill': CColor,
@@ -83,7 +72,7 @@ class CRectangle(CSimpleContainer):
         pos = context.GetPos()
         size = context.ComputeSize(self)
         
-        if sides == corners == (None, None, None, None):
+        if all(side is None for side in sides) and all(corner is None for corner in corners):
             canvas.DrawRectangle(pos, size, border, fill)
         else:
             cornerPath = []

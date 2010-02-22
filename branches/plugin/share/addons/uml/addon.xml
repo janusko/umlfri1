@@ -21,6 +21,9 @@
     </Description>
     
     <Metamodel>
-        <Path path="." />
+        <Path path="metamodel" />
+        
+        <Template path="templates/empty.fritx" name="Empty UML diagram" />
+        <Template path="templates/diagrams.fritx" name="Simple UML template" />
     </Metamodel>
 </AddOn>

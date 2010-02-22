@@ -36,23 +36,6 @@
             <RectangleWidth>2</RectangleWidth>
         </Drag>
     </Styles>
-    <Paths>
-        <Root>&apppath;</Root>
-        <Addons>&apppath;/share/addons/</Addons>
-        <Templates>&apppath;/etc/templates/</Templates>
-        <Images>&apppath;/img/</Images>
-        <Gui>&apppath;/gui/</Gui>
-        <Locales>&apppath;/share/locale/</Locales>
-        <Schema>&apppath;/share/schema/</Schema>
-        <UserDir>~/.uml_fri</UserDir>
-        <UserConfig>~/.uml_fri/config.xml</UserConfig>
-        <UserAddons>~/.uml_fri/addons/</UserAddons>
-        <UserTemplates>~/.uml_fri/templates/</UserTemplates>
-        <UserEnabledAddons>~/.uml_fri/addons.xml</UserEnabledAddons>
-        <RecentFiles>~/.uml_fri/RecentFiles.xml</RecentFiles>
-        <UserGui>~/.uml_fri/UserGui.xml</UserGui>
-        <Plugins>&apppath;/plugins</Plugins>
-    </Paths>
     <Page>
         <Width>797</Width>
         <Height>1123</Height>

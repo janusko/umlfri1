@@ -1,17 +1,19 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: UML .FRI 1.0-beta\n"
+"Project-Id-Version: UML .FRI 1.0-beta20090601\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-20 22:06+0200\n"
-"PO-Revision-Date: 2009-08-20 22:08+0100\n"
-"Last-Translator: Ján Janech <janech@kios.sk>\n"
-"Language-Team: uml_fri <uml@kst.fri.utc.sk>\n"
+"POT-Creation-Date: 2009-09-01 15:23+0200\n"
+"PO-Revision-Date: 2010-02-16 13:47+0100\n"
+"Last-Translator: tomassino8 <tomassino8@gmail.com>\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Slovak\n"
-"X-Poedit-Country: SLOVAKIA\n"
-"X-Poedit-SourceCharset: utf-8\n"
 
 msgid "<b>project e-mail address</b>"
 msgstr "<b>e-mail adresa projektu</b>"
@@ -32,8 +34,23 @@ msgstr "Pridať diagram"
 msgid "Add element"
 msgstr "Pridaj element"
 
+msgid "Addon could not be installed"
+msgstr "Rozšírenie sa nepodarilo nainštalovať"
+
 msgid "Addons"
 msgstr "Rozšírenia"
+
+msgid "Align _bottom"
+msgstr "Zarovnať do_dola"
+
+msgid "Align _left"
+msgstr "Zarovnať do_ľava"
+
+msgid "Align _right"
+msgstr "Zarovnať do_prava"
+
+msgid "Align _top"
+msgstr "Zarovnať do_hora"
 
 msgid "All files"
 msgstr "Všetky súbory"
@@ -86,6 +103,12 @@ msgstr "Spojenie"
 msgid "Connections"
 msgstr "Spojenia"
 
+msgid "Copy as image"
+msgstr "Kopírovať ako obrázok"
+
+msgid "Copy without background (transparent)"
+msgstr "Kopírovať bez pozadia (priesvitné)"
+
 msgid "Create New Project"
 msgstr "Vytvoriť nový projekt"
 
@@ -94,6 +117,9 @@ msgstr "Vytvoriť _nový projekt"
 
 msgid "Date"
 msgstr "Dátum poslednej zmeny"
+
+msgid "Date/Time"
+msgstr "Dátum/Čas"
 
 msgid "Delete from Project"
 msgstr "Odstrániť z projektu"
@@ -149,8 +175,17 @@ msgstr "Elementy"
 msgid "Enable"
 msgstr "Povoliť"
 
+msgid "Error"
+msgstr "Chyba"
+
+msgid "Error name"
+msgstr "Názov chyby"
+
 msgid "Error opening file"
 msgstr "Chyba pri otváraní súboru"
+
+msgid "Error text"
+msgstr "Popis chyby"
 
 msgid "Exception"
 msgstr "Výnimka"
@@ -206,17 +241,17 @@ msgstr "Voľne šíriteľný CASE nástroj vyvíjaný v pythone."
 msgid "GTK+ version"
 msgstr "Verzia GTK+:"
 
-msgid "Gui"
-msgstr "Gui"
+msgid "Homepage"
+msgstr "Domovská stránka"
 
 msgid "Homepage:"
 msgstr "Domovská stránka:"
 
+msgid "Change source and target"
+msgstr "Zameň zdroj a cieľ"
+
 msgid "I_nclude project"
 msgstr "V_lož projekt"
-
-msgid "Images"
-msgstr "Obrázky"
 
 msgid "Install"
 msgstr "Inštalovať"
@@ -235,9 +270,6 @@ msgstr "Licencia:"
 
 msgid "Line color"
 msgstr "Farba čiary"
-
-msgid "Locales"
-msgstr "Preklady"
 
 msgid "Machine"
 msgstr "Počítač"
@@ -287,9 +319,6 @@ msgstr "P_S"
 msgid "Pages"
 msgstr "Záložky"
 
-msgid "Paths"
-msgstr "Priečinky"
-
 msgid "Platform"
 msgstr "Platforma"
 
@@ -304,15 +333,6 @@ msgstr "Farba bodu"
 
 msgid "Points size"
 msgstr "Veľkosť bodu"
-
-msgid "Portable Document Format"
-msgstr "Formát prenositeľných dokumentov (PDF)"
-
-msgid "Portable Network Graphics"
-msgstr "Formát prenositeľných obrázkov (PNG)"
-
-msgid "PostScript"
-msgstr "PostScript"
 
 msgid "Preferences"
 msgstr "Nastavenia"
@@ -335,9 +355,6 @@ msgstr "Verzia jazyka Python"
 msgid "Question"
 msgstr "Otázka"
 
-msgid "Recent files"
-msgstr "Naposledy otvorené súbory"
-
 msgid "Rectagle width"
 msgstr "Šírka štvoruholníka"
 
@@ -347,17 +364,11 @@ msgstr "Farba štvoruholníka"
 msgid "Rectangle width"
 msgstr "Šírka štvoruholníka"
 
-msgid "Root"
-msgstr "Aplikácia"
-
 msgid "S_VG"
 msgstr "S_VG"
 
 msgid "Save Project As"
 msgstr "Uložiť projekt ako"
-
-msgid "Scalable Vector Graphics"
-msgstr "Scalable Vector Graphics (SVG)"
 
 msgid "Select Addon"
 msgstr "Vyberte rozšírenie"
@@ -406,9 +417,6 @@ msgstr "Pod vedením:"
 
 msgid "System _info"
 msgstr "Systémové _informácie"
-
-msgid "Templates"
-msgstr "Predlohy"
 
 msgid "Text Font"
 msgstr "Písmo textu"
@@ -487,14 +495,8 @@ msgstr "Žilinská univerzita"
 msgid "Unset default diagram"
 msgstr "Zrušiť nastavenie východzieho diagramu"
 
-msgid "Use the <i>Send</i> button to send this error information directly on our server. If the <i>Include project</i> option is chcecked your current project will be send to the server as well. You can also write some some basic information about what were you doing when this exception occured in the <i>User comments</i> tab to help us recreate it. Or you can use the <i>Home</i> button to post this error directly on our websites bugreport. In case of problems, feel free to write us an email on :"
-msgstr "Stlač <i>Informuj</i> tlačítko na odoslanie tejto chyby priamo na našu web stránku alebo stlač <i>Save</i> tlačítko pre uloženie chybovej hlášky so základnými systémovými informáciami do súboru. Ak je zaznačené <i>Prilož projekt</i>, váš aktuálny projekt bude priložený k tejto správe. Taktiež môžete napísať základné informácie o tom, čo ste robili, keď došlo k vyvolaniu tejto výnimky v záložke <i>Poznámky užívateľa</i> a tak nám pomocť zreprodukovať vyvolanú výnimku. Prosím, pošlite nám váš uložený textový súbor na náš e-mail:"
-
-msgid "User config"
-msgstr "Nastavenia užívateľa"
-
-msgid "User dir"
-msgstr "Zložka užívateľa"
+msgid "Use the <i>Send</i> button to send this error information directly on our server. If the <i>Include project</i> option is checked your current project will be send to the server as well. You can also write some basic information about what were you doing when this exception occured in the <i>User comments</i> tab to help us recreate it. Or you can use the <i>Home</i> button to post this error directly on our websites bugreport. In case of problems, feel free to write us an email on :"
+msgstr "Stlačte tlačítko <i>Poslať</i> na odoslanie tejto chyby priamo na náš server. Ak je zaznačené <i>Vlož projekt</i>, váš aktuálny projekt bude priložený k tejto správe. Taktiež môžete napísať základné informácie o tom, čo ste robili, keď došlo k vyvolaniu tejto výnimky v záložke <i>Poznámky užívateľa</i> a tak nám pomocť zreprodukovať vyvolanú výnimku. Tlačítko <i>Domov</i> môžete použiť pre zaslanie údajov o tejto chybe do systému správy chýb na našej stránke. V prípade problémov nám napíšte na našu emailovú adresu :"
 
 msgid "Uups! An error during sending occured:\n"
 msgstr "Uups! Počas posielania nastal problém:\n"
@@ -523,6 +525,9 @@ msgstr "Viditeľnosť"
 
 msgid "Warning"
 msgstr "Varovanie"
+
+msgid "_Warnings"
+msgstr "Zobraziť v_arovania"
 
 msgid ""
 "We are looking for people willing to help us improve our\n"
@@ -553,6 +558,9 @@ msgstr "Nesprávny element:"
 
 msgid "Z-Order"
 msgstr "Poradie"
+
+msgid "Zoom:"
+msgstr "Zväčšenie:"
 
 msgid "_Add diagram"
 msgstr "Pridať _diagram"
@@ -609,7 +617,7 @@ msgid "_Send"
 msgstr "Po_slať"
 
 msgid "_Toolbox"
-msgstr "_Panel s nástrojmi"
+msgstr "Pane_l s nástrojmi"
 
 msgid "_UML .FRI Homepage"
 msgstr "_Stránka projektu"
@@ -638,3 +646,5 @@ msgstr "nič"
 msgid "project web"
 msgstr "Web projektu"
 
+#~ msgid "Class diagram"
+#~ msgstr "Diagram tried"

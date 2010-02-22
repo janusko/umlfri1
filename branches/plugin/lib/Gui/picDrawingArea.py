@@ -1,8 +1,11 @@
 from lib.Depend.gtk2 import gtk
 from lib.Depend.gtk2 import gobject
 
-import lib.consts
+from lib.Project import CProject, CProjectNode
+
+from lib.consts import BUFFER_SIZE, SCALE_MIN, SCALE_MAX, SCALE_INCREASE
 from lib.config import config
+from lib.Distconfig import IMAGES_PATH
 
 from common import CWidget, event
 from lib.Drawing import CDiagram, CElement, CConnection, CConLabelInfo
@@ -12,12 +15,12 @@ from lib.Connections import CConnectionObject
 from lib.Exceptions.UserException import *
 from lib.Drawing.Canvas import CGtkCanvas, CSvgCanvas, CCairoCanvas, CExportCanvas
 from lib.Drawing import Element
+
 import thread
+import os.path
 
 
 targets = [('document/uml', 0, gtk.TARGET_SAME_WIDGET)]
-
-PAGE_SIZE=(config["/Page/Width"],config["/Page/Height"])
 
 class Record(object): pass
 
@@ -27,7 +30,7 @@ class CpicDrawingArea(CWidget):
                 'pMenuShift', 
                 'pmShift_SendBack', 'pmShift_BringForward', 'pmShift_ToBottom', 'pmShift_ToTop','pmShowInProjectView',
                 'mnuCtxCut', 'mnuCtxCopy', 'mnuCtxPaste', 'mnuCtxDelete',
-                'pmOpenSpecification', 'mnuCtxShiftDelete')
+                'pmOpenSpecification', 'mnuCtxShiftDelete','mnuChangeSourceTarget')
 
     __gsignals__ = {
         'get-selected':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_PYOBJECT,
@@ -62,7 +65,7 @@ class CpicDrawingArea(CWidget):
         self.selSq = None
         self.pressedKeys = set()
         self.scale = 1.0
-        self.buffer_size = ((0, 0), lib.consts.BUFFER_SIZE)
+        self.buffer_size = ((0, 0), BUFFER_SIZE)
         self.picDrawingArea.realize()
         self.buffer = gtk.gdk.Pixmap(self.picDrawingArea.window, *self.buffer_size[1])
         self.Diagram = CDiagram(None,_("Start page"))
@@ -80,8 +83,13 @@ class CpicDrawingArea(CWidget):
         self.picEventBox.drag_dest_set(gtk.DEST_DEFAULT_ALL, self.TARGETS, gtk.gdk.ACTION_COPY)
         self.AdjustScrollBars()
         self.cursors = {None: None}
-        for name, img in (('grab', lib.consts.GRAB_CURSOR), ('grabbing', lib.consts.GRABBING_CURSOR)):
-            self.cursors[name] = gtk.gdk.Cursor(gtk.gdk.display_get_default(), gtk.gdk.pixbuf_new_from_file(config['/Paths/Images']+img), 0, 0)
+        for name, img in (('grab', 'grab.png'), ('grabbing', 'grabbing.png')):
+            self.cursors[name] = gtk.gdk.Cursor(
+                gtk.gdk.display_get_default(),
+                gtk.gdk.pixbuf_new_from_file(os.path.join(IMAGES_PATH, img)),
+                0,
+                0
+            )
         self.__invalidated = False
 
     def __SetCursor(self, cursor = None):
@@ -96,10 +104,10 @@ class CpicDrawingArea(CWidget):
             scale = scaleY
         else : scale = scaleX
         
-        if scale < lib.consts.SCALE_MIN:
-            scale = lib.consts.SCALE_MIN
-        elif scale > lib.consts.SCALE_MAX:
-            scale = lib.consts.SCALE_MAX
+        if scale < SCALE_MIN:
+            scale = SCALE_MIN
+        elif scale > SCALE_MAX:
+            scale = SCALE_MAX
 
         self.SetScale(scale)
         diaSizeMinX, diaSizeMinY = self.canvas.ToPhysical((diaSizeMinX, diaSizeMinY))
@@ -107,15 +115,15 @@ class CpicDrawingArea(CWidget):
         self.picVBar.set_value(diaSizeMinY)
 
     def SetScale(self, scale):
-        if (scale >= lib.consts.SCALE_MIN) and (scale <= lib.consts.SCALE_MAX):
+        if (scale >= SCALE_MIN) and (scale <= SCALE_MAX):
             self.scale = scale
             self.canvas.SetScale(self.scale)
             self.AdjustScrollBars()
             self.Paint()
 
     def IncScale(self, scale):
-        tmp_scale = (lib.consts.SCALE_INCREASE*((self.scale+0.00001)//lib.consts.SCALE_INCREASE))+scale
-        if (tmp_scale+0.00001 >= lib.consts.SCALE_MIN) and (tmp_scale-0.00001 <= lib.consts.SCALE_MAX):
+        tmp_scale = (SCALE_INCREASE*((self.scale+0.00001)//SCALE_INCREASE))+scale
+        if (tmp_scale+0.00001 >= SCALE_MIN) and (tmp_scale-0.00001 <= SCALE_MAX):
             self.scale = tmp_scale
             self.canvas.SetScale(self.scale)
             self.AdjustScrollBars()
@@ -196,9 +204,11 @@ class CpicDrawingArea(CWidget):
             if changed:
                 self.__invalidated = True # redraw completly on next configure event
             return
+        
         posx, posy = int(self.picHBar.get_value()), int(self.picVBar.get_value())
-        sizx, sizy = self.GetWindowSize()        
+        sizx, sizy = self.GetWindowSize()    
         ((bposx, bposy), (bsizx, bsizy)) = self.buffer_size
+        (bposx, bposy) = self.canvas.ToPhysical((bposx, bposy))
         
         
         if posx < bposx or bposx + bsizx < posx + sizx or \
@@ -207,6 +217,7 @@ class CpicDrawingArea(CWidget):
             bposx = posx + (sizx - bsizx)//2
             bposy = posy + (sizy - bsizy)//2
                       
+            (bposx, bposy) = self.canvas.ToLogical((bposx, bposy))
             self.buffer_size = ((bposx, bposy), (bsizx, bsizy))
             changed = True
         if changed:
@@ -294,6 +305,7 @@ class CpicDrawingArea(CWidget):
         )
         selection = list(self.Diagram.GetSelected())
         self.pmOpenSpecification.set_sensitive(len(selection) == 1 and isinstance(selection[0], CElement))
+        self.mnuChangeSourceTarget.set_sensitive(len(selection) == 1 and isinstance(selection[0], CConnection))
         if (self.application.GetProject() is not None and 
             self.Diagram is not None and
             self.application.GetProject().GetRoot().GetObject() in (
@@ -606,10 +618,10 @@ class CpicDrawingArea(CWidget):
     def on_picEventBox_scroll_event(self, widget, event):
         if (event.state & gtk.gdk.CONTROL_MASK):
             if event.direction == gtk.gdk.SCROLL_UP:
-                self.IncScale(lib.consts.SCALE_INCREASE)
+                self.IncScale(SCALE_INCREASE)
                 return
             elif event.direction == gtk.gdk.SCROLL_DOWN:
-                self.IncScale(-lib.consts.SCALE_INCREASE)
+                self.IncScale(-SCALE_INCREASE)
                 return           
 
         if  event.state & gtk.gdk.SHIFT_MASK :
@@ -866,22 +878,127 @@ class CpicDrawingArea(CWidget):
             else:
                 self.Diagram.ShiftDeleteConnection(sel)
         self.Paint()
-
+        
+    @event("mnuChangeSourceTarget","activate")
+    def on_mnuChangeSourceTarget_click(self,widget):
+        self.ChangeSourceTarget()
+        self.Paint()
+        
+        
+    def ChangeSourceTarget(self):
+        
+        for sel in self.Diagram.GetSelected():
+            if isinstance(sel, CConnection):
+                sel.GetObject().ChangeConnection()
+            project = self.application.GetProject()
+            diagrams = project.GetDiagrams()
+            for d in diagrams:
+                for c in d.GetConnections():
+                    if c.GetObject() == sel.GetObject():
+                        c.ChangeConnection(self.canvas)                        
+                        self.Paint()
+                
     def HasFocus(self):
         return self.picDrawingArea.is_focus()
 
-    def GetSelectionPixbuf(self):
+    def GetSelectionPixbuf(self, zoom, bg):
         (x, y), (sizeX, sizeY) = self.Diagram.GetSelectSquare(self.canvas)
-        # to do: shouldn't this be implemented in the diagram method in the first place ?
-        x = x * self.GetScale()
-        y = y * self.GetScale()
         # 4 is the size of shadow -- do we have a constant or config value for this ?
-        sizeX = (sizeX + 4) * self.GetScale() 
-        sizeY = (sizeY + 4) * self.GetScale()
-        self.Diagram.PaintSelected(self.canvas)   
-       
-        pixbuf =  gtk.gdk.Pixbuf(gtk.gdk.COLORSPACE_RGB, True, 8, sizeX, sizeY)
-        pixbuf.get_from_drawable(self.buffer, self.buffer.get_colormap(), x, y, 0, 0, sizeX, sizeY)
+        sizeX = (sizeX + 4) * zoom
+        sizeY = (sizeY + 4) * zoom
+        canvas = CExportCanvas(self.application.GetProject().GetMetamodel().GetStorage(), 'pixbuf', None, sizeX, sizeY, background = bg)
+        canvas.SetScale(zoom)
+        canvas.MoveBase(x, y)
+        self.Diagram.PaintSelected(canvas)
+        return canvas.Finish()
+
+    ### Align & tidy methods
+    ##  ____________________
+    
+    ## Takes all selected Elements (ONLY Elements, no Labels or Connections!)
+    ## and align them to the most left position occured among them
+    
+    def AlignLeft(self, widget = None):
+        selected = self.Diagram.GetSelectedElements()
+        # at first: initialization &retaking of position of the 1st element
+        try:
+            min_left =selected.next().GetPosition()[0]
+        except StopIteration:
+            return
+        # now the iteration through the rest of SelectedElements
+        temp=0
+        for i in selected:
+            temp = i.GetPosition()[0]
+            if min_left > temp:
+                min_left =temp
+        # now we have the most left location
+        # set the x position of all selected elements to that most left one!
+        for sel in self.Diagram.GetSelectedElements():
+            sel.SetPosition((min_left, sel.GetPosition()[1]))
+        # redraw canvas!
         self.Paint()
-        # lets assume that we have a white background... so white colour pixels will be fully transparent
-        return pixbuf.add_alpha(True, chr(255), chr(255),chr(255))
+
+
+    def AlignTop(self, widget = None):
+        selected = self.Diagram.GetSelectedElements()
+        # at first: initialization &retaking of position of the 1st element
+        try:
+            min_top =selected.next().GetPosition()[1]
+        except StopIteration:
+            return
+        # now the iteration through the rest of SelectedElements
+        temp=0
+        for i in selected:
+            temp = i.GetPosition()[1]
+            if min_top > temp:
+                min_top =temp
+        # now we have the most left location
+        # set the x position of all selected elements to that most left one!
+        for sel in self.Diagram.GetSelectedElements():
+            sel.SetPosition(( sel.GetPosition()[0], min_top ))
+        # redraw canvas!
+        self.Paint()
+
+
+    def AlignRight(self, widget = None):
+        selected = self.Diagram.GetSelectedElements()
+        # at first: initialization &retaking of position of the 1st element
+        try:
+            temp = selected.next()
+            max_right = temp.GetPosition()[0] + temp.GetSize(self.Diagram)[0]
+        except StopIteration:
+            return
+        # now the iteration through the rest of SelectedElements
+        temp=0
+        for i in selected:
+            temp = i.GetPosition()[0] + i.GetSize(self.Diagram)[0]
+            if max_right < temp:
+                max_right =temp
+        # now we have the most right location
+        # set the x position of all selected elements to that most right one!
+        for sel in self.Diagram.GetSelectedElements():
+            sel.SetPosition(( max_right - sel.GetSize(self.Diagram)[0] , sel.GetPosition()[1]))
+        # redraw canvas!
+        self.Paint()
+
+
+    def AlignBottom(self, widget = None):
+        selected = self.Diagram.GetSelectedElements()
+        # at first: initialization &retaking of position of the 1st element
+        try:
+            temp = selected.next()
+            max_bottom = temp.GetPosition()[1] + temp.GetSize(self.Diagram)[1]
+        except StopIteration:
+            return
+        # now the iteration through the rest of SelectedElements
+        temp=0
+        for i in selected:
+            temp = i.GetPosition()[1] + i.GetSize(self.Diagram)[1]
+            if max_bottom < temp:
+                max_bottom =temp
+        # now we have the most right location
+        # set the x position of all selected elements to that most right one!
+        for sel in self.Diagram.GetSelectedElements():
+            sel.SetPosition(( sel.GetPosition()[0], max_bottom - sel.GetSize(self.Diagram)[1]))
+        # redraw canvas!
+        self.Paint()

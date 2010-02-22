@@ -54,13 +54,16 @@ class CCairoBaseCanvas(CAbstractCanvas):
         self.cr = pangocairo.CairoContext(self.cairo_context)
         self.pango_layout = self.cr.create_layout()
         self.fonts = {}
+        
+        self.baseX = 0
+        self.baseY = 0
 
     def ToLogical(self, pos):
-        pos = (int(pos[0]/self.scale),int(pos[1]/self.scale))     
+        pos = (int((pos[0] - self.baseX)/self.scale),int((pos[1] - self.baseY)/self.scale))
         return pos
 
     def ToPhysical(self, pos):
-        pos = (int(pos[0]*self.scale),int(pos[1]*self.scale)) 
+        pos = (int(pos[0]*self.scale + self.baseX),int(pos[1]*self.scale + self.baseY))
         return pos
 
     def SetScale(self, scale):
@@ -68,6 +71,10 @@ class CCairoBaseCanvas(CAbstractCanvas):
 
     def GetScale(self):
         return float(self.scale)
+    
+    def MoveBase(self, x, y):
+        self.baseX = x
+        self.baseY = y
 
     def SetAlpha(self, alpha):
         if alpha >= 0.0 and alpha <= 1.0:
@@ -122,7 +129,7 @@ class CCairoBaseCanvas(CAbstractCanvas):
             radius = int(size[0])/2
             
         self.cr.scale(self.scale, self.scale)
-        self.cr.translate (int(pos[0])+(int(size[0])/2), int(pos[1])+(int(size[1])/2))
+        self.cr.translate (int(pos[0] - self.baseX)+(int(size[0])/2), int(pos[1] - self.baseY)+(int(size[1])/2))
         self.cr.scale(size0, size1)
         self.cr.arc(0,0,radius,arc[0],arc[1])
 
@@ -147,8 +154,8 @@ class CCairoBaseCanvas(CAbstractCanvas):
     def DrawLine(self, start, end, fg, line_width = None, line_style = None):
         self.cr.save()
         self.cr.scale(self.scale, self.scale)
-        self.cr.move_to(int(start[0]),int(start[1]))
-        self.cr.line_to(int(end[0]),int(end[1]))
+        self.cr.move_to(int(start[0] - self.baseX),int(start[1] - self.baseY))
+        self.cr.line_to(int(end[0] - self.baseX),int(end[1] - self.baseY))
 
         if fg is not None: 
             temp_color = HexToRGB(fg)
@@ -163,41 +170,19 @@ class CCairoBaseCanvas(CAbstractCanvas):
         self.cr.stroke()
         self.cr.restore()
 
-    def DrawLines(self, points, fg, line_width = None, line_style = None):
-        self.cr.save()
-        self.cr.scale(self.scale, self.scale)
-        move_pen = True
-        for x,y in points :
-            if move_pen:
-                self.cr.move_to(x,y)
-                move_pen = False
-            self.cr.line_to(x,y) 
-
-        if fg is not None:
-            temp_color = HexToRGB(fg)
-            self.cr.set_source_rgba(temp_color[0], temp_color[1], temp_color[2], self.alpha)
-
-        if line_width is not None:
-            self.cr.set_line_width(line_width)
-
-        if line_style is not None:
-            self.cr.set_dash(LINE_STYLES[line_style], 0)
-
-        self.cr.stroke()
-        self.cr.restore()
-
-    def DrawPolygon(self, points, fg = None, bg = None, line_width = None, line_style = None):
+    def __DrawPolyAll(self, points, fg, bg, line_width, line_style, closed):
         self.cr.save()
         self.cr.scale(self.scale, self.scale)
         move_pen = True
 
         for x,y in points :
             if move_pen:
-                self.cr.move_to(x,y)
+                self.cr.move_to(x - self.baseX,y - self.baseY)
                 move_pen = False
-            self.cr.line_to(x,y)
+            self.cr.line_to(x - self.baseX,y - self.baseY)
 
-        self.cr.close_path()
+        if closed:
+            self.cr.close_path()
 
         if bg is not None:
             temp_color = HexToRGB(bg)
@@ -217,6 +202,12 @@ class CCairoBaseCanvas(CAbstractCanvas):
         self.cr.stroke()
         self.cr.restore()
 
+    def DrawLines(self, points, fg, line_width = None, line_style = None):
+        self.__DrawPolyAll(points, fg, None, line_width, line_style, False)
+
+    def DrawPolygon(self, points, fg = None, bg = None, line_width = None, line_style = None):
+        self.__DrawPolyAll(points, fg, bg, line_width, line_style, True)
+
     def DrawPath(self, path, fg = None, bg = None, line_width = None, line_style = None):
         for single in path:
             t = single.GetType()
@@ -228,7 +219,7 @@ class CCairoBaseCanvas(CAbstractCanvas):
     def DrawRectangle(self, pos, size, fg = None, bg = None, line_width = None, line_style = None):
         self.cr.save()
         self.cr.scale(self.scale, self.scale)
-        self.cr.rectangle(int(pos[0]), int(pos[1]), int(size[0]), int(size[1]))
+        self.cr.rectangle(int(pos[0] - self.baseX), int(pos[1] - self.baseY), int(size[0]), int(size[1]))
 
         if bg is not None:
             temp_color = HexToRGB(bg)
@@ -252,7 +243,7 @@ class CCairoBaseCanvas(CAbstractCanvas):
         self.cr.save()
         self.cr.scale(self.scale, self.scale)
         self.__SetFont(font)
-        self.cr.move_to (int(pos[0]), int(pos[1]))
+        self.cr.move_to (int(pos[0] - self.baseX), int(pos[1] - self.baseY))
         self.pango_layout.set_text(text)
         font_color = HexToRGB(fg)
         self.cr.set_source_rgb(font_color[0], font_color[1], font_color[2])
@@ -277,7 +268,7 @@ class CCairoBaseCanvas(CAbstractCanvas):
         pixmap = PixmapFromPath(self.storage, filename)
         self.cr.save()
         self.cr.scale(self.scale, self.scale)
-        self.cr.set_source_surface (pixmap, pos[0], pos[1])
+        self.cr.set_source_surface (pixmap, pos[0] - self.baseX, pos[1] - self.baseY)
         self.cr.paint()
         self.cr.restore()
 

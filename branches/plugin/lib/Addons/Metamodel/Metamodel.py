@@ -3,7 +3,6 @@ from lib.Elements.Factory import CElementFactory
 from lib.Diagrams.Factory import CDiagramFactory
 from lib.Connections.Factory import CConnectionFactory
 from PathFactory import CPathFactory
-from lib.consts import VERSIONS_PATH, DIAGRAMS_PATH, ELEMENTS_PATH, CONNECTIONS_PATH, DOMAINS_PATH, PATHS_PATH
 from lib.Exceptions import MetamodelValidationError
 from lib.Elements import CElementType
 from lib.Addons.Plugin import Reference
@@ -13,11 +12,11 @@ class CMetamodel(Reference):
     def __init__(self, storage, uri, version):
         Reference.__init__(self)
         self.__Storage = storage
-        self.__PathFactory = CPathFactory(self.__Storage, PATHS_PATH)
-        self.__DomainFactory = CDomainFactory(self.__Storage, DOMAINS_PATH)
-        self.__ElementFactory = CElementFactory(self, self.__Storage, ELEMENTS_PATH, self.__DomainFactory)
-        self.__DiagramFactory = CDiagramFactory(self, self.__Storage, DIAGRAMS_PATH)
-        self.__ConnectionFactory = CConnectionFactory(self, self.__Storage, CONNECTIONS_PATH, self.__DomainFactory)
+        self.__PathFactory = CPathFactory(self.__Storage, 'paths.xml')
+        self.__DomainFactory = CDomainFactory(self.__Storage, 'domains')
+        self.__ElementFactory = CElementFactory(self, self.__Storage, 'elements', self.__DomainFactory)
+        self.__DiagramFactory = CDiagramFactory(self, self.__Storage, 'diagrams')
+        self.__ConnectionFactory = CConnectionFactory(self, self.__Storage, 'connections', self.__DomainFactory)
         self.__MetamodelUri = uri
         self.__MetamodelVersion = version
         self.__diagramsList = []

@@ -2,9 +2,9 @@ from __future__ import with_statement
 from lib.Depend.gtk2 import gtk
 from lib.Depend.gtk2 import pango
 import lib.Depend
-import lib.consts
+from lib.consts import MAIL, ERROR_LOG_ADDRESS, WEB
 from common import CWindow
-from lib.config import config
+from lib.Distconfig import USERDIR_PATH, ROOT_PATH
 from lib.Gui.dialogs import CWarningDialog
 import sys, os, time, tarfile, traceback, cStringIO, datetime, urllib, urllib2
 import os.path
@@ -27,7 +27,7 @@ class CfrmException(CWindow):
         self.btnReport.connect("clicked", self.OnBtnReportClicked, None)
         self.btnSend.connect("clicked", self.OnBtnSendClicked, None)
         self.chbtnIncludeProject.connect("toggled", self.OnChbtnIncludeProjectToogled, None)
-        self.lblMail.set_label("<span background='white'><b>"+ lib.consts.MAIL + "</b></span>")
+        self.lblMail.set_label("<span background='white'><b>"+ MAIL + "</b></span>")
         self.append_project = True
 
         buff = self.tviewSysInfo.get_buffer()  
@@ -42,7 +42,7 @@ class CfrmException(CWindow):
         buff.insert_with_tags_by_name(iter, "UML .FRI:\t\t", "bold")
         buff.insert_with_tags_by_name(iter, self.application.GetVersion(), "mono")
         try:
-            with open(lib.consts.ROOT_PATH + '/.svn/entries') as svn:
+            with open(os.path.join(ROOT_PATH, '.svn', 'entries')) as svn:
                 result = []
                 for idx, line in enumerate(svn):
                     if idx in [3, 4, 10]: 
@@ -68,8 +68,8 @@ class CfrmException(CWindow):
        
     def OnBtnSendClicked(self, widget, event, data=None):
         try:
-            log_tar_path = config['/Paths/UserDir'] + str(time.time()) + '.tar'  # path to tar file
-            tar = tarfile.open(log_tar_path, "w")
+            output = cStringIO.StringIO()
+            tar = tarfile.open(None, "w", output)
             tarinfo = tarfile.TarInfo()
             
             # tarinfo properties
@@ -115,24 +115,23 @@ class CfrmException(CWindow):
             if self.append_project == True:
                 if self.application.GetProject() is not None:
                     
-                    log_project_path = config['/Paths/UserDir'] + EXCEPTION_PROJECT_FILE
+                    log_project_path = os.path.join(USERDIR_PATH, EXCEPTION_PROJECT_FILE)
                     self.application.GetProject().SaveProject(log_project_path)
                     tar.add(log_project_path,EXCEPTION_PROJECT_FILE)
                     os.remove(log_project_path)
             
-            tar.close() # closing the tar file, now we have all we need for sending
 
             ### sending....testing ###
             try:
-                file_to_send = open(log_tar_path, 'r')            
-                string_to_send = file_to_send.read().encode('base64_codec')
-                file_to_send.close()
+                string_to_send = output.getvalue().encode('base64_codec')
+                tar.close() # close tar file
+                output.close() # close cStringIO
                 
                 values = {'upfile' : string_to_send}
                 data = urllib.urlencode(values)
-                req = urllib2.Request(lib.consts.ERROR_LOG_ADDRESS, data)
+                req = urllib2.Request(ERROR_LOG_ADDRESS, data)
                 response = urllib2.urlopen(req)
-               
+
                 # if everything goes well
                 if response.code == 200:
                     t = _('File successfully send...\n\nThank you for helping improving UML .FRI')
@@ -145,7 +144,6 @@ class CfrmException(CWindow):
             except urllib2.URLError, e :
                 t = _('Uups! An error during sending occured:\n') + str(e).replace('<','').replace('>','')
             
-            os.remove(log_tar_path)     # remove the tar-ed log file
             CWarningDialog(None, t).run()
             return
 
@@ -156,7 +154,7 @@ class CfrmException(CWindow):
 
     def OnBtnReportClicked(self, widget, event, data=None):
         from webbrowser import open_new
-        open_new(lib.consts.WEB)
+        open_new(WEB)
         self.form.run()
         self.Hide()
 

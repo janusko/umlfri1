@@ -15,11 +15,11 @@ from lib.Connections.Object import CConnectionObject
 from lib.Drawing import CDiagram
 import os.path
 from lib.consts import UMLPROJECT_NAMESPACE, PROJECT_EXTENSION, PROJECT_CLEARXML_EXTENSION
-from lib.config import config
+from lib.Distconfig import SCHEMA_PATH
 
 #if lxml.etree is imported successfully, we use xml validation with xsd schema
 if HAVE_LXML:
-    xmlschema_doc = etree.parse(os.path.join(config['/Paths/Schema'], "umlproject.xsd"))
+    xmlschema_doc = etree.parse(os.path.join(SCHEMA_PATH, "umlproject.xsd"))
     xmlschema = etree.XMLSchema(xmlschema_doc)
 
 
@@ -51,6 +51,17 @@ class CProject(Reference):
     def DeleteDefaultDiagram(self, diagram):
         if self.defaultDiagram is diagram:
             self.defaultDiagram = None
+    
+    def GetDiagrams(self):
+        stack = [self.root]
+        diagrams = []
+        while len(stack) > 0:
+            node = stack.pop(0)
+            for d in node.GetDiagrams():
+                diagrams.append(d)
+            stack += node.GetChilds()
+        return diagrams
+        
     
     def GetMetamodel(self):
         return self.__metamodel
@@ -157,7 +168,7 @@ class CProject(Reference):
                 element = etree.Element(UMLPROJECT_NAMESPACE+'text')
                 element.text = data
             else:
-                raise Exception("unknown data format")
+                raise ProjectError("unknown data format")
             if name:
                 element.set('name', name)
             return element
@@ -264,7 +275,10 @@ class CProject(Reference):
         #xml tree is validate with xsd schema (recentfile.xsd)
         if HAVE_LXML:
             if not xmlschema.validate(rootNode):
-                raise XMLError(xmlschema.error_log.last_error)
+                if __debug__:
+                    raise XMLError("Schema validation failed\n" + str(xmlschema.error_log.last_error))
+                else:
+                    raise XMLError("Schema validation failed")
         
         #make human-friendly tree
         Indent(rootNode)
@@ -335,11 +349,17 @@ class CProject(Reference):
         else:
             raise ProjectError("malformed project file")
     
-    def LoadProject(self, filename, copy = False):
+    def CreateProject(self, template):
+        template.LoadInto(self)
+    
+    def LoadProject(self, filename, copy = False, storage = None):
         ListObj = {}
         ListCon = {}
         
-        if is_zipfile(filename):
+        if storage is not None:
+            self.isZippedFile = True
+            data = storage.read_file(filename)
+        elif is_zipfile(filename):
             self.isZippedFile = True
             file = ZipFile(filename,'r')
             data = file.read('content.xml')
@@ -360,7 +380,10 @@ class CProject(Reference):
         #xml (version) file is validate with xsd schema (metamodel.xsd)
         if HAVE_LXML:
             if not xmlschema.validate(root):
-                raise XMLError(xmlschema.error_log.last_error)
+                if __debug__:
+                    raise XMLError("Schema validation failed\n" + str(xmlschema.error_log.last_error))
+                else:
+                    raise XMLError("Schema validation failed")
         
         savever = tuple(int(i) for i in root.get('saveversion').split('.'))
         
@@ -386,7 +409,10 @@ class CProject(Reference):
                 addon = self.__addonManager.GetAddon(uri)
                 
                 if addon is None and self.isZippedFile and ('metamodel/addon.xml' in file.namelist()):
-                    addon = self.__addonManager.LoadAddon(os.path.join(filename, 'metamodel'))
+                    if storage is None:
+                        addon = self.__addonManager.LoadAddon(os.path.join(filename, 'metamodel'))
+                    else:
+                        addon = self.__addonManager.LoadAddon(storage.subopen('metamodel'))
                     if uri not in addon.GetUris():
                         addon = None
                     self.__addon = addon

@@ -12,17 +12,16 @@ from Addon import CAddon
 from Metamodel import CMetamodelAddonComponent
 from Plugin.AddonComponent import CPluginAddonComponent
 from Plugin.Manager import CPluginManager
-
-from lib.consts import ADDON_NAMESPACE, ADDON_LIST_NAMESPACE, ADDON_PATH
+from lib.consts import ADDON_NAMESPACE, ADDON_LIST_NAMESPACE
+from lib.Distconfig import SCHEMA_PATH, USERDIR_PATH, ADDONS_PATH
 from lib.config import config
-
 from lib.Exceptions.DevException import *
 
 #if lxml.etree is imported successfully, we use xml validation with xsd schema
 if HAVE_LXML:
-    xmlschema_doc = etree.parse(os.path.join(config['/Paths/Schema'], "addon.xsd"))
+    xmlschema_doc = etree.parse(os.path.join(SCHEMA_PATH, "addon.xsd"))
     xmlschema = etree.XMLSchema(xmlschema_doc)
-    xmlschema_list_doc = etree.parse(os.path.join(config['/Paths/Schema'], "addonList.xsd"))
+    xmlschema_list_doc = etree.parse(os.path.join(SCHEMA_PATH, "addonList.xsd"))
     xmlschema_list = etree.XMLSchema(xmlschema_list_doc)
 
 class CAddonManager(object):
@@ -30,9 +29,9 @@ class CAddonManager(object):
     reIlegalCharacters = re.compile('[^a-z0-9A-Z]')
     
     def __init__(self, pluginAdapter):
-        self.__enabledAddons = self.__LoadEnabledAddons(config['/Paths/UserEnabledAddons'])
-        self.__addons = self.__LoadAllAddons(open_storage(config['/Paths/Addons']), False)
-        self.__addons.update(self.__LoadAllAddons(open_storage(config['/Paths/UserAddons']), True))
+        self.__enabledAddons = self.__LoadEnabledAddons(os.path.join(USERDIR_PATH, 'addons.xml'))
+        self.__addons = self.__LoadAllAddons(open_storage(ADDONS_PATH), False)
+        self.__addons.update(self.__LoadAllAddons(open_storage(os.path.join(USERDIR_PATH, 'addons')), True))
         self.__pluginManager = CPluginManager(pluginAdapter)
     
     def __LoadEnabledAddons(self, path):
@@ -96,10 +95,13 @@ class CAddonManager(object):
         return tmp
     
     def __LoadAddon(self, storage, uninstallable):
-        if not storage.exists(ADDON_PATH):
+        if storage is None:
             return None
         
-        root = etree.XML(storage.read_file(ADDON_PATH))
+        if not storage.exists('addon.xml'):
+            return None
+        
+        root = etree.XML(storage.read_file('addon.xml'))
         if HAVE_LXML:
             if not xmlschema.validate(root):
                 raise FactoryError("XMLError", xmlschema.error_log.last_error)
@@ -141,10 +143,13 @@ class CAddonManager(object):
                 description = self.__FormatMultilineText(node.text or '')
             elif node.tag == ADDON_NAMESPACE+'Metamodel':
                 path = ''
+                templates = []
                 for info in node:
-                    if node.tag == ADDON_NAMESPACE+'Path':
-                        path = node.attrib["icon"]
-                component = CMetamodelAddonComponent(path)
+                    if info.tag == ADDON_NAMESPACE+'Path':
+                        path = info.attrib["path"]
+                    if info.tag == ADDON_NAMESPACE+'Template':
+                        templates.append((info.attrib.get("name"), info.attrib.get("icon"), info.attrib.get("path")))
+                component = CMetamodelAddonComponent(path, templates)
             elif node.tag == ADDON_NAMESPACE+'Plugin':
                 codes = []
                 requiredMetamodels = []
@@ -209,14 +214,16 @@ class CAddonManager(object):
             yield addon
     
     def Save(self):
-        self.__SaveEnabledAddons(config['/Paths/UserEnabledAddons'], self.__enabledAddons)
+        self.__SaveEnabledAddons(os.path.join(USERDIR_PATH, 'addons.xml'), self.__enabledAddons)
     
-    def LoadAddon(self, path):
-        return self.__LoadAddon(open_storage(path), False)
+    def LoadAddon(self, storage):
+        if isintance(storage, (str, unicde)):
+            storage = open_storage(path)
+        return self.__LoadAddon(storage, False)
     
     def InstallAddon(self, addon):
         dirname = str(uuid.uuid5(uuid.NAMESPACE_URL, addon.GetDefaultUri()))
-        path = os.path.join(config['/Paths/UserAddons'], dirname)
+        path = os.path.join(USERDIR_PATH, 'addons', dirname)
         storage = CDirectory.duplicate(addon.GetStorage(), path)
         
         self.__addons.update(self.__LoadAddonToDict(storage, True))

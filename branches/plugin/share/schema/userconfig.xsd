@@ -13,58 +13,53 @@
 					</xs:annotation>
 					<xs:complexType>
 						<xs:all minOccurs="0">
-							<xs:element name="Element">
+							<xs:element name="Element" minOccurs="0">
 								<xs:annotation>
 									<xs:documentation>Styles for elements. Each of element has defined any settings as color of line, fill, shadow and other.</xs:documentation>
 								</xs:annotation>
 								<xs:complexType>
 									<xs:all minOccurs="0">
-										<xs:element name="LineColor" type="xs:string">
+										<xs:element name="LineColor" type="xs:string" minOccurs="0">
 											<xs:annotation>
 												<xs:documentation>Define color of line of element</xs:documentation>
 											</xs:annotation>
 										</xs:element>
-										<xs:element name="FillColor" type="xs:string">
+										<xs:element name="FillColor" type="xs:string" minOccurs="0">
 											<xs:annotation>
 												<xs:documentation>Define first color of fill of element</xs:documentation>
 											</xs:annotation>
 										</xs:element>
-										<xs:element name="Fill2Color" type="xs:string">
+										<xs:element name="Fill2Color" type="xs:string" minOccurs="0">
 											<xs:annotation>
 												<xs:documentation>Define second color of fill of element</xs:documentation>
 											</xs:annotation>
 										</xs:element>
-										<xs:element name="Fill3Color" type="xs:string">
+										<xs:element name="Fill3Color" type="xs:string" minOccurs="0">
 											<xs:annotation>
 												<xs:documentation>Define 3th color of fill of element</xs:documentation>
 											</xs:annotation>
 										</xs:element>
-										<xs:element name="ShadowColor" type="xs:string">
+										<xs:element name="ShadowColor" type="xs:string" minOccurs="0">
 											<xs:annotation>
 												<xs:documentation>Define color of shadow</xs:documentation>
 											</xs:annotation>
 										</xs:element>
-										<xs:element name="NameTextColor" type="xs:string">
+										<xs:element name="NameTextColor" type="xs:string" minOccurs="0">
 											<xs:annotation>
 												<xs:documentation>Define color of neme of element</xs:documentation>
 											</xs:annotation>
 										</xs:element>
-										<xs:element name="TextColor" type="xs:string">
+										<xs:element name="TextColor" type="xs:string" minOccurs="0">
 											<xs:annotation>
 												<xs:documentation>Define color of text</xs:documentation>
 											</xs:annotation>
 										</xs:element>
-										<xs:element name="ObjectNameTextFont" type="xs:string">
-											<xs:annotation>
-												<xs:documentation>Define font of object name</xs:documentation>
-											</xs:annotation>
-										</xs:element>
-										<xs:element name="NameTextFont" type="xs:string">
+										<xs:element name="NameTextFont" type="xs:string" minOccurs="0">
 											<xs:annotation>
 												<xs:documentation>Define font of text for name</xs:documentation>
 											</xs:annotation>
 										</xs:element>
-										<xs:element name="TextFont" type="xs:string">
+										<xs:element name="TextFont" type="xs:string" minOccurs="0">
 											<xs:annotation>
 												<xs:documentation>Define font of text</xs:documentation>
 											</xs:annotation>
@@ -72,63 +67,48 @@
 									</xs:all>
 								</xs:complexType>
 							</xs:element>
-							<xs:element name="Connection">
+							<xs:element name="Connection" minOccurs="0">
 								<xs:complexType>
 									<xs:all minOccurs="0">
-										<xs:element name="LineColor" type="xs:string"/>
-										<xs:element name="ArrowColor" type="xs:string"/>
-										<xs:element name="ArrowFillColor" type="xs:string"/>
-										<xs:element name="ArrowAngleSteps" type="xs:int"/>
-										<xs:element name="NameTextColor" type="xs:string"/>
-										<xs:element name="TextColor" type="xs:string"/>
-										<xs:element name="NameTextFont" type="xs:string"/>
-										<xs:element name="TextFont" type="xs:string"/>
-										<xs:element name="TextFill" type="xs:string"/>
-										<xs:element name="MinimalAngle" type="xs:float"/>
+										<xs:element name="LineColor" type="xs:string" minOccurs="0"/>
+										<xs:element name="ArrowColor" type="xs:string" minOccurs="0"/>
+										<xs:element name="ArrowFillColor" type="xs:string" minOccurs="0"/>
+										<xs:element name="ArrowAngleSteps" type="xs:int" minOccurs="0"/>
+										<xs:element name="NameTextColor" type="xs:string" minOccurs="0"/>
+										<xs:element name="TextColor" type="xs:string" minOccurs="0"/>
+										<xs:element name="NameTextFont" type="xs:string" minOccurs="0"/>
+										<xs:element name="TextFont" type="xs:string" minOccurs="0"/>
+										<xs:element name="TextFill" type="xs:string" minOccurs="0"/>
+										<xs:element name="MinimalAngle" type="xs:float" minOccurs="0"/>
 									</xs:all>
 								</xs:complexType>
 							</xs:element>
-							<xs:element name="Selection">
+							<xs:element name="Selection" minOccurs="0">
 								<xs:complexType>
 									<xs:all minOccurs="0">
-										<xs:element name="PointsSize" type="xs:int"/>
-										<xs:element name="PointsColor" type="xs:string"/>
-										<xs:element name="RectangleColor" type="xs:string"/>
-										<xs:element name="RectangleWidth" type="xs:int"/>
+										<xs:element name="PointsSize" type="xs:int" minOccurs="0"/>
+										<xs:element name="PointsColor" type="xs:string" minOccurs="0"/>
+										<xs:element name="RectangleColor" type="xs:string" minOccurs="0"/>
+										<xs:element name="RectangleWidth" type="xs:int" minOccurs="0"/>
 									</xs:all>
 								</xs:complexType>
 							</xs:element>
-							<xs:element name="Drag">
+							<xs:element name="Drag" minOccurs="0">
 								<xs:complexType>
 									<xs:all minOccurs="0">
-										<xs:element name="RectangleColor" type="xs:string"/>
-										<xs:element name="RectangleWidth" type="xs:int"/>
+										<xs:element name="RectangleColor" type="xs:string" minOccurs="0"/>
+										<xs:element name="RectangleWidth" type="xs:int" minOccurs="0"/>
 									</xs:all>
 								</xs:complexType>
 							</xs:element>
 						</xs:all>
 					</xs:complexType>
 				</xs:element>
-				<xs:element name="Paths">
+				<xs:element name="Page" minOccurs="0">
 					<xs:complexType>
 						<xs:all minOccurs="0">
-							<xs:element name="Root" type="xs:string"/>
-							<xs:element name="Templates" type="xs:string"/>
-							<xs:element name="Images" type="xs:string"/>
-							<xs:element name="Gui" type="xs:string"/>
-							<xs:element name="Locales" type="xs:string"/>
-							<xs:element name="Schema" type="xs:string"/>
-							<xs:element name="UserDir" type="xs:string"/>
-							<xs:element name="UserConfig" type="xs:string"/>
-							<xs:element name="RecentFiles" type="xs:string"/>
-						</xs:all>
-					</xs:complexType>
-				</xs:element>
-				<xs:element name="Page">
-					<xs:complexType>
-						<xs:all minOccurs="0">
-							<xs:element name="Width" type="xs:int"/>
-							<xs:element name="Height" type="xs:int"/>
+							<xs:element name="Width" type="xs:int" minOccurs="0"/>
+							<xs:element name="Height" type="xs:int" minOccurs="0"/>
 						</xs:all>
 					</xs:complexType>
 				</xs:element>

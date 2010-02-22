@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: UML .FRI 1.0-beta20090601\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-20 22:06+0200\n"
+"POT-Creation-Date: 2009-09-01 15:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,7 +35,22 @@ msgstr ""
 msgid "Add element"
 msgstr ""
 
+msgid "Addon could not be installed"
+msgstr ""
+
 msgid "Addons"
+msgstr ""
+
+msgid "Align _bottom"
+msgstr ""
+
+msgid "Align _left"
+msgstr ""
+
+msgid "Align _right"
+msgstr ""
+
+msgid "Align _top"
 msgstr ""
 
 msgid "All files"
@@ -89,6 +104,12 @@ msgstr ""
 msgid "Connections"
 msgstr ""
 
+msgid "Copy as image"
+msgstr ""
+
+msgid "Copy without background (transparent)"
+msgstr ""
+
 msgid "Create New Project"
 msgstr ""
 
@@ -96,6 +117,9 @@ msgid "Create _New Project"
 msgstr ""
 
 msgid "Date"
+msgstr ""
+
+msgid "Date/Time"
 msgstr ""
 
 msgid "Delete from Project"
@@ -149,7 +173,16 @@ msgstr ""
 msgid "Enable"
 msgstr ""
 
+msgid "Error"
+msgstr ""
+
+msgid "Error name"
+msgstr ""
+
 msgid "Error opening file"
+msgstr ""
+
+msgid "Error text"
 msgstr ""
 
 msgid "Exception"
@@ -203,16 +236,16 @@ msgstr ""
 msgid "GTK+ version"
 msgstr ""
 
-msgid "Gui"
+msgid "Homepage"
 msgstr ""
 
 msgid "Homepage:"
 msgstr ""
 
-msgid "I_nclude project"
+msgid "Change source and target"
 msgstr ""
 
-msgid "Images"
+msgid "I_nclude project"
 msgstr ""
 
 msgid "Install"
@@ -231,9 +264,6 @@ msgid "License:"
 msgstr ""
 
 msgid "Line color"
-msgstr ""
-
-msgid "Locales"
 msgstr ""
 
 msgid "Machine"
@@ -284,9 +314,6 @@ msgstr ""
 msgid "Pages"
 msgstr ""
 
-msgid "Paths"
-msgstr ""
-
 msgid "Platform"
 msgstr ""
 
@@ -300,15 +327,6 @@ msgid "Points color"
 msgstr ""
 
 msgid "Points size"
-msgstr ""
-
-msgid "Portable Document Format"
-msgstr ""
-
-msgid "Portable Network Graphics"
-msgstr ""
-
-msgid "PostScript"
 msgstr ""
 
 msgid "Preferences"
@@ -332,9 +350,6 @@ msgstr ""
 msgid "Question"
 msgstr ""
 
-msgid "Recent files"
-msgstr ""
-
 msgid "Rectagle width"
 msgstr ""
 
@@ -344,16 +359,10 @@ msgstr ""
 msgid "Rectangle width"
 msgstr ""
 
-msgid "Root"
-msgstr ""
-
 msgid "S_VG"
 msgstr ""
 
 msgid "Save Project As"
-msgstr ""
-
-msgid "Scalable Vector Graphics"
 msgstr ""
 
 msgid "Select Addon"
@@ -402,9 +411,6 @@ msgid "Supervised by:"
 msgstr ""
 
 msgid "System _info"
-msgstr ""
-
-msgid "Templates"
 msgstr ""
 
 msgid "Text Font"
@@ -486,18 +492,12 @@ msgstr ""
 
 msgid ""
 "Use the <i>Send</i> button to send this error information directly on our "
-"server. If the <i>Include project</i> option is chcecked your current "
-"project will be send to the server as well. You can also write some some "
+"server. If the <i>Include project</i> option is checked your current "
+"project will be send to the server as well. You can also write some "
 "basic information about what were you doing when this exception occured in "
 "the <i>User comments</i> tab to help us recreate it. Or you can use the "
 "<i>Home</i> button to post this error directly on our websites bugreport. In "
 "case of problems, feel free to write us an email on :"
-msgstr ""
-
-msgid "User config"
-msgstr ""
-
-msgid "User dir"
 msgstr ""
 
 msgid "Uups! An error during sending occured:\n"
@@ -525,6 +525,9 @@ msgstr ""
 msgid "Warning"
 msgstr ""
 
+msgid "_Warnings"
+msgstr ""
+
 msgid ""
 "We are looking for people willing to help us improve our\n"
 "application. You too can contribute in many ways:\n"
@@ -544,6 +547,9 @@ msgid "Wrong element: "
 msgstr ""
 
 msgid "Z-Order"
+msgstr ""
+
+msgid "Zoom:"
 msgstr ""
 
 msgid "_Add diagram"

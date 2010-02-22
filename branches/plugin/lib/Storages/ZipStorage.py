@@ -9,8 +9,6 @@ from AbstractStorage import CAbstractStorage
 
 from lib.Exceptions import *
 
-reMulSep = re.compile('/{2,}')
-
 class CZipStorage(CAbstractStorage):
     @staticmethod
     def create(path):
@@ -54,7 +52,14 @@ class CZipStorage(CAbstractStorage):
         self.path = path
     
     def __convertPath(self, path):
-        return reMulSep.sub('/', '/'.join((self.path, path)).replace('\\', '/').strip('/'))
+        path = path.replace('\\', '/').split('/')
+        ret = []
+        for part in path:
+            if path == '..':
+                del ret[-1]
+            elif path and path != '.':
+                ret.append(path)
+        return '/'.join(path)
     
     def listdir(self, path):
         path = self.__convertPath(path)

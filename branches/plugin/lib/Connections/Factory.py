@@ -8,13 +8,13 @@ from Alias import CConnectionAlias
 from lib.consts import METAMODEL_NAMESPACE
 from lib.Drawing.Objects import ALL, ALL_CONNECTION, CContainer, CSimpleContainer
 from lib.Drawing.Context import BuildParam
-from lib.config import config
+from lib.Distconfig import SCHEMA_PATH
 
 import weakref
 
 #if lxml.etree is imported successfully, we use xml validation with xsd schema
 if HAVE_LXML:
-    xmlschema_doc = etree.parse(os.path.join(config['/Paths/Schema'], "metamodel.xsd"))
+    xmlschema_doc = etree.parse(os.path.join(SCHEMA_PATH, "metamodel.xsd"))
     xmlschema = etree.XMLSchema(xmlschema_doc)
 
 

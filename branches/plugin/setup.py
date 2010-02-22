@@ -13,6 +13,15 @@ languages = {
     'sk' : 'slovak'
 }
 
+def addon(name):
+    ret = []
+    root = os.path.join('share', 'addons', name)
+    for path, dirs, files in os.walk(root):
+        if '.' not in path:
+            ret.append((path, [os.path.join(path, file) for file in files]))
+    
+    return ret
+
 reWinVar = re.compile('%(?P<env>[a-zA-Z][a-zA-Z0-9]*)%?')
 def expandwinvars(path):
     while True:
@@ -30,7 +39,7 @@ class CDllPy2Exe(Cpy2exe):
     GTK_needed_files = ['etc/fonts', 'etc/gtk-2.0', 'etc/pango', ('lib/gtk-2.0/*/engines', 'libwimp.dll'),
                         'lib/gtk-2.0/*/immodules', 'lib/gtk-2.0/*/loaders', 'lib/pango/*/modules',
                         'share/themes/MS-Windows/gtk-2.0']
-    GTK_dll_fixes = ['bin/iconv.dll']
+    GTK_dll_fixes = ['bin/iconv.dll', 'bin/libxml2-2.dll']
     
     VC_PATH = 'c:\\windows\\WinSxS\\x86_microsoft.vc90.crt_1fc8b3b9a1e18e3b_9.0.21022.8_none_bcb86ed6ac711f91'
     VC_needed_files = ['msvcr90.dll', 'msvcm90.dll', 'msvcp90.dll']
@@ -97,7 +106,7 @@ class CInnoPy2Exe(Cpy2exe):
         else:
             dist_dir = self.dist_dir
         
-        windows_exe_files = [p[len(dist_dir):] for p in self.windows_exe_files]
+        windows_exe_files = [p[len(dist_dir):] for p in self.windows_exe_files] + [p[len(dist_dir):] for p in self.console_exe_files]
         lib_files = [p[len(dist_dir):] for p in self.lib_files]
         
         pathname = dist_dir+'setup.iss'
@@ -144,6 +153,7 @@ class CInnoPy2Exe(Cpy2exe):
         print>>f, r'Name: "associatefrip"; Description: "{cm:AssocFileExtension,UML .FRI,frip}"; GroupDescription: "{cm:OtherTasks}"'
         print>>f, r'Name: "associatefripx"; Description: "{cm:AssocFileExtension,UML .FRI,fripx}"; GroupDescription: "{cm:OtherTasks}"'
         print>>f, r'Name: "associatefrit"; Description: "{cm:AssocFileExtension,UML .FRI,frit}"; GroupDescription: "{cm:OtherTasks}"'
+        print>>f, r'Name: "associatefria"; Description: "{cm:AssocFileExtension,UML .FRI,fria}"; GroupDescription: "{cm:OtherTasks}"'
         print>>f
         
         print>>f, r"[Files]"
@@ -186,6 +196,11 @@ class CInnoPy2Exe(Cpy2exe):
         print>>f, r'Root: HKCR; Subkey: "uml_fri template\shell"; ValueType: string; ValueName: ""; ValueData: "new"; Tasks: associatefrit'
         print>>f, r'Root: HKCR; Subkey: "uml_fri template\shell\new\command"; ValueType: string; ValueName: ""; ValueData: """{app}\bin\uml_fri.exe"" --new=""%1"""; Tasks: associatefrit'
         print>>f, r'Root: HKCR; Subkey: "uml_fri template\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\bin\uml_fri.exe"" --open=""%1"""; Tasks: associatefrit'
+        print>>f, r'Root: HKCR; Subkey: ".fria"; ValueType: string; ValueName: ""; ValueData: "uml_fri addon"; Flags: uninsdeletevalue; Tasks: associatefria'
+        print>>f, r'Root: HKCR; Subkey: "uml_fri addon"; ValueType: string; ValueName: ""; ValueData: "{cm:TemplateFileDesc}"; Flags: uninsdeletekey; Tasks: associatefria'
+        print>>f, r'Root: HKCR; Subkey: "uml_fri addon\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\img\fileicon.ico"; Tasks: associatefria'
+        print>>f, r'Root: HKCR; Subkey: "uml_fri addon\shell"; ValueType: string; ValueName: ""; ValueData: "open"; Tasks: associatefria'
+        print>>f, r'Root: HKCR; Subkey: "uml_fri addon\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\bin\uml_fri.exe"" --install=""%1"""; Tasks: associatefria'
         
         print>>f
         print>>f, r'[Run]'
@@ -232,23 +247,14 @@ setup(
         ("gui", glob.glob("gui/*.png")+glob.glob("gui/*.glade")),
         ("etc", glob.glob("etc/*.xml")),
         ("etc/templates", glob.glob("etc/templates/*.frit")),
-        ("etc/uml/connections", glob.glob("etc/uml/connections/*.xml")),
-        ("etc/uml/domains", glob.glob("etc/uml/domains/*.xml")),
-        ("etc/uml/diagrams", glob.glob("etc/uml/diagrams/*.xml")),
-        ("etc/uml/elements", glob.glob("etc/uml/elements/*.xml")),
-        ("etc/uml/icons", glob.glob("etc/uml/icons/*.png")),
-        ("etc/uml", glob.glob("etc/uml/*.xml")),
-
-        ("etc/flowchart/connections", glob.glob("etc/flowchart/connections/*.xml")),
-        ("etc/flowchart/domains", glob.glob("etc/flowchart/domains/*.xml")),
-        ("etc/flowchart/diagrams", glob.glob("etc/flowchart/diagrams/*.xml")),
-        ("etc/flowchart/elements", glob.glob("etc/flowchart/elements/*.xml")),
-        ("etc/flowchart/icons", glob.glob("etc/flowchart/icons/*.png")),
-        ("etc/flowchart", glob.glob("etc/flowchart/*.xml")),
         
         ("share/schema", glob.glob("share/schema/*.xsd")),
         ("img", glob.glob("img/*.png")+glob.glob("img/*.ico")),
         (".", ["ABOUT", "README", "LICENSE"])
-    ]+list(get_languages('share/locale', 'uml_fri')),
+    ]+list(get_languages('share/locale', 'uml_fri'))
+    + addon('uml')
+    + addon('flowchart')
+    + addon('dfd')
+    ,
     cmdclass = {"py2exe": CDllAndInnoPy2Exe},
 )

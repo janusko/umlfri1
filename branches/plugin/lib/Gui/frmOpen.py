@@ -1,8 +1,12 @@
 from lib.Depend.gtk2 import gtk
 
+from lib.Drawing.Canvas.GtkPlus import PixmapFromPath
+
 import common
-import lib.consts
-from lib.config import config
+
+from lib.consts import PROJECT_EXTENSION, PROJECT_CLEARXML_EXTENSION, PROJECT_TPL_EXTENSION
+
+from lib.Distconfig import TEMPLATES_PATH, IMAGES_PATH, USERDIR_PATH
 import os
 import os.path
 import gobject
@@ -27,17 +31,17 @@ class CfrmOpen(common.CWindow):
         
         filter = gtk.FileFilter()
         filter.set_name(_("UML .FRI Projects"))
-        filter.add_pattern('*'+lib.consts.PROJECT_EXTENSION)
+        filter.add_pattern('*'+PROJECT_EXTENSION)
         self.fwOpenExisting.add_filter(filter)
         
         filter = gtk.FileFilter()
         filter.set_name(_("UML .FRI Clear XML Projects"))
-        filter.add_pattern('*'+lib.consts.PROJECT_CLEARXML_EXTENSION)
+        filter.add_pattern('*'+PROJECT_CLEARXML_EXTENSION)
         self.fwOpenExisting.add_filter(filter)
         
         filter = gtk.FileFilter()
         filter.set_name(_("UML .FRI Project templates"))
-        filter.add_pattern('*'+lib.consts.PROJECT_TPL_EXTENSION)
+        filter.add_pattern('*'+PROJECT_TPL_EXTENSION)
         self.fwOpenExisting.add_filter(filter)
         
         filter = gtk.FileFilter()
@@ -53,12 +57,12 @@ class CfrmOpen(common.CWindow):
     
     def __GetIcon(self, filename):
         if not os.path.isfile(filename):
-            return gtk.gdk.pixbuf_new_from_file(config['/Paths/Images']+lib.consts.DEFAULT_TEMPLATE_ICON)
+            return gtk.gdk.pixbuf_new_from_file(os.path.join(IMAGES_PATH, 'default_icon.png'))
         f = os.tempnam()
         ext = filename.split('.')
         ext.reverse()
         
-        if (("."+ext[0]) != lib.consts.PROJECT_CLEARXML_EXTENSION):
+        if (("."+ext[0]) != PROJECT_CLEARXML_EXTENSION):
             try:
                 z = zipfile.ZipFile(filename)
                 for i in z.namelist():
@@ -70,7 +74,7 @@ class CfrmOpen(common.CWindow):
             except zipfile.BadZipfile:
                 pass
 
-        return gtk.gdk.pixbuf_new_from_file(config['/Paths/Images']+lib.consts.DEFAULT_TEMPLATE_ICON)
+        return gtk.gdk.pixbuf_new_from_file(os.path.join(IMAGES_PATH, 'default_icon.png'))
     
     def __ReloadOpenRecentList(self):
         self.listStore.clear()
@@ -96,16 +100,12 @@ class CfrmOpen(common.CWindow):
         self.fwOpenExisting.set_current_folder_uri(self.fwOpenExisting.get_current_folder_uri())
         
         self.ivOpenModel.clear()
-        templates = []
-        for dirname in (config['/Paths/Templates'], config['/Paths/UserTemplates']):
-            if os.path.exists(dirname):
-                templates.extend((dirname, filename) for filename in os.listdir(dirname))
-        for dirname, filename in templates:
-            if filename.endswith(lib.consts.PROJECT_TPL_EXTENSION):
-                iter = self.ivOpenModel.append()
-                self.ivOpenModel.set(iter, 0, filename[:-len(lib.consts.PROJECT_TPL_EXTENSION)],
-                                           1, self.__GetIcon(os.path.join(dirname, filename)),
-                                           2, os.path.join(dirname, filename))
+        for template in self.application.GetTemplateManager().GetAllTemplates():
+            iter = self.ivOpenModel.append()
+            self.ivOpenModel.set(iter, 0, template.GetName(),
+                                       2, template)
+            if template.GetIcon() is not None:
+                self.ivOpenModel.set(iter, 1, PixmapFromPath(template.GetStorage(), template.GetIcon()))
         
         self.__ReloadOpenRecentList()
         self.form.set_transient_for(parent.form)
@@ -120,7 +120,7 @@ class CfrmOpen(common.CWindow):
                     tmp = self.ivOpenNew.get_selected_items()
                     if tmp: 
                         iter = self.ivOpenModel.get_iter(tmp[0])
-                        return self.ivOpenModel.get(iter, 2)[0], True # template
+                        return self.ivOpenModel.get(iter, 2)[0], None # template
                 elif self.nbOpen.get_current_page() == 1:
                     copy = self.chkOpenAsCopyExisting.get_active()
                     filename = self.fwOpenExisting.get_filename()

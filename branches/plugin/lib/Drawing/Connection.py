@@ -1,6 +1,6 @@
 from lib.Exceptions.UserException import *
 from lib.config import config
-#from lib.Connections.Object import CConnectionObject
+from lib.Connections.Object import CConnectionObject
 from lib.Math2D import CPoint, CLine, CPolyLine, CRectangle
 from math import sqrt, atan2, pi
 from CacheableObject import CCacheableObject
@@ -83,6 +83,18 @@ class CConnection(CCacheableObject, CSelectableObject, Reference):
         CCacheableObject.__init__(self)
         CSelectableObject.__init__(self)
     
+    def ChangeConnection(self,canvas):
+        pos = []
+        for lbl in self.labels.values():
+            pos.append(lbl.GetPosition(canvas))
+        sour = self.GetSource()
+        dest = self.GetDestination()
+        self.SetSource(dest) 
+        self.SetDestination(sour)
+        self.points.reverse()
+        for lbl in self.labels.values():
+            lbl.SetPosition(pos.pop(0),canvas)
+
     def Deselect(self):
         '''Execute L{CSelectableObject.Deselect<CSelectableObject.Deselect>} 
         and L{self.DeselectPoint<self.DeselectPoint>}
@@ -162,7 +174,10 @@ class CConnection(CCacheableObject, CSelectableObject, Reference):
         @rtype: L{CElement<CElement>}
         '''
         return self.source()
+    def SetSource (self, sour):
         
+        self.source = weakref.ref(sour)
+
     def GetDestination(self):
         '''
         Get element at the end of connection
@@ -171,7 +186,11 @@ class CConnection(CCacheableObject, CSelectableObject, Reference):
         @rtype: L{CElement<CElement>}
         '''
         return self.destination()
+    
+    def SetDestination(self,dest):
         
+        self.destination = weakref.ref(dest)
+
     def GetSourceObject(self):
         """
         Get source object of logical connection
@@ -259,7 +278,8 @@ class CConnection(CCacheableObject, CSelectableObject, Reference):
         @param info: dictionary with parameters to restore label position
         @type  info: dict
         '''
-        self.labels[id].SetSaveInfo(**info)
+        if id in self.labels:
+            self.labels[id].SetSaveInfo(**info)
         
     def InsertPoint(self, canvas, point, index = None):
         '''
@@ -435,6 +455,7 @@ class CConnection(CCacheableObject, CSelectableObject, Reference):
         @type  delta: tuple
         '''
         
+        self.ValidatePoints(canvas)
         self.object.Paint(CDrawingContext(canvas, self, delta))
         
         for lbl in self.labels.values():
