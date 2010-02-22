@@ -24,13 +24,18 @@ class CCriticalPathFinder(object):
     
     def activity(self, path):
         try:
-            metamodel = self.interface.DetailMetamodel()
-            if metamodel['uri'] != 'urn:umlfri.org:metamodel:graphTheory':
+            project = self.interface.GetAdapter().GetProject()
+            if project is None:
+                self.interface.DisplayWarning("No project loaded")
+                return
+            
+            metamodel = project.GetMetamodel()
+            if metamodel.GetUri() != 'urn:umlfri.org:metamodel:graphTheory':
                 self.interface.DisplayWarning('Not supported metamodel')
                 return
             
-            diagram = self.interface.GetProject().GetCurrentDiagram()
-            if diagram.GetType() != 'Critical Path diagram':
+            diagram = self.interface.GetAdapter().GetCurrentDiagram()
+            if diagram is None or diagram.GetType() != 'Critical Path diagram':
                 self.interface.DisplayWarning('Critical path not supported on current diagram')
                 return
             
