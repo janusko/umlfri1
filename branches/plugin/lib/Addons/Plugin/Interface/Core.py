@@ -108,6 +108,9 @@ class CCore(object):
         
         except (UnknowMethodError, ), e:
             self.manager.Send(addr, RESP_UNKNOWN_METHOD, id = identifier, fname = fname, __id__ = callid)
+        
+        except (PluginInvalidMethodParameters, ), e:
+            self.manager.Send(addr, RESP_INVALID_METHOD_PARAMETER, id = identifier, fname = fname, __id__ = callid)
             
         #~ except (TypeError, ), e:
             #~ raise ParamMissingError()

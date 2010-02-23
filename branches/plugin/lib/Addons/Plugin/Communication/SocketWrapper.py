@@ -78,7 +78,7 @@ class CSocketWrapper(object):
         '''
         Close socket
         '''
-        self.state = false
+        self.state = False
         self.socket.close()
     
     def Opened(self):

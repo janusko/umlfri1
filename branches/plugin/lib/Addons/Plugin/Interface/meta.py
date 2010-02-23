@@ -62,7 +62,10 @@ class Meta(type):
         else:
             params = dict(zip(fun.func_code.co_varnames, params))
         params = dict((key, desc['params'][key](params[key])) for key in params)
-        return desc['result'](fun(**params))
+        try:
+            return desc['result'](fun(**params))
+        except TypeError:
+            raise PluginInvalidMethodParameters()
         
     @classmethod
     def Create(cls, hisclass, params):

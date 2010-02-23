@@ -45,6 +45,7 @@ class CConnection(object):
                         RESP_INVALID_PARAMETER: PluginInvalidParameter,
                         RESP_INVALID_OBJECT: PluginInvalidObject,
                         RESP_UNKNOWN_METHOD: PluginUnknownMethod,
+                        RESP_INVALID_METHOD_PARAMETER: PluginInvalidMethodParameters,
                         RESP_PROJECT_NOT_LOADED: PluginProjectNotLoaded,
                         RESP_UNKNOWN_CONSTRUCTOR: PluginUnknownConstructor,
                         RESP_TRANSACTION_PENDING: TransactionPendingError,

@@ -7,6 +7,7 @@ class PluginMissingParameter(PluginError): pass
 class PluginInvalidParameter(PluginError): pass
 class PluginInvalidObject(PluginError): pass
 class PluginUnknownMethod(PluginError): pass
+class PluginInvalidMethodParameters(PluginError): pass
 class PluginProjectNotLoaded(PluginError): pass
 class PluginUnknownConstructor(PluginError): pass
 
