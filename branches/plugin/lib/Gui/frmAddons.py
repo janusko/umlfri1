@@ -138,7 +138,7 @@ class CfrmAddons(CWindow):
     
     @event("cmdInstallPlugin", "clicked")
     @event("cmdInstallMetamodel", "clicked")
-    def on_cmdInstallMetamodel_click(self, button):
+    def on_InstallAddon(self, button):
         addon = None
         
         if self.application.GetProject() is not None and self.application.GetProject().GetAddon() is not None:
@@ -166,10 +166,10 @@ class CfrmAddons(CWindow):
             self.application.GetAddonManager().InstallAddon(addon)
             self.__Load()
     
-    @event("cmdUninstallMetamodel", "clicked")
-    @event("mnuUninstallMetamodel", "activate")
-    def on_cmdUninstallMetamodel_click(self, button):
-        addon = self.__GetSelectedAddon(self.twMetamodelList)
+    @event("cmdUninstallMetamodel", "clicked", "twMetamodelList")
+    @event("mnuUninstallMetamodel", "activate", "twMetamodelList")
+    def on_UninstallAddon(self, button, tw):
+        addon = self.__GetSelectedAddon(getattr(self, tw))
         
         if addon is None:
             return
@@ -223,3 +223,16 @@ class CfrmAddons(CWindow):
                 self.mnuHomepageMetamodel.set_sensitive(addon.GetHomepage() is not None)
                 
                 self.mnuMetamodel.popup(None, None, None, event.button, event.time)
+    
+    @event("twPluginList", "cursor-changed")
+    def PluginChanged(self, treeView = None):
+        addon = self.__GetSelectedAddon(self.twPluginList)
+        
+        if addon is None:
+            self.cmdPluginStart.set_sensitive(False)
+            self.cmdPluginStop.set_sensitive(False)
+            self.cmdUninstallPlugin.set_sensitive(False)
+        else:
+            self.cmdPluginStart.set_sensitive(not addon.IsEnabled())
+            self.cmdPluginStop.set_sensitive(addon.IsEnabled())
+            self.cmdUninstallPlugin.set_sensitive(addon.IsUninstallable())
