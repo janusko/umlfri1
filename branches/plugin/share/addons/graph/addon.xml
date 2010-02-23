@@ -15,5 +15,6 @@
     
     <Metamodel>
         <Path path="." />
+        <Template path="templates/graphTheory.frit" name="Empty Graph" />
     </Metamodel>
 </AddOn>
