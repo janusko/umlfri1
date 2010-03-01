@@ -1,9 +1,9 @@
-<ConnectionType xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" id="Generalization">
+<ConnectionType xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" id="Implementation">
     <Icon path="icons/generalize.png"/>
     <Domain id="generalization" identity="name"/>
     
     <Appearance>
-        <ConnectionLine style="dotted" color="#cfg.Styles.Connection.LineColor"/>
+        <ConnectionLine style="dot" color="#cfg.Styles.Connection.LineColor"/>
         <ConnectionArrow index="-1" style="triangle_arrow" fill="#cfg.Styles.Connection.ArrowFillColor" color="#cfg.Styles.Connection.ArrowColor"/>
         
         <Label position="center">
