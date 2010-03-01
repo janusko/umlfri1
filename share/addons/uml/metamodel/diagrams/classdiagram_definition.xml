@@ -11,6 +11,7 @@
     </Elements>
     <Connections>
         <Item value="Generalization" />
+        <Item value="Implementation" />
         <Item value="Association" />
         <Item value="Agregation" />
         <Item value="Compose" />
