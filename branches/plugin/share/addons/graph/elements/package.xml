@@ -7,5 +7,7 @@
     <Appearance>
         <TextBox text="PACKAGE" font="Arial 10" color="red" />
     </Appearance>
-    <Options />
+    <Options>
+        <DirectAdd>true</DirectAdd>
+    </Options>
 </ElementType>
