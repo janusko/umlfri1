@@ -16,4 +16,10 @@ class CPythonStarter(object):
         path = self.__plugin.GetPath()
         uri = self.__plugin.GetUri()
         
-        self.__process = subprocess.Popen([self.__pl_runner, str(port), ROOT_PATH, path, uri], shell = (os.name == 'nt'))
+        env = os.environ.copy()
+        env['UMLFRI_PORT'] = str(port)
+        env['UMLFRI_ROOT'] = ROOT_PATH
+        env['UMLFRI_PATH'] = path
+        env['UMLFRI_URI'] = uri
+        
+        self.__process = subprocess.Popen(self.__pl_runner, shell = (os.name == 'nt'), env = env)

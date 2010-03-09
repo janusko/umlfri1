@@ -1,10 +1,11 @@
 #!/usr/bin/python
 import sys
+import os
 
-port = int(sys.argv[1])
-path = sys.argv[2]
-rootPath = sys.argv[3]
-uri = sys.argv[4]
+port = int(os.environ['UMLFRI_PORT'])
+path = os.environ['UMLFRI_PATH']
+rootPath = os.environ['UMLFRI_ROOT']
+uri = os.environ['UMLFRI_URI']
 
 sys.path.insert(0, rootPath)
 sys.path.insert(0, path)
