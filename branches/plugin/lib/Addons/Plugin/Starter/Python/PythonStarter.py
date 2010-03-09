@@ -18,8 +18,8 @@ class CPythonStarter(object):
         
         env = os.environ.copy()
         env['UMLFRI_PORT'] = str(port)
-        env['UMLFRI_ROOT'] = ROOT_PATH
-        env['UMLFRI_PATH'] = path
-        env['UMLFRI_URI'] = uri
+        env['UMLFRI_ROOT'] = str(ROOT_PATH)
+        env['UMLFRI_PATH'] = str(path)
+        env['UMLFRI_URI'] = str(uri)
         
         self.__process = subprocess.Popen(self.__pl_runner, shell = (os.name == 'nt'), env = env)
