@@ -1,10 +1,9 @@
 #!/usr/bin/python
 
+import lib
+
 import lib.Warnings.List
 lib.Warnings.List.WarningList.handle()
-
-import lib.Depend
-lib.Depend.check()
 
 from lib.Depend.gtk2 import gtk
 from lib.Depend.gtk2 import gobject
