@@ -32,6 +32,10 @@ class IProject(IBase):
     def GetMetamodel(him):
         return him.GetMetamodel()
     
+    @result(r_longstr)
+    def GetSaveXml(him):
+        return him.XmlToStr(him.GetSaveXml())
+    
     #~ @parameter('node', t_classobject(CElementObject))
     #~ def RemoveNode(him, node):
         #~ node = node.GetNode()

@@ -1,4 +1,5 @@
 import re
+import base64
 from lib.Addons.Plugin.Interface import Reference
 from lib.Addons.Plugin.Interface.decorators import *
 from lib.Addons.Plugin.Interface.meta import Meta
@@ -200,5 +201,16 @@ def rc_eval(val, con=None):
 @reverse(rc_eval)
 def r_eval(val, con=None):
     return str(val)
+
+def t_longstr(val, con = None):
+    try:
+        return base64.b64decode(val)
+    except TypeError:
+        raise ValueError()
+        
+@reverse(t_longstr)
+def r_longstr(val, con=None):
+    return base64.b64encode(str(val))
     
+t_longstr = reverse(r_longstr)(t_longstr)
 
