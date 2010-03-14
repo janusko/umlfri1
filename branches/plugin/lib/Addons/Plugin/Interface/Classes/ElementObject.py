@@ -20,6 +20,12 @@ class IElementObject(IDomainObject):
     def GetConnections(him):
         return list(him.GetConnections())
         
+    @result(r_objectlist)
+    def GetChilds(him):
+        node = him.GetNode()
+        if node is not None:
+            return [n.GetObject() for n in node.GetChilds()]
+        
     
     #destructive
     
