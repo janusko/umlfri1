@@ -28,7 +28,10 @@ class CAddonManager(object):
     reSpaces = re.compile(' +')
     reIlegalCharacters = re.compile('[^a-z0-9A-Z]')
     
-    def __init__(self, pluginAdapter):
+    def __init__(self, pluginAdapter, appRef, appType):
+        self.__appRef = appRef
+        self.__appType = appType
+        
         self.__enabledAddons = self.__LoadEnabledAddons(os.path.join(USERDIR_PATH, 'addons.xml'))
         self.__addons = self.__LoadAllAddons(open_storage(ADDONS_PATH), False)
         self.__addons.update(self.__LoadAllAddons(open_storage(os.path.join(USERDIR_PATH, 'addons')), True))
@@ -162,7 +165,7 @@ class CAddonManager(object):
                         patches.append((info.attrib["path"], info.attrib["module"]))
                     elif info.tag == ADDON_NAMESPACE+'Metamodel':
                         requiredMetamodels.append(info.attrib["required"])
-                component = CPluginAddonComponent(codes, patches, requiredMetamodels)
+                component = CPluginAddonComponent(codes, patches, requiredMetamodels, self.__appRef, self.__appType)
         
         return CAddon(self, storage, uris, component,
             all(self.__enabledAddons.get(uri, True) for uri in uris),

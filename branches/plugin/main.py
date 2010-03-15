@@ -51,7 +51,7 @@ class Application(CApplication):
         
         CApplication.__init__(self)
         self.pluginAdapter = CPluginAdapter(self)
-        self.addonManager = CAddonManager(self.pluginAdapter)
+        self.addonManager = CAddonManager(self.pluginAdapter, self, 'gtk+')
         self.templateManager = CTemplateManager(self.addonManager)
         
         gobject.timeout_add(SPLASH_TIMEOUT, self.GetWindow('frmSplash').Hide)

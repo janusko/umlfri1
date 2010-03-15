@@ -6,7 +6,7 @@ from Plugin import CPlugin
 from Starter import starters
 
 class CPluginAddonComponent(object):
-    def __init__(self, codes, patches, requiredMetamodels):
+    def __init__(self, codes, patches, requiredMetamodels, appRef, appType):
         allowedOs = ('all', platform.system(), platform.system() + ' ' + platform.version())
         self.__path = None
         self.__starter = None
@@ -22,6 +22,9 @@ class CPluginAddonComponent(object):
         self.__requiredMetamodels = requiredMetamodels
         self.__plugin = None
         self.__metamodel = None
+        
+        self.__appRef = appRef
+        self.__appType = appType
     
     def _SetAddon(self, addon):
         self.__addon = addon
@@ -39,7 +42,7 @@ class CPluginAddonComponent(object):
                 path = os.path.abspath(os.path.join(root, path))
                 if path not in sys.path:
                     sys.path.append(path)
-                self.__patches.append(__import__(module).Plugin(None, None)) # TODO: set to current app and app type
+                self.__patches.append(__import__(module).Plugin(self.__appType, self.__appRef))
         
         for patch in self.__patches:
             patch.Start()
