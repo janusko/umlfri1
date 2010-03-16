@@ -1,6 +1,7 @@
 from lib.Domains import CDomainObject
+from lib.Base import CBaseObject
 
-class CNodeEvalWrapper(object):
+class CNodeEvalWrapper(CBaseObject):
     def __init__(self, object, node):
         self.__object = object
         self.__node = node

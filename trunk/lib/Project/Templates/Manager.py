@@ -1,13 +1,14 @@
 from lib.consts import PROJECT_TPL_EXTENSION
 from lib.Distconfig import TEMPLATES_PATH, USERDIR_PATH
 from lib.Storages import open_storage
+from lib.Base import CBaseObject
 
 from Template import CTemplate
 
 import os
 import os.path
 
-class CTemplateManager(object):
+class CTemplateManager(CBaseObject):
     def __init__(self, addonManager):
         self.__dirs = (TEMPLATES_PATH, os.path.join(USERDIR_PATH, 'templates'))
         self.__addonManager = addonManager

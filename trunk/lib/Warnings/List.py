@@ -1,8 +1,9 @@
 import warnings
 import datetime
 import linecache
+from lib.Base import CBaseObject
 
-class WarningList(object):
+class WarningList(CBaseObject):
     __instance = None
     __old = None
     

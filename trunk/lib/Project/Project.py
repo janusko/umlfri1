@@ -1,6 +1,6 @@
 from lib.Depend.etree import etree, HAVE_LXML
 
-from lib.lib import XMLEncode, IDGenerator, Indent
+from lib.lib import XMLEncode, Indent
 from ProjectNode import CProjectNode
 from cStringIO import StringIO
 from zipfile import ZipFile, ZIP_STORED, ZIP_DEFLATED, is_zipfile
@@ -15,6 +15,7 @@ from lib.Drawing import CDiagram
 import os.path
 from lib.consts import UMLPROJECT_NAMESPACE, PROJECT_EXTENSION, PROJECT_CLEARXML_EXTENSION
 from lib.Distconfig import SCHEMA_PATH
+from lib.Base import CBaseObject
 
 #if lxml.etree is imported successfully, we use xml validation with xsd schema
 if HAVE_LXML:
@@ -27,7 +28,7 @@ if HAVE_LXML:
         xmlschemas.append((version, etree.XMLSchema(doc)))
 
 
-class CProject(object):
+class CProject(CBaseObject):
     SaveVersion = (1, 1, 0) # save file format version
     def __init__(self, addonManager):
         self.root = None
@@ -156,8 +157,6 @@ class CProject(object):
         else:
             self.isZippedFile = isZippedFile
         
-        id = IDGenerator()
-        
         def SaveDomainObjectInfo(data, name=None):
             if isinstance(data, dict):
                 element = etree.Element(UMLPROJECT_NAMESPACE+'dict')
@@ -176,28 +175,8 @@ class CProject(object):
                 element.set('name', name)
             return element
         
-        def saveattr(object, element):
-            if isinstance(object, dict):
-                attrs = object.iteritems()
-            else:
-                attrs = object.GetType().GetAttributes()
-            for attr in attrs:
-                if isinstance(object, dict):
-                    attr, value = attr
-                else:
-                    value = object.GetAttribute(attr)
-                if not isinstance(value, list):
-                    propertyNode = etree.Element(UMLPROJECT_NAMESPACE+'property', name=unicode(attr), value=unicode(value))
-                else:
-                    propertyNode = etree.Element(UMLPROJECT_NAMESPACE+'property', name=unicode(attr), type="list")
-                    for item in value:
-                        itemNode = etree.Element(UMLPROJECT_NAMESPACE+'item')
-                        saveattr(item, itemNode)
-                        propertyNode.append(itemNode)
-                element.append(propertyNode)
-        
         def savetree(node, element):
-            nodeNode = etree.Element(UMLPROJECT_NAMESPACE+'node', id=unicode(id(node.GetObject())))
+            nodeNode = etree.Element(UMLPROJECT_NAMESPACE+'node', id=unicode(node.GetObject().GetUID()))
             if node.HasChild():
                 childsNode = etree.Element(UMLPROJECT_NAMESPACE+'childs')
                 for chld in node.GetChilds():
@@ -207,17 +186,17 @@ class CProject(object):
             diagramsNode = etree.Element(UMLPROJECT_NAMESPACE+'diagrams')
             if node.HasDiagram():
                 for area in node.GetDiagrams():
-                    diagramNode = etree.Element(UMLPROJECT_NAMESPACE+'diagram', id=unicode(id(area)))
+                    diagramNode = etree.Element(UMLPROJECT_NAMESPACE+'diagram', id=unicode(area.GetUID()))
                     if area is self.defaultDiagram:
                         diagramNode.attrib['default'] = 'true'
                     for e in area.GetElements():
                         pos = e.GetPosition()
                         dw, dh = e.GetSizeRelative()
-                        elementNode = etree.Element(UMLPROJECT_NAMESPACE+'element', id=unicode(id(e.GetObject())), x=unicode(pos[0]), y=unicode(pos[1]), dw=unicode(dw), dh=unicode(dh))
+                        elementNode = etree.Element(UMLPROJECT_NAMESPACE+'element', id=unicode(e.GetObject().GetUID()), x=unicode(pos[0]), y=unicode(pos[1]), dw=unicode(dw), dh=unicode(dh))
                         diagramNode.append(elementNode)
                         
                     for c in area.GetConnections():
-                        connectionNode = etree.Element(UMLPROJECT_NAMESPACE+'connection', id=unicode(id(c.GetObject())))
+                        connectionNode = etree.Element(UMLPROJECT_NAMESPACE+'connection', id=unicode(c.GetObject().GetUID()))
                         for pos in c.GetMiddlePoints():
                             pointNode = etree.Element(UMLPROJECT_NAMESPACE+'point', x=unicode(pos[0]), y=unicode(pos[1]))
                             connectionNode.append(pointNode)
@@ -253,22 +232,28 @@ class CProject(object):
         metamodelNode.append(metamodelVersionNode)
         rootNode.append(metamodelNode)
         
+        elements = list(elements)
+        elements.sort(key = CBaseObject.GetUID)
         for object in elements:
-            objectNode = etree.Element(UMLPROJECT_NAMESPACE+'object', type=unicode(object.GetType().GetId()), id=unicode(id(object)))
+            objectNode = etree.Element(UMLPROJECT_NAMESPACE+'object', type=unicode(object.GetType().GetId()), id=unicode(object.GetUID()))
             objectNode.append(SaveDomainObjectInfo(object.GetSaveInfo()))
             objectsNode.append(objectNode)
             
         rootNode.append(objectsNode)
         
+        connections = list(connections)
+        connections.sort(key = CBaseObject.GetUID)
         for connection in connections:
-            connectionNode = etree.Element(UMLPROJECT_NAMESPACE+'connection', type=unicode(connection.GetType().GetId()), id=unicode(id(connection)), source=unicode(id(connection.GetSource())), destination=unicode(id(connection.GetDestination())))
+            connectionNode = etree.Element(UMLPROJECT_NAMESPACE+'connection', type=unicode(connection.GetType().GetId()), id=unicode(connection.GetUID()), source=unicode(connection.GetSource().GetUID()), destination=unicode(connection.GetDestination().GetUID()))
             connectionNode.append(SaveDomainObjectInfo(connection.GetSaveInfo()))
             connectionsNode.append(connectionNode)
         
         rootNode.append(connectionsNode)
         
+        diagrams = list(diagrams)
+        diagrams.sort(key = CBaseObject.GetUID)
         for diagram in diagrams:
-            diagramNode = etree.Element(UMLPROJECT_NAMESPACE + 'diagram', id=unicode(id(diagram)), type=unicode(diagram.GetType().GetId()))
+            diagramNode = etree.Element(UMLPROJECT_NAMESPACE + 'diagram', id=unicode(diagram.GetUID()), type=unicode(diagram.GetType().GetId()))
             diagramNode.append(SaveDomainObjectInfo(diagram.GetSaveInfo()))
             diagramsNode.append(diagramNode)
             
@@ -455,6 +440,7 @@ class CProject(object):
                     if subelem.tag == UMLPROJECT_NAMESPACE+'object':
                         id = subelem.get("id")
                         object = CElementObject(self.GetMetamodel().GetElementFactory().GetElement(subelem.get("type")))
+                        object.SetUID(id)
                         object.SetSaveInfo(CProject.__LoadDomainObjectInfo(subelem[0]))
                         ListObj[id] = object
             
@@ -463,6 +449,7 @@ class CProject(object):
                     if connection.tag == UMLPROJECT_NAMESPACE+'connection':
                         id = connection.get("id")
                         con = CConnectionObject(self.GetMetamodel().GetConnectionFactory().GetConnection(connection.get("type")),ListObj[connection.get("source")],ListObj[connection.get("destination")])
+                        con.SetUID(id)
                         con.SetSaveInfo(CProject.__LoadDomainObjectInfo(connection[0]))
                         ListCon[id] = con
             
@@ -472,6 +459,7 @@ class CProject(object):
                         id = diagram.get('id')
                         diag = CDiagram(self.GetMetamodel().GetDiagramFactory().GetDiagram(diagram.get('type')))
                         diag.SetSaveInfo(CProject.__LoadDomainObjectInfo(diagram[0]))
+                        diag.SetUID(id)
                         ListDiag[id] = diag
             
             elif element.tag == UMLPROJECT_NAMESPACE+'projecttree':

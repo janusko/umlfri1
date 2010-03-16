@@ -55,28 +55,3 @@ def XMLEncode(val):
     elif isinstance(val, unicode):
         ret = ret[2:-1]
     return ret.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('<', '&gt;').replace('"', '&quot;').encode('utf8')
-
-class IDGenerator:
-    """
-    ID number generator for group of objects
-    """
-    def __init__(self):
-        """
-        Initialize generator to empty
-        """
-        self.ids = {}
-    
-    def id(self, obj):
-        """
-        Calculate ID for given object
-        
-        @param obj: object
-        @type  obj: anything
-        
-        @return: ID of given object
-        @rtype:  integer
-        """
-        return self.ids.setdefault(id(obj), len(self.ids))
-    
-    __call__ = id
-

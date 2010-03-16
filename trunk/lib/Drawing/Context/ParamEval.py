@@ -1,7 +1,8 @@
 from NodeEvalWrapper import CNodeEvalWrapper
 from ConfigEvalWrapper import CConfigEvalWrapper
+from lib.Base import CBaseObject
 
-class CParamEval(object):
+class CParamEval(CBaseObject):
     def __init__(self, str, type = None):
         self.__code = compile(str, "<param>", 'eval')
         self.__type = type

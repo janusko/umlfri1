@@ -1,8 +1,9 @@
 import re
 from Object import CDomainObject
 from lib.Exceptions import DomainParserError
+from lib.Base import CBaseObject
 
-class CDomainParser(object):
+class CDomainParser(CBaseObject):
     '''
     Parser supporting various types of parsing methods.
     

@@ -1,6 +1,7 @@
 from lib.config import config
+from lib.Base import CBaseObject
 
-class CCacheableObject(object):
+class CCacheableObject(CBaseObject):
     
     """Size cache of visible object"""
     

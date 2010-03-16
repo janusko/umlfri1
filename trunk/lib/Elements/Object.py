@@ -3,8 +3,9 @@ import weakref
 from lib.Domains import CDomainObject
 from Alias import CElementAlias
 from lib.consts import DEFAULT_IDENTITY
+from lib.Base import CBaseObject
 
-class CElementObject(object):
+class CElementObject(CBaseObject):
     """
     Object that represents logical element and its properties
     """

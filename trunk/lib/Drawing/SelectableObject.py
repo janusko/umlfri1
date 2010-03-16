@@ -1,4 +1,6 @@
-class CSelectableObject(object):
+from lib.Base import CBaseObject
+
+class CSelectableObject(CBaseObject):
     '''Implements interface for selecting visible object'''
     def __init__(self):
         self.selected = False

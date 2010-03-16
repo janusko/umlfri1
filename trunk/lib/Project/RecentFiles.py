@@ -6,6 +6,7 @@ import os.path
 from lib.Distconfig import SCHEMA_PATH, USERDIR_PATH
 import datetime
 from lib.consts import RECENTFILES_NAMESPACE
+from lib.Base import CBaseObject
 
 #if lxml.etree is imported successfully, we use xml validation with xsd schema
 if HAVE_LXML:
@@ -13,8 +14,7 @@ if HAVE_LXML:
     xmlschema = etree.XMLSchema(xmlschema_doc)
 
 
-class CRecentFiles(object):
-    
+class CRecentFiles(CBaseObject):
     def __init__(self):
         self.filename = os.path.join(USERDIR_PATH, 'RecentFiles.xml')
         

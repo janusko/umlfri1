@@ -6,13 +6,14 @@ from lib.Exceptions.DevException import *
 from Type import CDiagramType
 from lib.Distconfig import SCHEMA_PATH
 from lib.consts import METAMODEL_NAMESPACE
+from lib.Base import CBaseObject
 
 #if lxml.etree is imported successfully, we use xml validation with xsd schema
 if HAVE_LXML:
     xmlschema_doc = etree.parse(os.path.join(SCHEMA_PATH, "metamodel.xsd"))
     xmlschema = etree.XMLSchema(xmlschema_doc)
 
-class CDiagramFactory(object):
+class CDiagramFactory(CBaseObject):
     """
     Creates diagram types from metamodel XMLs
     """

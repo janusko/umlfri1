@@ -28,3 +28,7 @@ class DomainParserError(DevException):
 
 class MetamodelValidationError(DevException):
     pass
+
+class UIDException(DevException):
+    pass
+

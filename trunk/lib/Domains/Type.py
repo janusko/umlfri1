@@ -2,8 +2,9 @@ import re
 from Object import CDomainObject
 from lib.Exceptions import DomainTypeError
 import weakref
+from lib.Base import CBaseObject
 
-class CDomainType(object):
+class CDomainType(CBaseObject):
     '''
     @cvar ATOMIC: list of names of atomic attribute types
     @ivar name: name/id of domain

@@ -1,9 +1,10 @@
 from lib.Exceptions.UserException import *
 from lib.Domains import CDomainObject
 from Alias import CConnectionAlias
+from lib.Base import CBaseObject
 import weakref
 
-class CConnectionObject(object):
+class CConnectionObject(CBaseObject):
     """
     Object that represents logical connection and its properties
     """
