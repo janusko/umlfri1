@@ -10,6 +10,7 @@ from lib.consts import METAMODEL_NAMESPACE
 from lib.Drawing.Objects import ALL
 from lib.Drawing.Context import BuildParam
 from lib.Depend.etree import etree, HAVE_LXML
+from lib.Base import CBaseObject
 
 #if lxml.etree is imported successfully, we use xml validation with xsd schema
 if HAVE_LXML:
@@ -17,7 +18,7 @@ if HAVE_LXML:
     xmlschema = etree.XMLSchema(xmlschema_doc)
 
 
-class CElementFactory(object):
+class CElementFactory(CBaseObject):
     """
     Factory, that creates element type objects
     """

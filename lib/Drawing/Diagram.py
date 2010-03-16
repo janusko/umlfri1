@@ -8,8 +8,9 @@ from lib.Math2D import CRectangle
 from lib.Math2D import CPoint
 from lib.Domains import CDomainObject, CDomainFactory
 from lib.consts import DEFAULT_IDENTITY
+from lib.Base import CBaseObject
 
-class CDiagram:
+class CDiagram(CBaseObject):
     def __init__(self, type, name = None): #  name = "untitled"
         self.elements = []
         self.connections = []

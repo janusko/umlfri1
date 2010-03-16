@@ -1,9 +1,10 @@
 from math import atan2
 from lib.Exceptions.UserException import *
+from lib.Base import CBaseObject
 
 import weakref
 
-class CConnectionType(object):
+class CConnectionType(CBaseObject):
     """
     Contains part of metamodel that represents connection type
     """

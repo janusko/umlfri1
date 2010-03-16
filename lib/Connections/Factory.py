@@ -1,4 +1,5 @@
 from lib.Depend.etree import etree, HAVE_LXML
+from lib.Base import CBaseObject
 
 import os
 import os.path
@@ -18,7 +19,7 @@ if HAVE_LXML:
     xmlschema = etree.XMLSchema(xmlschema_doc)
 
 
-class CConnectionFactory(object):
+class CConnectionFactory(CBaseObject):
     """
     Creates connection types from metamodel XMLs
     """

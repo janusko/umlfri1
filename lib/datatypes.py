@@ -1,6 +1,8 @@
 import colors
 
-class CColor(object):
+from Base import CBaseObject
+
+class CColor(CBaseObject):
     def __init__(self, color):
         if isinstance(color, CColor):
             self.__color = color.__color
@@ -22,7 +24,7 @@ class CColor(object):
     def __str__(self):
         return self.__color
 
-class CFont(object):
+class CFont(CBaseObject):
     def __init__(self, font):
         if isinstance(font, CFont):
             self.__fontFamily = font.__fontFamily

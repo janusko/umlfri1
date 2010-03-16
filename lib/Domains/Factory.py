@@ -9,6 +9,7 @@ from Parser import CDomainParser
 from Joiner import CDomainJoiner
 from lib.Exceptions import DomainFactoryError
 from lib.Depend.etree import etree, HAVE_LXML
+from lib.Base import CBaseObject
 
 #if lxml.etree is imported successfully, we use xml validation with xsd schema
 if HAVE_LXML:
@@ -16,7 +17,7 @@ if HAVE_LXML:
     xmlschema = etree.XMLSchema(xmlschema_doc)
 
 
-class CDomainFactory(object):
+class CDomainFactory(CBaseObject):
     '''
     Factory to create Domains
     

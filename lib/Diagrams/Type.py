@@ -1,6 +1,7 @@
 import weakref
+from lib.Base import CBaseObject
 
-class CDiagramType(object):
+class CDiagramType(CBaseObject):
     """
     Type of diagram
     """
