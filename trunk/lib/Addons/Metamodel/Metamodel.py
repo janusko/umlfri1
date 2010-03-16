@@ -13,7 +13,7 @@ class CMetamodel(object):
         self.__PathFactory = CPathFactory(self.__Storage, 'paths.xml')
         self.__DomainFactory = CDomainFactory(self.__Storage, 'domains')
         self.__ElementFactory = CElementFactory(self, self.__Storage, 'elements', self.__DomainFactory)
-        self.__DiagramFactory = CDiagramFactory(self.__Storage, 'diagrams')
+        self.__DiagramFactory = CDiagramFactory(self.__Storage, 'diagrams', self.__DomainFactory)
         self.__ConnectionFactory = CConnectionFactory(self, self.__Storage, 'connections', self.__DomainFactory)
         self.__MetamodelUri = uri
         self.__MetamodelVersion = version

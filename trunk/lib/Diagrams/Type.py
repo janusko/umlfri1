@@ -1,8 +1,10 @@
+import weakref
+
 class CDiagramType(object):
     """
     Type of diagram
     """
-    def __init__(self, id):
+    def __init__(self, factory, id):
         """
         Initialize diagram type
         
@@ -15,7 +17,44 @@ class CDiagramType(object):
         self.connections = []
         self.swimlines = False
         self.lifelines = False
+        self.domain = None
         self.counter = 0
+        self.factory = weakref.ref(factory)
+    
+    def GetMetamodel(self):
+        return self.factory().GetMetamodel()
+    
+    def SetDomain(self, domain):
+        '''
+        @param domain: domain type that holds info about data
+        @type domain: L{CDomainType<lib.Domains.Type.CDomainType>}
+        '''
+        self.domain = domain
+    
+    def GetDomain(self):
+        '''
+        @return: current domain type
+        @rtype: L{CDomainType<lib.Domains.Type.CDomainType>}
+        '''
+        return self.domain
+        
+    def GetIdentity(self):
+        '''
+        Determine element identity
+        
+        @return: Name of property acting as unique identifier of element
+        @rtype: string
+        '''
+        return self.identity
+    
+    def SetIdentity(self, identity):
+        '''
+        Change element identity
+        
+        @param identity: Name of property acting as unique identifier of element
+        @type identity: string
+        '''
+        self.identity = identity
     
     def GenerateName(self):
         '''

@@ -27,7 +27,10 @@ class CDomainType(object):
         self.name = name
         self.imports = []
         self.attributes = {}
-        self.factory = weakref.ref(factory)
+        if factory is None:
+            self.factory = None
+        else:
+            self.factory = weakref.ref(factory)
         self.parsers = []
         self.joiners = []
         self.attributeorder = []
