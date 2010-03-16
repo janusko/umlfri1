@@ -16,7 +16,7 @@ class CDiagramFactory(object):
     """
     Creates diagram types from metamodel XMLs
     """
-    def __init__(self, storage, path):
+    def __init__(self, storage, path, domainfactory):
         """
         Parse metamodel and create list of diagram types
         
@@ -25,10 +25,15 @@ class CDiagramFactory(object):
         
         @param path: Path to directory with diagram metamodel XMLs
         @type  path: string
+        
+        @param domainfactory: factory that has already loaded all the domains
+        from current metamodel
+        @type domainfactory: L{CDomainFactory<lib.Domains.Factory.CDomainFactory>}
         """
         self.types = {}
         self.path = path
         self.storage = storage
+        self.domainfactory = domainfactory
         
         self.Reload()
         
@@ -82,7 +87,7 @@ class CDiagramFactory(object):
             if not xmlschema.validate(root):
                 raise FactoryError("XMLError", xmlschema.error_log.last_error)
 
-        obj = CDiagramType(root.get('id'))
+        obj = CDiagramType(self, root.get('id'))
         
         for element in root:
             if element.tag == METAMODEL_NAMESPACE+'Icon':
@@ -92,6 +97,10 @@ class CDiagramFactory(object):
                 swimlines = element.get('swimlines')
                 lifelines = element.get('lifelines')
                 obj.SetSpecial(swimlines, lifelines)
+           
+            elif element.tag == METAMODEL_NAMESPACE + 'Domain':
+                obj.SetDomain(self.domainfactory.GetDomain(element.get('id')))
+                obj.SetIdentity(element.get('identity'))
                 
             elif element.tag == METAMODEL_NAMESPACE+'Elements':
                 for item in element:
