@@ -9,6 +9,7 @@ from lib import Indent
 from Exceptions.DevException import *
 from Exceptions import XMLError
 from datatypes import CFont, CColor
+from Base import CBaseObject
 
 import os.path
 import os
@@ -51,7 +52,7 @@ if HAVE_LXML:
     xmlschema_user_doc = etree.parse(os.path.join(SCHEMA_PATH, "userconfig.xsd"))
     xmlschema_user = etree.XMLSchema(xmlschema_user_doc)
 
-class CConfig(object):
+class CConfig(CBaseObject):
     """
     Automatic config file manager
     """

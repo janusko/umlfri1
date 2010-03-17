@@ -1,7 +1,7 @@
-from lib.Addons.Plugin import Reference
 import weakref
+from lib.Base import CBaseObject
 
-class CDiagramType(Reference):
+class CDiagramType(CBaseObject):
     """
     Type of diagram
     """
@@ -12,7 +12,6 @@ class CDiagramType(Reference):
         @param id: Name of the diagram type
         @type  id: string
         """
-        Reference.__init__(self)
         self.factory = weakref.ref(factory)
         self.icon = None
         self.id = id
@@ -20,7 +19,44 @@ class CDiagramType(Reference):
         self.connections = []
         self.swimlines = False
         self.lifelines = False
+        self.domain = None
         self.counter = 0
+        self.factory = weakref.ref(factory)
+    
+    def GetMetamodel(self):
+        return self.factory().GetMetamodel()
+    
+    def SetDomain(self, domain):
+        '''
+        @param domain: domain type that holds info about data
+        @type domain: L{CDomainType<lib.Domains.Type.CDomainType>}
+        '''
+        self.domain = domain
+    
+    def GetDomain(self):
+        '''
+        @return: current domain type
+        @rtype: L{CDomainType<lib.Domains.Type.CDomainType>}
+        '''
+        return self.domain
+        
+    def GetIdentity(self):
+        '''
+        Determine element identity
+        
+        @return: Name of property acting as unique identifier of element
+        @rtype: string
+        '''
+        return self.identity
+    
+    def SetIdentity(self, identity):
+        '''
+        Change element identity
+        
+        @param identity: Name of property acting as unique identifier of element
+        @type identity: string
+        '''
+        self.identity = identity
     
     def GenerateName(self):
         '''

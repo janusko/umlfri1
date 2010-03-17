@@ -6,26 +6,90 @@ import lib.Math2D
 import operator
 from lib.Math2D import CRectangle
 from lib.Math2D import CPoint
-from lib.Addons.Plugin import Reference
-
-
-class CDiagram(Reference):
-    NAME_PROPERY = 'Name' #This must be replaced by domain
+from lib.Domains import CDomainObject, CDomainFactory
+from lib.consts import DEFAULT_IDENTITY
+from lib.Base import CBaseObject
     
+class CDiagram(CBaseObject):
+    NAME_PROPERY = 'Name' #This must be replaced by domain
     def __init__(self, type, name = None): #  name = "untitled"
-        Reference.__init__(self)
         self.elements = []
         self.connections = []
         self.selected = set()
         self.path = None
-        self.typeDiagram = type
+        self.type = type
+        if type is not None:
+            self.domainobject = CDomainObject(type.GetDomain())
+        else:
+            self.domainobject = CDomainObject(CDomainFactory.startPageDomain)
         self.size = None
         self.viewport = ((0, 0), (0, 0))
         self.scrollingPos = [0, 0]                  #position on diagram (needed for scrollBars)
         if name is None:
-            name = self.typeDiagram.GenerateName()
-        self.name = name
+            self.SetName(self.type.GenerateName())
+        else:
+            self.SetName(name)
+        self.revision = 0
         
+    def GetObject(self):
+        return self
+    
+    def GetValue(self, name):
+        return self.domainobject.GetValue(name)
+        
+    def GetDomainName(self, key=''):
+        return self.domainobject.GetDomainName(key)
+    
+    def GetDomainType(self, key=''):
+        return self.domainobject.GetType(key)
+    
+    def GetDomainObject(self):
+        return self.domainobject
+    
+    def GetValue(self, key):
+        return self.domainobject.GetValue(key)
+    
+    def SetValue(self, key, value):
+        self.domainobject.SetValue(key, value)
+        self.revision += 1
+        
+    def AppendItem(self, key):
+        self.domainobject.AppendItem(key)
+        self.revision += 1
+    
+    def RemoveItem(self, key):
+        self.domainobject.RemoveItem(key)
+        self.revision += 1
+    
+    def GetSaveInfo(self):
+        return self.domainobject.GetSaveInfo()
+    
+    def SetSaveInfo(self, value):
+        return self.domainobject.SetSaveInfo(value)
+        
+    def GetRevision(self):
+        """
+        Get revision of this object. Revision is incremented after each
+        object state chage
+        
+        @return: Object revision
+        @rtype:  integer
+        """
+        return self.revision
+    
+    def AddRevision(self):
+        """
+        Increase revision on external change (Like movement in project tree)
+        """
+        
+        self.revision += 1
+    
+    def GetName(self):
+        return self.domainobject.GetValue(self.type.GetIdentity() or DEFAULT_IDENTITY)
+        
+    def SetName(self, value):
+        self.domainobject.SetValue(self.type.GetIdentity() or DEFAULT_IDENTITY if self.type else DEFAULT_IDENTITY, value)
+    
     def GetHScrollingPos(self):
         return self.scrollingPos[0]
     
@@ -63,18 +127,12 @@ class CDiagram(Reference):
         self.path = Path
     
     def GetType(self):
-        return self.typeDiagram
-    
-    def GetName(self):
-        return self.name
-    
-    def SetName(self, name):
-        self.name = name
+        return self.type
     
     def AddElement(self, element):
         self.size = None
         if element not in self.elements:
-            if element.GetObject().GetType().GetId() not in self.typeDiagram.GetElements():
+            if element.GetObject().GetType().GetId() not in self.type.GetElements():
                 raise DrawingError("DiagramHaveNotThisElement", element)
             for i in self.elements:
                 if i.GetObject() is element.GetObject():

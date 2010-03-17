@@ -3,6 +3,7 @@ from Communication.SocketWrapper import CSocketWrapper
 from Communication.ComSpec import *
 from Interface.Core import CCore
 from Interface.Transaction import CTransaction
+from Interface.Classes.base import IBase
 from lib.consts import *
 import thread
 
@@ -14,6 +15,7 @@ class CPluginManager(object):
     '''
 
     def __init__(self, pluginAdapter):
+        IBase.SetAdapter(pluginAdapter)
         self.__plugins = {}
         self.conlock = thread.allocate()
         self.connection = {}

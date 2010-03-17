@@ -3,9 +3,9 @@ import weakref
 from lib.Domains import CDomainObject
 from Alias import CElementAlias
 from lib.consts import DEFAULT_IDENTITY
-from lib.Addons.Plugin import Reference
+from lib.Base import CBaseObject
 
-class CElementObject(Reference):
+class CElementObject(CBaseObject):
     """
     Object that represents logical element and its properties
     """
@@ -16,7 +16,6 @@ class CElementObject(Reference):
         @param type: Type of the new element
         @type  type: L{CElementType<Type.CElementType>} or L{CElementType<Type.CElementAlias>}
         """
-        Reference.__init__(self)
         self.revision = 0
         if isinstance(type, CElementAlias):
             self.type = type.GetAliasType()

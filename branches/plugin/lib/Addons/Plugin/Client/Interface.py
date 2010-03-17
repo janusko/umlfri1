@@ -6,7 +6,7 @@ class CInterface(object):
     
     def __init__(self, port):
         self.connection = CConnection(port)
-        self.adapter = classes['IAdapter']('adapter', self.connection)
+        self.adapter = classes['IAdapter']('#adapter', self.connection)
     
     def _Init(self, uri):
         return self.connection.Execute('plugin', 'init', {'uri': uri})()

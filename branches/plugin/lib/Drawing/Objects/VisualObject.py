@@ -1,8 +1,9 @@
 from lib.config import config
 from lib.Drawing.Context import CParamEval
 import weakref
+from lib.Base import CBaseObject
 
-class CVisualObject:
+class CVisualObject(CBaseObject):
     types = {}
     def __init__(self):
         CVisualObject.SetParent(self,None)

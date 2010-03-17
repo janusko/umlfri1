@@ -1,4 +1,6 @@
-class CAbstractCanvas:
+from lib.Base import CBaseObject
+
+class CAbstractCanvas(CBaseObject):
     def __init__(self):
         pass
     

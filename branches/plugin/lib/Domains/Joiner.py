@@ -1,7 +1,8 @@
 import re
 from Object import CDomainObject
+from lib.Base import CBaseObject
 
-class CDomainJoiner(object):
+class CDomainJoiner(CBaseObject):
     '''
     Joiner supporting joins according to self.joiner
     @ivar joiner: string used to replace domain representation

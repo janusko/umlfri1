@@ -610,6 +610,15 @@
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element name="Icon" type="ElementIconType"/>
+				<xs:element name="Domain">
+					<xs:annotation>
+						<xs:documentation>Define domain of diagram</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:attribute name="id" type="xs:string"/>
+						<xs:attribute name="identity" type="xs:string"/>
+					</xs:complexType>
+				</xs:element>
 				<xs:element name="Special" type="ElementSpecialType"/>
 				<xs:element name="Elements">
 					<xs:complexType>

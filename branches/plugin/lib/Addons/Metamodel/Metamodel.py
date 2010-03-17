@@ -5,17 +5,16 @@ from lib.Connections.Factory import CConnectionFactory
 from PathFactory import CPathFactory
 from lib.Exceptions import MetamodelValidationError
 from lib.Elements import CElementType
-from lib.Addons.Plugin import Reference
+from lib.Base import CBaseObject
 import os
 
-class CMetamodel(Reference):
+class CMetamodel(CBaseObject):
     def __init__(self, storage, uri, version):
-        Reference.__init__(self)
         self.__Storage = storage
         self.__PathFactory = CPathFactory(self.__Storage, 'paths.xml')
         self.__DomainFactory = CDomainFactory(self.__Storage, 'domains')
         self.__ElementFactory = CElementFactory(self, self.__Storage, 'elements', self.__DomainFactory)
-        self.__DiagramFactory = CDiagramFactory(self, self.__Storage, 'diagrams')
+        self.__DiagramFactory = CDiagramFactory(self, self.__Storage, 'diagrams', self.__DomainFactory)
         self.__ConnectionFactory = CConnectionFactory(self, self.__Storage, 'connections', self.__DomainFactory)
         self.__MetamodelUri = uri
         self.__MetamodelVersion = version

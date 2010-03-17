@@ -141,14 +141,7 @@ class ClwProperties(CWidget):
         
         if Element is  None:
             return
-        
-        if isinstance(self.element, CDiagram):
-            v = self.element.GetName()
-            row = self.treeStore.append(None)
-            self.treeStore.set(row, ID_NAME, CDiagram.NAME_PROPERY, ID_VALUE, v, ID_TEXT_VISIBLE, True, ID_COMBO_VISIBLE, False, ID_BUTTON_VISIBLE, False, ID_EDITABLE, True)
-            return
-        else:
-            self._FillBody(self.element.GetObject(), None, '')
+        self._FillBody(self.element.GetObject(), None, '')
     
     def Clear(self):
         self.element = None
@@ -165,18 +158,13 @@ class ClwProperties(CWidget):
         model = self.lwProperties.get_model()
         iter = model.get_iter_from_string(path)
         model.set(iter, ID_VALUE, new_value) 
-        if isinstance(self.element, CDiagram):
-            name, = model.get(iter, ID_NAME)
-            self.element.SetName(new_value)
-            self.application.GetBus().emit('content-update', self.element, name)
-        else:
-            key = self.get_key(path)
-            try:
-                self.element.GetObject().SetValue(key, new_value)
-            except (DomainTypeError, ), e:
-                model.set(iter, ID_VALUE, str(self.element.GetObject().GetValue(key)))
-                raise ParserError(*e.params)
-            self.application.GetBus().emit('content-update', self.element, key)
+        key = self.get_key(path)
+        try:
+            self.element.GetObject().SetValue(key, new_value)
+        except (DomainTypeError, ), e:
+            model.set(iter, ID_VALUE, str(self.element.GetObject().GetValue(key)))
+            raise ParserError(*e.params)
+        self.application.GetBus().emit('content-update', self.element, key)
         
     @event("ComboRenderer", "edited")
     def on_change_combo(self, cellrenderer, path, new_value):

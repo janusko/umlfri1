@@ -1,4 +1,6 @@
-class CTemplate(object):
+from lib.Base import CBaseObject
+
+class CTemplate(CBaseObject):
     def __init__(self, name, storage, path, icon):
         self.__name = name
         self.__storage = storage

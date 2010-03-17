@@ -20,40 +20,16 @@ class CtxtNotes(CWidget):
             self.txtNotes.set_sensitive(False)
             return
         
-        if isinstance(self.element, CDiagram):
-            return
-        
         object = Element.GetObject()
-        if isinstance(object, (CElementObject, CConnectionObject)):
-            if object.GetDomainType().HasAttribute('note'):
-                self.txtNotes.get_buffer().set_text(object.GetValue('note'))
-                self.txtNotes.set_sensitive(True)
-        elif isinstance(object, CConnectionObject):
-            type = Element.GetObject().GetType()
-            cnt = 0
-            for k in type.GetAttributes():
-                v = object.GetAttribute(k)
-                atrtype = type.GetAttribute(k)
-                if atrtype[0] == 'note':
-                    if cnt > 0:
-                        self.element = None
-                        raise ProjectError("TooMuchNotes")
-                    self.txtNotes.get_buffer().set_text(v)
-                    self.txtNotes.set_sensitive(True)
-                    self.attr = k
-                    cnt += 1
+        if object.GetDomainType().HasAttribute('note'):
+            self.txtNotes.get_buffer().set_text(object.GetValue('note'))
+            self.txtNotes.set_sensitive(True)
     
     @event("txtNotes.buffer", "changed")
     def on_txtNotes_changed(self, buffer):
         if self.element is not None:
-            if isinstance(self.element, CDiagram):
-                pass    #maybe, In the future, We can add notes to diagram
-            elif isinstance(self.element.GetObject(), (CElementObject, CConnectionObject)):
-                self.element.GetObject().SetValue('note', buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter()))
-                self.application.GetBus().emit('content-update', self.element, 'note')
-            elif isinstance(self.element.GetObject(), CConnectionObject):
-                self.element.GetObject().SetAttribute(self.attr, buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter()))
-                self.application.GetBus().emit('content-update', self.element, self.attr)
+            self.element.GetObject().SetValue('note', buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter()))
+            self.application.GetBus().emit('content-update', self.element, 'note')
                 
     @event('application.bus', 'content-update')
     def on_content_update(self, widget, element, property):

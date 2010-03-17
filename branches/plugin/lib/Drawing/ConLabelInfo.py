@@ -2,12 +2,11 @@ from lib.Math2D import CPoint, CPolyLine, CLine
 from math import pi, sqrt
 from CacheableObject import CCacheableObject
 from Context import CDrawingContext
-from lib.Addons.Plugin import Reference
 import weakref
 
 class EConLabelInfo(Exception): pass
 
-class CConLabelInfo(CCacheableObject, Reference):
+class CConLabelInfo(CCacheableObject):
     '''
     Stores information about graphical representation of label
     '''
@@ -25,7 +24,6 @@ class CConLabelInfo(CCacheableObject, Reference):
         <lib.Drawing.Objects.VisualObject.CVisualObject>}
         '''
         
-        Reference.__init__(self)
         CCacheableObject.__init__(self)
         self.idx = 0
         self.dist = 0

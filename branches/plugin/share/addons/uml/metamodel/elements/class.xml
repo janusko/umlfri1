@@ -5,6 +5,7 @@
     <Connections>
         <Item value="Association" allowrecursive="1"/>
         <Item value="Generalization" with="Class" allowrecursive="0"/>
+        <Item value="Implementation" with="Class" allowrecursive="0"/>
         <Item value="Agregation" with="Class" allowrecursive="1"/>
         <Item value="Compose" with="Class" allowrecursive="0"/>
         <Item value="Dependency" />

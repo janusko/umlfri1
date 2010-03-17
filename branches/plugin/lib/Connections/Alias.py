@@ -1,7 +1,8 @@
 from lib.Exceptions.UserException import *
+from lib.Base import CBaseObject
 import weakref
 
-class CConnectionAlias(object):
+class CConnectionAlias(CBaseObject):
     '''
     Scheme for a class of connections
     '''

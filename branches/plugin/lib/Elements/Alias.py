@@ -1,7 +1,8 @@
 from lib.Exceptions.UserException import *
 import weakref
+from lib.Base import CBaseObject
 
-class CElementAlias(object):
+class CElementAlias(CBaseObject):
     '''
     Scheme for a class of elements
     '''

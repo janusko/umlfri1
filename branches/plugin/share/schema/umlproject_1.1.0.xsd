@@ -61,6 +61,24 @@
 						</xs:sequence>
 					</xs:complexType>
 				</xs:element>
+				<xs:element name="diagrams">
+					<xs:annotation>
+						<xs:documentation>In this block all diagrams are defined</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="diagram" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="dict" type="dictType" />
+									</xs:sequence>
+									<xs:attribute name="id" type="xs:string" use="required" />
+									<xs:attribute name="type" type="xs:string" use="required" />
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
 				<xs:element name="projecttree">
 					<xs:annotation>
 						<xs:documentation>This block define tree of project</xs:documentation>
@@ -88,7 +106,7 @@
 					</xs:complexType>
 				</xs:element>
 			</xs:sequence>
-			<xs:attribute name="saveversion" type="xs:string" use="required">
+			<xs:attribute name="saveversion" type="xs:string" use="required" fixed="1.1.0">
 				<xs:annotation>
 					<xs:documentation>Specify a version of save of UML .FRI document</xs:documentation>
 				</xs:annotation>
@@ -127,7 +145,7 @@
 														</xs:element>
 														<xs:element name="label" type="labelType" minOccurs="0" maxOccurs="unbounded"/>
 													</xs:sequence>
-													<xs:attribute name="id" type="xs:integer" use="required"/>
+													<xs:attribute name="id" type="xs:string" use="required"/>
 												</xs:complexType>
 											</xs:element>
 										</xs:sequence>
@@ -139,21 +157,20 @@
 				</xs:complexType>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="id" type="xs:integer" use="required"/>
+		<xs:attribute name="id" type="xs:string" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="diagramType">
 		<xs:annotation>
 			<xs:documentation>type of Diagram</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="name" type="xs:string" use="required"/>
-		<xs:attribute name="type" type="xs:string" use="required"/>
+		<xs:attribute name="id" type="xs:string" use="required" />
 		<xs:attribute name="default" type="xs:boolean"/>
 	</xs:complexType>
 	<xs:complexType name="elementType">
 		<xs:annotation>
 			<xs:documentation>type of Element</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="id" type="xs:integer" use="required"/>
+		<xs:attribute name="id" type="xs:string" use="required"/>
 		<xs:attribute name="x" type="xs:integer" use="required"/>
 		<xs:attribute name="y" type="xs:integer" use="required"/>
 		<xs:attribute name="dw" type="xs:integer" use="required"/>
@@ -203,12 +220,12 @@
 		<xs:annotation>
 			<xs:documentation>type of Connection</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="source" type="xs:integer" use="required">
+		<xs:attribute name="source" type="xs:string" use="required">
 			<xs:annotation>
 				<xs:documentation>Define source of connection</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="destination" type="xs:integer" use="required">
+		<xs:attribute name="destination" type="xs:string" use="required">
 			<xs:annotation>
 				<xs:documentation>Define destination of connection</xs:documentation>
 			</xs:annotation>
@@ -218,7 +235,7 @@
 				<xs:documentation>Define type of connection</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="id" type="xs:integer" use="required">
+		<xs:attribute name="id" type="xs:string" use="required">
 			<xs:annotation>
 				<xs:documentation>Define ID of connection</xs:documentation>
 			</xs:annotation>
@@ -233,7 +250,7 @@
 				<xs:documentation>Type atribute is required for each object of project. Type can be "Package", "Class", ...</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="id" type="xs:integer" use="required">
+		<xs:attribute name="id" type="xs:string" use="required">
 			<xs:annotation>
 				<xs:documentation>Id define unique number for object</xs:documentation>
 			</xs:annotation>

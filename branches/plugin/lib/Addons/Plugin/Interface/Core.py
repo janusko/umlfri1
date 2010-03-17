@@ -2,7 +2,6 @@ import thread, time, sys, socket, re
 from lib.Depend.gtk2 import gtk
 from lib.Addons.Plugin.Communication.ComSpec import *
 from lib.Exceptions import *
-from reference import Reference
 from meta import Meta
 
 class CCore(object):
@@ -85,7 +84,7 @@ class CCore(object):
     
     def _exec(self, com, params, addr, callid):
         try:
-            match = re.match(r'(?P<id>([a-zA-Z_][a-zA-Z0-9_]*|#[0-9]+)).(?P<fname>\w+)$', com)
+            match = re.match(r'(?P<id>([#a-zA-Z_][-a-zA-Z0-9_]*)).(?P<fname>\w+)$', com)
             if match is None:
                 self.manager.Send(addr, RESP_INVALID_COMMAND_TYPE, command = 'exec', type = com, __id__ = callid)
                 return

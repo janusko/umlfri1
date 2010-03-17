@@ -8,10 +8,9 @@ from SelectableObject import CSelectableObject
 from ConLabelInfo import CConLabelInfo
 from lib.consts import LABELS_CLICKABLE
 from Context import CDrawingContext
-from lib.Addons.Plugin import Reference
 import weakref
 
-class CConnection(CCacheableObject, CSelectableObject, Reference):
+class CConnection(CCacheableObject, CSelectableObject):
     '''Graphical representation of connection
     
     In the program you have to distinguish between logical connection and its
@@ -65,7 +64,6 @@ class CConnection(CCacheableObject, CSelectableObject, Reference):
         @type  points: list
         '''
         
-        Reference.__init__(self)
         self.diagram = weakref.ref(diagram)
         self.diagram().AddConnection(self)
         self.object = obj

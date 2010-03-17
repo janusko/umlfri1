@@ -1,10 +1,10 @@
 from math import atan2
 from lib.Exceptions.UserException import *
-from lib.Addons.Plugin import Reference
+from lib.Base import CBaseObject
 
 import weakref
 
-class CConnectionType(Reference):
+class CConnectionType(CBaseObject):
     """
     Contains part of metamodel that represents connection type
     """
@@ -21,7 +21,6 @@ class CConnectionType(Reference):
         @param identity: Name of property acting as unique identifier of connection
         @type  identity: string
         """
-        Reference.__init__(self)
         self.id = id
         self.icon = icon
         self.labels = []

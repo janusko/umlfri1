@@ -626,6 +626,10 @@ class CpicDrawingArea(CWidget):
 
         if  event.state & gtk.gdk.SHIFT_MASK :
             self.__Scroll(self.picHBar, event.direction)
+        elif event.direction == gtk.gdk.SCROLL_LEFT:
+            self.__Scroll(self.picHBar, event.direction)
+        elif event.direction == gtk.gdk.SCROLL_RIGHT:
+            self.__Scroll(self.picHBar, event.direction)
         else:
             self.__Scroll(self.picVBar, event.direction)
         self.Paint(False)
@@ -634,12 +638,17 @@ class CpicDrawingArea(CWidget):
     def on_picDrawingArea_foucus_out_event(self, widget, event):
         self.emit('set-selected', None)
         self.ResetAction()
-
+        
+    #TODO FIX: fix vertical scrolling
     def __Scroll(self, scrollbar, direction):
         tmp = scrollbar.get_adjustment()
         if direction == gtk.gdk.SCROLL_UP:
             tmp.value = max(tmp.lower, tmp.value - 20)
         elif direction == gtk.gdk.SCROLL_DOWN:
+            tmp.value = min(tmp.upper - tmp.page_size, tmp.value + 20)
+        elif direction == gtk.gdk.SCROLL_LEFT:
+            tmp.value = max(tmp.lower, tmp.value - 20)
+        elif direction == gtk.gdk.SCROLL_RIGHT:
             tmp.value = min(tmp.upper - tmp.page_size, tmp.value + 20)
         scrollbar.set_adjustment(tmp)
     

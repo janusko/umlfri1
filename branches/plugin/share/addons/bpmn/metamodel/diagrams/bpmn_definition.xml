@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <DiagramType id="BPMN Diagram" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
     <Icon path="icons/logobpmn.png" />
+    <Domain id="bpmn_diagram" identity="name" />
     <Special swimlines="0" lifelines="0" />
     <Elements>
         <Item value="Annotation"/>

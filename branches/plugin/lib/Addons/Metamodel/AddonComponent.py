@@ -42,6 +42,13 @@ class CMetamodelAddonComponent(object):
             for element in root[0]:
                 diagName = element.get('value')
                 self.__metamodel.AddDiagram(diagName)
+                
+            diagramIds = []
+            for diagram in (self.__metamodel.GetDiagramFactory()).types.values():
+                diagramIds.append(diagram.id)
+            for diagram in self.__metamodel.GetDiagrams():
+                if diagram not in diagramIds:
+                    raise FactoryError("Unsupported diagram type: " + diagram)
         return self.__metamodel
     
     def GetTemplates(self):

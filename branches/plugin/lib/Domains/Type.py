@@ -2,9 +2,9 @@ import re
 from Object import CDomainObject
 from lib.Exceptions import DomainTypeError
 import weakref
-from lib.Addons.Plugin import Reference
+from lib.Base import CBaseObject
 
-class CDomainType(Reference):
+class CDomainType(CBaseObject):
     '''
     @cvar ATOMIC: list of names of atomic attribute types
     @ivar name: name/id of domain
@@ -25,11 +25,13 @@ class CDomainType(Reference):
         @param factory: domain factory that already loaded all the domains
         @type factory: L{CDomainFactory<Factory.CDomainFactory>}
         '''
-        Reference.__init__(self)
         self.name = name
         self.imports = []
         self.attributes = {}
-        self.factory = weakref.ref(factory)
+        if factory is None:
+            self.factory = lambda:None
+        else:
+            self.factory = weakref.ref(factory)
         self.parsers = []
         self.joiners = []
         self.attributeorder = []

@@ -58,4 +58,6 @@ class OutOfTransactionError(TransactionError):
 
 class MetamodelValidationError(DevException):
     pass
-    
+
+class UIDException(DevException):
+    pass

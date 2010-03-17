@@ -1,10 +1,10 @@
 from lib.Exceptions.UserException import *
 from lib.Domains import CDomainObject
-from lib.Addons.Plugin import Reference
 from Alias import CConnectionAlias
+from lib.Base import CBaseObject
 import weakref
 
-class CConnectionObject(Reference):
+class CConnectionObject(CBaseObject):
     """
     Object that represents logical connection and its properties
     """
@@ -21,7 +21,6 @@ class CConnectionObject(Reference):
         @param dest: Destination element of connection
         @type  dest: L{CElementObject<lib.Elements.Object.CElementObject>}
         """
-        Reference.__init__(self)
         self.__SetWeakSource(None)
         self.__SetWeakDestination(None)
         self.revision = 0

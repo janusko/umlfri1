@@ -1,18 +1,19 @@
-from lib.Addons.Plugin.Interface.Classes.base import IBase
-from lib.Addons.Plugin.Interface.reference import Reference
 from common import CGuiObject, event
 from lib.Depend.gtk2 import gobject
 from GuiManager import CGuiManager
+from lib.Base import CBaseObject
 
 
-class CPluginAdapter(CGuiObject):
+class CPluginAdapter(CBaseObject, CGuiObject):
     
     def __init__(self, app):
         CGuiObject.__init__(self, app)
         self.guiManager = CGuiManager(app)
         self.manager = None
-        IBase.SetAdapter(self)
-        Reference.SetAdapter(self)
+        self.GetUID()
+        
+    def _generateUID(self):
+        return 'adapter'
         
     def _SetPluginManager(self, pluginManager):
         self.manager = pluginManager

@@ -6,7 +6,9 @@ import StorageList
 
 from AbstractStorage import CAbstractStorage
 
-class CDirectory(CAbstractStorage):
+from lib.Base import CBaseObject
+
+class CDirectory(CBaseObject):
     @staticmethod
     def create(path):
         if not os.path.isdir(path):

@@ -1,4 +1,6 @@
-class CAbstractStorage(object):
+from lib.Base import CBaseObject
+
+class CAbstractStorage(CBaseObject):
     @staticmethod
     def create(path):
         return None

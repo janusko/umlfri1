@@ -1,6 +1,7 @@
 from lib.config import config
+from lib.Base import CBaseObject
 
-class CConfigEvalWrapper(object):
+class CConfigEvalWrapper(CBaseObject):
     def __init__(self, path = []):
         self.__path = path
     

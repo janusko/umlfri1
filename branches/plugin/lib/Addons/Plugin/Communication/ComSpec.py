@@ -1,14 +1,13 @@
 import re
 import base64
-from lib.Addons.Plugin.Interface import Reference
 from lib.Addons.Plugin.Interface.decorators import *
 from lib.Addons.Plugin.Interface.meta import Meta
 from lib.Addons.Plugin.Client import classes
-
+from lib.Base.Registrar import registrar
 
 IDENTIFIER = 'UML.FRI'
 VERSION = '0.1'
-FIRST_LINE_PLUGIN = re.compile(r'(?P<command>\w+) +(?P<type>[\w#:.]+) +%s/(?P<version>\d+\.\d+)\r?$' % IDENTIFIER)
+FIRST_LINE_PLUGIN = re.compile(r'(?P<command>\w+) +(?P<type>[-#0-9a-zA-Z_:.]+) +%s/(?P<version>\d+\.\d+)\r?$' % IDENTIFIER)
 FIRST_LINE_MAIN = re.compile(r'%s/(?P<version>\d+\.\d+) +(?P<code>\d{3})( (?P<text>[ \w]+))?\r?$' % IDENTIFIER)
 PARAM_LINE = re.compile(r'(?P<key>[A-Za-z_]\w*): *(?P<value>[^\r\n]+)\r?$')
 EMPTY_LINE = re.compile(r'(\r|\n|\r\n)$')
@@ -72,12 +71,10 @@ def t_2boolTuple(x, conn = None):
 
 @reverse(tc_object)
 def t_object(val, conn = None):
-    if val == 'adapter':
-        return Reference.GetAdapter()
-    elif re.match(r'#[0-9]+$', val) is not None:
-        return Reference.GetObject(int(val[1:]))
-    elif val == 'None':
+    if val == 'None':
         return None
+    elif re.match(r'#[-0-9a-z]+$', val) is not None:
+        return registrar.GetObject(val[1:])
     else:
         match = re.match(r'[ ]*(?P<clsname>[a-zA-Z][a-zA-Z0-9_]+)[(](?P<params>.*)[)][ ]*$', val)
         if match is not None and Meta.HasConstructor(match.groupdict()['clsname']):
@@ -116,16 +113,6 @@ def t_str(val, conn = None):
 t_str = reverse(t_str)(t_str)
 r_str = t_str
 
-def t_elementType(val, conn = None):
-    try:
-        f = Reference.GetProject().GetMetamodel().GetElementFactory()
-        if f.HasType(val):
-            return f.GetElement(val)
-        else:
-            raise ValueError()
-    except AttributeError:
-        raise ValueError()
-
 def t_2x2intTuple(val, conn = None):
     match = re.match(r'\(\((?P<a>[0-9]+),(?P<b>[0-9]+)\),\((?P<c>[0-9]+),(?P<d>[0-9]+)\)\)$', val)
     if match is not None:
@@ -135,7 +122,6 @@ def t_2x2intTuple(val, conn = None):
         raise ValueError()
 
 def rc_object(val, connection):
-    print val
     if val.find('::') >= 0:
         val, cls = val.split('::')
         if val == 'None':
@@ -154,7 +140,7 @@ def rc_objectlist(val, connection):
 
 @reverse(rc_object)
 def r_object(val, conn = None):
-    return ('#%i::%s' % (val.GetPluginId(), Meta.GetClassName(val)) if val is not None else 'None::NoneType') 
+    return ('#%s::%s' % (val.GetUID(), Meta.GetClassName(val)) if val is not None else 'None::NoneType') 
         
 
 @reverse(rc_objectlist)

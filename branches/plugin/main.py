@@ -28,7 +28,6 @@ from lib.Distconfig import LOCALES_PATH, GUI_PATH
 from lib.consts import SPLASH_TIMEOUT
 
 from lib.Exceptions import UserException
-from lib.Addons.Plugin import Reference
 
 __version__ = '1.0-rc2'
 
@@ -51,7 +50,7 @@ class Application(CApplication):
         
         CApplication.__init__(self)
         self.pluginAdapter = CPluginAdapter(self)
-        self.addonManager = CAddonManager(self.pluginAdapter, self, 'gtk+')
+        self.addonManager = CAddonManager(self, 'gtk+')
         self.templateManager = CTemplateManager(self.addonManager)
         
         gobject.timeout_add(SPLASH_TIMEOUT, self.GetWindow('frmSplash').Hide)

@@ -9,6 +9,7 @@ from Parser import CDomainParser
 from Joiner import CDomainJoiner
 from lib.Exceptions import DomainFactoryError
 from lib.Depend.etree import etree, HAVE_LXML
+from lib.Base import CBaseObject
 
 #if lxml.etree is imported successfully, we use xml validation with xsd schema
 if HAVE_LXML:
@@ -16,13 +17,16 @@ if HAVE_LXML:
     xmlschema = etree.XMLSchema(xmlschema_doc)
 
 
-class CDomainFactory(object):
+class CDomainFactory(CBaseObject):
     '''
     Factory to create Domains
     
     @ivar domains: dictionary with domain names as keys and domain types as values
     '''
     IDENTIFIER = re.compile('[a-zA-Z][a-zA-Z0-9_]*')
+    startPageDomain = CDomainType('@StartPage', None)
+    startPageDomain.AppendAttribute('name', 'Name', 'str')
+    
     def __init__(self, storage, path):
         """
         Create the domain factory
@@ -63,7 +67,7 @@ class CDomainFactory(object):
             
             domain.CheckMissingInfo()
             domain.CheckDefault()
-    
+            
     def GetDomain(self, id):
         """
         @return: Domain type by name
@@ -72,6 +76,9 @@ class CDomainFactory(object):
         @param id: Element type name
         @type  id: string
         """
+        if id is None:
+            return self.startPageDomain
+            
         if not id in self.domains:
             raise DomainFactoryError('unrecognized domain name "%s"' % id)
         

@@ -1,7 +1,8 @@
 from lib.Exceptions.UserException import *
 import weakref
+from lib.Base import CBaseObject
 
-class CProjectNode(object):
+class CProjectNode(CBaseObject):
     
     def __init__(self, parent = None, object = None, path = None):
         self.SetParent(parent)

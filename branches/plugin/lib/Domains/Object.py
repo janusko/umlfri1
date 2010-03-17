@@ -2,8 +2,9 @@ from lib.Exceptions import DomainObjectError
 import re
 from lib.consts import DEFAULT_IDENTITY
 from types import NoneType
+from lib.Base import CBaseObject
 
-class CDomainObject(object):
+class CDomainObject(CBaseObject):
     '''
     representation of logical element attribute - its value
     

@@ -1,4 +1,6 @@
-class CDrawingContext(object):
+from lib.Base import CBaseObject
+
+class CDrawingContext(CBaseObject):
     def __init__(self, canvas, element, pos, size = (None, None)):
         self.canvas = canvas
         self.element = element

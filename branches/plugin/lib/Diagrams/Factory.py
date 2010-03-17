@@ -7,17 +7,18 @@ from Type import CDiagramType
 from lib.Distconfig import SCHEMA_PATH
 from lib.consts import METAMODEL_NAMESPACE
 import weakref
+from lib.Base import CBaseObject
 
 #if lxml.etree is imported successfully, we use xml validation with xsd schema
 if HAVE_LXML:
     xmlschema_doc = etree.parse(os.path.join(SCHEMA_PATH, "metamodel.xsd"))
     xmlschema = etree.XMLSchema(xmlschema_doc)
 
-class CDiagramFactory(object):
+class CDiagramFactory(CBaseObject):
     """
     Creates diagram types from metamodel XMLs
     """
-    def __init__(self, metamodel, storage, path):
+    def __init__(self, metamodel, storage, path, domainfactory):
         """
         Parse metamodel and create list of diagram types
         
@@ -26,12 +27,16 @@ class CDiagramFactory(object):
         
         @param path: Path to directory with diagram metamodel XMLs
         @type  path: string
+        
+        @param domainfactory: factory that has already loaded all the domains
+        from current metamodel
+        @type domainfactory: L{CDomainFactory<lib.Domains.Factory.CDomainFactory>}
         """
         self.types = {}
         self.path = path
         self.storage = storage
         self.metamodel = weakref.ref(metamodel)
-        
+        self.domainfactory = weakref.ref(domainfactory)
         self.Reload()
         
     def GetDiagram(self, type):
@@ -94,6 +99,10 @@ class CDiagramFactory(object):
                 swimlines = element.get('swimlines')
                 lifelines = element.get('lifelines')
                 obj.SetSpecial(swimlines, lifelines)
+           
+            elif element.tag == METAMODEL_NAMESPACE + 'Domain':
+                obj.SetDomain(self.domainfactory().GetDomain(element.get('id')))
+                obj.SetIdentity(element.get('identity'))
                 
             elif element.tag == METAMODEL_NAMESPACE+'Elements':
                 for item in element:
