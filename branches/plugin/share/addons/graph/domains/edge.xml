@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Domain id="edge" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" >
-    <Attribute id="directed" type="bool" name="Directed"  />
-    <Attribute id="reversed" type="bool" name=""  />
-    <Attribute id="value" type="float" name="Value" default="1.0" />
-</Domain>

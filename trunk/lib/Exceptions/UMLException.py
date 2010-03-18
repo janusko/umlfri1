@@ -67,4 +67,8 @@ class UMLException(Exception):
         Get parameter of exception
         '''
         return self.params[idx]
+    
+    def __iter__(self):
+        for i in self.params:
+            yield i
 

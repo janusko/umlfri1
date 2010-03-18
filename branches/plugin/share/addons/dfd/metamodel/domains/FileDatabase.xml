@@ -1,4 +1,0 @@
-<Domain id="FileDatabase" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" >
-    <Attribute id="filedbname" type="str" name="File/Database Name" />
-    <Attribute id="note" type="text" name="Note" />
-</Domain>

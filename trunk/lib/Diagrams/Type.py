@@ -12,6 +12,7 @@ class CDiagramType(CBaseObject):
         @param id: Name of the diagram type
         @type  id: string
         """
+        self.factory = weakref.ref(factory)
         self.icon = None
         self.id = id
         self.elements = []
@@ -183,3 +184,9 @@ class CDiagramType(CBaseObject):
         Set name of this diagram type
         """
         self.id = id
+    
+    def GetFactory(self):
+        return self.factory()
+        
+    def GetMetamodel(self):
+        return self.factory().GetMetamodel()

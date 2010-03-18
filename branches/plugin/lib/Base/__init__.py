@@ -1,1 +1,0 @@
-from BaseObject import CBaseObject

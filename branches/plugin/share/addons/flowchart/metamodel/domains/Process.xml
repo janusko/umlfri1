@@ -1,4 +1,0 @@
-<Domain id="Process" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" >
-    <Attribute id="process" type="str" name="Process" />
-    <Attribute id="note" type="text" name="Note" />
-</Domain>

@@ -1,10 +1,9 @@
 #!/usr/bin/python
 
+import lib
+
 import lib.Warnings.List
 lib.Warnings.List.WarningList.handle()
-
-import lib.Depend
-lib.Depend.check()
 
 from lib.Depend.gtk2 import gtk
 from lib.Depend.gtk2 import gobject
@@ -21,7 +20,7 @@ from lib.Project.Templates import CTemplateManager
 from lib.Addons import CAddonManager
 
 import lib.Gui
-from lib.Gui import CBus
+from lib.Gui import CBus, CPluginAdapter
 from lib.Gui.dialogs import CExceptionDialog, CErrorDialog
 
 from lib.config import config
@@ -48,15 +47,21 @@ class Application(CApplication):
         self.recentFiles = CRecentFiles()
         self.clipboard = CClipboard()
         self.bus = CBus()
-        self.addonManager = CAddonManager()
-        self.templateManager = CTemplateManager(self.addonManager)
         
         CApplication.__init__(self)
+        self.pluginAdapter = CPluginAdapter(self)
+        self.addonManager = CAddonManager(self, 'gtk+')
+        self.templateManager = CTemplateManager(self.addonManager)
         
         gobject.timeout_add(SPLASH_TIMEOUT, self.GetWindow('frmSplash').Hide)
+        
+        self.addonManager.StartAll()
     
     def GetBus(self):
         return self.bus
+    
+    def GetPluginAdapter(self):
+        return self.pluginAdapter
     
     @argument("-o", "--open", True)
     def DoOpen(self, value):
@@ -110,6 +115,9 @@ class Application(CApplication):
     def GetProject(self):
         return self.project
     
+    def GetAddonManager(self):
+        return self.addonManager
+    
     def GetTemplateManager(self):
         return self.templateManager
     
@@ -138,10 +146,12 @@ class Application(CApplication):
             win.Show()
     
     def Quit(self):
+        self.addonManager.StopAll()
         CApplication.Quit(self)
         config.Save()
         self.addonManager.Save()
         self.recentFiles.SaveRecentFiles()
 
 if __name__ == '__main__':
+    gobject.threads_init()
     Application().Main()

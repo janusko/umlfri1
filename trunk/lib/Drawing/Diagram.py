@@ -9,8 +9,9 @@ from lib.Math2D import CPoint
 from lib.Domains import CDomainObject, CDomainFactory
 from lib.consts import DEFAULT_IDENTITY
 from lib.Base import CBaseObject
-
+    
 class CDiagram(CBaseObject):
+    NAME_PROPERY = 'Name' #This must be replaced by domain
     def __init__(self, type, name = None): #  name = "untitled"
         self.elements = []
         self.connections = []

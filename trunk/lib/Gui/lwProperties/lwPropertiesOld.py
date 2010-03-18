@@ -78,6 +78,9 @@ class ClwProperties(CWidget):
         DType = object.GetDomainType(prefix)
         
         for attrID in DType.IterAttributeIDs():
+            if DType.IsHidden(attrID):
+                continue
+                
             row = self.treeStore.append(parent)
             identifier = ('.' if prefix else '') + attrID
             type = DType.GetAttribute(attrID)['type']
@@ -138,7 +141,6 @@ class ClwProperties(CWidget):
         
         if Element is  None:
             return
-        
         self._FillBody(self.element.GetObject(), None, '')
     
     def Clear(self):

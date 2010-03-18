@@ -1,3 +1,0 @@
-<Domain id="Start" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" >
-    <Attribute id="note" type="text" name="Note" />
-</Domain>
