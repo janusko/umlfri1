@@ -53,5 +53,8 @@ class CDirectory(CBaseObject):
     
     def walk(self):
         return os.walk(self.path)
+    
+    def get_path(self):
+        return self.path
 
 StorageList.classes.append(CDirectory)

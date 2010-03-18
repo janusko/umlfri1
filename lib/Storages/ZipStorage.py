@@ -129,5 +129,8 @@ class CZipStorage(CAbstractStorage):
                 tmp[fparts[-1]] = None
         
         return list(self.__walk('', dir))
+    
+    def get_path(self):
+        return os.path.join(self.zip.filename, self.path)
 
 StorageList.classes.append(CZipStorage)

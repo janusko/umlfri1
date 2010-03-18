@@ -145,17 +145,34 @@ class CProject(CBaseObject):
         return elements, connections, diagrams
     
     def SaveProject(self, filename = None, isZippedFile = None):
-        assert self.__metamodel is not None
-        
         if filename is None:
             filename = self.filename
         else:
             self.filename = filename
-
+        
+        
         if isZippedFile is None:
             isZippedFile = self.isZippedFile
         else:
             self.isZippedFile = isZippedFile
+        
+        rootNode = self.GetSaveXml()
+        
+        if isZippedFile :
+            fZip = ZipFile(filename, 'w', ZIP_DEFLATED)
+            fZip.writestr('content.xml', CProject.XmlToStr(rootNode))
+            fZip.close()
+        else:
+            f = open(filename, 'w')
+            f.write(CProject.XmlToStr(rootNode))
+            f.close()
+        
+    @staticmethod
+    def XmlToStr(rootNode):
+        return '<?xml version="1.0" encoding="utf-8"?>\n'+etree.tostring(rootNode, encoding='utf-8')
+        
+    def GetSaveXml(self):
+        assert self.__metamodel is not None
         
         def SaveDomainObjectInfo(data, name=None):
             if isinstance(data, dict):
@@ -281,14 +298,7 @@ class CProject(CBaseObject):
         #make human-friendly tree
         Indent(rootNode)
         
-        if isZippedFile :
-            fZip = ZipFile(filename, 'w', ZIP_DEFLATED)
-            fZip.writestr('content.xml', '<?xml version="1.0" encoding="utf-8"?>\n'+etree.tostring(rootNode, encoding='utf-8'))
-            fZip.close()
-        else:
-            f = open(filename, 'w')
-            f.write('<?xml version="1.0" encoding="utf-8"?>\n'+etree.tostring(rootNode, encoding='utf-8'))
-            f.close()
+        return rootNode
     
     
     def __CreateTree(self, ListObj, ListCon, ListDiag, root, parentNode, savever):

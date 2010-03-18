@@ -8,10 +8,13 @@ class CBaseObject(object):
     def GetUID(self):
         uid = self.__uid
         if uid is None:
-            uid = self.__uid = str(uuid.uuid1())
+            uid = self.__uid = self._generateUID()
             registrar._Register(uid, self)
         
         return self.__uid
+        
+    def _generateUID(self):
+        return str(uuid.uuid1())
     
     def SetUID(self, value):
         if self.__uid is not None:

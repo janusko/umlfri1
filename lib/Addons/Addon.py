@@ -44,6 +44,12 @@ class CAddon(object):
         self.__enabled = False
         self.__manager._RefreshAddonEnabled(self)
     
+    def Start(self):
+        self.__component.Start()
+    
+    def Stop(self):
+        self.__component.Stop()
+    
     def GetAuthor(self):
         return self.__author
     
@@ -80,3 +86,6 @@ class CAddon(object):
     def Uninstall(self):
         self.__storage.destroy()
         self.__manager._DeleteAddon(self)
+    
+    def GetManager(self):
+        return self.__manager

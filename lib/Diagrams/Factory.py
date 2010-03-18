@@ -6,6 +6,7 @@ from lib.Exceptions.DevException import *
 from Type import CDiagramType
 from lib.Distconfig import SCHEMA_PATH
 from lib.consts import METAMODEL_NAMESPACE
+import weakref
 from lib.Base import CBaseObject
 
 #if lxml.etree is imported successfully, we use xml validation with xsd schema
@@ -17,7 +18,7 @@ class CDiagramFactory(CBaseObject):
     """
     Creates diagram types from metamodel XMLs
     """
-    def __init__(self, storage, path, domainfactory):
+    def __init__(self, metamodel, storage, path, domainfactory):
         """
         Parse metamodel and create list of diagram types
         
@@ -34,8 +35,8 @@ class CDiagramFactory(CBaseObject):
         self.types = {}
         self.path = path
         self.storage = storage
-        self.domainfactory = domainfactory
-        
+        self.metamodel = weakref.ref(metamodel)
+        self.domainfactory = weakref.ref(domainfactory)
         self.Reload()
         
     def GetDiagram(self, type):
@@ -100,7 +101,7 @@ class CDiagramFactory(CBaseObject):
                 obj.SetSpecial(swimlines, lifelines)
            
             elif element.tag == METAMODEL_NAMESPACE + 'Domain':
-                obj.SetDomain(self.domainfactory.GetDomain(element.get('id')))
+                obj.SetDomain(self.domainfactory().GetDomain(element.get('id')))
                 obj.SetIdentity(element.get('identity'))
                 
             elif element.tag == METAMODEL_NAMESPACE+'Elements':
@@ -116,4 +117,7 @@ class CDiagramFactory(CBaseObject):
                         obj.AppendConnection(value)
         
         self.types[root.get('id')] = obj
+    
+    def GetMetamodel(self):
+        return self.metamodel()
     

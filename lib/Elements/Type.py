@@ -1,7 +1,6 @@
 from lib.lib import ToBool
 from lib.Exceptions.UserException import *
 from lib.Base import CBaseObject
-
 import weakref
 
 class CElementType(CBaseObject):

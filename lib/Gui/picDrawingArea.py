@@ -181,18 +181,18 @@ class CpicDrawingArea(CWidget):
         h,v = (self.picHBar.get_value(),self.picVBar.get_value())
         return int(-h+x), int(-v+y)
       
-    def ToPaint(self, changed = True):
+    def Paint(self, changed = True):
         try:
             self.paintlock.acquire()
             self.paintChanged = self.paintChanged or changed
             if not self.tobePainted:
                 self.tobePainted = True
-                gobject.timeout_add(5, self.Paint)
+                gobject.timeout_add(15, self.ToPaint)
         finally:
             self.paintlock.release()
         
 
-    def Paint(self, changed = True):
+    def ToPaint(self, changed = True):
         try:
             self.paintlock.acquire()
             self.tobePainted = False
