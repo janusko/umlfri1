@@ -543,8 +543,7 @@ class CfrmMain(CWindow):
             self.twProjectView.UpdateElement(element)
             self.nbTabs.RefreshTab(element)
         else:
-            if isinstance(element, (CElement, CConnection)):
-                element = element.GetObject()
+            element = element.GetObject()
             if element.HasVisualAttribute(property):
                 if (self.picDrawingArea.GetDiagram().HasElementObject(element)
                     or self.picDrawingArea.GetDiagram().HasConnection(element)):
