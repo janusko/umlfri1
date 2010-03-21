@@ -73,3 +73,9 @@ class CAcceptServer(object):
         finally:
             self.run = None
             self.sock.close()
+    
+    def GetPort(self):
+        if self.run:
+            return self.sock.getsockname()[1]
+        else:
+            return None
