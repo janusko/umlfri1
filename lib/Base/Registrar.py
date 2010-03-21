@@ -11,6 +11,9 @@ class CRegistrar(object):
         except KeyError:
             raise UIDException("objectNotFound")
     
+    def Clear(self):
+        self.__dict.clear()
+    
     def _Register(self, uid, object):
         if uid in self.__dict:
             raise UIDException(("uidUsed", uid))

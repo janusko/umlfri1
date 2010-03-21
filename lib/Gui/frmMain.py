@@ -151,16 +151,14 @@ class CfrmMain(CWindow):
     
     def LoadProject(self, filenameOrTemplate, copy = None):
         self.nbTabs.CloseAll()
+        self.application.ProjectDelete()
         self.application.ProjectInit()
         try:
             if copy is None:
                 self.application.GetProject().CreateProject(filenameOrTemplate)
             else:
                 self.application.GetProject().LoadProject(filenameOrTemplate, copy)
-        except (ProjectError, XMLError), ex:
-            if __debug__:
-                raise
-            
+        except Exception, ex:
             if copy is not None:
                 self.application.GetRecentFiles().RemoveFile(filenameOrTemplate)
             self.application.ProjectDelete()
@@ -169,6 +167,10 @@ class CfrmMain(CWindow):
             self.ReloadTitle()
             self.nbProperties.Fill(None)
             self.UpdateMenuSensitivity(project = False)
+            
+            if __debug__:
+                raise
+            
             return CWarningDialog(self.form, _('Error opening file') + '\n' + _(str(ex))).run()
             
         self.ReloadTitle()

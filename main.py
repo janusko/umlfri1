@@ -29,6 +29,8 @@ from lib.consts import SPLASH_TIMEOUT
 
 from lib.Exceptions import UserException
 
+from lib.Base.Registrar import registrar
+
 __version__ = '1.0-rc2'
 
 class Application(CApplication):
@@ -107,6 +109,7 @@ class Application(CApplication):
     
     def ProjectInit(self):
         if self.project is None:
+            registrar.Clear()
             self.project = CProject(self.addonManager)
             
     def ProjectDelete(self):
