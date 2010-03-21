@@ -17,6 +17,9 @@ class CPluginAdapter(CBaseObject, CGuiObject):
         
     def _SetPluginManager(self, pluginManager):
         self.manager = pluginManager
+    
+    def GetPluginManager(self):
+        return self.manager
         
     def GetGuiManager(self):
         return self.guiManager

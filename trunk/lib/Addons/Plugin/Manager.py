@@ -25,7 +25,6 @@ class CPluginManager(object):
         self.proxy = CCore(self, pluginAdapter)
         self.acceptserver = CAcceptServer(('localhost', PLUGIN_SOCKET), self.NewConnection)
         self.acceptserver.Start()
-        print "PORT:", self.acceptserver.sock.getsockname()[1]
     
     def NewConnection(self, sock, addr):
         '''
@@ -81,7 +80,7 @@ class CPluginManager(object):
         self.SendToAll(RESP_DOMAIN_VALUE_CHANGED, element = r_object(element), path = path)
         
     def GetPort(self):
-        return self.acceptserver.sock.getsockname()[1]
+        return self.acceptserver.GetPort()
     
     def GetTransaction(self, addr):
         return self.transaction[addr]

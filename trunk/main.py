@@ -65,6 +65,13 @@ class Application(CApplication):
     def GetPluginAdapter(self):
         return self.pluginAdapter
     
+    def GetPluginPort(self):
+        manager = self.pluginAdapter.GetPluginManager()
+        if manager:
+            return manager.GetPort()
+        else:
+            return None
+    
     @argument("-o", "--open", True)
     def DoOpen(self, value):
         "Opens selected project file"
