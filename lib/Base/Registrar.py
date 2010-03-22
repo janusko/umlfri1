@@ -12,7 +12,11 @@ class CRegistrar(object):
             raise UIDException("objectNotFound")
     
     def Clear(self):
-        self.__dict.clear()
+        items = self.__dict.items()
+        for key, value in items:
+            if not getattr(value, '_persistent', False):
+                del self.__dict[key]
+        del items
     
     def _Register(self, uid, object):
         if uid in self.__dict:

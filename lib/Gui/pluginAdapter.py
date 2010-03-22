@@ -11,6 +11,7 @@ class CPluginAdapter(CBaseObject, CGuiObject):
         self.guiManager = CGuiManager(app)
         self.manager = None
         self.GetUID()
+        self._persistent = True
         
     def _generateUID(self):
         return 'adapter'
