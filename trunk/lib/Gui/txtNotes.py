@@ -32,6 +32,7 @@ class CtxtNotes(CWidget):
             self.application.GetBus().emit('content-update', self.element, 'note')
                 
     @event('application.bus', 'content-update')
+    @event('application.bus', 'content-update-from-plugin')
     def on_content_update(self, widget, element, property):
         if (self.element is not None and (element is self.element 
             or not isinstance(self.element, CDiagram) and element is self.element.GetObject())):

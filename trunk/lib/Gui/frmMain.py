@@ -539,16 +539,23 @@ class CfrmMain(CWindow):
     
     @event('application.bus', 'content-update')
     def on_nbProperties_content_update(self, widget, element, property):
-        if isinstance(element, CDiagram):
-            self.twProjectView.UpdateElement(element)
-            self.nbTabs.RefreshTab(element)
-        else:
+        self._on_nbProperties_content_update(widget, element, property, False)
+    
+    @event('application.bus', 'content-update-from-plugin')
+    def on_nbProperties_content_update_from_plugin(self, widget, element, property):
+        self._on_nbProperties_content_update(widget, element, property, True)
+        
+    def _on_nbProperties_content_update(self, widget, element, property, fromPlugin):
+        if isinstance(element, (CElement, CConnection)):
             element = element.GetObject()
-            if element.HasVisualAttribute(property):
-                if (self.picDrawingArea.GetDiagram().HasElementObject(element)
-                    or self.picDrawingArea.GetDiagram().HasConnection(element)):
+        if element.HasVisualAttribute(property):
+            if (self.picDrawingArea.GetDiagram().HasElementObject(element)
+                or self.picDrawingArea.GetDiagram().HasConnection(element)):
+                if fromPlugin:
+                    self.picDrawingArea.ToPaint()
+                else:
                     self.picDrawingArea.Paint()
-                self.twProjectView.UpdateElement(element)
+            self.twProjectView.UpdateElement(element)
 
     @event("tbToolBox", "toggled")
     def on_tbToolBox_toggled(self, widget, ItemId, ItemType):

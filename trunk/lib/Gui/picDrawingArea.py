@@ -181,25 +181,25 @@ class CpicDrawingArea(CWidget):
         h,v = (self.picHBar.get_value(),self.picVBar.get_value())
         return int(-h+x), int(-v+y)
       
-    def Paint(self, changed = True):
-        #~ try:
-            #~ self.paintlock.acquire()
-            #~ self.paintChanged = self.paintChanged or changed
-            #~ if not self.tobePainted:
-                #~ self.tobePainted = True
-                #~ gobject.timeout_add(15, self.ToPaint)
-        #~ finally:
-            #~ self.paintlock.release()
+    def ToPaint(self, changed = True):
+        try:
+            self.paintlock.acquire()
+            self.paintChanged = self.paintChanged or changed
+            if not self.tobePainted:
+                self.tobePainted = True
+                gobject.timeout_add(15, self.Paint)
+        finally:
+            self.paintlock.release()
         
 
-    #~ def ToPaint(self, changed = True):
-        #~ try:
-            #~ self.paintlock.acquire()
-            #~ self.tobePainted = False
-            #~ changed = changed or self.paintChanged
-            #~ self.paintChanged = False
-        #~ finally:
-            #~ self.paintlock.release()
+    def Paint(self, changed = True):
+        try:
+            self.paintlock.acquire()
+            self.tobePainted = False
+            changed = changed or self.paintChanged
+            self.paintChanged = False
+        finally:
+            self.paintlock.release()
         if not self.picDrawingArea.window or not self.canvas:
             if changed:
                 self.__invalidated = True # redraw completly on next configure event
