@@ -33,11 +33,12 @@ class CPluginAdapter(CBaseObject, CGuiObject):
         
         
     @event('application.bus', 'content-update')
+    @event('application.bus', 'content-update-from-plugin')
     def gui_change_domain_value(self, widget, element, property):
         self.manager.DomainValueChanged(element, property)
     
     def plugin_change_domain_value(self, element, property):
-        gobject.idle_add(self.application.GetBus().emit, 'content-update', element, property)
+        gobject.idle_add(self.application.GetBus().emit, 'content-update-from-plugin', element, property)
     
     def plugin_display_warning(self, text):
         gobject.idle_add(self.application.GetBus().emit, 'run-dialog', 'warning', text)
