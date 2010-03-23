@@ -6,13 +6,10 @@ from lib.Drawing.Diagram import CDiagram
 from lib.Drawing.Element import CElement
 from lib.Elements.Object import CElementObject
 from lib.Connections.Object import CConnectionObject
+from lib.Addons.Plugin.Interface.Classes.DomainObject import IDomainObject
 
-class IDiagram(IBase):
+class IDiagram(IDomainObject):
     __cls__ = CDiagram
-    
-    @result(r_str)
-    def GetName(him):
-        return him.GetName()
     
     @parameter('obj', t_classobject(CElementObject))
     @result(r_object)
@@ -27,10 +24,6 @@ class IDiagram(IBase):
     @result(r_str)
     def GetPath(him):
         return him.GetPath()
-    
-    @result(r_str)
-    def GetType(him):
-        return him.GetType().GetId()
     
     @result(r_objectlist)
     def GetSelected(him):
@@ -75,11 +68,7 @@ class IDiagram(IBase):
     
     # WRITE METHODS
     
-    @result(r_none)
-    @parameter('name', t_str)
-    def SetName(him, name):
-        him.SetName(name)
-        IBase.adapter.plugin_change_domain_value(him, CDiagram.NAME_PROPERY)
+    
     
     #~ @parameter('connection', t_classobject(CConnection))
     #~ def AddConnection(him, connection): 
