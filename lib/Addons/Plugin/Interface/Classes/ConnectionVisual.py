@@ -25,4 +25,13 @@ class IConnectionVisual(IBase):
     @result(r_object)
     def GetSourceObject(him):
         return him.GetSourceObject()
+        
+    @result(r_eval)
+    def GetPoints(him):
+        return list(him.GetPoints(IBase.adapter.GetCanvas()))
+        
+    @result(r_eval)
+    def GetAllLabelPositions(him):
+        return list(him.GetAllLabelPositions())
+    
     
