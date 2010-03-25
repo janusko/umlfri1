@@ -15,7 +15,7 @@ class CDomainType(CBaseObject):
     @ivar attributeorder: order of attributes defined by metamodel
     '''
     
-    ATOMIC = 'int', 'float', 'str', 'text', 'bool', 'enum', 'list'
+    ATOMIC = 'int', 'float', 'str', 'text', 'bool', 'enum', 'list', 'color', 'font'
     
     def __init__(self, name, factory):
         '''
@@ -384,7 +384,7 @@ class CDomainType(CBaseObject):
                 return self.__GetInt(value)
             elif type == 'float':
                 return self.__GetFloat(value)
-            elif type in ('str', 'text'):
+            elif type in ('str', 'text', 'color', 'font'):
                 return self.__GetStr(value)
             elif type == 'bool':
                 return self.__GetBool(value)

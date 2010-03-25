@@ -6,6 +6,10 @@ class CellRendererButton(gtk.GenericCellRenderer):
     __gproperties__ = {
         "text": (gobject.TYPE_STRING, None, "Text",
         "Displayed text", gobject.PARAM_READWRITE),
+        "font": (gobject.TYPE_STRING, None, "Text",
+        "Displayed font", gobject.PARAM_READWRITE),
+        "color": (gobject.TYPE_STRING, None, "Text",
+        "Displayed font", gobject.PARAM_READWRITE),
     }
     
     __gsignals__ = {
@@ -18,6 +22,8 @@ class CellRendererButton(gtk.GenericCellRenderer):
         
         self.text = ""
         self.width = 30
+        self.font = ""
+        self.color = ""
         
         self.set_property('mode', gtk.CELL_RENDERER_MODE_EDITABLE)
     
@@ -29,15 +35,31 @@ class CellRendererButton(gtk.GenericCellRenderer):
 
     def on_render(self, window, widget, background_area, cell_area, expose_area, flags):
         tid = 0
+        gcc = widget.style.text_gc[tid]
         layout = widget.create_pango_layout(self.text)
-        layout.set_font_description(widget.style.font_desc)
+        if self.font == "":
+            self.font = widget.style.font_desc
+        layout.set_font_description(pango.FontDescription(self.font))
         w, h = layout.get_size()
         self.width = w / pango.SCALE + 6
         x = cell_area.x + 3
         y = int(cell_area.y + (cell_area.height - h / pango.SCALE) / 2)
+        
         widget.style.paint_box(window, gtk.STATE_NORMAL, gtk.SHADOW_OUT, None, widget, "button",
                 cell_area.x, cell_area.y, self.width, cell_area.height)
-        window.draw_layout(widget.style.text_gc[tid], x, y, layout)
+        if self.color is not None:
+            if self.color != "":
+                gc = window.new_gc()
+                try :
+                    color = gtk.gdk.color_parse(self.color)
+                    avg = (color.red + color.green + color.blue)/3
+                    if (avg < 256*128):
+                        gcc = widget.style.white_gc
+                    gc.set_rgb_fg_color(color)
+                    window.draw_rectangle(gc,True,cell_area.x, cell_area.y, self.width, cell_area.height)
+                except :
+                    pass
+        window.draw_layout(gcc, x, y, layout)
 
     def on_get_size(self, widget, cell_area=None):
         if cell_area is None:
