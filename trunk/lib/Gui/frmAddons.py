@@ -18,6 +18,8 @@ class CfrmAddons(CWindow):
         'mnuHomepageMetamodel', 'mnuAboutMetamodel',
         
         'twPluginList', 'cmdInstallPlugin', 'cmdUninstallPlugin', 'cmdPluginPreferences', 'cmdPluginStart', 'cmdPluginStop',
+        'mnuPlugin', 'mnuUninstallPlugin', 'mnuStartPlugin', 'mnuStopPlugin',
+        'mnuHomepagePlugin', 'mnuAboutPlugin',
     )
     
     def __init__(self, app, wTree):
@@ -99,7 +101,7 @@ class CfrmAddons(CWindow):
     
     def __GetSelectedAddon(self, treeView, path = None):
         if path is not None:
-            iter = self.__MetamodelStore.get_iter(path)
+            iter = treeView.get_model().get_iter(path)
         else:
             iter = treeView.get_selection().get_selected()[1]
         
@@ -224,6 +226,24 @@ class CfrmAddons(CWindow):
                 
                 self.mnuMetamodel.popup(None, None, None, event.button, event.time)
     
+    @event("mnuHomepagePlugin", "activate")
+    def on_mnuHomepagePlugin_click(self, button):
+        addon = self.__GetSelectedAddon(self.twPluginList)
+        
+        if addon is None:
+            return
+        
+        webbrowser.open_new_tab(addon.GetHomepage())
+    
+    @event("mnuAboutPlugin", "activate")
+    def on_mnuAboutPlugin_click(self, button):
+        addon = self.__GetSelectedAddon(self.twPluginList)
+        
+        if addon is None:
+            return
+        
+        self.application.GetWindow("frmAboutAddon").ShowDialog(self, addon)
+    
     @event("twPluginList", "cursor-changed")
     def PluginChanged(self, treeView = None):
         addon = self.__GetSelectedAddon(self.twPluginList)
@@ -236,3 +256,18 @@ class CfrmAddons(CWindow):
             self.cmdPluginStart.set_sensitive(not addon.IsEnabled())
             self.cmdPluginStop.set_sensitive(addon.IsEnabled())
             self.cmdUninstallPlugin.set_sensitive(addon.IsUninstallable())
+    
+    @event("twPluginList", "button-press-event")
+    def PluginPopup(self, treeView, event):
+        if event.button == 3:
+            path = self.twPluginList.get_path_at_pos(event.x, event.y)
+            if path is None:
+                return
+            addon = self.__GetSelectedAddon(self.twPluginList, path[0])
+            if addon is not None:
+                self.mnuStartPlugin.set_sensitive(not addon.IsEnabled())
+                self.mnuStopPlugin.set_sensitive(addon.IsEnabled())
+                self.mnuUninstallPlugin.set_sensitive(addon.IsUninstallable())
+                self.mnuHomepagePlugin.set_sensitive(addon.GetHomepage() is not None)
+                
+                self.mnuPlugin.popup(None, None, None, event.button, event.time)
