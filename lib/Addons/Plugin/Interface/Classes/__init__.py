@@ -11,3 +11,13 @@ import DiagramType
 import DomainType
 import ElementType
 import Adapter
+
+import Button
+import ButtonBar
+import CheckMenuItem
+import ImageMenuItem
+import Menu
+import MenuItem
+import ToggleButton
+import Widget
+import Separator

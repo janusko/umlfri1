@@ -32,7 +32,7 @@ class IProject(IBase):
     def GetMetamodel(him):
         return him.GetMetamodel()
     
-    @result(r_longstr)
+    @result(r_str)
     def GetSaveXml(him):
         return him.XmlToStr(him.GetSaveXml())
     

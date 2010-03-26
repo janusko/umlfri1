@@ -8,7 +8,7 @@ class Meta(type):
     interface = {}
     names = {}
     constructor = '__init__'
-    implicit = lambda self, x: x
+    implicit = lambda self, x, con=None, addr=None: x
     
     def __init__(self, name, bases, dictionary):
         type.__init__(self, name, bases, dictionary)
@@ -46,9 +46,9 @@ class Meta(type):
             return None, None
     
     @classmethod
-    def Execute(cls, obj, fname, params, isobject = True):
+    def Execute(cls, obj, fname, params, core, addr, isobject = True):
         if isobject:
-            fun, desc = cls.GetMethod(obj.__class__, fname)
+            fun, desc = cls.GetMethod(cls.GetClassName(obj), fname)
             if getattr(fun, '_constructor', False):
                 raise UnknowMethodError()
         else:
@@ -61,7 +61,9 @@ class Meta(type):
             params[fun.func_code.co_varnames[0]] = obj
         else:
             params = dict(zip(fun.func_code.co_varnames, params))
-        params = dict((key, desc['params'][key](params[key])) for key in params)
+        params = dict((key, desc['params'][key](params[key], core, addr)) for key in params)
+            
+        print params
         try:
             return desc['result'](fun(**params))
         except TypeError:
@@ -83,19 +85,26 @@ class Meta(type):
         
     @classmethod
     def IsDestructive(cls, obj, fname):
-        desc = cls.GetMethod(obj.__class__, fname)[1]
+        desc = cls.GetMethod(cls.GetClassName(obj), fname)[1]
         if desc is None:
             raise UnknowMethodError()
         else:
             return desc['destructive']
             
+            
+    @classmethod
+    def _getclassname(cls, value):
+        if value in cls.interface:
+            return cls.interface[value]['__class__'].__name__
+        elif value != object:
+            for base in value.__bases__:
+                name = cls._getclassname(base)
+                if name:
+                    return name
+    
     @classmethod
     def GetClassName(cls, object):
-        desc = cls.interface.get(object.__class__)
-        if desc:
-            return desc['__class__'].__name__
-        else:
-            return None
+        return cls._getclassname(object.__class__)
     
     @classmethod
     def GetMethodList(cls, classname):

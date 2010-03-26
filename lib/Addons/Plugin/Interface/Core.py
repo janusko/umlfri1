@@ -99,9 +99,9 @@ class CCore(object):
             
             if Meta.IsDestructive(obj, fname):
                 result = None
-                self.manager.GetTransaction(addr).Action(Meta.Execute, (obj, fname, params))
+                self.manager.GetTransaction(addr).Action(Meta.Execute, (obj, fname, params, self, addr))
             else:
-                result = Meta.Execute(obj, fname, params)
+                result = Meta.Execute(obj, fname, params, self, addr)
             
             self.manager.Send(addr, RESP_RESULT, __id__ = callid, result = result)
         
@@ -216,4 +216,8 @@ class CCore(object):
             self.manager.Send(addr, RESP_OK, __id__ = callid)
         else:
             self.manager.Send(addr, RESP_INVALID_COMMAND_TYPE, command = 'plugin', type = ctype, __id__ = callid)
+    
+    def _callback(self, id, addr):
+        print 'callbacking', id, addr
+        self.manager.Send(addr, RESP_CALLBACK, callback = id)
             

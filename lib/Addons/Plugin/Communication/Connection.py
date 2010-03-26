@@ -18,6 +18,10 @@ class CConnection(object):
         self.guicallback = {}
         self.finalized = thread.allocate()
         self.finalized.acquire()
+        
+        self.callbacks = {}
+        self.callbackidx = -1
+        self.callbacklock = thread.allocate()
     
     def Command(self, command, params, data, addr):
         try:
@@ -60,11 +64,14 @@ class CConnection(object):
                 path = params['path']
                 if path in self.guicallback:
                     thread.start_new(self.guicallback[path], (path, ))
+                    
+            elif code == RESP_CALLBACK:
+                print 'CallBack', params['callback']
+                self.callbacks[int(params['callback'])]()
             
             elif code == RESP_FINALIZE:
                 self.finalized.release()
-            
-            
+                
         finally:
             self.lock.release()
     
@@ -95,6 +102,16 @@ class CConnection(object):
             self.guicallback[path] = callback
         finally:
             self.lock.release()
+    
+    def SetCallback(self, fun):
+        try:
+            self.callbacklock.acquire()
+            self.callbackidx += 1
+            self.callbacks[self.callbackidx] = fun
+            return self.callbackidx
+        finally:
+            self.callbacklock.release()
+    
     
     def WaitTillClosed(self):
         self.finalized.acquire()
