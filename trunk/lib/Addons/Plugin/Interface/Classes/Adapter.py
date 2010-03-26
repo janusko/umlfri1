@@ -13,3 +13,24 @@ class IAdapter(IBase):
     @result(r_object)
     def GetCurrentDiagram(him):
         return him.GetCurrentDiagram()
+    
+    @result(r_object)
+    def GetMainMenu(him):
+        return him.GetMainMenu()
+        
+    @result(r_object)
+    def GetTabMenu(him):
+        return him.GetTabMenu()
+        
+    @result(r_object)
+    def GetTreeMenu(him):
+        return him.GetTreeMenu()
+    
+    @result(r_object)
+    def GetDrawMenu(him):
+        return him.GetDrawMenu()
+    
+    @result(r_object)
+    def GetButtonBar(him):
+        return him.GetButtonBar()
+

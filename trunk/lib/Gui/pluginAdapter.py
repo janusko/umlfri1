@@ -45,3 +45,18 @@ class CPluginAdapter(CBaseObject, CGuiObject):
     
     def GetCanvas(self):
         return self.application.GetWindow('frmMain').picDrawingArea.canvas
+    
+    def GetMainMenu(self):
+        return self.guiManager.GetMainMenu()
+    
+    def GetTabMenu(self):
+        return self.guiManager.GetTabMenu()
+        
+    def GetTreeMenu(self):
+        return self.guiManager.GetTreeMenu()
+    
+    def GetDrawMenu(self):
+        return self.guiManager.GetDrawMenu()
+    
+    def GetButtonBar(self):
+        return self.guiManager.GetButtonBar()

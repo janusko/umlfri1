@@ -16,6 +16,7 @@ RESP_NOTIFY = 100
 RESP_GUI_ACTIVATED = 101
 RESP_DOMAIN_VALUE_CHANGED = 102
 RESP_FINALIZE = 103
+RESP_CALLBACK = 104
 
 
 RESP_OK = 200
@@ -41,10 +42,10 @@ RESP_INVALID_METHOD_PARAMETER = 412
 
 RESP_UNHANDELED_EXCEPTION = 500
 
-def tc_object(val, conn = None):
+def tc_object(val, conn = None, addr = None):
     return val.GetId()
 
-def t_2intTuple(x, conn = None):
+def t_2intTuple(x, conn = None, addr = None):
     try:
         assert len(x) > 4 and x[0] == '(' and x[-1] == ')'
         result = tuple(int(i)for i in x[1:-1].split(','))
@@ -53,7 +54,7 @@ def t_2intTuple(x, conn = None):
     except (AssertionError, ):
         raise ValueError()
         
-def t_bool(val, conn = None):
+def t_bool(val, conn = None, addr = None):
     if val == 'True':
         return True
     elif val == 'False':
@@ -61,7 +62,7 @@ def t_bool(val, conn = None):
     else:
         raise ValueError()
         
-def t_2boolTuple(x, conn = None):
+def t_2boolTuple(x, conn = None, addr = None):
     if not (len(x) > 4 and x[0] == '(' and x[-1] == ')'):
         raise ValueError()
     result = tuple(t_bool(i.strip()) for i in x[1:-1].split(','))
@@ -70,7 +71,7 @@ def t_2boolTuple(x, conn = None):
     return result
 
 @reverse(tc_object)
-def t_object(val, conn = None):
+def t_object(val, conn = None, addr = None):
     if val == 'None':
         return None
     elif re.match(r'#[-0-9a-z]+$', val) is not None:
@@ -98,7 +99,7 @@ def t_object(val, conn = None):
             raise ValueError()
 
 def t_classobject(cls):
-    def check(val, conn = None):
+    def check(val, conn = None, addr = None):
         res = t_object(val)
         if isinstance(res, cls):
             return res
@@ -107,13 +108,7 @@ def t_classobject(cls):
     check = reverse(tc_object)(check)
     return check
 
-def t_str(val, conn = None):
-    return str(val)
-
-t_str = reverse(t_str)(t_str)
-r_str = t_str
-
-def t_2x2intTuple(val, conn = None):
+def t_2x2intTuple(val, conn = None, addr = None):
     match = re.match(r'\(\((?P<a>[0-9]+),(?P<b>[0-9]+)\),\((?P<c>[0-9]+),(?P<d>[0-9]+)\)\)$', val)
     if match is not None:
         d = match.groupdict()
@@ -121,7 +116,7 @@ def t_2x2intTuple(val, conn = None):
     else:
         raise ValueError()
 
-def rc_object(val, connection):
+def rc_object(val, connection, addr = None):
     if val.find('::') >= 0:
         val, cls = val.split('::')
         if val == 'None':
@@ -134,12 +129,12 @@ def rc_object(val, connection):
     else:
         raise ValueError()
     
-def rc_objectlist(val, connection):
+def rc_objectlist(val, connection, addr = None):
     return [rc_object(i, connection) for i in val[1:-1].split(',') if i != '']
     
 
 @reverse(rc_object)
-def r_object(val, conn = None):
+def r_object(val, conn = None, addr = None):
     return ('#%s::%s' % (val.GetUID(), Meta.GetClassName(val)) if val is not None else 'None::NoneType') 
         
 
@@ -148,20 +143,20 @@ def r_objectlist(val, conn = None):
     return '[' + ','.join(r_object(i) for i in val) + ']'
 
 @reverse(t_bool)
-def r_bool(val, conn = None):
+def r_bool(val, conn = None, addr = None):
     return str(bool(val))
 
 t_bool = reverse(r_bool)(t_bool)
 
 @reverse(t_2intTuple)
-def r_2intTuple(val, conn = None):
+def r_2intTuple(val, conn = None, addr = None):
     assert type(val) == tuple and len(val) == 2 and all(type(i) == int for i in val)
     return '(%i,%i)' % val
     
 t_2intTuple = reverse(r_2intTuple)(t_2intTuple)
 
 @reverse(t_2boolTuple)
-def r_2boolTuple(val, conn = None):
+def r_2boolTuple(val, conn = None, addr = None):
     if type(val) != tuple or len(val) != 2 or any(type(i) != bool for i in val):
         raise ValueError()
     return str(val)
@@ -169,34 +164,72 @@ def r_2boolTuple(val, conn = None):
 t_2boolTuple = reverse(r_2boolTuple)(t_2boolTuple)
 
 @reverse(t_2x2intTuple)
-def r_2x2intTuple(val, conn = None):
+def r_2x2intTuple(val, conn = None, addr = None):
     return '((%i,%i),(%i,%i))' % (val[0] + val[1])
 
 t_2x2intTuple = reverse(r_2x2intTuple)(t_2x2intTuple)
 
 @reverse(lambda val, conn = None: None)
-def r_none(val, conn = None):
+def r_none(val, conn = None, addr = None):
     if val is None:
         return 'None'
     else:
         raise ValueError()
 
-def rc_eval(val, con=None):
+def rc_eval(val, con=None, addr = None):
     return eval(val, {}, {'__builtins__': {}})
     
 @reverse(rc_eval)
-def r_eval(val, con=None):
+def r_eval(val, con=None, addr = None):
     return str(val)
 
-def t_longstr(val, con = None):
+def t_str(val, con = None, addr = None):
     try:
-        return base64.b64decode(val)
+        if val == 'None':
+            return None
+        else:
+            val = base64.b64decode(val)
+            if val[-1] != '\0':
+                raise ValueError()
+            else:
+                return val[:-1]
     except TypeError:
         raise ValueError()
         
-@reverse(t_longstr)
-def r_longstr(val, con=None):
-    return base64.b64encode(str(val))
+@reverse(t_str)
+def r_str(val, con=None, addr = None):
+    if val is None:
+        return 'None'
+    else:
+        return base64.b64encode(str(val + '\0'))
     
-t_longstr = reverse(r_longstr)(t_longstr)
+t_str = reverse(r_str)(t_str)
 
+def tc_callback(val, con = None, addr = None):
+    if val is None:
+        result = 'None'
+    else:
+        result = str(con.SetCallback(val))
+    print 'Will call', result
+    return result
+
+@reverse(tc_callback)
+def t_callback(val, con = None, addr = None):
+    if val == 'None':
+        return None
+    else:
+        return lambda *a: con._callback(val, addr)
+    
+
+def r_int(val, con = None, addr = None):
+    if isinstance(val, (int, long)):
+        return str(val)
+    else:
+        raise ValueError()
+
+@reverse(r_int)
+def t_int(val, con = None, addr = None):
+    return int(val)
+    
+r_int = reverse(t_int)(r_int)
+    
