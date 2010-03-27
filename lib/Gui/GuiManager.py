@@ -5,6 +5,8 @@ from lib.Base import CBaseObject
 from lib.Base.Registrar import registrar
 import plugin
 
+from warnings import warn
+
 class CGuiManager(object):
     '''
     Encapsulates handling of GUI modifications
@@ -85,6 +87,7 @@ class CGuiManager(object):
 ##################################### OBSOLETE ############################################
     
     def AddItem(self, mtype, path, name, callback, addr, **params):
+        warn(DeprecationWarning('GuiManager.AddItem is deprecated'))
         try:
             self.lock.acquire()
             if mtype in ('ImageMenuItem', 'MenuItem'):
@@ -133,6 +136,7 @@ class CGuiManager(object):
         
         
     def SetSensitive(self, path, sensitive):
+        warn(DeprecationWarning('GuiManager.SetSensitive is deprecated'))
         try:
             self.lock.acquire()
             if path in self.menuitems:

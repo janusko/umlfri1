@@ -63,7 +63,6 @@ class Meta(type):
             params = dict(zip(fun.func_code.co_varnames, params))
         params = dict((key, desc['params'][key](params[key], core, addr)) for key in params)
             
-        print params
         try:
             return desc['result'](fun(**params))
         except TypeError:
