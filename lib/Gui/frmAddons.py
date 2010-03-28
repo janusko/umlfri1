@@ -91,7 +91,10 @@ class CfrmAddons(CWindow):
             if addon.GetIcon() is None:
                 icon = None
             else:
-                icon = PixmapFromPath(addon.GetStorage(), addon.GetIcon())
+                try:
+                    icon = PixmapFromPath(addon.GetStorage(), addon.GetIcon())
+                except:
+                    icon = None
             
             name = addon.GetName()
             version = addon.GetVersion()
