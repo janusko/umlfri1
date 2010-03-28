@@ -9,7 +9,8 @@ from lib.lib import Indent
 from lib.Storages import open_storage, CDirectory
 from Addon import CAddon
 
-from Metamodel import CMetamodelAddonComponent
+from Composite.AddonComponent import CCompositeAddonComponent
+from Metamodel.AddonComponent import CMetamodelAddonComponent
 from Plugin.AddonComponent import CPluginAddonComponent
 from Plugin.Manager import CPluginManager
 from lib.consts import ADDON_NAMESPACE, ADDON_LIST_NAMESPACE
@@ -144,32 +145,53 @@ class CAddonManager(object):
             elif node.tag == ADDON_NAMESPACE+'Description':
                 description = self.__FormatMultilineText(node.text or '')
             elif node.tag == ADDON_NAMESPACE+'Metamodel':
-                path = ''
-                templates = []
-                for info in node:
-                    if info.tag == ADDON_NAMESPACE+'Path':
-                        path = info.attrib["path"]
-                    if info.tag == ADDON_NAMESPACE+'Template':
-                        templates.append((info.attrib.get("name"), info.attrib.get("icon"), info.attrib.get("path")))
-                component = CMetamodelAddonComponent(path, templates)
+                component = self.__LoadMetamodelAddonComponent(node)
             elif node.tag == ADDON_NAMESPACE+'Plugin':
-                codes = []
-                requiredMetamodels = []
-                patches = []
-                
-                for info in node:
-                    if info.tag == ADDON_NAMESPACE+'Code':
-                        codes.append((node.get("os", "all"), info.attrib["language"], info.attrib["path"]))
-                    elif info.tag == ADDON_NAMESPACE+'Patch':
-                        patches.append(info.attrib["module"])
-                    elif info.tag == ADDON_NAMESPACE+'Metamodel':
-                        requiredMetamodels.append(info.attrib["required"])
-                component = CPluginAddonComponent(codes, patches, requiredMetamodels, self.__patchParams)
+                component = self.__LoadPluginAddonComponent(node)
+            elif node.tag == ADDON_NAMESPACE+'Composite':
+                component = self.__LoadCompositeAddonComponent(node)
         
         return CAddon(self, storage, uris, component,
             all(self.__enabledAddons.get(uri, True) for uri in uris),
             uninstallable, author, name, version, license, homepage,
             icon, description)
+    
+    def __LoadMetamodelAddonComponent(self, node):
+        path = ''
+        templates = []
+        for info in node:
+            if info.tag == ADDON_NAMESPACE+'Path':
+                path = info.attrib["path"]
+            if info.tag == ADDON_NAMESPACE+'Template':
+                templates.append((info.attrib.get("name"), info.attrib.get("icon"), info.attrib.get("path")))
+        
+        return CMetamodelAddonComponent(path, templates)
+    
+    def __LoadPluginAddonComponent(self, node):
+        codes = []
+        requiredMetamodels = []
+        patches = []
+        
+        for info in node:
+            if info.tag == ADDON_NAMESPACE+'Code':
+                codes.append((info.get("os", "all"), info.attrib["language"], info.attrib["path"]))
+            elif info.tag == ADDON_NAMESPACE+'Patch':
+                patches.append(info.attrib["module"])
+            elif info.tag == ADDON_NAMESPACE+'Metamodel':
+                requiredMetamodels.append(info.attrib["required"])
+        
+        return CPluginAddonComponent(codes, patches, requiredMetamodels, self.__patchParams)
+    
+    def __LoadCompositeAddonComponent(self, node):
+        components = {}
+        
+        for info in node:
+            if info.tag == ADDON_NAMESPACE+'Metamodel':
+                components['metamodel'] = self.__LoadMetamodelAddonComponent(info)
+            elif info.tag == ADDON_NAMESPACE+'Plugin':
+                components['plugin'] = self.__LoadPluginAddonComponent(info)
+        
+        return CCompositeAddonComponent(**components)
     
     def __FormatMultilineText(self, text):
         ret = []

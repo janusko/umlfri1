@@ -31,8 +31,12 @@ class CfrmAboutAddon(CWindow):
         self.lblAboutAddonVersion.set_label(addon.GetVersion())
         if addon.GetType() == 'metamodel':
             self.lblAboutAddonType.set_label(_("metamodel"))
-        else:
+        elif addon.GetType() == 'plugin':
             self.lblAboutAddonType.set_label(_("plugin"))
+        elif addon.GetType() == 'composite':
+            self.lblAboutAddonType.set_label(_("metamodel+plugin"))
+        else:
+            return
         
         self.lblAboutAddonAuthor.set_label(', '.join(addon.GetAuthor()))
         

@@ -439,7 +439,7 @@ class CProject(CBaseObject):
                 
                 if addon is None:
                     raise ProjectError("Project using unknown metamodel")
-                if addon.GetType() != 'metamodel':
+                if addon.GetType() not in ('metamodel', 'composite'):
                     raise ProjectError("Given URI identifier is not metamodel")
                 self.__metamodel = addon.GetComponent().LoadMetamodel()
                 if self.__metamodel is None:

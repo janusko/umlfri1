@@ -50,6 +50,10 @@ class CfrmInstallAddon(CWindow):
         self.lblInstallAddonVersion.set_label(addon.GetVersion())
         if addon.GetType() == 'metamodel':
             self.lblInstallAddonType.set_label(_("metamodel"))
+        elif addon.GetType() == 'plugin':
+            self.lblInstallAddonType.set_label(_("plugin"))
+        elif addon.GetType() == 'composite':
+            self.lblInstallAddonType.set_label(_("metamodel+plugin"))
         else:
             return
         

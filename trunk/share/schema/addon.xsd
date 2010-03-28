@@ -91,6 +91,7 @@
 				<xs:choice>
 					<xs:element name="Metamodel" type="MetamodelType"/>
 					<xs:element name="Plugin" type="PluginType"/>
+					<xs:element name="Composite" type="CompositeType"/>
 				</xs:choice>
 			</xs:sequence>
 		</xs:complexType>
@@ -133,6 +134,12 @@
 				</xs:complexType>
 			</xs:element>
 		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CompositeType">
+		<xs:all>
+			<xs:element name="Metamodel" type="MetamodelType"/>
+			<xs:element name="Plugin" type="PluginType"/>
+		</xs:all>
 	</xs:complexType>
 	<xs:complexType name="PluginCodeType">
 		<xs:attribute name="os" type="xs:string" default="all"/>
