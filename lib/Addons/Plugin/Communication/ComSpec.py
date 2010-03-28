@@ -210,7 +210,6 @@ def tc_callback(val, con = None, addr = None):
         result = 'None'
     else:
         result = str(con.SetCallback(val))
-    print 'Will call', result
     return result
 
 @reverse(tc_callback)

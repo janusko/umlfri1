@@ -25,7 +25,6 @@ class CConnection(object):
     
     def Command(self, command, params, data, addr):
         try:
-            #print command, params, data, addr
             self.lock.acquire()
             code = int(command['code'])
             if 200 <= code <= 299 or 400 <= code <= 599:
@@ -66,8 +65,7 @@ class CConnection(object):
                     thread.start_new(self.guicallback[path], (path, ))
                     
             elif code == RESP_CALLBACK:
-                print 'CallBack', params['callback']
-                self.callbacks[int(params['callback'])]()
+                thread.start_new(self.callbacks[int(params['callback'])], ())
             
             elif code == RESP_FINALIZE:
                 self.finalized.release()

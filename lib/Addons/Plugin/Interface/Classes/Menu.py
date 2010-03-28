@@ -16,7 +16,7 @@ class IMenu(IWidget):
     @parameter('label', t_str)
     @parameter('underline', t_bool)
     @parameter('imagefilename', t_str)
-    def AddMenuItem(him, callback, position, label, underline, imagefilename):
+    def AddMenuItem(him, callback, position, label, underline=True, imagefilename=None):
         return him.AddMenuItem(callback, position, label, underline, imagefilename)
     
     @result(r_none)
@@ -24,7 +24,7 @@ class IMenu(IWidget):
     @parameter('position', t_int)
     @parameter('stock', t_str)
     @parameter('label', t_str)
-    def AddStockMenuItem(him, callback, position, stock, label):
+    def AddStockMenuItem(him, callback, position, stock, label=None):
         return him.AddStockMenuItem(callback, position, stock, label)
     
     @result(r_none)
@@ -32,7 +32,7 @@ class IMenu(IWidget):
     @parameter('position', t_int)
     @parameter('label', t_str)
     @parameter('underline', t_bool)
-    def AddCheckMenuItem(him, callback, position, label, underline):
+    def AddCheckMenuItem(him, callback, position, label, underline=True):
         return him.AddCheckMenuItem(callback, position, label, underline)
     
     @result(r_none)

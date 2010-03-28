@@ -17,7 +17,7 @@ class IButtonBar(IWidget):
     @parameter('label', t_str)
     @parameter('imagefilename', t_str)
     @parameter('togglebutton', t_bool)
-    def AddButton(him, callback, position, label, imagefilename, togglebutton):
+    def AddButton(him, callback, position, label, imagefilename=None, togglebutton=False):
         return him.AddButton(callback, position, label, imagefilename, togglebutton)
         
     @result(r_none)
@@ -26,7 +26,7 @@ class IButtonBar(IWidget):
     @parameter('position', t_int)
     @parameter('label', t_str)
     @parameter('togglebutton', t_bool)
-    def AddStockButton(him, callback, position, stock, label, togglebutton):
+    def AddStockButton(him, callback, position, stock, label=None, togglebutton=False):
         return him.AddStockButton(callback, position, stock, label, togglebutton)
     
     @result(r_none)

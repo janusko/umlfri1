@@ -18,7 +18,6 @@ class CCore(object):
         return True
     
     def Command(self, command, params, data, addr):
-        #print 'Command', command, params, data
         
         if command['version'] == VERSION:
             try:
@@ -218,6 +217,5 @@ class CCore(object):
             self.manager.Send(addr, RESP_INVALID_COMMAND_TYPE, command = 'plugin', type = ctype, __id__ = callid)
     
     def _callback(self, id, addr):
-        print 'callbacking', id, addr
         self.manager.Send(addr, RESP_CALLBACK, callback = id)
             

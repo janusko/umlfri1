@@ -19,3 +19,7 @@ class IMenuItem(IWidget):
     def SetLabel(him, value):
         return him.SetLabel(value)
         
+    @result(r_none)
+    def AddSubmenu(him):
+        him.AddSubmenu()
+        

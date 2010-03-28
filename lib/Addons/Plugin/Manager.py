@@ -37,7 +37,6 @@ class CPluginManager(object):
             self.conlock.acquire()
             self.transaction[addr] = CTransaction()
             self.connection[addr] = CSocketWrapper(sock, self.proxy, addr, True)
-            #print self.transaction.keys()
         finally:
             self.conlock.release()
     
