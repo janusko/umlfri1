@@ -7,7 +7,7 @@ from Starter import starters
 from PatchPlugin import CPatchPlugin
 
 class CPluginAddonComponent(object):
-    def __init__(self, codes, patches, requiredMetamodels, appRef, appType):
+    def __init__(self, codes, patches, requiredMetamodels, patchParams):
         allowedOs = ('all', platform.system(), platform.system() + ' ' + platform.version())
         self.__path = None
         self.__starter = None
@@ -24,8 +24,7 @@ class CPluginAddonComponent(object):
         self.__plugin = None
         self.__metamodel = None
         
-        self.__appRef = appRef
-        self.__appType = appType
+        self.__patchParams = patchParams
     
     def _SetAddon(self, addon):
         self.__addon = addon
@@ -40,7 +39,7 @@ class CPluginAddonComponent(object):
             root = self.__addon.GetStorage().get_path()
             
             for path in self.__patchPaths:
-                self.__patches.append(CPatchPlugin((self.__appType, self.__appRef), self.__addon.GetDefaultUri(), root, path))
+                self.__patches.append(CPatchPlugin(self.__patchParams, self.__addon.GetDefaultUri(), root, path))
         
         for patch in self.__patches:
             patch.Start()
