@@ -1,1 +1,0 @@
-from AddonComponent import CMetamodelAddonComponent

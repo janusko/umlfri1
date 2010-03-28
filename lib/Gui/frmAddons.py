@@ -83,6 +83,8 @@ class CfrmAddons(CWindow):
                 twStore = self.__MetamodelStore
             elif addon.GetType() == 'plugin':
                 twStore = self.__PluginStore
+            elif addon.GetType() == 'composite':
+                twStore = self.__PluginStore
             else:
                 continue
             
