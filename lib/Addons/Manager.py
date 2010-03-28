@@ -88,9 +88,13 @@ class CAddonManager(object):
         return tmp
     
     def __LoadAddonToDict(self, storage, uninstallable):
+        tmp = self.__AddAddonToDict(self.__LoadAddon(storage, uninstallable))
+        
+        return tmp
+    
+    def __AddAddonToDict(self, addon):
         tmp = {}
         
-        addon = self.__LoadAddon(storage, uninstallable)
         if addon is not None:
             for uri in addon.GetUris():
                 tmp[uri] = addon
@@ -241,8 +245,8 @@ class CAddonManager(object):
         self.__SaveEnabledAddons(os.path.join(USERDIR_PATH, 'addons.xml'), self.__enabledAddons)
     
     def LoadAddon(self, storage):
-        if isintance(storage, (str, unicde)):
-            storage = open_storage(path)
+        if isinstance(storage, (str, unicode)):
+            storage = open_storage(storage)
         return self.__LoadAddon(storage, False)
     
     def InstallAddon(self, addon):
@@ -250,7 +254,9 @@ class CAddonManager(object):
         path = os.path.join(USERDIR_PATH, 'addons', dirname)
         storage = CDirectory.duplicate(addon.GetStorage(), path)
         
-        self.__addons.update(self.__LoadAddonToDict(storage, True))
+        addon = self.__LoadAddon(storage, True)
+        addon.Start()
+        self.__addons.update(self.__AddAddonToDict(addon))
     
     def StartAll(self):
         for addon in self.__addons.itervalues():
