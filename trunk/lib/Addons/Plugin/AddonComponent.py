@@ -4,6 +4,7 @@ import platform
 
 from Plugin import CPlugin
 from Starter import starters
+from PatchPlugin import CPatchPlugin
 
 class CPluginAddonComponent(object):
     def __init__(self, codes, patches, requiredMetamodels, appRef, appType):
@@ -38,11 +39,8 @@ class CPluginAddonComponent(object):
             
             root = self.__addon.GetStorage().get_path()
             
-            for path, module in self.__patchPaths:
-                path = os.path.abspath(os.path.join(root, path))
-                if path not in sys.path:
-                    sys.path.append(path)
-                self.__patches.append(__import__(module).Plugin(self.__appType, self.__appRef))
+            for path in self.__patchPaths:
+                self.__patches.append(CPatchPlugin((self.__appType, self.__appRef), self.__addon.GetDefaultUri(), root, path))
         
         for patch in self.__patches:
             patch.Start()

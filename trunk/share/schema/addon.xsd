@@ -140,7 +140,6 @@
 		<xs:attribute name="path" type="xs:string" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="PluginPatchType">
-		<xs:attribute name="path" type="xs:string" use="required"/>
 		<xs:attribute name="module" type="xs:string" use="required"/>
 	</xs:complexType>
 </xs:schema>
