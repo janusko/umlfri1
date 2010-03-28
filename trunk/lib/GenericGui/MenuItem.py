@@ -8,4 +8,4 @@ class CMenuItem(CWidget):
         
     def SetLabel(self, value): pass
         
-    
+    def AddSubmenu(self): pass
