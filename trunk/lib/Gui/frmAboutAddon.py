@@ -25,7 +25,10 @@ class CfrmAboutAddon(CWindow):
         if icon is None:
             self.imgAboutAddonIcon.clear()
         else:
-            self.imgAboutAddonIcon.set_from_pixbuf(PixmapFromPath(addon.GetStorage(), icon))
+            try:
+                self.imgAboutAddonIcon.set_from_pixbuf(PixmapFromPath(addon.GetStorage(), icon))
+            except:
+                self.imgAboutAddonIcon.clear()
         
         self.lblAboutAddonName.set_markup("<big><b>%s</b></big>"%addon.GetName())
         self.lblAboutAddonVersion.set_label(addon.GetVersion())

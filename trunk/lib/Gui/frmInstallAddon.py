@@ -44,7 +44,10 @@ class CfrmInstallAddon(CWindow):
         if icon is None:
             self.imgInstallAddonIcon.clear()
         else:
-            self.imgInstallAddonIcon.set_from_pixbuf(PixmapFromPath(addon.GetStorage(), icon))
+            try:
+                self.imgInstallAddonIcon.set_from_pixbuf(PixmapFromPath(addon.GetStorage(), icon))
+            except:
+                self.imgInstallAddonIcon.clear()
         
         self.lblInstallAddonName.set_markup("<big><b>%s</b></big>"%addon.GetName())
         self.lblInstallAddonVersion.set_label(addon.GetVersion())
