@@ -41,7 +41,9 @@ class CPatchPlugin(object):
         if self.__obj is None:
             self.__MakeObject()
         
-        self.__obj.Start()
+        if self.__obj is not None:
+            self.__obj.Start()
     
     def Stop(self):
-        self.__obj.Stop()
+        if self.__obj is not None:
+            self.__obj.Stop()
