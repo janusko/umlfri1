@@ -6,21 +6,18 @@ class CButtonBar(CContainer, lib.GenericGui.CButtonBar):
     
     def _addButton(self, callback, position, stock, label, imagefilename, tooglebutton):
         if tooglebutton:
-            cls = gtk.ToggleToolButton
+            item = gtk.ToggleToolButton(stock)
         else:
-            cls = gtk.ToolButton
+            item = gtk.ToolButton(stock)
         
-        if stock:
-            item = cls(stock_id = stock)
-            if label:
-                item.set_label(label)
-        else:
-            if imagefilename:
-                image = gtk.Image()
-                image.set_from_file(imagefilename)
-            else:
-                image = None
-            item = cls(image, label)
+        if label:
+            item.set_label(label)
+        
+        if imagefilename:
+            image = gtk.Image()
+            image.set_from_file(imagefilename)
+            image.show()
+            item.set_icon_widget(image)
             
         self._addItem(callback, position, item)
     
