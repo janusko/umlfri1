@@ -537,15 +537,9 @@ class CfrmMain(CWindow):
             diagram.AddToSelection(diagram.HasElementObject(object))
             self.picDrawingArea.Paint()
     
-    @event('application.bus', 'content-update')
-    def on_nbProperties_content_update(self, widget, element, property):
-        self._on_nbProperties_content_update(widget, element, property, False)
-    
-    @event('application.bus', 'content-update-from-plugin')
-    def on_nbProperties_content_update_from_plugin(self, widget, element, property):
-        self._on_nbProperties_content_update(widget, element, property, True)
-        
-    def _on_nbProperties_content_update(self, widget, element, property, fromPlugin):
+    @event('application.bus', 'content-update', False)
+    @event('application.bus', 'content-update-from-plugin', True)
+    def on_nbProperties_content_update(self, widget, element, property, fromPlugin):
         if isinstance(element, (CElement, CConnection)):
             element = element.GetObject()
         if element.HasVisualAttribute(property):
