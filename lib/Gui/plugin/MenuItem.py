@@ -5,10 +5,10 @@ from Widget import CWidget
 class CMenuItem(lib.GenericGui.CMenuItem, CWidget):
     
     def GetLabel(self):
-        return self.obj.get_label()
+        return self.obj.get_property('label')
     
     def SetLabel(self, value):
-        gtk.idle_add(self.obj.set_label, value)
+        gtk.idle_add(self.obj.set_property, 'label', value)
     
     def GetSubmenu(self):
         return self.manager.GetItem(self.obj.get_submenu())

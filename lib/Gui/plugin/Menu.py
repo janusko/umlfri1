@@ -17,12 +17,12 @@ class CMenu(CContainer, lib.GenericGui.CMenu):
     def _addStockMenuItem(self, callback, position, stock, label):
         item = gtk.ImageMenuItem(stock_id = stock)
         if label:
-            item.set_label(label)
+            item.set_property('label', label)
         self._addItem(callback, position, item)
         
     def _addCheckMenuItem(self, callback, position, label, underline):
         item = gtk.CheckMenuItem(label, underline)
-        item.set_label(label)
+        item.set_property('label', label)
         self._addItem(callback, position, item)
         
     def _addSeparator(self, position):
