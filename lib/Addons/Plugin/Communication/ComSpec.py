@@ -189,10 +189,12 @@ def t_str(val, con = None, addr = None):
             return None
         else:
             val = base64.b64decode(val)
-            if val[-1] != '\0':
-                raise ValueError()
-            else:
+            if val[-1] == '\0':
                 return val[:-1]
+            elif val[-1] == '\x01':
+                return unicode(val[:-1])
+            else:
+                raise ValueError()
     except TypeError:
         raise ValueError()
         
@@ -200,8 +202,12 @@ def t_str(val, con = None, addr = None):
 def r_str(val, con=None, addr = None):
     if val is None:
         return 'None'
+    elif isinstance(val, str):
+        return base64.b64encode(val + '\0')
+    elif isinstance(val, unicode):
+        return base64.b64encode(val + '\x01')
     else:
-        return base64.b64encode(str(val + '\0'))
+        raise ValueError()
     
 t_str = reverse(r_str)(t_str)
 
