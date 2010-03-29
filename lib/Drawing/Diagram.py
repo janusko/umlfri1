@@ -46,9 +46,6 @@ class CDiagram(CBaseObject):
     def GetDomainObject(self):
         return self.domainobject
     
-    def GetValue(self, key):
-        return self.domainobject.GetValue(key)
-    
     def SetValue(self, key, value):
         self.domainobject.SetValue(key, value)
         self.revision += 1
@@ -66,6 +63,9 @@ class CDiagram(CBaseObject):
     
     def SetSaveInfo(self, value):
         return self.domainobject.SetSaveInfo(value)
+    
+    def HasVisualAttribute(self, key):
+        return self.domainobject.HasVisualAttribute(key)
         
     def GetRevision(self):
         """
