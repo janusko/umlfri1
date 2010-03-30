@@ -4,7 +4,7 @@ from Container import CContainer
 
 class CMenu(CContainer, lib.GenericGui.CMenu):
     
-    def _addMenuItem(self, callback, position, label, underline, imagefilename):
+    def _addMenuItem(self, guiId, callback, position, label, underline, imagefilename):
         if imagefilename:
             item = gtk.ImageMenuItem(label)
             image = gtk.Image()
@@ -12,31 +12,31 @@ class CMenu(CContainer, lib.GenericGui.CMenu):
             item.set_image(image)
         else:
             item = gtk.MenuItem(label, underline)
-        self._addItem(callback, position, item)
+        self._addItem(guiId, callback, position, item)
         
-    def _addStockMenuItem(self, callback, position, stock, label):
+    def _addStockMenuItem(self, guiId, callback, position, stock, label):
         item = gtk.ImageMenuItem(stock_id = stock)
         if label:
             item.set_property('label', label)
-        self._addItem(callback, position, item)
+        self._addItem(guiId, callback, position, item)
         
-    def _addCheckMenuItem(self, callback, position, label, underline):
+    def _addCheckMenuItem(self, guiId, callback, position, label, underline):
         item = gtk.CheckMenuItem(label, underline)
         item.set_property('label', label)
-        self._addItem(callback, position, item)
+        self._addItem(guiId, callback, position, item)
         
-    def _addSeparator(self, position):
-        self._addItem(None, position, gtk.SeparatorMenuItem())
+    def _addSeparator(self, guiId, position):
+        self._addItem(guiId, None, position, gtk.SeparatorMenuItem())
     
-    def AddMenuItem(self, callback, position, label, underline, imagefilename):
-        gtk.idle_add(self._addMenuItem, callback, position, label, underline, imagefilename)
+    def AddMenuItem(self, guiId, callback, position, label, underline, imagefilename):
+        gtk.idle_add(self._addMenuItem, guiId, callback, position, label, underline, imagefilename)
     
-    def AddStockMenuItem(self, callback, position, stock, label):
-        gtk.idle_add(self._addStockMenuItem, callback, position, stock, label)
+    def AddStockMenuItem(self, guiId, callback, position, stock, label):
+        gtk.idle_add(self._addStockMenuItem, guiId, callback, position, stock, label)
     
-    def AddCheckMenuItem(self, callback, position, label, underline):
-        gtk.idle_add(self._addCheckMenuItem, callback, position, label, underline)
+    def AddCheckMenuItem(self, guiId, callback, position, label, underline):
+        gtk.idle_add(self._addCheckMenuItem, guiId, callback, position, label, underline)
     
-    def AddSeparator(self, position):
-        gtk.idle_add(self._addSeparator, position)
+    def AddSeparator(self, guiId, position):
+        gtk.idle_add(self._addSeparator, guiId, position)
     

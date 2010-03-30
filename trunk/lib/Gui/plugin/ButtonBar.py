@@ -4,7 +4,7 @@ from Container import CContainer
 
 class CButtonBar(CContainer, lib.GenericGui.CButtonBar):
     
-    def _addButton(self, callback, position, stock, label, imagefilename, tooglebutton):
+    def _addButton(self, guiId, callback, position, stock, label, imagefilename, tooglebutton):
         if tooglebutton:
             item = gtk.ToggleToolButton(stock)
         else:
@@ -19,17 +19,17 @@ class CButtonBar(CContainer, lib.GenericGui.CButtonBar):
             image.show()
             item.set_icon_widget(image)
             
-        self._addItem(callback, position, item)
+        self._addItem(guiId, callback, position, item)
     
-    def _addSeparator(self, position):
-        self._addItem(None, position, gtk.SeparatorToolItem())
+    def _addSeparator(self, guiId, position):
+        self._addItem(guiId, None, position, gtk.SeparatorToolItem())
     
-    def AddButton(self, callback, position, label, imagefilename, tooglebutton):
-        gtk.idle_add(self._addButton, callback, position, None, label, imagefilename, tooglebutton)
+    def AddButton(self, guiId, callback, position, label, imagefilename, tooglebutton):
+        gtk.idle_add(self._addButton, guiId, callback, position, None, label, imagefilename, tooglebutton)
         
-    def AddStockButton(self, callback, position, stock, label, tooglebutton):
-        gtk.idle_add(self._addButton, callback, position, stock, label, None, tooglebutton)
+    def AddStockButton(self, guiId, callback, position, stock, label, tooglebutton):
+        gtk.idle_add(self._addButton, guiId, callback, position, stock, label, None, tooglebutton)
         
-    def AddSeparator(self, position):
-        gtk.idle_add(self._addSeparator, position)
+    def AddSeparator(self, guiId, position):
+        gtk.idle_add(self._addSeparator, guiId, position)
     
