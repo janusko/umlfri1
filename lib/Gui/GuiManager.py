@@ -55,14 +55,14 @@ class CGuiManager(object):
             self.lock.acquire()
             if item is None:
                 return None
-            if hasattr(item, '_UIDref'):
-                return registrar.GetObject(item._UIDref)
+            if hasattr(item, '_pluginShade'):
+                return item._pluginShade
             else:
                 cls = CGuiManager.transformations.get(item.__class__, None)
                 if cls is None:
                     return None
-                result = cls(item, self)
-                item._UIDref = result.GetUID()
+                result = cls(item, self, item.get_name())
+                item._pluginShade = result
                 CGuiManager.items.append(result)
                 return result
         finally:

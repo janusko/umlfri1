@@ -11,32 +11,36 @@ class IMenu(IWidget):
         return list(him.GetItems())
     
     @result(r_none)
+    @parameter('guiId', t_str)
     @parameter('callback', t_callback)
     @parameter('position', t_int)
     @parameter('label', t_str)
     @parameter('underline', t_bool)
     @parameter('imagefilename', t_str)
-    def AddMenuItem(him, callback, position, label, underline=True, imagefilename=None):
-        return him.AddMenuItem(callback, position, label, underline, imagefilename)
+    def AddMenuItem(him, guiId, callback, position, label, underline=True, imagefilename=None):
+        return him.AddMenuItem(guiId, callback, position, label, underline, imagefilename)
     
     @result(r_none)
+    @parameter('guiId', t_str)
     @parameter('callback', t_callback)
     @parameter('position', t_int)
     @parameter('stock', t_str)
     @parameter('label', t_str)
-    def AddStockMenuItem(him, callback, position, stock, label=None):
-        return him.AddStockMenuItem(callback, position, stock, label)
+    def AddStockMenuItem(him, guiId, callback, position, stock, label=None):
+        return him.AddStockMenuItem(guiId, callback, position, stock, label)
     
     @result(r_none)
+    @parameter('guiId', t_str)
     @parameter('callback', t_callback)
     @parameter('position', t_int)
     @parameter('label', t_str)
     @parameter('underline', t_bool)
-    def AddCheckMenuItem(him, callback, position, label, underline=True):
-        return him.AddCheckMenuItem(callback, position, label, underline)
+    def AddCheckMenuItem(him, guiId, callback, position, label, underline=True):
+        return him.AddCheckMenuItem(guiId, callback, position, label, underline)
     
     @result(r_none)
+    @parameter('guiId', t_str)
     @parameter('position', t_int)
-    def AddSeparator(him, position):
-        return him.AddSeparator(position)
+    def AddSeparator(him, guiId, position):
+        return him.AddSeparator(guiId, position)
 

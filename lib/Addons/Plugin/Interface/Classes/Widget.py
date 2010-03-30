@@ -7,6 +7,10 @@ class IWidget(IBase):
     
     __cls__ = None
     
+    @result(r_str)
+    def GetGuiId(him):
+        return him.GetGuiId()
+    
     @result(r_none)
     @parameter('value', t_bool)
     def SetSensitive(him, value):
