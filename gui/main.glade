@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <glade-interface>
-<!-- interface-requires gtk+ 2.16 -->
-<!-- interface-naming-policy toplevel-contextual -->
+  <!-- interface-requires gtk+ 2.16 -->
+  <!-- interface-naming-policy toplevel-contextual -->
   <widget class="GtkWindow" id="frmMain">
     <property name="width_request">640</property>
     <property name="height_request">480</property>
@@ -242,7 +242,7 @@
                       </widget>
                     </child>
                     <child>
-                      <widget class="GtkImageMenuItem" id="mnuAlignLeft">
+                      <widget class="GtkImageMenuItem" id="mnuAlignMostLeft">
                         <property name="label" translatable="yes">Align _left</property>
                         <property name="visible">True</property>
                         <property name="accel_path">l</property>
@@ -258,7 +258,7 @@
                       </widget>
                     </child>
                     <child>
-                      <widget class="GtkImageMenuItem" id="mnuAlignRight">
+                      <widget class="GtkImageMenuItem" id="mnuAlignMostRight">
                         <property name="label" translatable="yes">Align _right</property>
                         <property name="visible">True</property>
                         <property name="accel_path">r</property>
@@ -274,7 +274,7 @@
                       </widget>
                     </child>
                     <child>
-                      <widget class="GtkImageMenuItem" id="mnuAlignTop">
+                      <widget class="GtkImageMenuItem" id="mnuAlignMostTop">
                         <property name="label" translatable="yes">Align _top</property>
                         <property name="visible">True</property>
                         <property name="accel_path">c</property>
@@ -290,7 +290,7 @@
                       </widget>
                     </child>
                     <child>
-                      <widget class="GtkImageMenuItem" id="mnuAlignBottom">
+                      <widget class="GtkImageMenuItem" id="mnuAlignMostBottom">
                         <property name="label" translatable="yes">Align _bottom</property>
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>

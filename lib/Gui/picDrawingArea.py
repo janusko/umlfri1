@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from lib.Depend.gtk2 import gtk
 from lib.Depend.gtk2 import gobject
 
@@ -15,6 +16,8 @@ from lib.Connections import CConnectionObject
 from lib.Exceptions.UserException import *
 from lib.Drawing.Canvas import CGtkCanvas, CSvgCanvas, CCairoCanvas, CExportCanvas
 from lib.Drawing import Element
+
+import tidy
 
 import thread
 import os.path
@@ -922,92 +925,63 @@ class CpicDrawingArea(CWidget):
         return canvas.Finish()
 
     ### Align & tidy methods
-    ##  ____________________
-    
     ## Takes all selected Elements (ONLY Elements, no Labels or Connections!)
-    ## and align them to the most left position occured among them
-    
+    #left
     def AlignLeft(self, widget = None):
-        selected = self.Diagram.GetSelectedElements()
-        # at first: initialization &retaking of position of the 1st element
-        try:
-            min_left =selected.next().GetPosition()[0]
-        except StopIteration:
-            return
-        # now the iteration through the rest of SelectedElements
-        temp=0
-        for i in selected:
-            temp = i.GetPosition()[0]
-            if min_left > temp:
-                min_left =temp
-        # now we have the most left location
-        # set the x position of all selected elements to that most left one!
-        for sel in self.Diagram.GetSelectedElements():
-            sel.SetPosition((min_left, sel.GetPosition()[1]))
+        # use the algorithm for Alignment
+        tidy.CsetToAlign( self.Diagram.GetSelectedElements(), self.Diagram ).\
+          AlignLeft( 0 ) #temporary hack
+        #will be used self.Diagram.GetElementAtPosition(self.canvas, pos) in future
         # redraw canvas!
         self.Paint()
-
-
-    def AlignTop(self, widget = None):
-        selected = self.Diagram.GetSelectedElements()
-        # at first: initialization &retaking of position of the 1st element
-        try:
-            min_top =selected.next().GetPosition()[1]
-        except StopIteration:
-            return
-        # now the iteration through the rest of SelectedElements
-        temp=0
-        for i in selected:
-            temp = i.GetPosition()[1]
-            if min_top > temp:
-                min_top =temp
-        # now we have the most left location
-        # set the x position of all selected elements to that most left one!
-        for sel in self.Diagram.GetSelectedElements():
-            sel.SetPosition(( sel.GetPosition()[0], min_top ))
+    
+    def AlignMostLeft(self, widget = None):
+        # use the algorithm for Alignment
+        tidy.CsetToAlign( self.Diagram.GetSelectedElements(), self.Diagram ).AlignMostLeft()
         # redraw canvas!
         self.Paint()
-
-
+    
+    #right
     def AlignRight(self, widget = None):
-        selected = self.Diagram.GetSelectedElements()
-        # at first: initialization &retaking of position of the 1st element
-        try:
-            temp = selected.next()
-            max_right = temp.GetPosition()[0] + temp.GetSize(self.Diagram)[0]
-        except StopIteration:
-            return
-        # now the iteration through the rest of SelectedElements
-        temp=0
-        for i in selected:
-            temp = i.GetPosition()[0] + i.GetSize(self.Diagram)[0]
-            if max_right < temp:
-                max_right =temp
-        # now we have the most right location
-        # set the x position of all selected elements to that most right one!
-        for sel in self.Diagram.GetSelectedElements():
-            sel.SetPosition(( max_right - sel.GetSize(self.Diagram)[0] , sel.GetPosition()[1]))
+        # use the algorithm for Alignment
+        tidy.CsetToAlign( self.Diagram.GetSelectedElements(), self.Diagram ).\
+          AlignRight( 200 ) #temporary hack
+        #will be used self.Diagram.GetElementAtPosition(self.canvas, pos) in future
         # redraw canvas!
         self.Paint()
-
-
+    
+    def AlignMostRight(self, widget = None):
+        # use the algorithm for Alignment
+        tidy.CsetToAlign( self.Diagram.GetSelectedElements(), self.Diagram ).AlignMostRight()
+        # redraw canvas!
+        self.Paint()
+    
+    #top
+    def AlignTop(self, widget = None):
+        # use the algorithm for Alignment
+        tidy.CsetToAlign( self.Diagram.GetSelectedElements(), self.Diagram ).\
+             AlignTop( 0 ) #temporary hack
+        #will be used self.Diagram.GetElementAtPosition(self.canvas, pos) in future
+        # redraw canvas!
+        self.Paint()
+    
+    def AlignMostTop(self, widget = None):
+        # use the algorithm for Alignment
+        tidy.CsetToAlign( self.Diagram.GetSelectedElements(), self.Diagram ).AlignMostTop()
+        # redraw canvas!
+        self.Paint()
+    
+    #bottom
     def AlignBottom(self, widget = None):
-        selected = self.Diagram.GetSelectedElements()
-        # at first: initialization &retaking of position of the 1st element
-        try:
-            temp = selected.next()
-            max_bottom = temp.GetPosition()[1] + temp.GetSize(self.Diagram)[1]
-        except StopIteration:
-            return
-        # now the iteration through the rest of SelectedElements
-        temp=0
-        for i in selected:
-            temp = i.GetPosition()[1] + i.GetSize(self.Diagram)[1]
-            if max_bottom < temp:
-                max_bottom =temp
-        # now we have the most right location
-        # set the x position of all selected elements to that most right one!
-        for sel in self.Diagram.GetSelectedElements():
-            sel.SetPosition(( sel.GetPosition()[0], max_bottom - sel.GetSize(self.Diagram)[1]))
+        # use the algorithm for Alignment
+        tidy.CsetToAlign( self.Diagram.GetSelectedElements(), self.Diagram ).\
+          AlignBottom( 0 ) #temporary hack
+        #will be used self.Diagram.GetElementAtPosition(self.canvas, pos) in future
+        # redraw canvas!
+        self.Paint()
+    
+    def AlignMostBottom(self, widget = None):
+        # use the algorithm for Alignment
+        tidy.CsetToAlign( self.Diagram.GetSelectedElements(), self.Diagram ).AlignMostBottom()
         # redraw canvas!
         self.Paint()
