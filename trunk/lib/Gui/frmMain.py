@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from lib.Depend.gtk2 import gtk
 
 from common import CWindow, event
@@ -38,7 +39,7 @@ class CfrmMain(CWindow):
         'mItemProject',
         #############
         'mItemDiagram',
-        'mnuExport', 'mnuAlignLeft', 'mnuAlignRight', 'mnuAlignTop', 'mnuAlignBottom',
+        'mnuExport', 'mnuAlignMostLeft', 'mnuAlignMostRight', 'mnuAlignMostTop', 'mnuAlignMostBottom',
         #############
         'mItemView',
         'mnuViewTools', 'mnuViewCommands', 'mnuNormalSize', 'mnuZoomIn','mnuZoomOut', 'mnuBestFit',
@@ -615,22 +616,22 @@ class CfrmMain(CWindow):
             self.UpdateMenuSensitivity()
 
     #Methods of alignment &tidy
-    @event('mnuAlignLeft', 'activate')
+    @event('mnuAlignMostLeft', 'activate')
     def on_mnuAlignLeft_activate(self, widget):
         if self.picDrawingArea.HasFocus():
-            self.picDrawingArea.AlignLeft()
+            self.picDrawingArea.AlignMostLeft()
 
-    @event('mnuAlignRight', 'activate')
+    @event('mnuAlignMostRight', 'activate')
     def on_mnuAlignRight_activate(self, widget):
         if self.picDrawingArea.HasFocus():
-            self.picDrawingArea.AlignRight()
+            self.picDrawingArea.AlignMostRight()
 
-    @event('mnuAlignTop', 'activate')
+    @event('mnuAlignMostTop', 'activate')
     def on_mnuAlignTop_activate(self, widget):
         if self.picDrawingArea.HasFocus():
-            self.picDrawingArea.AlignTop()
+            self.picDrawingArea.AlignMostTop()
 
-    @event('mnuAlignBottom', 'activate')
+    @event('mnuAlignMostBottom', 'activate')
     def on_mnuAlignBottom_activate(self, widget):
         if self.picDrawingArea.HasFocus():
-            self.picDrawingArea.AlignBottom()
+            self.picDrawingArea.AlignMostBottom()
