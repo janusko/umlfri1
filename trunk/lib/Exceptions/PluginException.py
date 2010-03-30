@@ -10,4 +10,6 @@ class PluginUnknownMethod(PluginError): pass
 class PluginInvalidMethodParameters(PluginError): pass
 class PluginProjectNotLoaded(PluginError): pass
 class PluginUnknownConstructor(PluginError): pass
+    
+class PluginInMainloop(PluginError): pass
 

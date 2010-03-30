@@ -16,4 +16,4 @@ from lib.Addons.Plugin.Client.Interface import CInterface
 interface = CInterface(port)
 interface._Init(uri)
 plugin.pluginMain(interface)
-interface.WaitTillClosed()
+interface.Mainloop()

@@ -8,7 +8,7 @@ from ExceptionCarrier import CExceptionCarrier
 
 class CConnection(object):
     
-    def __init__(self, port):
+    def __init__(self, port, mainloop):
         self.lock = thread.allocate()
         self.lastid = 0
         self.results = {}
@@ -16,12 +16,14 @@ class CConnection(object):
         sock.connect(('localhost', port))
         self.wrapper = CSocketWrapper(sock, self, None, False)
         self.guicallback = {}
-        self.finalized = thread.allocate()
-        self.finalized.acquire()
+        self.mainloop = mainloop
         
         self.callbacks = {}
         self.callbackidx = -1
         self.callbacklock = thread.allocate()
+    
+    def SetMainloop(self, mainloop):
+        self.mainloop = mainloop
     
     def Command(self, command, params, data, addr):
         try:
@@ -62,13 +64,13 @@ class CConnection(object):
             elif code == RESP_GUI_ACTIVATED:
                 path = params['path']
                 if path in self.guicallback:
-                    thread.start_new(self.guicallback[path], (path, ))
+                    self.mainloop.Call(self.guicallback[path], path)
                     
             elif code == RESP_CALLBACK:
-                thread.start_new(self.callbacks[int(params['callback'])], ())
+                self.mainloop.Call(self.callbacks[int(params['callback'])])
             
             elif code == RESP_FINALIZE:
-                self.finalized.release()
+                self.mainloop.Stop()
                 
         finally:
             self.lock.release()
@@ -110,8 +112,3 @@ class CConnection(object):
         finally:
             self.callbacklock.release()
     
-    
-    def WaitTillClosed(self):
-        self.finalized.acquire()
-        self.finalized.release()
-        return
