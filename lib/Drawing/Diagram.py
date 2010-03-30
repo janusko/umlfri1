@@ -85,10 +85,16 @@ class CDiagram(CBaseObject):
         self.revision += 1
     
     def GetName(self):
-        return self.domainobject.GetValue(self.type.GetIdentity() or DEFAULT_IDENTITY)
+        if self.type:
+            return self.domainobject.GetValue(self.type.GetIdentity() or DEFAULT_IDENTITY)
+        else:
+            return self.name
         
     def SetName(self, value):
-        self.domainobject.SetValue(self.type.GetIdentity() or DEFAULT_IDENTITY if self.type else DEFAULT_IDENTITY, value)
+        if self.type:
+            self.domainobject.SetValue(self.type.GetIdentity() or DEFAULT_IDENTITY if self.type else DEFAULT_IDENTITY, value)
+        else:
+            self.name = value
     
     def GetHScrollingPos(self):
         return self.scrollingPos[0]
