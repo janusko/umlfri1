@@ -22,4 +22,4 @@ class CPythonStarter(object):
         env['UMLFRI_PATH'] = str(path)
         env['UMLFRI_URI'] = str(uri)
         
-        self.__process = subprocess.Popen(self.__pl_runner, shell = (os.name == 'nt'), env = env)
+        self.__process = subprocess.Popen([self.__pl_runner], shell = (os.name == 'nt'), env = env)
