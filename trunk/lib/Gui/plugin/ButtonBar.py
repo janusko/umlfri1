@@ -25,11 +25,11 @@ class CButtonBar(CContainer, lib.GenericGui.CButtonBar):
         self._addItem(guiId, None, position, gtk.SeparatorToolItem())
     
     def AddButton(self, guiId, callback, position, label, imagefilename, tooglebutton):
-        gtk.idle_add(self._addButton, guiId, callback, position, None, label, imagefilename, tooglebutton)
+        self._addButton(guiId, callback, position, None, label, imagefilename, tooglebutton)
         
     def AddStockButton(self, guiId, callback, position, stock, label, tooglebutton):
-        gtk.idle_add(self._addButton, guiId, callback, position, stock, label, None, tooglebutton)
+        self._addButton(guiId, callback, position, stock, label, None, tooglebutton)
         
     def AddSeparator(self, guiId, position):
-        gtk.idle_add(self._addSeparator, guiId, position)
+        self._addSeparator(guiId, position)
     

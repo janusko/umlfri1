@@ -12,7 +12,7 @@ class CWidget(lib.GenericGui.CWidget):
         return self._guiId
         
     def SetSensitive(self, value):
-        gtk.idle_add(self.obj.set_property, 'sensitive', value)
+        self.obj.set_property('sensitive', value)
         
     def GetSensitive(self):
         return self.obj.get_property('sensitive')

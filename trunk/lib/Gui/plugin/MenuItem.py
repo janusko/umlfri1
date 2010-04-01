@@ -8,11 +8,11 @@ class CMenuItem(lib.GenericGui.CMenuItem, CWidget):
         return self.obj.get_property('label')
     
     def SetLabel(self, value):
-        gtk.idle_add(self.obj.set_property, 'label', value)
+        self.obj.set_property('label', value)
     
     def GetSubmenu(self):
         return self.manager.GetItem(self.obj.get_submenu())
     
     def AddSubmenu(self):
         menu = gtk.Menu()
-        gtk.idle_add(self.obj.set_submenu, menu)
+        self.obj.set_submenu(menu)

@@ -29,14 +29,14 @@ class CMenu(CContainer, lib.GenericGui.CMenu):
         self._addItem(guiId, None, position, gtk.SeparatorMenuItem())
     
     def AddMenuItem(self, guiId, callback, position, label, underline, imagefilename):
-        gtk.idle_add(self._addMenuItem, guiId, callback, position, label, underline, imagefilename)
+        self._addMenuItem(guiId, callback, position, label, underline, imagefilename)
     
     def AddStockMenuItem(self, guiId, callback, position, stock, label):
-        gtk.idle_add(self._addStockMenuItem, guiId, callback, position, stock, label)
+        self._addStockMenuItem(guiId, callback, position, stock, label)
     
     def AddCheckMenuItem(self, guiId, callback, position, label, underline):
-        gtk.idle_add(self._addCheckMenuItem, guiId, callback, position, label, underline)
+        self._addCheckMenuItem(guiId, callback, position, label, underline)
     
     def AddSeparator(self, guiId, position):
-        gtk.idle_add(self._addSeparator, guiId, position)
+        self._addSeparator(guiId, position)
     
