@@ -21,6 +21,7 @@ from tabStartPage import CtabStartPage
 from lib.Distconfig import IMAGES_PATH
 from lib.Gui.diagramPrint import CDiagramPrint
 from lib.Exceptions import UserException
+from lib.Project import CProjectNode
 
 
 class CfrmMain(CWindow):
@@ -541,7 +542,7 @@ class CfrmMain(CWindow):
     @event('application.bus', 'content-update', False)
     @event('application.bus', 'content-update-from-plugin', True)
     def on_nbProperties_content_update(self, widget, element, property, fromPlugin):
-        if isinstance(element, (CElement, CConnection)):
+        if isinstance(element, (CElement, CConnection, CProjectNode)):
             element = element.GetObject()
         if element.HasVisualAttribute(property):
             if (self.picDrawingArea.GetDiagram().HasElementObject(element)
