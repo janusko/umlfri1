@@ -33,4 +33,16 @@ class IAdapter(IBase):
     @result(r_object)
     def GetButtonBar(him):
         return him.GetButtonBar()
+        
+    @result(r_none)
+    @parameter('event', t_str)
+    @parameter('callback', t_callback)
+    def AddNotification(him, event, callback):
+        him.AddNotification(event, callback)
+
+    @result(r_none)
+    @parameter('event', t_str)
+    @parameter('callback', t_callback)
+    def RemoveNotification(him, event, callback):
+        him.RemoveNotification(event, callback)
 

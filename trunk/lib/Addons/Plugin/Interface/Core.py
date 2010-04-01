@@ -3,6 +3,7 @@ from lib.Depend.gtk2 import gtk
 from lib.Addons.Plugin.Communication.ComSpec import *
 from lib.Exceptions import *
 from meta import Meta
+from lib.Base import CBaseObject
 
 class CCore(object):
     
@@ -216,6 +217,35 @@ class CCore(object):
         else:
             self.manager.Send(addr, RESP_INVALID_COMMAND_TYPE, command = 'plugin', type = ctype, __id__ = callid)
     
-    def _callback(self, id, addr):
-        self.manager.Send(addr, RESP_CALLBACK, callback = id)
+    def _callback(self, id, addr, **kw):
+        result = {}
+        for key, value in kw.iteritems():
+            fun = None
+            
+            if isinstance(value, bool):
+                fun = r_bool
+            elif isinstance(value, CBaseObject):
+                fun = r_object
+            elif isinstance(value, (str, unicode)):
+                fun = r_str
+            elif isinstance(value, (int, long)):
+                fun = r_int
+            elif isinstance(value, list) and (len(value) == 0 or isinstance(value[0], CBaseObject)):
+                fun = r_objectlist
+            elif isinstance(value, tuple) and len(val) == 2:
+                if isinstance(val[0], int):
+                    fun = r_2intTuple
+                elif isinstance(val[0], bool):
+                    fun = r_2boolTuple
+                elif isinstance(val[0], tuple):
+                    fun = r_2x2intTuple
+            elif val is None:
+                fun = r_none
+            
+            if fun is not None:
+                result[key] = (fun.__name__[2:], fun(value, self, addr))
+            else:
+                raise ValueError
+            
+        self.manager.Send(addr, RESP_CALLBACK, callback = id, kwds = repr(result))
             

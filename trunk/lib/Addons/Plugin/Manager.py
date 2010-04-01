@@ -58,6 +58,9 @@ class CPluginManager(object):
         '''
         return self.pluginAdapter.GetGuiManager()
     
+    def GetPluginAdapter(self):
+        return self.pluginAdapter
+    
     def Send(self, addr, code, **params):
         if addr not in self.connection:
             return
