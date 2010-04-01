@@ -8,5 +8,5 @@ class CButton(lib.GenericGui.CButton, CWidget):
         return self.obj.get_label()
     
     def SetLabel(self, value):
-        return self.obj.set_label(value)
+        self.obj.set_label(value)
     

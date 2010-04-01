@@ -13,4 +13,4 @@ class CImageMenuItem(lib.GenericGui.CImageMenuItem, CMenuItem):
         self.obj.set_image(image)
     
     def SetImageFromFile(self, filename):
-        gtk.idle_add(self._setImage, filename)
+        self._setImage(filename)
