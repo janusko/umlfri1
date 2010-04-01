@@ -18,6 +18,11 @@ class CContainer(CWidget):
     def GetItems(self):
         for child in self.obj.get_children():
             yield self.manager.GetItem(child)
+    
+    def GetItem(self, guiId):
+        for item in self.GetItems():
+            if item.GetGuiId() == guiId:
+                return item
 
 
 

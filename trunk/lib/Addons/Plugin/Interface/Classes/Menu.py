@@ -1,14 +1,10 @@
-from Widget import IWidget
+from Container import IContainer
 from lib.GenericGui import CMenu
 from lib.Addons.Plugin.Communication.ComSpec import *
 from lib.Addons.Plugin.Interface.decorators import *
 
-class IMenu(IWidget):
+class IMenu(IContainer):
     __cls__ = CMenu
-    
-    @result(r_objectlist)
-    def GetItems(him):
-        return list(him.GetItems())
     
     @result(r_object)
     @parameter('guiId', t_str)
