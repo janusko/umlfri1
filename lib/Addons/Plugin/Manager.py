@@ -78,9 +78,6 @@ class CPluginManager(object):
         finally:
             self.conlock.release()
             
-    def DomainValueChanged(self, element, path):
-        self.SendToAll(RESP_DOMAIN_VALUE_CHANGED, element = r_object(element), path = path)
-        
     def GetPort(self):
         return self.acceptserver.GetPort()
     

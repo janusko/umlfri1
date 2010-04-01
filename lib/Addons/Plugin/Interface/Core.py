@@ -217,14 +217,17 @@ class CCore(object):
         else:
             self.manager.Send(addr, RESP_INVALID_COMMAND_TYPE, command = 'plugin', type = ctype, __id__ = callid)
     
-    def _callback(self, id, addr, **kw):
-        result = {}
-        for key, value in kw.iteritems():
+    def _callback(self, id, addr, *args, **kwds):
+        result = []
+        for value in args:
             fun = None
             
             if isinstance(value, bool):
                 fun = r_bool
             elif isinstance(value, CBaseObject):
+                fun = r_object
+            elif isinstance(self.guimanager.GetItem(value), CBaseObject):
+                value = self.guimanager.GetItem(value)
                 fun = r_object
             elif isinstance(value, (str, unicode)):
                 fun = r_str
@@ -239,13 +242,13 @@ class CCore(object):
                     fun = r_2boolTuple
                 elif isinstance(val[0], tuple):
                     fun = r_2x2intTuple
-            elif val is None:
+            elif value is None:
                 fun = r_none
             
             if fun is not None:
-                result[key] = (fun.__name__[2:], fun(value, self, addr))
+                result.append((fun.__name__[2:], fun(value, self, addr)))
             else:
                 raise ValueError
             
-        self.manager.Send(addr, RESP_CALLBACK, callback = id, kwds = repr(result))
+        self.manager.Send(addr, RESP_CALLBACK, callback = id, args = repr(result))
             

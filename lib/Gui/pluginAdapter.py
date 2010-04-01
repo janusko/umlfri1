@@ -33,9 +33,9 @@ class CPluginAdapter(CBaseObject, CGuiObject):
         else:
             raise ValueError()
     
-    def Notify(self, event, **kwds):
+    def Notify(self, event, *args):
         for callback in self.notifications[event]:
-            callback(**kwds)
+            callback(*args)
         
     def _generateUID(self):
         return 'adapter'
@@ -61,8 +61,7 @@ class CPluginAdapter(CBaseObject, CGuiObject):
     def gui_change_domain_value(self, widget, element, property):
         if isinstance(element, CProjectNode):
             element = element.GetObject()
-        self.manager.DomainValueChanged(element, property)
-        self.Notify('content-update', element = element, property = property)
+        self.Notify('content-update', element, property)
     
     @event('application.bus', 'project-opened')
     def gui_project_opened(self, widget):
