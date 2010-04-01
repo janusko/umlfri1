@@ -305,7 +305,6 @@ class ClwProperties(CWidget):
         
     @event('application.bus', 'content-update-from-plugin')
     def on_content_update(self, widget, element, property):
-        if (self.element is not None and (element is self.element 
-            or not isinstance(self.element, CDiagram) and element is self.element.GetObject())):
+        if self.element is not None and element is self.element:
             self.Fill(self.element)
         
