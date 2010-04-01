@@ -1,15 +1,11 @@
-from Widget import IWidget
+from Container import IContainer
 from lib.GenericGui import CButtonBar
 from lib.Addons.Plugin.Communication.ComSpec import *
 from lib.Addons.Plugin.Interface.decorators import *
 
-class IButtonBar(IWidget):
+class IButtonBar(IContainer):
     
     __cls__ = CButtonBar
-    
-    @result(r_objectlist)
-    def GetItems(him):
-        return list(him.GetItems())
     
     @result(r_object)
     @parameter('guiId', t_str)
