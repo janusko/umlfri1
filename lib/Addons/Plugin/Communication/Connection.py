@@ -1,5 +1,6 @@
 import socket
 import thread
+import ComSpec
 from ComSpec import *
 from lib.Exceptions import *
 from SocketWrapper import CSocketWrapper
@@ -67,7 +68,11 @@ class CConnection(object):
                     self.mainloop.Call(self.guicallback[path], path)
                     
             elif code == RESP_CALLBACK:
-                self.mainloop.Call(self.callbacks[int(params['callback'])])
+                kwds = eval(params['kwds'])
+                for key, value in kwds.iteritems():
+                    kwds[key] = ComSpec.__dict__['r_' + value[0]]._reverse(value[1], self)
+                    
+                self.mainloop.Call(self.callbacks[int(params['callback'])], **kwds)
             
             elif code == RESP_FINALIZE:
                 self.mainloop.Stop()
@@ -106,9 +111,11 @@ class CConnection(object):
     def SetCallback(self, fun):
         try:
             self.callbacklock.acquire()
-            self.callbackidx += 1
-            self.callbacks[self.callbackidx] = fun
-            return self.callbackidx
+            if not hasattr(fun, '_callbackId'):
+                self.callbackidx += 1
+                fun._callbackId = self.callbackidx
+                self.callbacks[self.callbackidx] = fun
+            return fun._callbackId
         finally:
             self.callbacklock.release()
     

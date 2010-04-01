@@ -485,3 +485,5 @@ class CProject(CBaseObject):
                         self.GetMetamodel().GetElementFactory().GetElement(item.get('id')).SetCounter(int(item.get('value')))
                     elif self.GetMetamodel().GetDiagramFactory().HasType(item.get('id')):
                         self.GetMetamodel().GetDiagramFactory().GetDiagram(item.get('id')).SetCounter(int(item.get('value')))
+        
+        self.__addonManager.GetPluginManager().GetPluginAdapter().gui_project_opened(self)
