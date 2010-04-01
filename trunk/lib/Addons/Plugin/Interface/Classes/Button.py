@@ -13,6 +13,7 @@ class IButton(IWidget):
     
     @result(r_none)
     @parameter('value', t_str)
+    @mainthread
     def SetLabel(him, value):
-        return him.SetLabel(value)
+        him.SetLabel(value)
     

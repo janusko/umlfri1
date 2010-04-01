@@ -13,6 +13,7 @@ class IWidget(IBase):
     
     @result(r_none)
     @parameter('value', t_bool)
+    @mainthread
     def SetSensitive(him, value):
         him.SetSensitive(value)
         

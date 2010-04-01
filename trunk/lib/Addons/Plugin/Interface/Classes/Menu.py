@@ -10,37 +10,41 @@ class IMenu(IWidget):
     def GetItems(him):
         return list(him.GetItems())
     
-    @result(r_none)
+    @result(r_object)
     @parameter('guiId', t_str)
     @parameter('callback', t_callback)
     @parameter('position', t_int)
     @parameter('label', t_str)
     @parameter('underline', t_bool)
     @parameter('imagefilename', t_str)
+    @mainthread
     def AddMenuItem(him, guiId, callback, position, label, underline=True, imagefilename=None):
         return him.AddMenuItem(guiId, callback, position, label, underline, imagefilename)
     
-    @result(r_none)
+    @result(r_object)
     @parameter('guiId', t_str)
     @parameter('callback', t_callback)
     @parameter('position', t_int)
     @parameter('stock', t_str)
     @parameter('label', t_str)
+    @mainthread
     def AddStockMenuItem(him, guiId, callback, position, stock, label=None):
         return him.AddStockMenuItem(guiId, callback, position, stock, label)
     
-    @result(r_none)
+    @result(r_object)
     @parameter('guiId', t_str)
     @parameter('callback', t_callback)
     @parameter('position', t_int)
     @parameter('label', t_str)
     @parameter('underline', t_bool)
+    @mainthread
     def AddCheckMenuItem(him, guiId, callback, position, label, underline=True):
         return him.AddCheckMenuItem(guiId, callback, position, label, underline)
     
-    @result(r_none)
+    @result(r_object)
     @parameter('guiId', t_str)
     @parameter('position', t_int)
+    @mainthread
     def AddSeparator(him, guiId, position):
         return him.AddSeparator(guiId, position)
 

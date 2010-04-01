@@ -9,5 +9,6 @@ class IImageMenuItem(IMenuItem):
     
     @result(r_none)
     @parameter('filename', t_str)
+    @mainthread
     def SetImageFromFile(him, filename):
-        return him.SetImageFromFile(filename)
+        him.SetImageFromFile(filename)

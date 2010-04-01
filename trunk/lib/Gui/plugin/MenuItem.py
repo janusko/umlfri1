@@ -16,3 +16,5 @@ class CMenuItem(lib.GenericGui.CMenuItem, CWidget):
     def AddSubmenu(self):
         menu = gtk.Menu()
         self.obj.set_submenu(menu)
+        return self.manager.GetItem(menu)
+        
