@@ -19,17 +19,18 @@ class CButtonBar(CContainer, lib.GenericGui.CButtonBar):
             image.show()
             item.set_icon_widget(image)
             
-        self._addItem(guiId, callback, position, item)
-    
-    def _addSeparator(self, guiId, position):
-        self._addItem(guiId, None, position, gtk.SeparatorToolItem())
+        self.AddItem(guiId, callback, position, item)
+        
+        return self.manager.GetItem(item)
     
     def AddButton(self, guiId, callback, position, label, imagefilename, tooglebutton):
-        self._addButton(guiId, callback, position, None, label, imagefilename, tooglebutton)
+        return self._addButton(guiId, callback, position, None, label, imagefilename, tooglebutton)
         
     def AddStockButton(self, guiId, callback, position, stock, label, tooglebutton):
-        self._addButton(guiId, callback, position, stock, label, None, tooglebutton)
+        return self._addButton(guiId, callback, position, stock, label, None, tooglebutton)
         
     def AddSeparator(self, guiId, position):
-        self._addSeparator(guiId, position)
+        item = gtk.SeparatorToolItem()
+        self.AddItem(guiId, None, position, item)
+        return self.manager.GetItem(item)
     

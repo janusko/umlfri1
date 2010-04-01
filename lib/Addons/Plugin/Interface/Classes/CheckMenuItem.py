@@ -13,8 +13,9 @@ class ICheckMenuItem(IMenuItem):
         
     @result(r_none)
     @parameter('value', t_bool)
+    @mainthread
     def SetActive(him, value): 
-        return him.SetActive(value)
+        him.SetActive(value)
         
     @result(r_bool)
     def GetInconsistent(him):
@@ -22,8 +23,9 @@ class ICheckMenuItem(IMenuItem):
         
     @result(r_none)
     @parameter('value', t_bool)
+    @mainthread
     def SetInconsistent(him, value):
-        return him.SetInconsistent(value)
+        him.SetInconsistent(value)
         
     @result(r_bool)
     def GetRadio(him):
@@ -31,5 +33,6 @@ class ICheckMenuItem(IMenuItem):
         
     @result(r_none)
     @parameter('value', t_bool)
+    @mainthread
     def SetRadio(him, value):
-        return him.SetRadio(value)
+        him.SetRadio(value)

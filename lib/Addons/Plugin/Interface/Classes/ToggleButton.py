@@ -13,5 +13,6 @@ class IToggleButton(IButton):
         
     @result(r_none)
     @parameter('value', t_bool)
+    @mainthread
     def SetActive(him, value):
-        return him.SetActive(value)
+        him.SetActive(value)

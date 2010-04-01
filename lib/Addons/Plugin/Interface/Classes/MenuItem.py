@@ -16,10 +16,12 @@ class IMenuItem(IWidget):
         
     @result(r_none)
     @parameter('value', t_str)
+    @mainthread
     def SetLabel(him, value):
-        return him.SetLabel(value)
+        him.SetLabel(value)
         
-    @result(r_none)
+    @result(r_object)
+    @mainthread
     def AddSubmenu(him):
-        him.AddSubmenu()
+        return him.AddSubmenu()
         
