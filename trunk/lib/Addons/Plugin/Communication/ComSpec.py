@@ -223,7 +223,7 @@ def t_callback(val, con = None, addr = None):
     if val == 'None':
         return None
     else:
-        result = lambda *a, **kw: con._callback(val, addr, **kw)
+        result = lambda *a, **kw: con._callback(val, addr, *a, **kw)
         result._callbackId = (val, addr)
         return result
     

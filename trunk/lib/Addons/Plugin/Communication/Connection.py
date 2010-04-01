@@ -68,11 +68,13 @@ class CConnection(object):
                     self.mainloop.Call(self.guicallback[path], path)
                     
             elif code == RESP_CALLBACK:
-                kwds = eval(params['kwds'])
-                for key, value in kwds.iteritems():
-                    kwds[key] = ComSpec.__dict__['r_' + value[0]]._reverse(value[1], self)
+                args = eval(params['args'])
+                vals = []
+                for value in args:
+                    vals.append(ComSpec.__dict__['r_' + value[0]]._reverse(value[1], self))
                     
-                self.mainloop.Call(self.callbacks[int(params['callback'])], **kwds)
+                callback = self.callbacks[int(params['callback'])]
+                self.mainloop.Call(callback, *vals)
             
             elif code == RESP_FINALIZE:
                 self.mainloop.Stop()
