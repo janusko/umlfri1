@@ -121,7 +121,7 @@ class CConnection(object):
                 self.callbackidx += 1
                 ff._callbackId = self.callbackidx
                 self.callbacks[self.callbackidx] = fun
-            return self.callbackidx
+            return ff._callbackId
         finally:
             self.callbacklock.release()
     
