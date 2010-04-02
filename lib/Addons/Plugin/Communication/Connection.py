@@ -113,11 +113,15 @@ class CConnection(object):
     def SetCallback(self, fun):
         try:
             self.callbacklock.acquire()
-            if not hasattr(fun, '_callbackId'):
+            if hasattr(fun, '__func__'):
+                ff = fun.__func__
+            else:
+                ff = fun
+            if not hasattr(ff, '_callbackId'):
                 self.callbackidx += 1
-                fun._callbackId = self.callbackidx
+                ff._callbackId = self.callbackidx
                 self.callbacks[self.callbackidx] = fun
-            return fun._callbackId
+            return self.callbackidx
         finally:
             self.callbacklock.release()
     
