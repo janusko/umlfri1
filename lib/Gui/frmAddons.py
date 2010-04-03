@@ -77,6 +77,7 @@ class CfrmAddons(CWindow):
     
     def __Load(self):
         self.__MetamodelStore.clear()
+        self.__PluginStore.clear()
         
         for addon in self.application.GetAddonManager().ListAddons():
             if addon.GetType() == 'metamodel':
