@@ -7,9 +7,11 @@ import Diagram
 import ConLabelInfo
 import Metamodel
 import ConnectionType
+import ConnectionAlias
 import DiagramType
 import DomainType
 import ElementType
+import ElementAlias
 import Adapter
 
 import Button
