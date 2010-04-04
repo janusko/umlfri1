@@ -23,12 +23,12 @@ def EncodeValue(value, app, con = None, addr = None):
         fun = 'int'
     elif isinstance(value, list) and (len(value) == 0 or isinstance(value[0], CBaseObject)):
         fun = 'objectlist'
-    elif isinstance(value, tuple) and len(val) == 2:
-        if isinstance(val[0], int):
+    elif isinstance(value, tuple) and len(value) == 2:
+        if isinstance(value[0], int):
             fun = '2intTuple'
-        elif isinstance(val[0], bool):
+        elif isinstance(value[0], bool):
             fun = '2boolTuple'
-        elif isinstance(val[0], tuple):
+        elif isinstance(value[0], tuple):
             fun = '2x2intTuple'
     elif callable(value):
         fun = 'callback'
