@@ -2,6 +2,7 @@ import socket
 import thread
 import ComSpec
 from ComSpec import *
+from Encoding import *
 from lib.Exceptions import *
 from SocketWrapper import CSocketWrapper
 from Future import CFuture
@@ -68,13 +69,14 @@ class CConnection(object):
                     self.mainloop.Call(self.guicallback[path], path)
                     
             elif code == RESP_CALLBACK:
-                args = eval(params['args'])
-                vals = []
-                for value in args:
-                    vals.append(ComSpec.__dict__['r_' + value[0]]._reverse(value[1], self))
+                args = rc_eval(params['args'])
+                kwds = rc_eval(params['kwds'])
+                
+                args = tuple(DecodeValue(i, False, self) for i in args)
+                kwds = dict((k, DecodeValue(v, False, self)) for k, v in kwds.iteritems())
                     
                 callback = self.callbacks[int(params['callback'])]
-                self.mainloop.Call(callback, *vals)
+                self.mainloop.Call(callback, *args, **kwds)
             
             elif code == RESP_FINALIZE:
                 self.mainloop.Stop()
@@ -88,16 +90,15 @@ class CConnection(object):
     def Error(self, addr):
         return True #so that connection won't break
     
-    def Execute(self, command, type, params):
+    def Execute(self, command, type, args, kwds):
         try:
             self.lock.acquire()
             self.lastid += 1
             __id__ = str(self.lastid)
-            params['__id__'] = __id__
             lck = thread.allocate()
             lck.acquire()
             self.results[__id__] = lck
-            self.wrapper.Send(command, type, params = params)
+            self.wrapper.Send(command, type, {'__id__': __id__, 'args': r_eval(args), 'kwds': r_eval(kwds)})
             return CFuture(self.results[__id__], self.results, __id__, self.lock)
         
         finally:

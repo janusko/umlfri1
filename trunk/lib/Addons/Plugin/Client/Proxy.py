@@ -28,7 +28,7 @@ class CProxy(object):
         fun, desc = self.Meta.GetMethod(self.__class__.__name__, name)
         if fun is None:
             raise AttributeError()
-        return CCallable(self.id, name, fun, desc, self.connection)
+        return CCallable(self.id, name, self.connection)
     
     def __getattribute__(self, name):
         res = object.__getattribute__(self, name)
