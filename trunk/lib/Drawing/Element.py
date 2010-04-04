@@ -15,6 +15,9 @@ class CElement(CVisibleObject):
         self.object.AddAppears(diagram)
         self.__AddExistingConnections()
     
+    def GetDiagram(self):
+        return self.diagram()
+    
     def __AddExistingConnections(self):
         if not self.isLoad:
             for i in self.object.GetConnections():
