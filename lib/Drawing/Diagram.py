@@ -9,6 +9,7 @@ from lib.Math2D import CPoint
 from lib.Domains import CDomainObject, CDomainFactory
 from lib.consts import DEFAULT_IDENTITY
 from lib.Base import CBaseObject
+import weakref
     
 class CDiagram(CBaseObject):
     NAME_PROPERY = 'Name' #This must be replaced by domain
@@ -433,7 +434,10 @@ class CDiagram(CBaseObject):
             yield c
 
     def Assign(self, cprojNode):
-        pass
+        self.node = weakref.ref(cprojNode)
+    
+    def GetNode(self):
+        return self.node()
     
     def ShiftElementsToTop(self):
         for selectedElement in self.GetSelectedElements():

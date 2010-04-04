@@ -33,16 +33,16 @@ class CInterface(object):
         return self.adapter
     
     def StartAutocommit(self):
-        return self.connection.Execute('transaction', 'autocommit', {})()
+        return self.connection.Execute('transaction', 'autocommit', (), {})()
     
     def BeginTransaction(self):
-        return self.connection.Execute('transaction', 'begin', {})()
+        return self.connection.Execute('transaction', 'begin', (), {})()
     
     def CommitTransaction(self):
-        return self.connection.Execute('transaction', 'commit', {})()
+        return self.connection.Execute('transaction', 'commit', (), {})()
         
     def RollbackTransaction(self):
-        return self.connection.Execute('transaction', 'rollback', {})()
+        return self.connection.Execute('transaction', 'rollback', (), {})()
     
     def GetTransaction(self):
         return CTransaction(self)
