@@ -21,13 +21,6 @@ def destructive(fun):
     fun._destructive = True
     return fun
 
-def factory(fun):
-    fun._constructor = True
-    fun._result = lambda x: x
-    fun._destructive = True
-    return fun
-    
-
 def reverse(transform):
     def transformation(fun):
         fun._reverse = transform

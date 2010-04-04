@@ -18,11 +18,7 @@ class Meta(type):
             self.interface[dictionary['__cls__']] = dict(
                 (('__class__', self),) +
                 tuple((fname if not getattr(getattr(self, fname), '_constructor', False) else Meta.constructor, 
-                    {'params': self.__joindict(
-                        {getattr(self, fname).func_code.co_varnames[0]: self.implicit}, 
-                        getattr(self, fname)._params if hasattr(getattr(self, fname), '_params') else {}),
-                     'result': getattr(self, fname)._result,
-                     'fname': fname,
+                    {'fname': fname,
                      'destructive': getattr(getattr(self, fname), '_destructive', False)
                     })
                 for fname in dir(self)
@@ -46,27 +42,14 @@ class Meta(type):
             return None, None
     
     @classmethod
-    def Execute(cls, obj, fname, params, core, addr, isobject = True):
-        if isobject:
-            fun, desc = cls.GetMethod(cls.GetClassName(obj), fname)
-            if getattr(fun, '_constructor', False):
-                raise UnknowMethodError()
-        else:
-            fun, desc = cls.GetMethod(obj, fname)
-            if not getattr(fun, '_constructor', False):
-                raise UnknowMethodError()
+    def Execute(cls, obj, fname, args, kwds, core, addr):
+        fun, desc = cls.GetMethod(cls.GetClassName(obj), fname)
         if desc is None:
             raise UnknowMethodError()
-        elif isobject:
-            params[fun.func_code.co_varnames[0]] = obj
-        else:
-            params = dict(zip(fun.func_code.co_varnames, params))
-        params = dict((key, desc['params'][key](params[key], core, addr)) for key in params)
-            
         if hasattr(fun, '_synchronized'):
             fun = fun._synchronized
         try:
-            return desc['result'](fun(**params))
+            return fun(obj, *args, **kwds)
         except TypeError:
             raise PluginInvalidMethodParameters()
         

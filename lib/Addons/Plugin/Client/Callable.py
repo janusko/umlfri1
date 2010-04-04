@@ -1,14 +1,16 @@
+from lib.Addons.Plugin.Communication.Encoding import *
+
 class CCallable(object):
     
-    def __init__(self, id, fname, fun, desc, connection):
+    def __init__(self, id, fname, connection):
         self.id = id
         self.fname = fname
-        self.fun = fun
-        self.desc = desc
         self.connection = connection
     
-    def __call__(self, *args, **params):
-        params.update(zip(self.fun.func_code.co_varnames[1:self.fun.func_code.co_argcount], args))
-        params = dict((key, self.desc['params'][key]._reverse(params[key], self.connection)) for key in params)
-        return self.desc['result']._reverse(self.connection.Execute('exec', '%s.%s'%(self.id, self.fname), params)(), self.connection)
+    def __call__(self, *args, **kwds):
+        args = tuple(EncodeValue(i, False, self.connection) for i in args)
+        kwds = dict((k, EncodeValue(v, False, self.connection)) for k, v in kwds.iteritems())
+        
+        result = rc_eval(self.connection.Execute('exec', '%s.%s'%(self.id, self.fname), args, kwds)())
+        return DecodeValue(result, False, self.connection)
     

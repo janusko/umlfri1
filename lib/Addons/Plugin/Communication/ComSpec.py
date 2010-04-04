@@ -77,26 +77,7 @@ def t_object(val, conn = None, addr = None):
     elif re.match(r'#[-0-9a-z]+$', val) is not None:
         return registrar.GetObject(val[1:])
     else:
-        match = re.match(r'[ ]*(?P<clsname>[a-zA-Z][a-zA-Z0-9_]+)[(](?P<params>.*)[)][ ]*$', val)
-        if match is not None and Meta.HasConstructor(match.groupdict()['clsname']):
-            paramstr = match.groupdict()['params']
-            braces = {'(': 0, '[': 0, '{': 0}
-            reverse = {')':'(', ']':'[', '}':'{'}
-            splits = [-1]
-            for i, c in enumerate(paramstr):
-                if c == ',' and all(j == 0 for j in braces.itervalues()):
-                    splits.append(i)
-                elif c in braces:
-                    braces[c] += 1
-                elif c in reverse:
-                    braces[reverse[c]] -= 1
-            splits.append(len(paramstr))
-            params = []
-            for i in xrange(1, len(splits)):
-                params.append(paramstr[splits[i - 1] + 1 : splits[i]])
-            return Meta.Create(match.groupdict()['clsname'], params)
-        else:
-            raise ValueError()
+        raise ValueError()
 
 def t_classobject(cls):
     def check(val, conn = None, addr = None):
@@ -139,7 +120,7 @@ def r_object(val, conn = None, addr = None):
         
 
 @reverse(rc_objectlist)
-def r_objectlist(val, conn = None):
+def r_objectlist(val, conn = None, addr = None):
     return '[' + ','.join(r_object(i) for i in val) + ']'
 
 @reverse(t_bool)
@@ -169,19 +150,27 @@ def r_2x2intTuple(val, conn = None, addr = None):
 
 t_2x2intTuple = reverse(r_2x2intTuple)(t_2x2intTuple)
 
-@reverse(lambda val, conn = None: None)
+def t_none(val, conn = None, addr = None):
+    if val == 'None':
+        return None
+    else:
+        raise ValueError()
+
+@reverse(t_none)
 def r_none(val, conn = None, addr = None):
     if val is None:
         return 'None'
     else:
         raise ValueError()
+        
+t_none = reverse(r_none)(t_none)
 
 def rc_eval(val, con=None, addr = None):
     return eval(val, {}, {'__builtins__': {}})
     
 @reverse(rc_eval)
 def r_eval(val, con=None, addr = None):
-    return str(val)
+    return `val`
 
 def t_str(val, con = None, addr = None):
     try:

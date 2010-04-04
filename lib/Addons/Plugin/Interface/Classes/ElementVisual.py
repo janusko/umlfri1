@@ -12,14 +12,3 @@ class IElementVisual(IVisibleObject):
     def GetConnections(him):
         return list(him.GetConnections())
     
-    @parameter('diagram', t_classobject(CDiagram))
-    @parameter('obj', t_classobject(CElementObject))
-    @parameter('pos', t_2intTuple)
-    @factory
-    def Create(diagram, obj, pos):
-        if diagram is None or obj is None:
-            raise ValueError()
-        res = CElement(diagram, obj)
-        res.SetPosition(pos)
-        return res
-    

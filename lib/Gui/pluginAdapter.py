@@ -13,16 +13,10 @@ class CPluginAdapter(CBaseObject, CGuiObject):
         self.manager = None
         self.GetUID()
         self._persistent = True
-        self.notifications = {
-            'content-update': [],
-            'project-opened': [],
-        }
+        self.notifications = {}
     
     def AddNotification(self, event, callback):
-        if event in self.notifications:
-            self.notifications[event].append(callback)
-        else:
-            raise ValueError()
+        self.notifications.setdefault(event, []).append(callback)
             
     def RemoveNotification(self, event, callback):
         if event in self.notifications:
@@ -33,9 +27,10 @@ class CPluginAdapter(CBaseObject, CGuiObject):
         else:
             raise ValueError()
     
-    def Notify(self, event, *args):
-        for callback in self.notifications[event]:
-            callback(*args)
+    def Notify(self, event, *args, **kwds):
+        if event in self.notifications:
+            for callback in self.notifications[event]:
+                callback(*args, **kwds)
         
     def _generateUID(self):
         return 'adapter'
@@ -70,7 +65,7 @@ class CPluginAdapter(CBaseObject, CGuiObject):
     def plugin_change_domain_value(self, element, property):
         gobject.idle_add(self.application.GetBus().emit, 'content-update-from-plugin', element, property)
     
-    def plugin_display_warning(self, text):
+    def DisplayWarning(self, text):
         gobject.idle_add(self.application.GetBus().emit, 'run-dialog', 'warning', text)
     
     def GetCanvas(self):
@@ -90,3 +85,4 @@ class CPluginAdapter(CBaseObject, CGuiObject):
     
     def GetButtonBar(self):
         return self.guiManager.GetButtonBar()
+        
