@@ -23,7 +23,7 @@ class IDomainObject(IBase):
     
     @result(r_eval)
     def GetSaveInfo(him):
-        return str(him.GetSaveInfo())
+        return him.GetSaveInfo()
     
     @result(r_str)
     def GetType(him):
