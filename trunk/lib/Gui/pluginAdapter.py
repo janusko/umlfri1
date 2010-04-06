@@ -50,7 +50,6 @@ class CPluginAdapter(CBaseObject, CGuiObject):
     def GetCurrentDiagram(self):
         return self.application.GetWindow('frmMain').picDrawingArea.GetDiagram()
         
-        
     @event('application.bus', 'content-update')
     @event('application.bus', 'content-update-from-plugin')
     def gui_change_domain_value(self, widget, element, property):
@@ -73,25 +72,6 @@ class CPluginAdapter(CBaseObject, CGuiObject):
     def plugin_add_element(self, element):
         self.application.GetWindow('frmMain').picDrawingArea.ToPaint()
         
-    
-    def DisplayWarning(self, text):
-        gobject.idle_add(self.application.GetBus().emit, 'run-dialog', 'warning', text)
-    
     def GetCanvas(self):
         return self.application.GetWindow('frmMain').picDrawingArea.canvas
     
-    def GetMainMenu(self):
-        return self.guiManager.GetMainMenu()
-    
-    def GetTabMenu(self):
-        return self.guiManager.GetTabMenu()
-        
-    def GetTreeMenu(self):
-        return self.guiManager.GetTreeMenu()
-    
-    def GetDrawMenu(self):
-        return self.guiManager.GetDrawMenu()
-    
-    def GetButtonBar(self):
-        return self.guiManager.GetButtonBar()
-        

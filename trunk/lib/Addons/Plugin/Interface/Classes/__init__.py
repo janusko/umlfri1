@@ -13,6 +13,7 @@ import DomainType
 import ElementType
 import ElementAlias
 import Adapter
+import GuiManager
 
 import Button
 import ButtonBar

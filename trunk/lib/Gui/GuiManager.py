@@ -7,7 +7,7 @@ import plugin
 
 from warnings import warn
 
-class CGuiManager(object):
+class CGuiManager(CBaseObject):
     '''
     Encapsulates handling of GUI modifications
     '''
@@ -64,3 +64,7 @@ class CGuiManager(object):
     
     def GetButtonBar(self):
         return self.GetItem(self.app.GetWindow('frmMain').hndCommandBar.get_children()[0])
+    
+    def DisplayWarning(self, text):
+        gobject.idle_add(self.app.GetBus().emit, 'run-dialog', 'warning', text)
+    
