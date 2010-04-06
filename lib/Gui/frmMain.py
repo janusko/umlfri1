@@ -7,7 +7,7 @@ from lib.consts import SCALE_MIN, SCALE_MAX, SCALE_INCREASE, WEB
 from lib.Exceptions import *
 
 import os.path
-from lib.Drawing import CElement, CDiagram, CConnection
+from lib.Drawing import CElement, CDiagram, CConnection, CConLabelInfo
 from lib.Elements import CElementObject, CElementType
 from dialogs import CWarningDialog, CQuestionDialog, ECancelPressed
 from tbToolBox import CtbToolBox
@@ -542,7 +542,7 @@ class CfrmMain(CWindow):
     @event('application.bus', 'content-update', False)
     @event('application.bus', 'content-update-from-plugin', True)
     def on_nbProperties_content_update(self, widget, element, property, fromPlugin):
-        if isinstance(element, (CElement, CConnection, CProjectNode)):
+        if isinstance(element, (CElement, CConnection, CProjectNode, CConLabelInfo)):
             element = element.GetObject()
         if element.HasVisualAttribute(property):
             if (self.picDrawingArea.GetDiagram().HasElementObject(element)

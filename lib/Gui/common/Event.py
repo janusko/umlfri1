@@ -18,12 +18,12 @@ def event(obj, *args):
             params = args
         if not hasattr(fnc, 'events'):
             def tmp2(self, *args, **kw_args):
-                #~ try:
+                try:
                     if fnc.__enabled:
                         return fnc(self, *args, **kw_args)
-                #~ except Exception, e:
-                    #~ exccls, excobj, tb = sys.exc_info()
-                    #~ self.application.DisplayException(exccls, excobj, tb)
+                except Exception, e:
+                    exccls, excobj, tb = sys.exc_info()
+                    self.application.DisplayException(exccls, excobj, tb)
             
             fnc.__enabled = True
             
