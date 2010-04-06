@@ -11,6 +11,6 @@ class CCallable(object):
         args = tuple(EncodeValue(i, False, self.connection) for i in args)
         kwds = dict((k, EncodeValue(v, False, self.connection)) for k, v in kwds.iteritems())
         
-        result = rc_eval(self.connection.Execute('exec', '%s.%s'%(self.id, self.fname), args, kwds)())
+        result = t_eval(self.connection.Execute('exec', '%s.%s'%(self.id, self.fname), args, kwds)())
         return DecodeValue(result, False, self.connection)
     
