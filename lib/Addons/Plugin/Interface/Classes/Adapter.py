@@ -12,21 +12,6 @@ class IAdapter(IBase):
     def GetCurrentDiagram(him):
         return him.GetCurrentDiagram()
     
-    def GetMainMenu(him):
-        return him.GetMainMenu()
-        
-    def GetTabMenu(him):
-        return him.GetTabMenu()
-        
-    def GetTreeMenu(him):
-        return him.GetTreeMenu()
-    
-    def GetDrawMenu(him):
-        return him.GetDrawMenu()
-    
-    def GetButtonBar(him):
-        return him.GetButtonBar()
-        
     def AddNotification(him, event, callback):
         him.AddNotification(event, callback)
 
@@ -36,6 +21,5 @@ class IAdapter(IBase):
     def Notify(him, event, *args, **kwds):
         return him.Notify(event, *args, **kwds)
     
-    def DisplayWarning(him, text):
-        him.DisplayWarning(text)
-
+    def GetGuiManager(him):
+        return him.GetGuiManager()
