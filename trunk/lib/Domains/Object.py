@@ -51,6 +51,39 @@ class CDomainObject(CBaseObject):
         '''
         return self._TracePath(id, 'getdomainname')
     
+    def __CopyFromObjectToObject(self,old,copy):
+        for id in old.GetType().IterAttributeIDs():
+            if old.GetType().GetAttribute(id)['type']!='list':
+                copy.SetValue(id,old.GetValue(id))
+            else:
+                ind=0
+                for att in old.GetValue(id):
+                    copy.AppendItem(id)
+                    self.__CopyFromObjectToObject(att,copy.GetValue(id)[ind])
+                    ind=ind+1
+        return copy
+    
+    def GetCopy(self):
+        '''
+        Copy of this domain object
+        
+        @return: copy of domain object
+        @rtype: L{CDomainObject<lib.Domains.Object.CDomainObject>}
+        '''
+        return self.__CopyFromObjectToObject(self,CDomainObject(self.GetType()))
+    
+    def SetValues(self,domainobject):
+        '''
+        Set values from given domain object
+        
+        @param domainobject: domain object with values to be copied
+        @type domainobject: L{CDomainObject<lib.Domains.Object.CDomainObject>}
+        '''
+        if self.GetType().GetName()==domainobject.GetType().GetName():
+            self.values=domainobject.values
+        else:
+            raise DomainObjectError('Domain type mismatch.')
+    
     def GetValue(self, id):
         '''
         @return: value of attribute

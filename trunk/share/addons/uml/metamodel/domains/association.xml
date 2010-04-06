@@ -1,33 +1,49 @@
 <Domain id="association" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" >
-    <Attribute id="name" type="str" name="Name" />
-    <Attribute id="direction" type="enum" name="Direction">
-        <Enum>Unspecified</Enum>
-        <Enum>Source to Destination</Enum>
-        <Enum>Destination to Source</Enum>
-        <Enum>Bidirectional</Enum>
+    <Attribute id="name" name="Name" >
+		<Str/>
+	</Attribute>
+    <Attribute id="direction" name="Direction" >
+		<Enum>
+        	<Enum_value>Unspecified</Enum_value>
+        	<Enum_value>Source to Destination</Enum_value>
+        	<Enum_value>Destination to Source</Enum_value>
+        	<Enum_value>Bidirectional</Enum_value>
+		</Enum>
     </Attribute>
-    <Attribute id="stereotype" type="str" name="Stereotype" />
-    <Attribute id="SCardinality" type="str" name="Source Cardinality" >
-        <Enum> </Enum>
-        <Enum>*</Enum>
-        <Enum>0</Enum>
-        <Enum>0..*</Enum>
-        <Enum>0..1</Enum>
-        <Enum>1</Enum>
-        <Enum>1..</Enum>
-        <Enum>1..*</Enum>
+    <Attribute id="stereotype" name="Stereotype" >
+		<Str/>
+	</Attribute>
+    <Attribute id="SCardinality" name="Source Cardinality" >
+        <Enum>
+			<Enum_value> </Enum_value>
+        	<Enum_value>*</Enum_value>
+        	<Enum_value>0</Enum_value>
+        	<Enum_value>0..*</Enum_value>
+        	<Enum_value>0..1</Enum_value>
+        	<Enum_value>1</Enum_value>
+        	<Enum_value>1..</Enum_value>
+        	<Enum_value>1..*</Enum_value>
+		</Enum>
     </Attribute>
-    <Attribute id="DCardinality" type="str" name="Destination Cardinality" >
-        <Enum> </Enum>
-        <Enum>*</Enum>
-        <Enum>0</Enum>
-        <Enum>0..*</Enum>
-        <Enum>0..1</Enum>
-        <Enum>1</Enum>
-        <Enum>1..</Enum>
-        <Enum>1..*</Enum>
+    <Attribute id="DCardinality" name="Destination Cardinality" >
+        <Enum>
+			<Enum_value> </Enum_value>
+	        <Enum_value>*</Enum_value>
+	        <Enum_value>0</Enum_value>
+	        <Enum_value>0..*</Enum_value>
+	        <Enum_value>0..1</Enum_value>
+	        <Enum_value>1</Enum_value>
+	        <Enum_value>1..</Enum_value>
+	        <Enum_value>1..*</Enum_value>
+		</Enum>
     </Attribute>
-    <Attribute id="SRole" type="str" name="Source Role" />
-    <Attribute id="DRole" type="str" name="Destination Role" />
-    <Attribute id="note" type="text" name="Notes" />
+    <Attribute id="SRole" name="Source Role" >
+		<Str/>
+	</Attribute>
+    <Attribute id="DRole" name="Destination Role" >
+		<Str/>
+	</Attribute>
+    <Attribute id="notes" name="Notes" >
+		<Text/>
+	</Attribute>
 </Domain>

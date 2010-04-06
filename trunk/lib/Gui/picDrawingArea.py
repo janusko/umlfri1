@@ -309,8 +309,8 @@ class CpicDrawingArea(CWidget):
             not bool(set(i.GetObject() for i in self.Diagram.GetElements()).intersection(set(i.GetObject() for i in self.application.GetClipboard().GetContent())))
         )
         selection = list(self.Diagram.GetSelected())
-        self.pmOpenSpecification.set_sensitive(len(selection) == 1 and isinstance(selection[0], CElement))
-        self.mnuChangeSourceTarget.set_sensitive(len(selection) == 1 and isinstance(selection[0], CConnection))
+        self.pmOpenSpecification.set_sensitive(len(selection) == 1)
+        self.mnuChangeSourceTarget.set_sensitive(len(selection) == 1)
         if (self.application.GetProject() is not None and 
             self.Diagram is not None and
             self.application.GetProject().GetRoot().GetObject() in (
@@ -835,7 +835,7 @@ class CpicDrawingArea(CWidget):
     def on_mnuOpenSpecification_click(self, menuItem):
         if len(tuple(self.Diagram.GetSelected())) == 1:
             for Element in self.Diagram.GetSelected():
-                if isinstance(Element, CElement):
+                if isinstance(Element, CElement) or isinstance(Element, CConnection):
                     self.emit('open-specification',Element)
         
     # Z-Order menu:  

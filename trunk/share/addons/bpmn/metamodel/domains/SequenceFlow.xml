@@ -1,4 +1,8 @@
 <Domain id="SequenceFlow" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
-    <Attribute id="name" type="str" name="Name" />
-    <Attribute id="note" type="text" name="Notes" />
+    <Attribute id="name" name="Name" attribute_group="General">
+		<Str/>
+	</Attribute>
+    <Attribute id="notes" name="Notes" attribute_group="General">
+		<Text/>
+	</Attribute>
 </Domain>

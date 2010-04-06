@@ -1,11 +1,21 @@
 <Domain id="package" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" >
-    <Attribute id="name" type="str" name="Name" />
-    <Attribute id="stereotype" type="str" name="Stereotype" />
-    <Attribute id="scope" type="enum" name="Scope">
-        <Enum>Private</Enum>
-        <Enum>Protected</Enum>
-        <Enum>Public</Enum>
+    <Attribute id="name" name="Name" >
+		<Str/>
+	</Attribute>
+    <Attribute id="stereotype" name="Stereotype" >
+		<Str/>
+	</Attribute>
+    <Attribute id="scope" name="Scope" >
+        <Enum default="Private">
+			<Enum_value>Private</Enum_value>
+	        <Enum_value>Protected</Enum_value>
+	        <Enum_value>Public</Enum_value>
+		</Enum>
     </Attribute>
-    <Attribute id="abstract" type="bool" name="Abstract" />
-    <Attribute id="note" type="text" name="Note" />
+    <Attribute id="abstract" name="Abstract" >
+		<Bool default="False"/>
+	</Attribute>
+    <Attribute id="notes" name="Notes" >
+		<Text/>
+	</Attribute>
 </Domain>

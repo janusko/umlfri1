@@ -1,3 +1,5 @@
 <Domain id="InclusiveDecisionMerge" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" >
-    <Attribute id="note" type="text" name="Note" />
+    <Attribute id="notes" name="Notes" attribute_group="General">
+		<Text/>
+	</Attribute>
 </Domain>
