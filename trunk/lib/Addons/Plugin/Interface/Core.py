@@ -28,8 +28,8 @@ class CCore(object):
                 com = command['command'].lower()
                 callid = params.pop('__id__', None)
                 
-                args = tuple(DecodeValue(i, True, self, addr) for i in rc_eval(params['args']))
-                kwds = dict((k, DecodeValue(v, True, self, addr)) for k, v in rc_eval(params['kwds']).iteritems())
+                args = tuple(DecodeValue(i, True, self, addr) for i in t_eval(params['args']))
+                kwds = dict((k, DecodeValue(v, True, self, addr)) for k, v in t_eval(params['kwds']).iteritems())
             
                 if com == 'exec':
                     self._exec(command['type'], args, kwds, addr, callid)

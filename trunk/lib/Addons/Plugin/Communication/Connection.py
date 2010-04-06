@@ -69,8 +69,8 @@ class CConnection(object):
                     self.mainloop.Call(self.guicallback[path], path)
                     
             elif code == RESP_CALLBACK:
-                args = rc_eval(params['args'])
-                kwds = rc_eval(params['kwds'])
+                args = t_eval(params['args'])
+                kwds = t_eval(params['kwds'])
                 
                 args = tuple(DecodeValue(i, False, self) for i in args)
                 kwds = dict((k, DecodeValue(v, False, self)) for k, v in kwds.iteritems())

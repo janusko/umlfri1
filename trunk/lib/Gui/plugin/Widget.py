@@ -17,3 +17,6 @@ class CWidget(lib.GenericGui.CWidget):
     def GetSensitive(self):
         return self.obj.get_property('sensitive')
     
+    def GetObject(self):
+        return self.obj
+    

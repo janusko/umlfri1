@@ -2,8 +2,8 @@ import ComSpec
 from lib.Base import CBaseObject
 from lib.Addons.Plugin.Client import classes
 
-def rc_eval(*a):
-    return ComSpec.rc_eval(*a)
+def t_eval(*a):
+    return ComSpec.t_eval(*a)
 
 def r_eval(*a):
     return ComSpec.r_eval(*a)
@@ -36,7 +36,7 @@ def EncodeValue(value, app, con = None, addr = None):
         fun = 'none'
     else:
         try:
-            if value == rc_eval(r_eval(value, con, addr), con, addr):
+            if value == t_eval(r_eval(value, con, addr), con, addr):
                 fun = 'eval'
         except:
             pass

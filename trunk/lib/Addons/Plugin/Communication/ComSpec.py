@@ -165,12 +165,14 @@ def r_none(val, conn = None, addr = None):
         
 t_none = reverse(r_none)(t_none)
 
-def rc_eval(val, con=None, addr = None):
+def t_eval(val, con=None, addr = None):
     return eval(val, {}, {'__builtins__': {}})
     
-@reverse(rc_eval)
+@reverse(t_eval)
 def r_eval(val, con=None, addr = None):
     return `val`
+    
+t_eval = reverse(r_eval)(t_eval)
 
 def t_str(val, con = None, addr = None):
     try:
