@@ -177,7 +177,9 @@ class CProject(CBaseObject):
         def SaveDomainObjectInfo(data, name=None):
             if isinstance(data, dict):
                 element = etree.Element(UMLPROJECT_NAMESPACE+'dict')
-                for key, value in data.iteritems():
+                d = list(data.iteritems())
+                d.sort()
+                for key, value in d:
                     element.append(SaveDomainObjectInfo(value, key))
             elif isinstance(data, list):
                 element = etree.Element(UMLPROJECT_NAMESPACE+'list')
