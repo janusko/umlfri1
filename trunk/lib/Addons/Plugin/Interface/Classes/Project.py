@@ -32,9 +32,12 @@ class IProject(IBase):
     def GetMetamodel(him):
         return him.GetMetamodel()
     
-    @result(r_str)
-    def GetSaveXml(him):
-        return him.XmlToStr(him.GetSaveXml())
+    
+    @parameter('fileName', t_str)
+    @parameter('isZippedFile', t_bool)
+    def Save(him, fileName = None, isZippedFile = None):
+        him.SaveProject(fileName, isZippedFile)
+    
     
     #~ @parameter('node', t_classobject(CElementObject))
     #~ def RemoveNode(him, node):
