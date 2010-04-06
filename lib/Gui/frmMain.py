@@ -21,8 +21,8 @@ from tabStartPage import CtabStartPage
 from lib.Distconfig import IMAGES_PATH
 from lib.Gui.diagramPrint import CDiagramPrint
 from lib.Exceptions import UserException
+from lib.Gui.frmProperties import CfrmProperties
 from lib.Project import CProjectNode
-
 
 class CfrmMain(CWindow):
     name = 'frmMain'
@@ -590,7 +590,7 @@ class CfrmMain(CWindow):
     def on_show_open_specification(self, widget, Element):
         tmp = self.application.GetWindow('frmProperties')
         tmp.SetParent(self.application.GetWindow('frmMain'))
-        tmp.ShowProperties('', Element, self.picDrawingArea)
+        tmp.ShowPropertiesWindow(Element,self.picDrawingArea)
         self.picDrawingArea.Paint()
     
     #Z-Order 

@@ -1,6 +1,7 @@
 from lib.Depend.gtk2 import gtk
 from lib.Depend.gtk2 import gobject
 from lib.Depend.gtk2 import pango
+from lib.Gui.frmProperties import CfrmProperties
 
 import sys
 import os
@@ -23,7 +24,7 @@ class CApplication(gobject.GObject):
     
     def __init__(self):
         gobject.GObject.__init__(self)
-        
+        self.propertiesWindow = CfrmProperties()
         gtk.glade.set_custom_handler(self.__get_custom_handler)
         f_globals = sys._getframe().f_back.f_globals
         if '__version__' in f_globals:
@@ -157,7 +158,10 @@ class CApplication(gobject.GObject):
         return self.version
     
     def GetWindow(self, name):
-        return self.wins[name]
+        if name!='frmProperties':
+            return self.wins[name]
+        else:
+            return self.propertiesWindow
     
     def DisplayException(self, exccls, excobj, tb):
         win = gtk.Window()

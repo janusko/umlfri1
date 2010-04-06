@@ -1,5 +1,11 @@
 <Domain id="synchronization" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" >
-    <Attribute id="name" type="str" name="Name" />
-    <Attribute id="stereotype" type="str" name="Stereotype" />
-    <Attribute id="note" type="text" name="Note" />
+    <Attribute id="name" name="Name" >
+		<Str/>
+	</Attribute>
+    <Attribute id="stereotype" name="Stereotype" >
+		<Str/>
+	</Attribute>
+    <Attribute id="notes" name="Notes" >
+		<Text/>
+	</Attribute>
 </Domain>

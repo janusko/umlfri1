@@ -1,3 +1,5 @@
 <Domain id="Data" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" >
-    <Attribute id="data" type="text" name="Data" />
+    <Attribute id="data" name="Data" attribute_group="General">
+		<Text/>
+	</Attribute>
 </Domain>

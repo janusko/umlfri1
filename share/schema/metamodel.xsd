@@ -776,24 +776,61 @@
 			<xs:choice minOccurs="0" maxOccurs="unbounded">
 				<xs:element name="Parse" type="ParseType" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="Join" type="JoinType" minOccurs="0" maxOccurs="unbounded"/>
-				<xs:element name="Attribute" minOccurs="0" maxOccurs="unbounded">
+				<xs:element name="Attribute" minOccurs="1" maxOccurs="unbounded">
 					<xs:complexType>
-						<xs:choice minOccurs="0" maxOccurs="unbounded">
-							<xs:element name="List" minOccurs="0">
+						<xs:choice>
+							<xs:element name="Int" minOccurs="1" maxOccurs="1">
 								<xs:complexType>
-									<xs:sequence minOccurs="0">
-										<xs:element name="Parse" type="ParseType" minOccurs="0"/>
-									</xs:sequence>
-									<xs:attribute name="type" type="xs:string" use="optional"/>
+									<xs:attribute name="default" type="xs:integer" use="optional"/>
 								</xs:complexType>
 							</xs:element>
-							<xs:element name="Enum" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
-							<xs:element ref="Domain" minOccurs="0"/>
+							<xs:element name="Float" minOccurs="1" maxOccurs="1">
+								<xs:complexType>
+									<xs:attribute name="default" type="xs:float" use="optional"/>
+								</xs:complexType>								
+							</xs:element>			
+							<xs:element name="Bool" minOccurs="1" maxOccurs="1">
+								<xs:complexType>
+									<xs:attribute name="default" use="optional">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:enumeration value="True"/>
+												<xs:enumeration value="False"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="Text" minOccurs="1" maxOccurs="1">
+								<xs:complexType>
+									<xs:attribute name="default" type="xs:string" use="optional"/>
+								</xs:complexType>	
+							</xs:element>
+							<xs:element name="Str" minOccurs="1" maxOccurs="1">
+								<xs:complexType>
+									<xs:attribute name="default" type="xs:string" use="optional"/>
+								</xs:complexType>	
+							</xs:element>
+							<xs:element name="Enum" minOccurs="1" maxOccurs="1">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Enum_value" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+									</xs:sequence>
+									<xs:attribute name="default" type="xs:string" use="optional"/>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="List" minOccurs="1" maxOccurs="1">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Parse" type="ParseType" minOccurs="0"/>
+										<xs:element ref="Domain" minOccurs="1" maxOccurs="1"/>
+									</xs:sequence>
+									<xs:attribute name="type" type="xs:string" use="optional"/>
+								</xs:complexType>				
+							</xs:element>
 						</xs:choice>
 						<xs:attribute name="id" type="xs:string" use="required"/>
-						<xs:attribute name="type" type="xs:string" use="optional"/>
 						<xs:attribute name="name" type="xs:string" use="required"/>
-						<xs:attribute name="default" type="xs:string" use="optional"/>
 						<xs:attribute name="hidden" type="xs:boolean" use="optional" default="false"/>
 					</xs:complexType>
 				</xs:element>

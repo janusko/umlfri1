@@ -69,8 +69,7 @@ class CDomainType(CBaseObject):
             raise DomainTypeError('Used type "%s" is not imported '
                 'in definition of "%s.%s"'%(type, self.name, id))
         
-        self.attributes[id] = {'name': name, 'type':type, 'default': default, 
-            'hidden': (hidden in ('true', '1'))}
+        self.attributes[id] = {'name': name, 'type':type, 'default': default,'hidden': (hidden in ('true', '1'))}
         self.attributeorder.append(id)
     
     def HasAttribute(self, id):
@@ -522,3 +521,6 @@ class CDomainType(CBaseObject):
                 return unicode(value)
         else:
             return value.GetSaveInfo()
+    
+    def GetAttributesCount(self):
+        return len(self.attributeorder)

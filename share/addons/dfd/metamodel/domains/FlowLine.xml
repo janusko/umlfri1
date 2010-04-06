@@ -1,4 +1,8 @@
 <Domain id="FlowLine" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" >
-    <Attribute id="flowlineid" type="str" name="FlowLine ID" />
-    <Attribute id="note" type="text" name="Note" />
+    <Attribute id="flowlineid" name="FlowLine ID" >
+		<Str/>
+	</Attribute>
+    <Attribute id="notes" name="Notes" >
+		<Text/>
+	</Attribute>
 </Domain>
