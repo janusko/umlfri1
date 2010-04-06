@@ -70,7 +70,7 @@ class CsetToAlign(set):
     def AlignBottom(self, setBottomCoordinate):
         # set the y position to setBottomCoordinate
         for sel in self:
-            sel.SetPosition( (sel.GetPosition()[0], setBottomCoordinate ) )
+            sel.SetPosition( (sel.GetPosition()[0], setBottomCoordinate -sel.GetSize(self.diagram)[1]) )
         # But preserve the X coordinate ("sel.GetPosition()[0]")
     
     def AlignMostBottom(self):
