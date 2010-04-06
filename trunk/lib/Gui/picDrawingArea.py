@@ -33,7 +33,8 @@ class CpicDrawingArea(CWidget):
                 'pMenuShift', 
                 'pmShift_SendBack', 'pmShift_BringForward', 'pmShift_ToBottom', 'pmShift_ToTop','pmShowInProjectView',
                 'mnuCtxCut', 'mnuCtxCopy', 'mnuCtxPaste', 'mnuCtxDelete',
-                'pmOpenSpecification', 'mnuCtxShiftDelete','mnuChangeSourceTarget')
+                'pmOpenSpecification', 'mnuCtxShiftDelete','mnuChangeSourceTarget',
+                'pmAlign_Left', 'pmAlign_Right', 'pmAlign_Bottom', 'pmAlign_Top')
 
     __gsignals__ = {
         'get-selected':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_PYOBJECT,
@@ -94,6 +95,7 @@ class CpicDrawingArea(CWidget):
                 0
             )
         self.__invalidated = False
+        self.lastClick =0,0 # TODO: check it in model
 
     def __SetCursor(self, cursor = None):
         self.picDrawingArea.window.set_cursor(self.cursors[cursor])
@@ -318,7 +320,7 @@ class CpicDrawingArea(CWidget):
     @event("picEventBox", "button-press-event")
     def on_picEventBox_button_press_event(self, widget, event):
         self.picDrawingArea.grab_focus() 
-        pos = self.GetAbsolutePos((event.x, event.y))
+        pos = self.lastClick =self.GetAbsolutePos((event.x, event.y)) # TODO: how to?
         if event.button == 1 and event.type == gtk.gdk._2BUTTON_PRESS:
             if len(tuple(self.Diagram.GetSelected())) == 1:
                 for Element in self.Diagram.GetSelected():
@@ -926,12 +928,14 @@ class CpicDrawingArea(CWidget):
 
     ### Align & tidy methods
     ## Takes all selected Elements (ONLY Elements, no Labels or Connections!)
-    #left
+    # left
+    @event("pmAlign_Left","activate")
     def AlignLeft(self, widget = None):
+        # get the LEFT edge of clicked Element
+        clickedElem =self.Diagram.GetElementAtPosition(self.canvas, self.lastClick)
         # use the algorithm for Alignment
         tidy.CsetToAlign( self.Diagram.GetSelectedElements(), self.Diagram ).\
-          AlignLeft( 0 ) #temporary hack
-        #will be used self.Diagram.GetElementAtPosition(self.canvas, pos) in future
+          AlignLeft( clickedElem.GetPosition()[0] )
         # redraw canvas!
         self.Paint()
     
@@ -942,11 +946,13 @@ class CpicDrawingArea(CWidget):
         self.Paint()
     
     #right
+    @event("pmAlign_Right","activate")
     def AlignRight(self, widget = None):
+        # get the RIGHT edge of clicked Element
+        clickedElem =self.Diagram.GetElementAtPosition(self.canvas, self.lastClick)
         # use the algorithm for Alignment
         tidy.CsetToAlign( self.Diagram.GetSelectedElements(), self.Diagram ).\
-          AlignRight( 200 ) #temporary hack
-        #will be used self.Diagram.GetElementAtPosition(self.canvas, pos) in future
+          AlignRight( clickedElem.GetPosition()[0] +clickedElem.GetSize(self.Diagram)[0] )
         # redraw canvas!
         self.Paint()
     
@@ -957,10 +963,13 @@ class CpicDrawingArea(CWidget):
         self.Paint()
     
     #top
+    @event("pmAlign_Top","activate")
     def AlignTop(self, widget = None):
+        # get the TOP edge of clicked Element
+        clickedElem =self.Diagram.GetElementAtPosition(self.canvas, self.lastClick)
         # use the algorithm for Alignment
         tidy.CsetToAlign( self.Diagram.GetSelectedElements(), self.Diagram ).\
-             AlignTop( 0 ) #temporary hack
+             AlignTop( clickedElem.GetPosition()[1] ) #temporary hack
         #will be used self.Diagram.GetElementAtPosition(self.canvas, pos) in future
         # redraw canvas!
         self.Paint()
@@ -972,11 +981,13 @@ class CpicDrawingArea(CWidget):
         self.Paint()
     
     #bottom
+    @event("pmAlign_Bottom","activate")
     def AlignBottom(self, widget = None):
+        # get the BOTTOM edge of clicked Element
+        clickedElem =self.Diagram.GetElementAtPosition(self.canvas, self.lastClick)
         # use the algorithm for Alignment
         tidy.CsetToAlign( self.Diagram.GetSelectedElements(), self.Diagram ).\
-          AlignBottom( 0 ) #temporary hack
-        #will be used self.Diagram.GetElementAtPosition(self.canvas, pos) in future
+          AlignBottom( clickedElem.GetPosition()[1] +clickedElem.GetSize(self.Diagram)[1] )
         # redraw canvas!
         self.Paint()
     
