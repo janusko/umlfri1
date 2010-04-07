@@ -23,3 +23,6 @@ class IAdapter(IBase):
     
     def GetGuiManager(him):
         return him.GetGuiManager()
+
+    def LoadProject(him, fileName):
+        him.LoadProject(fileName)

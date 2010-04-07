@@ -75,3 +75,10 @@ class CPluginAdapter(CBaseObject, CGuiObject):
     def GetCanvas(self):
         return self.application.GetWindow('frmMain').picDrawingArea.canvas
     
+    def LoadProject(self, fileName):
+        self.application.ProjectDelete()
+        self.application.ProjectInit()
+        self.GetProject().LoadProject(fileName)
+        gobject.idle_add(self.application.GetBus().emit, 'project-opened')
+        
+    
