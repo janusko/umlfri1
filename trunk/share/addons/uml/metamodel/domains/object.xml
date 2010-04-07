@@ -7,9 +7,9 @@
 	</Attribute>
     <Attribute id="scope" name="Scope" >
         <Enum default="Private">
-			<Enum_value>Private</Enum_value>
-	        <Enum_value>Protected</Enum_value>
-	        <Enum_value>Public</Enum_value>
+			<Value>Private</Value>
+	        <Value>Protected</Value>
+	        <Value>Public</Value>
 		</Enum>    
 	</Attribute>
     <Attribute id="abstract" name="Abstract" >
@@ -26,9 +26,9 @@
 				</Attribute>
 	            <Attribute id="scope" name="Scope" >
 	                <Enum default="Private">
-						<Enum_value>Private</Enum_value>
-		                <Enum_value>Protected</Enum_value>
-		                <Enum_value>Public</Enum_value>
+						<Value>Private</Value>
+		                <Value>Protected</Value>
+		                <Value>Public</Value>
 					</Enum>
 	            </Attribute>
 	            <Attribute id="type" name="Type" >

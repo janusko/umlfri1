@@ -4,38 +4,42 @@
 	</Attribute>
     <Attribute id="direction" name="Direction" >
 		<Enum>
-        	<Enum_value>Unspecified</Enum_value>
-        	<Enum_value>Source to Destination</Enum_value>
-        	<Enum_value>Destination to Source</Enum_value>
-        	<Enum_value>Bidirectional</Enum_value>
+        	<Value>Unspecified</Value>
+        	<Value>Source to Destination</Value>
+        	<Value>Destination to Source</Value>
+        	<Value>Bidirectional</Value>
 		</Enum>
     </Attribute>
     <Attribute id="stereotype" name="Stereotype" >
 		<Str/>
 	</Attribute>
     <Attribute id="SCardinality" name="Source Cardinality" >
-        <Enum>
-			<Enum_value> </Enum_value>
-        	<Enum_value>*</Enum_value>
-        	<Enum_value>0</Enum_value>
-        	<Enum_value>0..*</Enum_value>
-        	<Enum_value>0..1</Enum_value>
-        	<Enum_value>1</Enum_value>
-        	<Enum_value>1..</Enum_value>
-        	<Enum_value>1..*</Enum_value>
-		</Enum>
+        <Str>
+			<Enum>
+				<Value> </Value>
+	        	<Value>*</Value>
+	        	<Value>0</Value>
+	        	<Value>0..*</Value>
+	        	<Value>0..1</Value>
+	        	<Value>1</Value>
+	        	<Value>1..</Value>
+	        	<Value>1..*</Value>
+			</Enum>
+		</Str>
     </Attribute>
     <Attribute id="DCardinality" name="Destination Cardinality" >
-        <Enum>
-			<Enum_value> </Enum_value>
-	        <Enum_value>*</Enum_value>
-	        <Enum_value>0</Enum_value>
-	        <Enum_value>0..*</Enum_value>
-	        <Enum_value>0..1</Enum_value>
-	        <Enum_value>1</Enum_value>
-	        <Enum_value>1..</Enum_value>
-	        <Enum_value>1..*</Enum_value>
-		</Enum>
+		<Str>        	
+			<Enum>
+				<Value> </Value>
+	    	    <Value>*</Value>
+	    	    <Value>0</Value>
+	    	    <Value>0..*</Value>
+	    	    <Value>0..1</Value>
+	    	    <Value>1</Value>
+	    	    <Value>1..</Value>
+	    	    <Value>1..*</Value>
+			</Enum>
+		</Str>
     </Attribute>
     <Attribute id="SRole" name="Source Role" >
 		<Str/>

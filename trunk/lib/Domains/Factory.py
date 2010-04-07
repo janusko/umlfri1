@@ -192,11 +192,16 @@ class CDomainFactory(CBaseObject):
             elif type == 'Enum':
                 obj.AppendAttribute(id,attribute.get('name'),'enum',child.get('default'),attribute.get('hidden'))
                 for option in child:
-                    if option.tag == METAMODEL_NAMESPACE + 'Enum_value':
+                    if option.tag == METAMODEL_NAMESPACE + 'Value':
                         obj.AppendEnumValue(id, option.text)
                 
             elif type == 'Str':
                 obj.AppendAttribute(id,attribute.get('name'),'str',child.get('default'),attribute.get('hidden'))
+                enum=child.find(METAMODEL_NAMESPACE + 'Enum')
+                if enum!=None:
+                    for option in enum:
+                        if option.tag == METAMODEL_NAMESPACE + 'Value':
+                            obj.AppendEnumValue(id, option.text)
                 
             elif type == 'Text':
                 obj.AppendAttribute(id,attribute.get('name'),'text',child.get('default'),attribute.get('hidden'))
@@ -211,20 +216,20 @@ class CDomainFactory(CBaseObject):
                 elif ltype is not None and '.' in ltype:
                     raise DomainFactoryError('Local domain "%s" cannot be used as explicitly '
                         'set itemtype of "%s.%s"' % (type, obj.GetName(), id))
-                for option in child:
-                    if option.tag == METAMODEL_NAMESPACE + 'Domain':
-                        name = obj.GetName() +'.' + id
-                        self.__LoadDomain(option, name)
-                        obj.AppendImport(name)
-                        at = obj.GetAttribute(id)
-                        attype = at['type']
-                        if attype is None:
-                            obj.GetAttribute(id)['type'] = name
-                        elif attype == 'list' and ('list' not in at or at['list']['type'] is None):
-                            obj.SetList(id, type = name)
-                        else:
-                            raise DomainFactoryError('Nested Domain "%s" is not allowed '
-                                'because type is explicitly set.'%(name,))
+                option=child.find(METAMODEL_NAMESPACE + 'Domain')
+                if option!=None:
+                    name = obj.GetName() +'.' + id
+                    self.__LoadDomain(option, name)
+                    obj.AppendImport(name)
+                    at = obj.GetAttribute(id)
+                    attype = at['type']
+                    if attype is None:
+                        obj.GetAttribute(id)['type'] = name
+                    elif attype == 'list' and ('list' not in at or at['list']['type'] is None):
+                        obj.SetList(id, type = name)
+                    else:
+                        raise DomainFactoryError('Nested Domain "%s" is not allowed '
+                            'because type is explicitly set.'%(name,))
     
     def __LoadList(self, node):
         '''
