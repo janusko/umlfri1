@@ -1,4 +1,4 @@
-from lib.Depend.gtk2 import gtk
+from lib.Depend.gtk2 import gtk, gobject
 from lib.Exceptions import *
 import thread
 from lib.Base import CBaseObject
