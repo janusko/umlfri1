@@ -1,8 +1,8 @@
 <Domain id="MessageFlow" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
-    <Attribute id="name" name="Name" attribute_group="General">
+    <Attribute id="name" name="Name" >
 		<Str/>
 	</Attribute>
-    <Attribute id="notes" name="Notes" attribute_group="General">
+    <Attribute id="notes" name="Notes" >
 		<Text/>
 	</Attribute>
 </Domain>

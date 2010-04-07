@@ -1,8 +1,8 @@
 <Domain id="InputOutput" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" >
     <Attribute id="type" name="Type" >
 		<Enum default="Input">
-	        <Enum_value>Input</Enum_value>
-	        <Enum_value>Output</Enum_value>        
+	        <Value>Input</Value>
+	        <Value>Output</Value>        
 		</Enum>
     </Attribute>
     <Attribute id="variables" name="Variables" >

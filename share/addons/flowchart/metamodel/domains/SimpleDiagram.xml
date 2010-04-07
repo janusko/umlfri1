@@ -1,6 +1,14 @@
 <Domain xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" id="SimpleDiagram">
-    <Attribute id="name" type="str" name="Name"/>
-    <Attribute id="author" type="str" name="Author"/>
-    <Attribute id="version" type="str" name="Version" default="1.0.0"/>
-    <Attribute id="note" type="text" name="Notes"/>
+    <Attribute id="name" name="Name">
+		<Str/>
+	</Attribute>
+    <Attribute id="author" name="Author">
+		<Str/>
+	</Attribute>
+    <Attribute id="version" name="Version" >
+		<Str default="1.0.0"/>
+	</Attribute>
+    <Attribute id="note" name="Notes">
+		<Text/>
+	</Attribute>
 </Domain>

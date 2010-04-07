@@ -1,5 +1,5 @@
 <Domain id="Intermediate" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" >
-    <Attribute id="notes" name="Notes" attribute_group="General">
+    <Attribute id="notes" name="Notes" >
 		<Text/>
 	</Attribute>
 </Domain>

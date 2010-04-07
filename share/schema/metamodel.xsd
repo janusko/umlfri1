@@ -808,13 +808,22 @@
 							</xs:element>
 							<xs:element name="Str" minOccurs="1" maxOccurs="1">
 								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Enum" minOccurs="0" maxOccurs="1">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="Value" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
 									<xs:attribute name="default" type="xs:string" use="optional"/>
 								</xs:complexType>	
 							</xs:element>
 							<xs:element name="Enum" minOccurs="1" maxOccurs="1">
 								<xs:complexType>
 									<xs:sequence>
-										<xs:element name="Enum_value" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+										<xs:element name="Value" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
 									</xs:sequence>
 									<xs:attribute name="default" type="xs:string" use="optional"/>
 								</xs:complexType>

@@ -1,8 +1,8 @@
 <Domain id="Task" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" >
-    <Attribute id="task" name="Task" attribute_group="General">
+    <Attribute id="task" name="Task" >
 		<Str/>
 	</Attribute>
-    <Attribute id="notes" name="Notes" attribute_group="General">
+    <Attribute id="notes" name="Notes" >
 		<Text/>
 	</Attribute>
 </Domain>

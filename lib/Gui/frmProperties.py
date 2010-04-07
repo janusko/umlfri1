@@ -388,8 +388,19 @@ class CfrmProperties():
             self.__CreateTable(vbox,type)
         else:
             for id in type.IterAttributeIDs():
-                self.domain_object.GetValue(id)
-                #?????!!!!!!!!???????
+                val=str(self.domain_object.GetValue(id))
+                if type.GetAttribute(id)['type']=='str':
+                    self.attributes[type.GetName()][id].set_text(val)
+                if type.GetAttribute(id)['type']=='bool' or type.GetAttribute(id)['type']=='enum':
+                    model=self.attributes[type.GetName()][id].get_model()
+                    iter=model.get_iter('0')
+                    tmp=[]
+                    while iter!=None:
+                        tmp.append(model.get_value(iter,0))
+                        iter=model.iter_next(iter)
+                    self.attributes[type.GetName()][id].set_active(tmp.index(val))
+                if type.GetAttribute(id)['type']=='text':
+                    self.attributes[type.GetName()][id].get_buffer().set_text(val)
     
     #metoda vytvori novy poddialog dialogu
     def ChildDialog_handler(self,widget,type,dialog):
@@ -467,4 +478,5 @@ class CfrmProperties():
                 continue
             self.domain_object.SetValue(id,val)
         self.old_domain_object.SetValues(self.domain_object)
+        
     

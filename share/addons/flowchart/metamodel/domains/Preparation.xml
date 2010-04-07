@@ -4,8 +4,8 @@
 	</Attribute>
     <Attribute id="looptype" name="Loop type" >
         <Enum  default="To">
-			<Enum_value>To</Enum_value>
-        	<Enum_value>Down To</Enum_value>
+			<Value>To</Value>
+        	<Value>Down To</Value>
 		</Enum>
     </Attribute>
     <Attribute id="initialvalue" name="Initial value" >
