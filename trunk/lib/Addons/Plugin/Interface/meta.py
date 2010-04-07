@@ -45,13 +45,13 @@ class Meta(type):
     def Execute(cls, obj, fname, args, kwds, core, addr):
         fun, desc = cls.GetMethod(cls.GetClassName(obj), fname)
         if desc is None:
-            raise UnknowMethodError()
+            raise UnknowMethodError(obj.GetUID(), fname)
         if hasattr(fun, '_synchronized'):
             fun = fun._synchronized
         try:
             return fun(obj, *args, **kwds)
         except TypeError:
-            raise PluginInvalidMethodParameters()
+            raise PluginInvalidMethodParameters(obj.GetUID(), fname)
         
     @classmethod
     def Create(cls, hisclass, params):
@@ -71,7 +71,7 @@ class Meta(type):
     def IsDestructive(cls, obj, fname):
         desc = cls.GetMethod(cls.GetClassName(obj), fname)[1]
         if desc is None:
-            raise UnknowMethodError()
+            raise UnknowMethodError(obj.GetUID(), fname)
         else:
             return desc['destructive']
             

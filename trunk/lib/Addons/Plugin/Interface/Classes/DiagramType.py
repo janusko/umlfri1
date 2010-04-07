@@ -16,7 +16,6 @@ class IDiagramType(IBase):
     def GetConnections(him):
         cf = him.GetMetamodel().GetConnectionFactory()
         result = [cf.GetConnection(i) for i in him.GetConnections()]
-        print result
         return result
     
     @result(r_objectlist)
