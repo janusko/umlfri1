@@ -636,3 +636,17 @@ class CfrmMain(CWindow):
     def on_mnuAlignBottom_activate(self, widget):
         if self.picDrawingArea.HasFocus():
             self.picDrawingArea.AlignMostBottom()
+            
+            
+    @event('application.bus', 'project-opened')
+    def on_project_opened(self, widget):
+        self.nbTabs.CloseAll()
+        self.ReloadTitle()
+        self.twProjectView.Redraw(True)
+        self.mnuItems.Redraw()
+        self.nbProperties.Fill(None)
+        self.picDrawingArea.Redraw()
+        self.UpdateMenuSensitivity(project = True)
+        for diagram in self.application.GetProject().GetDefaultDiagrams():
+            self.nbTabs.AddTab(diagram)
+            self.picDrawingArea.SetDiagram(diagram)
