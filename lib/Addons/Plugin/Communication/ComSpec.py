@@ -4,6 +4,7 @@ from lib.Addons.Plugin.Interface.decorators import *
 from lib.Addons.Plugin.Interface.meta import Meta
 from lib.Addons.Plugin.Client import classes
 from lib.Base.Registrar import registrar
+from lib.Exceptions import *
 
 IDENTIFIER = 'UML.FRI'
 VERSION = '0.1'
@@ -25,6 +26,7 @@ RESP_GUI_SENSITIVE = 202
 RESP_GUI_INSENSITIVE = 203
 RESP_METAMODEL_DESCRIPTION = 204
 RESP_RESULT = 205
+RESP_EXCEPTION = 206
 
 RESP_UNKONWN_COMMAND = 400
 RESP_UNSUPPORTED_VERSION = 401
@@ -41,6 +43,40 @@ RESP_TRANSACTION_MODE_UNSPECIFIED = 411
 RESP_INVALID_METHOD_PARAMETER = 412
 
 RESP_UNHANDELED_EXCEPTION = 500
+
+code2Exception = {
+    RESP_UNKONWN_COMMAND: PluginUnknownCommand,
+    RESP_UNSUPPORTED_VERSION: PluginUnsupportedVersion,
+    RESP_INVALID_COMMAND_TYPE: PluginInvalidCommandType,
+    RESP_MISSING_PARAMETER: PluginMissingParameter,
+    RESP_INVALID_PARAMETER: PluginInvalidParameter,
+    RESP_INVALID_OBJECT: PluginInvalidObject,
+    RESP_UNKNOWN_METHOD: PluginUnknownMethod,
+    RESP_INVALID_METHOD_PARAMETER: PluginInvalidMethodParameters,
+    RESP_PROJECT_NOT_LOADED: PluginProjectNotLoaded,
+    RESP_UNKNOWN_CONSTRUCTOR: PluginUnknownConstructor,
+    RESP_TRANSACTION_PENDING: TransactionPendingError,
+    RESP_OUT_OF_TRANSACTION: OutOfTransactionError,
+    RESP_TRANSACTION_MODE_UNSPECIFIED: TransactionModeUnspecifiedError,
+    RESP_UNHANDELED_EXCEPTION: UMLException,
+}
+
+exception2Code = (
+    (TransactionModeUnspecifiedError, RESP_TRANSACTION_MODE_UNSPECIFIED),
+    (TransactionPendingError, RESP_TRANSACTION_PENDING),
+    (OutOfTransactionError, RESP_OUT_OF_TRANSACTION),
+    (ParamValueError, RESP_INVALID_PARAMETER),
+    (ParamMissingError, RESP_MISSING_PARAMETER),
+    (UnknowMethodError, RESP_UNKNOWN_METHOD),
+    (PluginInvalidMethodParameters, RESP_INVALID_METHOD_PARAMETER),
+    (UMLException, RESP_UNHANDELED_EXCEPTION),
+)
+
+def Exception2Code(exc):
+    for ecl, code in exception2Code:
+        if isinstance(exc, ecl):
+            return code
+
 
 def tc_object(val, conn = None, addr = None):
     return val.GetId()

@@ -1,4 +1,4 @@
-import thread, time, sys, socket, re
+import thread, time, sys, socket, re, traceback
 from lib.Depend.gtk2 import gtk
 from lib.Addons.Plugin.Communication.ComSpec import *
 from lib.Exceptions import *
@@ -43,23 +43,10 @@ class CCore(object):
                 else:
                     self.manager.Send(addr, RESP_UNKONWN_COMMAND, command = com, __id__ = callid)
             
-            except TransactionModeUnspecifiedError:
-                self.manager.Send(addr, RESP_TRANSACTION_MODE_UNSPECIFIED, __id__ = callid)
-            
-            except TransactionPendingError:
-                self.manager.Send(addr, RESP_TRANSACTION_PENDING, __id__ = callid)
-                
-            except OutOfTransactionError:
-                self.manager.Send(addr, RESP_OUT_OF_TRANSACTION, __id__ = callid)
-            
-            except (ParamValueError, ), e:
-                self.manager.Send(addr, RESP_INVALID_PARAMETER, params = [i for i in e], __id__ = callid)
-            
-            except (ParamMissingError, ), e:
-                self.manager.Send(addr, RESP_MISSING_PARAMETER, param = e[0], __id__ = callid)
-                
             except (UMLException, ), e:
-                self.manager.Send(addr, RESP_UNHANDELED_EXCEPTION, params = [i for i in e], __id__ = callid)
+                code = Exception2Code(e)
+                trace = ''.join(traceback.format_exception(*sys.exc_info()))
+                self.manager.Send(addr, code, params = [i for i in e] + [trace], __id__ = callid)
         
         else:
             self.manager.Send(addr, RESP_UNSUPPORTED_VERSION, version = command['version'], __id__ = callid)
@@ -108,12 +95,6 @@ class CCore(object):
             
             self.manager.Send(addr, RESP_RESULT, __id__ = callid, result = result)
         
-        except (UnknowMethodError, ), e:
-            self.manager.Send(addr, RESP_UNKNOWN_METHOD, id = identifier, fname = fname, __id__ = callid)
-        
-        except (PluginInvalidMethodParameters, ), e:
-            self.manager.Send(addr, RESP_INVALID_METHOD_PARAMETER, id = identifier, fname = fname, __id__ = callid)
-            
         except (TypeError, ), e:
             raise ParamMissingError()
         
