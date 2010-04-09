@@ -4,9 +4,9 @@ from lib.Exceptions.UserException import *
 
 class CCase(CSimpleContainer):
     types = {
-        'condition': str,
+        'condition': None, # Type is not important
         'negate': bool,
-        'type': None # Type is not important
+        'type': str
     }
     def __init__(self, condition = None, negate = False, type = "equal"):
         CSimpleContainer.__init__(self)
