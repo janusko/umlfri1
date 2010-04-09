@@ -25,6 +25,17 @@ def BoolWrap(value):
         return value.lower() in ('true', 'yes', '1')
     return bool(value)
 
+def FloatWrap(value):
+    if isinstance(value, (str, unicode)):
+        if ':' in value:
+            value = value.split(':')
+            if len(value) != 2:
+                raise Exception("bad value")
+            return float(int(value[0]))/int(value[1])
+        elif value[-1] == '%':
+            return float(value[:-1])/100
+    return float(value)
+
 def TupleWrap(type):
     def tmp(value):
         out = []
@@ -40,6 +51,8 @@ def TupleWrap(type):
 def BuildParam(value, type = None):
     if type is bool:
         type2 = BoolWrap
+    elif type is float:
+        type2 = FloatWrap
     elif isinstance(type, tuple):
         type2 = TupleWrap(type)
         type = tuple

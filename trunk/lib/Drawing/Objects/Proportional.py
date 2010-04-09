@@ -3,7 +3,7 @@ from lib.Exceptions.UserException import *
 
 class CProportional(CAlign):
     types = {
-        'ratio': str,
+        'ratio': float,
         'align': str,
         'size': str
     }
@@ -11,10 +11,7 @@ class CProportional(CAlign):
         CAlign.__init__(self, align)
         
         self.strratio = ratio
-        ratio = ratio.split(':')
-        if len(ratio) != 2:
-            raise XMLError("Proportional", "ratio")
-        self.ratio = float(int(ratio[0]))/int(ratio[1])
+        self.ratio = ratio
         self.size = size
 
     def ComputeChildSize(self, context):
