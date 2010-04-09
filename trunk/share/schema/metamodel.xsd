@@ -291,9 +291,29 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="SimpleObjectContainer">
-				<xs:attribute name="padding" type="xs:int" use="required">
+				<xs:attribute name="padding" type="xs:int">
 					<xs:annotation>
 						<xs:documentation>Define padding</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="left" type="xs:int">
+					<xs:annotation>
+						<xs:documentation>Define left padding</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="right" type="xs:int">
+					<xs:annotation>
+						<xs:documentation>Define right padding</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="top" type="xs:int">
+					<xs:annotation>
+						<xs:documentation>Define top padding</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="bottom" type="xs:int">
+					<xs:annotation>
+						<xs:documentation>Define bottom padding</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
 			</xs:extension>
