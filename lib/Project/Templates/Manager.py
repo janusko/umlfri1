@@ -33,7 +33,7 @@ class CTemplateManager(CBaseObject):
                     yield CTemplate(filename.rsplit('.', 1)[0], storage, 'content.xml', icon)
         
         for type in ('metamodel', 'composite'):
-            for addon in self.__addonManager.ListAddons(type):
+            for addon in self.__addonManager.ListEnabledAddons(type):
                 for name, icon, path in addon.GetComponent().GetTemplates():
                     if name is None:
                         name = path.replace('\\', '/').rsplit('/', 1)[-1].rsplit('.', 1)[0]

@@ -241,6 +241,11 @@ class CAddonManager(object):
         for addon in l:
             yield addon
     
+    def ListEnabledAddons(self, type = None):
+        for addon in self.ListAddons(type):
+            if addon.IsEnabled():
+                yield addon
+    
     def Save(self):
         self.__SaveEnabledAddons(os.path.join(USERDIR_PATH, 'addons.xml'), self.__enabledAddons)
     
