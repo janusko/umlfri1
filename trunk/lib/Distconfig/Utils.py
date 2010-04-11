@@ -15,11 +15,16 @@ def dir(path):
     
     return syspath(os.path.abspath(os.path.dirname(path)))
 
-def root():
+def frozen():
     import sys
     import imp
     
-    if (hasattr(sys, "frozen") or hasattr(sys, "importers") or imp.is_frozen("__main__")):
+    return (hasattr(sys, "frozen") or hasattr(sys, "importers") or imp.is_frozen("__main__"))
+
+def root():
+    import sys
+    
+    if frozen():
         return path(syspath(sys.executable), '..', '..')
     else:
         return path(dir(__file__), '..', '..')
@@ -32,4 +37,6 @@ def user():
 ROOT = root()
 USER = user()
 
-__all__ = ['ROOT', 'USER', 'path']
+IS_FROZEN = frozen()
+
+__all__ = ['ROOT', 'USER', 'IS_FROZEN', 'path']

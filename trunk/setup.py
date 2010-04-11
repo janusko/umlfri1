@@ -106,7 +106,12 @@ class CInnoPy2Exe(Cpy2exe):
         else:
             dist_dir = self.dist_dir
         
-        windows_exe_files = [p[len(dist_dir):] for p in self.windows_exe_files] + [p[len(dist_dir):] for p in self.console_exe_files]
+        windows_exe_files = [
+            exe
+            for exe in
+                [p[len(dist_dir):] for p in self.windows_exe_files] + [p[len(dist_dir):] for p in self.console_exe_files]
+            if 'pl_runner' not in exe
+        ]
         lib_files = [p[len(dist_dir):] for p in self.lib_files]
         
         pathname = dist_dir+'setup.iss'
@@ -230,7 +235,14 @@ setup(
         {
             "script": "main.py",
             "icon_resources": [(1, "doc/Logo/icon.ico")],
-            "dest_base": "bin\uml_fri",
+            "dest_base": "bin/uml_fri",
+            "company_name": "Faculty of Management Science and Informatics, University of Zilina",
+        }
+    ],
+    console = [
+        {
+            "script": "lib/Addons/Plugin/Starter/Python/pl_runner.py",
+            "dest_base": "bin/pl_runner",
             "company_name": "Faculty of Management Science and Informatics, University of Zilina",
         }
     ],

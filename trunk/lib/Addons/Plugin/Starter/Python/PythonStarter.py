@@ -1,12 +1,17 @@
 from lib.config import config
-from lib.Distconfig import ROOT_PATH
+from lib.Distconfig import ROOT_PATH, IS_FROZEN
 
 import os
 import os.path
 import subprocess
 
 class CPythonStarter(object):
-    __pl_runner = os.path.join(os.path.dirname(__file__), 'pl_runner.py')
+    if IS_FROZEN:
+        __pl_runner = os.path.join(ROOT_PATH, 'bin', 'pl_runner.exe')
+        __lib_root = None
+    else:
+        __pl_runner = os.path.join(os.path.dirname(__file__), 'pl_runner.py')
+        __lib_root = ROOT_PATH
     
     def __init__(self, plugin):
         self.__plugin = plugin
@@ -18,7 +23,8 @@ class CPythonStarter(object):
         
         env = os.environ.copy()
         env['UMLFRI_PORT'] = str(port)
-        env['UMLFRI_ROOT'] = str(ROOT_PATH)
+        if self.__lib_root is not None:
+            env['UMLFRI_ROOT'] = str(self.__lib_root)
         env['UMLFRI_PATH'] = str(path)
         env['UMLFRI_URI'] = str(uri)
         
