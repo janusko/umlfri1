@@ -3,11 +3,13 @@ import sys
 import os
 
 port = int(os.environ['UMLFRI_PORT'])
-path = os.environ['UMLFRI_PATH']
-rootPath = os.environ['UMLFRI_ROOT']
 uri = os.environ['UMLFRI_URI']
 
-sys.path.insert(0, rootPath)
+if 'UMLFRI_ROOT' in os.environ:
+    rootPath = os.environ['UMLFRI_ROOT']
+    sys.path.insert(0, rootPath)
+
+path = os.environ['UMLFRI_PATH']
 sys.path.insert(0, path)
 
 import plugin
