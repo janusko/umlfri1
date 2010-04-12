@@ -422,8 +422,13 @@ class CDiagram(CBaseObject):
         old_selected =  self.selected
         self.DeselectAll()
         for e in old_selected:
-            e.Paint(canvas)
-            self.AddToSelection(e)
+            if isinstance(e, Element.CElement):
+                e.Paint(canvas)
+                self.AddToSelection(e)
+        for e in old_selected:
+            if isinstance(e, Connection.CConnection):
+                e.Paint(canvas)
+                self.AddToSelection(e)
  
     def GetElements(self):
         for e in self.elements:
