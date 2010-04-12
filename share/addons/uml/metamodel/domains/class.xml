@@ -106,6 +106,9 @@
 	            	<Attribute id="virtual" name="Virtual" >
 						<Bool default="False"/>
 					</Attribute>
+	            	<Attribute id="abstract" name="Abstract"  >
+						<Bool default="False"/>
+					</Attribute>
 	            	<Attribute id="override" name="Override" >
 						<Bool default="False"/>
 					</Attribute>
