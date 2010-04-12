@@ -99,7 +99,7 @@
                                                 </Switch>
                                                 
                                                 <Default
-                                                    textfont="#cfg.Styles.Element.TextFont.ChangeStyle('underline', static)"
+                                                    textfont="#cfg.Styles.Element.TextFont.ChangeStyle('underline', static).ChangeStyle('italic', abstract)"
                                                 >
                                                     <VBox>
                                                         <Condition condition="#stereotype">
