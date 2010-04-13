@@ -314,7 +314,7 @@ class CpicDrawingArea(CWidget):
         if (self.application.GetProject() is not None and 
             self.Diagram is not None and
             self.application.GetProject().GetRoot().GetObject() in (
-                [item.GetObject() for item in self.Diagram.GetSelectedElements()])):
+                [item.GetObject() for item in self.Diagram.GetSelectedElements(True)])):
             self.mnuCtxShiftDelete.set_sensitive(False)
     
     @event("picEventBox", "button-press-event")
@@ -417,13 +417,13 @@ class CpicDrawingArea(CWidget):
             #here, I get prent element of selected elements (if element is on (over) another element)
             minzorder = 9999999
             parentElement = None
-            for el in self.Diagram.GetSelectedElements():
+            for el in self.Diagram.GetSelectedElements(True):
                 pos1, pos2 = el.GetSquare(self.canvas)
-                zorder = self.Diagram.elements.index(el)
+                zorder = self.Diagram.GetElementZOrder(el)
                 if newElement.AreYouInRange(self.canvas, pos1, pos2, True):
                     for el2 in self.Diagram.GetElementsInRange(self.canvas, pos1, pos2, True):
-                        if self.Diagram.elements.index(el2) < minzorder:        #get element with minimal zorder
-                            minzorder = self.Diagram.elements.index(el2)
+                        if self.Diagram.GetElementZOrder(el2) < minzorder:        #get element with minimal zorder
+                            minzorder = self.Diagram.GetElementZOrder(el2)
                             parentElement = el2.GetObject()
                     
             self.Diagram.DeselectAll()
