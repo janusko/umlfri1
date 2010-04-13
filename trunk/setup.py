@@ -106,10 +106,11 @@ class CInnoPy2Exe(Cpy2exe):
         else:
             dist_dir = self.dist_dir
         
+        all_windows_exe_files = [p[len(dist_dir):] for p in self.windows_exe_files] + [p[len(dist_dir):] for p in self.console_exe_files]
+        
         windows_exe_files = [
             exe
-            for exe in
-                [p[len(dist_dir):] for p in self.windows_exe_files] + [p[len(dist_dir):] for p in self.console_exe_files]
+            for exe in all_windows_exe_files
             if 'pl_runner' not in exe
         ]
         lib_files = [p[len(dist_dir):] for p in self.lib_files]
@@ -162,7 +163,7 @@ class CInnoPy2Exe(Cpy2exe):
         print>>f
         
         print>>f, r"[Files]"
-        allfiles = windows_exe_files + lib_files
+        allfiles = all_windows_exe_files + lib_files
         allfiles.sort()
         for path in allfiles:
             dest = os.path.dirname(path)
