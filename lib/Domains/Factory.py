@@ -169,6 +169,8 @@ class CDomainFactory(CBaseObject):
         
         @param attribute: xml node
         '''
+        trycast = lambda type, value: None if value is None else type(value)
+        
         id = attribute.get('id')
         if self.IDENTIFIER.match(id) is None:
             raise DomainFactoryError('Name "%s" is not valid' %id)
@@ -181,13 +183,13 @@ class CDomainFactory(CBaseObject):
                 raise DomainFactoryError('Local domain "%s" cannot be used as explicitly '
                     'set type of "%s.%s"' % (type, obj.GetName(), id))
             if type == 'Int':
-                obj.AppendAttribute(id,attribute.get('name'),'int',child.get('default'),attribute.get('hidden'))
+                obj.AppendAttribute(id,attribute.get('name'),'int',trycast(int, child.get('default')),attribute.get('hidden'))
                 
             elif type == 'Float':
-                obj.AppendAttribute(id,attribute.get('name'),'float',child.get('default'),attribute.get('hidden'))
+                obj.AppendAttribute(id,attribute.get('name'),'float',trycast(float, child.get('default')),attribute.get('hidden'))
                 
             elif type == 'Bool':
-                obj.AppendAttribute(id,attribute.get('name'),'bool',child.get('default'),attribute.get('hidden'))
+                obj.AppendAttribute(id,attribute.get('name'),'bool',trycast(lambda x: x == 'True', child.get('default')),attribute.get('hidden'))
                 
             elif type == 'Enum':
                 obj.AppendAttribute(id,attribute.get('name'),'enum',child.get('default'),attribute.get('hidden'))
