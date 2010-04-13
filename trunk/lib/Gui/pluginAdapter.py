@@ -30,7 +30,13 @@ class CPluginAdapter(CBaseObject, CGuiObject):
     def Notify(self, event, *args, **kwds):
         if event in self.notifications:
             for callback in self.notifications[event]:
-                callback(*args, **kwds)
+                if ((hasattr(callback, 'im_func') and 
+                    getattr(callback.im_func, '_synchronized', False)) or 
+                    getattr(callback, '_synchronized', False)
+                ):
+                    gobject.idle_add(callback, *args, **kwds)
+                else:
+                    callback(*args, **kwds)
         
     def _generateUID(self):
         return 'adapter'
