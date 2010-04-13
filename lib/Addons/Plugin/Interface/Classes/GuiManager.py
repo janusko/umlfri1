@@ -1,7 +1,7 @@
 from base import IBase
 from lib.Addons.Plugin.Communication.ComSpec import *
 from lib.Addons.Plugin.Interface.decorators import *
-from lib.Gui.pluginAdapter import CGuiManager
+from lib.Gui.GuiManager import CGuiManager
 
 class IGuiManager(IBase):
     __cls__ = CGuiManager
