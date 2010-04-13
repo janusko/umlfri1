@@ -2,6 +2,7 @@ from base import IBase
 from lib.Addons.Plugin.Communication.ComSpec import *
 from lib.Addons.Plugin.Interface.decorators import *
 from lib.Addons.Metamodel.Metamodel import CMetamodel
+from lib.Exceptions import *
 
 class IMetamodel(IBase):
     __cls__ = CMetamodel
@@ -29,4 +30,16 @@ class IMetamodel(IBase):
     @result(r_objectlist)
     def GetDomains(him):
         return list(him.GetDomainFactory().IterTypes())
+    
+    def ListDir(him, path):
+        try:
+            return him.GetStorage().listdir(path)
+        except:
+            raise ParamValueError('invalid path')
+    
+    def ReadFile(him, path):
+        try:
+            return him.GetStorage().read_file(path)
+        except:
+            raise ParamValueError('invalid path')
         
