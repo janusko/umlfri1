@@ -30,6 +30,7 @@ class CGuiManager(CBaseObject):
         self.lock = thread.allocate()
         self.app = app
         self.frmMain = self.app.GetWindow('frmMain')
+        self._persistent = True
         
     def GetItem(self, item):
         try:
