@@ -307,9 +307,14 @@ class CProject(CBaseObject):
         for elem in root:
             if elem.tag == UMLPROJECT_NAMESPACE+'childs':
                 for node in elem:
-                    proNode = CProjectNode(parentNode,ListObj[node.get("id")],parentNode.GetPath() + "/" + ListObj[node.get("id")].GetName() + ":" + ListObj[node.get("id")].GetType().GetId())
-                    self.AddNode(proNode,parentNode)
-                    self.__CreateTree(ListObj, ListCon, ListDiag, node, proNode, savever)
+                    elemid = node.get("id")
+                    if elemid in ListObj:
+                        proNode = CProjectNode(parentNode,ListObj[elemid],parentNode.GetPath() + "/" + ListObj[elemid].GetName() + ":" + ListObj[elemid].GetType().GetId())
+                        self.AddNode(proNode,parentNode)
+                        self.__CreateTree(ListObj, ListCon, ListDiag, node, proNode, savever)
+                    else:
+                        # show warning
+                        pass
                     
             elif elem.tag == UMLPROJECT_NAMESPACE+'diagrams':
                 for area in elem:
@@ -318,34 +323,51 @@ class CProject(CBaseObject):
                         if savever < (1, 1, 0):
                             diagram = CDiagram(self.GetMetamodel().GetDiagramFactory().GetDiagram(area.get("type")),area.get("name"))
                         else:
-                            diagram = ListDiag[area.get("id")]
+                            diagid = area.get("id")
+                            if diagid in ListDiag:
+                                diagram = ListDiag[diagid]
+                            else:
+                                diagram = None
                         
-                        diagram.SetPath(parentNode.GetPath() + "/" + diagram.GetName() + ":=Diagram=")
-                        if 'default' in area.attrib and area.attrib['default'].lower() in ('1', 'true'):
-                            self.defaultDiagram = diagram
-                        parentNode.AddDiagram(diagram)
-                        for pic in area:
-                            if pic.tag == UMLPROJECT_NAMESPACE+"element":
-                                element = CElement(diagram,ListObj[pic.get("id")],True)
-                                element.SetPosition((int(pic.get("x")),int(pic.get("y"))))
-                                dw = int(pic.get("dw"))
-                                dh = int(pic.get("dh"))
-                                element.SetSizeRelative((dw, dh))
-                            elif pic.tag == UMLPROJECT_NAMESPACE+"connection":
-                                for e in diagram.GetElements():
-                                    if e.GetObject() is ListCon[pic.get("id")].GetSource():
-                                        source = e
-                                    if e.GetObject() is ListCon[pic.get("id")].GetDestination():
-                                        destination = e
-                                conect = CConnection(diagram,ListCon[pic.get("id")],source,destination,[])
-                                for propCon in pic:
-                                    if propCon.tag == UMLPROJECT_NAMESPACE+"point":
-                                        conect.AddPoint((int(propCon.get("x")),int(propCon.get("y"))))
-                                    elif propCon.tag == UMLPROJECT_NAMESPACE+"label":
-                                        data = dict(propCon.items())
-                                        del data["num"]
-                                        conect.RestoreLabelPosition(int(propCon.get("num")), data)
-                            
+                        if diagram is not None:
+                            diagram.SetPath(parentNode.GetPath() + "/" + diagram.GetName() + ":=Diagram=")
+                            if 'default' in area.attrib and area.attrib['default'].lower() in ('1', 'true'):
+                                self.defaultDiagram = diagram
+                            parentNode.AddDiagram(diagram)
+                            for pic in area:
+                                if pic.tag == UMLPROJECT_NAMESPACE+"element":
+                                    elemid = pic.get("id")
+                                    if elemid in ListObj:
+                                        element = CElement(diagram,ListObj[elemid],True)
+                                        element.SetPosition((int(pic.get("x")),int(pic.get("y"))))
+                                        dw = int(pic.get("dw"))
+                                        dh = int(pic.get("dh"))
+                                        element.SetSizeRelative((dw, dh))
+                                    else:
+                                        # show warning
+                                        pass
+                                elif pic.tag == UMLPROJECT_NAMESPACE+"connection":
+                                    conid = pic.get("id")
+                                    if conid in ListCon:
+                                        for e in diagram.GetElements():
+                                            if e.GetObject() is ListCon[conid].GetSource():
+                                                source = e
+                                            if e.GetObject() is ListCon[conid].GetDestination():
+                                                destination = e
+                                        conect = CConnection(diagram,ListCon[conid],source,destination,[])
+                                        for propCon in pic:
+                                            if propCon.tag == UMLPROJECT_NAMESPACE+"point":
+                                                conect.AddPoint((int(propCon.get("x")),int(propCon.get("y"))))
+                                            elif propCon.tag == UMLPROJECT_NAMESPACE+"label":
+                                                data = dict(propCon.items())
+                                                del data["num"]
+                                                conect.RestoreLabelPosition(int(propCon.get("num")), data)
+                                    else:
+                                        # show warning
+                                        pass
+                        else:
+                            # show warning
+                            pass
         
     @staticmethod
     def __LoadDomainObjectInfo(element):
@@ -459,11 +481,17 @@ class CProject(CBaseObject):
             elif element.tag == UMLPROJECT_NAMESPACE+'connections':
                 for connection in element:
                     if connection.tag == UMLPROJECT_NAMESPACE+'connection':
-                        id = connection.get("id")
-                        con = CConnectionObject(self.GetMetamodel().GetConnectionFactory().GetConnection(connection.get("type")),ListObj[connection.get("source")],ListObj[connection.get("destination")])
-                        con.SetUID(id)
-                        con.SetSaveInfo(CProject.__LoadDomainObjectInfo(connection[0]))
-                        ListCon[id] = con
+                        conFrom = connection.get("source")
+                        conTo = connection.get("destination")
+                        if conFrom in ListObj and conTo in ListObj:
+                            id = connection.get("id")
+                            con = CConnectionObject(self.GetMetamodel().GetConnectionFactory().GetConnection(connection.get("type")),ListObj[conFrom],ListObj[conTo])
+                            con.SetUID(id)
+                            con.SetSaveInfo(CProject.__LoadDomainObjectInfo(connection[0]))
+                            ListCon[id] = con
+                        else:
+                            # show warning
+                            pass
             
             elif savever >= (1, 1, 0) and element.tag == UMLPROJECT_NAMESPACE+'diagrams':
                 for diagram in element:
@@ -477,7 +505,8 @@ class CProject(CBaseObject):
             elif element.tag == UMLPROJECT_NAMESPACE+'projecttree':
                 for subelem in element:
                     if subelem.tag == UMLPROJECT_NAMESPACE+'node':
-                        proNode = CProjectNode(None,ListObj[subelem.get("id")],ListObj[subelem.get("id")].GetName() + ":" + ListObj[subelem.get("id")].GetType().GetId())
+                        elemid = subelem.get("id")
+                        proNode = CProjectNode(None,ListObj[elemid],ListObj[elemid].GetName() + ":" + ListObj[elemid].GetType().GetId())
                         self.SetRoot(proNode)
                         self.__CreateTree(ListObj, ListCon, ListDiag, subelem, proNode, savever)
             
