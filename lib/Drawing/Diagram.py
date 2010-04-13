@@ -116,7 +116,7 @@ class CDiagram(CBaseObject):
         return None
     
     def GetElementZOrder(self, object):
-        return self.elements.index(el)
+        return self.elements.index(object)
     
     def GetConnection(self, conObject):
         for c in self.connections:
