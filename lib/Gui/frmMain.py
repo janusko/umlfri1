@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 from lib.Depend.gtk2 import gtk
-
 from common import CWindow, event
 
 from lib.consts import SCALE_MIN, SCALE_MAX, SCALE_INCREASE, WEB
 from lib.Exceptions import *
 
+import gobject
 import os.path
 from lib.Drawing import CElement, CDiagram, CConnection, CConLabelInfo
 from lib.Elements import CElementObject, CElementType
@@ -184,7 +184,14 @@ class CfrmMain(CWindow):
         for diagram in self.application.GetProject().GetDefaultDiagrams():
             self.nbTabs.AddTab(diagram)
             self.picDrawingArea.SetDiagram(diagram)
-        
+        self.twProjectView.GetRootNode()
+        self.twProjectView.twProjectView.grab_focus()
+        gobject.idle_add(self.ReloadedFocus)
+    
+    def ReloadedFocus(self):
+        self.nbProperties.lwProperties.lwProperties.set_cursor_on_cell(
+            0,self.nbProperties.lwProperties.lwProperties.get_column(1),None, True)
+    
     def PaintAll(self):
         if not self.nbTabs.IsStartPageActive():
             self.picDrawingArea.Paint(True)
@@ -448,10 +455,11 @@ class CfrmMain(CWindow):
             parentElement = self.twProjectView.GetSelectedDiagram()
         else:
             parentElement = self.twProjectView.GetRootNode()
-
         ElementType = self.application.GetProject().GetMetamodel().GetElementFactory().GetElement(element)
         ElementObject = CElementObject(ElementType)
         self.twProjectView.AddElement(ElementObject, None, parentElement)
+        self.nbProperties.lwProperties.lwProperties.set_cursor_on_cell(
+            0,self.nbProperties.lwProperties.lwProperties.get_column(1),None, True)
 
     @event("picDrawingArea", "add-element")
     def on_add_element(self, widget, Element, diagram, parentElement):
@@ -465,6 +473,8 @@ class CfrmMain(CWindow):
         self.nbTabs.AddTab(diagram)
         self.picDrawingArea.SetDiagram(diagram)
         self.tbToolBox.SetButtons(diagramId)
+        self.nbProperties.lwProperties.lwProperties.set_cursor_on_cell(
+            0,self.nbProperties.lwProperties.lwProperties.get_column(1),None, True)
 
     @event("picDrawingArea", "get-selected")
     def on_picDrawingArea_get_selected(self, widget):
