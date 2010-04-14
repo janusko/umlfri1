@@ -44,6 +44,9 @@ def check():
     assert gtk.gtk_version >= (2, 10), "GTK+ 2.10 or better is required"
     assert gtk.pygtk_version >= (2, 10), "PyGTK 2.10 or better is required"
     
+    assert (2, 15) < gtk.gtk_version or gtk.gtk_version >= (2, 14, 7), (
+        "GTK+ %s has known bug and is not supported" % ('.'.join(str(i) for i in gtk.gtk_version),))
+    
     # pygtk.require('2.0')
 
 def version():
