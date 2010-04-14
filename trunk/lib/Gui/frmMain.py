@@ -498,10 +498,14 @@ class CfrmMain(CWindow):
         self.tbToolBox.SetSelected(selected)
 
     @event("picDrawingArea", "selected-item")
-    def on_picDrawingArea_selected_item(self, widget, selected):
+    def on_picDrawingArea_selected_item(self, widget, selected, new = False):
         self.UpdateMenuSensitivity(element = len(selected) > 0)
         if len(selected) == 1:
             self.nbProperties.Fill(selected[0])
+            #if new is True : element or connections was first time created
+            if new == True:
+                self.nbProperties.lwProperties.lwProperties.set_cursor_on_cell(
+                  0,self.nbProperties.lwProperties.lwProperties.get_column(1),None, True)
         else:
             self.nbProperties.Fill(None)
 
@@ -555,6 +559,7 @@ class CfrmMain(CWindow):
 
     @event("tbToolBox", "toggled")
     def on_tbToolBox_toggled(self, widget, ItemId, ItemType):
+        self.picDrawingArea.Diagram.DeselectAll()
         self.picDrawingArea.ResetAction()
         
     @event("picDrawingArea","drop-from-treeview")
