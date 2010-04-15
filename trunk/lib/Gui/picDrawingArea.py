@@ -498,10 +498,10 @@ class CpicDrawingArea(CWidget):
                     (type, points, source), destination = self.__NewConnection, itemSel
                     obj = CConnectionObject(type, source.GetObject(), destination.GetObject())
                     x = CConnection(self.Diagram, obj, source, destination, points[1:])
+                    self.emit('set-selected', None)
                     self.Diagram.AddToSelection(x)
                     self.emit('selected-item', list(self.Diagram.GetSelected()),True)
                     self.__NewConnection = None
-                    self.emit('set-selected', None)
                 else:
                     pass
             else:
