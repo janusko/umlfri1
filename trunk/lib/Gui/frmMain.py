@@ -414,10 +414,10 @@ class CfrmMain(CWindow):
     @event("mnuCopyAsImage","activate")
     def on_mnuCopyAsImage_click(self, widget):
         if self.picDrawingArea.HasFocus():
-            zoom, bg = self.application.GetWindow('frmCopyImage').Show()
+            zoom, padding, bg = self.application.GetWindow('frmCopyImage').Show()
             if zoom is None:
                 return
-            gtk.clipboard_get(gtk.gdk.SELECTION_CLIPBOARD).set_image(self.picDrawingArea.GetSelectionPixbuf(zoom, bg))
+            gtk.clipboard_get(gtk.gdk.SELECTION_CLIPBOARD).set_image(self.picDrawingArea.GetSelectionPixbuf(zoom, padding, bg))
     
     @event("cmdPaste", "clicked")
     @event("mnuPaste","activate")

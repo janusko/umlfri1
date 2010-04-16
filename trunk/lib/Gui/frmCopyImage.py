@@ -8,7 +8,7 @@ class CfrmCopyImage(CWindow):
     name = 'frmCopyImage'
     glade = 'export.glade'
     
-    widgets = ('spinCopyZoom','chkCopyTransparent', )
+    widgets = ('spinCopyZoom','chkCopyTransparent', 'spinCopyPadding')
     
     def Show(self):
         if platform.isA("windows"):
@@ -17,12 +17,13 @@ class CfrmCopyImage(CWindow):
         try:
             if self.form.run() == gtk.RESPONSE_OK:
                 zoom = self.spinCopyZoom.get_value_as_int()
+                padding = self.spinCopyPadding.get_value_as_int()
                 if self.chkCopyTransparent.get_active():
                     bg = None
                 else:
                     bg = CColor("#FFFFFF")
-                return zoom, bg
+                return zoom, padding, bg
             else:
-                return None, None
+                return None, None, None
         finally:
             self.Hide()
