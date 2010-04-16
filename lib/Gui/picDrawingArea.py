@@ -917,14 +917,13 @@ class CpicDrawingArea(CWidget):
     def HasFocus(self):
         return self.picDrawingArea.is_focus()
 
-    def GetSelectionPixbuf(self, zoom, bg):
+    def GetSelectionPixbuf(self, zoom, padding, bg):
         (x, y), (sizeX, sizeY) = self.Diagram.GetSelectSquare(self.canvas)
-        # 4 is the size of shadow -- do we have a constant or config value for this ?
-        sizeX = (sizeX + 4) * zoom
-        sizeY = (sizeY + 4) * zoom
+        sizeX = (sizeX + padding*2) * zoom
+        sizeY = (sizeY + padding*2) * zoom
         canvas = CExportCanvas(self.application.GetProject().GetMetamodel().GetStorage(), 'pixbuf', None, sizeX, sizeY, background = bg)
         canvas.SetScale(zoom)
-        canvas.MoveBase(x, y)
+        canvas.MoveBase(x - padding, y - padding)
         self.Diagram.PaintSelected(canvas)
         return canvas.Finish()
 
