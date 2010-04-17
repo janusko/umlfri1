@@ -653,7 +653,7 @@ class CfrmMain(CWindow):
             self.picDrawingArea.AlignMostBottom()
             
             
-    @event('application.bus', 'project-opened')
+    @event('application.bus', 'project-opened-from-plugin-adapter')
     def on_project_opened(self, widget):
         self.nbTabs.CloseAll()
         self.ReloadTitle()

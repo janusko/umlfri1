@@ -10,5 +10,6 @@ class CBus(gobject.GObject):
         'run-dialog':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_PYOBJECT,
             (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT, )), #type, message
         'project-opened': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
+        'project-opened-from-plugin-adapter': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
     }
     
