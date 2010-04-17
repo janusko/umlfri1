@@ -85,6 +85,6 @@ class CPluginAdapter(CBaseObject, CGuiObject):
         self.application.ProjectDelete()
         self.application.ProjectInit()
         self.GetProject().LoadProject(fileName)
-        gobject.idle_add(self.application.GetBus().emit, 'project-opened')
+        gobject.idle_add(self.application.GetBus().emit, 'project-opened-from-plugin-adapter')
         
     
