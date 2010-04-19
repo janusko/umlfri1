@@ -106,7 +106,7 @@ class CDomainObject(CBaseObject):
         '''
         self._TracePath(id, 'setvalue', value)
     
-    def AppendItem(self, id):
+    def AppendItem(self, id,item=None):
         '''
         Append next object to the attribute with type list
         
@@ -116,7 +116,9 @@ class CDomainObject(CBaseObject):
         @param id: path to the attribute
         @type id: str
         '''
-        self._TracePath(id, 'append')
+        self._TracePath(id, 'append',item)
+        items=self._TracePath(id, 'getvalue')
+        return items[len(items)-1]
     
     def RemoveItem(self, id):
         '''
@@ -167,7 +169,10 @@ class CDomainObject(CBaseObject):
                     return self.type.GetAttribute(path[0])['type']
             elif action == 'append':
                 if self.type.GetAttribute(path[0])['type'] == 'list':
-                    self.values[path[0]].append(self.type.GetDefaultValue(domain = self.type.GetAttribute(path[0])['list']['type']))
+                    if value==None:
+                        self.values[path[0]].append(self.type.GetDefaultValue(domain = self.type.GetAttribute(path[0])['list']['type']))
+                    else:
+                        self.values[path[0]].append(value)
                 else:
                     raise DomainObjectError('Attribute %s of domain %s is not of type "list"'%\
                     (path[0], self.type.GetName()))
