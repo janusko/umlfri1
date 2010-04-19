@@ -380,7 +380,7 @@ class CpicDrawingArea(CWidget):
                 else:
                     self.Diagram.AddToSelection(itemSel)
                     self.Paint()
-                    self.emit('selected-item', list(self.Diagram.GetSelected()).False)
+                    self.emit('selected-item', list(self.Diagram.GetSelected()),False)
             else: # nothing under pointer
                 if self.Diagram.SelectedCount() > 0:
                     if not (event.state & gtk.gdk.CONTROL_MASK):
