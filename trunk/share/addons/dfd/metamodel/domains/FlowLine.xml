@@ -2,7 +2,7 @@
     <Attribute id="flowlineid" name="FlowLine ID" >
 		<Str/>
 	</Attribute>
-    <Attribute id="notes" name="Notes" >
+    <Attribute id="note" name="Note" >
 		<Text/>
 	</Attribute>
 </Domain>

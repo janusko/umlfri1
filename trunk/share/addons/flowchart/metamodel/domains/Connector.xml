@@ -2,7 +2,7 @@
     <Attribute id="connectorid" name="Connector ID" >
 		<Str/>
 	</Attribute>
-    <Attribute id="notes" name="Notes" >
+    <Attribute id="note" name="Note" >
 		<Text/>
 	</Attribute>
 </Domain>

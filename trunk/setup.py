@@ -265,9 +265,9 @@ setup(
         ("img", glob.glob("img/*.png")+glob.glob("img/*.ico")),
         (".", ["ABOUT", "README", "LICENSE"])
     ]+list(get_languages('share/locale', 'uml_fri'))
-    + addon('uml')
-    + addon('flowchart')
-    + addon('dfd')
+    #+ addon('uml')
+    #+ addon('flowchart')
+    + addon('oracleERD')
     ,
     cmdclass = {"py2exe": CDllAndInnoPy2Exe},
 )

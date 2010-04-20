@@ -2,7 +2,7 @@
     <Attribute id="filedbname" name="File/Database Name" >
 		<Str/>
 	</Attribute>
-    <Attribute id="notes" name="Notes" >
+    <Attribute id="note" name="Note" >
 		<Text/>
 	</Attribute>
 </Domain>

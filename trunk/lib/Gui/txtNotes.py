@@ -24,6 +24,9 @@ class CtxtNotes(CWidget):
         if object.GetDomainType().HasAttribute('note'):
             self.txtNotes.get_buffer().set_text(object.GetValue('note'))
             self.txtNotes.set_sensitive(True)
+        else:
+            self.txtNotes.get_buffer().set_text("")
+            self.txtNotes.set_sensitive(False)
     
     @event("txtNotes.buffer", "changed")
     def on_txtNotes_changed(self, buffer):
