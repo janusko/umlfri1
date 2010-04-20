@@ -11,7 +11,7 @@
     <Attribute id="DRole" name="Destination Role" >
 		<Str/>
 	</Attribute>
-    <Attribute id="notes" name="Notes" >
+    <Attribute id="note" name="Note" >
 		<Text/>
 	</Attribute>
 </Domain>

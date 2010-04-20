@@ -2,7 +2,7 @@
     <Attribute id="process" name="Process" >
 		<Str/>
 	</Attribute>
-    <Attribute id="notes" name="Notes" >
+    <Attribute id="note" name="Note" >
 		<Text/>
 	</Attribute>
 </Domain>

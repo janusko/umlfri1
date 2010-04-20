@@ -8,7 +8,7 @@
     <Attribute id="version" name="Version">
 		<Str default="1.0.0"/>
 	</Attribute>
-    <Attribute id="note" name="Notes">
+    <Attribute id="note" name="Note">
 		<Text/>
 	</Attribute>
 </Domain>

@@ -40,13 +40,13 @@
 	            <Attribute id="default" name="Default" >
 					<Str/>
 				</Attribute>
-	            <Attribute id="notes" name="Notes" >
+	            <Attribute id="note" name="Note" >
 					<Text/>
 				</Attribute>
 	        </Domain>
 		</List>
     </Attribute>
-    <Attribute id="notes" name="Notes" >
+    <Attribute id="note" name="Note" >
 		<Text/>
 	</Attribute>
 </Domain>

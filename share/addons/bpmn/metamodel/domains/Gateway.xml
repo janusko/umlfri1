@@ -2,7 +2,7 @@
     <Attribute id="condition" name="Condition" >
 		<Str/>
 	</Attribute>
-    <Attribute id="notes" name="Notes" >
+    <Attribute id="note" name="Note" >
 		<Text/>
 	</Attribute>
 </Domain>
