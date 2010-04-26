@@ -215,6 +215,9 @@ class CProject(CBaseObject):
                         diagramNode.append(elementNode)
                         
                     for c in area.GetConnections():
+                        if c is None or c.GetObject() is None or c.GetObject().GetSource() is None or c.GetObject().GetDestination() is None:
+                            print "WARNING: false ConnectionVisual"
+                            continue
                         connectionNode = etree.Element(UMLPROJECT_NAMESPACE+'connection', id=unicode(c.GetObject().GetUID()))
                         for pos in c.GetMiddlePoints():
                             pointNode = etree.Element(UMLPROJECT_NAMESPACE+'point', x=unicode(pos[0]), y=unicode(pos[1]))
@@ -263,6 +266,9 @@ class CProject(CBaseObject):
         connections = list(connections)
         connections.sort(key = CBaseObject.GetUID)
         for connection in connections:
+            if connection is None or connection.GetSource() is None or connection.GetDestination() is None:
+                print "WARNING: False connection object"
+                continue
             connectionNode = etree.Element(UMLPROJECT_NAMESPACE+'connection', type=unicode(connection.GetType().GetId()), id=unicode(connection.GetUID()), source=unicode(connection.GetSource().GetUID()), destination=unicode(connection.GetDestination().GetUID()))
             connectionNode.append(SaveDomainObjectInfo(connection.GetSaveInfo()))
             connectionsNode.append(connectionNode)
