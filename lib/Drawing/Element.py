@@ -51,11 +51,21 @@ class CElement(CVisibleObject):
         self.squares = []
 
     def Paint(self, canvas, delta = (0, 0)):
-        self.object.Paint(CDrawingContext(canvas, self, (self.position[0]+ delta[0], self.position[1]+ delta[1]), self.GetSize(canvas)))
+        x, y = self.position
+        context = CDrawingContext(canvas, self, (x + delta[0], y + delta[1]))
+        
+        rx, ry = self.object.GetType().GetResizable(context)
+        
+        self.deltaSize = (
+            self.deltaSize[0] if rx else 0,
+            self.deltaSize[1] if ry else 0,
+        )
+        
+        w, h = self.GetSize(canvas)
+        
+        context.Resize((w, h))
+        self.object.Paint(context)
         if self.selected:
-            x, y = self.position
-            w, h = self.GetSize(canvas)
-            rx, ry = self.object.GetType().GetResizable()
             
             self.squares = []
             

@@ -45,6 +45,19 @@ class CSwitch(CContainer):
             raise XMLError("Case needed")
         CContainer.AppendChild(self, child)
     
+    def GetResizable(self, context):
+        value, = self.GetVariables(context, 'value')
+        
+        rx, ry = False, False
+        for i in self.childs:
+            if i.IsTrue(context, value):
+                rcx, rcy = i.GetResizable(context)
+                rx = rx or rcx
+                ry = ry or rcy
+                if rx and ry:
+                    return True, True
+        return rx, ry
+    
     def ComputeSize(self, context):
         value, = self.GetVariables(context, 'value')
         

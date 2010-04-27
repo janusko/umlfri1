@@ -33,7 +33,7 @@ class CProportional(CAlign):
     def ComputeSize(self, context):
         return self.ComputeChildSize(context)
     
-    def GetResizable(self):
-        rx, ry = CAlign.GetResizable(self)
+    def GetResizable(self, context):
+        rx, ry = CAlign.GetResizable(self, context)
         resizable = rx or ry
         return resizable, resizable

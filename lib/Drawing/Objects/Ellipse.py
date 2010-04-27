@@ -14,7 +14,7 @@ class CEllipse(CSimpleContainer):
         
         self.borderwidth = borderwidth
     
-    def GetResizable(self):
+    def GetResizable(self, context):
         return True, True
 
     def Paint(self, context):

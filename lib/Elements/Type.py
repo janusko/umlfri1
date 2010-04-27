@@ -123,13 +123,13 @@ class CElementType(CBaseObject):
         '''
         return self.id
     
-    def GetResizable(self):
+    def GetResizable(self, context):
         '''
         @return: True if element can be resized - depends on the uppermost
         authoritative visual object.
         @rtype: bool
         '''
-        return self.appearance.GetResizable()
+        return self.appearance.GetResizable(context)
     
     def Paint(self, context):
         '''

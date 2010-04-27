@@ -9,14 +9,14 @@ class CContainer(CVisualObject):
         self.childs.append(child)
         child.SetParent(self)
     
-    def GetResizable(self):
+    def GetResizable(self, context):
         rx, ry = False, False
         for i in self.childs:
-            rcx, rcy = i.GetResizable()
+            rcx, rcy = i.GetResizable(context)
             rx = rx or rcx
             ry = ry or rcy
-            if rx == ry == True:
-                return rx, ry
+            if rx and ry:
+                return True, True
         return rx, ry
 
     def GetChild(self, index):

@@ -38,7 +38,7 @@ class CRectangle(CSimpleContainer):
             if righttop is not None or rightbottom is not None:
                 raise XMLError("Rectangle", "right")
     
-    def GetResizable(self):
+    def GetResizable(self, context):
         return True, True
 
     def Paint(self, context):

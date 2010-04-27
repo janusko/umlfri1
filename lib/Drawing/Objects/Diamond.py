@@ -14,7 +14,7 @@ class CDiamond(CSimpleContainer):
         self.fill = fill
         self.border = border
     
-    def GetResizable(self):
+    def GetResizable(self, context):
         return True, True
 
     def Paint(self, context):
