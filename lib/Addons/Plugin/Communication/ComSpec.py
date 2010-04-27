@@ -62,6 +62,7 @@ code2Exception = {
 }
 
 exception2Code = (
+    (UIDException, RESP_INVALID_OBJECT),
     (TransactionModeUnspecifiedError, RESP_TRANSACTION_MODE_UNSPECIFIED),
     (TransactionPendingError, RESP_TRANSACTION_PENDING),
     (OutOfTransactionError, RESP_OUT_OF_TRANSACTION),
