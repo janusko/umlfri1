@@ -208,7 +208,7 @@ class CDiagram(CBaseObject):
             self.selected.add(c)
             c.Select()
     
-    def GetSelectSquare(self, canvas):
+    def GetSelectSquare(self, canvas, includeConnections = False):
         x1, y1 = self.GetSize(canvas)
         x2, y2 = 0, 0
         
@@ -223,6 +223,13 @@ class CDiagram(CBaseObject):
                 x2 = x + w
             if y + h > y2:
                 y2 = y + h
+        if includeConnections:
+            for connection in self.GetSelectedConnections():
+                for x, y in connection.GetMiddlePoints():
+                    x1 = min(x, x1)
+                    x2 = max(x, x2)
+                    y1 = min(y, y1)
+                    y2 = max(y, y2)
         return (int(x1), int(y1)), (int(x2 - x1), int(y2 - y1))
     
     def MoveSelection(self, delta, canvas = None):

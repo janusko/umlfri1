@@ -918,7 +918,7 @@ class CpicDrawingArea(CWidget):
         return self.picDrawingArea.is_focus()
 
     def GetSelectionPixbuf(self, zoom, padding, bg):
-        (x, y), (sizeX, sizeY) = self.Diagram.GetSelectSquare(self.canvas)
+        (x, y), (sizeX, sizeY) = self.Diagram.GetSelectSquare(self.canvas, True)
         sizeX = (sizeX + padding*2) * zoom
         sizeY = (sizeY + padding*2) * zoom
         canvas = CExportCanvas(self.application.GetProject().GetMetamodel().GetStorage(), 'pixbuf', None, sizeX, sizeY, background = bg)
