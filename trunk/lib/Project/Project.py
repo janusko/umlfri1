@@ -211,7 +211,7 @@ class CProject(CBaseObject):
                     for e in area.GetElements():
                         pos = e.GetPosition()
                         dw, dh = e.GetSizeRelative()
-                        elementNode = etree.Element(UMLPROJECT_NAMESPACE+'element', id=unicode(e.GetObject().GetUID()), x=unicode(pos[0]), y=unicode(pos[1]), dw=unicode(dw), dh=unicode(dh))
+                        elementNode = etree.Element(UMLPROJECT_NAMESPACE+'element', id=unicode(e.GetObject().GetUID()), x=unicode(int(pos[0])), y=unicode(int(pos[1])), dw=unicode(int(dw)), dh=unicode(int(dh)))
                         diagramNode.append(elementNode)
                         
                     for c in area.GetConnections():
@@ -220,12 +220,12 @@ class CProject(CBaseObject):
                             continue
                         connectionNode = etree.Element(UMLPROJECT_NAMESPACE+'connection', id=unicode(c.GetObject().GetUID()))
                         for pos in c.GetMiddlePoints():
-                            pointNode = etree.Element(UMLPROJECT_NAMESPACE+'point', x=unicode(pos[0]), y=unicode(pos[1]))
+                            pointNode = etree.Element(UMLPROJECT_NAMESPACE+'point', x=unicode(int(pos[0])), y=unicode(int(pos[1])))
                             connectionNode.append(pointNode)
                             
                         for num, info in enumerate(c.GetAllLabelPositions()):
                             connectionNode.append(etree.Element(UMLPROJECT_NAMESPACE+'label', 
-                                dict(map(lambda x: (x[0], unicode(x[1])), info.iteritems())), #transform {key:value, ...} -> {key:unicode(value), ...}
+                                dict(map(lambda x: (x[0], unicode(int(x[1]))), info.iteritems())), #transform {key:value, ...} -> {key:unicode(value), ...}
                                 num=unicode(num)))
                                 
                         diagramNode.append(connectionNode)
