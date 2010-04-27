@@ -16,7 +16,7 @@ from lib.Connections import CConnectionObject
 from lib.Exceptions.UserException import *
 from lib.Drawing.Canvas import CGtkCanvas, CSvgCanvas, CCairoCanvas, CExportCanvas
 from lib.Drawing import Element
-#from lib.Drawing.TidyWrap import CTidyWrapper
+from lib.Drawing.TidyWrap import CTidyWrapper
 
 import thread
 import os.path
@@ -927,94 +927,94 @@ class CpicDrawingArea(CWidget):
         return canvas.Finish()
 
     ### Align & tidy methods
-    ## Takes all selected Elements (ONLY Elements, no Labels or Connections!)
-    # left
-    #@event("pmAlign_Left","activate")
-    #def alignLeft(self, widget = None):
-        ## get the LEFT edge of clicked Element
-        #clickedElem =self.Diagram.GetElementAtPosition(self.canvas, self.lastClick)
-        ## use the algorithm for Alignment
-        #a =CTidyWrapper( self.Diagram.GetSelectedElements(), self.Diagram )
-        #a.alignLeft( clickedElem)
-        #a.applyState()
-        ## redraw canvas!
-        #self.Paint()
+    # Takes all selected Elements (ONLY Elements, no Labels or Connections!)
+    #left
+    @event("pmAlign_Left","activate")
+    def alignLeft(self, widget = None):
+        # get the LEFT edge of clicked Element
+        clickedElem =self.Diagram.GetElementAtPosition(self.canvas, self.lastClick)
+        # use the algorithm for Alignment
+        a =CTidyWrapper( self.Diagram.GetSelectedElements(), self.Diagram )
+        a.alignLeft( clickedElem)
+        a.applyState()
+        # redraw canvas!
+        self.Paint()
     
-    #def alignMostLeft(self, widget = None):
-        ## use the algorithm for Alignment
-        #a =CTidyWrapper( self.Diagram.GetSelectedElements(), self.Diagram )
-        #a.alignMostLeft()
-        #a.applyState()
-        ## redraw canvas!
-        #self.Paint()
+    def alignMostLeft(self, widget = None):
+        # use the algorithm for Alignment
+        a =CTidyWrapper( self.Diagram.GetSelectedElements(), self.Diagram )
+        a.alignMostLeft()
+        a.applyState()
+        # redraw canvas!
+        self.Paint()
     
-    ##right
-    #@event("pmAlign_Right","activate")
-    #def alignRight(self, widget = None):
-        ## get the RIGHT edge of clicked Element
-        #clickedElem =self.Diagram.GetElementAtPosition(self.canvas, self.lastClick)
-        ## use the algorithm for Alignment
-        #a =CTidyWrapper( self.Diagram.GetSelectedElements(), self.Diagram )
-        #a.alignRight( clickedElem)
-        #a.applyState()
-        ## redraw canvas!
-        #self.Paint()
+    #right
+    @event("pmAlign_Right","activate")
+    def alignRight(self, widget = None):
+        # get the RIGHT edge of clicked Element
+        clickedElem =self.Diagram.GetElementAtPosition(self.canvas, self.lastClick)
+        # use the algorithm for Alignment
+        a =CTidyWrapper( self.Diagram.GetSelectedElements(), self.Diagram )
+        a.alignRight( clickedElem)
+        a.applyState()
+        # redraw canvas!
+        self.Paint()
     
-    #def alignMostRight(self, widget = None):
-        ## use the algorithm for Alignment
-        #a =CTidyWrapper( self.Diagram.GetSelectedElements(), self.Diagram )
-        #a.alignMostRight()
-        #a.applyState()
-        ## redraw canvas!
-        #self.Paint()
+    def alignMostRight(self, widget = None):
+        # use the algorithm for Alignment
+        a =CTidyWrapper( self.Diagram.GetSelectedElements(), self.Diagram )
+        a.alignMostRight()
+        a.applyState()
+        # redraw canvas!
+        self.Paint()
     
-    ##top
-    #@event("pmAlign_Top","activate")
-    #def alignTop(self, widget = None):
-        ## get the TOP edge of clicked Element
-        #clickedElem =self.Diagram.GetElementAtPosition(self.canvas, self.lastClick)
-        ## use the algorithm for Alignment
-        #a =CTidyWrapper( self.Diagram.GetSelectedElements(), self.Diagram )
-        #a.alignTop( clickedElem)
-        #a.applyState()
-        ## redraw canvas!
-        #self.Paint()
+    #top
+    @event("pmAlign_Top","activate")
+    def alignTop(self, widget = None):
+        # get the TOP edge of clicked Element
+        clickedElem =self.Diagram.GetElementAtPosition(self.canvas, self.lastClick)
+        # use the algorithm for Alignment
+        a =CTidyWrapper( self.Diagram.GetSelectedElements(), self.Diagram )
+        a.alignTop( clickedElem)
+        a.applyState()
+        # redraw canvas!
+        self.Paint()
     
-    #def alignMostTop(self, widget = None):
-        ## use the algorithm for Alignment
-        #a =CTidyWrapper( self.Diagram.GetSelectedElements(), self.Diagram )
-        #a.alignMostTop()
-        #a.applyState()
-        ## redraw canvas!
-        #self.Paint()
+    def alignMostTop(self, widget = None):
+        # use the algorithm for Alignment
+        a =CTidyWrapper( self.Diagram.GetSelectedElements(), self.Diagram )
+        a.alignMostTop()
+        a.applyState()
+        # redraw canvas!
+        self.Paint()
     
-    ##bottom
-    #@event("pmAlign_Bottom","activate")
-    #def alignBottom(self, widget = None):
-        ## get the BOTTOM edge of clicked Element
-        #clickedElem =self.Diagram.GetElementAtPosition(self.canvas, self.lastClick)
-        ## use the algorithm for Alignment
-        #a =CTidyWrapper( self.Diagram.GetSelectedElements(), self.Diagram )
-        #a.alignBottom( clickedElem)
-        #a.applyState()
-        ## redraw canvas!
-        #self.Paint()
+    #bottom
+    @event("pmAlign_Bottom","activate")
+    def alignBottom(self, widget = None):
+        # get the BOTTOM edge of clicked Element
+        clickedElem =self.Diagram.GetElementAtPosition(self.canvas, self.lastClick)
+        # use the algorithm for Alignment
+        a =CTidyWrapper( self.Diagram.GetSelectedElements(), self.Diagram )
+        a.alignBottom( clickedElem)
+        a.applyState()
+        # redraw canvas!
+        self.Paint()
     
-    #def alignMostBottom(self, widget = None):
-        ## use the algorithm for Alignment
-        #a =CTidyWrapper( self.Diagram.GetSelectedElements(), self.Diagram )
-        #a.alignMostBottom()
-        #a.applyState()
-        ## redraw canvas!
-        #self.Paint()
+    def alignMostBottom(self, widget = None):
+        # use the algorithm for Alignment
+        a =CTidyWrapper( self.Diagram.GetSelectedElements(), self.Diagram )
+        a.alignMostBottom()
+        a.applyState()
+        # redraw canvas!
+        self.Paint()
 
-    ##TIDY
-    ##@event("pmTidy","activate")
-    #def Tidy(self, widget = None):
-        ## use the algorithm for Tidy
-        ##a =CTidyWrapper( self.Diagram.GetSelectedElements(), self.Diagram,  )
-        ##a.Tidy( modus)
-        ## TODO Calling of the tidy
-        ##a.applyState()
-        ## redraw canvas!
-        #self.Paint()
+    #TIDY
+    #@event("pmTidy","activate")
+    def Tidy(self, widget = None):
+        # use the algorithm for Tidy
+        #a =CTidyWrapper( self.Diagram.GetSelectedElements(), self.Diagram,  )
+        #a.Tidy( modus)
+        # TODO Calling of the tidy
+        #a.applyState()
+        # redraw canvas!
+        self.Paint()
