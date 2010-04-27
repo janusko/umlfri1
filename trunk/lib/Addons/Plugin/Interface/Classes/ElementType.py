@@ -37,9 +37,5 @@ class IElementType(IBase):
     @result(r_bool)
     def AllowedRecursive(him, connection):
         return him.connections[connection.GetId()][1]
-    
-    @result(r_2boolTuple)
-    def GetResizable(him):
-        return him.GetResizable()
         
 #todo: remake GetConnections and add GetOptions

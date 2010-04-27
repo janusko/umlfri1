@@ -28,7 +28,7 @@ class CLine(CVisualObject):
         else:
             return (1, 0)
     
-    def GetResizable(self):
+    def GetResizable(self, context):
         tp = self.__ComputeType()
         return tp == 'horizontal', tp == 'vertical'
 

@@ -21,7 +21,7 @@ class CVisualObject(CBaseObject):
             else:
                 yield value
     
-    def GetResizable(self):
+    def GetResizable(self, context):
         return False, False
     
     def ComputeSize(self, context):

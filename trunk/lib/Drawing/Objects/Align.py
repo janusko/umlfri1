@@ -32,9 +32,9 @@ class CAlign(CSimpleContainer):
                 elif i == 'middle':
                     self.aligny = 'center'
     
-    def GetResizable(self):
+    def GetResizable(self, context):
         if self.alignx is None or self.aligny is None:
-            rx, ry = CSimpleContainer.GetResizable(self)
+            rx, ry = CSimpleContainer.GetResizable(self, context)
         else:
             rx, ry = False, False
         return self.alignx is not None or rx, self.aligny is not None or ry

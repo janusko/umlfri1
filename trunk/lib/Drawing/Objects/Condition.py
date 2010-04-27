@@ -8,6 +8,12 @@ class CCondition(CSimpleContainer):
     def __init__(self, condition):
         CSimpleContainer.__init__(self)
         self.condition = condition
+    
+    def GetResizable(self, context):
+        condition, = self.GetVariables(context, 'condition')
+        if condition:
+            return CSimpleContainer.GetResizable(self, context)
+        return False, False
 
     def ComputeSize(self, context):
         condition, = self.GetVariables(context, 'condition')

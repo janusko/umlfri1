@@ -43,9 +43,9 @@ class CSizer(CSimpleContainer):
         else:
             self.height = height
     
-    def GetResizable(self):
+    def GetResizable(self, context):
         if self.width is None or self.height is None:
-            rx, ry = CSimpleContainer.GetResizable(self)
+            rx, ry = CSimpleContainer.GetResizable(self, context)
         return self.width is None and rx, self.height is None and ry
 
     def ComputeSize(self, context):
