@@ -225,7 +225,7 @@ class CProject(CBaseObject):
                             
                         for num, info in enumerate(c.GetAllLabelPositions()):
                             connectionNode.append(etree.Element(UMLPROJECT_NAMESPACE+'label', 
-                                dict(map(lambda x: (x[0], unicode(int(x[1]))), info.iteritems())), #transform {key:value, ...} -> {key:unicode(value), ...}
+                                dict(map(lambda x: (x[0], unicode(x[1])), info.iteritems())), #transform {key:value, ...} -> {key:unicode(value), ...}
                                 num=unicode(num)))
                                 
                         diagramNode.append(connectionNode)
