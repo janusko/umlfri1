@@ -323,7 +323,7 @@ class CpicDrawingArea(CWidget):
         if event.button == 1 and event.type == gtk.gdk._2BUTTON_PRESS:
             if len(tuple(self.Diagram.GetSelected())) == 1:
                 for Element in self.Diagram.GetSelected():
-                    if isinstance(Element, CElement):
+                    if isinstance(Element, (CElement,CConnection)):
                         self.emit('open-specification',Element)
                         return True
         

@@ -1,6 +1,12 @@
 class CAbstractEditableComboBox(object):
     
+    def __init__(self,style='text'):
+        pass
+    
     def GetWidget(self):
+        pass
+    
+    def SetBackgroundColor(self,color):
         pass
     
     def AppendItem(self,item):

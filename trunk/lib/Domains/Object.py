@@ -80,7 +80,17 @@ class CDomainObject(CBaseObject):
         @type domainobject: L{CDomainObject<lib.Domains.Object.CDomainObject>}
         '''
         if self.GetType().GetName()==domainobject.GetType().GetName():
-            self.values=domainobject.values
+            for id in self.type.IterAttributeIDs():
+                self.values[id] = self.type.GetDefaultValue(id)
+            for id in self.GetType().IterAttributeIDs():
+                if self.GetType().GetAttribute(id)['type']!='list':
+                    self.SetValue(id,domainobject.GetValue(id))
+                else:
+                    ind=0
+                    for att in domainobject.GetValue(id):
+                        self.AppendItem(id)
+                        self.__CopyFromObjectToObject(att,self.GetValue(id)[ind])
+                        ind=ind+1
         else:
             raise DomainObjectError('Domain type mismatch.')
     

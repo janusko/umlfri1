@@ -184,9 +184,35 @@ class CDomainFactory(CBaseObject):
                     'set type of "%s.%s"' % (type, obj.GetName(), id))
             if type == 'Int':
                 obj.AppendAttribute(id,attribute.get('name'),'int',trycast(int, child.get('default')),attribute.get('hidden'))
+                enum=child.find(METAMODEL_NAMESPACE + 'Enum')
+                if enum!=None:
+                    for option in enum:
+                        if option.tag == METAMODEL_NAMESPACE + 'Value':
+                            obj.AppendEnumValue(id, trycast(int,option.text))
+                restriction=child.find(METAMODEL_NAMESPACE + 'Min')
+                if restriction!=None:
+                    min=trycast(int,restriction.text)
+                    obj.AppendRestriction(id,'min',min)
+                restriction=child.find(METAMODEL_NAMESPACE + 'Max')
+                if restriction!=None:
+                    max=trycast(int,restriction.text)
+                    obj.AppendRestriction(id,'max',max)
                 
             elif type == 'Float':
                 obj.AppendAttribute(id,attribute.get('name'),'float',trycast(float, child.get('default')),attribute.get('hidden'))
+                enum=child.find(METAMODEL_NAMESPACE + 'Enum')
+                if enum!=None:
+                    for option in enum:
+                        if option.tag == METAMODEL_NAMESPACE + 'Value':
+                            obj.AppendEnumValue(id, trycast(float,option.text))
+                restriction=child.find(METAMODEL_NAMESPACE + 'Min')
+                if restriction!=None:
+                    min=trycast(float,restriction.text)
+                    obj.AppendRestriction(id,'min',min)
+                restriction=child.find(METAMODEL_NAMESPACE + 'Max')
+                if restriction!=None:
+                    max=trycast(float,restriction.text)
+                    obj.AppendRestriction(id,'max',max)
                 
             elif type == 'Bool':
                 obj.AppendAttribute(id,attribute.get('name'),'bool',trycast(lambda x: x == 'True', child.get('default')),attribute.get('hidden'))
@@ -204,9 +230,17 @@ class CDomainFactory(CBaseObject):
                     for option in enum:
                         if option.tag == METAMODEL_NAMESPACE + 'Value':
                             obj.AppendEnumValue(id, option.text)
+                restriction=child.find(METAMODEL_NAMESPACE + 'Restricted')
+                if restriction!=None:
+                    restricted=trycast(int,restriction.text)
+                    obj.AppendRestriction(id,'restricted',restricted)
                 
             elif type == 'Text':
                 obj.AppendAttribute(id,attribute.get('name'),'text',child.get('default'),attribute.get('hidden'))
+                restriction=child.find(METAMODEL_NAMESPACE + 'Restriction')
+                if restriction!=None:
+                    restricted=trycast(str,restriction.text)
+                    obj.AppendRestriction(id,'restricted',restricted)
                 
             elif type == 'List':
                 obj.AppendAttribute(id,attribute.get('name'),'list',None,attribute.get('hidden'))

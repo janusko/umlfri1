@@ -18,6 +18,9 @@ class CTextArea(CAbstractTextArea):
     def GetWidget(self):
         return self.frm
     
+    def SetBackgroundColor(self,color):
+        self.textarea.modify_base(gtk.STATE_NORMAL, gtk.gdk.color_parse(color))
+    
     def GetText(self):
         buffer=self.textarea.get_buffer()
         return buffer.get_text(buffer.get_iter_at_offset(0),buffer.get_iter_at_offset(buffer.get_char_count()),True)

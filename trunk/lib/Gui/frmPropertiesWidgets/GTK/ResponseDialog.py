@@ -7,8 +7,8 @@ from lib.Gui.frmPropertiesWidgets.Abstract.AbstractResponseDialog import CAbstra
 
 class CResponseDialog(CAbstractResponseDialog):
     
-    def __init__(self,title=''):
-        self.dialog=gtk.Dialog(title,None,gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT | gtk.WINDOW_TOPLEVEL)
+    def __init__(self,title,parent):
+        self.dialog=gtk.Dialog(title,parent.GetWidget(),gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT | gtk.WINDOW_TOPLEVEL)
         self.dialog.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
         self.response=None
         self.default_response=None
@@ -34,6 +34,18 @@ class CResponseDialog(CAbstractResponseDialog):
         img.show()
         hbox.pack_start(img,False,False,10)
         lbl=gtk.Label(question)
+        lbl.show()
+        hbox.pack_start(lbl,False,False,5)
+        self.dialog.vbox.pack_start(hbox,False,False)
+    
+    def SetWarning(self,warning):
+        hbox=gtk.HBox()
+        hbox.show()
+        img=gtk.Image()
+        img.set_from_stock(gtk.STOCK_DIALOG_WARNING,gtk.ICON_SIZE_DIALOG)
+        img.show()
+        hbox.pack_start(img,False,False,10)
+        lbl=gtk.Label(warning)
         lbl.show()
         hbox.pack_start(lbl,False,False,5)
         self.dialog.vbox.pack_start(hbox,False,False)
