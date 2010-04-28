@@ -553,19 +553,21 @@ class CfrmMain(CWindow):
             diagram.AddToSelection(diagram.HasElementObject(object))
             self.picDrawingArea.Paint()
     
+    @event('application.bus', 'all-content-update', '', False)
     @event('application.bus', 'content-update', False)
     @event('application.bus', 'content-update-from-plugin', True)
     def on_nbProperties_content_update(self, widget, element, property, fromPlugin):
         if isinstance(element, (CElement, CConnection, CProjectNode, CConLabelInfo)):
-            element = element.GetObject()
-        if element.HasVisualAttribute(property):
-            if (self.picDrawingArea.GetDiagram().HasElementObject(element)
-                or self.picDrawingArea.GetDiagram().HasConnection(element)):
+            object = element.GetObject()
+        if property == '' or object.HasVisualAttribute(property):
+            if (self.picDrawingArea.GetDiagram().HasElementObject(object)
+                or self.picDrawingArea.GetDiagram().HasConnection(object)):
                 if fromPlugin:
                     self.picDrawingArea.ToPaint()
                 else:
                     self.picDrawingArea.Paint()
-            self.twProjectView.UpdateElement(element)
+            self.twProjectView.UpdateElement(object)
+            self.nbProperties.Fill(element)
 
     @event("tbToolBox", "toggled")
     def on_tbToolBox_toggled(self, widget, ItemId, ItemType):
@@ -605,7 +607,7 @@ class CfrmMain(CWindow):
     def on_show_open_specification(self, widget, Element):
         tmp = self.application.GetWindow('frmProperties')
         tmp.SetParent(self.application.GetWindow('frmMain'))
-        tmp.ShowPropertiesWindow(Element,self.picDrawingArea)
+        tmp.ShowPropertiesWindow(Element,self.application)
         self.picDrawingArea.Paint()
     
     #Z-Order 

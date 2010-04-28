@@ -9,6 +9,9 @@ class CAbstractDialog(object):
     def SetTitle(self,title):
         pass
     
+    def GetTitle(self):
+        pass
+    
     def SetSize(self,x,y):
         pass
     

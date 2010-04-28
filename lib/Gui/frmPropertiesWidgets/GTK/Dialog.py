@@ -29,6 +29,9 @@ class CDialog(CAbstractDialog):
     def SetTitle(self,title):
         self.dialog.set_title(title)
     
+    def GetTitle(self):
+        return self.dialog.get_title()
+    
     def SetSize(self,x,y):
         self.dialog.resize(x,y)
     

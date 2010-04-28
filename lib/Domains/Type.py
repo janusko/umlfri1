@@ -102,7 +102,6 @@ class CDomainType(CBaseObject):
         @type value: str
         '''
         
-        assert isinstance(value, (str, unicode))
         if not id in self.attributes:
             raise DomainTypeError('Unknown identifier %s'%(id, ))
             
@@ -110,6 +109,24 @@ class CDomainType(CBaseObject):
             raise DomainTypeError('the same enum value already defined')
         
         self.attributes[id].setdefault('enum',[]).append(value)
+    
+    def AppendRestriction(self,id,res,value):
+        '''
+        Add restriction to type.
+        
+        @param id: identifier of attribute
+        @type id: str
+        
+        @param res: restriction identifiier
+        @type value: str
+        
+        @param value: restriction value
+        @type value: str
+        '''
+        
+        if not id in self.attributes:
+            raise DomainTypeError('Unknown identifier %s'%(id, ))
+        self.attributes[id].setdefault(res,value)
     
     def SetList(self, id, type=None, parser=None):
         '''
@@ -356,6 +373,61 @@ class CDomainType(CBaseObject):
         if id not in self.attributes:
             raise DomainTypeError('Unknown identifier "%s"'%(id, ))
         return self.attributes[id]['hidden']
+    
+    def CheckValue(self, value, id = None, domain = None):
+        '''
+        @return: checked value
+        
+        @param id: identifier of the attribute
+        @type id: str
+        
+        @param value: value to be checked
+        
+        @raise DomainTypeError: 
+            - if id is not recoginzed
+            - if value is incopatible with attribute domain
+            - if value is incopatible with attribute constraint
+        '''
+        
+        if domain is None:
+            if not id in self.attributes:
+                raise DomainTypeError('Unknown identifier %s'%(id, ))
+            type = self.attributes[id]['type']
+        else:
+            type = domain
+        
+        if type in self.ATOMIC:
+            if type == 'int':
+                min = self.attributes[id]['min'] if self.attributes[id].has_key('min') else None
+                max = self.attributes[id]['max'] if self.attributes[id].has_key('max') else None
+                val = self.__GetInt(value)
+                if (min!=None and min>val) or (max!=None and max<val):
+                    raise DomainTypeError('Value of attribute %s is out of bounds.'%(id))
+                else:
+                    return val
+            elif type == 'float':
+                min = self.attributes[id]['min'] if self.attributes[id].has_key('min') else None
+                max = self.attributes[id]['max'] if self.attributes[id].has_key('max') else None
+                val = self.__GetFloat(value)
+                if (min!=None and min>val) or (max!=None and max<val):
+                    raise DomainTypeError('Value of attribute %s is out of bounds.'%(id))
+                else:
+                    return val
+            elif type in ('str', 'text'):
+                restriction=self.attributes[id]['restricted'] if self.attributes[id].has_key('restricted') else None
+                val = self.__GetStr(value)
+                if restriction!=None:
+                    strings=restriction.split('|')
+                    for string in strings:
+                        if val.find(string)!=-1:
+                            raise DomainTypeError('Value of attribute %s is out of bounds.'%(id))
+                return val
+            elif type in ('color', 'font'):
+                return self.__GetStr(value)
+            else:
+                return value
+        else:
+            return self.__GetNonAtomic(value, type)
     
     def TransformValue(self, value, id = None, domain = None):
         '''

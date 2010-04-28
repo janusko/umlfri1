@@ -3,6 +3,9 @@ class CAbstractTextArea(object):
     def GetWidget(self):
         pass
     
+    def SetBackgroundColor(self,color):
+        pass
+    
     def GetText(self):
         pass
     
