@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Gesture plugin for UML .FRI-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://umlfri.org/xmlschema/gestures.xsd" targetNamespace="http://umlfri.org/xmlschema/gestures.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="Gesture">
+		<xs:annotation>
+			<xs:documentation>Gesture object in UML .FRI metamodel</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Algorithm">
+					<xs:annotation>
+						<xs:documentation>Algorithm object in UML .FRI metamodel</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Description" minOccurs="1" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>Description object in UML .FRI metamodel.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Line" type="Line" minOccurs="0" maxOccurs="unbounded"/>
+									</xs:sequence>
+									<xs:attribute name="id" type="xs:string" use="required">
+										<xs:annotation>
+											<xs:documentation>Description id.</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+						<xs:attribute name="name" type="xs:string" use="required">
+							<xs:annotation>
+								<xs:documentation>Unique name of gesture algorithm.</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string" use="required">
+				<xs:annotation>
+					<xs:documentation>Unique name of gesture.</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="type" use="required">
+				<xs:annotation>
+					<xs:documentation>Define type of gesture.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="connection"/>
+						<xs:enumeration value="element"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="GestureDiagramType">
+		<xs:annotation>
+			<xs:documentation>Gesture actions in in diagram.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="GestureElements">
+					<xs:annotation>
+						<xs:documentation>Defined actions for elements.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="GestureRecognizer" type="GestureRecognizer" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="GestureConnections">
+					<xs:annotation>
+						<xs:documentation>Defined actions for connections.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="GestureRecognizer" type="GestureRecognizer" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="id" type="xs:string" use="required">
+				<xs:annotation>
+					<xs:documentation>Unique name of diagram.</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="Line">
+		<xs:annotation>
+			<xs:documentation>Defines vector.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="from" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>Start point of the vector.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="to" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>End point of the vector.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="GestureRecognizer">
+		<xs:annotation>
+			<xs:documentation>Defines action and help for gesture.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="objectId" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>Element or connection name defined in metamodel.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="gestureName" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>Gesture name defined in gesture definitions.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="help" type="xs:string" use="optional">
+			<xs:annotation>
+				<xs:documentation>Gesture help.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+</xs:schema>
