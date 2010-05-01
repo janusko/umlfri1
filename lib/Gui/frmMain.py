@@ -559,6 +559,8 @@ class CfrmMain(CWindow):
     def on_nbProperties_content_update(self, widget, element, property, fromPlugin):
         if isinstance(element, (CElement, CConnection, CProjectNode, CConLabelInfo)):
             object = element.GetObject()
+        else:
+            object = element
         if property == '' or object.HasVisualAttribute(property):
             if (self.picDrawingArea.GetDiagram().HasElementObject(object)
                 or self.picDrawingArea.GetDiagram().HasConnection(object)):
