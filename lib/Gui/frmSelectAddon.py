@@ -27,6 +27,10 @@ class CfrmSelectAddon(common.CWindow):
                 if self.form.run() == gtk.RESPONSE_CANCEL:
                     self.form.hide()
                     return None, None
+                
+                if self.form.get_filter() is None:
+                    continue
+                
                 filter = self.form.get_filter().get_name()
                 
                 if filter == _("UML .FRI Project with embedded metamodels"):
