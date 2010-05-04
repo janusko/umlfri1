@@ -12,10 +12,13 @@ from lib.Exceptions import *
 class CZipStorage(CAbstractStorage):
     @staticmethod
     def create(path):
+        print 'som tu', path
         if os.path.isdir(path):
             return None
         
         file = path.replace('\\', '/').split('/')
+        if file[0][-1] == ':' and len(file[0]) == 2:
+            file[0] += os.path.sep
         path = []
         while True:
             if not file:
