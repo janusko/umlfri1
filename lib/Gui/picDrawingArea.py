@@ -33,7 +33,7 @@ class CpicDrawingArea(CWidget):
                 'pmShift_SendBack', 'pmShift_BringForward', 'pmShift_ToBottom', 'pmShift_ToTop','pmShowInProjectView',
                 'mnuCtxCut', 'mnuCtxCopy', 'mnuCtxPaste', 'mnuCtxDelete',
                 'pmOpenSpecification', 'mnuCtxShiftDelete','mnuChangeSourceTarget',
-                'pmAlign_Left', 'pmAlign_Right', 'pmAlign_Bottom', 'pmAlign_Top')
+                'pmAlign_Left', 'pmAlign_Right', 'pmAlign_Bottom', 'pmAlign_Top', 'pmAlign_HCenter', 'pmAlign_VCenter')
 
     __gsignals__ = {
         'get-selected':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_PYOBJECT,
@@ -967,6 +967,18 @@ class CpicDrawingArea(CWidget):
         a.applyState()
         # redraw canvas!
         self.Paint()
+
+    #horizontal center
+    @event("pmAlign_HCenter","activate")
+    def alignHCenter(self, widget = None):
+        # get the RIGHT edge of clicked Element
+        clickedElem =self.Diagram.GetElementAtPosition(self.canvas, self.lastClick)
+        # use the algorithm for Alignment
+        a =CTidyWrapper( self.Diagram.GetSelectedElements(), self.Diagram )
+        a.alignHCenter( clickedElem)
+        a.applyState()
+        # redraw canvas!
+        self.Paint()
     
     #top
     @event("pmAlign_Top","activate")
@@ -1004,6 +1016,18 @@ class CpicDrawingArea(CWidget):
         # use the algorithm for Alignment
         a =CTidyWrapper( self.Diagram.GetSelectedElements(), self.Diagram )
         a.alignMostBottom()
+        a.applyState()
+        # redraw canvas!
+        self.Paint()
+
+    #vertical center
+    @event("pmAlign_VCenter","activate")
+    def alignVCenter(self, widget = None):
+        # get the center of clicked Element
+        clickedElem =self.Diagram.GetElementAtPosition(self.canvas, self.lastClick)
+        # use the algorithm for Alignment
+        a =CTidyWrapper( self.Diagram.GetSelectedElements(), self.Diagram )
+        a.alignVCenter( clickedElem)
         a.applyState()
         # redraw canvas!
         self.Paint()
