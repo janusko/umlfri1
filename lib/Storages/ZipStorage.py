@@ -17,7 +17,7 @@ class CZipStorage(CAbstractStorage):
             return None
         
         file = path.replace('\\', '/').split('/')
-        if file[0][-1] == ':' and len(file[0]) == 2:
+        if file and len(file[0]) == 2 and file[0][-1] == ':':
             file[0] += os.path.sep
         path = []
         while True:
