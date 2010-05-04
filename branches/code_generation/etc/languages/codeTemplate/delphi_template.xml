@@ -1,4 +1,4 @@
-<?xml version="1.0" ?>
+<xml version="1.0" ?>
 <Template diagram="Class Diagram" language="Delphi" type="Code">
     <Element id="Package">
         <Directory name="{name}" value="[_0-9a-zA-Z]+">
