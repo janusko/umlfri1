@@ -1,4 +1,4 @@
-<xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Template diagram="All" language="HTML" type="Documentation">
     <Element id="documentation">
         <Directory name="icons" value="[_0-9a-zA-Z]+" >
