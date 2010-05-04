@@ -48,6 +48,14 @@ class CTidyMath(object):
         for i in range(len(self.positionList)):
             self.positionList[i] = (setRightCoordinate -self.sizeList[i][0], self.positionList[i][1] )
         # But preserve the Y coordinate ("sel.GetPosition()[1]")
+#--horizontal center alignment
+    def alignHCenter(self, setHCenterCoordinate):
+        # set the x position to setRightCoordinate
+        for i in range(len(self.positionList)):
+            self.positionList[i] = (setHCenterCoordinate -self.sizeList[i][0]/2,
+self.positionList[i][1] )
+        # But preserve the Y coordinate ("sel.GetPosition()[1]")
+
 #--top alignment
     def alignTop(self, setTopCoordinate):
         # set the y position to setTopCoordinate
@@ -76,6 +84,13 @@ class CTidyMath(object):
         for i in range(len(self.positionList)):
             self.positionList[i] = (self.positionList[i][0], setBottomCoordinate -self.sizeList[i][1])
         # But preserve the Y coordinate ("sel.GetPosition()[1]")
+#--vertical center alignment
+    def alignVCenter(self, setVCenterCoordinate):
+        # set the y position to setBottomCoordinate
+        for i in range(len(self.positionList)):
+            self.positionList[i] = (self.positionList[i][0], setVCenterCoordinate
+-self.sizeList[i][1]/2)
+        # But preserve the X coordinate ("sel.GetPosition()[0]")
 
 #--Tidy
 #    def Tidy(self):

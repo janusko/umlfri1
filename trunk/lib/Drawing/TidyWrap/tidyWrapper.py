@@ -64,6 +64,15 @@ class CTidyWrapper(object):
         self.tidy.alignMostRight( )
         self.positionList =self.tidy.getPositions()
 
+#--horizontal center alignment
+    def alignHCenter(self, clickedElem):
+        if not isinstance(clickedElem, CVisibleObject):
+            return #nothing to do
+        # set the x position to setLeftCoordinate
+        self.tidy.alignHCenter( clickedElem.GetPosition()[0]
++clickedElem.GetSize(self.diagram)[0]/2 )
+        self.positionList =self.tidy.getPositions()
+
 #--top alignment
     def alignTop(self, clickedElem):
         if not isinstance(clickedElem, CVisibleObject):
@@ -87,6 +96,15 @@ class CTidyWrapper(object):
     def alignMostBottom(self):
         self.tidy.alignMostBottom( )
         self.positionList =self.tidy.getPositions()
+
+#--vertical center alignment
+    def alignVCenter(self, clickedElem):
+        if not isinstance(clickedElem, CVisibleObject):
+            return #nothing to do
+        # set the y position to setTopCoordinate
+        self.tidy.alignVCenter( clickedElem.GetPosition()[1] +clickedElem.GetSize(self.diagram)[1]/2 )
+        self.positionList =self.tidy.getPositions()
+
 
 #--Tidy
 #    def Tidy(self, clickedElem):

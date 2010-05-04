@@ -1483,6 +1483,32 @@
                 </child>
               </widget>
             </child>
+            <child>
+              <widget class="GtkImageMenuItem" id="pmAlign_HCenter">
+                <property name="label" translatable="yes">Align Centers Vertical</property>
+                <property name="visible">True</property>
+                <property name="use_stock">False</property>
+                <child internal-child="image">
+                  <widget class="GtkImage" id="image10">
+                    <property name="visible">True</property>
+                    <property name="stock">gtk-go-forward</property>
+                  </widget>
+                </child>
+              </widget>
+            </child>
+            <child>
+              <widget class="GtkImageMenuItem" id="pmAlign_VCenter">
+                <property name="label" translatable="yes">Align Center Horizontal</property>
+                <property name="visible">True</property>
+                <property name="use_stock">False</property>
+                <child internal-child="image">
+                  <widget class="GtkImage" id="image11">
+                    <property name="visible">True</property>
+                    <property name="stock">gtk-go-forward</property>
+                  </widget>
+                </child>
+              </widget>
+            </child>
           </widget>
         </child>
       </widget>
