@@ -12,7 +12,6 @@ from lib.Exceptions import *
 class CZipStorage(CAbstractStorage):
     @staticmethod
     def create(path):
-        print 'som tu', path
         if os.path.isdir(path):
             return None
         
