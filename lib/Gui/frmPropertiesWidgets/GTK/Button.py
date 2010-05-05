@@ -21,6 +21,9 @@ class CButton(CAbstractButton):
     def SetSensitive(self,value):
         self.button.set_sensitive(value)
     
+    def GetSensitive(self):
+        return self.button.get_property('sensitive')
+    
     def SetHandler(self,event,func,data):
         if event=='clicked':
             self.button.connect('clicked',self.__ButtonEventHandler,func,data)

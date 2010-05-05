@@ -15,6 +15,9 @@ class CAbstractButton(object):
     def SetSensitive(self,value):
         pass
     
+    def GetSensitive(self):
+        pass
+    
     def SetHandler(self,event,func,data):
         pass
     

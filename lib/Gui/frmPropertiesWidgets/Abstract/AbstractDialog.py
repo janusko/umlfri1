@@ -39,3 +39,6 @@ class CAbstractDialog(object):
     def SetHandler(self,event,func,data):
         pass
     
+    def GrabFirst(self):
+        pass
+    

@@ -112,6 +112,13 @@ class CConnectionObject(CBaseObject):
         @rtype:  integer
         """
         return self.revision
+        
+    def AddRevision(self):
+        """
+        Increase revision on external change (Like movement in project tree)
+        """
+        
+        self.revision += 1
     
     def GetAppears(self):
         """

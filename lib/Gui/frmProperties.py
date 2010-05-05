@@ -54,14 +54,14 @@ class CfrmProperties(object):
         return ';'.join(val)
         
     def __CreateTable(self,type,dialog):
-        btnNew=CButton('New')
-        btnNew.SetHandler('clicked',self.__onTableNewButtonClick,tuple([type]))
+        btnNew=CButton('_New')
+        btnNew.SetHandler('clicked',self.__onTableNewButtonClick,(type,dialog))
         
-        btnSave=CButton('Save')
+        btnSave=CButton('_Save')
         btnSave.SetSensitive(False)
         btnSave.SetHandler('clicked',self.__onTableSaveButtonClick,(type,dialog))
         
-        btnDelete=CButton('Delete')
+        btnDelete=CButton('_Delete')
         btnDelete.SetSensitive(False)
         btnDelete.SetHandler('clicked',self.__onTableDeleteButtonClick,tuple([type]))
         
@@ -76,7 +76,7 @@ class CfrmProperties(object):
         self.tables[type.GetName()]['save']=btnSave
         self.tables[type.GetName()]['delete']=btnDelete
         
-        table.SetHandler('row-selected',self.__onTableRowSelect,tuple([type]))
+        table.SetHandler('row-selected',self.__onTableRowSelect,(type,dialog))
         if len(type.GetName().split('.'))==2 or len(type.GetName().split('.'))%2==1:
             self.__FillTable(type)
         else:
@@ -103,7 +103,18 @@ class CfrmProperties(object):
                         tmp.append(str(att.GetValue(key)))
                 table.AppendRow(tmp,att)
     
-    def __onTableNewButtonClick(self,type):
+    def __onTableNewButtonClick(self,type,dialog):
+        if self.tables[type.GetName()]['save'].GetSensitive()==True:
+            question=CResponseDialog('Question',dialog)
+            question.AppendResponse('continue','C_ontinue')
+            question.AppendResponse('cancel','_Cancel',True)
+            question.SetQuestion('There are unsaved changes and if you continue they will be\n lost. '\
+                                          'What do you wish to do?')
+            question.Show()
+            response=question.Close()
+            if response=='cancel':
+                dialog.GrabFirst()
+                return
         self.__ClearFormular(type)
         self.tables[type.GetName()]['save'].SetSensitive(False)
         self.tables[type.GetName()]['delete'].SetSensitive(False)
@@ -220,7 +231,18 @@ class CfrmProperties(object):
             self.tables[type.GetName()]['save'].SetSensitive(False)
             self.tables[type.GetName()]['delete'].SetSensitive(False)
     
-    def __onTableRowSelect(self,type):
+    def __onTableRowSelect(self,type,dialog):
+        if self.tables[type.GetName()]['save'].GetSensitive()==True:
+            question=CResponseDialog('Question',dialog)
+            question.AppendResponse('continue','C_ontinue')
+            question.AppendResponse('cancel','_Cancel',True)
+            question.SetQuestion('There are unsaved changes and if you continue they will be\n lost. '\
+                                          'What do you wish to do?')
+            question.Show()
+            response=question.Close()
+            if response=='cancel':
+                dialog.GrabFirst()
+                return
         table=self.tables[type.GetName()]['ref']
         item=table.GetRowObject(table.GetSelectedRowIndex())
         for id in type.IterAttributeIDs():
@@ -578,9 +600,9 @@ class CfrmProperties(object):
     
     def __CloseFunction(self,parent):
         close_dialog=CResponseDialog('Question',parent)
-        close_dialog.AppendResponse('close','Close')
-        close_dialog.AppendResponse('cancel','Cancel')
-        close_dialog.AppendResponse('save','Save & close',True)
+        close_dialog.AppendResponse('close','_Close')
+        close_dialog.AppendResponse('cancel','C_ancel')
+        close_dialog.AppendResponse('save','_Save & close',True)
         close_dialog.SetQuestion('There are unsaved changes.What do you want to do?')
         button=CCheckButton('Do not show this dialog again.')
         button.SetHandler('toggled',self.__onCloseDialogCheckButtonToggle,tuple([button]))

@@ -14,11 +14,13 @@ class CDialog(CAbstractDialog):
     def __init__(self,parent,title=''):
         self.dialog=gtk.Dialog(title,parent,gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT | gtk.WINDOW_TOPLEVEL)
         self.dialog.set_position(gtk.WIN_POS_MOUSE)
-        self.dialog_tabs=self.dialog_tabs=gtk.Notebook()
+        self.dialog_tabs=gtk.Notebook()
+        self.dialog_tabs.connect('focus',self.__Focus_handler)
         self.dialog.vbox.pack_start(self.dialog_tabs,True,True)
         self.dialog_tabs.show()
         self.dialog_tab={}
         self.dialog_tab_items_count={}
+        self.dialog.connect('key-press-event',self.__CtrlTab_handler)
     
     def SetWidget(self,dialog):
         self.dialog=dialog
@@ -92,4 +94,87 @@ class CDialog(CAbstractDialog):
     
     def __DialogEventHandler(self,dialog,event,func,data):
         func(*data)
+        return True
+    
+    def __CtrlTab_handler(self,widget,event):
+        if event.get_state()==gtk.gdk.CONTROL_MASK and event.keyval==65289:
+            ntb=self.dialog.vbox.get_children()[0]
+            if ntb.get_current_page()==(len(ntb.get_children())-1):
+                ntb.set_current_page(0)
+            else:
+                ntb.next_page()
+        elif event.get_state()==gtk.gdk.CONTROL_MASK and event.keyval==116:
+            ntb=self.dialog.vbox.get_children()[0]
+            items=ntb.get_children()[ntb.get_current_page()].get_child().get_children()
+            if isinstance(items[len(items)-1].get_child(),gtk.VBox):
+                treeview=items[len(items)-1].get_child().get_children()[1].get_child()
+                if treeview.get_model().get_iter_first()!=None:
+                    treeview.get_selection().select_path('0')
+                    treeview.emit('cursor-changed')
+                    self.GrabFirst()
+                else:
+                    treeview.grab_focus()
+                return True
+        elif event.keyval==65289:
+            if isinstance(widget,gtk.Notebook):
+                return False
+            else:
+                ntb=self.dialog.vbox.get_children()[0]
+                items=ntb.get_children()[ntb.get_current_page()].get_child().get_children()
+                entries=[]
+                table=[]
+                for item in items:
+                    if isinstance(item,gtk.Table):
+                        chlds=item.get_children()
+                        chlds.reverse()
+                        for it in chlds:
+                            if not isinstance(it,gtk.Alignment):
+                                entries.append(it)
+                    elif isinstance(item,gtk.Frame):
+                        if isinstance(item.get_child(),gtk.ScrolledWindow):
+                            entries.append(item.get_child().get_child())
+                if widget.get_focus().get_parent() in entries:
+                    widget=widget.get_focus().get_parent()
+                else:
+                    widget=widget.get_focus()
+                if widget in entries:
+                    if len(entries)-1==entries.index(widget):
+                        if not isinstance(entries[0],gtk.HBox):
+                            entries[0].grab_focus()
+                        else:
+                            entries[0].get_children()[1].grab_focus()
+                    else:
+                        if not isinstance(entries[entries.index(widget)+1],gtk.HBox):
+                            entries[entries.index(widget)+1].grab_focus()
+                        else:
+                            entries[entries.index(widget)+1].get_children()[1].grab_focus()
+                else:
+                    return False
+            return True
+    
+    def GrabFirst(self):
+        ntb=self.dialog.vbox.get_children()[0]
+        items=ntb.get_children()[ntb.get_current_page()].get_child().get_children()
+        entries=[]
+        table=[]
+        for item in items:
+            if isinstance(item,gtk.Table):
+                chlds=item.get_children()
+                chlds.reverse()
+                for it in chlds:
+                    if not isinstance(it,gtk.Alignment):
+                        entries.append(it)
+            elif isinstance(item,gtk.Frame):
+                if isinstance(item.get_child(),gtk.ScrolledWindow):
+                    entries.append(item.get_child().get_child())
+        if isinstance(entries[0],gtk.HBox):
+            entries[0].get_children()[1].grab_focus()
+        elif isinstance(entries[0],gtk.ScrolledWindow):
+            entries[0].get_child().grab_focus()
+        else:
+            entries[0].grab_focus()
+    
+    def __Focus_handler(self,ntb,num):
+        chlds=ntb.get_children()[ntb.get_current_page()].get_child().get_children()[0].get_children()
+        chlds[len(chlds)-2].grab_focus()
         return True
