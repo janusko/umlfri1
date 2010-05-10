@@ -7,6 +7,7 @@ from lib.Gui.frmPropertiesWidgets.Abstract.AbstractTable import CAbstractTable
 class CTable(CAbstractTable):
     
     def __init__(self,model,delete,save,new):
+        self.last_select=None
         self.row_object=[]
         cols=[]
         types=[]
@@ -75,6 +76,18 @@ class CTable(CAbstractTable):
     
     def UnselectAll(self):
         self.table.get_selection().unselect_all()
+    
+    def SelectLast(self):
+        if self.last_select!=None:
+            self.table.get_selection().select_path(self.last_select)
+        else:
+            self.table.get_selection().unselect_all()
+    
+    def SetLastSelect(self,path):
+        self.last_select=path
+     
+    def GetLastSelect(self):
+        return self.last_select
     
     def SetHandler(self,event,func,data):
         if event=='row-selected':

@@ -109,12 +109,10 @@ class CDialog(CAbstractDialog):
             if isinstance(items[len(items)-1].get_child(),gtk.VBox):
                 treeview=items[len(items)-1].get_child().get_children()[1].get_child()
                 if treeview.get_model().get_iter_first()!=None:
-                    treeview.get_selection().select_path('0')
-                    treeview.emit('cursor-changed')
-                    self.GrabFirst()
+                    treeview.set_cursor('0')
+                    treeview.grab_focus()
                 else:
                     treeview.grab_focus()
-                return True
         elif event.keyval==65289:
             if isinstance(widget,gtk.Notebook):
                 return False
@@ -173,6 +171,12 @@ class CDialog(CAbstractDialog):
             entries[0].get_child().grab_focus()
         else:
             entries[0].grab_focus()
+    
+    def GrabTable(self):
+        ntb=self.dialog.vbox.get_children()[0]
+        items=ntb.get_children()[ntb.get_current_page()].get_child().get_children()
+        treeview=items[len(items)-1].get_child().get_children()[1].get_child()
+        treeview.grab_focus()
     
     def __Focus_handler(self,ntb,num):
         chlds=ntb.get_children()[ntb.get_current_page()].get_child().get_children()[0].get_children()

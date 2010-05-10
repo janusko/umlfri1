@@ -9,9 +9,6 @@ class CAbstractButton(object):
     def SetSize(self,x,y):
         pass
     
-    def GrabFocus(self):
-        pass
-    
     def SetSensitive(self,value):
         pass
     

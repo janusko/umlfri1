@@ -30,6 +30,15 @@ class CAbstractTable(object):
     def UnselectAll(self):
         pass
     
+    def SelectLast(self):
+        pass
+    
+    def SetLastSelect(self,path):
+        pass
+    
+    def GetLastSelect(self):
+        pass
+    
     def SetHandler(self,event,func,data):
         pass
     

@@ -1581,6 +1581,13 @@
       </widget>
     </child>
     <child>
+      <widget class="GtkMenuItem" id="mnuOpenSpecification">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">Open specification ...</property>
+        <property name="use_underline">True</property>
+      </widget>
+    </child>
+    <child>
       <widget class="GtkSeparatorMenuItem" id="menuitem3">
         <property name="visible">True</property>
       </widget>
