@@ -15,9 +15,6 @@ class CButton(CAbstractButton):
     def SetSize(self,x,y):
         self.button.set_size_request(x,y)
     
-    def GrabFocus(self):
-        self.button.grab_focus()
-    
     def SetSensitive(self,value):
         self.button.set_sensitive(value)
     

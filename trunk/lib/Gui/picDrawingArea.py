@@ -308,7 +308,7 @@ class CpicDrawingArea(CWidget):
             not bool(set(i.GetObject() for i in self.Diagram.GetElements()).intersection(set(i.GetObject() for i in self.application.GetClipboard().GetContent())))
         )
         selection = list(self.Diagram.GetSelected())
-        self.pmOpenSpecification.set_sensitive(len(selection) == 1)
+        self.pmOpenSpecification.set_sensitive(len(selection) <= 1)
         self.mnuChangeSourceTarget.set_sensitive(len(selection) == 1)
         if (self.application.GetProject() is not None and 
             self.Diagram is not None and
@@ -326,6 +326,8 @@ class CpicDrawingArea(CWidget):
                     if isinstance(Element, (CElement,CConnection)):
                         self.emit('open-specification',Element)
                         return True
+            elif len(tuple(self.Diagram.GetSelected())) == 0:
+                self.emit('open-specification',self.Diagram)
         
         if event.button == 1:
             if gtk.keysyms.space in self.pressedKeys:
@@ -838,6 +840,8 @@ class CpicDrawingArea(CWidget):
             for Element in self.Diagram.GetSelected():
                 if isinstance(Element, CElement) or isinstance(Element, CConnection):
                     self.emit('open-specification',Element)
+        elif len(tuple(self.Diagram.GetSelected())) == 0:
+            self.emit('open-specification',self.Diagram)
         
     # Z-Order menu:  
     def Shift_activate(self, actionName):

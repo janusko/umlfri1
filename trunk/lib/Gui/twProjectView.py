@@ -18,7 +18,7 @@ class CtwProjectView(CWidget):
                
                'menuTreeElement',
                'mnuTreeAddDiagram', 'mnuTreeAddElement','mnuTreeDelete', 'mnuTreeFindInDiagrams',
-               'mnuTreeSetAsDefault', 'mnuTreeUnSetDefault',
+               'mnuTreeSetAsDefault', 'mnuTreeUnSetDefault','mnuOpenSpecification'
               )
     
     __gsignals__ = {
@@ -30,6 +30,7 @@ class CtwProjectView(CWidget):
         'close-diagram': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
         'selected_diagram_and_select_element': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT)), 
         'show_frmFindInDiagram': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,gobject.TYPE_PYOBJECT,)),
+        'open-specification': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
     }
     
     def __init__(self, app, wTree):
@@ -299,7 +300,12 @@ class CtwProjectView(CWidget):
     def button_clicked(self, widget, event):
         self.EventButton = (event.button, event.time) 
         
-        
+    @event("mnuOpenSpecification","activate")
+    def on_mnuOpenSpecification_activate(self,widget):
+        iter = self.twProjectView.get_selection().get_selected()[1]
+        node=self.twProjectView.get_model().get(iter,3)[0]
+        self.emit('selected-item-tree',node)
+        self.emit('open-specification',node.GetObject())
     
     @event("twProjectView", "row-activated")
     def on_twProjectView_set_selected(self, treeView, path, column):

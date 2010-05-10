@@ -605,6 +605,7 @@ class CfrmMain(CWindow):
     def on_show_element_in_treeView(self, widget, Element):
         self.twProjectView.ShowElement(Element)
     
+    @event("twProjectView","open-specification")
     @event("picDrawingArea","open-specification")
     def on_show_open_specification(self, widget, Element):
         tmp = self.application.GetWindow('frmProperties')

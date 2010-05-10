@@ -1,7 +1,7 @@
 from lib.Depend.gtk2 import gtk
 from lib.Depend.gtk2 import gobject
 from lib.Exceptions import DomainTypeError
-from lib.Drawing import CElement, CConnection
+from lib.Drawing import CElement, CConnection, CDiagram
 from lib.Domains.Object import CDomainObject
 import pygtk
 from frmPropertiesWidgets.__init__ import *
@@ -41,6 +41,7 @@ class CfrmProperties(object):
                 if self.attributes[type.GetName()].has_key(id):
                     self.attributes[type.GetName()][id].SetText('')
         self.tables[type.GetName()]['ref'].UnselectAll()
+        self.tables[type.GetName()]['ref'].SetLastSelect(None)
     
     def __ToString(self,object):
         for joiner in object.GetType().IterJoiners():
@@ -63,7 +64,7 @@ class CfrmProperties(object):
         
         btnDelete=CButton('_Delete')
         btnDelete.SetSensitive(False)
-        btnDelete.SetHandler('clicked',self.__onTableDeleteButtonClick,tuple([type]))
+        btnDelete.SetHandler('clicked',self.__onTableDeleteButtonClick,(type,dialog))
         
         model=[]
         for key in type.IterAttributeIDs():
@@ -104,6 +105,7 @@ class CfrmProperties(object):
                 table.AppendRow(tmp,att)
     
     def __onTableNewButtonClick(self,type,dialog):
+        dialog.GrabFirst()
         if self.tables[type.GetName()]['save'].GetSensitive()==True:
             question=CResponseDialog('Question',dialog)
             question.AppendResponse('continue','C_ontinue')
@@ -113,7 +115,6 @@ class CfrmProperties(object):
             question.Show()
             response=question.Close()
             if response=='cancel':
-                dialog.GrabFirst()
                 return
         self.__ClearFormular(type)
         self.tables[type.GetName()]['save'].SetSensitive(False)
@@ -129,6 +130,7 @@ class CfrmProperties(object):
     def __onTableSaveButtonClick(self,type,dialog):
         if self.__CheckValues(type):
             table=self.tables[type.GetName()]['ref']
+            dialog.GrabFirst()
             if table.GetSelectedRowIndex()!=-1:
                 domainobject=table.GetRowObject(table.GetSelectedRowIndex())
                 idx=0
@@ -208,8 +210,9 @@ class CfrmProperties(object):
             warning.Show()
             warning.Close()
     
-    def __onTableDeleteButtonClick(self,type):
+    def __onTableDeleteButtonClick(self,type,dialog):
         table=self.tables[type.GetName()]['ref']
+        dialog.GrabFirst()
         if table.GetSelectedRowIndex()!=-1:
             idx=table.GetSelectedRowIndex()
             table.RemoveRow(idx)
@@ -232,49 +235,60 @@ class CfrmProperties(object):
             self.tables[type.GetName()]['delete'].SetSensitive(False)
     
     def __onTableRowSelect(self,type,dialog):
-        if self.tables[type.GetName()]['save'].GetSensitive()==True:
-            question=CResponseDialog('Question',dialog)
-            question.AppendResponse('continue','C_ontinue')
-            question.AppendResponse('cancel','_Cancel',True)
-            question.SetQuestion('There are unsaved changes and if you continue they will be\n lost. '\
-                                          'What do you wish to do?')
-            question.Show()
-            response=question.Close()
-            if response=='cancel':
-                dialog.GrabFirst()
-                return
+        change=True
         table=self.tables[type.GetName()]['ref']
-        item=table.GetRowObject(table.GetSelectedRowIndex())
-        for id in type.IterAttributeIDs():
-            val=str(item.GetValue(id))
-            if type.GetAttribute(id)['type']=='str' or type.GetAttribute(id)['type']=='int' or type.GetAttribute(id)['type']=='float':
-                if isinstance(self.attributes[type.GetName()][id],CEditableComboBox):
+        if self.tables[type.GetName()]['save'].GetSensitive()==True:
+            if table.GetLastSelect()!=str(table.GetSelectedRowIndex()):
+                question=CResponseDialog('Question',dialog)
+                question.AppendResponse('continue','C_ontinue')
+                question.AppendResponse('cancel','_Cancel',True)
+                question.SetQuestion('There are unsaved changes and if you continue they will be\n lost. '\
+                                              'What do you wish to do?')
+                question.Show()
+                response=question.Close()
+                if response=='cancel':
+                    dialog.GrabFirst()
+                    table.SelectLast()
+                    change=False
+            else:
+                table.SelectLast()
+                change=False
+        if change:
+            table.SetLastSelect(str(table.GetSelectedRowIndex()))
+            dialog.GrabTable()
+            item=table.GetRowObject(table.GetSelectedRowIndex())
+            for id in type.IterAttributeIDs():
+                val=str(item.GetValue(id))
+                if type.GetAttribute(id)['type']=='str' or type.GetAttribute(id)['type']=='int' or type.GetAttribute(id)['type']=='float':
+                    if isinstance(self.attributes[type.GetName()][id],CEditableComboBox):
+                        self.attributes[type.GetName()][id].SetActiveItemText(val)
+                    elif isinstance(self.attributes[type.GetName()][id],CEditBox):
+                        val=self.attributes[type.GetName()][id].SetText(val)
+                if type.GetAttribute(id)['type']=='bool' or type.GetAttribute(id)['type']=='enum':
                     self.attributes[type.GetName()][id].SetActiveItemText(val)
-                elif isinstance(self.attributes[type.GetName()][id],CEditBox):
-                    val=self.attributes[type.GetName()][id].SetText(val)
-            if type.GetAttribute(id)['type']=='bool' or type.GetAttribute(id)['type']=='enum':
-                self.attributes[type.GetName()][id].SetActiveItemText(val)
-            if type.GetAttribute(id)['type']=='text':
-                self.attributes[type.GetName()][id].SetText(val)
-            if type.GetAttribute(id)['type']=='list':
-                self.table_values.setdefault(type.GetName()+'.'+id,[])
-                self.table_values[type.GetName()+'.'+id]=[]
-                for obj in item.GetValue(id):
-                    self.table_values[type.GetName()+'.'+id].append(obj.GetCopy())
-                if len(type.GetName().split('.'))%2==1:
-                    self.__FillTable(type.GetFactory().GetDomain(type.GetAttribute(id)['list']['type']))
-                elif len(type.GetName().split('.'))%2==0 or len(type.GetName().split('.'))==2:
-                    objects=item.GetValue(id)
-                    self.attributes[type.GetName()][id].SetText(self.__ObjectsToString(objects))
-        self.tables[type.GetName()]['delete'].SetSensitive(True)
-        self.tables[type.GetName()]['save'].SetSensitive(False)
+                if type.GetAttribute(id)['type']=='text':
+                    self.attributes[type.GetName()][id].SetText(val)
+                if type.GetAttribute(id)['type']=='list':
+                    self.table_values.setdefault(type.GetName()+'.'+id,[])
+                    self.table_values[type.GetName()+'.'+id]=[]
+                    for obj in item.GetValue(id):
+                        self.table_values[type.GetName()+'.'+id].append(obj.GetCopy())
+                    if len(type.GetName().split('.'))%2==1:
+                        self.__FillTable(type.GetFactory().GetDomain(type.GetAttribute(id)['list']['type']))
+                    elif len(type.GetName().split('.'))%2==0 or len(type.GetName().split('.'))==2:
+                        objects=item.GetValue(id)
+                        self.attributes[type.GetName()][id].SetText(self.__ObjectsToString(objects))
+            self.tables[type.GetName()]['delete'].SetSensitive(True)
+            self.tables[type.GetName()]['save'].SetSensitive(False)
     
     def ShowPropertiesWindow(self,element,app):
         self.element=element
         self.application=app
-        self.old_domain_object=element.GetObject().GetDomainObject()
-        self.domain_object=element.GetObject().GetDomainObject().GetCopy()
-        type=element.GetObject().GetDomainObject().GetType()
+        if isinstance(element,(CElement,CConnection,CDiagram)):
+            element=element.GetObject()
+        self.old_domain_object=element.GetDomainObject()
+        self.domain_object=element.GetDomainObject().GetCopy()
+        type=element.GetDomainObject().GetType()
         self.attributes={}
         self.tables={}
         dlg=self.__CreateBoneWindow(type,'Properties',self.parent,True)
