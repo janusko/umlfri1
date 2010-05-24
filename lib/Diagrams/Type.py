@@ -22,6 +22,7 @@ class CDiagramType(CBaseObject):
         self.domain = None
         self.counter = 0
         self.factory = weakref.ref(factory)
+        self.hierarchization =""
     
     def GetMetamodel(self):
         return self.factory().GetMetamodel()
@@ -190,3 +191,10 @@ class CDiagramType(CBaseObject):
         
     def GetMetamodel(self):
         return self.factory().GetMetamodel()
+    
+    def SetHierarchization(self, connectionType):
+        self.hierarchization =connectionType
+    
+    def GetHierarchization(self):
+        return self.hierarchization
+    

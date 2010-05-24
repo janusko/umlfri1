@@ -40,7 +40,7 @@ class CfrmMain(CWindow):
         'mItemProject',
         #############
         'mItemDiagram',
-        'mnuExport', 'mnuAlignMostLeft', 'mnuAlignMostRight', 'mnuAlignMostTop', 'mnuAlignMostBottom',
+        'mnuExport',
         #############
         'mItemView',
         'mnuViewTools', 'mnuViewCommands', 'mnuNormalSize', 'mnuZoomIn','mnuZoomOut', 'mnuBestFit',
@@ -61,6 +61,9 @@ class CfrmMain(CWindow):
         #############
         #fullscreen
         'mnuMenubar', 'mnuFullscreen', 'cmdCloseFullscreen', 'vpaRight', 'sbStatus','hpaRight',
+        #############
+        'mItemTidy',
+        'mnuAlignMostLeft', 'mnuAlignMostRight', 'mnuAlignMostTop', 'mnuAlignMostBottom', 'mnuTidy', 
         )
 
     complexWidgets = (CtbToolBox, CtwProjectView, CmnuItems, CpicDrawingArea, CnbProperties, CTabs,
@@ -657,6 +660,11 @@ class CfrmMain(CWindow):
         if self.picDrawingArea.HasFocus():
             self.picDrawingArea.alignMostBottom()
             
+    @event('mnuTidy', 'activate')
+    def on_mnuTidy_activate(self, widget):
+        if self.picDrawingArea.HasFocus():
+            self.picDrawingArea.tidy()
+
             
     @event('application.bus', 'project-opened-from-plugin-adapter')
     def on_project_opened(self, widget):

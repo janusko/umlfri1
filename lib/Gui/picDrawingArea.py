@@ -33,7 +33,7 @@ class CpicDrawingArea(CWidget):
                 'pmShift_SendBack', 'pmShift_BringForward', 'pmShift_ToBottom', 'pmShift_ToTop','pmShowInProjectView',
                 'mnuCtxCut', 'mnuCtxCopy', 'mnuCtxPaste', 'mnuCtxDelete',
                 'pmOpenSpecification', 'mnuCtxShiftDelete','mnuChangeSourceTarget',
-                'pmAlign_Left', 'pmAlign_Right', 'pmAlign_Bottom', 'pmAlign_Top', 'pmAlign_HCenter', 'pmAlign_VCenter')
+                'pmAlign_Left', 'pmAlign_Right', 'pmAlign_Bottom', 'pmAlign_Top', 'pmAlign_HCenter', 'pmAlign_VCenter',)
 
     __gsignals__ = {
         'get-selected':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_PYOBJECT,
@@ -319,7 +319,7 @@ class CpicDrawingArea(CWidget):
     @event("picEventBox", "button-press-event")
     def on_picEventBox_button_press_event(self, widget, event):
         self.picDrawingArea.grab_focus() 
-        pos = self.lastClick =self.GetAbsolutePos((event.x, event.y)) # TODO: how to?
+        pos = self.lastClick =self.GetAbsolutePos((event.x, event.y))
         if event.button == 1 and event.type == gtk.gdk._2BUTTON_PRESS:
             if len(tuple(self.Diagram.GetSelected())) == 1:
                 for Element in self.Diagram.GetSelected():
@@ -1021,7 +1021,7 @@ class CpicDrawingArea(CWidget):
         a =CTidyWrapper( self.Diagram.GetSelectedElements(), self.Diagram )
         a.alignMostBottom()
         a.applyState()
-        # redraw canvas!
+        # redraBalíkw canvas!
         self.Paint()
 
     #vertical center
@@ -1035,14 +1035,14 @@ class CpicDrawingArea(CWidget):
         a.applyState()
         # redraw canvas!
         self.Paint()
-
+        
     #TIDY
     #@event("pmTidy","activate")
-    def Tidy(self, widget = None):
+    def tidy(self, widget = None):
         # use the algorithm for Tidy
-        #a =CTidyWrapper( self.Diagram.GetSelectedElements(), self.Diagram,  )
-        #a.Tidy( modus)
-        # TODO Calling of the tidy
-        #a.applyState()
-        # redraw canvas!
+        #print "Ahoj"
+        a =CTidyWrapper( self.Diagram.GetElements(), self.Diagram, self.Diagram.GetConnections() )
+        a.Tidy()
+        a.applyState()
+        #redraw canvas!
         self.Paint()

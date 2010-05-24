@@ -168,7 +168,7 @@ class CConnection(CCacheableObject, CSelectableObject):
         '''
         Get element at the beginning of connection
         
-        @return: self.source
+        @return: self.sourcetuple
         @rtype: L{CElement<CElement>}
         '''
         return self.source()
@@ -677,10 +677,10 @@ L{CCairoCanvas<lib.Drawing.Canvas.CairoCanvas.CCairoCanvas>}
         
         for i in iterator:
             prevpoint =point
-            point     =i.next()
+            point     =i
             localLen  =abs(CLine(prevpoint, point))
             localLengths.append( localLen )
-            acumulLengths.append( localLen+listOfLengths[-1])
+            acumulLengths.append( localLen+acumulLengths[-1])
        
         #send labels to the 0th part of the connection +recalculate position
         for label in self.labels.values():
