@@ -293,7 +293,7 @@ self.positionList[i][1] )
         for i in components:
             i[1].hierarchization()
             #now start the computation; the time divide by the number of vertices
-            i[1].stressMajorization(7.*len(self.centerList)/len(i[0]))
+            i[1].stressMajorization(time()+7.*len(self.centerList)/len(i[0]))
         #apply the computations on the continuous components
         self.applyComponents(components)
 
@@ -540,28 +540,13 @@ self.positionList[i][1] )
         """
         if len(self.centerList)<2:
             return #nothing to do
-        
+                
         #begin the comupting
         if not self.idealDistances:
             self.computeIdealDistances()
         
         totalEnergyOrig =self.computeTotalEnergy()
-        totalEnergyAfter =totalEnergyOrig/1.0004
-        #if some verteces to hierarchize, DO "hierarchization"
-        #if self.setOfHierarchization:
-            #self.hierarchization()
-        #take the nearest vertex to (0,0) coordinate to be fixed
-        #elem =self.centerList[0]
-        #distanceFrom00 = float(elem[0])**2 +float(elem[1])**2
-        #index =0
-        #for i,j in enumerate(self.centerList):
-            #tmpDist =float(j[0])**2 +float(j[1])**2
-            #if tmpDist <distanceFrom00:
-                #index, distanceFrom00 = i, tmpDist
-        #try:
-            #fixxed =-self.setOfHierarchization.pop() #fix the "fixxed" element
-        #except:
-            #fixxed =self.setOfOhers.pop()
+        totalEnergyAfter =totalEnergyOrig/1.00101
         #remove one random element --> to fix the whole structure by him.
         const =[]
         for i in range(len(self.idealDistances)):
@@ -570,9 +555,9 @@ self.positionList[i][1] )
                 if not i == j:
                     tmp += self.idealDistances[i][j]**-2
             const.append(tmp)
-        #inv =lambda x: 0 if x ==0 else 1/x
-        while totalEnergyOrig/totalEnergyAfter >1.0003: #perform
-            #print totalEnergyOrig/totalEnergyAfter, "pomer zlepsenia"
+        #print "stressMajorization", totalEnergyOrig/totalEnergyAfter
+
+        while totalEnergyOrig/totalEnergyAfter >1.0000001:
             #now -compute one iteration of common vertices
             for i in self.setOfOhers:
                 posX=0.
@@ -607,13 +592,8 @@ self.positionList[i][1] )
             #update the total energy variables
             totalEnergyOrig =totalEnergyAfter
             totalEnergyAfter =self.computeTotalEnergy()
-            #print totalEnergyOrig, "Energia pred iteraciou", totalEnergyAfter, "Energia po iteracii" #debug
-            if time() >timeMax:
+            if timeMax and time() >timeMax:
                 break
-        #if fixxed>0:
-            #self.setOfOhers.add(fixxed) #give back the fixxed element
-        #else:
-            #self.setOfHierarchization.add(fixxed)
         #transform the results also into the position list
         self.positionList =[]
         for i,j in zip(self.centerList, self.sizeList):
