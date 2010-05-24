@@ -642,6 +642,11 @@
 					</xs:complexType>
 				</xs:element>
 				<xs:element name="Special" type="ElementSpecialType"/>
+                <xs:element name="Hierarchization">
+                    <xs:complexType>
+                        <xs:attribute name="connectionType" type="xs:string"/>
+                    </xs:complexType>
+                </xs:element>
 				<xs:element name="Elements">
 					<xs:complexType>
 						<xs:sequence>
