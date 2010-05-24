@@ -14,14 +14,20 @@ They represent some graph theory conditions under which the computation cannot
 #be performed
 """
 class GraphError(Exception):
+    """
+    The general error of the graph visualization module
+    """
     def __init__(self):
         self.value = ""
     def __str__(self):
         return repr(self.value)
 
 class CyclicHierarchyError(GraphError):
-  def __init__(self):
-          self.value = "The hierarchization process encountered cycle!"
+    """
+    Error signaling the cycle in the hierarchization relations
+    """
+    def __init__(self):
+        self.value = "The hierarchization process encountered cycle!"
 
 
 """
@@ -30,10 +36,27 @@ This class DO NOT treat the multiple or reflexive connections!
 """
 
 class CTidyMath(object):
+    
     #constructor
     def __init__(self, positionList, sizeList, connections=None, hierarchyConnections =None, centerList=None):
-        """Constructor takes as the argument container of all the SELECTED
-        elements or generator of that container"""
+        """
+        Constructor
+
+        @param positionList: container/generator with DEFINED order of positions of elements
+        @type  positionList: container/generator of tuples
+
+        @param sizeList: container/generator with DEFINED order of sizes of elements
+        @type  sizeList: container/generator of tuples
+
+        @param connections: set of ALL UNORIENTED edges/connections; In the tuple needs to be indices of the incident vertices; at that appropriate indices need to be positions +sizes of the vertices; the lower index first.
+        @type  connections: container/generator of tuples
+
+        @param hierarchyConnections: set of ORIENTED edges making the hierarchy; In the tuple needs to be indices of the incident vertices
+        @type  hierarchyConnections: container/generator of tuples
+
+        @param centerList: container/generator with DEFINED order of centers of elements
+        @type  centerList: container/generator of tuples
+        """
         self.positionList =[] #here MUST be the iterable
         self.sizeList     =sizeList
         self.connections  =set(map(lambda x: tuple(x), connections)) if connections else set()
@@ -59,31 +82,76 @@ class CTidyMath(object):
                 self.setOfHierarchization.add(i[0])
                 self.setOfHierarchization.add(i[1])
             self.setOfOhers =self.setOfOhers.difference(self.setOfHierarchization)
-        print "Debug init", self.positionList, self.sizeList, self.connections, self.HConnections, self.setOfHierarchization, self.setOfOhers
+        #print "Debug init", self.positionList, self.sizeList, self.connections, self.HConnections, self.setOfHierarchization, self.setOfOhers
     
     #other public methods
-    def getSize(self):
+    def getSizes(self):
+        """ 
+        Returns the generator of the element sizes
+        
+        @return: generator of sizes of elements
+        @rtype:  generator of tuples
+        """
         for i in self.sizeList:
             yield i
 
     def getPositions(self):
+        """ 
+        Returns the generator of the element positions
+        
+        @return: generator of positions of elements
+        @rtype:  generator of tuples
+        """
         for i in self.positionList:
             yield i
 
     def getCenters(self):
+        """ 
+        Returns the generator of the element centers
+        
+        @return: generator of centers of elements
+        @rtype:  generator of tuples
+        """
         for i in self.centerList:
             yield i
 
     def getMostLeftCoordinate(self):
+        """ 
+        Returns the actual most left coordinate of elements
+        
+        @return: actual most left coordinate of the elements
+        @rtype:  int
+        """
         return min([i[0] for i in self.positionList])
 
     def getMostTopCoordinate(self):
+        """ 
+        Returns the actual most top coordinate of elements
+        
+        @return: actual most top coordinate of the elements
+        @rtype:  int
+        """
         return min([i[1] for i in self.positionList])
         
     def getMostRightCoordinate(self):
+        """ 
+        Returns the actual most right coordinate of elements
+        
+        @return: actual most right coordinate of the elements
+        @rtype:  int
+        """
         return max([i[0]+j[0] for (i,j) in zip(self.positionList, self.sizeList)])
         
     def translateToTheCoordinate(self, mostLeftTop): #works OK
+        """ 
+        Translate all the elements so that the most left and top coordinate is "mostLeftTop"
+        
+        @param positionList: new most left-top coordinate of the system of elements
+        @type  positionList: tuple
+        
+        @return: most right-top coordinate of the system of elements
+        @rtype:  tuple of int
+        """
         deltaH =mostLeftTop[0] -self.getMostLeftCoordinate()
         deltaV =mostLeftTop[1] -self.getMostTopCoordinate()
         for i in range(len(self.positionList)):
@@ -96,12 +164,21 @@ class CTidyMath(object):
 
 #--left alignment
     def alignLeft(self, setLeftCoordinate):
+        """
+        Align the elements left, so that they have the same most left coordinate
+        
+        @param positionList: new most left coordinate of elements
+        @type  positionList: int
+        """
         # set the x position to setLeftCoordinate
         for i in range(len(self.positionList)):
             self.positionList[i] = (setLeftCoordinate, self.positionList[i][1] )
         # But preserve the Y coordinate ("sel.GetPosition()[1]")
     
     def alignMostLeft(self):
+        """
+        Align the elements most left, so that they have the same left coordinate as the previous most left one
+        """
         setLeftCoordinate =min([pos[0] for pos in self.positionList])
         # now we have the most left location
         # set the x position of all selected elements to that most left one!
@@ -110,12 +187,21 @@ class CTidyMath(object):
         # But preserve the Y coordinate ("sel.GetPosition()[1]")
 #--right alignment
     def alignRight(self, setRightCoordinate):
+        """
+        Align the elements right, so that they have the same most right coordinate
+        
+        @param positionList: new most right coordinate of elements
+        @type  positionList: int
+        """
         # set the x position to setRightCoordinate
         for i in range(len(self.positionList)):
             self.positionList[i] = (setRightCoordinate -self.sizeList[i][0], self.positionList[i][1] )
         # But preserve the Y coordinate ("sel.GetPosition()[1]")
     
     def alignMostRight(self):
+        """
+        Align the elements most right, so that they have the same right coordinate as the previous most right one
+        """
         setRightCoordinate =max([pos[0]+size[0] for (pos, size) in zip(self.positionList, self.sizeList)])
         # now we have the most right location
         # set the x position of all selected elements to that most right one!
@@ -124,6 +210,12 @@ class CTidyMath(object):
         # But preserve the Y coordinate ("sel.GetPosition()[1]")
 #--horizontal center alignment
     def alignHCenter(self, setHCenterCoordinate):
+        """
+        Align the centers of elements horizontally, so that they have the same vertical center coordinate
+        
+        @param positionList: new vertical center coordinate of elements
+        @type  positionList: int
+        """
         # set the x position to setRightCoordinate
         for i in range(len(self.positionList)):
             self.positionList[i] = (setHCenterCoordinate -self.sizeList[i][0]/2,
@@ -132,12 +224,21 @@ self.positionList[i][1] )
 
 #--top alignment
     def alignTop(self, setTopCoordinate):
+        """
+        Align the elements top, so that they have the same most top coordinate
+        
+        @param positionList: new most top coordinate of elements
+        @type  positionList: int
+        """
         # set the y position to setTopCoordinate
         for i in range(len(self.positionList)):
             self.positionList[i] = (self.positionList[i][0], setTopCoordinate)
         # But preserve the X coordinate ("sel.GetPosition()[0]")
     
     def alignMostTop(self):
+        """
+        Align the elements most top, so that they have the same top coordinate as the previous most top one
+        """
         setTopCoordinate =min([pos[1] for pos in self.positionList])
         # now we have the most top location
         # set the y position of all selected elements to that most top one!
@@ -146,12 +247,21 @@ self.positionList[i][1] )
         # But preserve the X coordinate ("sel.GetPosition()[0]")
 #--bottom alignment
     def alignBottom(self, setBottomCoordinate):
+        """
+        Align the elements bottom, so that they have the same most bottom coordinate
+        
+        @param positionList: new most bottom coordinate of elements
+        @type  positionList: int
+        """
         # set the y position to setBottomCoordinate
         for i in range(len(self.positionList)):
             self.positionList[i] = (self.positionList[i][0], setBottomCoordinate -self.sizeList[i][1])
         # But preserve the X coordinate ("sel.GetPosition()[0]")
     
     def alignMostBottom(self):
+        """
+        Align the elements most bottom, so that they have the same bottom coordinate as the previous most bottom one
+        """
         setBottomCoordinate =max([pos[1]+size[1] for (pos, size) in zip(self.positionList, self.sizeList)])
         # now we have the most bottom location
         # set the y position of all selected elements to that most bottom one!
@@ -160,6 +270,12 @@ self.positionList[i][1] )
         # But preserve the Y coordinate ("sel.GetPosition()[1]")
 #--vertical center alignment
     def alignVCenter(self, setVCenterCoordinate):
+        """
+        Align the centers of elements vertically, so that they have the same horizontal center coordinate
+        
+        @param positionList: new horizontal center coordinate of elements
+        @type  positionList: int
+        """
         # set the y position to setBottomCoordinate
         for i in range(len(self.positionList)):
             self.positionList[i] = (self.positionList[i][0], setVCenterCoordinate
@@ -168,6 +284,9 @@ self.positionList[i][1] )
 
 #--Tidy------------------------------------------
     def Tidy(self):
+        """
+        Method to perform the complex tidy
+        """
         # set the y position to setBottomCoordinate
         components =self.divideToComponents()
         #now process the individual components +GIVE THEM THE MAX_TIME
@@ -181,6 +300,9 @@ self.positionList[i][1] )
     def divideToComponents(self): #works
         """
         This method divides the input graph into the separate components
+        
+        @return: components with thier back mappings 
+        @rtype:  list of tuples (1st in tuple map; 2nd CTidyMath instance with one component)
         """
         allNodes =set(range(len(self.centerList )))
         allConnections =set(self.connections)
@@ -268,7 +390,7 @@ self.positionList[i][1] )
                 allHierarchization.difference_update(comHConnections)
                 
             #do not give positions of elements, but their centers
-            print "mapIndex, comSizeList, comConnections, comHConnections, comCenterList", mapIndex, comSizeList, comConnections, comHConnections, comCenterList
+            #print "mapIndex, comSizeList, comConnections, comHConnections, comCenterList", mapIndex, comSizeList, comConnections, comHConnections, comCenterList
             components.append((mapIndex,
             CTidyMath(None, comSizeList, comConnections, comHConnections, comCenterList) ))
         
@@ -277,6 +399,12 @@ self.positionList[i][1] )
         
         
     def applyComponents(self, listToApply):
+        """
+        This method applies the layout performed on the components back to original CTidyMath instance
+        
+        @param components with thier back mappings 
+        @type  list of tuples (1st in tuple map; 2nd CTidyMath instance with one component)
+        """
         mostLeftTop=(0,0)
         for i in listToApply:
             #take the separated elements side-by-side
@@ -353,12 +481,18 @@ self.positionList[i][1] )
 
     
     def computeVertexNeighbours(self): #works OK
+        """
+        Acquire the set of vertices incident to each one vertex
+        """
         self.vertexNeighbours =[set() for i in range(len(self.centerList))]
         for i in self.connections:
             self.vertexNeighbours[i[0]].add(i[1])
             self.vertexNeighbours[i[1]].add(i[0])
     
     def computeIdealDistances(self): #works ????
+        """
+        Method to compute the ideal distances between each two vertices for starting of the Stress Majorization
+        """
         if not self.vertexNeighbours:
             self.computeVertexNeighbours()
         elements =len(self.centerList)
@@ -378,6 +512,9 @@ self.positionList[i][1] )
             
     
     def computeTotalEnergy(self): #works ????
+        """
+        Method to compute the total energy/stress in the system
+        """
         if not self.idealDistances:
             self.computeIdealDistances()
         elements =len(self.sizeList)
@@ -394,6 +531,9 @@ self.positionList[i][1] )
         The main tidy method -it computes the new distribution of vertices
         through the Stress Majorization method http://www.research.att.com/areas/
         visualization/papers_videos/abstract.php?id=DBLP-conf-gd-GansnerKN04
+        
+        @param optional time limit; after this limit no iteration will be started
+        @type  float
         """
         if len(self.centerList)<2:
             return #nothing to do
@@ -425,7 +565,7 @@ self.positionList[i][1] )
             for j in range( i+1, len(self.idealDistances)):
                 const += self.idealDistances[i][j]**-2
         while totalEnergyOrig/totalEnergyAfter >1.0003: #perform
-            print totalEnergyOrig/totalEnergyAfter, "pomer zlepsenia"
+            #print totalEnergyOrig/totalEnergyAfter, "pomer zlepsenia"
             #now -compute one iteration of common vertices
             for i in self.setOfOhers:
                 posX=0.
@@ -476,13 +616,16 @@ self.positionList[i][1] )
 ## the module self test section! on console
 
     def test(self):
+        """
+        Method helping testing the modules
+        """
         for i in range(len(self.sizeList)):
             self.centerList[i] =self.sizeList[i]
 
 
 
 
-if __name__ == '__main__':
+if __name__ == '__main__': #if run from console
     a=CTidyMath([[20,10],[20,10],[20,10],[20,10]], [[30,20],[30,10],[20,10],[10,10]], [[0,1],[0,2],[2,3]], [[1,0],[2,0],[2,1],[3,2],[2,3]], None)
     #a.hierarchization() #works!!
     #print list(a.getCenters())
