@@ -16,7 +16,18 @@ class CTidyWrapper(object):
     #constructor
     def __init__(self, setOfSelectedElements, diagram, connections=None):
         """Constructor takes as the argument container of all the SELECTED
-        elements or generator of that container, """
+        elements or generator of that container,
+        
+        @param container/generator of elements to be aligned
+        @type  generator of tuples
+        
+        @param components with thier back mappings 
+        @type  list of tuples (1st in tuple map; 2nd CTidyMath instance with one component)
+        
+        @param components with thier back mappings 
+        @type  list of tuples (1st in tuple map; 2nd CTidyMath instance with one component)
+        
+        """
         self.elementList =list(setOfSelectedElements)
         self.diagram      =diagram
         #make internal 
