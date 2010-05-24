@@ -645,6 +645,7 @@
                 <xs:element name="Hierarchization">
                     <xs:complexType>
                         <xs:attribute name="connectionType" type="xs:string"/>
+                        <xs:attribute name="direction" type="xs:string"/>
                     </xs:complexType>
                 </xs:element>
 				<xs:element name="Elements">

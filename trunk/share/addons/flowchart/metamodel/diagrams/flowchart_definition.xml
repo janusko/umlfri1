@@ -3,6 +3,7 @@
     <Icon path="icons/FlowChart.png" />
     <Domain id="SimpleDiagram" identity="name" />
     <Special swimlines="0" lifelines="0" />
+    <Hierarchization connectionType="" />
     <Elements>
         <Item value="Note"/>
         <Item value="Process" />
