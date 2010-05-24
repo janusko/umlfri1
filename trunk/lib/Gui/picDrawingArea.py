@@ -1037,12 +1037,11 @@ class CpicDrawingArea(CWidget):
         self.Paint()
         
     #TIDY
-    #@event("pmTidy","activate")
     def tidy(self, widget = None):
         # use the algorithm for Tidy
-        #print "Ahoj"
         a =CTidyWrapper( self.Diagram.GetElements(), self.Diagram, self.Diagram.GetConnections() )
         a.Tidy()
         a.applyState()
+        del(a)
         #redraw canvas!
         self.Paint()
