@@ -39,13 +39,17 @@ class CTidyMath(object):
         self.connections  =set(map(lambda x: tuple(x), connections)) if connections else set()
         self.HConnections  =[]
         self.setOfHierarchization =set()
-        self.setOfOhers =set()
+        self.setOfOhers =set(range(len(self.sizeList)))
         self.idealDistances =None
         self.vertexNeighbours =None
         if not centerList: #compute
             self.centerList   =[[i[0]+j[0]/2,i[1]+j[1]/2] for i,j in zip(positionList, sizeList)]
         else:
             self.centerList =centerList
+            if not self.positionList:
+                self.positionList =[]
+                for i,j in zip(self.centerList, self.sizeList):
+                    self.positionList.append( (i[0]-j[0]/2, i[1]-j[1]/2) )
         if positionList:
             self.positionList =positionList
         if hierarchyConnections:
@@ -54,8 +58,8 @@ class CTidyMath(object):
             for i in self.HConnections:
                 self.setOfHierarchization.add(i[0])
                 self.setOfHierarchization.add(i[1])
-            self.setOfOhers =set(range(len(self.centerList))).difference(self.setOfHierarchization)
-        #print "Debug init", self.positionList, self.sizeList, self.connections, self.HConnections, self.setOfHierarchization, self.setOfOhers
+            self.setOfOhers =self.setOfOhers.difference(self.setOfHierarchization)
+        print "Debug init", self.positionList, self.sizeList, self.connections, self.HConnections, self.setOfHierarchization, self.setOfOhers
     
     #other public methods
     def getSize(self):
