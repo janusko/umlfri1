@@ -3,6 +3,7 @@
     <Icon path="icons/state_diagram.png" />
     <Domain id="basic_diagram" identity="name" />
     <Special swimlines="0" lifelines="0" />
+    <Hierarchization connectionType="Generalization" />
     <Elements>
         <Item value="Note" />
         <Item value="Package" />

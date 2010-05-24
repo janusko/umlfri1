@@ -509,7 +509,10 @@ self.positionList[i][1] )
                 for k in range(elements):
                     if self.idealDistances[i][k] +self.idealDistances[k][j] <self.idealDistances[i][j]:
                         self.idealDistances[i][j] =self.idealDistances[i][k] +self.idealDistances[k][j]
-            
+        for i,j in enumerate(self.sizeList):
+            for k,l in enumerate(self.sizeList):
+                if (i,k) in self.connections:
+                    self.idealDistances[i][k] =self.idealDistances[k][i] =  len(self.vertexNeighbours[i].symmetric_difference(self.vertexNeighbours[k]))                     *(sqrt(j[0]**2 +j[1]**2) +sqrt(l[0]**2 +l[1]**2))/2    
     
     def computeTotalEnergy(self): #works ????
         """
@@ -555,15 +558,19 @@ self.positionList[i][1] )
             #tmpDist =float(j[0])**2 +float(j[1])**2
             #if tmpDist <distanceFrom00:
                 #index, distanceFrom00 = i, tmpDist
-        try:
-            fixxed =-self.setOfHierarchization.pop() #fix the "fixxed" element
-        except:
-            fixxed =self.setOfOhers.pop()
+        #try:
+            #fixxed =-self.setOfHierarchization.pop() #fix the "fixxed" element
+        #except:
+            #fixxed =self.setOfOhers.pop()
         #remove one random element --> to fix the whole structure by him.
-        const =0.
+        const =[]
         for i in range(len(self.idealDistances)):
-            for j in range( i+1, len(self.idealDistances)):
-                const += self.idealDistances[i][j]**-2
+            tmp =0.
+            for j in range(len(self.idealDistances)):
+                if not i == j:
+                    tmp += self.idealDistances[i][j]**-2
+            const.append(tmp)
+        #inv =lambda x: 0 if x ==0 else 1/x
         while totalEnergyOrig/totalEnergyAfter >1.0003: #perform
             #print totalEnergyOrig/totalEnergyAfter, "pomer zlepsenia"
             #now -compute one iteration of common vertices
@@ -582,7 +589,7 @@ self.positionList[i][1] )
                     else:
                         posX +=self.centerList[j][0]/idDist**2
                         posY +=self.centerList[j][1]/idDist**2
-                self.centerList[i] =(int(posX/const), int(posY/const))
+                self.centerList[i] =(int(posX/const[i] ), int(posY/const[i]))
             #now -compute one iteration of hierarcized vertices
             for i in self.setOfHierarchization:
                 posX=0.
@@ -596,17 +603,17 @@ self.positionList[i][1] )
                         posX += (self.centerList[j][0]/idDist +(self.centerList[i][0] -self.centerList[j][0])/realDist)/idDist
                     else:
                         posX +=self.centerList[j][0]/idDist**2
-                self.centerList[i] =(int(posX/const), self.centerList[i][1])
+                self.centerList[i] =(int(posX/const[i]), self.centerList[i][1])
             #update the total energy variables
             totalEnergyOrig =totalEnergyAfter
             totalEnergyAfter =self.computeTotalEnergy()
             #print totalEnergyOrig, "Energia pred iteraciou", totalEnergyAfter, "Energia po iteracii" #debug
             if time() >timeMax:
                 break
-        if fixxed>0:
-            self.setOfOhers.add(fixxed) #give back the fixxed element
-        else:
-            self.setOfHierarchization.add(fixxed)
+        #if fixxed>0:
+            #self.setOfOhers.add(fixxed) #give back the fixxed element
+        #else:
+            #self.setOfHierarchization.add(fixxed)
         #transform the results also into the position list
         self.positionList =[]
         for i,j in zip(self.centerList, self.sizeList):
@@ -630,8 +637,8 @@ if __name__ == '__main__': #if run from console
     #a.hierarchization() #works!!
     #print list(a.getCenters())
     #print list(a.getPositions())
-    print a.computeTotalEnergy()
-    a.stressMajorization()
+    print a.computeIdealDistances()
+    #a.stressMajorization()
     #print a.vertexNeighbours
     print a.idealDistances
     print a.computeTotalEnergy()
