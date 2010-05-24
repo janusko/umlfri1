@@ -169,11 +169,12 @@ self.positionList[i][1] )
         #now process the individual components +GIVE THEM THE MAX_TIME
         for i in components:
             i[1].hierarchization()
-            #i[1].stressMajorization()
-        #check if 
+            #now start the computation; the time divide by the number of vertices
+            i[1].stressMajorization(7.*len(self.centerList)/len(i[0]))
+        #apply the computations on the continuous components
         self.applyComponents(components)
 
-    def divideToComponents(self):
+    def divideToComponents(self): #works
         """
         This method divides the input graph into the separate components
         """
@@ -282,11 +283,10 @@ self.positionList[i][1] )
                 self.positionList[k] =l #set the internal variables of Tidy obj by this values
                 # Position or centers???
                 
-                # TODO naskladanie vedla seba 
         #print "a.getCenters()",   list(a.getCenters())
         #print "a.getPositions()", list(a.getPositions())
     
-    def hierarchization(self):
+    def hierarchization(self): #works
         """
         This method compute the vertical positions/floors of components for the
         nodes involved in hierarchization connections/edges
@@ -348,43 +348,44 @@ self.positionList[i][1] )
         return
 
     
-    def computeVertexNeighbours(self):
+    def computeVertexNeighbours(self): #works OK
         self.vertexNeighbours =[set() for i in range(len(self.centerList))]
         for i in self.connections:
             self.vertexNeighbours[i[0]].add(i[1])
             self.vertexNeighbours[i[1]].add(i[0])
     
-    def computeIdealDistances(self):
+    def computeIdealDistances(self): #works ????
         if not self.vertexNeighbours:
             self.computeVertexNeighbours()
         elements =len(self.centerList)
-        self.idealDistances =[ [0 for i in range(elements)] for i in range(elements)]
+        self.idealDistances =[ [100000 for i in range(elements)] for i in range(elements)]
         for i,j in enumerate(self.sizeList):
-            for k,l in enumerate(self.sizeList[i:]):
-                if (m,n) in self.connections:
-                    self.idealDistances[i][k] =self.idealDistances[k][i] =  len(self.vertexNeighbours[i].symmetric_difference(self.vertexNeighbours[j]))                     *(sqrt(j[0]**2 +j[1]**2) +sqrt(i[0]**2 +i[1]**2))/2
+            for k,l in enumerate(self.sizeList):
+                if (i,k) in self.connections:
+                    self.idealDistances[i][k] =self.idealDistances[k][i] =  len(self.vertexNeighbours[i].symmetric_difference(self.vertexNeighbours[k]))                     *(sqrt(j[0]**2 +j[1]**2) +sqrt(l[0]**2 +l[1]**2))/2
+        for i in range(elements):
+            self.idealDistances[i][i] =0.
         #now use Floyd algorithm
         for i in range(elements):
             for j in range(elements):
                 for k in range(elements):
-                    if self.idealDistances[i][k] and self.idealDistances[k][j] and \
-                    self.idealDistances[i][k] +self.idealDistances[k][j] <self.idealDistances[i][j]:
+                    if self.idealDistances[i][k] +self.idealDistances[k][j] <self.idealDistances[i][j]:
                         self.idealDistances[i][j] =self.idealDistances[i][k] +self.idealDistances[k][j]
             
     
-    def computeTotalEnergy(self):
+    def computeTotalEnergy(self): #works ????
         if not self.idealDistances:
             self.computeIdealDistances()
         elements =len(self.sizeList)
         totalEnergy =0.
         for i,j in enumerate(self.centerList):
-            for k,l in enumerate(self.centerList[i:]):
-                idDist =self.idealDistances[i][j-i-1]
+            for k,l in enumerate(self.centerList[i+1:]):
+                idDist =self.idealDistances[i][k+i+1]
                 realDist =sqrt((j[0]-l[0])**2 +(j[1]-l[1])**2)
                 totalEnergy +=(realDist/idDist-1)**2
         return totalEnergy
     
-    def stressMajorization(self):
+    def stressMajorization(self, timeMax=None):
         """
         The main tidy method -it computes the new distribution of vertices
         through the Stress Majorization method http://www.research.att.com/areas/
@@ -398,7 +399,7 @@ self.positionList[i][1] )
             self.computeIdealDistances()
         
         totalEnergyOrig =self.computeTotalEnergy()
-        totalEnergyAfter =0.00001
+        totalEnergyAfter =totalEnergyOrig/1.0004
         #if some verteces to hierarchize, DO "hierarchization"
         #if self.setOfHierarchization:
             #self.hierarchization()
@@ -410,19 +411,25 @@ self.positionList[i][1] )
             #tmpDist =float(j[0])**2 +float(j[1])**2
             #if tmpDist <distanceFrom00:
                 #index, distanceFrom00 = i, tmpDist
-        fixxed =self.setOfOhers.pop() # discard(index) #fix the "index" element
+        try:
+            fixxed =-self.setOfHierarchization.pop() #fix the "fixxed" element
+        except:
+            fixxed =self.setOfOhers.pop()
         #remove one random element --> to fix the whole structure by him.
         const =0.
         for i in range(len(self.idealDistances)):
-            for j in range( i, len(self.idealDistances)):
+            for j in range( i+1, len(self.idealDistances)):
                 const += self.idealDistances[i][j]**-2
-        while totalEnergyOrig/totalEnergyAfter >1.03: #perform
+        while totalEnergyOrig/totalEnergyAfter >1.0003: #perform
+            print totalEnergyOrig/totalEnergyAfter, "pomer zlepsenia"
             #now -compute one iteration of common vertices
             for i in self.setOfOhers:
                 posX=0.
                 posY=0.
                 for j,k in enumerate(self.centerList):
                     idDist =self.idealDistances[i][j]
+                    if idDist<1:
+                        continue
                     realDist = sqrt( (self.centerList[j][0] -self.centerList[i][0])**2
                                     +(self.centerList[j][1] -self.centerList[i][1])**2)
                     if realDist:
@@ -437,6 +444,8 @@ self.positionList[i][1] )
                 posX=0.
                 for j,k in enumerate(self.centerList):
                     idDist =self.idealDistances[i][j]
+                    if idDist<1:
+                        continue
                     realDist = sqrt( (self.centerList[j][0] -self.centerList[i][0])**2
                                     +(self.centerList[j][1] -self.centerList[i][1])**2)
                     if realDist:
@@ -447,11 +456,21 @@ self.positionList[i][1] )
             #update the total energy variables
             totalEnergyOrig =totalEnergyAfter
             totalEnergyAfter =self.computeTotalEnergy()
-        self.setOfOhers.add(index) #give back the fixxed element
+            #print totalEnergyOrig, "Energia pred iteraciou", totalEnergyAfter, "Energia po iteracii" #debug
+            if time() >timeMax:
+                break
+        if fixxed>0:
+            self.setOfOhers.add(fixxed) #give back the fixxed element
+        else:
+            self.setOfHierarchization.add(fixxed)
+        #transform the results also into the position list
+        self.positionList =[]
+        for i,j in zip(self.centerList, self.sizeList):
+            self.positionList.append( (i[0]-j[0]/2, i[1]-j[1]/2) )
         return
-        # TODO vypľuj výsledky Aj v posList
 
 ## the module self test section! on console
+
     def test(self):
         for i in range(len(self.sizeList)):
             self.centerList[i] =self.sizeList[i]
@@ -460,15 +479,18 @@ self.positionList[i][1] )
 
 
 if __name__ == '__main__':
-    a=CTidyMath([[20,10],[20,10],[20,10],[20,10]], [[30,20],[30,10],[20,10],[10,10]], [[1,0],[0,1],[3,2]], [[1,0],[2,0],[2,1],[3,2],[2,3]], None)
+    a=CTidyMath([[20,10],[20,10],[20,10],[20,10]], [[30,20],[30,10],[20,10],[10,10]], [[0,1],[0,2],[2,3]], [[1,0],[2,0],[2,1],[3,2],[2,3]], None)
     #a.hierarchization() #works!!
     #print list(a.getCenters())
     #print list(a.getPositions())
-    a.computeVertexNeighbours()
-    print a.vertexNeighbours
-    a.divideToComponents()
-    print list(a.getCenters())
-    print list(a.getPositions())
+    print a.computeTotalEnergy()
+    a.stressMajorization()
+    #print a.vertexNeighbours
+    print a.idealDistances
+    print a.computeTotalEnergy()
+    #a.divideToComponents()
+    #print list(a.getCenters())
+    #print list(a.getPositions())
     # check the order of results with the header below and the test writeout
     ##def __init__(self, positionList, sizeList, connections=None, hierarchyConnections =None, centerList=None):
     ##print self.positionList, self.sizeList, self.connections, self.HConnections, self.setOfHierarchization, self.setOfOhers, self.connectionBends
