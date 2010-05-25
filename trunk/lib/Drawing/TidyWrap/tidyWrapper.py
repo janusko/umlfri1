@@ -62,12 +62,11 @@ class CTidyWrapper(object):
         #print self.positionList, self.sizeList, self.connections, self.hierarchization    
         self.tidy =CTidyMath(self.positionList, self.sizeList, self.connections, self.hierarchization, direction =self.direction)
 
-
 #def __init__(self, positionList, sizeList, connections=None, hierarchyConnections =None, centerList=None)
     
-    def applyState(self): #works OK
+    def ApplyState(self): #works OK
         """Applies the new positions of elements"""
-        self.positionList =self.tidy.getPositions()
+        self.positionList =self.tidy.GetPositions()
         for (elem, pos) in zip(self.elementList, self.positionList):
             elem.SetPosition( pos )
         if self.connectionsObj: #if called operation changing connection bends
@@ -101,7 +100,7 @@ class CTidyWrapper(object):
     
     #other public methods
 #--left alignment
-    def alignLeft(self, clickedElem):
+    def AlignLeft(self, clickedElem):
         """
         Call left alignment method from CTidyMath
         The left coordinate of the 'clickedElem' will be set as the left for all
@@ -113,20 +112,20 @@ class CTidyWrapper(object):
         if not isinstance(clickedElem, CVisibleObject):
             return #nothing to do
         # set the x position to setLeftCoordinate
-        self.tidy.alignLeft( clickedElem.GetPosition()[0] )
+        self.tidy.AlignLeft( clickedElem.GetPosition()[0] )
         
     
-    def alignMostLeft(self):
+    def AlignMostLeft(self):
         """
         Call most left alignment method from CTidyMath
         The left coordinate of the the selected elements will be set by the most
         left one
         """
-        self.tidy.alignMostLeft( )
+        self.tidy.AlignMostLeft( )
         
 
 #--right alignment
-    def alignRight(self, clickedElem):
+    def AlignRight(self, clickedElem):
         """
         Call right alignment method from CTidyMath
         The right coordinate of the 'clickedElem' will be set as the right for all
@@ -138,20 +137,20 @@ class CTidyWrapper(object):
         if not isinstance(clickedElem, CVisibleObject):
             return #nothing to do
         # set the x position to setLeftCoordinate
-        self.tidy.alignRight( clickedElem.GetPosition()[0] +clickedElem.GetSize(self.diagram)[0] )
+        self.tidy.AlignRight( clickedElem.GetPosition()[0] +clickedElem.GetSize(self.diagram)[0] )
         
     
-    def alignMostRight(self):
+    def AlignMostRight(self):
         """
         Call most right alignment method from CTidyMath
         The right coordinate of the the selected elements will be set by the most
         right one
         """
-        self.tidy.alignMostRight( )
+        self.tidy.AlignMostRight( )
         
 
 #--horizontal center alignment
-    def alignHCenter(self, clickedElem):
+    def AlignHCenter(self, clickedElem):
         """
         Call horizontal center alignment method from CTidyMath
         The horizontal center coordinate of the 'clickedElem' will be set as the
@@ -163,12 +162,12 @@ class CTidyWrapper(object):
         if not isinstance(clickedElem, CVisibleObject):
             return #nothing to do
         # set the x position to setLeftCoordinate
-        self.tidy.alignHCenter( clickedElem.GetPosition()[0]
+        self.tidy.AlignHCenter( clickedElem.GetPosition()[0]
 +clickedElem.GetSize(self.diagram)[0]/2 )
         
 
 #--top alignment
-    def alignTop(self, clickedElem):
+    def AlignTop(self, clickedElem):
         """
         Call top alignment method from CTidyMath
         The top coordinate of the 'clickedElem' will be set as the top for all
@@ -180,19 +179,19 @@ class CTidyWrapper(object):
         if not isinstance(clickedElem, CVisibleObject):
             return #nothing to do
         # set the y position to settopCoordinate
-        self.tidy.alignTop( clickedElem.GetPosition()[1] )
+        self.tidy.AlignTop( clickedElem.GetPosition()[1] )
         
-    def alignMostTop(self):
+    def AlignMostTop(self):
         """
         Call most top alignment method from CTidyMath
         The top coordinate of the the selected elements will be set by the most
         top one
         """
-        self.tidy.alignMostTop( )
+        self.tidy.AlignMostTop( )
         
 
 #--bottom alignment
-    def alignBottom(self, clickedElem):
+    def AlignBottom(self, clickedElem):
         """
         Call bottom alignment method from CTidyMath
         The bottom coordinate of the 'clickedElem' will be set as the bottom for all
@@ -204,20 +203,20 @@ class CTidyWrapper(object):
         if not isinstance(clickedElem, CVisibleObject):
             return #nothing to do
         # set the y position to setTopCoordinate
-        self.tidy.alignBottom( clickedElem.GetPosition()[1] +clickedElem.GetSize(self.diagram)[1] )
+        self.tidy.AlignBottom( clickedElem.GetPosition()[1] +clickedElem.GetSize(self.diagram)[1] )
         
     
-    def alignMostBottom(self):
+    def AlignMostBottom(self):
         """
         Call most bottom alignment method from CTidyMath
         The bottom coordinate of the the selected elements will be set by the most
         bottom one
         """
-        self.tidy.alignMostBottom( )
+        self.tidy.AlignMostBottom( )
         
 
 #--vertical center alignment
-    def alignVCenter(self, clickedElem):
+    def AlignVCenter(self, clickedElem):
         """
         Call vertical center alignment method from CTidyMath
         The vertical center coordinate of the 'clickedElem' will be set as the
@@ -229,7 +228,7 @@ class CTidyWrapper(object):
         if not isinstance(clickedElem, CVisibleObject):
             return #nothing to do
         # set the y position to setTopCoordinate
-        self.tidy.alignVCenter( clickedElem.GetPosition()[1] +clickedElem.GetSize(self.diagram)[1]/2 )
+        self.tidy.AlignVCenter( clickedElem.GetPosition()[1] +clickedElem.GetSize(self.diagram)[1]/2 )
         
 
 #--Tidy
