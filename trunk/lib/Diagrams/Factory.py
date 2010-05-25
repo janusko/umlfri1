@@ -118,7 +118,9 @@ class CDiagramFactory(CBaseObject):
             
             elif element.tag == METAMODEL_NAMESPACE+'Hierarchization':
                 connectionType =element.get('connectionType')
+                direction =element.get('direction')
                 obj.SetHierarchization(connectionType)
+                obj.SetDirection(direction)
         
         self.types[root.get('id')] = obj
     

@@ -38,7 +38,7 @@ This class DO NOT treat the multiple or reflexive connections!
 class CTidyMath(object):
     
     #constructor
-    def __init__(self, positionList, sizeList, connections=None, hierarchyConnections =None, centerList=None):
+    def __init__(self, positionList, sizeList, connections=None, hierarchyConnections =None, centerList=None, direction=None):
         """
         Constructor
 
@@ -65,6 +65,7 @@ class CTidyMath(object):
         self.setOfOhers =set(range(len(self.sizeList)))
         self.idealDistances =None
         self.vertexNeighbours =None
+        self.direction = direction
         if not centerList: #compute
             self.centerList   =[[i[0]+j[0]/2,i[1]+j[1]/2] for i,j in zip(positionList, sizeList)]
         else:
@@ -392,7 +393,7 @@ self.positionList[i][1] )
             #do not give positions of elements, but their centers
             #print "mapIndex, comSizeList, comConnections, comHConnections, comCenterList", mapIndex, comSizeList, comConnections, comHConnections, comCenterList
             components.append((mapIndex,
-            CTidyMath(None, comSizeList, comConnections, comHConnections, comCenterList) ))
+            CTidyMath(None, comSizeList, comConnections, comHConnections, comCenterList, self.direction) ))
         
         return components
         #TODO pridaj Time division 
@@ -425,9 +426,7 @@ self.positionList[i][1] )
         
         @raise CyclicHierarchyError
         """
-        #print "Pozdravy z hierarch "
         if not self.HConnections:
-            #print "nothing in hierarchization"
             return #nothing to do
         
         #print self.positionList, self.sizeList, self.connections, self.HConnections, self.setOfHierarchization, self.setOfOhers,
@@ -460,19 +459,39 @@ self.positionList[i][1] )
         #now assign the y coordinate according to the floor
         #WARNING! THE FLOOR IS **ALWAYS* NEGATIVE!
         pairs =levels.items()
-        pairs.sort(lambda x,y: cmp(x[1], y[1]), reverse =True)
+        
+        pairs.sort(lambda x,y: cmp(x[1], y[1]), reverse =(self.direction in ['up','left']))
+        
         #print "pairs", pairs
         floorHeight =[0]*len(self.centerList)
-        for i in pairs:
-            floorHeight[ - i[1]] =max(self.sizeList[i[0]][1], floorHeight[ - i[1]])
-        #print "floorHeight", floorHeight
-        cumulativeFloorHeight =floorHeight[0]/2
-        floor =0
-        for i in pairs:
-            if not - i[1] ==floor:
-                cumulativeFloorHeight +=(floorHeight[floor] +floorHeight[floor +1])/2 +40
-                floor +=1
-            self.centerList[ i[0]][1] =cumulativeFloorHeight
+        if self.direction in ['up','down']: #for vertical hierarchy
+            for i in pairs:
+                floorHeight[ - i[1]] =max(self.sizeList[i[0]][1], floorHeight[ - i[1]])
+            #print "floorHeight", floorHeight
+            floor =pairs[0][1]
+            cumulativeFloorHeight =floorHeight[-floor]/2
+            for i in pairs:
+                if not i[1] ==floor:
+                    if self.direction == 'up':
+                        cumulativeFloorHeight +=(floorHeight[-floor] +floorHeight[-floor +1])/2 +40
+                    else:
+                        cumulativeFloorHeight +=(floorHeight[-floor] +floorHeight[-floor -1])/2 +40
+                    floor = i[1]
+                self.centerList[ i[0]][1] =cumulativeFloorHeight
+        else: #for horizontal hierarchy
+            for i in pairs:
+                floorHeight[ - i[1]] =max(self.sizeList[i[0]][0], floorHeight[ - i[1]])
+            #print "floorHeight", floorHeight
+            floor =pairs[0][1]
+            cumulativeFloorHeight =floorHeight[-floor]/2
+            for i in pairs:
+                if not i[1] ==floor:
+                    if self.direction == 'left':
+                        cumulativeFloorHeight +=(floorHeight[-floor] +floorHeight[-floor +1])/2 +40
+                    else:
+                        cumulativeFloorHeight +=(floorHeight[-floor] +floorHeight[-floor -1])/2 +40
+                    floor = i[1]
+                self.centerList[ i[0]][0] =cumulativeFloorHeight
         #additional precomputing of the posList.
         self.positionList =[]
         for i,j in zip(self.centerList, self.sizeList):
@@ -576,19 +595,34 @@ self.positionList[i][1] )
                         posY +=self.centerList[j][1]/idDist**2
                 self.centerList[i] =(int(posX/const[i] ), int(posY/const[i]))
             #now -compute one iteration of hierarcized vertices
-            for i in self.setOfHierarchization:
-                posX=0.
-                for j,k in enumerate(self.centerList):
-                    idDist =self.idealDistances[i][j]
-                    if idDist<1:
-                        continue
-                    realDist = sqrt( (self.centerList[j][0] -self.centerList[i][0])**2
-                                    +(self.centerList[j][1] -self.centerList[i][1])**2)
-                    if realDist:
-                        posX += (self.centerList[j][0]/idDist +(self.centerList[i][0] -self.centerList[j][0])/realDist)/idDist
-                    else:
-                        posX +=self.centerList[j][0]/idDist**2
-                self.centerList[i] =(int(posX/const[i]), self.centerList[i][1])
+            if self.direction in ['up','down']:
+                for i in self.setOfHierarchization:
+                    posX=0.
+                    for j,k in enumerate(self.centerList):
+                        idDist =self.idealDistances[i][j]
+                        if idDist<1:
+                            continue
+                        realDist = sqrt( (self.centerList[j][0] -self.centerList[i][0])**2
+                                        +(self.centerList[j][1] -self.centerList[i][1])**2)
+                        if realDist:
+                            posX += (self.centerList[j][0]/idDist +(self.centerList[i][0] -self.centerList[j][0])/realDist)/idDist
+                        else:
+                            posX +=self.centerList[j][0]/idDist**2
+                    self.centerList[i] =(int(posX/const[i]), self.centerList[i][1])
+            else:
+                for i in self.setOfHierarchization:
+                    posY=0.
+                    for j,k in enumerate(self.centerList):
+                        idDist =self.idealDistances[i][j]
+                        if idDist<1:
+                            continue
+                        realDist = sqrt( (self.centerList[j][0] -self.centerList[i][0])**2
+                                        +(self.centerList[j][1] -self.centerList[i][1])**2)
+                        if realDist:
+                            posY += (self.centerList[j][1]/idDist +(self.centerList[i][1] -self.centerList[j][1])/realDist)/idDist
+                        else:
+                            posY +=self.centerList[j][1]/idDist**2
+                    self.centerList[i] =(self.centerList[i][0], int(posY/const[i]))
             #update the total energy variables
             totalEnergyOrig =totalEnergyAfter
             totalEnergyAfter =self.computeTotalEnergy()
@@ -601,7 +635,7 @@ self.positionList[i][1] )
         return
 
 ## the module self test section! on console
-
+# ------------------------------------------
     def test(self):
         """
         Method helping testing the modules
