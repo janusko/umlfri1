@@ -934,114 +934,114 @@ class CpicDrawingArea(CWidget):
     # Takes all selected Elements (ONLY Elements, no Labels or Connections!)
     #left
     @event("pmAlign_Left","activate")
-    def alignLeft(self, widget = None):
+    def AlignLeft(self, widget = None):
         # get the LEFT edge of clicked Element
         clickedElem =self.Diagram.GetElementAtPosition(self.canvas, self.lastClick)
         # use the algorithm for Alignment
         a =CTidyWrapper( self.Diagram.GetSelectedElements(), self.Diagram )
-        a.alignLeft( clickedElem)
-        a.applyState()
+        a.AlignLeft( clickedElem)
+        a.ApplyState()
         # redraw canvas!
         self.Paint()
     
-    def alignMostLeft(self, widget = None):
+    def AlignMostLeft(self, widget = None):
         # use the algorithm for Alignment
         a =CTidyWrapper( self.Diagram.GetSelectedElements(), self.Diagram )
-        a.alignMostLeft()
-        a.applyState()
+        a.AlignMostLeft()
+        a.ApplyState()
         # redraw canvas!
         self.Paint()
     
     #right
     @event("pmAlign_Right","activate")
-    def alignRight(self, widget = None):
+    def AlignRight(self, widget = None):
         # get the RIGHT edge of clicked Element
         clickedElem =self.Diagram.GetElementAtPosition(self.canvas, self.lastClick)
         # use the algorithm for Alignment
         a =CTidyWrapper( self.Diagram.GetSelectedElements(), self.Diagram )
-        a.alignRight( clickedElem)
-        a.applyState()
+        a.AlignRight( clickedElem)
+        a.ApplyState()
         # redraw canvas!
         self.Paint()
     
-    def alignMostRight(self, widget = None):
+    def AlignMostRight(self, widget = None):
         # use the algorithm for Alignment
         a =CTidyWrapper( self.Diagram.GetSelectedElements(), self.Diagram )
-        a.alignMostRight()
-        a.applyState()
+        a.AlignMostRight()
+        a.ApplyState()
         # redraw canvas!
         self.Paint()
 
     #horizontal center
     @event("pmAlign_HCenter","activate")
-    def alignHCenter(self, widget = None):
+    def AlignHCenter(self, widget = None):
         # get the RIGHT edge of clicked Element
         clickedElem =self.Diagram.GetElementAtPosition(self.canvas, self.lastClick)
         # use the algorithm for Alignment
         a =CTidyWrapper( self.Diagram.GetSelectedElements(), self.Diagram )
-        a.alignHCenter( clickedElem)
-        a.applyState()
+        a.AlignHCenter( clickedElem)
+        a.ApplyState()
         # redraw canvas!
         self.Paint()
     
     #top
     @event("pmAlign_Top","activate")
-    def alignTop(self, widget = None):
+    def AlignTop(self, widget = None):
         # get the TOP edge of clicked Element
         clickedElem =self.Diagram.GetElementAtPosition(self.canvas, self.lastClick)
         # use the algorithm for Alignment
         a =CTidyWrapper( self.Diagram.GetSelectedElements(), self.Diagram )
-        a.alignTop( clickedElem)
-        a.applyState()
+        a.AlignTop( clickedElem)
+        a.ApplyState()
         # redraw canvas!
         self.Paint()
     
-    def alignMostTop(self, widget = None):
+    def AlignMostTop(self, widget = None):
         # use the algorithm for Alignment
         a =CTidyWrapper( self.Diagram.GetSelectedElements(), self.Diagram )
-        a.alignMostTop()
-        a.applyState()
+        a.AlignMostTop()
+        a.ApplyState()
         # redraw canvas!
         self.Paint()
     
     #bottom
     @event("pmAlign_Bottom","activate")
-    def alignBottom(self, widget = None):
+    def AlignBottom(self, widget = None):
         # get the BOTTOM edge of clicked Element
         clickedElem =self.Diagram.GetElementAtPosition(self.canvas, self.lastClick)
         # use the algorithm for Alignment
         a =CTidyWrapper( self.Diagram.GetSelectedElements(), self.Diagram )
-        a.alignBottom( clickedElem)
-        a.applyState()
+        a.AlignBottom( clickedElem)
+        a.ApplyState()
         # redraw canvas!
         self.Paint()
     
-    def alignMostBottom(self, widget = None):
+    def AlignMostBottom(self, widget = None):
         # use the algorithm for Alignment
         a =CTidyWrapper( self.Diagram.GetSelectedElements(), self.Diagram )
-        a.alignMostBottom()
-        a.applyState()
+        a.AlignMostBottom()
+        a.ApplyState()
         # redraBalíkw canvas!
         self.Paint()
 
     #vertical center
     @event("pmAlign_VCenter","activate")
-    def alignVCenter(self, widget = None):
+    def AlignVCenter(self, widget = None):
         # get the center of clicked Element
         clickedElem =self.Diagram.GetElementAtPosition(self.canvas, self.lastClick)
         # use the algorithm for Alignment
         a =CTidyWrapper( self.Diagram.GetSelectedElements(), self.Diagram )
-        a.alignVCenter( clickedElem)
-        a.applyState()
+        a.AlignVCenter( clickedElem)
+        a.ApplyState()
         # redraw canvas!
         self.Paint()
         
     #TIDY
-    def tidy(self, widget = None):
+    def Tidy(self, widget = None):
         # use the algorithm for Tidy
         a =CTidyWrapper( self.Diagram.GetElements(), self.Diagram, self.Diagram.GetConnections() )
         a.Tidy()
-        a.applyState()
+        a.ApplyState()
         del(a)
         #redraw canvas!
         self.Paint()

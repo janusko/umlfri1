@@ -643,27 +643,27 @@ class CfrmMain(CWindow):
     @event('mnuAlignMostLeft', 'activate')
     def on_mnuAlignLeft_activate(self, widget):
         if self.picDrawingArea.HasFocus():
-            self.picDrawingArea.alignMostLeft()
+            self.picDrawingArea.AlignMostLeft()
 
     @event('mnuAlignMostRight', 'activate')
     def on_mnuAlignRight_activate(self, widget):
         if self.picDrawingArea.HasFocus():
-            self.picDrawingArea.alignMostRight()
+            self.picDrawingArea.AlignMostRight()
 
     @event('mnuAlignMostTop', 'activate')
     def on_mnuAlignTop_activate(self, widget):
         if self.picDrawingArea.HasFocus():
-            self.picDrawingArea.alignMostTop()
+            self.picDrawingArea.AlignMostTop()
 
     @event('mnuAlignMostBottom', 'activate')
     def on_mnuAlignBottom_activate(self, widget):
         if self.picDrawingArea.HasFocus():
-            self.picDrawingArea.alignMostBottom()
+            self.picDrawingArea.AlignMostBottom()
             
     @event('mnuTidy', 'activate')
     def on_mnuTidy_activate(self, widget):
         if self.picDrawingArea.HasFocus():
-            self.picDrawingArea.tidy()
+            self.picDrawingArea.Tidy()
 
             
     @event('application.bus', 'project-opened-from-plugin-adapter')
