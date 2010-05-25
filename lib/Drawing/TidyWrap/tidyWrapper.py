@@ -102,6 +102,14 @@ class CTidyWrapper(object):
     #other public methods
 #--left alignment
     def alignLeft(self, clickedElem):
+        """
+        Call left alignment method from CTidyMath
+        The left coordinate of the 'clickedElem' will be set as the left for all
+        the selected elements
+        
+        @param element to be aligned after
+        @type  CVisibleObject
+        """
         if not isinstance(clickedElem, CVisibleObject):
             return #nothing to do
         # set the x position to setLeftCoordinate
@@ -109,11 +117,24 @@ class CTidyWrapper(object):
         
     
     def alignMostLeft(self):
+        """
+        Call most left alignment method from CTidyMath
+        The left coordinate of the the selected elements will be set by the most
+        left one
+        """
         self.tidy.alignMostLeft( )
         
 
 #--right alignment
     def alignRight(self, clickedElem):
+        """
+        Call right alignment method from CTidyMath
+        The right coordinate of the 'clickedElem' will be set as the right for all
+        the selected elements
+        
+        @param element to be aligned after
+        @type  CVisibleObject
+        """
         if not isinstance(clickedElem, CVisibleObject):
             return #nothing to do
         # set the x position to setLeftCoordinate
@@ -121,11 +142,24 @@ class CTidyWrapper(object):
         
     
     def alignMostRight(self):
+        """
+        Call most right alignment method from CTidyMath
+        The right coordinate of the the selected elements will be set by the most
+        right one
+        """
         self.tidy.alignMostRight( )
         
 
 #--horizontal center alignment
     def alignHCenter(self, clickedElem):
+        """
+        Call horizontal center alignment method from CTidyMath
+        The horizontal center coordinate of the 'clickedElem' will be set as the
+        horizontal center for all the selected elements
+        
+        @param element to be aligned after
+        @type  CVisibleObject
+        """
         if not isinstance(clickedElem, CVisibleObject):
             return #nothing to do
         # set the x position to setLeftCoordinate
@@ -135,18 +169,38 @@ class CTidyWrapper(object):
 
 #--top alignment
     def alignTop(self, clickedElem):
+        """
+        Call top alignment method from CTidyMath
+        The top coordinate of the 'clickedElem' will be set as the top for all
+        the selected elements
+        
+        @param element to be aligned after
+        @type  CVisibleObject
+        """
         if not isinstance(clickedElem, CVisibleObject):
             return #nothing to do
         # set the y position to settopCoordinate
         self.tidy.alignTop( clickedElem.GetPosition()[1] )
         
-    
     def alignMostTop(self):
+        """
+        Call most top alignment method from CTidyMath
+        The top coordinate of the the selected elements will be set by the most
+        top one
+        """
         self.tidy.alignMostTop( )
         
 
 #--bottom alignment
     def alignBottom(self, clickedElem):
+        """
+        Call bottom alignment method from CTidyMath
+        The bottom coordinate of the 'clickedElem' will be set as the bottom for all
+        the selected elements
+        
+        @param element to be aligned after
+        @type  CVisibleObject
+        """
         if not isinstance(clickedElem, CVisibleObject):
             return #nothing to do
         # set the y position to setTopCoordinate
@@ -154,11 +208,24 @@ class CTidyWrapper(object):
         
     
     def alignMostBottom(self):
+        """
+        Call most bottom alignment method from CTidyMath
+        The bottom coordinate of the the selected elements will be set by the most
+        bottom one
+        """
         self.tidy.alignMostBottom( )
         
 
 #--vertical center alignment
     def alignVCenter(self, clickedElem):
+        """
+        Call vertical center alignment method from CTidyMath
+        The vertical center coordinate of the 'clickedElem' will be set as the
+        vertical center for all the selected elements
+        
+        @param element to be aligned after
+        @type  CVisibleObject
+        """
         if not isinstance(clickedElem, CVisibleObject):
             return #nothing to do
         # set the y position to setTopCoordinate
