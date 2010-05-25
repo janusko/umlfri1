@@ -23,6 +23,7 @@ class CDiagramType(CBaseObject):
         self.counter = 0
         self.factory = weakref.ref(factory)
         self.hierarchization =""
+        self.direction =""
     
     def GetMetamodel(self):
         return self.factory().GetMetamodel()
@@ -198,3 +199,10 @@ class CDiagramType(CBaseObject):
     def GetHierarchization(self):
         return self.hierarchization
     
+    def SetDirection(self, direction):
+        self.direction =direction
+    
+    def GetDirection(self):
+        return self.direction
+
+

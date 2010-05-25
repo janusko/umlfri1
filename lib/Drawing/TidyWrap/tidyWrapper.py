@@ -36,7 +36,7 @@ class CTidyWrapper(object):
         self.hierarchization =None
         self.connections     =None #the container of all the nonreflex. single connections
         self.connectionsObj  =None #the list of all real connections
-        #self.connectionsBends     =None
+        self.direction       =None
         if connections: #works??
             #need to separate reflexive or multiple connections
             self.connections  =set()
@@ -44,6 +44,7 @@ class CTidyWrapper(object):
             self.connectionsObj  =list(connections)
             
             hierarchizationType =diagram.GetType().GetHierarchization()
+            self.direction      =diagram.GetType().GetDirection()
             
             for i in self.connectionsObj:
                 try:
@@ -59,7 +60,7 @@ class CTidyWrapper(object):
                     pass
         #debug
         #print self.positionList, self.sizeList, self.connections, self.hierarchization    
-        self.tidy =CTidyMath(self.positionList, self.sizeList, self.connections, self.hierarchization)
+        self.tidy =CTidyMath(self.positionList, self.sizeList, self.connections, self.hierarchization, direction =self.direction)
 
 
 #def __init__(self, positionList, sizeList, connections=None, hierarchyConnections =None, centerList=None)
@@ -175,7 +176,7 @@ class CTidyWrapper(object):
         try:
             self.tidy.Tidy()
         except GraphError:
-            print "Vyskytla sa cyklicka dedicnost" #debug
+            #print "Vyskytla sa cyklicka dedicnost" #debug
             pass
 
 
