@@ -3,6 +3,7 @@
 from heapq import heappop, heappush, heapify
 from math import sqrt
 from time import time
+import copy
 
 """
 The module for complete tidy of the diagram
@@ -578,6 +579,7 @@ self.positionList[i][1] )
 
         while totalEnergyOrig/totalEnergyAfter >1.0000001:
             #now -compute one iteration of common vertices
+            q=copy.deepcopy(self.centerList)
             for i in self.setOfOhers:
                 posX=0.
                 posY=0.
@@ -593,7 +595,7 @@ self.positionList[i][1] )
                     else:
                         posX +=self.centerList[j][0]/idDist**2
                         posY +=self.centerList[j][1]/idDist**2
-                self.centerList[i] =(int(posX/const[i] ), int(posY/const[i]))
+                q[i] =(int(posX/const[i] ), int(posY/const[i]))
             #now -compute one iteration of hierarcized vertices
             if self.direction in ['up','down']:
                 for i in self.setOfHierarchization:
@@ -608,7 +610,7 @@ self.positionList[i][1] )
                             posX += (self.centerList[j][0]/idDist +(self.centerList[i][0] -self.centerList[j][0])/realDist)/idDist
                         else:
                             posX +=self.centerList[j][0]/idDist**2
-                    self.centerList[i] =(int(posX/const[i]), self.centerList[i][1])
+                    q[i] =(int(posX/const[i]), self.centerList[i][1])
             else:
                 for i in self.setOfHierarchization:
                     posY=0.
@@ -622,7 +624,9 @@ self.positionList[i][1] )
                             posY += (self.centerList[j][1]/idDist +(self.centerList[i][1] -self.centerList[j][1])/realDist)/idDist
                         else:
                             posY +=self.centerList[j][1]/idDist**2
-                    self.centerList[i] =(self.centerList[i][0], int(posY/const[i]))
+                    q[i] =(self.centerList[i][0], int(posY/const[i]))
+            #swap q and self.centerList
+            q, self.centerList =self.centerList, q
             #update the total energy variables
             totalEnergyOrig =totalEnergyAfter
             totalEnergyAfter =self.computeTotalEnergy()
