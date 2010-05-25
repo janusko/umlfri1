@@ -78,7 +78,11 @@ class CTidyMath(object):
         if positionList:
             self.positionList =positionList
         if hierarchyConnections:
-            self.hConnections  =set(map(lambda x: tuple(x), hierarchyConnections))
+            if self.direction in ['down', 'right']:
+                self.hConnections  =set(map(lambda x: tuple(x[::-1]), hierarchyConnections))
+                self.direction = 'up' if self.direction == 'down' else 'left'
+            else:
+                self.hConnections  =set(map(lambda x: tuple(x), hierarchyConnections))
             self.setOfHierarchization =set()
             for i in self.hConnections:
                 self.setOfHierarchization.add(i[0])
