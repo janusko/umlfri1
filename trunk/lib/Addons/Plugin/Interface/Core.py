@@ -43,7 +43,7 @@ class CCore(object):
                 else:
                     self.manager.Send(addr, RESP_UNKONWN_COMMAND, command = com, __id__ = callid)
             
-            except (UMLException, ), e:
+            except (UMLException, PluginError), e:
                 code = Exception2Code(e)
                 trace = ''.join(traceback.format_exception(*sys.exc_info()))
                 self.manager.Send(addr, code, params = [i for i in e] + [trace], __id__ = callid)
