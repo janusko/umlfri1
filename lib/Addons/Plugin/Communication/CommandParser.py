@@ -1,5 +1,6 @@
 import thread, re
 from ComSpec import *
+from lib.consts import PLUGIN_DISPLAY_COMMUNICATION
 
 class CCommandParser(object):
     
@@ -20,6 +21,7 @@ class CCommandParser(object):
         self.buffer = buffer
         self.proxy = proxy
         self.run = True
+        self.client = client
         
         if client:
             self.firstline = FIRST_LINE_PLUGIN
@@ -52,6 +54,9 @@ class CCommandParser(object):
                 if line is None:
                     self.Stop()
                     break
+                
+                if PLUGIN_DISPLAY_COMMUNICATION and self.client:
+                    print `line`
                 
                 if self.state == 'firstline':
                     if self.emptyline.match(line):

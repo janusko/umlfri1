@@ -2,6 +2,7 @@ import thread, base64, array, socket
 from CommandParser import CCommandParser
 from SynchLineBuffer import CSynchLineBuffer
 from ComSpec import *
+from lib.consts import PLUGIN_DISPLAY_COMMUNICATION
 
 
 class CSocketWrapper(object):
@@ -61,6 +62,10 @@ class CSocketWrapper(object):
                 else:
                     data = '%s\n%s\n\n\n' % (fline, pline)
                     
+                if PLUGIN_DISPLAY_COMMUNICATION and self.client:
+                    for line in data.splitlines():
+                        print `line+'\n'`
+                
                 self.sock.sendall(data)
                 result = True
             
