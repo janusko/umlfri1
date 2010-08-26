@@ -27,24 +27,32 @@ def reverse(transform):
         return fun
     return transformation
     
-import gobject, thread
+import gobject, thread, sys
 
 class CSynchronized(object):
     
     def __init__(self, fun):
         self.fun = fun
         self.result = None
+        self.exception = None
         self.lock = thread.allocate()
         self.lock.acquire()
     
     def __call__(self, *a, **k):
         gobject.idle_add(self.work, a, k)
         self.lock.acquire()
-        return self.result
+        if self.exception is None:
+            return self.result
+        else:
+            raise self.exception[1], None, self.exception[2]
         
     def work(self, a, k):
-        self.result = self.fun(*a, **k)
-        self.lock.release()
+        try:
+            self.result = self.fun(*a, **k)
+        except (Exception, ), e:
+            self.exception = sys.exc_info()
+        finally:
+            self.lock.release()
 
 def mainthread(fun):
     fun._synchronized = CSynchronized(fun)

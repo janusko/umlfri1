@@ -44,22 +44,7 @@ class CConnection(object):
                     self.results[__id__] = True
                 
                 elif 400 <= code <= 599:
-                    self.results[__id__] = CExceptionCarrier({
-                        RESP_UNKONWN_COMMAND: PluginUnknownCommand,
-                        RESP_UNSUPPORTED_VERSION: PluginUnsupportedVersion,
-                        RESP_INVALID_COMMAND_TYPE: PluginInvalidCommandType,
-                        RESP_MISSING_PARAMETER: PluginMissingParameter,
-                        RESP_INVALID_PARAMETER: PluginInvalidParameter,
-                        RESP_INVALID_OBJECT: PluginInvalidObject,
-                        RESP_UNKNOWN_METHOD: PluginUnknownMethod,
-                        RESP_INVALID_METHOD_PARAMETER: PluginInvalidMethodParameters,
-                        RESP_PROJECT_NOT_LOADED: PluginProjectNotLoaded,
-                        RESP_UNKNOWN_CONSTRUCTOR: PluginUnknownConstructor,
-                        RESP_TRANSACTION_PENDING: TransactionPendingError,
-                        RESP_OUT_OF_TRANSACTION: OutOfTransactionError,
-                        RESP_TRANSACTION_MODE_UNSPECIFIED: TransactionModeUnspecifiedError,
-                        RESP_UNHANDELED_EXCEPTION: UMLException,
-                        }[code], 
+                    self.results[__id__] = CExceptionCarrier(code2Exception[code], 
                         *((code,) + tuple(params.values())))
                 
                 lck.release()
