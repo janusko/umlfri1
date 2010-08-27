@@ -2,14 +2,15 @@ class UMLException(Exception):
     """
     Exception used for marking incorrect user operations
     """
-    def __init__(self, *params):
+    def __init__(self, *args):
         """
         Initialize this exception and set its values
         
         @param params: parameters for exception
         @type  params: tuple of anything, or anything
         """
-        self.params = params
+        Exception.__init__(self, *args)
+        self.params = self.args
 
 
     def __str__(self): 
