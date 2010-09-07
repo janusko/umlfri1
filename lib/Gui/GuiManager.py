@@ -1,6 +1,6 @@
 from lib.Depend.gtk2 import gtk, gobject
 from lib.Exceptions import *
-import thread
+import thread, weakref
 from lib.Base import CBaseObject
 from lib.Base.Registrar import registrar
 import plugin
@@ -31,20 +31,23 @@ class CGuiManager(CBaseObject):
         self.app = app
         self.frmMain = self.app.GetWindow('frmMain')
         self._persistent = True
+        self.owners = {}
         
-    def GetItem(self, item):
+    def GetItem(self, item, _addr=None):
         try:
             self.lock.acquire()
             if item is None:
                 return None
             if hasattr(item, '_pluginShade'):
-                return item._pluginShade
+                return item._pluginShade()
             else:
                 cls = CGuiManager.transformations.get(item.__class__, None)
                 if cls is None:
                     return None
-                result = cls(item, self, item.get_name())
-                item._pluginShade = result
+                result = cls(item, self, item.get_name(), _addr)
+                if _addr is not None:
+                    self.owners.setdefault(_addr, []).append(result)
+                item._pluginShade = weakref.ref(result)
                 CGuiManager.items.append(result)
                 return result
         finally:
@@ -68,4 +71,11 @@ class CGuiManager(CBaseObject):
     
     def DisplayWarning(self, text):
         gobject.idle_add(self.app.GetBus().emit, 'run-dialog', 'warning', text)
+        
+    def DisposeOf(self, addr):
+        if addr in self.owners:
+            for i in reversed(self.owners[addr]):
+                i.Remove()
+                CGuiManager.items.remove(i)
+            del self.owners[addr]
     

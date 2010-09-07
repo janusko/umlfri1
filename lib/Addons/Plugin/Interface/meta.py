@@ -46,6 +46,8 @@ class Meta(type):
         fun, desc = cls.GetMethod(cls.GetClassName(obj), fname)
         if desc is None:
             raise UnknowMethodError(obj.GetUID(), fname)
+        if getattr(fun, '_include_addr', False):
+            kwds['_addr'] = addr
         if hasattr(fun, '_synchronized'):
             fun = fun._synchronized
         try:

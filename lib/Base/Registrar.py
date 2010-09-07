@@ -22,5 +22,8 @@ class CRegistrar(object):
         if uid in self.__dict:
             raise UIDException(("uidUsed", uid))
         self.__dict[uid] = object
+        
+    def __len__(self):
+        return len(self.__dict)
 
 registrar = CRegistrar()

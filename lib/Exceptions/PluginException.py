@@ -12,4 +12,6 @@ class PluginProjectNotLoaded(PluginError): pass
 class PluginUnknownConstructor(PluginError): pass
     
 class PluginInMainloop(PluginError): pass
+    
+class PluginAccessDenied(PluginError): pass
 
