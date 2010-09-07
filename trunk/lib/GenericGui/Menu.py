@@ -5,14 +5,14 @@ class CMenu(CWidget):
     def GetItems(self):
         pass
         
-    def AddMenuItem(self, guiId, callback, position, label, underline, imagefilename):
+    def AddMenuItem(self, guiId, callback, position, label, underline, imagefilename, _addr):
         pass
     
-    def AddStockMenuItem(self, guiId, callback, position, stock, label):
+    def AddStockMenuItem(self, guiId, callback, position, stock, label, _addr):
         pass
     
-    def AddCheckMenuItem(self, guiId, callback, position, label, underline):
+    def AddCheckMenuItem(self, guiId, callback, position, label, underline, _addr):
         pass
     
-    def AddSeparator(self, guiId, position):
+    def AddSeparator(self, guiId, position, _addr):
         pass

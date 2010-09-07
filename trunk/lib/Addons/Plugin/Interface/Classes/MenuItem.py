@@ -22,6 +22,7 @@ class IMenuItem(IWidget):
         
     @result(r_object)
     @mainthread
-    def AddSubmenu(him):
-        return him.AddSubmenu()
+    @includeAddr
+    def AddSubmenu(him, _addr=None):
+        return him.AddSubmenu(_addr)
         

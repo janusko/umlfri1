@@ -4,7 +4,8 @@ from Container import CContainer
 
 class CMenu(CContainer, lib.GenericGui.CMenu):
     
-    def AddMenuItem(self, guiId, callback, position, label, underline, imagefilename):
+    def AddMenuItem(self, guiId, callback, position, label, underline, imagefilename, _addr):
+        self.TestAccess(_addr)
         if imagefilename:
             item = gtk.ImageMenuItem(label)
             image = gtk.Image()
@@ -13,23 +14,26 @@ class CMenu(CContainer, lib.GenericGui.CMenu):
         else:
             item = gtk.MenuItem(label, underline)
         self.AddItem(guiId, callback, position, item)
-        return self.manager.GetItem(item)
+        return self.manager.GetItem(item, _addr)
     
-    def AddStockMenuItem(self, guiId, callback, position, stock, label):
+    def AddStockMenuItem(self, guiId, callback, position, stock, label, _addr):
+        self.TestAccess(_addr)
         item = gtk.ImageMenuItem(stock_id = stock)
         if label:
             item.set_property('label', label)
         self.AddItem(guiId, callback, position, item)
-        return self.manager.GetItem(item)
+        return self.manager.GetItem(item, _addr)
     
-    def AddCheckMenuItem(self, guiId, callback, position, label, underline):
+    def AddCheckMenuItem(self, guiId, callback, position, label, underline, _addr):
+        self.TestAccess(_addr)
         item = gtk.CheckMenuItem(label, underline)
         item.set_property('label', label)
         self._addItem(guiId, callback, position, item)
-        return self.manager.GetItem(item)
+        return self.manager.GetItem(item, _addr)
     
-    def AddSeparator(self, guiId, position):
+    def AddSeparator(self, guiId, position, _addr):
+        self.TestAccess(_addr)
         item = gtk.SeparatorMenuItem()
         self.AddItem(guiId, None, position, item)
-        return self.manager.GetItem(item)
+        return self.manager.GetItem(item, _addr)
     

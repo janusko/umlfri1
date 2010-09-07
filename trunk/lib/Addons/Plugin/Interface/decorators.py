@@ -42,9 +42,13 @@ class CSynchronized(object):
         gobject.idle_add(self.work, a, k)
         self.lock.acquire()
         if self.exception is None:
-            return self.result
+            r = self.result
+            self.result = None
+            return r
         else:
-            raise self.exception[1], None, self.exception[2]
+            e = self.exception
+            self.exception = None
+            raise e[1], None, e[2]
         
     def work(self, a, k):
         try:
@@ -56,4 +60,8 @@ class CSynchronized(object):
 
 def mainthread(fun):
     fun._synchronized = CSynchronized(fun)
+    return fun
+    
+def includeAddr(fun):
+    fun._include_addr = True
     return fun

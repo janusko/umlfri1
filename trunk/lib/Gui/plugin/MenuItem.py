@@ -1,6 +1,7 @@
 import lib.GenericGui
 from lib.Depend.gtk2 import gtk
 from Widget import CWidget
+from lib.Exceptions import *
 
 class CMenuItem(lib.GenericGui.CMenuItem, CWidget):
     
@@ -13,8 +14,11 @@ class CMenuItem(lib.GenericGui.CMenuItem, CWidget):
     def GetSubmenu(self):
         return self.manager.GetItem(self.obj.get_submenu())
     
-    def AddSubmenu(self):
+    def AddSubmenu(self, _addr):
+        if self.obj.get_submenu() is not None:
+            raise PluginAccessDenied()
+        self.TestAccess(_addr)
         menu = gtk.Menu()
         self.obj.set_submenu(menu)
-        return self.manager.GetItem(menu)
+        return self.manager.GetItem(menu, _addr)
         

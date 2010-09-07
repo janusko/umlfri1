@@ -42,6 +42,7 @@ RESP_OUT_OF_TRANSACTION = 410
 RESP_TRANSACTION_MODE_UNSPECIFIED = 411
 RESP_INVALID_METHOD_PARAMETER = 412
 RESP_IN_MAINLOOP = 413
+RESP_ACCESS_DENIED = 414
 
 RESP_UNHANDELED_EXCEPTION = 500
 
@@ -59,6 +60,7 @@ code2Exception = {
     RESP_TRANSACTION_PENDING: TransactionPendingError,
     RESP_OUT_OF_TRANSACTION: OutOfTransactionError,
     RESP_TRANSACTION_MODE_UNSPECIFIED: TransactionModeUnspecifiedError,
+    RESP_ACCESS_DENIED: PluginAccessDenied,
     RESP_UNHANDELED_EXCEPTION: UMLException,
     RESP_IN_MAINLOOP: PluginInMainloop,
 }
@@ -72,6 +74,7 @@ exception2Code = (
     (ParamMissingError, RESP_MISSING_PARAMETER),
     (UnknowMethodError, RESP_UNKNOWN_METHOD),
     (PluginInvalidMethodParameters, RESP_INVALID_METHOD_PARAMETER),
+    (PluginAccessDenied, RESP_ACCESS_DENIED),
     (PluginInMainloop, RESP_IN_MAINLOOP),
     (UMLException, RESP_UNHANDELED_EXCEPTION),
 )

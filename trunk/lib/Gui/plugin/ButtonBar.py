@@ -4,7 +4,8 @@ from Container import CContainer
 
 class CButtonBar(CContainer, lib.GenericGui.CButtonBar):
     
-    def _addButton(self, guiId, callback, position, stock, label, imagefilename, tooglebutton):
+    def _addButton(self, guiId, callback, position, stock, label, imagefilename, tooglebutton, _addr):
+        self.TestAccess(_addr)
         if tooglebutton:
             item = gtk.ToggleToolButton(stock)
         else:
@@ -21,16 +22,17 @@ class CButtonBar(CContainer, lib.GenericGui.CButtonBar):
             
         self.AddItem(guiId, callback, position, item)
         
-        return self.manager.GetItem(item)
+        return self.manager.GetItem(item, _addr)
     
-    def AddButton(self, guiId, callback, position, label, imagefilename, tooglebutton):
-        return self._addButton(guiId, callback, position, None, label, imagefilename, tooglebutton)
+    def AddButton(self, guiId, callback, position, label, imagefilename, tooglebutton, _addr):
+        return self._addButton(guiId, callback, position, None, label, imagefilename, tooglebutton, _addr)
         
-    def AddStockButton(self, guiId, callback, position, stock, label, tooglebutton):
-        return self._addButton(guiId, callback, position, stock, label, None, tooglebutton)
+    def AddStockButton(self, guiId, callback, position, stock, label, tooglebutton, _addr):
+        return self._addButton(guiId, callback, position, stock, label, None, tooglebutton, _addr)
         
-    def AddSeparator(self, guiId, position):
+    def AddSeparator(self, guiId, position, _addr):
+        self.TestAccess(_addr)
         item = gtk.SeparatorToolItem()
         self.AddItem(guiId, None, position, item)
-        return self.manager.GetItem(item)
+        return self.manager.GetItem(item, _addr)
     
