@@ -7,18 +7,11 @@ class platform:
             return cls.__sys.platform in ('win32', 'cygwin')
         else:
             return cls.__sys.platform == platform
-
-def check():
-    """
-    Check wether platform is sufficient or not
-    
-    @raise AssertionError: if platform configuration is insufficient
-    """
+            
+def getPythonVersion():
     import platform
-    
-    req = [2, 5]
+
     ver = []
-    
     for s in platform.python_version_tuple():
         if isinstance(s, (int, float)):
             ver.append(s)
@@ -36,6 +29,18 @@ def check():
                 ver.append(n)
             else:
                 break
+    return ver
+
+
+def check():
+    """
+    Check wether platform is sufficient or not
+    
+    @raise AssertionError: if platform configuration is insufficient
+    """
+    req = [2, 5]
+    
+    ver = getPythonVersion()
     
     if ver < req:
         raise AssertionError("You will need at least Python 2.5 to run UML .FRI")

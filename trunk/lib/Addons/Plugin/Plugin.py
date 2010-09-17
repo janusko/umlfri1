@@ -33,6 +33,21 @@ class CPlugin(object):
         if self.IsInitialized():
             self.__pluginManager().Send(self.__addr, RESP_FINALIZE)
     
+    def ClearGui(self):
+        self.__pluginManager().GetGuiManager().DisposeOf(self.__addr)
+    
+    def Terminate(self):
+        self.__starter.Terminate()
+        
+    def Kill(self):
+        self.__starter.Kill()
+    
+    def Poll(self):
+        return self.__starter.Poll()
+        
+    def IsAlive(self):
+        return self.Poll() is None
+    
     def _SetPluginManager(self, manager):
         self.__pluginManager = weakref.ref(manager)
     

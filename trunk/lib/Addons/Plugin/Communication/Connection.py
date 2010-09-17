@@ -99,8 +99,8 @@ class CConnection(object):
     def SetCallback(self, fun):
         try:
             self.callbacklock.acquire()
-            if hasattr(fun, '__func__'):
-                ff = fun.__func__
+            if hasattr(fun, 'im_func'):
+                ff = fun.im_func
             else:
                 ff = fun
             if not hasattr(ff, '_callbackId'):
