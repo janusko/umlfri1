@@ -1,9 +1,11 @@
 from lib.config import config
 from lib.Distconfig import ROOT_PATH, IS_FROZEN
+from lib.Depend.sysplatform import getPythonVersion
 
 import os
 import os.path
 import subprocess
+import signal
 
 class CPythonStarter(object):
     if IS_FROZEN:
@@ -29,3 +31,20 @@ class CPythonStarter(object):
         env['UMLFRI_URI'] = str(uri)
         
         self.__process = subprocess.Popen([self.__pl_runner], shell = (os.name == 'nt'), env = env)
+    
+    def Terminate(self):
+        if getPythonVersion() < [2, 6]:
+            if os.name == 'posix':
+                os.kill(self.__process.pid, signal.SIGTERM)
+        else:
+            self.__process.terminate()
+        
+    def Kill(self):
+        if getPythonVersion() < [2, 6]:
+            if os.name == 'posix':
+                os.kill(self.__process.pid, signal.SIGKILL)
+        else:
+            self.__process.kill()
+    
+    def Poll(self):
+        return self.__process.poll()

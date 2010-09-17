@@ -16,7 +16,7 @@ class CPluginManager(object):
 
     def __init__(self, pluginAdapter):
         IBase.SetAdapter(pluginAdapter)
-        self.__plugins = {}
+        self.plugins = {}
         self.conlock = thread.allocate()
         self.connection = {}
         self.transaction = {}
@@ -41,16 +41,16 @@ class CPluginManager(object):
             self.conlock.release()
     
     def AddPlugin(self, plugin):
-        if plugin.GetUri() in self.__plugins:
+        if plugin.GetUri() in self.plugins:
             raise Exception() # TODO: replace with better exception
-        self.__plugins[plugin.GetUri()] = plugin
+        self.plugins[plugin.GetUri()] = plugin
         plugin._SetPluginManager(self)
     
     def ConnectPlugin(self, uri, addr):
-        if self.__plugins[uri].IsInitialized():
+        if self.plugins[uri].IsInitialized():
             raise Exception() # TODO: replace with better exception
         
-        self.__plugins[uri]._Connect(addr)
+        self.plugins[uri]._Connect(addr)
     
     def GetGuiManager(self):
         '''
