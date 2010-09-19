@@ -62,8 +62,6 @@ class CfrmMain(CWindow):
         #fullscreen
         'mnuMenubar', 'mnuFullscreen', 'cmdCloseFullscreen', 'vpaRight', 'sbStatus','hpaRight',
         #############
-        'mItemTidy',
-        'mnuAlignMostLeft', 'mnuAlignMostRight', 'mnuAlignMostTop', 'mnuAlignMostBottom', 'mnuTidy', 
         )
 
     complexWidgets = (CtbToolBox, CtwProjectView, CmnuItems, CpicDrawingArea, CnbProperties, CTabs,
@@ -639,33 +637,6 @@ class CfrmMain(CWindow):
         if (event.state & gtk.gdk.CONTROL_MASK):
             self.UpdateMenuSensitivity()
 
-    #Methods of alignment &tidy
-    @event('mnuAlignMostLeft', 'activate')
-    def on_mnuAlignLeft_activate(self, widget):
-        if self.picDrawingArea.HasFocus():
-            self.picDrawingArea.AlignMostLeft()
-
-    @event('mnuAlignMostRight', 'activate')
-    def on_mnuAlignRight_activate(self, widget):
-        if self.picDrawingArea.HasFocus():
-            self.picDrawingArea.AlignMostRight()
-
-    @event('mnuAlignMostTop', 'activate')
-    def on_mnuAlignTop_activate(self, widget):
-        if self.picDrawingArea.HasFocus():
-            self.picDrawingArea.AlignMostTop()
-
-    @event('mnuAlignMostBottom', 'activate')
-    def on_mnuAlignBottom_activate(self, widget):
-        if self.picDrawingArea.HasFocus():
-            self.picDrawingArea.AlignMostBottom()
-            
-    @event('mnuTidy', 'activate')
-    def on_mnuTidy_activate(self, widget):
-        if self.picDrawingArea.HasFocus():
-            self.picDrawingArea.Tidy()
-
-            
     @event('application.bus', 'project-opened-from-plugin-adapter')
     def on_project_opened(self, widget):
         self.nbTabs.CloseAll()
