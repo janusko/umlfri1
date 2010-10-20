@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DiagramType id="BPMN Diagram" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Icon path="icons/logobpmn.png" />
+    <Domain id="SimpleDiagram" identity="name" />
+    <Special swimlines="0" lifelines="0" />
+    <Hierarchization connectionType="" />
+    <Elements>
+        <Item value="Annotation"/>
+        <Item value="Gateway"/>
+        <Item value="ForkJoin"/>
+        <Item value="InclusiveDecisionMerge"/>
+        <Item value="Task"/>
+        <Item value="Process"/>
+        <Item value="Start"/>
+        <Item value="Intermediate"/>
+        <Item value="End"/>
+        <Item value="Data"/>
+    </Elements>
+    <Connections>
+        <Item value="Association"/>
+        <Item value="MessageFlow"/>
+        <Item value="SequenceFlow"/>
+    </Connections>
+</DiagramType>

@@ -1,0 +1,29 @@
+<ElementType id="Subroutine Call" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Icon path="icons/SubroutineCall.png"/>
+    <Domain id="SubroutineCall"/>
+    <Connections>
+        <Item value="Note Link" with="Note"/>
+        <Item value="Flow Line"/>
+    </Connections>
+    <Appearance>
+        <Shadow padding="3" color="#cfg.Styles.Element.ShadowColor">
+            <Rectangle fill="#cfg.Styles.Element.FillColor" border="#cfg.Styles.Element.LineColor">
+                <VBox expand="2">
+                    <Sizer minwidth="10"  minheight="1"/>
+                    <Line color="#cfg.Styles.Element.LineColor" type="vertical"/>
+                    <Sizer minheight="50" minwidth="100">
+                        <Padding padding="5">
+                            <Align align="center center">
+                                <TextBox text="#self.subroutineCall" font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/>
+                            </Align>
+                        </Padding>
+                    </Sizer>
+                    <Line color="#cfg.Styles.Element.LineColor" type="vertical"/>
+                    <Sizer minwidth="10" minheight="1"/>
+                </VBox>
+            </Rectangle>
+        </Shadow>
+    </Appearance>
+    <Options>
+    </Options>
+</ElementType>
