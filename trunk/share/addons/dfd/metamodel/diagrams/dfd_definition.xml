@@ -3,7 +3,6 @@
     <Icon path="icons/logodfd.png" />
     <Domain id="SimpleDiagram" identity="name" />
     <Special swimlines="0" lifelines="0" />
-    <Hierarchization connectionType="" />
     <Elements>
         <Item value="Function"/>
         <Item value="InputOutput"/>
