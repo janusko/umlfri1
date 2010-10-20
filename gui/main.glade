@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <glade-interface>
-  <!-- interface-requires gtk+ 2.16 -->
-  <!-- interface-naming-policy toplevel-contextual -->
+<!-- interface-requires gtk+ 2.16 -->
+<!-- interface-naming-policy toplevel-contextual -->
   <widget class="GtkWindow" id="frmMain">
     <property name="width_request">640</property>
     <property name="height_request">480</property>
@@ -11,7 +11,6 @@
     <child>
       <widget class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
-        <property name="orientation">vertical</property>
         <child>
           <widget class="GtkMenuBar" id="mnuMenubar">
             <property name="visible">True</property>
@@ -615,7 +614,6 @@
                   <widget class="GtkVPaned" id="vpaWarnings">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="orientation">vertical</property>
                     <child>
                       <widget class="GtkNotebook" id="nbTabs">
                         <property name="visible">True</property>
@@ -965,7 +963,6 @@
                   <widget class="GtkVPaned" id="vpaRight">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="orientation">vertical</property>
                     <property name="position">200</property>
                     <child>
                       <widget class="GtkScrolledWindow" id="scrolledwindow1">
@@ -1358,96 +1355,6 @@
         <property name="visible">True</property>
         <property name="label" translatable="yes">Open specification ...</property>
         <property name="use_underline">True</property>
-      </widget>
-    </child>
-    <child>
-      <widget class="GtkMenuItem" id="pmAlign">
-        <property name="visible">True</property>
-        <property name="label" translatable="yes">Align</property>
-        <property name="use_underline">True</property>
-        <child>
-          <widget class="GtkMenu" id="pmAlign_menu1">
-            <child>
-              <widget class="GtkImageMenuItem" id="pmAlign_Left">
-                <property name="label" translatable="yes">Align Left</property>
-                <property name="visible">True</property>
-                <property name="use_stock">False</property>
-                <child internal-child="image">
-                  <widget class="GtkImage" id="image6">
-                    <property name="visible">True</property>
-                    <property name="stock">gtk-go-back</property>
-                  </widget>
-                </child>
-              </widget>
-            </child>
-            <child>
-              <widget class="GtkImageMenuItem" id="pmAlign_Right">
-                <property name="label" translatable="yes">Align Right</property>
-                <property name="visible">True</property>
-                <property name="use_stock">False</property>
-                <child internal-child="image">
-                  <widget class="GtkImage" id="image7">
-                    <property name="visible">True</property>
-                    <property name="xalign">0.54000002145767212</property>
-                    <property name="stock">gtk-go-forward</property>
-                  </widget>
-                </child>
-              </widget>
-            </child>
-            <child>
-              <widget class="GtkImageMenuItem" id="pmAlign_Bottom">
-                <property name="label" translatable="yes">Align Bottom</property>
-                <property name="visible">True</property>
-                <property name="use_stock">False</property>
-                <child internal-child="image">
-                  <widget class="GtkImage" id="image8">
-                    <property name="visible">True</property>
-                    <property name="stock">gtk-go-down</property>
-                  </widget>
-                </child>
-              </widget>
-            </child>
-            <child>
-              <widget class="GtkImageMenuItem" id="pmAlign_Top">
-                <property name="label" translatable="yes">Align Top</property>
-                <property name="visible">True</property>
-                <property name="use_stock">False</property>
-                <child internal-child="image">
-                  <widget class="GtkImage" id="image9">
-                    <property name="visible">True</property>
-                    <property name="stock">gtk-go-up</property>
-                  </widget>
-                </child>
-              </widget>
-            </child>
-            <child>
-              <widget class="GtkImageMenuItem" id="pmAlign_HCenter">
-                <property name="label" translatable="yes">Align Centers Vertical</property>
-                <property name="visible">True</property>
-                <property name="use_stock">False</property>
-                <child internal-child="image">
-                  <widget class="GtkImage" id="image10">
-                    <property name="visible">True</property>
-                    <property name="stock">gtk-go-forward</property>
-                  </widget>
-                </child>
-              </widget>
-            </child>
-            <child>
-              <widget class="GtkImageMenuItem" id="pmAlign_VCenter">
-                <property name="label" translatable="yes">Align Center Horizontal</property>
-                <property name="visible">True</property>
-                <property name="use_stock">False</property>
-                <child internal-child="image">
-                  <widget class="GtkImage" id="image11">
-                    <property name="visible">True</property>
-                    <property name="stock">gtk-go-forward</property>
-                  </widget>
-                </child>
-              </widget>
-            </child>
-          </widget>
-        </child>
       </widget>
     </child>
   </widget>
