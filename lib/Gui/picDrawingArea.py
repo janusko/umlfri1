@@ -311,6 +311,15 @@ class CpicDrawingArea(CWidget):
             self.application.GetProject().GetRoot().GetObject() in (
                 [item.GetObject() for item in self.Diagram.GetSelectedElements(True)])):
             self.mnuCtxShiftDelete.set_sensitive(False)
+            
+    @event('application.bus', 'position-change', False)
+    @event('application.bus', 'position-change-from-plugin', True)
+    @event('application.bus', 'many-position-change', False)
+    def ElementPositionChange(self, widget, elements, plugin):
+        if plugin:
+            self.ToPaint()
+        else:
+            self.Paint()
     
     @event("picEventBox", "button-press-event")
     def on_picEventBox_button_press_event(self, widget, event):
