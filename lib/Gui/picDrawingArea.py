@@ -32,7 +32,7 @@ class CpicDrawingArea(CWidget):
                 'mnuCtxCut', 'mnuCtxCopy', 'mnuCtxPaste', 'mnuCtxDelete',
                 'pmOpenSpecification', 'mnuCtxShiftDelete','mnuChangeSourceTarget',
                 'mnuAlign',
-                'mnuAlignUpwards','mnuAlignDownwards','mnuAlignCenterVer','mnuSpaceEvenlyVertically')
+                'mnuAlignLeft','mnuAlignRight','mnuAlignUpwards','mnuAlignDownwards','mnuAlignCenterHor','mnuAlignCenterVer','mnuSpaceEvenlyHorizontally','mnuSpaceEvenlyVertically')
 
     __gsignals__ = {
         'get-selected':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_PYOBJECT,
@@ -909,6 +909,16 @@ class CpicDrawingArea(CWidget):
     def on_mnuChangeSourceTarget_click(self,widget):
         self.ChangeSourceTarget()
         self.Paint()
+    
+    @event("mnuAlignLeft","activate")
+    def on_mnuAlign_AlignLeft_activate(self, menuItem):
+        self.Diagram.AllignLeft()
+        self.Paint()
+        
+    @event("mnuAlignRight","activate")
+    def on_mnuAlign_AlignRight_activate(self, menuItem):        
+        self.Diagram.AllignRight(self.canvas)
+        self.Paint()
       
     @event("mnuAlignUpwards","activate")
     def on_mnuAlign_AlignUpwards_activate(self, menuItem):         
@@ -919,10 +929,20 @@ class CpicDrawingArea(CWidget):
     def on_mnuAlign_AlignDownwards_activate(self, menuItem):         
         self.Diagram.AllignDownwards(self.canvas)
         self.Paint()
-            
+
+    @event("mnuAlignCenterHor","activate")
+    def on_mnuAlignCenterHor(self, widget):        
+        self.Diagram.AllignCenterHor(self.canvas)
+        self.Paint()
+
     @event("mnuAlignCenterVer","activate")
     def on_mnuAlignCenterVer(self, widget):        
         self.Diagram.AllignCenterVer(self.canvas)
+        self.Paint()
+      
+    @event("mnuSpaceEvenlyHorizontally","activate")
+    def on_mnuMakeHorizontalSpacing(self, widget):        
+        self.Diagram.MakeHorizontalSpacing(self.canvas)
         self.Paint()
         
     @event("mnuSpaceEvenlyVertically","activate")
