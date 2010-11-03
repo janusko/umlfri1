@@ -30,7 +30,9 @@ class CpicDrawingArea(CWidget):
                 'pMenuShift', 
                 'pmShift_SendBack', 'pmShift_BringForward', 'pmShift_ToBottom', 'pmShift_ToTop','pmShowInProjectView',
                 'mnuCtxCut', 'mnuCtxCopy', 'mnuCtxPaste', 'mnuCtxDelete',
-                'pmOpenSpecification', 'mnuCtxShiftDelete','mnuChangeSourceTarget')
+                'pmOpenSpecification', 'mnuCtxShiftDelete','mnuChangeSourceTarget',
+                'mnuAlign',
+                'mnuAlignUpwards','mnuAlignDownwards','mnuAlignCenterVer','mnuSpaceEvenlyVertically')
 
     __gsignals__ = {
         'get-selected':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_PYOBJECT,
@@ -907,10 +909,28 @@ class CpicDrawingArea(CWidget):
     def on_mnuChangeSourceTarget_click(self,widget):
         self.ChangeSourceTarget()
         self.Paint()
+      
+    @event("mnuAlignUpwards","activate")
+    def on_mnuAlign_AlignUpwards_activate(self, menuItem):         
+        self.Diagram.AllignUpwards()
+        self.Paint()
+
+    @event("mnuAlignDownwards","activate")
+    def on_mnuAlign_AlignDownwards_activate(self, menuItem):         
+        self.Diagram.AllignDownwards(self.canvas)
+        self.Paint()
+            
+    @event("mnuAlignCenterVer","activate")
+    def on_mnuAlignCenterVer(self, widget):        
+        self.Diagram.AllignCenterVer(self.canvas)
+        self.Paint()
         
-        
+    @event("mnuSpaceEvenlyVertically","activate")
+    def on_mnuMakeVerticalSpacing(self, widget):        
+        self.Diagram.MakeVerticalSpacing(self.canvas)
+        self.Paint()
+    
     def ChangeSourceTarget(self):
-        
         for sel in self.Diagram.GetSelected():
             if isinstance(sel, CConnection):
                 sel.GetObject().ChangeConnection()
