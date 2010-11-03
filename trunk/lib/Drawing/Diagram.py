@@ -586,4 +586,80 @@ class CDiagram(CBaseObject):
                     y_min = posY
                   
         return ((int(x_min),int(y_min)),(int(x_max), int(y_max)))
-
+    
+    def AllignDownwards(self,canvas):
+        '''
+        Alligns all elements of specified diagram to down 
+        according to the first element
+        ''' 
+        elements = []
+        for e in self.GetSelectedElements():
+            elements.append(e)
+        if len(elements)<2: return
+        
+        base_y = elements[0].GetPosition()[1] + elements[0].GetSize(canvas)[1]
+        for e in elements:
+            x, y = e.GetPosition()
+            if base_y < y:
+                base_y = e.GetPosition()[1] + e.GetSize(canvas)[1]
+        
+        for e in elements:
+            x, y = e.GetPosition()
+            e.SetPosition([x, base_y- e.GetSize(canvas)[1]])
+    
+    def AllignUpwards(self):
+        '''
+        Alligns all elements of specified diagram to up 
+        according to the first element
+        ''' 
+        elements = []
+        for e in self.GetSelectedElements():
+            elements.append(e)
+        if len(elements)<2: return
+        
+        base_y = elements[0].GetPosition()[0]
+        for e in elements:
+            x, y = e.GetPosition()
+            if base_y > y:
+                base_y = y
+        
+        for e in elements:
+            x, y = e.GetPosition()
+            e.SetPosition([x, base_y])        
+     
+    def AllignCenterVer(self, canvas):
+        '''
+        Aligns centers of selected elements vertically.
+        New center is average of selected items
+        '''
+        elements = []
+        for e in self.GetSelectedElements():
+            elements.append(e)
+        if len(elements)<2: return
+        avgy = 0
+        for e in elements:
+            avgy += e.GetCenter(canvas)[0]
+        avgy = avgy/len(elements)
+        for e in elements:
+            x, y = e.GetPosition()
+            x = avgy - e.GetSize(canvas)[0]/2
+            e.SetPosition((x, y))
+            
+    def MakeVerticalSpacing(self, canvas):
+        '''
+        Makes evenly vertically spaces between elements
+        '''
+        elements = []
+        totalhightel = 0
+        for e in self.GetSelectedElements():
+            totalhightel += e.GetSize(canvas)[1]
+            elements.append(e)
+        if len(elements)<2: return
+        totalhight = self.GetSelectSquare(canvas)[1][1]
+        spacing = (totalhight - totalhightel)/(len(elements) - 1)
+        elements.sort(lambda x, y : cmp(x.GetPosition()[1], y.GetPosition()[1]))
+        y = elements[0].GetPosition()[1]
+        for e in elements:
+            x = e.GetPosition()[0]
+            e.SetPosition((x,y))
+            y += e.GetSize(canvas)[1] + spacing

@@ -97,7 +97,6 @@ class CfrmOpen(common.CWindow):
     
     def ShowDialog(self, parent, tab = 0):
         self.nbOpen.set_current_page(tab)
-        self.fwOpenExisting.set_current_folder_uri(self.fwOpenExisting.get_current_folder_uri())
         
         self.ivOpenModel.clear()
         for template in self.application.GetTemplateManager().GetAllTemplates():
