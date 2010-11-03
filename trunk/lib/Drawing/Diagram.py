@@ -586,6 +586,46 @@ class CDiagram(CBaseObject):
                     y_min = posY
                   
         return ((int(x_min),int(y_min)),(int(x_max), int(y_max)))
+
+    def AllignLeft(self): 
+        '''
+        Alligns all elements of specified diagram to left 
+        according to the first element
+        '''
+        elements = []
+        for e in self.GetSelectedElements():
+            elements.append(e)
+        if len(elements)<2: return
+        
+        base_x = elements[0].GetPosition()[0]
+        for e in elements:
+            x, y = e.GetPosition()
+            if base_x > x:
+                base_x = x
+        
+        for e in elements:
+            x, y = e.GetPosition()
+            e.SetPosition([base_x, y])
+            
+    def AllignRight(self, canvas):
+        '''
+        Alligns all elements of specified diagram to right 
+        according to the first element
+        '''
+        elements = []
+        for e in self.GetSelectedElements():
+            elements.append(e)
+        if len(elements)<2: return
+        
+        base_x = elements[0].GetPosition()[0]+elements[0].GetSize(canvas)[0]
+        for e in elements:
+            x, y = e.GetPosition()
+            if base_x < x:
+                base_x = e.GetPosition()[0] + e.GetSize(canvas)[0]
+                
+        for e in elements:
+            x, y = e.GetPosition()
+            e.SetPosition([base_x-e.GetSize(canvas)[0], y])
     
     def AllignDownwards(self,canvas):
         '''
@@ -625,7 +665,25 @@ class CDiagram(CBaseObject):
         
         for e in elements:
             x, y = e.GetPosition()
-            e.SetPosition([x, base_y])        
+            e.SetPosition([x, base_y])
+        
+    def AllignCenterHor(self, canvas):
+        '''
+        Aligns centers of selected elements horizontally.
+        New center is average of selected items
+        '''
+        elements = []
+        for e in self.GetSelectedElements():
+            elements.append(e)
+        if len(elements)<2: return
+        avgy = 0
+        for e in elements:
+            avgy += e.GetCenter(canvas)[1]
+        avgy = avgy/len(elements)
+        for e in elements:
+            x, y = e.GetPosition()
+            y = avgy - e.GetSize(canvas)[1]/2
+            e.SetPosition((x, y))
      
     def AllignCenterVer(self, canvas):
         '''
@@ -644,6 +702,25 @@ class CDiagram(CBaseObject):
             x, y = e.GetPosition()
             x = avgy - e.GetSize(canvas)[0]/2
             e.SetPosition((x, y))
+            
+    def MakeHorizontalSpacing(self, canvas):
+        '''
+        Makes evenly horizontal spaces between elements
+        '''
+        elements = []
+        totalwidthel = 0
+        for e in self.GetSelectedElements():
+            totalwidthel += e.GetSize(canvas)[0]
+            elements.append(e)
+        if len(elements)<2: return
+        totalwidth = self.GetSelectSquare(canvas)[1][0]            
+        spacing = (totalwidth - totalwidthel)/(len(elements) - 1)
+        elements.sort(lambda x, y : cmp(x.GetPosition()[0], y.GetPosition()[0]))
+        x = elements[0].GetPosition()[0]
+        for e in elements:
+            y = e.GetPosition()[1]
+            e.SetPosition((x, y))
+            x += e.GetSize(canvas)[0] + spacing  
             
     def MakeVerticalSpacing(self, canvas):
         '''
