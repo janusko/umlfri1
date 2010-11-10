@@ -3,6 +3,7 @@
     <Icon path="icons/logobpmn.png" />
     <Domain id="SimpleDiagram" identity="name" />
     <Special swimlines="0" lifelines="0" />
+    <Hierarchization connectionType="" />
     <Elements>
         <Item value="Annotation"/>
         <Item value="Gateway"/>

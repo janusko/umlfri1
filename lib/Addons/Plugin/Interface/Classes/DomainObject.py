@@ -31,7 +31,7 @@ class IDomainObject(IBase):
     
     @result(r_objectlist)
     def GetAppears(him):
-        return list(him.GetAppears())
+        return list(him.GetAppears)
     
     #destructive 
     

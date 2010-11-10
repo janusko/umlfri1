@@ -13,11 +13,5 @@ class CBus(gobject.GObject):
             (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT, )), #type, message
         'project-opened': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
         'project-opened-from-plugin-adapter': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
-        
-        'position-change':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
-            (gobject.TYPE_PYOBJECT, )),
-        'many-position-change':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
-            (gobject.TYPE_PYOBJECT, )),
-        'position-change-from-plugin':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
-            (gobject.TYPE_PYOBJECT, )),
     }
+    

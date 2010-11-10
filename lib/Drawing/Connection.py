@@ -168,7 +168,7 @@ class CConnection(CCacheableObject, CSelectableObject):
         '''
         Get element at the beginning of connection
         
-        @return: self.source
+        @return: self.sourcetuple
         @rtype: L{CElement<CElement>}
         '''
         return self.source()
@@ -642,6 +642,59 @@ class CConnection(CCacheableObject, CSelectableObject):
         return ( abs(line1) > pointSize and abs(line2) > pointSize and
             minAngle < (line1.Angle() - line2.Angle()) % (2 * pi) < \
             2 * pi - minAngle )
+
+    def RemoveAllPoints(self, canvas, runValidation = True):
+        '''
+        Delete all points from polyline
+                
+        @param canvas: Canvas on which its being drawn
+        @type  canvas:
+L{CCairoCanvas<lib.Drawing.Canvas.CairoCanvas.CCairoCanvas>}
+        
+        @param runValidation: if True then at the end executes 
+        L{self.ValidatePoints<self.ValidatePoints>}
+        @type  runValidation: bool
+        '''
+        if len(self.points) <= 0: #if empty, nothing to do
+            return
+        #unselect all selected points
+        self.selpoint = None
+
+        #relocate the labels
+        src =self.source().GetCenter(canvas)
+        dst =self.destination().GetCenter(canvas)
+        self.points.insert(0, src)
+        self.points.append( dst)
+        totalLen  =abs(CLine( src, dst))
+
+        #compute the list of lengths on individual conn. parts from source
+        iterator  =iter(self.points)
+        prevpoint =None
+        point     =iterator.next()
+        acumulLen =0.
+        acumulLengths =[acumulLen] #acumulated leng. from source
+        localLengths  =[]          #lengths of individual conn. parts 
+        
+        for i in iterator:
+            prevpoint =point
+            point     =i
+            localLen  =abs(CLine(prevpoint, point))
+            localLengths.append( localLen )
+            acumulLengths.append( localLen+acumulLengths[-1])
+       
+        #send labels to the 0th part of the connection +recalculate position
+        for label in self.labels.values():
+            #compute the label.pos (=the proportion of connection
+            label.pos =(acumulLengths[label.idx] +localLengths[label.idx]*label.pos
+              )/acumulLengths[label.idx+1]
+            
+            label.idx =0
+            label.RecalculatePosition(canvas)
+        #clean bend points of connection
+        self.points =[]
+        #optionally run validation
+        if runValidation:
+            self.ValidatePoints(canvas)
 
 if __name__ == '__main__':
     pass

@@ -31,7 +31,7 @@ from lib.Exceptions import UserException
 
 from lib.Base.Registrar import registrar
 
-__version__ = '1.0-rc2'
+__version__ = '1.0-rc3'
 
 class Application(CApplication):
     windows = lib.Gui
