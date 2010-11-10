@@ -238,7 +238,7 @@ setup(
             "icon_resources": [(1, "doc/Logo/icon.ico")],
             "dest_base": "bin/uml_fri",
             "company_name": "Faculty of Management Science and Informatics, University of Zilina",
-        }
+        },
     ],
     console = [
         {
@@ -265,9 +265,9 @@ setup(
         ("img", glob.glob("img/*.png")+glob.glob("img/*.ico")),
         (".", ["ABOUT", "README", "LICENSE"])
     ]+list(get_languages('share/locale', 'uml_fri'))
-    #+ addon('uml')
+    + addon('uml')
     #+ addon('flowchart')
-    + addon('oracleERD')
+    #+ addon('oracleErd')
     ,
     cmdclass = {"py2exe": CDllAndInnoPy2Exe},
 )
