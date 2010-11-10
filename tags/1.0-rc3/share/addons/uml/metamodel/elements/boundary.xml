@@ -1,0 +1,20 @@
+<ElementType xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" id="Boundary">
+    <Icon path="icons/boundary_element.png"/>
+    <Domain id="boundary" identity="name"/>
+    <Connections>
+    </Connections>
+    <Appearance>           
+        <Rectangle fill="white" border="#cfg.Styles.Element.LineColor">
+            <Sizer minheight="300" minwidth="300">
+                <Padding padding="5">
+                    <Align align="center">
+                        <TextBox text="#self.name" font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/>                                       
+                    </Align>
+                </Padding>
+            </Sizer>
+        </Rectangle>
+    </Appearance>
+    <Options>
+        <Layer>-1</Layer>
+    </Options>
+</ElementType>
