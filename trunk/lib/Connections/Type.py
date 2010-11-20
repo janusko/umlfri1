@@ -54,7 +54,7 @@ class CConnectionType(CBaseObject):
         '''
         return self.identity
     
-    def SetDomain(self, identity):
+    def SetConnectionIdentity(self, identity):
         '''
         Change identity of connection
         

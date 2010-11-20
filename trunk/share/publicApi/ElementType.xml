@@ -1,0 +1,71 @@
+<interface
+    xmlns="http://umlfri.org/xmlschema/publicApi.xsd"
+    name="org.umlfri.api.metamodel.ElementType">
+    
+    <documentation>
+        ...
+    </documentation>
+    
+    <property name="name">
+        <documentation>
+            Connection type name.
+        </documentation>
+        
+        <value type="string" readable="true" />
+    </property>
+    
+    <property name="domain">
+        <documentation>
+            Domain type associated with connection type.
+        </documentation>
+        
+        <value type="org.umlfri.api.metamodel.DomainType" readable="true" />
+    </property>
+    
+    <property name="identity">
+        <documentation>
+            Name of identity property, or None if it is not defined.
+        </documentation>
+        
+        <value type="string" readable="true" />
+    </property>
+    
+    <property name="connections">
+        <documentation>
+            List of connection types, which could be attached to an element
+            of this element type.
+        </documentation>
+        
+        <value type="org.umlfri.api.metamodel.ConnectionType" iterable="true" />
+    </property>
+    
+    <method name="connectedWith">
+        <documentation>
+            List of element types to which the element could be connected
+            through a connection of the given type.
+        </documentation>
+        
+        <parameter name="connection" type="org.umlfri.api.metamodel.ConnectionType">
+            <documentation>
+                Tested connection type.
+            </documentation>
+        </parameter>
+        
+        <return type="org.umlfri.api.metamodel.ElementType" iterable="true" />
+    </method>
+    
+    <method name="allowRecursive">
+        <documentation>
+            Determines whether a connection of the given type could be
+            attached recursively.
+        </documentation>
+        
+        <parameter name="connection" type="org.umlfri.api.metamodel.ConnectionType">
+            <documentation>
+                Tested connection type.
+            </documentation>
+        </parameter>
+        
+        <return type="boolean" />
+    </method>
+</interface>

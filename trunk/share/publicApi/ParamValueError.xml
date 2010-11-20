@@ -1,0 +1,16 @@
+<exception
+    xmlns="http://umlfri.org/xmlschema/publicApi.xsd"
+    name="org.umlfri.api.exceptions.ParamValueError">
+    
+    <documentation>
+        ...
+    </documentation>
+    
+    <property name="message">
+        <documentation>
+            Exception message.
+        </documentation>
+        
+        <value type="string" readable="true" />
+    </property>
+</exception>

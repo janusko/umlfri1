@@ -43,7 +43,7 @@ class IDomainObject(IBase):
         him.SetValue(path, value)
         IBase.adapter.plugin_change_domain_value(him, path)
         
-    def GetDomainType(him, name=''):
+    def GetDomainType(him):
         return him.GetDomainType()
     
 

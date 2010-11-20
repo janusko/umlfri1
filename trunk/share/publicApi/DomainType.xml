@@ -1,0 +1,16 @@
+<interface
+    xmlns="http://umlfri.org/xmlschema/publicApi.xsd"
+    name="org.umlfri.api.metamodel.DomainType">
+    
+    <documentation>
+        ...
+    </documentation>
+    
+    <property name="name">
+        <documentation>
+            Diagram type name.
+        </documentation>
+        
+        <value type="string" readable="true" />
+    </property>
+</interface>

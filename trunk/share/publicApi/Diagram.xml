@@ -1,0 +1,138 @@
+<interface
+    xmlns="http://umlfri.org/xmlschema/publicApi.xsd"
+    name="org.umlfri.api.model.Diagram">
+    
+    <documentation>
+        ...
+    </documentation>
+    
+    <method name="getElement">
+        <documentation>
+            Returns visual element associated with the given element object.
+        </documentation>
+        
+        <parameter name="obj" type="org.umlfri.api.model.ElementObject">
+            <documentation>
+                The element object.
+            </documentation>
+        </parameter>
+        
+        <return type="org.umlfri.api.model.ElementVisual" />
+    </property>
+    
+    <method name="getConnection">
+        <documentation>
+            Returns visual connection associated with the given connection object.
+        </documentation>
+        
+        <parameter name="obj" type="org.umlfri.api.model.ConnectionObject">
+            <documentation>
+                The connection object.
+            </documentation>
+        </parameter>
+        
+        <return type="org.umlfri.api.model.ConnectionVisual" />
+    </property>
+    
+    <property name="selected">
+        <documentation>
+            Elements or connections selected on the diagram.
+        </documentation>
+        
+        <value type="org.umlfri.api.model.Visual" iterable="true" />
+    </property>
+    
+    <property name="selectSquare">
+        <documentation>
+            Square area of the selection on the diagram.
+        </documentation>
+        
+        <value type="xywh" readable="true" />
+    </property>
+    
+    <method name="getElementAtPosition">
+        <documentation>
+            Gets top-most element at given coordinates.
+        <documentation>
+        
+        <parameter name="pos">
+            <documentation>
+                The position.
+            </documentation>
+        </parameter>
+        
+        <return type="org.umlfri.api.model.ElementVisual" />
+    </method>
+    
+    <method name="getElementInRange">
+        <documentation>
+            Gets all elemnts located in given range of coordinates.
+        <documentation>
+        
+        
+        <parameter name="topLeft" type="xy">
+            <documentation>
+                Top left position of the range.
+            </documentation>
+        </parameter>
+        
+        <parameter name="bottomRight" type="xy">
+            <documentation>
+                Bottom right position of the range.
+            </documentation>
+        </parameter>
+        
+        <return type="org.umlfri.api.model.ElementVisual" iterable="true" />
+    </method>
+    
+    <property name="sizeSquare">
+        <documentation>
+            Nonempty diagram area range.
+        </documentation>
+        
+        <value type="xywh" />
+    </property>
+    
+    <property name="elements">
+        <documentation>
+            All elements in the diagram.
+        </documentation>
+        
+        <value type="org.umlfri.api.model.ElementVisual" iterable="true" />
+    </property>
+    
+    <property name="connections">
+        <documentation>
+            All connections in the diagram.
+        </documentation>
+        
+        <value type="org.umlfri.api.model.ConnectionVisual" iterable="true" />
+    </property>
+    
+    <property name="name">
+        <documentation>
+            Diagram name.
+        </documentation>
+        
+        <value type="string" readable="true" />
+    </property>
+    
+    <property name="values">
+        <documentation>
+            Collection, that contains all property values.
+        </documentation>
+        
+        <index name="path" type="string" />
+        <value type="object" readable="true" writable="true" />
+        <getter apiname="GetValue" />
+        <setter apiname="SetValue" />
+    </property>
+    
+    <property name="type">
+        <documentation>
+            Diagram type identifier.
+        </documentation>
+        
+        <value type="string" readable="true" />
+    </property>
+</interface>
