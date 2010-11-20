@@ -12,7 +12,6 @@ from lib.Base import CBaseObject
 import weakref
     
 class CDiagram(CBaseObject):
-    NAME_PROPERY = 'Name' #This must be replaced by domain
     def __init__(self, type, name = None): #  name = "untitled"
         self.elements = []
         self.connections = []

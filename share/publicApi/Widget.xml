@@ -1,0 +1,22 @@
+<interface
+    xmlns="http://umlfri.org/xmlschema/publicApi.xsd"
+    name="org.umlfri.api.gui.Widget">
+    
+    <documentation>
+        ...
+    </documentation>
+    
+    <property name="sensitive">
+        <documentation>
+            Widget's sensitivity. True, if widget is enabled.
+        </documentation>
+        <value type="boolean" readable="true" writable="true" />
+    </property>
+    
+    <property name="guiId">
+        <documentation>
+            Widget's unique identifier.
+        </documentation>
+        <value type="string" readable="true" />
+    </property>
+</interface>

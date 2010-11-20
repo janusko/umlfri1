@@ -1,0 +1,61 @@
+<interface
+    xmlns="http://umlfri.org/xmlschema/publicApi.xsd"
+    name="org.umlfri.api.model.ConnectionObject">
+    
+    <documentation>
+        ...
+    </documentation>
+    
+    <method name="getConnectedObject">
+        <documentation>
+            Gets the element connected through the connection to element
+            passed as parameter.
+        </documentation>
+        
+        <parameter name="obj" type="org.umlfri.api.model.ElementObject">
+            <documentation>
+                Known element connected through the connection.
+            </documentation>
+        </parameter>
+        
+        <return type="org.umlfri.api.model.ElementObject" />
+    </method>
+    
+    <property name="source">
+        <documentation>
+            Connection source element.
+        </documentation>
+        <value type="org.umlfri.api.model.ElementObject" readable="true" />
+    </property>
+    
+    <property name="destination">
+        <documentation>
+            Connection destination element.
+        </documentation>
+        <value type="org.umlfri.api.model.ElementObject" readable="true" />
+    </property>
+    
+    <property name="values">
+        <documentation>
+            Collection, that contains all property values.
+        </documentation>
+        <index name="path" type="string" />
+        <value type="object" readable="true" writable="true" />
+        <getter apiname="GetValue" />
+        <setter apiname="SetValue" />
+    </property>
+    
+    <property name="type">
+        <documentation>
+            Connection type identifier.
+        </documentation>
+        <value type="string" readable="true" />
+    </property>
+    
+    <property name="appears">
+        <documentation>
+            Connection appearances in project diagrams.
+        </documentation>
+        <value type="org.umlfri.api.model.Diagram" iterable="true" />
+    </property>
+</interface>

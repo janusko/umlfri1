@@ -1,0 +1,89 @@
+<interface
+    xmlns="http://umlfri.org/xmlschema/publicApi.xsd"
+    name="org.umlfri.api.Adapter">
+    
+    <documentation>
+        ...
+    </documentation>
+    
+    <property name="project">
+        <documentation>
+            Gets a reference to the current project, or null if no project
+            is loaded.
+        </documentation>
+        <value type="org.umlfri.api.model.Project" readable="true" />
+    </property>
+    
+    <property name="diagram">
+        <documentation>
+            Gets a reference to the current diagram, or null if no diagram
+            is selected.
+        </documentation>
+        <value type="org.umlfri.api.model.Diagram" readable="true" />
+    </property>
+    
+    <method name="addNotification">
+        <documentation>
+            Adds the notification.
+        </documentation>
+        
+        <parameter name="event" type="string">
+            <documentation>
+                Event name.
+            </documentation>
+        </parameter>
+        <parameter name="callback" type="delegate">
+            <documentation>
+                Callback function delegate.
+            </documentation>
+        </parameter>
+    </method>
+    
+    <method name="removeNotification">
+        <documentation>
+            Removes the notification.
+        </documentation>
+        
+        <parameter name="event" type="string">
+            <documentation>
+                Event name.
+            </documentation>
+        </parameter>
+        <parameter name="callback" type="delegate">
+            <documentation>
+                Callback function delegate.
+            </documentation>
+        </parameter>
+    </method>
+    
+    <method name="notify">
+        <documentation>
+            Triggers the notification.
+        </documentation>
+        
+        <parameter name="event" type="string">
+            <documentation>
+                Event name.
+            </documentation>
+        </parameter>
+    </method>
+    
+    <property name="guiManager">
+        <documentation>
+            Gets a gui manager instance.
+        </documentation>
+        <value type="org.umlfri.api.gui.GuiManager" readable="true" />
+    </property>
+    
+    <method name="loadProject">
+        <documentation>
+            Loads the given project in UML .FRI and sets the project instance.
+        </documentation>
+        
+        <parameter name="fileName" type="string">
+            <documentation>
+                Full path to file.
+            </documentation>
+        </parameter>
+    </method>
+</interface>
