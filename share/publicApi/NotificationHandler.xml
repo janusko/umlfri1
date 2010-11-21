@@ -1,0 +1,14 @@
+<delegate
+    xmlns="http://umlfri.org/xmlschema/publicApi.xsd"
+    name="org.umlfri.api.base.NotificationEventHandler">
+    
+    <documentation>
+        Delegate definition for notification handlers.
+    </documentation>
+    
+    <parameterDictionary name="args">
+        <documentation>
+            Notification parameters.
+        </documentation>
+    </parameterDictionary>
+</delegate>
