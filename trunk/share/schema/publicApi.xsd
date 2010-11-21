@@ -84,6 +84,14 @@
 					<xs:attribute name="default" type="xs:string"/>
 				</xs:complexType>
 			</xs:element>
+			<xs:element name="parameterDictionary" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="documentation" type="xs:string" minOccurs="0"/>
+					</xs:sequence>
+					<xs:attribute name="name" use="required"/>
+				</xs:complexType>
+			</xs:element>
 			<xs:element name="return" minOccurs="0">
 				<xs:complexType>
 					<xs:sequence>
