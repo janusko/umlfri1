@@ -14,15 +14,13 @@
         <value type="string" readable="true" />
     </property>
     
-    <property name="values">
+    <property name="values" singular="value">
         <documentation>
             Collection, that contains all property values.
         </documentation>
         
         <index name="path" type="string" />
         <value type="object" readable="true" writable="true" />
-        <getter apiname="GetValue" />
-        <setter apiname="SetValue" />
     </property>
     
     <property name="type">
@@ -57,12 +55,11 @@
         <value type="org.umlfri.api.model.ConnectionObject" iterable="true" />
     </property>
     
-    <property name="children">
+    <property name="childs">
         <documentation>
             Child elements of the element.
         </documentation>
         
         <value type="org.umlfri.api.model.ElementObject" iterable="true" />
-        <getter apiname="GetChilds" />
     </property>
 </interface>

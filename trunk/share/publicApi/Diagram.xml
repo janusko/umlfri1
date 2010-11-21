@@ -18,7 +18,7 @@
         </parameter>
         
         <return type="org.umlfri.api.model.ElementVisual" />
-    </property>
+    </method>
     
     <method name="getConnection">
         <documentation>
@@ -32,7 +32,7 @@
         </parameter>
         
         <return type="org.umlfri.api.model.ConnectionVisual" />
-    </property>
+    </method>
     
     <property name="selected">
         <documentation>
@@ -53,9 +53,9 @@
     <method name="getElementAtPosition">
         <documentation>
             Gets top-most element at given coordinates.
-        <documentation>
+        </documentation>
         
-        <parameter name="pos">
+        <parameter name="pos" type="xy">
             <documentation>
                 The position.
             </documentation>
@@ -67,7 +67,7 @@
     <method name="getElementInRange">
         <documentation>
             Gets all elemnts located in given range of coordinates.
-        <documentation>
+        </documentation>
         
         
         <parameter name="topLeft" type="xy">
@@ -117,15 +117,13 @@
         <value type="string" readable="true" />
     </property>
     
-    <property name="values">
+    <property name="values" singular="value">
         <documentation>
             Collection, that contains all property values.
         </documentation>
         
         <index name="path" type="string" />
         <value type="object" readable="true" writable="true" />
-        <getter apiname="GetValue" />
-        <setter apiname="SetValue" />
     </property>
     
     <property name="type">

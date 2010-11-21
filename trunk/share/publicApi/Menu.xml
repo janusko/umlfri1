@@ -132,14 +132,12 @@
         <return type="org.umlfri.api.gui.Separator" />
     </method>
     
-    <property name="items">
+    <property name="items" singular="item">
         <documentation>
             Contains all menu items. It can be used to to iterate over them,
             or access one of them through guiId.
         </documentation>
         <index type="string" name="guiId" />
-        <value type="org.umlfri.api.gui.MenuItem" readable="true" iterable="true">
-        <getter apiname="GetItem" />
-        <iterator apiname="GetItems" />
+        <value type="org.umlfri.api.gui.MenuItem" readable="true" iterable="true" />
     </property>
 </interface>
