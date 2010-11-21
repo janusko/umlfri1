@@ -19,7 +19,7 @@
         </documentation>
         
         <value type="org.umlfri.api.gui.Menu" readable="true" />
-    </method>
+    </property>
     
     <property name="label">
         <documentation>
@@ -27,5 +27,5 @@
         </documentation>
         
         <value type="string" readable="true" writable="true" />
-    </method>
+    </property>
 </interface>

@@ -35,14 +35,12 @@
         <value type="org.umlfri.api.model.ElementObject" readable="true" />
     </property>
     
-    <property name="values">
+    <property name="values" singular="value">
         <documentation>
             Collection, that contains all property values.
         </documentation>
         <index name="path" type="string" />
         <value type="object" readable="true" writable="true" />
-        <getter apiname="GetValue" />
-        <setter apiname="SetValue" />
     </property>
     
     <property name="type">
