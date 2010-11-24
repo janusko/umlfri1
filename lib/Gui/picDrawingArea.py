@@ -27,12 +27,33 @@ class Record(object): pass
 class CpicDrawingArea(CWidget):
     name = 'picDrawingArea'
     widgets = ('picDrawingArea', 'picEventBox', 'picVBar', 'picHBar',
-                'pMenuShift', 
-                'pmShift_SendBack', 'pmShift_BringForward', 'pmShift_ToBottom', 'pmShift_ToTop','pmShowInProjectView',
-                'mnuCtxCut', 'mnuCtxCopy', 'mnuCtxPaste', 'mnuCtxDelete',
-                'pmOpenSpecification', 'mnuCtxShiftDelete','mnuChangeSourceTarget',
-                'mnuAlign',
-                'mnuAlignLeft','mnuAlignRight','mnuAlignUpwards','mnuAlignDownwards','mnuAlignCenterHor','mnuAlignCenterVer','mnuSpaceEvenlyHorizontally','mnuSpaceEvenlyVertically')
+            'pMenuShift', 
+                'mnuCtxCut',
+                'mnuCtxCopy',
+                'mnuCtxPaste',
+                'mnuCtxDelete',
+                'mnuCtxShiftDelete',
+                'pmShowInProjectView',
+                'mnuChangeSourceTarget',
+                    
+                    'pmShift_SendBack',
+                    'pmShift_BringForward',
+                    'pmShift_ToBottom',
+                    'pmShift_ToTop',
+                    
+                    'mnuAlignLeftMost', 'mnuAlignLeftCurrent',
+                    'mnuAlignRightMost', 'mnuAlignRightCurrent',
+                    'mnuAlignUpwardsMost', 'mnuAlignUpwardsCurrent',
+                    'mnuAlignDownwardsMost', 'mnuAlignDownwardsCurrent',
+                    'mnuAlignCenterHor',
+                    'mnuAlignCenterVer',
+                'mnuSizing',
+                    'mnuSpaceEvenlyHorizontally',
+                    'mnuSpaceEvenlyVertically',
+                    'mnuSizingRadioCurrent',
+                    'mnuSizingRadioMin', 
+                    'mnuSizingRadioMax',
+                'pmOpenSpecification')
 
     __gsignals__ = {
         'get-selected':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_PYOBJECT,
@@ -410,6 +431,7 @@ class CpicDrawingArea(CWidget):
             self.emit('selected-item', list(self.Diagram.GetSelected()),False)
             #if something is selected:
             self.UpdateMenuSensitivity(bool(self.application.GetProject()), bool(self.Diagram), int(len(list(self.Diagram.GetSelected())) > 0))
+            self.itemSel = itemSel
             self.pMenuShift.popup(None,None,None,event.button,event.time)
             return True
 
@@ -910,44 +932,28 @@ class CpicDrawingArea(CWidget):
         self.ChangeSourceTarget()
         self.Paint()
     
-    @event("mnuAlignLeft","activate")
-    def on_mnuAlign_AlignLeft_activate(self, menuItem):
-        self.Diagram.AllignLeft()
+    @event("mnuAlignLeftMost","activate", True, True, False)
+    @event("mnuAlignLeftCurrent","activate", True, True, True)
+    @event("mnuAlignRightMost","activate", True, False, False)
+    @event("mnuAlignRightCurrent","activate", True, False, True)
+    @event("mnuAlignUpwardsMost","activate", False, True, False)
+    @event("mnuAlignUpwardsCurrent","activate", False, True, True)
+    @event("mnuAlignDownwardsMost","activate", False, False, False)
+    @event("mnuAlignDownwardsCurrent","activate", False, False, True)
+    def on_mnuAlign_activate(self, menuItem, horiz, lower, defaultE):
+        self.Diagram.AlignElementsXY(horiz, lower, self.canvas, self.itemSel if defaultE else None)
         self.Paint()
-        
-    @event("mnuAlignRight","activate")
-    def on_mnuAlign_AlignRight_activate(self, menuItem):        
-        self.Diagram.AllignRight(self.canvas)
-        self.Paint()
-      
-    @event("mnuAlignUpwards","activate")
-    def on_mnuAlign_AlignUpwards_activate(self, menuItem):         
-        self.Diagram.AllignUpwards()
-        self.Paint()
-
-    @event("mnuAlignDownwards","activate")
-    def on_mnuAlign_AlignDownwards_activate(self, menuItem):         
-        self.Diagram.AllignDownwards(self.canvas)
-        self.Paint()
-
-    @event("mnuAlignCenterHor","activate")
-    def on_mnuAlignCenterHor(self, widget):        
-        self.Diagram.AllignCenterHor(self.canvas)
-        self.Paint()
-
-    @event("mnuAlignCenterVer","activate")
-    def on_mnuAlignCenterVer(self, widget):        
-        self.Diagram.AllignCenterVer(self.canvas)
+    
+    @event("mnuAlignCenterHor","activate", True, True)
+    @event("mnuAlignCenterVer","activate", False, True)
+    def on_mnuAlignCenter(self, widget, p1, p2):
+        self.Diagram.AlignElementCentersXY(p1, self.canvas, self.itemSel if p2 else None)
         self.Paint()
       
-    @event("mnuSpaceEvenlyHorizontally","activate")
-    def on_mnuMakeHorizontalSpacing(self, widget):        
-        self.Diagram.MakeHorizontalSpacing(self.canvas)
-        self.Paint()
-        
-    @event("mnuSpaceEvenlyVertically","activate")
-    def on_mnuMakeVerticalSpacing(self, widget):        
-        self.Diagram.MakeVerticalSpacing(self.canvas)
+    @event("mnuSpaceEvenlyHorizontally","activate", True)
+    @event("mnuSpaceEvenlyVertically","activate", False)
+    def on_mnuMakeSpacing(self, widget, p1):
+        self.Diagram.SpaceElementsEvenlyXY(p1, self.canvas)
         self.Paint()
     
     def ChangeSourceTarget(self):

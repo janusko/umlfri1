@@ -60,7 +60,7 @@ class CVisibleObject(CCacheableObject, CSelectableObject):
         return ((x, y), (x + w, y + h))
     
     def SetPosition(self, pos, *ignored):
-        self.position = pos
+        self.position = tuple(pos)
         
     def GetDiagram(self):
         return self.diagram()
