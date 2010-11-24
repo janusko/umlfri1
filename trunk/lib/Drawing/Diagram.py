@@ -586,156 +586,92 @@ class CDiagram(CBaseObject):
                   
         return ((int(x_min),int(y_min)),(int(x_max), int(y_max)))
 
-    def AllignLeft(self): 
-        '''
-        Alligns all elements of specified diagram to left 
-        according to the first element
-        '''
-        elements = []
-        for e in self.GetSelectedElements():
-            elements.append(e)
-        if len(elements)<2: return
-        
-        base_x = elements[0].GetPosition()[0]
-        for e in elements:
-            x, y = e.GetPosition()
-            if base_x > x:
-                base_x = x
-        
-        for e in elements:
-            x, y = e.GetPosition()
-            e.SetPosition([base_x, y])
-            
-    def AllignRight(self, canvas):
-        '''
-        Alligns all elements of specified diagram to right 
-        according to the first element
-        '''
-        elements = []
-        for e in self.GetSelectedElements():
-            elements.append(e)
-        if len(elements)<2: return
-        
-        base_x = elements[0].GetPosition()[0]+elements[0].GetSize(canvas)[0]
-        for e in elements:
-            x, y = e.GetPosition()
-            if base_x < x:
-                base_x = e.GetPosition()[0] + e.GetSize(canvas)[0]
-                
-        for e in elements:
-            x, y = e.GetPosition()
-            e.SetPosition([base_x-e.GetSize(canvas)[0], y])
+    def AlignElementsXY(self, isHorizontal, isLowerBoundary,
+            canvas, defaultElement=None): 
+        """
+        Aligns selected elements along specified axis and position.
+        If position is't set, elements will be aligned to their average
+        position.
     
-    def AllignDownwards(self,canvas):
-        '''
-        Alligns all elements of specified diagram to down 
-        according to the first element
-        ''' 
-        elements = []
-        for e in self.GetSelectedElements():
-            elements.append(e)
+        @param isHorizontal: align horizontaly or verticaly
+        @type isHorizonatal: bool
+        @param isLowerBoundary: align to lower or higher boundary
+        @type isLowerBoundary: bool
+        @param canvas: drawing canvas
+        @type canvas: L{CCairoCanvas<lib.Drawing.Canvas.Cairo.CCairoCanvas>}
+        @param defaultElement: Element to align to
+        @type defaultElement: L{CElement<lib.Drawing.Element.CElement>}
+        """
+        xy = 1-int(bool(isHorizontal))
+        elements = tuple(self.GetSelectedElements())
         if len(elements)<2: return
-        
-        base_y = elements[0].GetPosition()[1] + elements[0].GetSize(canvas)[1]
+        if not defaultElement:
+            fun = min if isLowerBoundary else max
+            most = elements[0].GetPosition()[xy] + \
+                (0 if isLowerBoundary else elements[0].GetSize(canvas)[xy])
+            for e in elements:
+                most = fun( most, e.GetPosition()[xy] + \
+                    (0 if isLowerBoundary else e.GetSize(canvas)[xy]) )
+        else: 
+            most = defaultElement.GetPosition()[xy] + \
+                (0 if isLowerBoundary else defaultElement.GetSize(canvas)[xy])
         for e in elements:
-            x, y = e.GetPosition()
-            if base_y < y:
-                base_y = e.GetPosition()[1] + e.GetSize(canvas)[1]
-        
-        for e in elements:
-            x, y = e.GetPosition()
-            e.SetPosition([x, base_y- e.GetSize(canvas)[1]])
+            pos = list(e.GetPosition())
+            pos[xy] = most - \
+                ( 0 if isLowerBoundary else e.GetSize(canvas)[xy] )
+            e.SetPosition(pos)
     
-    def AllignUpwards(self):
-        '''
-        Alligns all elements of specified diagram to up 
-        according to the first element
-        ''' 
-        elements = []
-        for e in self.GetSelectedElements():
-            elements.append(e)
-        if len(elements)<2: return
+    def AlignElementCentersXY(self, isHorizontal, canvas, defaultElement=None):
+        """
+        Aligns centers of selected elements to defaultElements center 
+        along x or y axis.
+        If defaultElement it's set, elements will be aligned to their average
+        center position.
         
-        base_y = elements[0].GetPosition()[0]
+        @param isHorizontal: align horizontaly or verticaly
+        @type xy: bool
+        @param canvas: drawing canvas
+        @type canvas: L{CCairoCanvas<lib.Drawing.Canvas.Cairo.CCairoCanvas>}
+        @param defaultElement: Element to align to
+        @type defaultElement: L{CElement<lib.Drawing.Element.CElement>}
+        """
+        xy = 1-int(bool(isHorizontal))
+        elements = tuple(self.GetSelectedElements())
+        if len(elements)<2: return
+        if not defaultElement:
+            avg = 0
+            for e in elements:
+                avg += e.GetCenter(canvas)[xy]
+            position = avg/len(elements)
+        else:
+            position = defaultElement.GetCenter(canvas)[xy]
         for e in elements:
-            x, y = e.GetPosition()
-            if base_y > y:
-                base_y = y
+            pos = list(e.GetPosition())
+            pos[xy] = position - e.GetSize(canvas)[xy]/2
+            e.SetPosition(pos)
+    
+    def SpaceElementsEvenlyXY(self, isHorizontal, canvas):
+        """
+        Spaces selected elements evenly along x or y axis.
         
+        @param xy: space horizontaly or verticaly
+        @type xy: bool
+        @param canvas: drawing canvas
+        @type canvas: L{CCairoCanvas<lib.Drawing.Canvas.Cairo.CCairoCanvas>}
+        """
+        xy = 1-int(bool(isHorizontal))
+        elements = list(self.GetSelectedElements())
+        if len(elements)<3: return
+        elemtotal = 0
         for e in elements:
-            x, y = e.GetPosition()
-            e.SetPosition([x, base_y])
-        
-    def AllignCenterHor(self, canvas):
-        '''
-        Aligns centers of selected elements horizontally.
-        New center is average of selected items
-        '''
-        elements = []
-        for e in self.GetSelectedElements():
-            elements.append(e)
-        if len(elements)<2: return
-        avgy = 0
+            elemtotal += e.GetSize(canvas)[xy]
+        total = self.GetSelectSquare(canvas)[1][xy]
+        spacing = (total - elemtotal)/(len(elements) - 1)
+        elements.sort(lambda x, y: cmp(x.GetPosition()[xy],\
+            y.GetPosition()[xy]))
+        pos = [0, 0]
+        pos[xy] = elements[0].GetPosition()[xy]
         for e in elements:
-            avgy += e.GetCenter(canvas)[1]
-        avgy = avgy/len(elements)
-        for e in elements:
-            x, y = e.GetPosition()
-            y = avgy - e.GetSize(canvas)[1]/2
-            e.SetPosition((x, y))
-     
-    def AllignCenterVer(self, canvas):
-        '''
-        Aligns centers of selected elements vertically.
-        New center is average of selected items
-        '''
-        elements = []
-        for e in self.GetSelectedElements():
-            elements.append(e)
-        if len(elements)<2: return
-        avgy = 0
-        for e in elements:
-            avgy += e.GetCenter(canvas)[0]
-        avgy = avgy/len(elements)
-        for e in elements:
-            x, y = e.GetPosition()
-            x = avgy - e.GetSize(canvas)[0]/2
-            e.SetPosition((x, y))
-            
-    def MakeHorizontalSpacing(self, canvas):
-        '''
-        Makes evenly horizontal spaces between elements
-        '''
-        elements = []
-        totalwidthel = 0
-        for e in self.GetSelectedElements():
-            totalwidthel += e.GetSize(canvas)[0]
-            elements.append(e)
-        if len(elements)<2: return
-        totalwidth = self.GetSelectSquare(canvas)[1][0]            
-        spacing = (totalwidth - totalwidthel)/(len(elements) - 1)
-        elements.sort(lambda x, y : cmp(x.GetPosition()[0], y.GetPosition()[0]))
-        x = elements[0].GetPosition()[0]
-        for e in elements:
-            y = e.GetPosition()[1]
-            e.SetPosition((x, y))
-            x += e.GetSize(canvas)[0] + spacing  
-            
-    def MakeVerticalSpacing(self, canvas):
-        '''
-        Makes evenly vertically spaces between elements
-        '''
-        elements = []
-        totalhightel = 0
-        for e in self.GetSelectedElements():
-            totalhightel += e.GetSize(canvas)[1]
-            elements.append(e)
-        if len(elements)<2: return
-        totalhight = self.GetSelectSquare(canvas)[1][1]
-        spacing = (totalhight - totalhightel)/(len(elements) - 1)
-        elements.sort(lambda x, y : cmp(x.GetPosition()[1], y.GetPosition()[1]))
-        y = elements[0].GetPosition()[1]
-        for e in elements:
-            x = e.GetPosition()[0]
-            e.SetPosition((x,y))
-            y += e.GetSize(canvas)[1] + spacing
+            pos[1-xy] = e.GetPosition()[1-xy]
+            e.SetPosition(pos)
+            pos[xy] += e.GetSize(canvas)[xy] + spacing

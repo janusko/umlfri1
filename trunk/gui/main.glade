@@ -1366,47 +1366,114 @@
           <widget class="GtkMenu" id="mnuAlign_menu">
             <property name="visible">True</property>
             <child>
-              <widget class="GtkMenuItem" id="mnuAlignLeft">
+              <widget class="GtkMenuItem" id="mnuAlignMost">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Align Left</property>
+                <property name="label" translatable="yes">most</property>
                 <property name="use_underline">True</property>
+                <child>
+                  <widget class="GtkMenu" id="menu3">
+                    <property name="visible">True</property>
+                    <property name="ubuntu_local">True</property>
+                    <child>
+                      <widget class="GtkMenuItem" id="mnuAlignLeftMost">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Left most</property>
+                        <property name="use_underline">True</property>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkMenuItem" id="mnuAlignRightMost">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Right most</property>
+                        <property name="use_underline">True</property>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkMenuItem" id="mnuAlignUpwardsMost">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Upwards most</property>
+                        <property name="use_underline">True</property>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkMenuItem" id="mnuAlignDownwardsMost">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Downwards most</property>
+                        <property name="use_underline">True</property>
+                      </widget>
+                    </child>
+                  </widget>
+                </child>
               </widget>
             </child>
             <child>
-              <widget class="GtkMenuItem" id="mnuAlignRight">
+              <widget class="GtkMenuItem" id="mnuAlignCurrent">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Align Right</property>
+                <property name="label" translatable="yes">current</property>
                 <property name="use_underline">True</property>
+                <child>
+                  <widget class="GtkMenu" id="menu4">
+                    <property name="visible">True</property>
+                    <property name="ubuntu_local">True</property>
+                    <child>
+                      <widget class="GtkMenuItem" id="mnuAlignLeftCurrent">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Current left</property>
+                        <property name="use_underline">True</property>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkMenuItem" id="mnuAlignRightCurrent">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Current right</property>
+                        <property name="use_underline">True</property>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkMenuItem" id="mnuAlignUpwardsCurrent">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Current upwards</property>
+                        <property name="use_underline">True</property>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkMenuItem" id="mnuAlignDownwardsCurrent">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Current downwards</property>
+                        <property name="use_underline">True</property>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkMenuItem" id="mnuAlignCenterHor">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Current Center horizontaly</property>
+                        <property name="use_underline">True</property>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkMenuItem" id="mnuAlignCenterVer">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Current center verticaly</property>
+                        <property name="use_underline">True</property>
+                      </widget>
+                    </child>
+                  </widget>
+                </child>
               </widget>
             </child>
-            <child>
-              <widget class="GtkMenuItem" id="mnuAlignUpwards">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">Align Upwards</property>
-                <property name="use_underline">True</property>
-              </widget>
-            </child>
-            <child>
-              <widget class="GtkMenuItem" id="mnuAlignDownwards">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">Align Downwards</property>
-                <property name="use_underline">True</property>
-              </widget>
-            </child>
-            <child>
-              <widget class="GtkMenuItem" id="mnuAlignCenterHor">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">Align Horizontally</property>
-                <property name="use_underline">True</property>
-              </widget>
-            </child>
-            <child>
-              <widget class="GtkMenuItem" id="mnuAlignCenterVer">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">Align Vertically</property>
-                <property name="use_underline">True</property>
-              </widget>
-            </child>
+          </widget>
+        </child>
+      </widget>
+    </child>
+    <child>
+      <widget class="GtkMenuItem" id="mnuSpacing">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">Spacing</property>
+        <property name="use_underline">True</property>
+        <child>
+          <widget class="GtkMenu" id="menu2">
+            <property name="visible">True</property>
+            <property name="ubuntu_local">True</property>
             <child>
               <widget class="GtkMenuItem" id="mnuSpaceEvenlyHorizontally">
                 <property name="visible">True</property>
@@ -1419,6 +1486,51 @@
                 <property name="visible">True</property>
                 <property name="label" translatable="yes">Space Evenly Vertically</property>
                 <property name="use_underline">True</property>
+              </widget>
+            </child>
+          </widget>
+        </child>
+      </widget>
+    </child>
+    <child>
+      <widget class="GtkMenuItem" id="mnuSizing">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">Sizing</property>
+        <property name="use_underline">True</property>
+        <child>
+          <widget class="GtkMenu" id="menu1">
+            <property name="visible">True</property>
+            <property name="ubuntu_local">True</property>
+            <child>
+              <widget class="GtkSeparatorMenuItem" id="separatormenuitem2">
+                <property name="visible">True</property>
+              </widget>
+            </child>
+            <child>
+              <widget class="GtkRadioMenuItem" id="mnuSizingRadioCurrent">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Current</property>
+                <property name="use_underline">True</property>
+                <property name="active">True</property>
+                <property name="draw_as_radio">True</property>
+              </widget>
+            </child>
+            <child>
+              <widget class="GtkRadioMenuItem" id="mnuSizingRadioMin">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Minimal</property>
+                <property name="use_underline">True</property>
+                <property name="draw_as_radio">True</property>
+                <property name="group">mnuSizingRadioCurrent</property>
+              </widget>
+            </child>
+            <child>
+              <widget class="GtkRadioMenuItem" id="mnuSizingRadioMax">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Maximal</property>
+                <property name="use_underline">True</property>
+                <property name="draw_as_radio">True</property>
+                <property name="group">mnuSizingRadioCurrent</property>
               </widget>
             </child>
           </widget>
