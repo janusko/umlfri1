@@ -49,11 +49,10 @@ class CpicDrawingArea(CWidget):
                     'mnuAlignCenterVer',
                 'mnuSizing',
                     'mnuSpaceEvenlyHorizontally',
-                    'mnuSpaceEvenlyVertically',
-                    'mnuSizingRadioCurrent',
-                    'mnuSizingRadioMin', 
-                    'mnuSizingRadioMax',
-                'pmOpenSpecification')
+                    'mnuSpaceEvenlyVertically',                   
+                'pmOpenSpecification',
+                'mnuResizeHight',
+                'mnuResizeWidth')
 
     __gsignals__ = {
         'get-selected':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_PYOBJECT,
@@ -949,7 +948,17 @@ class CpicDrawingArea(CWidget):
     def on_mnuAlignCenter(self, widget, p1, p2):
         self.Diagram.AlignElementCentersXY(p1, self.canvas, self.itemSel if p2 else None)
         self.Paint()
-      
+    
+    @event("mnuResizeHight","activate")
+    def on_mnuResizeHight(self, menuItem):
+        self.Diagram.ResizeElementsEvenly(False,self.canvas,self.itemSel)
+        self.Paint()
+        
+    @event("mnuResizeWidth","activate")
+    def on_mnuResizeWidth(self, menuItem):
+        self.Diagram.ResizeElementsEvenly(True,self.canvas,self.itemSel)
+        self.Paint()
+    
     @event("mnuSpaceEvenlyHorizontally","activate", True)
     @event("mnuSpaceEvenlyVertically","activate", False)
     def on_mnuMakeSpacing(self, widget, p1):

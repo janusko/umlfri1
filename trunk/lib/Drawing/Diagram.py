@@ -675,3 +675,47 @@ class CDiagram(CBaseObject):
             pos[1-xy] = e.GetPosition()[1-xy]
             e.SetPosition(pos)
             pos[xy] += e.GetSize(canvas)[xy] + spacing
+
+    def ResizeElementsEvenly(self, resizeByWidth, canvas, selectedElement=None):
+        '''
+        Resize all elements based on the size of the selected element
+        '''
+        """
+        Resize selected elements evenly to minimal or maximal size of selected
+        elements or requested size.
+        
+        @param reziseByWidth: resize to maximum or minimum
+        @type resizeByWidth: bool
+        @param canvas: drawing canvas
+        @type canvas: L{CCairoCanvas<lib.Drawing.Canvas.Cairo.CCairoCanvas>}
+        @param size: requested size
+        @type size: list
+        """    
+
+        xy = 1 - int(resizeByWidth)
+        
+        if selectedElement:
+            selectedElementSize = selectedElement.GetSize(canvas)
+            relativeSelectedElementSize = selectedElement.GetSizeRelative()
+        elements = tuple(self.GetSelectedElements())
+        if (len(elements)<2): return        
+        minSelElSize = selectedElement.GetMinimalSize(canvas)
+        
+        for e in elements:
+            esize = list(e.GetSizeRelative())
+            actualElementMinimalSize = e.GetMinimalSize(canvas)               
+            if actualElementMinimalSize[xy] <= selectedElementSize[xy]:
+                if selectedElementSize[xy] < e.GetSize(canvas)[xy]:
+                    esize[xy] = selectedElementSize[xy] - minSelElSize[xy]
+                    e.SetSizeRelative(esize)                    
+                if selectedElementSize[xy] > e.GetSize(canvas)[xy]:
+                    esize[xy] = selectedElementSize[xy] - actualElementMinimalSize[xy]
+                    e.SetSizeRelative(esize)
+            if actualElementMinimalSize[xy] > selectedElementSize[xy]:
+                if selectedElementSize[xy] < e.GetSize(canvas)[xy]:
+                    esize[xy] = 0                
+                    e.SetSizeRelative(esize)
+                if selectedElementSize[xy] > e.GetSize(canvas)[xy]:
+                    esize[xy] = selectedElementSize[xy] - actualElementMinimalSize[xy]
+                    e.SetSizeRelative(esize)            
+        
