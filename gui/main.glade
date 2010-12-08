@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0"?>
 <glade-interface>
   <!-- interface-requires gtk+ 2.16 -->
   <!-- interface-naming-policy toplevel-contextual -->
@@ -1373,7 +1373,6 @@
                 <child>
                   <widget class="GtkMenu" id="menu3">
                     <property name="visible">True</property>
-                    <property name="ubuntu_local">True</property>
                     <child>
                       <widget class="GtkMenuItem" id="mnuAlignLeftMost">
                         <property name="visible">True</property>
@@ -1414,7 +1413,6 @@
                 <child>
                   <widget class="GtkMenu" id="menu4">
                     <property name="visible">True</property>
-                    <property name="ubuntu_local">True</property>
                     <child>
                       <widget class="GtkMenuItem" id="mnuAlignLeftCurrent">
                         <property name="visible">True</property>
@@ -1473,7 +1471,6 @@
         <child>
           <widget class="GtkMenu" id="menu2">
             <property name="visible">True</property>
-            <property name="ubuntu_local">True</property>
             <child>
               <widget class="GtkMenuItem" id="mnuSpaceEvenlyHorizontally">
                 <property name="visible">True</property>
@@ -1500,37 +1497,30 @@
         <child>
           <widget class="GtkMenu" id="menu1">
             <property name="visible">True</property>
-            <property name="ubuntu_local">True</property>
             <child>
-              <widget class="GtkSeparatorMenuItem" id="separatormenuitem2">
+              <widget class="GtkMenuItem" id="mnuSizingBySelEl">
                 <property name="visible">True</property>
-              </widget>
-            </child>
-            <child>
-              <widget class="GtkRadioMenuItem" id="mnuSizingRadioCurrent">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">Current</property>
+                <property name="label" translatable="yes">By Selected Element</property>
                 <property name="use_underline">True</property>
-                <property name="active">True</property>
-                <property name="draw_as_radio">True</property>
-              </widget>
-            </child>
-            <child>
-              <widget class="GtkRadioMenuItem" id="mnuSizingRadioMin">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">Minimal</property>
-                <property name="use_underline">True</property>
-                <property name="draw_as_radio">True</property>
-                <property name="group">mnuSizingRadioCurrent</property>
-              </widget>
-            </child>
-            <child>
-              <widget class="GtkRadioMenuItem" id="mnuSizingRadioMax">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">Maximal</property>
-                <property name="use_underline">True</property>
-                <property name="draw_as_radio">True</property>
-                <property name="group">mnuSizingRadioCurrent</property>
+                <child>
+                  <widget class="GtkMenu" id="menu5">
+                    <property name="visible">True</property>
+                    <child>
+                      <widget class="GtkMenuItem" id="mnuResizeHight">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Resize Height</property>
+                        <property name="use_underline">True</property>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkMenuItem" id="mnuResizeWidth">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Resize Width</property>
+                        <property name="use_underline">True</property>
+                      </widget>
+                    </child>
+                  </widget>
+                </child>
               </widget>
             </child>
           </widget>
