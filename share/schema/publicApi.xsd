@@ -7,7 +7,15 @@
 				<xs:element name="documentation" type="xs:string" minOccurs="0"/>
 				<xs:choice minOccurs="0" maxOccurs="unbounded">
 					<xs:element name="property" type="propertyType"/>
-					<xs:element name="method" type="methodType"/>
+					<xs:element name="method">
+						<xs:complexType>
+							<xs:complexContent>
+								<xs:extension base="methodType">
+									<xs:attribute name="apiname"/>
+								</xs:extension>
+							</xs:complexContent>
+						</xs:complexType>
+					</xs:element>
 				</xs:choice>
 			</xs:sequence>
 			<xs:attribute name="name" type="xs:string" use="required"/>
@@ -79,6 +87,7 @@
 						<xs:element name="documentation" type="xs:string" minOccurs="0"/>
 					</xs:sequence>
 					<xs:attribute name="name" type="xs:string" use="required"/>
+					<xs:attribute name="apiname" type="xs:string"/>
 					<xs:attribute name="type" type="xs:string" use="required"/>
 					<xs:attribute name="required" type="xs:boolean" default="true"/>
 					<xs:attribute name="default" type="xs:string"/>
@@ -89,7 +98,8 @@
 					<xs:sequence>
 						<xs:element name="documentation" type="xs:string" minOccurs="0"/>
 					</xs:sequence>
-					<xs:attribute name="name" use="required"/>
+					<xs:attribute name="name" type="xs:string" use="required"/>
+					<xs:attribute name="apiname" type="xs:string"/>
 				</xs:complexType>
 			</xs:element>
 			<xs:element name="return" minOccurs="0">

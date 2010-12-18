@@ -1,3 +1,4 @@
+<?xml version="1.0" ?>
 <delegate
     xmlns="http://umlfri.org/xmlschema/publicApi.xsd"
     name="org.umlfri.api.gui.BasicEventHandler">
