@@ -1,3 +1,4 @@
+<?xml version="1.0" ?>
 <interface
     xmlns="http://umlfri.org/xmlschema/publicApi.xsd"
     name="org.umlfri.api.base.Adapter">
@@ -32,7 +33,7 @@
                 Event name.
             </documentation>
         </parameter>
-        <parameter name="callback" type="org.umlfri.api.base.NotificationHandler">
+        <parameter name="callback" type="org.umlfri.api.base.NotificationEventHandler">
             <documentation>
                 Callback function delegate.
             </documentation>
@@ -49,7 +50,7 @@
                 Event name.
             </documentation>
         </parameter>
-        <parameter name="callback" type="org.umlfri.api.base.NotificationHandler">
+        <parameter name="callback" type="org.umlfri.api.base.NotificationEventHandler">
             <documentation>
                 Callback function delegate.
             </documentation>

@@ -1,6 +1,8 @@
+<?xml version="1.0" ?>
 <interface
     xmlns="http://umlfri.org/xmlschema/publicApi.xsd"
-    name="org.umlfri.api.gui.Widget">
+    name="org.umlfri.api.gui.Widget"
+    abstract="true">
     
     <documentation>
         ...
