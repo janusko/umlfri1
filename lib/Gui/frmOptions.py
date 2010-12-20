@@ -10,7 +10,7 @@ class CfrmOptions(common.CWindow):
     glade = 'appSettings.glade'
     
     widgets = ('cbElementLine', 'cbElementFill', 'cbElementFill2', 'cbElementFill3', 'cbElementShadow', 'cbElementNameText', 'cbElementText', 'fbElementNameText','fbElementText' ,'cbConnectionLine', 'cbConnectionArrow', 'cbConnectionArrowFill', 'cbConnectionNameText', 'cbConnectionText', 'fbConnectionNameText', 'fbConnectionText', 'sbSelectionPointsSize', 'cbSelectionPoints', 'cbSelectionRectangle' ,'sbSelectionRectangleWidth', 'cbDragRectangle', 'sbDragRectangleWidth', 'expElement', 'expSelection', 'expConnection', 'expDrag',
-               'cmdDefaultOptions')
+               'cmdDefaultOptions', 'cbGridLine1', 'cbGridLine2', 'sbGridLineWidth', 'sbGridHorSpacing', 'sbGridVerSpacing', 'cbGridActive', 'cbGridVisible', 'rbGridSnapPos', 'rbGridSnapCenter')
             
     def __init__(self, app, wTree):
         common.CWindow.__init__(self, app, wTree)
@@ -55,6 +55,14 @@ class CfrmOptions(common.CWindow):
             config['/Styles/Selection/PointsSize'] = self.sbSelectionPointsSize.get_value_as_int()
             config['/Styles/Selection/RectangleWidth'] = self.sbSelectionRectangleWidth.get_value_as_int()
             config['/Styles/Drag/RectangleWidth'] = self.sbDragRectangleWidth.get_value_as_int()
+            config['/Grid/LineColor1'] = self.GtkColorToCColor(self.cbGridLine1.get_color())
+            config['/Grid/LineColor2'] = self.GtkColorToCColor(self.cbGridLine2.get_color())
+            config['/Grid/LineWidth'] = self.sbGridLineWidth.get_value()
+            config['/Grid/HorSpacing'] = self.sbGridHorSpacing.get_value_as_int()
+            config['/Grid/VerSpacing'] = self.sbGridVerSpacing.get_value_as_int()
+            config['/Grid/Active'] = self.cbGridActive.get_active()
+            config['/Grid/Visible'] = self.cbGridVisible.get_active()
+            config['/Grid/SnapMode'] = "TOP_LEFT" if self.rbGridSnapPos.get_active() else "CENTER"
 
         self.Hide()
     
@@ -81,6 +89,19 @@ class CfrmOptions(common.CWindow):
         self.sbSelectionPointsSize.set_value(config['/Styles/Selection/PointsSize'])
         self.sbSelectionRectangleWidth.set_value(config['/Styles/Selection/RectangleWidth'])
         self.sbDragRectangleWidth.set_value(config['/Styles/Drag/RectangleWidth'])
+        self.cbGridLine1.set_color(self.CColorToGtkColor(config['/Grid/LineColor1']))
+        self.cbGridLine2.set_color(self.CColorToGtkColor(config['/Grid/LineColor2']))
+        self.sbGridLineWidth.set_value(config['/Grid/LineWidth'])
+        self.sbGridHorSpacing.set_value(config['/Grid/HorSpacing'])
+        self.sbGridVerSpacing.set_value(config['/Grid/VerSpacing'])
+        self.cbGridActive.set_active(config['/Grid/Active'])
+        self.cbGridVisible.set_active(config['/Grid/Visible'])
+        if config['/Grid/SnapMode']=="TOP_LEFT":
+            self.rbGridSnapPos.set_active(True)
+            self.rbGridSnapCenter.set_active(False)
+        elif config['/Grid/SnapMode']=="CENTER":
+            self.rbGridSnapCenter.set_active(True)
+            self.rbGridSnapPos.set_active(False)
     
     @event("expElement", "activate")
     @event("expConnection", "activate")

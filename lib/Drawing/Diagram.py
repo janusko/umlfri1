@@ -9,6 +9,7 @@ from lib.Math2D import CPoint
 from lib.Domains import CDomainObject, CDomainFactory
 from lib.consts import DEFAULT_IDENTITY
 from lib.Base import CBaseObject
+from lib.Drawing.Grid import CGrid
 import weakref
     
 class CDiagram(CBaseObject):
@@ -30,6 +31,7 @@ class CDiagram(CBaseObject):
         else:
             self.SetName(name)
         self.revision = 0
+        self.grid = CGrid()
         
     def GetObject(self):
         return self
@@ -249,7 +251,7 @@ class CDiagram(CBaseObject):
         elements |= set(self.GetSelectedElements())
         for el in elements:
             x, y = el.GetPosition(canvas)
-            el.SetPosition((x + deltax, y + deltay), canvas)
+            self.MoveElement(el, (x + deltax, y + deltay), canvas)
             if not isinstance(el, ConLabelInfo.CConLabelInfo):
                 for con in el.GetConnections():
                     if (con.GetSource() in elements) and (con.GetDestination() in elements):
@@ -390,6 +392,7 @@ class CDiagram(CBaseObject):
     def Paint(self, canvas):
         ((x, y), (w, h)) = self.viewport
         canvas.Clear()
+        self.grid.Paint(canvas)
         var = set([])
         for e in self.elements:#here is created a set of layer values
             var.add(int(e.GetObject().GetType().GetOptions().get('Layer', 0)))
@@ -586,6 +589,9 @@ class CDiagram(CBaseObject):
                   
         return ((int(x_min),int(y_min)),(int(x_max), int(y_max)))
 
+    def MoveElement(self, element, pos, canvas):
+        self.grid.SnapElement(element, pos, canvas)
+
     def AlignElementsXY(self, isHorizontal, isLowerBoundary,
             canvas, defaultElement=None): 
         """
@@ -619,7 +625,7 @@ class CDiagram(CBaseObject):
             pos = list(e.GetPosition())
             pos[xy] = most - \
                 ( 0 if isLowerBoundary else e.GetSize(canvas)[xy] )
-            e.SetPosition(pos)
+            self.MoveElement(e, pos, canvas)
     
     def AlignElementCentersXY(self, isHorizontal, canvas, defaultElement=None):
         """
@@ -648,7 +654,7 @@ class CDiagram(CBaseObject):
         for e in elements:
             pos = list(e.GetPosition())
             pos[xy] = position - e.GetSize(canvas)[xy]/2
-            e.SetPosition(pos)
+            self.MoveElement(e, pos, canvas)
     
     def SpaceElementsEvenlyXY(self, isHorizontal, canvas):
         """
@@ -673,7 +679,7 @@ class CDiagram(CBaseObject):
         pos[xy] = elements[0].GetPosition()[xy]
         for e in elements:
             pos[1-xy] = e.GetPosition()[1-xy]
-            e.SetPosition(pos)
+            self.MoveElement(e, pos, canvas)
             pos[xy] += e.GetSize(canvas)[xy] + spacing
 
     def ResizeElementsEvenly(self, resizeByWidth, canvas, selectedElement=None):

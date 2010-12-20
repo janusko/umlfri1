@@ -154,8 +154,8 @@ class CCairoBaseCanvas(CAbstractCanvas):
     def DrawLine(self, start, end, fg, line_width = None, line_style = None):
         self.cr.save()
         self.cr.scale(self.scale, self.scale)
-        self.cr.move_to(int(start[0] - self.baseX),int(start[1] - self.baseY))
-        self.cr.line_to(int(end[0] - self.baseX),int(end[1] - self.baseY))
+        self.cr.move_to(float(start[0] - self.baseX),float(start[1] - self.baseY))
+        self.cr.line_to(float(end[0] - self.baseX),float(end[1] - self.baseY))
 
         if fg is not None: 
             temp_color = HexToRGB(fg)
