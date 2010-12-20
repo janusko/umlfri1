@@ -104,6 +104,61 @@
 						</xs:all>
 					</xs:complexType>
 				</xs:element>
+				<xs:element name="Grid" minOccurs="0">
+				    <xs:annotation>
+					    <xs:documentation>Settings for grid.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:all>
+							<xs:element name="Active" type="xs:boolean" minOccurs="0">
+							    <xs:annotation>
+							        <xs:documentation>Is grid active.</xs:documentation>
+							    </xs:annotation>
+							</xs:element>
+							<xs:element name="Visible" type="xs:boolean" minOccurs="0">
+							    <xs:annotation>
+							        <xs:documentation>Is grid visible.</xs:documentation>
+							    </xs:annotation>
+							</xs:element>
+					        <xs:element name="LineColor1" type="xs:string" minOccurs="0">
+    						    <xs:annotation>
+	    						    <xs:documentation>Defines first line color.</xs:documentation>
+	    						</xs:annotation>
+							</xs:element>
+							<xs:element name="LineColor2" type="xs:string" minOccurs="0">
+							    <xs:annotation>
+							        <xs:documentation>Defines second line color.</xs:documentation>
+							    </xs:annotation>
+							</xs:element>
+							<xs:element name="HorSpacing" type="xs:int" minOccurs="0">
+							    <xs:annotation>
+							       <xs:documentation>Defines space between grid lines in pixels.</xs:documentation>
+							    </xs:annotation>
+							</xs:element>
+							<xs:element name="VerSpacing" type="xs:int" minOccurs="0">
+							    <xs:annotation>
+							       <xs:documentation>Defines space between grid lines in pixels.</xs:documentation>
+							    </xs:annotation>
+							</xs:element>
+							<xs:element name="LineWidth" type="xs:float" minOccurs="0">
+							    <xs:annotation>
+							        <xs:documentation>Defines line width of grid lines</xs:documentation>
+							    </xs:annotation>
+							</xs:element>
+							<xs:element name="SnapMode" minOccurs="0">
+							    <xs:annotation>
+							        <xs:documentation>Defines point to which elements will be snaped</xs:documentation>
+							    </xs:annotation>
+							    <xs:simpleType>
+							        <xs:restriction base="xs:string">
+							            <xs:enumeration value="TOP_LEFT"/>
+							            <xs:enumeration value="CENTER"/>
+							        </xs:restriction>
+							    </xs:simpleType>
+							</xs:element>
+					    </xs:all>
+				    </xs:complexType>
+				</xs:element>
 				<xs:element name="Page" minOccurs="0">
 					<xs:complexType>
 						<xs:all minOccurs="0">

@@ -36,6 +36,16 @@
             <RectangleWidth>2</RectangleWidth>
         </Drag>
     </Styles>
+    <Grid>
+        <Active>true</Active>
+        <Visible>true</Visible>
+        <LineColor1>#2B3E42</LineColor1>
+        <LineColor2>#77BED2</LineColor2>
+        <HorSpacing>20</HorSpacing>
+        <VerSpacing>20</VerSpacing>
+        <LineWidth>1</LineWidth>
+        <SnapMode>TOP_LEFT</SnapMode>
+    </Grid>
     <Page>
         <Width>797</Width>
         <Height>1123</Height>
