@@ -11,7 +11,9 @@
 						<xs:complexType>
 							<xs:complexContent>
 								<xs:extension base="methodType">
-									<xs:attribute name="apiname"/>
+									<xs:attribute name="apiname" type="xs:string"/>
+									<xs:attribute name="mutator" type="xs:boolean" default="false"/>
+									<xs:attribute name="transactional" type="xs:boolean" default="true"/>
 								</xs:extension>
 							</xs:complexContent>
 						</xs:complexType>
@@ -49,6 +51,7 @@
 					</xs:sequence>
 					<xs:attribute name="name" type="xs:string" use="required"/>
 					<xs:attribute name="type" type="xs:string" use="required"/>
+                    <xs:attribute name="apiname" type="xs:string"/>
 				</xs:complexType>
 			</xs:element>
 			<xs:element name="value">
@@ -61,17 +64,18 @@
 			</xs:element>
 			<xs:element name="getter" minOccurs="0">
 				<xs:complexType>
-					<xs:attribute name="apiname" type="xs:string" use="required"/>
+					<xs:attribute name="apiname" type="xs:string"/>
 				</xs:complexType>
 			</xs:element>
 			<xs:element name="setter" minOccurs="0">
 				<xs:complexType>
-					<xs:attribute name="apiname" type="xs:string" use="required"/>
+					<xs:attribute name="apiname" type="xs:string"/>
+					<xs:attribute name="transactional" type="xs:boolean" default="true"/>
 				</xs:complexType>
 			</xs:element>
 			<xs:element name="iterator" minOccurs="0">
 				<xs:complexType>
-					<xs:attribute name="apiname" type="xs:string" use="required"/>
+					<xs:attribute name="apiname" type="xs:string"/>
 				</xs:complexType>
 			</xs:element>
 		</xs:sequence>

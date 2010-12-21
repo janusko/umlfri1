@@ -34,3 +34,9 @@ class Identifier(object):
     @property
     def uppweCase(self):
         return ''.join(self.__upperCase)
+    
+    def __add__(self, str):
+        return Identifier(self.lowerCamelCase + str)
+    
+    def __radd__(self, str):
+        return Identifier(str + self.upperCamelCase)

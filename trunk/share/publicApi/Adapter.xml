@@ -23,7 +23,7 @@
         <value type="org.umlfri.api.model.Diagram" readable="true" />
     </property>
     
-    <method name="addNotification">
+    <method name="addNotification" mutator="true" transactional="false">
         <documentation>
             Adds the notification.
         </documentation>
@@ -40,7 +40,7 @@
         </parameter>
     </method>
     
-    <method name="removeNotification">
+    <method name="removeNotification" mutator="true" transactional="false">
         <documentation>
             Removes the notification.
         </documentation>
@@ -81,7 +81,7 @@
         <value type="org.umlfri.api.gui.GuiManager" readable="true" />
     </property>
     
-    <method name="loadProject">
+    <method name="loadProject" mutator="true" transactional="false">
         <documentation>
             Loads the given project in UML .FRI and sets the project instance.
         </documentation>

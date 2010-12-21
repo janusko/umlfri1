@@ -8,11 +8,11 @@ from interface import Interface
 from interfaceMethod import InterfaceMethod
 from interfaceMethodParameter import InterfaceMethodParameter
 from interfaceMethodReturn import InterfaceMethodReturn
-#from interfaceProperty import InterfaceProperty
-#from interfacePropertyGetter import InterfacePropertyGetter
-#from interfacePropertyIndex import InterfacePropertyIndex
-#from interfacePropertyIterator import InterfacePropertyIterator
-#from interfacePropertySetter import InterfacePropertySetter
+from interfaceProperty import InterfaceProperty
+from interfacePropertyGetter import InterfacePropertyGetter
+from interfacePropertyIndex import InterfacePropertyIndex
+from interfacePropertyIterator import InterfacePropertyIterator
+from interfacePropertySetter import InterfacePropertySetter
 from namespace import Namespace
 
 import os
@@ -87,7 +87,7 @@ class Builder(object):
             namespace,
             base = root.attrib.get('base'),
             abstract = root.attrib.get('abstract', "false").lower() in ("1", "true"),
-            documentation = self.__parseDocumentation(root.find('documentation'))
+            documentation = self.__parseDocumentation(root.find(self.__xmlns%'documentation'))
         )
         
         for child in root:
@@ -101,7 +101,9 @@ class Builder(object):
             root.attrib['name'],
             interface,
             apiName = root.attrib.get('apiname'),
-            documentation = self.__parseDocumentation(root.find('documentation'))
+            mutator = root.attrib.get('mutator', "false").lower() in ("1", "true"),
+            transactional = root.attrib.get('transactional', "true").lower() in ("1", "true"),
+            documentation = self.__parseDocumentation(root.find(self.__xmlns%'documentation'))
         )
         
         for child in root:
@@ -116,7 +118,7 @@ class Builder(object):
                     apiName = child.attrib.get('apiname'),
                     required = child.attrib.get('required', "true").lower() in ("1", "true"),
                     default = child.attrib.get('default'),
-                    documentation = self.__parseDocumentation(child.find('documentation')),
+                    documentation = self.__parseDocumentation(child.find(self.__xmlns%'documentation')),
                 )
             elif child.tag == self.__xmlns%'parameterDictionary':
                 parameter = InterfaceMethodParameter(
@@ -125,18 +127,75 @@ class Builder(object):
                     '*',
                     apiName = child.attrib.get('apiname'),
                     required = True,
-                    documentation = self.__parseDocumentation(child.find('documentation')),
+                    documentation = self.__parseDocumentation(child.find(self.__xmlns%'documentation')),
                 )
             elif child.tag == self.__xmlns%'return':
                 returnType = InterfaceMethodReturn(
                     method,
                     child.attrib['type'],
                     iterable = child.attrib.get('iterable', "true").lower() in ("1", "true"),
-                    documentation = self.__parseDocumentation(child.find('documentation')),
+                    documentation = self.__parseDocumentation(child.find(self.__xmlns%'documentation')),
                 )
     
     def __parseInterfaceProperty(self, root, interface):
-        pass
+        value = root.find(self.__xmlns%'value')
+        index = root.find(self.__xmlns%'index')
+        getter = root.find('getter')
+        setter = root.find('setter')
+        iterator = root.find('iterator')
+        
+        property = InterfaceProperty(
+            root.attrib['name'],
+            interface,
+            singular = root.attrib.get('singular'),
+            type = value.attrib['type'],
+            documentation = self.__parseDocumentation(root.find(self.__xmlns%'documentation'))
+        )
+        
+        if index is not None:
+            InterfacePropertyIndex(
+                index.attrib['name'],
+                property,
+                type = index.attrib['type'],
+                apiName = index.attrib.get('apiname'),
+                documentation = self.__parseDocumentation(root.find(self.__xmlns%'documentation'))
+            )
+        
+        if value.attrib.get('readable', "false").lower() in ("1", "true"):
+            apiName = None
+            
+            if getter is not None:
+                apiName = getter.attrib.get('apiname')
+            
+            InterfacePropertyGetter(
+                property,
+                apiName = apiName
+            )
+        
+        if value.attrib.get('writable', "false").lower() in ("1", "true"):
+            apiName = None
+            transactional = True
+            
+            if setter is not None:
+                apiName = setter.attrib.get('apiname')
+                transactional = setter.attrib.get('transactional', "true").lower() in ("1", "true")
+            
+            InterfacePropertySetter(
+                property,
+                apiName = apiName,
+                transactional = transactional
+            )
+        
+        if value.attrib.get('iterable', "false").lower() in ("1", "true"):
+            apiName = None
+            
+            if iterator is not None:
+                apiName = iterator.attrib.get('apiname')
+            
+            InterfacePropertyIterator(
+                property,
+                apiName = apiName
+            )
     
     ################
     ### Exception
@@ -205,7 +264,7 @@ class Builder(object):
         return '\n'.join(line.strip() for line in text.strip().split('\n'))
     
     def __printStructureHelper(self, object, level):
-        print ('    ' * level) + repr(object), 'with apiName', repr(getattr(object, 'apiName', None))
+        print ('    ' * level) + repr(object), ('with api name ' + object.apiName) if hasattr(object, 'apiName') else ''
         
         if isinstance(object, BaseContainer):
             for child in object.children:
