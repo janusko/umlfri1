@@ -32,6 +32,7 @@
 				<xs:element name="property" type="exceptionPropertyType" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
 			<xs:attribute name="name" type="xs:string" use="required"/>
+			<xs:attribute name="base" type="xs:string"/>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="delegate">
