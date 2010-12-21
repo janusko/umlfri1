@@ -39,6 +39,8 @@
     <Grid>
         <Active>true</Active>
         <Visible>true</Visible>
+        <ResizeElements>false</ResizeElements>
+        <SnapBreakpoints>false</SnapBreakpoints>
         <LineColor1>#2B3E42</LineColor1>
         <LineColor2>#77BED2</LineColor2>
         <HorSpacing>20</HorSpacing>

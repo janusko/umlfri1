@@ -44,6 +44,8 @@ types = {
     "/Grid/LineColor2": CColor,
     "/Grid/Active": bool,
     "/Grid/Visible": bool,
+    "/Grid/ResizeElements": bool,
+    "/Grid/SnapBreakpoints": bool,
     "/Grid/HorSpacing": int,
     "/Grid/VerSpacing": int,
     "/Grid/LineWidth": float,
