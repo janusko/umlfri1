@@ -2,12 +2,14 @@ from baseContainer import BaseContainer
 from delegate import Delegate
 from delegateParameter import DelegateParameter
 from delegateReturn import DelegateReturn
+from delegateThrows import DelegateThrows
 from exception import Exception as ExceptionDefinition
 from exceptionProperty import ExceptionProperty
 from interface import Interface
 from interfaceMethod import InterfaceMethod
 from interfaceMethodParameter import InterfaceMethodParameter
 from interfaceMethodReturn import InterfaceMethodReturn
+from interfaceMethodThrows import InterfaceMethodThrows
 from interfaceProperty import InterfaceProperty
 from interfacePropertyGetter import InterfacePropertyGetter
 from interfacePropertyIndex import InterfacePropertyIndex
@@ -134,6 +136,12 @@ class Builder(object):
                     method,
                     child.attrib['type'],
                     iterable = child.attrib.get('iterable', "true").lower() in ("1", "true"),
+                    documentation = self.__parseDocumentation(child.find(self.__xmlns%'documentation')),
+                )
+            elif child.tag == self.__xmlns%'throws':
+                returnType = InterfaceMethodThrows(
+                    method,
+                    child.attrib['exception'],
                     documentation = self.__parseDocumentation(child.find(self.__xmlns%'documentation')),
                 )
     
@@ -289,6 +297,12 @@ class Builder(object):
                     delegate,
                     child.attrib['type'],
                     iterable = child.attrib.get('iterable', "true").lower() in ("1", "true"),
+                    documentation = self.__parseDocumentation(child.find(self.__xmlns%'documentation')),
+                )
+            elif child.tag == self.__xmlns%'throws':
+                returnType = DelegateThrows(
+                    delegate,
+                    child.attrib['exception'],
                     documentation = self.__parseDocumentation(child.find(self.__xmlns%'documentation')),
                 )
     
