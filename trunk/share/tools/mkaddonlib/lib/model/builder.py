@@ -1,7 +1,7 @@
 from baseContainer import BaseContainer
 from delegate import Delegate
-#from delegateParameter import DelegateParameter
-#from delegateReturn import DelegateReturn
+from delegateParameter import DelegateParameter
+from delegateReturn import DelegateReturn
 from exception import Exception as ExceptionDefinition
 from exceptionProperty import ExceptionProperty
 from interface import Interface
@@ -255,12 +255,42 @@ class Builder(object):
         else:
             raise Exception
         
-        exception = Delegate(
+        delegate = Delegate(
             name,
-            namespace
+            namespace,
+            documentation = self.__parseDocumentation(root.find(self.__xmlns%'documentation'))
         )
         
-        # # # TODO
+        for child in root:
+            if child.tag == self.__xmlns%'parameter':
+                if child.attrib['type'] == 'namedparams':
+                    raise Exception
+                
+                parameter = DelegateParameter(
+                    child.attrib['name'],
+                    delegate,
+                    child.attrib['type'],
+                    apiName = child.attrib.get('apiname'),
+                    required = child.attrib.get('required', "true").lower() in ("1", "true"),
+                    default = child.attrib.get('default'),
+                    documentation = self.__parseDocumentation(child.find(self.__xmlns%'documentation')),
+                )
+            elif child.tag == self.__xmlns%'parameterDictionary':
+                parameter = DelegateParameter(
+                    child.attrib['name'],
+                    delegate,
+                    '*',
+                    apiName = child.attrib.get('apiname'),
+                    required = True,
+                    documentation = self.__parseDocumentation(child.find(self.__xmlns%'documentation')),
+                )
+            elif child.tag == self.__xmlns%'return':
+                returnType = DelegateReturn(
+                    delegate,
+                    child.attrib['type'],
+                    iterable = child.attrib.get('iterable', "true").lower() in ("1", "true"),
+                    documentation = self.__parseDocumentation(child.find(self.__xmlns%'documentation')),
+                )
     
     ################
     ### Helpers
@@ -291,7 +321,7 @@ class Builder(object):
         return '\n'.join(line.strip() for line in text.strip().split('\n'))
     
     def __printStructureHelper(self, object, level):
-        print ('    ' * level) + repr(object), ('with api name ' + object.apiName) if hasattr(object, 'apiName') else ''
+        print ('    ' * level) + repr(object), ('with api name ' + repr(object.apiName)) if hasattr(object, 'apiName') else ''
         
         if isinstance(object, BaseContainer):
             for child in object.children:
