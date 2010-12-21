@@ -26,7 +26,7 @@ class InterfaceMethodReturn(Base):
     
     @property
     def fqn(self):
-        return self.parent.fqn
+        return self.parent.fqn + "::__return__"
     
     @property
     def iterable(self):
