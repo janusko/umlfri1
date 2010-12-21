@@ -7,7 +7,7 @@
         Basic event handler without any additional parameters.
     </documentation>
     
-    <parameter name="widget" type="org.umlfri.api.gui.IWidget">
+    <parameter name="widget" type="org.umlfri.api.gui.Widget">
         <documentation>
             Widget which sent the event.
         </documentation>

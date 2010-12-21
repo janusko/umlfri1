@@ -8,6 +8,10 @@ class Exception(BaseContainer):
         self.__base = base
     
     @property
+    def namespace(self):
+        return self.parent
+    
+    @property
     def documentation(self):
         return self.__documentation
     
