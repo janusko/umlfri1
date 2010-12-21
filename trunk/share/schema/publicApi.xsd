@@ -129,15 +129,6 @@
 	<xs:complexType name="exceptionPropertyType">
 		<xs:sequence>
 			<xs:element name="documentation" type="xs:string" minOccurs="0"/>
-			<xs:element name="index" minOccurs="0">
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="documentation" type="xs:string" minOccurs="0"/>
-					</xs:sequence>
-					<xs:attribute name="name" type="xs:string" use="required"/>
-					<xs:attribute name="type" type="xs:string" use="required"/>
-				</xs:complexType>
-			</xs:element>
 			<xs:element name="value">
 				<xs:complexType>
 					<xs:attribute name="type" type="xs:string" use="required"/>

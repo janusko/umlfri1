@@ -91,7 +91,7 @@
             Nonempty diagram area range.
         </documentation>
         
-        <value type="xywh" />
+        <value type="xywh" readable="true" />
     </property>
     
     <property name="elements">

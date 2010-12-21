@@ -3,7 +3,7 @@ from delegate import Delegate
 #from delegateParameter import DelegateParameter
 #from delegateReturn import DelegateReturn
 from exception import Exception as ExceptionDefinition
-#from exceptionProperty import ExceptionProperty
+from exceptionProperty import ExceptionProperty
 from interface import Interface
 from interfaceMethod import InterfaceMethod
 from interfaceMethodParameter import InterfaceMethodParameter
@@ -160,6 +160,7 @@ class Builder(object):
                 apiName = index.attrib.get('apiname'),
                 documentation = self.__parseDocumentation(root.find(self.__xmlns%'documentation'))
             )
+        ableChildren = 0
         
         if value.attrib.get('readable', "false").lower() in ("1", "true"):
             apiName = None
@@ -171,6 +172,8 @@ class Builder(object):
                 property,
                 apiName = apiName
             )
+            
+            ableChildren += 1
         
         if value.attrib.get('writable', "false").lower() in ("1", "true"):
             apiName = None
@@ -185,6 +188,8 @@ class Builder(object):
                 apiName = apiName,
                 transactional = transactional
             )
+            
+            ableChildren += 1
         
         if value.attrib.get('iterable', "false").lower() in ("1", "true"):
             apiName = None
@@ -196,6 +201,11 @@ class Builder(object):
                 property,
                 apiName = apiName
             )
+            
+            ableChildren += 1
+        
+        if ableChildren == 0:
+            raise Exception()
     
     ################
     ### Exception
@@ -211,10 +221,27 @@ class Builder(object):
         
         exception = ExceptionDefinition(
             name,
-            namespace
+            namespace,
+            documentation = self.__parseDocumentation(root.find(self.__xmlns%'documentation'))
         )
         
-        # # # TODO
+        for child in root:
+            if child.tag == self.__xmlns%'property':
+                value = child.find(self.__xmlns%'value')
+                
+                iterable = value.attrib.get('iterable', 'false').lower() in ('1', 'true')
+                readable = value.attrib.get('readable', 'false').lower() in ('1', 'true')
+                
+                if not (iterable or readable) or (iterable and readable):
+                    raise Exception()
+                
+                property = ExceptionProperty(
+                    child.attrib['name'],
+                    exception,
+                    type = value.attrib['type'],
+                    iterable = iterable,
+                    documentation = self.__parseDocumentation(child.find(self.__xmlns%'documentation'))
+                )
     
     ################
     ### Delegate
