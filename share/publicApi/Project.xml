@@ -31,7 +31,7 @@
         <value type="org.umlfri.api.metamodel.Metamodel" readable="true" />
     </property>
     
-    <method name="save">
+    <method name="save" mutator="true" transactional="false">
         <documentation>
             Saves project to the given file. If no file name is sent,
             project is saved to the current location.

@@ -7,7 +7,7 @@
         ...
     </documentation>
     
-    <method name="addButton">
+    <method name="addButton" mutator="true">
         <documentation>
             Adds a new button with label to the button bar.
         </documentation>
@@ -46,7 +46,7 @@
         <return type="org.umlfri.api.gui.Button" />
     </method>
     
-    <method name="addStockButton">
+    <method name="addStockButton" mutator="true">
         <documentation>
             Adds a new themed button to the button bar.
         </documentation>
@@ -85,7 +85,7 @@
         <return type="org.umlfri.api.gui.Button" />
     </method>
     
-    <method name="addSeparator">
+    <method name="addSeparator" mutator="true">
         <documentation>
             Adds a new separator to the button bar.
         </documentation>

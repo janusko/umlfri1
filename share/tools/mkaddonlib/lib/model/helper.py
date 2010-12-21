@@ -6,6 +6,9 @@ def computeMethodApiName(singular):
 def computeMethodParameterApiName(singular):
     return singular.lowerCamelCase
 
+def computePropertyIndexApiName(singular):
+    return singular.lowerCamelCase
+
 def computePropertyGetterApiName(singular, plural):
     return ('get' + singular).upperCamelCase
 

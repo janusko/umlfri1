@@ -8,7 +8,7 @@
         ...
     </documentation>
     
-    <method name="addSubmenu">
+    <method name="addSubmenu" mutator="true">
         <documentation>
             Creates submenu for the menu item.
         </documentation>

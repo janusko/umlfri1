@@ -106,6 +106,6 @@
             are shown on the same diagram.
         </documentation>
         
-        <value type="org.umlfri.api.model.Connection" iterable="true" />
+        <value type="org.umlfri.api.model.ConnectionVisual" iterable="true" />
     </property>
 </interface>

@@ -7,7 +7,7 @@
         ...
     </documentation>
     
-    <method name="addMenuItem">
+    <method name="addMenuItem" mutator="true">
         <documentation>
             Adds a new menu item with label to the menu.
         </documentation>
@@ -46,7 +46,7 @@
         <return type="org.umlfri.api.gui.MenuItem" />
     </method>
     
-    <method name="addStockMenuItem">
+    <method name="addStockMenuItem" mutator="true">
         <documentation>
             Adds a new themed menu item to the menu.
         </documentation>
@@ -80,7 +80,7 @@
         <return type="org.umlfri.api.gui.MenuItem" />
     </method>
     
-    <method name="addCheckMenuItem">
+    <method name="addCheckMenuItem" mutator="true">
         <documentation>
             Adds a new themed menu item to the menu.
         </documentation>
@@ -114,7 +114,7 @@
         <return type="org.umlfri.api.gui.MenuItem" />
     </method>
     
-    <method name="addSeparator">
+    <method name="addSeparator" mutator="true">
         <documentation>
             Adds a new separator to the menu.
         </documentation>

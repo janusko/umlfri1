@@ -8,7 +8,7 @@
         ...
     </documentation>
     
-    <method name="setImageFromFile">
+    <method name="setImageFromFile" mutator="true">
         <documentation>
             Change the menu item icon to the given image.
         </documentation>

@@ -5,13 +5,15 @@ from interfaceMethodReturn import InterfaceMethodReturn
 import helper
 
 class InterfaceMethod(BaseContainer):
-    def __init__(self, name, interface, apiName = None, documentation = None):
+    def __init__(self, name, interface, apiName = None, mutator = False, transactional = True, documentation = None):
         BaseContainer.__init__(self, name, interface, sorted = False)
         if apiName is not None:
             self.__apiName = apiName
         else:
             self.__apiName = helper.computeMethodApiName(self.identifier)
         self.__documentation = documentation
+        self.__mutator = mutator
+        self.__transactional = mutator and transactional
     
     @property
     def fqn(self):
@@ -36,6 +38,14 @@ class InterfaceMethod(BaseContainer):
     @property
     def apiName(self):
         return self.__apiName
+    
+    @property
+    def mutator(self):
+        return self.__mutator
+    
+    @property
+    def transactional(self):
+        return self.__transactional
     
     @property
     def documentation(self):
