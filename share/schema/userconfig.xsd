@@ -120,6 +120,16 @@
 							        <xs:documentation>Is grid visible.</xs:documentation>
 							    </xs:annotation>
 							</xs:element>
+							<xs:element name="ResizeElements" type="xs:boolean" minOccurs="0">
+							    <xs:annotation>
+							        <xs:documentation>Resize elements to grid.</xs:documentation>
+							    </xs:annotation>
+							</xs:element>
+							<xs:element name="SnapBreakpoints" type="xs:boolean" minOccurs="0">
+							    <xs:annotation>
+							        <xs:documentation>Snap connection breakpoints to grid.</xs:documentation>
+							    </xs:annotation>
+							</xs:element>
 					        <xs:element name="LineColor1" type="xs:string" minOccurs="0">
     						    <xs:annotation>
 	    						    <xs:documentation>Defines first line color.</xs:documentation>
@@ -153,6 +163,7 @@
 							        <xs:restriction base="xs:string">
 							            <xs:enumeration value="TOP_LEFT"/>
 							            <xs:enumeration value="CENTER"/>
+							            <xs:enumeration value="CORNERS"/>
 							        </xs:restriction>
 							    </xs:simpleType>
 							</xs:element>

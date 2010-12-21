@@ -10,7 +10,7 @@ class CfrmOptions(common.CWindow):
     glade = 'appSettings.glade'
     
     widgets = ('cbElementLine', 'cbElementFill', 'cbElementFill2', 'cbElementFill3', 'cbElementShadow', 'cbElementNameText', 'cbElementText', 'fbElementNameText','fbElementText' ,'cbConnectionLine', 'cbConnectionArrow', 'cbConnectionArrowFill', 'cbConnectionNameText', 'cbConnectionText', 'fbConnectionNameText', 'fbConnectionText', 'sbSelectionPointsSize', 'cbSelectionPoints', 'cbSelectionRectangle' ,'sbSelectionRectangleWidth', 'cbDragRectangle', 'sbDragRectangleWidth', 'expElement', 'expSelection', 'expConnection', 'expDrag',
-               'cmdDefaultOptions', 'cbGridLine1', 'cbGridLine2', 'sbGridLineWidth', 'sbGridHorSpacing', 'sbGridVerSpacing', 'cbGridActive', 'cbGridVisible', 'rbGridSnapPos', 'rbGridSnapCenter')
+               'cmdDefaultOptions', 'cbGridLine1', 'cbGridLine2', 'sbGridLineWidth', 'sbGridHorSpacing', 'sbGridVerSpacing', 'cbGridActive', 'cbGridVisible', 'rbGridSnapPos', 'rbGridSnapCenter', 'rbGridSnapCorners', 'cbGridResizeElements', 'cbGridSnapBreakpoints')
             
     def __init__(self, app, wTree):
         common.CWindow.__init__(self, app, wTree)
@@ -62,7 +62,16 @@ class CfrmOptions(common.CWindow):
             config['/Grid/VerSpacing'] = self.sbGridVerSpacing.get_value_as_int()
             config['/Grid/Active'] = self.cbGridActive.get_active()
             config['/Grid/Visible'] = self.cbGridVisible.get_active()
-            config['/Grid/SnapMode'] = "TOP_LEFT" if self.rbGridSnapPos.get_active() else "CENTER"
+            if self.rbGridSnapPos.get_active():
+                config['/Grid/SnapMode'] = "TOP_LEFT"
+            elif self.rbGridSnapCenter.get_active():
+                config['/Grid/SnapMode'] = "CENTER"
+            else:
+                config['/Grid/SnapMode'] = "CORNERS"
+            config['/Grid/ResizeElements'] = \
+                self.cbGridResizeElements.get_active()
+            config['/Grid/SnapBreakpoints'] = \
+                self.cbGridSnapBreakpoints.get_active()
 
         self.Hide()
     
@@ -99,9 +108,17 @@ class CfrmOptions(common.CWindow):
         if config['/Grid/SnapMode']=="TOP_LEFT":
             self.rbGridSnapPos.set_active(True)
             self.rbGridSnapCenter.set_active(False)
+            self.rbGridSnapCorners.set_active(False)
         elif config['/Grid/SnapMode']=="CENTER":
             self.rbGridSnapCenter.set_active(True)
             self.rbGridSnapPos.set_active(False)
+            self.rbGridSnapCorners.set_active(False)
+        else:
+            self.rbGridSnapCenter.set_active(False)
+            self.rbGridSnapPos.set_active(False)
+            self.rbGridSnapCorners.set_active(True)
+        self.cbGridResizeElements.set_active(config['/Grid/ResizeElements'])
+        self.cbGridSnapBreakpoints.set_active(config['/Grid/SnapBreakpoints'])
     
     @event("expElement", "activate")
     @event("expConnection", "activate")
