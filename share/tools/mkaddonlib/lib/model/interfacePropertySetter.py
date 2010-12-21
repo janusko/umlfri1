@@ -28,6 +28,10 @@ class InterfacePropertySetter(Base):
         return self.parent.type
     
     @property
+    def index(self):
+        return self.parent.index
+    
+    @property
     def identifier(self):
         return self.parent.identifier
     

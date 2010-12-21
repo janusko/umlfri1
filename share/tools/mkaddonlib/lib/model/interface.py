@@ -1,7 +1,7 @@
 from baseContainer import BaseContainer
 
 class Interface(BaseContainer):
-    def __init__(self, name, namespace, base = None, abstract = False, documentation = ""):
+    def __init__(self, name, namespace, base = None, abstract = False, documentation = None):
         BaseContainer.__init__(self, name, namespace)
         
         self.__base = base
