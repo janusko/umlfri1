@@ -30,8 +30,8 @@ LABELS_CLICKABLE = True         # used to ignore labels at drawing area
 SCALE_MAX = 5.0
 SCALE_MIN = 0.6
 SCALE_INCREASE = 0.2
-BUFFER_SIZE=(2000.0,1500.0)         # buffer size at the start
-BUFFER_MAX_SIZE=(6400.0,6400.0)     # the graphic buffer will be extended to max this values
+BUFFER_SIZE=(2000,1500)         # buffer size at the start
+BUFFER_MAX_SIZE=(6400,6400)     # the graphic buffer will be extended to max this values
 
 DEFAULT_IDENTITY='@id'
 
