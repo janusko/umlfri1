@@ -494,7 +494,7 @@ class CpicDrawingArea(CWidget):
             elif self.dnd == 'point':
                 point = self.GetAbsolutePos((event.x, event.y))
                 connection, index = self.DragPoint
-                connection.MovePoint(self.canvas, point, index)
+                self.Diagram.MoveConnectionPoint(connection, point, index, self.canvas)
                 self.dnd = None
             elif self.dnd == 'line':
                 point = self.GetAbsolutePos((event.x, event.y))

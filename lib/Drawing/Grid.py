@@ -43,19 +43,19 @@ class CGrid(CBaseObject):
         if not self.local_settings:
             self.hor_spacing = config['/Grid/HorSpacing']
             self.ver_spacing = config['/Grid/VerSpacing']
-            self.resize_elements = config['/Grid/ResizeElements']
         x = self.hor_spacing * round(pos[0]/(float(self.hor_spacing)))# + 0.5
         y = self.ver_spacing * round(pos[1]/(float(self.ver_spacing)))# + 0.5
         return (x, y)
     
-    def SnapElement(self, element, pos, canvas, overide=False):
+    def SnapElement(self, element, pos, canvas, override=False):
         '''
-        Snaps element according to snap mode.
+        Snaps element position according to snap mode.
         '''
         if not self.local_settings:
-            self.active = config['/Grid/Active']
+            self.active = config['/Grid/Active'] == 'true'
+            self.resize_elements = config['/Grid/ResizeElements'] == 'true'
             self.snap_mode = config['/Grid/SnapMode']
-        if self.active and not overide:
+        if self.active or override:
             if self.snap_mode == 'TOP_LEFT':
                 pos = self.SnapPosition(pos)
             elif self.snap_mode == 'CENTER':
@@ -127,13 +127,20 @@ class CGrid(CBaseObject):
             rel[1] + size_increase[1]))
         element.SetPosition(new_pos)
     
-    def SnapConnection(self, connection, pos, canvas, overide=False):
-        pass
+    def SnapConnection(self, conn, pos, idx, canvas, override=False):
+        if not self.local_settings:
+            self.hor_spacing = config['/Grid/HorSpacing']
+            self.ver_spacing = config['/Grid/VerSpacing']
+            self.snap_breakpoints = config['/Grid/SnapBreakpoints'] == 'true'
+            self.active = config['/Grid/Active'] == 'true'
+        if (self.active and self.snap_breakpoints) or override:
+            pos = self.SnapPosition(pos)
+        conn.MovePoint(canvas, pos, idx)
     
-    def Paint(self, canvas):
+    def Paint(self, canvas, w, h):
     
         if not self.local_settings:
-            self.visible = config['/Grid/Visible']
+            self.visible = config['/Grid/Visible'] == 'true'
             self.hor_spacing = config['/Grid/HorSpacing']
             self.ver_spacing = config['/Grid/VerSpacing']
             self.line_width = config['/Grid/LineWidth']
@@ -143,9 +150,8 @@ class CGrid(CBaseObject):
         line_style = 'solid'
         line_style1 = 'dot'
         
-        target = canvas.cairo_context.get_target()
-        width = round(target.get_width()) - 0.5
-        height = round(target.get_height()) - 0.5
+        width = w + 0.5
+        height = h + 0.5
         current = 0.5
         
         while current <= width:

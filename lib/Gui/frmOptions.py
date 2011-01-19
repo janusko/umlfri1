@@ -60,8 +60,8 @@ class CfrmOptions(common.CWindow):
             config['/Grid/LineWidth'] = self.sbGridLineWidth.get_value()
             config['/Grid/HorSpacing'] = self.sbGridHorSpacing.get_value_as_int()
             config['/Grid/VerSpacing'] = self.sbGridVerSpacing.get_value_as_int()
-            config['/Grid/Active'] = self.cbGridActive.get_active()
-            config['/Grid/Visible'] = self.cbGridVisible.get_active()
+            config['/Grid/Active'] = str(self.cbGridActive.get_active()).lower()
+            config['/Grid/Visible'] = str(self.cbGridVisible.get_active()).lower()
             if self.rbGridSnapPos.get_active():
                 config['/Grid/SnapMode'] = "TOP_LEFT"
             elif self.rbGridSnapCenter.get_active():
@@ -69,9 +69,9 @@ class CfrmOptions(common.CWindow):
             else:
                 config['/Grid/SnapMode'] = "CORNERS"
             config['/Grid/ResizeElements'] = \
-                self.cbGridResizeElements.get_active()
+                str(self.cbGridResizeElements.get_active()).lower()
             config['/Grid/SnapBreakpoints'] = \
-                self.cbGridSnapBreakpoints.get_active()
+                str(self.cbGridSnapBreakpoints.get_active()).lower()
 
         self.Hide()
     
@@ -103,8 +103,8 @@ class CfrmOptions(common.CWindow):
         self.sbGridLineWidth.set_value(config['/Grid/LineWidth'])
         self.sbGridHorSpacing.set_value(config['/Grid/HorSpacing'])
         self.sbGridVerSpacing.set_value(config['/Grid/VerSpacing'])
-        self.cbGridActive.set_active(config['/Grid/Active'])
-        self.cbGridVisible.set_active(config['/Grid/Visible'])
+        self.cbGridActive.set_active(config['/Grid/Active']=='true')
+        self.cbGridVisible.set_active(config['/Grid/Visible']=='true')
         if config['/Grid/SnapMode']=="TOP_LEFT":
             self.rbGridSnapPos.set_active(True)
             self.rbGridSnapCenter.set_active(False)
@@ -117,8 +117,8 @@ class CfrmOptions(common.CWindow):
             self.rbGridSnapCenter.set_active(False)
             self.rbGridSnapPos.set_active(False)
             self.rbGridSnapCorners.set_active(True)
-        self.cbGridResizeElements.set_active(config['/Grid/ResizeElements'])
-        self.cbGridSnapBreakpoints.set_active(config['/Grid/SnapBreakpoints'])
+        self.cbGridResizeElements.set_active(config['/Grid/ResizeElements']=='true')
+        self.cbGridSnapBreakpoints.set_active(config['/Grid/SnapBreakpoints']=='true')
     
     @event("expElement", "activate")
     @event("expConnection", "activate")
