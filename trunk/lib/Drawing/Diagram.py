@@ -392,7 +392,7 @@ class CDiagram(CBaseObject):
     def Paint(self, canvas):
         ((x, y), (w, h)) = self.viewport
         canvas.Clear()
-        self.grid.Paint(canvas)
+        self.grid.Paint(canvas, *self.viewport[1])
         var = set([])
         for e in self.elements:#here is created a set of layer values
             var.add(int(e.GetObject().GetType().GetOptions().get('Layer', 0)))
@@ -590,7 +590,13 @@ class CDiagram(CBaseObject):
         return ((int(x_min),int(y_min)),(int(x_max), int(y_max)))
 
     def MoveElement(self, element, pos, canvas):
-        self.grid.SnapElement(element, pos, canvas)
+        if not isinstance(element, ConLabelInfo.CConLabelInfo):
+            self.grid.SnapElement(element, pos, canvas)
+        else:
+            element.SetPosition(pos, canvas)
+    
+    def MoveConnectionPoint(self, conn, pos, idx, canvas):
+        self.grid.SnapConnection(conn, pos, idx, canvas)
 
     def AlignElementsXY(self, isHorizontal, isLowerBoundary,
             canvas, defaultElement=None): 
