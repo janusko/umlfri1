@@ -158,9 +158,7 @@ class CGrid(CBaseObject):
         while current <= h:
             current += self.hor_spacing
             path_string += 'M %.1f,%.1f L %.1f,%.1f ' % (current, 0.5, current, h)
-        print path_string
         ret = Path(path_string)
-        print ret
         return ret
     
     def __IsSpacingChanged(self):
