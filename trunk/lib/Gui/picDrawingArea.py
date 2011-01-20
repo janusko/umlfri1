@@ -52,7 +52,10 @@ class CpicDrawingArea(CWidget):
                     'mnuSpaceEvenlyVertically',                   
                 'pmOpenSpecification',
                 'mnuResizeHight',
-                'mnuResizeWidth')
+                'mnuResizeWidth',
+                'mnuResizeHightAndWidth',
+                'mnuResizeByMaximalElement',
+                'mnuResizeByMinimalElement')
 
     __gsignals__ = {
         'get-selected':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_PYOBJECT,
@@ -957,6 +960,22 @@ class CpicDrawingArea(CWidget):
     @event("mnuResizeWidth","activate")
     def on_mnuResizeWidth(self, menuItem):
         self.Diagram.ResizeElementsEvenly(True,self.canvas,self.itemSel)
+        self.Paint()
+    
+    @event("mnuResizeHightAndWidth","activate")
+    def on_mnuResizeWidthAndHight(self, menuItem):
+        self.Diagram.ResizeElementsEvenly(True,self.canvas,self.itemSel)
+        self.Diagram.ResizeElementsEvenly(False,self.canvas,self.itemSel)
+        self.Paint()
+    
+    @event("mnuResizeByMaximalElement","activate")
+    def on_mnuResizeByMaximalElement(self, menuItem):
+        self.Diagram.ResizeByMaximalElement(self.canvas)        
+        self.Paint()
+        
+    @event("mnuResizeByMinimalElement","activate")
+    def on_mnuResizeByMinimalElement(self, menuItem):
+        self.Diagram.ResizeByMinimalElement(self.canvas)        
         self.Paint()
     
     @event("mnuSpaceEvenlyHorizontally","activate", True)

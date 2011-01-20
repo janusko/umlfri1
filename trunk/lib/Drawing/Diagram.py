@@ -729,5 +729,57 @@ class CDiagram(CBaseObject):
                     e.SetSizeRelative(esize)
                 if selectedElementSize[xy] > e.GetSize(canvas)[xy]:
                     esize[xy] = selectedElementSize[xy] - actualElementMinimalSize[xy]
-                    e.SetSizeRelative(esize)            
+                    e.SetSizeRelative(esize)
+    
+    def ResizeByMaximalElement(self, canvas):
+        '''
+        Resize all elements based on the size of the maximal element
+        '''
+        elements = tuple(self.GetSelectedElements())
+        if (len(elements)<2): return        
+
+        maxhight = 0
+        maxwidth = 0
+        size = 0
+        for e in elements:
+            if size < e.GetSize(canvas)[0] + e.GetSize(canvas)[1]:
+                size = e.GetSize(canvas)[0] + e.GetSize(canvas)[1]
+                maxhight = e.GetSize(canvas)[0]
+                maxwidth = e.GetSize(canvas)[1]
+                
+        for e in elements:
+            esize = list(e.GetSizeRelative())
+            actualElementMinimalSize = e.GetMinimalSize(canvas)
+            esize[0] = maxhight - actualElementMinimalSize[0]
+            esize[1] = maxwidth - actualElementMinimalSize[1]
+            e.SetSizeRelative(esize)
+            
+    def ResizeByMinimalElement(self, canvas):
+        '''
+        Resize all elements based on the size of the minimal element
+        '''
+        elements = tuple(self.GetSelectedElements())
+        if (len(elements)<2): return        
         
+        minhight = 99999
+        minwidth = 99999
+        size = minhight + minwidth
+        for e in elements:
+            if size > e.GetSize(canvas)[0] + e.GetSize(canvas)[1]:
+                size = e.GetSize(canvas)[0] + e.GetSize(canvas)[1]
+                minhight = e.GetSize(canvas)[0]
+                minwidth = e.GetSize(canvas)[1]
+                
+        for e in elements:
+            esize = list(e.GetSizeRelative())
+            selectedElementSize = e.GetSize(canvas)
+            actualElementMinimalSize = e.GetMinimalSize(canvas)
+            if minhight < actualElementMinimalSize[0]:
+                esize[0] = 0
+            if minhight >= actualElementMinimalSize[0]:
+                esize[0] = minhight - actualElementMinimalSize[0]
+            if minwidth < actualElementMinimalSize[1]:
+                esize[0] = 0
+            if minwidth >= actualElementMinimalSize[1]:
+                esize[1] = minwidth - actualElementMinimalSize[1]
+            e.SetSizeRelative(esize)

@@ -1495,7 +1495,7 @@
         <property name="label" translatable="yes">Sizing</property>
         <property name="use_underline">True</property>
         <child>
-          <widget class="GtkMenu" id="menu1">
+          <widget class="GtkMenu" id="menuSizing">
             <property name="visible">True</property>
             <child>
               <widget class="GtkMenuItem" id="mnuSizingBySelEl">
@@ -1503,7 +1503,7 @@
                 <property name="label" translatable="yes">By Selected Element</property>
                 <property name="use_underline">True</property>
                 <child>
-                  <widget class="GtkMenu" id="menu5">
+                  <widget class="GtkMenu" id="menuResize">
                     <property name="visible">True</property>
                     <child>
                       <widget class="GtkMenuItem" id="mnuResizeHight">
@@ -1519,8 +1519,29 @@
                         <property name="use_underline">True</property>
                       </widget>
                     </child>
+                    <child>
+                      <widget class="GtkMenuItem" id="mnuResizeHightAndWidth">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Resize Hight and Width</property>
+                        <property name="use_underline">True</property>
+                      </widget>
+                    </child>
                   </widget>
                 </child>
+              </widget>
+            </child>
+            <child>
+              <widget class="GtkMenuItem" id="mnuResizeByMaximalElement">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Resize by Maximal Element</property>
+                <property name="use_underline">True</property>
+              </widget>
+            </child>
+            <child>
+              <widget class="GtkMenuItem" id="mnuResizeByMinimalElement">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Resize by Minimal Element</property>
+                <property name="use_underline">True</property>
               </widget>
             </child>
           </widget>
