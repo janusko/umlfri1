@@ -262,6 +262,13 @@ class CCairoBaseCanvas(CAbstractCanvas):
         baseline = lines.get_baseline()/pango.SCALE
         return baseline
 
+    def DrawPixbuf(self, pixbuf, pos):
+        self.cairo_context.save()
+        self.cairo_context.scale(self.scale, self.scale)
+        self.cairo_context.set_source_pixbuf(pixbuf, pos[0] - self.baseX, pos[1] - self.baseY)
+        self.cairo_context.paint()
+        self.cairo_context.restore()
+
     def DrawIcon(self, pos, filename):
         if self.storage is None:
             raise DrawingError('storage')
