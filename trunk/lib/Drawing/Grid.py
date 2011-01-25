@@ -3,6 +3,7 @@ from lib.datatypes import CColor
 from lib.config import config
 from lib.Math2D.path import Path
 from math import sqrt
+from lib.Drawing.Canvas.Export import CExportCanvas
 
 class CGrid(CBaseObject):
     
@@ -11,6 +12,41 @@ class CGrid(CBaseObject):
         self.UpdateState(local_settings)
         self.hor_spacing = 0
         self.ver_spacing = 0
+        self.buffer = None
+        
+    def Redraw(self, size):
+        '''
+        Redraws the grid to pixbuf.
+        Needs to be called to apply grid appearance settings changes.
+        '''
+        if not self.local_settings:
+            self.hor_spacing = config['/Grid/HorSpacing']
+            self.ver_spacing = config['/Grid/VerSpacing']
+            self.line_width = config['/Grid/LineWidth']
+        fg1 = config['/Grid/LineColor1']
+        fg2 = config['/Grid/LineColor2']
+        line_style = 'solid'
+        line_style1 = 'dot'
+        w = size[0] + 0.5
+        h = size[1] + 0.5
+        current = 0.5
+        
+        canvas = CExportCanvas(surface_type='pixbuf', sizeX=w, sizeY=h)
+        
+        while current <= w:
+            canvas.DrawLine((0.5, current), (w, current), fg1, self.line_width,
+                line_style)
+            canvas.DrawLine((0.5, current), (w, current), fg2, self.line_width,
+                line_style1)
+            current += self.ver_spacing
+        current = 0.5
+        while current <= h:
+            canvas.DrawLine((current, 0.5), (current, h), fg1, self.line_width,
+                line_style)
+            canvas.DrawLine((current, 0.5), (current, h), fg2, self.line_width,
+                line_style1)
+            current += self.hor_spacing
+        self.buffer = canvas.Finish()
 
     def UpdateState(self, data):
         '''
@@ -24,7 +60,6 @@ class CGrid(CBaseObject):
             self.visible = data['visible']
             self.resize_elements = data['resize_elements']
             self.snap_breakpoints = data['snap_breakpoints']
-            self.old_vercital, self.old_horizontal = self.hor_spacing, self.hor_spacing
             self.hor_spacing = data['hor_space']
             self.ver_spacing = data['ver_space']
             self.line_width = data['line_width']
@@ -37,10 +72,10 @@ class CGrid(CBaseObject):
         ret['visible'] = self.visible
         ret['resize_elements'] = self.resize_elements
         ret['snap_breakpoints'] = self.snap_breakpoints
-        ret['hspace'] = self.hor_spacing
-        ret['vspace'] = self.ver_spacing
-        ret['linew'] = self.line_width
-        ret['mode'] = self.snap_mode
+        ret['hor_space'] = self.hor_spacing
+        ret['ver_space'] = self.ver_spacing
+        ret['line_width'] = self.line_width
+        ret['snap_mode'] = self.snap_mode
         return ret
     
     def SnapPosition(self, pos):
@@ -141,54 +176,17 @@ class CGrid(CBaseObject):
             pos = self.SnapPosition(pos)
         conn.MovePoint(canvas, pos, idx)
     
-    def __GetGridPath(self, width, height):
-        if not self.local_settings:
-            self.hor_spacing = config['/Grid/HorSpacing']
-            self.ver_spacing = config['/Grid/VerSpacing']
-        
-        w = width + 0.5
-        h = height + 0.5
-        current = 0.5
-        path_string = ''
-        
-        while current <= w:
-            current += self.ver_spacing
-            path_string += 'M %.1f,%.1f L %.1f,%.1f ' % (0.5, current, w, current)
-        current = 0.5
-        while current <= h:
-            current += self.hor_spacing
-            path_string += 'M %.1f,%.1f L %.1f,%.1f ' % (current, 0.5, current, h)
-        ret = Path(path_string)
-        return ret
-    
-    def __IsSpacingChanged(self):
-        if not self.local_settings:
-            self.old_horizontal = self.hor_spacing
-            self.old_vertical = self.ver_spacing
-            self.hor_spacing = config['/Grid/HorSpacing']
-            self.ver_spacing = config['/Grid/VerSpacing']
-        if self.old_vertical != self.ver_spacing:
-            return True
-        if self.old_horizontal != self.hor_spacing:
-            return True
-        
-    
-    def Paint(self, canvas, w, h):
-    
+    def Paint(self, canvas, size):
+        '''
+        Paints grid buffer onto canvas.
+        '''
         if not self.local_settings:
             self.visible = config['/Grid/Visible'] == 'true'
-            self.line_width = config['/Grid/LineWidth']
-        if not self.visible: return    
-        fg1 = config['/Grid/LineColor1']
-        fg2 = config['/Grid/LineColor2']
-        line_style = 'solid'
-        line_style1 = 'dot'
-        
-        if self.__IsSpacingChanged():
-            self.gridPath = self.__GetGridPath(w, h)
-        
-        canvas.DrawPath(self.gridPath, fg1, None, self.line_width, line_style)
-        canvas.DrawPath(self.gridPath, fg2, None, self.line_width, line_style1)
+        if not self.visible:
+            return    
+        if not self.buffer:
+            self.Redraw(size)
+        canvas.DrawPixbuf(self.buffer, (0, 0))
          
     def IsActive(self):
         return self.active
