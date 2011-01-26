@@ -589,6 +589,12 @@ class CDiagram(CBaseObject):
                   
         return ((int(x_min),int(y_min)),(int(x_max), int(y_max)))
 
+    def ApplyNewSettings(self):
+        '''
+        Called each time settings change.
+        '''
+        self.grid.Redraw(self.viewport[1])
+
     def MoveElement(self, element, pos, canvas):
         if not isinstance(element, ConLabelInfo.CConLabelInfo):
             self.grid.SnapElement(element, pos, canvas)

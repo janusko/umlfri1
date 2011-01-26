@@ -72,8 +72,11 @@ class CfrmOptions(common.CWindow):
                 str(self.cbGridResizeElements.get_active()).lower()
             config['/Grid/SnapBreakpoints'] = \
                 str(self.cbGridSnapBreakpoints.get_active()).lower()
-
-        self.Hide()
+            self.Hide()
+            return True
+        else:
+            self.Hide()
+            return False
     
     def __Load(self):
         self.cbElementLine.set_color(self.CColorToGtkColor(config['/Styles/Element/LineColor']))

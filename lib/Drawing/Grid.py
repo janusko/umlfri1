@@ -27,11 +27,12 @@ class CGrid(CBaseObject):
         fg2 = config['/Grid/LineColor2']
         line_style = 'solid'
         line_style1 = 'dot'
-        w = size[0] + 0.5
-        h = size[1] + 0.5
-        current = 0.5
-        
-        canvas = CExportCanvas(surface_type='pixbuf', sizeX=w, sizeY=h)
+        w = size[0]
+        h = size[1]
+        canvas = CExportCanvas(surface_type='pixbuf', sizeX=int(w), sizeY=int(h))
+        w += 0.5
+        h += 0.5
+        current = 0.5 + self.ver_spacing
         
         while current <= w:
             canvas.DrawLine((0.5, current), (w, current), fg1, self.line_width,
@@ -39,7 +40,7 @@ class CGrid(CBaseObject):
             canvas.DrawLine((0.5, current), (w, current), fg2, self.line_width,
                 line_style1)
             current += self.ver_spacing
-        current = 0.5
+        current = 0.5 + self.hor_spacing
         while current <= h:
             canvas.DrawLine((current, 0.5), (current, h), fg1, self.line_width,
                 line_style)
