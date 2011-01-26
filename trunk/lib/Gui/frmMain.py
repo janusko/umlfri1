@@ -195,6 +195,14 @@ class CfrmMain(CWindow):
         if not self.nbTabs.IsStartPageActive():
             self.picDrawingArea.Paint(True)
     
+    def ApplyNewSettings(self):
+        '''
+        Calls appropriate update methods after settings changed.
+        '''
+        for diagram in self.nbTabs.diagrams:
+            if diagram.GetType():
+                diagram.ApplyNewSettings()
+    
     # Diagrams
     @event("mnuViewTools", "activate")
     def ActionViewTools(self, *args):
@@ -249,7 +257,8 @@ class CfrmMain(CWindow):
     def on_mnuOptions_activate(self, mnu):
         tmp = self.application.GetWindow('frmOptions')
         tmp.SetParent(self)
-        tmp.Show()
+        if tmp.Show():
+            self.ApplyNewSettings()
         self.PaintAll()
 
     # Help
