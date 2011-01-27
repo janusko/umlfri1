@@ -789,3 +789,14 @@ class CDiagram(CBaseObject):
             if minwidth >= actualElementMinimalSize[1]:
                 esize[1] = minwidth - actualElementMinimalSize[1]
             e.SetSizeRelative(esize)
+            
+    def SnapElementsOnGrid(self, canvas):
+        '''
+        Snaps selected elements on grid. Grid doesn't have to be active.
+        '''
+        elements = list(self.GetSelectedElements())
+        if len(elements)<1: return
+        for e in elements:
+            pos = e.GetPosition()
+            self.grid.SnapElement(e, pos, canvas, True)
+        

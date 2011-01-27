@@ -55,7 +55,8 @@ class CpicDrawingArea(CWidget):
                 'mnuResizeWidth',
                 'mnuResizeHightAndWidth',
                 'mnuResizeByMaximalElement',
-                'mnuResizeByMinimalElement')
+                'mnuResizeByMinimalElement',
+                'mnuSnapElements')
 
     __gsignals__ = {
         'get-selected':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_PYOBJECT,
@@ -982,6 +983,11 @@ class CpicDrawingArea(CWidget):
     @event("mnuSpaceEvenlyVertically","activate", False)
     def on_mnuMakeSpacing(self, widget, p1):
         self.Diagram.SpaceElementsEvenlyXY(p1, self.canvas)
+        self.Paint()
+    
+    @event('mnuSnapElements', 'activate')
+    def on_mnuSnapElements(self, widget):
+        self.Diagram.SnapElementsOnGrid(self.canvas)
         self.Paint()
     
     def ChangeSourceTarget(self):
