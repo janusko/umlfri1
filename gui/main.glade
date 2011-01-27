@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <glade-interface>
   <!-- interface-requires gtk+ 2.16 -->
   <!-- interface-naming-policy toplevel-contextual -->
@@ -1546,6 +1546,14 @@
             </child>
           </widget>
         </child>
+      </widget>
+    </child>
+    <child>
+      <widget class="GtkMenuItem" id="mnuSnapElements">
+        <property name="visible">True</property>
+        <property name="tooltip" translatable="yes">Snap selected elements on grid.</property>
+        <property name="label" translatable="yes">Snap selected to grid</property>
+        <property name="use_underline">True</property>
       </widget>
     </child>
     <child>
