@@ -12,8 +12,12 @@ class CGrid(CBaseObject):
         self.UpdateState(local_settings)
         self.hor_spacing = 0
         self.ver_spacing = 0
+        self.needs_redraw = True
         self.buffer = None
         
+    def MarkToRedraw(self):
+        self.needs_redraw = True
+    
     def Redraw(self, size):
         '''
         Redraws the grid to pixbuf.
@@ -29,25 +33,28 @@ class CGrid(CBaseObject):
         line_style1 = 'dot'
         w = size[0]
         h = size[1]
-        canvas = CExportCanvas(surface_type='pixbuf', sizeX=int(w), sizeY=int(h))
+        canvas = CExportCanvas(surface_type='pixbuf', 
+            sizeX=int(w) + self.hor_spacing, 
+            sizeY=int(h) + self.ver_spacing)
         w += 0.5
         h += 0.5
-        current = 0.5 + self.ver_spacing
+        current = 0.5 + self.hor_spacing
         
         while current <= w:
-            canvas.DrawLine((0.5, current), (w, current), fg1, self.line_width,
-                line_style)
-            canvas.DrawLine((0.5, current), (w, current), fg2, self.line_width,
-                line_style1)
-            current += self.ver_spacing
-        current = 0.5 + self.hor_spacing
-        while current <= h:
             canvas.DrawLine((current, 0.5), (current, h), fg1, self.line_width,
                 line_style)
             canvas.DrawLine((current, 0.5), (current, h), fg2, self.line_width,
                 line_style1)
             current += self.hor_spacing
+        current = 0.5 + self.ver_spacing
+        while current <= h:
+            canvas.DrawLine((0.5, current), (w, current), fg1, self.line_width,
+                line_style)
+            canvas.DrawLine((0.5, current), (w, current), fg2, self.line_width,
+                line_style1)
+            current += self.ver_spacing
         self.buffer = canvas.Finish()
+        self.needs_redraw = False
 
     def UpdateState(self, data):
         '''
@@ -177,7 +184,7 @@ class CGrid(CBaseObject):
             pos = self.SnapPosition(pos)
         conn.MovePoint(canvas, pos, idx)
     
-    def Paint(self, canvas, size):
+    def Paint(self, canvas, viewport):
         '''
         Paints grid buffer onto canvas.
         '''
@@ -185,9 +192,11 @@ class CGrid(CBaseObject):
             self.visible = config['/Grid/Visible'] == 'true'
         if not self.visible:
             return    
-        if not self.buffer:
-            self.Redraw(size)
-        canvas.DrawPixbuf(self.buffer, (0, 0))
+        if not self.buffer or self.needs_redraw:
+            self.Redraw(viewport[1])
+        x = -(viewport[0][0] % self.hor_spacing)
+        y = -(viewport[0][1] % self.ver_spacing)
+        canvas.DrawPixbuf(self.buffer, (x, y))
          
     def IsActive(self):
         return self.active
