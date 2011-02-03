@@ -392,7 +392,7 @@ class CDiagram(CBaseObject):
     def Paint(self, canvas):
         ((x, y), (w, h)) = self.viewport
         canvas.Clear()
-        self.grid.Paint(canvas, self.viewport[1])
+        self.grid.Paint(canvas, self.viewport)
         var = set([])
         for e in self.elements:#here is created a set of layer values
             var.add(int(e.GetObject().GetType().GetOptions().get('Layer', 0)))
@@ -593,7 +593,7 @@ class CDiagram(CBaseObject):
         '''
         Called each time settings change.
         '''
-        self.grid.Redraw(self.viewport[1])
+        self.grid.MarkToRedraw()
 
     def MoveElement(self, element, pos, canvas):
         if not isinstance(element, ConLabelInfo.CConLabelInfo):
