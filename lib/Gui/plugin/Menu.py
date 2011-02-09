@@ -6,6 +6,7 @@ class CMenu(CContainer, lib.GenericGui.CMenu):
     
     def AddMenuItem(self, guiId, callback, position, label, underline, imagefilename, _addr):
         self.TestAccess(_addr)
+        
         if imagefilename:
             item = gtk.ImageMenuItem(label)
             image = gtk.Image()
@@ -18,6 +19,7 @@ class CMenu(CContainer, lib.GenericGui.CMenu):
     
     def AddStockMenuItem(self, guiId, callback, position, stock, label, _addr):
         self.TestAccess(_addr)
+        stock = self.RenameStock(stock)
         item = gtk.ImageMenuItem(stock_id = stock)
         if label:
             item.set_property('label', label)

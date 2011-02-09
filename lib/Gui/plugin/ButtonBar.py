@@ -5,6 +5,7 @@ from Container import CContainer
 class CButtonBar(CContainer, lib.GenericGui.CButtonBar):
     
     def _addButton(self, guiId, callback, position, stock, label, imagefilename, tooglebutton, _addr):
+        stock = self.RenameStock(stock)
         self.TestAccess(_addr)
         if tooglebutton:
             item = gtk.ToggleToolButton(stock)

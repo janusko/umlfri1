@@ -23,6 +23,12 @@ class CContainer(CWidget):
         for item in self.GetItems():
             if item.GetGuiId() == guiId:
                 return item
+                
+    def RenameStock(self, name):
+        if isinstance(name, (str, unicode)):
+            if not name.startswith('gtk-'):
+                return 'gtk-' + name
+        return name
 
 
 
