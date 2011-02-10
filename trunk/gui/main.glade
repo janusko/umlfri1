@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0"?>
 <glade-interface>
   <!-- interface-requires gtk+ 2.16 -->
   <!-- interface-naming-policy toplevel-contextual -->
@@ -11,6 +11,7 @@
     <child>
       <widget class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
+        <property name="orientation">vertical</property>
         <child>
           <widget class="GtkMenuBar" id="mnuMenubar">
             <property name="visible">True</property>
@@ -407,6 +408,14 @@
                       </widget>
                     </child>
                     <child>
+                      <widget class="GtkCheckMenuItem" id="mnuViewAlignAndDistribute">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">_Align and Distribute</property>
+                        <property name="use_underline">True</property>
+                        <accelerator key="t" signal="activate" modifiers="GDK_CONTROL_MASK"/>
+                      </widget>
+                    </child>
+                    <child>
                       <widget class="GtkCheckMenuItem" id="mnuViewWarnings">
                         <property name="visible">True</property>
                         <property name="label" translatable="yes">_Warnings</property>
@@ -485,104 +494,213 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkHandleBox" id="hndCommandBar">
+          <widget class="GtkVBox" id="vbox2">
             <property name="visible">True</property>
+            <property name="orientation">vertical</property>
             <child>
-              <widget class="GtkToolbar" id="toolbar1">
+              <widget class="GtkHandleBox" id="hndCommandBar">
                 <property name="visible">True</property>
-                <property name="toolbar_style">both</property>
                 <child>
-                  <widget class="GtkToolButton" id="cmdOpen">
+                  <widget class="GtkToolbar" id="toolbar1">
                     <property name="visible">True</property>
-                    <property name="stock_id">gtk-open</property>
+                    <property name="toolbar_style">both</property>
+                    <child>
+                      <widget class="GtkToolButton" id="cmdOpen">
+                        <property name="visible">True</property>
+                        <property name="stock_id">gtk-open</property>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkToolButton" id="cmdSave">
+                        <property name="visible">True</property>
+                        <property name="stock_id">gtk-save</property>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkSeparatorToolItem" id="separatortoolitem1">
+                        <property name="visible">True</property>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkToolButton" id="cmdCopy">
+                        <property name="visible">True</property>
+                        <property name="stock_id">gtk-copy</property>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkToolButton" id="cmdCut">
+                        <property name="visible">True</property>
+                        <property name="stock_id">gtk-cut</property>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkToolButton" id="cmdPaste">
+                        <property name="visible">True</property>
+                        <property name="stock_id">gtk-paste</property>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkSeparatorToolItem" id="separatortoolitem2">
+                        <property name="visible">True</property>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkToolButton" id="cmdZoomOut">
+                        <property name="visible">True</property>
+                        <property name="stock_id">gtk-zoom-out</property>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkToolButton" id="cmdZoomIn">
+                        <property name="visible">True</property>
+                        <property name="stock_id">gtk-zoom-in</property>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
                   </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkToolButton" id="cmdSave">
-                    <property name="visible">True</property>
-                    <property name="stock_id">gtk-save</property>
-                  </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkSeparatorToolItem" id="separatortoolitem1">
-                    <property name="visible">True</property>
-                  </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkToolButton" id="cmdCopy">
-                    <property name="visible">True</property>
-                    <property name="stock_id">gtk-copy</property>
-                  </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkToolButton" id="cmdCut">
-                    <property name="visible">True</property>
-                    <property name="stock_id">gtk-cut</property>
-                  </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkToolButton" id="cmdPaste">
-                    <property name="visible">True</property>
-                    <property name="stock_id">gtk-paste</property>
-                  </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkSeparatorToolItem" id="separatortoolitem2">
-                    <property name="visible">True</property>
-                  </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkToolButton" id="cmdZoomOut">
-                    <property name="visible">True</property>
-                    <property name="stock_id">gtk-zoom-out</property>
-                  </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkToolButton" id="cmdZoomIn">
-                    <property name="visible">True</property>
-                    <property name="stock_id">gtk-zoom-in</property>
-                  </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
-                  </packing>
                 </child>
               </widget>
+              <packing>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkHandleBox" id="hndCommandBar2">
+                <child>
+                  <widget class="GtkToolbar" id="toolbar2">
+                    <property name="visible">True</property>
+                    <property name="toolbar_style">both</property>
+                    <child>
+                      <widget class="GtkToolButton" id="cmdAlignLeftMost">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Most Left</property>
+                        <property name="icon">AlignMostLeft.png</property>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkToolButton" id="cmdAlignRightMost">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Most Right</property>
+                        <property name="icon">AlignMostRight.png</property>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkToolButton" id="cmdAlignUpMost">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Most Up</property>
+                        <property name="icon">AlignMostUp.png</property>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkToolButton" id="cmdAlignDownMost">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Most Down</property>
+                        <property name="icon">AlignMostDown.png</property>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkToolButton" id="cmdSpaceEvenlyHorizontally">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Evenly Horizontally</property>
+                        <property name="icon">SpaceHoriz.png</property>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkToolButton" id="cmdSpaceEvenlyVertically">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Evenly Vertically</property>
+                        <property name="icon">SpaceVertic.png</property>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkToolButton" id="cmdResizeByMax">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Resize By Max</property>
+                        <property name="icon">ResByMax.png</property>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkToolButton" id="cmdResizeByMin">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Resize By Min</property>
+                        <property name="icon">ResByMin.png</property>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                  </widget>
+                </child>
+              </widget>
+              <packing>
+                <property name="position">1</property>
+              </packing>
             </child>
           </widget>
           <packing>
             <property name="expand">False</property>
-            <property name="fill">False</property>
             <property name="position">1</property>
           </packing>
         </child>
@@ -611,6 +729,9 @@
                 <property name="fill">False</property>
                 <property name="position">0</property>
               </packing>
+            </child>
+            <child>
+              <placeholder/>
             </child>
             <child>
               <widget class="GtkHPaned" id="hpaRight">
@@ -1083,6 +1204,9 @@
             <property name="fill">False</property>
             <property name="position">3</property>
           </packing>
+        </child>
+        <child>
+          <placeholder/>
         </child>
       </widget>
     </child>

@@ -42,8 +42,8 @@ class CfrmMain(CWindow):
         'mnuExport',
         #############
         'mItemView',
-        'mnuViewTools', 'mnuViewCommands', 'mnuNormalSize', 'mnuZoomIn','mnuZoomOut', 'mnuBestFit',
-        'hndCommandBar', 'mnuViewWarnings',
+        'mnuViewTools', 'mnuViewCommands', 'mnuViewAlignAndDistribute', 'mnuNormalSize', 'mnuZoomIn','mnuZoomOut', 'mnuBestFit',
+        'hndCommandBar', 'hndCommandBar2', 'mnuViewWarnings',
         #############
         'mnuAddons', 'mnuOptions',
         #############
@@ -57,6 +57,10 @@ class CfrmMain(CWindow):
         #############
         #toolbar
         'cmdOpen', 'cmdSave', 'cmdCopy', 'cmdCut', 'cmdPaste', 'cmdZoomOut', 'cmdZoomIn',
+        #############
+        #toolbar2
+        'cmdAlignLeftMost', 'cmdAlignRightMost', 'cmdAlignUpMost', 'cmdAlignDownMost', 'cmdSpaceEvenlyHorizontally', 'cmdSpaceEvenlyVertically',
+        'cmdResizeByMax', 'cmdResizeByMin',
         #############
         #fullscreen
         'mnuMenubar', 'mnuFullscreen', 'cmdCloseFullscreen', 'vpaRight', 'sbStatus','hpaRight',
@@ -215,6 +219,13 @@ class CfrmMain(CWindow):
         else:
             self.hndCommandBar.hide()
     
+    @event("mnuViewAlignAndDistribute", "activate")
+    def ActionViewAlignAndDistribute(self, *args):
+        if self.mnuViewAlignAndDistribute.get_active():
+            self.hndCommandBar2.show()
+        else:
+            self.hndCommandBar2.hide()
+    
     @event("mnuViewWarnings", "activate")
     def ActionViewWarnings(self, *args):
         if self.mnuViewWarnings.get_active():
@@ -232,6 +243,7 @@ class CfrmMain(CWindow):
         if self.mnuFullscreen.get_active():
             self.mnuMenubar.hide()
             self.hndCommandBar.hide()
+            self.hndCommandBar2.hide()
             self.sbStatus.hide()
             self.cmdCloseFullscreen.show()
             self.nbTabs.Hide()
@@ -240,6 +252,7 @@ class CfrmMain(CWindow):
         else:
             self.mnuMenubar.show()
             self.ActionViewCommands()
+            self.ActionViewAlignAndDistribute()
             self.sbStatus.show()
             self.cmdCloseFullscreen.hide()
             self.nbTabs.Show()
@@ -443,7 +456,28 @@ class CfrmMain(CWindow):
     
     def ActionLoadToolBar(self, widget):
         pass
+       
+    @event("cmdAlignLeftMost", "clicked", True, True, False)
+    @event("cmdAlignRightMost", "clicked", True, False, False)
+    @event("cmdAlignRightMost", "clicked", True, False, False)
+    @event("cmdAlignUpMost","clicked", False, True, False)
+    @event("cmdAlignDownMost","clicked", False, False, False)
+    def on_mnuAlignMost_click(self, widget, horiz, lower, defaultE):
+        self.picDrawingArea.on_mnuAlign_activate(widget, horiz, lower, defaultE)
+    
+    @event("cmdSpaceEvenlyHorizontally","clicked", True)
+    @event("cmdSpaceEvenlyVertically","clicked", False)
+    def on_mnuMakeSpacing_click(self, widget, p1):
+        self.picDrawingArea.on_mnuMakeSpacing(widget, p1)
         
+    @event("cmdResizeByMax","clicked")
+    def on_mnuResizeByMax(self, widget):
+        self.picDrawingArea.on_mnuResizeByMaximalElement(widget)
+        
+    @event("cmdResizeByMin","clicked")
+    def on_mnuResizeByMin(self, widget):
+        self.picDrawingArea.on_mnuResizeByMinimalElement(widget)
+    
     # User defined signals
     @event("twProjectView", "add-element")
     @event("mnuItems", "add-element")
@@ -583,7 +617,7 @@ class CfrmMain(CWindow):
     def on_tbToolBox_toggled(self, widget, ItemId, ItemType):
         self.picDrawingArea.Diagram.DeselectAll()
         self.picDrawingArea.ResetAction()
-        
+    
     @event("picDrawingArea","drop-from-treeview")
     def on_drop_from_treeview(self, widget, position):
         node = self.twProjectView.GetSelectedNode()
