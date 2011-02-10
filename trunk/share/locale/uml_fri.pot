@@ -6,12 +6,13 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: UML .FRI 1.0-beta20090601\n"
+"Project-Id-Version: UML .FRI 1.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-01 15:23+0200\n"
+"POT-Creation-Date: 2011-02-10 12:13+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -24,6 +25,9 @@ msgstr ""
 
 #, python-format
 msgid "Academic year %s:"
+msgstr ""
+
+msgid "Active"
 msgstr ""
 
 msgid "Add _element"
@@ -41,16 +45,7 @@ msgstr ""
 msgid "Addons"
 msgstr ""
 
-msgid "Align _bottom"
-msgstr ""
-
-msgid "Align _left"
-msgstr ""
-
-msgid "Align _right"
-msgstr ""
-
-msgid "Align _top"
+msgid "Align"
 msgstr ""
 
 msgid "All files"
@@ -86,10 +81,16 @@ msgstr ""
 msgid "Bring To Top"
 msgstr ""
 
+msgid "By Selected Element"
+msgstr ""
+
 msgid "C_ontribute"
 msgstr ""
 
 msgid "C_redits"
+msgstr ""
+
+msgid "Change source and target"
 msgstr ""
 
 msgid "Close all diagram"
@@ -114,6 +115,24 @@ msgid "Create New Project"
 msgstr ""
 
 msgid "Create _New Project"
+msgstr ""
+
+msgid "Current Center horizontaly"
+msgstr ""
+
+msgid "Current center verticaly"
+msgstr ""
+
+msgid "Current downwards"
+msgstr ""
+
+msgid "Current left"
+msgstr ""
+
+msgid "Current right"
+msgstr ""
+
+msgid "Current upwards"
 msgstr ""
 
 msgid "Date"
@@ -158,6 +177,9 @@ msgstr ""
 msgid "Do you want to save project?"
 msgstr ""
 
+msgid "Downwards most"
+msgstr ""
+
 msgid "Drag"
 msgstr ""
 
@@ -192,6 +214,9 @@ msgid "Exception handler"
 msgstr ""
 
 msgid "Exception traceback (most recent call last)"
+msgstr ""
+
+msgid "Exit"
 msgstr ""
 
 msgid "Export diagram"
@@ -236,16 +261,28 @@ msgstr ""
 msgid "GTK+ version"
 msgstr ""
 
+msgid "Grid"
+msgstr ""
+
+msgid "Grid is visible."
+msgstr ""
+
+msgid "Grid will align diagram components."
+msgstr ""
+
 msgid "Homepage"
 msgstr ""
 
 msgid "Homepage:"
 msgstr ""
 
-msgid "Change source and target"
+msgid "Horizontal Spacing"
 msgstr ""
 
 msgid "I_nclude project"
+msgstr ""
+
+msgid "Informations about the warning"
 msgstr ""
 
 msgid "Install"
@@ -260,7 +297,19 @@ msgstr ""
 msgid "Invalid connection"
 msgstr ""
 
+msgid "Left most"
+msgstr ""
+
 msgid "License:"
+msgstr ""
+
+msgid "Line Color 1"
+msgstr ""
+
+msgid "Line Color 2"
+msgstr ""
+
+msgid "Line Width"
 msgstr ""
 
 msgid "Line color"
@@ -287,9 +336,6 @@ msgstr ""
 msgid "Notes"
 msgstr ""
 
-msgid "Object"
-msgstr ""
-
 msgid "Open Existing Project"
 msgstr ""
 
@@ -309,6 +355,9 @@ msgid "P_NG"
 msgstr ""
 
 msgid "P_S"
+msgstr ""
+
+msgid "Padding:"
 msgstr ""
 
 msgid "Pages"
@@ -359,6 +408,27 @@ msgstr ""
 msgid "Rectangle width"
 msgstr ""
 
+msgid "Resize Height"
+msgstr ""
+
+msgid "Resize Hight and Width"
+msgstr ""
+
+msgid "Resize Width"
+msgstr ""
+
+msgid "Resize by Maximal Element"
+msgstr ""
+
+msgid "Resize by Minimal Element"
+msgstr ""
+
+msgid "Resize elements"
+msgstr ""
+
+msgid "Right most"
+msgstr ""
+
 msgid "S_VG"
 msgstr ""
 
@@ -393,6 +463,53 @@ msgid "Shadow color"
 msgstr ""
 
 msgid "Show in project view"
+msgstr ""
+
+msgid "Sizing"
+msgstr ""
+
+msgid "Snap breakpoints"
+msgstr ""
+
+msgid "Snap centers"
+msgstr ""
+
+msgid "Snap connection breakpoints."
+msgstr ""
+
+msgid "Snap corners"
+msgstr ""
+
+msgid "Snap mode:"
+msgstr ""
+
+msgid "Snap position"
+msgstr ""
+
+msgid "Snap selected elements on grid."
+msgstr ""
+
+msgid "Snap selected to grid"
+msgstr ""
+
+msgid "Snap to element centers."
+msgstr ""
+
+msgid ""
+"Snap to element corners \n"
+"(the one that is closest to the grid)"
+msgstr ""
+
+msgid "Snap top left corner of elements to grid."
+msgstr ""
+
+msgid "Space Evenly Horizontally"
+msgstr ""
+
+msgid "Space Evenly Vertically"
+msgstr ""
+
+msgid "Spacing"
 msgstr ""
 
 msgid "Start"
@@ -490,14 +607,26 @@ msgstr ""
 msgid "Unset default diagram"
 msgstr ""
 
+msgid "Upwards most"
+msgstr ""
+
 msgid ""
 "Use the <i>Send</i> button to send this error information directly on our "
-"server. If the <i>Include project</i> option is checked your current "
-"project will be send to the server as well. You can also write some "
-"basic information about what were you doing when this exception occured in "
-"the <i>User comments</i> tab to help us recreate it. Or you can use the "
-"<i>Home</i> button to post this error directly on our websites bugreport. In "
-"case of problems, feel free to write us an email on :"
+"server. If the <i>Include project</i> option is checked your current project "
+"will be send to the server as well. You can also write some basic "
+"information about what were you doing when this exception occured in the "
+"<i>User comments</i> tab to help us recreate it. Or you can use the <i>Home</"
+"i> button to post this error directly on our websites bugreport. In case of "
+"problems, feel free to write us an email on :"
+msgstr ""
+
+msgid ""
+"Use the <i>Send</i> button to send this warning information directly on our "
+"server. If the <i>Include project</i> option is checked your current project "
+"will be send to the server as well. You can also write some basic "
+"information about what were you doing when this warning occured in the "
+"<i>User comments</i> tab to help us recreate it. In case of problems, feel "
+"free to write us an email on :"
 msgstr ""
 
 msgid "Uups! An error during sending occured:\n"
@@ -519,13 +648,16 @@ msgstr ""
 msgid "Version: %s"
 msgstr ""
 
+msgid "Vertical Spacing"
+msgstr ""
+
 msgid "Visible"
 msgstr ""
 
 msgid "Warning"
 msgstr ""
 
-msgid "_Warnings"
+msgid "Warning info"
 msgstr ""
 
 msgid ""
@@ -618,7 +750,16 @@ msgstr ""
 msgid "_View"
 msgstr ""
 
+msgid "_Warning info"
+msgstr ""
+
+msgid "_Warnings"
+msgstr ""
+
 msgid "_Z-Order"
+msgstr ""
+
+msgid "current"
 msgstr ""
 
 msgid "default file name"
@@ -630,7 +771,16 @@ msgstr ""
 msgid "metamodel"
 msgstr ""
 
+msgid "metamodel+plugin"
+msgstr ""
+
+msgid "most"
+msgstr ""
+
 msgid "none"
+msgstr ""
+
+msgid "plugin"
 msgstr ""
 
 msgid "project web"
