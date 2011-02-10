@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: UML .FRI 1.0-beta20090601\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-01 15:23+0200\n"
-"PO-Revision-Date: 2010-02-16 13:47+0100\n"
-"Last-Translator: tomassino8 <tomassino8@gmail.com>\n"
+"POT-Creation-Date: 2011-02-10 13:15+0100\n"
+"PO-Revision-Date: 2011-02-10 13:30+0100\n"
+"Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -24,6 +24,9 @@ msgstr "O projekte"
 #, python-format
 msgid "Academic year %s:"
 msgstr "Akademický rok %s"
+
+msgid "Active"
+msgstr "Aktívny"
 
 msgid "Add _element"
 msgstr "Pridať _element"
@@ -40,17 +43,8 @@ msgstr "Rozšírenie sa nepodarilo nainštalovať"
 msgid "Addons"
 msgstr "Rozšírenia"
 
-msgid "Align _bottom"
-msgstr "Zarovnať do_dola"
-
-msgid "Align _left"
-msgstr "Zarovnať do_ľava"
-
-msgid "Align _right"
-msgstr "Zarovnať do_prava"
-
-msgid "Align _top"
-msgstr "Zarovnať do_hora"
+msgid "Align"
+msgstr "Zarovnať"
 
 msgid "All files"
 msgstr "Všetky súbory"
@@ -85,11 +79,17 @@ msgstr "O jeden dopredu  "
 msgid "Bring To Top"
 msgstr "Presunúť dopredu"
 
+msgid "By Selected Element"
+msgstr "Podľa vybraného elementu"
+
 msgid "C_ontribute"
 msgstr "Pri_spieť"
 
 msgid "C_redits"
 msgstr "Auto_ri"
+
+msgid "Change source and target"
+msgstr "Zameň zdroj a cieľ"
 
 msgid "Close all diagram"
 msgstr "Zatvoriť všetky diagramy"
@@ -114,6 +114,24 @@ msgstr "Vytvoriť nový projekt"
 
 msgid "Create _New Project"
 msgstr "Vytvoriť _nový projekt"
+
+msgid "Current Center horizontaly"
+msgstr "Podľa vybraného centrovať horizontálne"
+
+msgid "Current center verticaly"
+msgstr "Podľa vybraného centrovať vertikálne"
+
+msgid "Current downwards"
+msgstr "Podľa vybraného nadol"
+
+msgid "Current left"
+msgstr "Podľa vybraného naľavo"
+
+msgid "Current right"
+msgstr "Podľa vybraného napravo"
+
+msgid "Current upwards"
+msgstr "Podľa vybraného nahor"
 
 msgid "Date"
 msgstr "Dátum poslednej zmeny"
@@ -160,6 +178,9 @@ msgstr "Chcete"
 msgid "Do you want to save project?"
 msgstr "Chcete uložiť projekt?"
 
+msgid "Downwards most"
+msgstr "Najviac nadol"
+
 msgid "Drag"
 msgstr "Ťahať"
 
@@ -186,6 +207,12 @@ msgstr "Chyba pri otváraní súboru"
 
 msgid "Error text"
 msgstr "Popis chyby"
+
+msgid "Evenly Horizontally"
+msgstr "Rozmiestniť horizontálne"
+
+msgid "Evenly Vertically"
+msgstr "Rozmiestniť vertikálne"
 
 msgid "Exception"
 msgstr "Výnimka"
@@ -241,17 +268,29 @@ msgstr "Voľne šíriteľný CASE nástroj vyvíjaný v pythone."
 msgid "GTK+ version"
 msgstr "Verzia GTK+:"
 
+msgid "Grid"
+msgstr "Mriežka"
+
+msgid "Grid is visible."
+msgstr "Mriežka je viditeľná"
+
+msgid "Grid will align diagram components."
+msgstr "Zarovnať komponenty na mriežku"
+
 msgid "Homepage"
 msgstr "Domovská stránka"
 
 msgid "Homepage:"
 msgstr "Domovská stránka:"
 
-msgid "Change source and target"
-msgstr "Zameň zdroj a cieľ"
+msgid "Horizontal Spacing"
+msgstr "Rozmiestniť horizontálne"
 
 msgid "I_nclude project"
 msgstr "V_lož projekt"
+
+msgid "Informations about the warning"
+msgstr "Informácie o varovaní"
 
 msgid "Install"
 msgstr "Inštalovať"
@@ -265,8 +304,20 @@ msgstr "Nainštalovať metamodel z aktuálneho projektu"
 msgid "Invalid connection"
 msgstr "Nepovolené spojenie"
 
+msgid "Left most"
+msgstr "Najviac doľava"
+
 msgid "License:"
 msgstr "Licencia:"
+
+msgid "Line Color 1"
+msgstr "Farba čiary 1"
+
+msgid "Line Color 2"
+msgstr "Farba čiary 2"
+
+msgid "Line Width"
+msgstr "Šírka čiary"
 
 msgid "Line color"
 msgstr "Farba čiary"
@@ -276,6 +327,18 @@ msgstr "Počítač"
 
 msgid "Metamodels"
 msgstr "Metamodely"
+
+msgid "Most Down"
+msgstr "Najviac nadol"
+
+msgid "Most Left"
+msgstr "Najviac naľavo"
+
+msgid "Most Right"
+msgstr "Najviac napravo"
+
+msgid "Most Up"
+msgstr "Najviac nahor"
 
 msgid "Name"
 msgstr "Názov"
@@ -291,9 +354,6 @@ msgstr "Písmo názvu"
 
 msgid "Notes"
 msgstr "Poznámky"
-
-msgid "Object"
-msgstr "Objekt"
 
 msgid "Open Existing Project"
 msgstr "Otvoriť existujúci projekt"
@@ -315,6 +375,9 @@ msgstr "P_NG"
 
 msgid "P_S"
 msgstr "P_S"
+
+msgid "Padding:"
+msgstr "Výplň"
 
 msgid "Pages"
 msgstr "Záložky"
@@ -364,6 +427,33 @@ msgstr "Farba štvoruholníka"
 msgid "Rectangle width"
 msgstr "Šírka štvoruholníka"
 
+msgid "Resize By Max"
+msgstr "Zväčšiť na maximálny"
+
+msgid "Resize By Min"
+msgstr "Zmenšiť na minimálny"
+
+msgid "Resize Height"
+msgstr "Zmeniť výšku"
+
+msgid "Resize Hight and Width"
+msgstr "Zmeniť výšku a šírku"
+
+msgid "Resize Width"
+msgstr "Zmeniť šírku"
+
+msgid "Resize by Maximal Element"
+msgstr "Zväčšiť na maximálny"
+
+msgid "Resize by Minimal Element"
+msgstr "Zmenšiť na minimálny"
+
+msgid "Resize elements"
+msgstr "Zmena veľkosti elementov"
+
+msgid "Right most"
+msgstr "Najviac doprava"
+
 msgid "S_VG"
 msgstr "S_VG"
 
@@ -399,6 +489,55 @@ msgstr "Farba tieňa"
 
 msgid "Show in project view"
 msgstr "Nájdi v strome projektu"
+
+msgid "Sizing"
+msgstr "Zmeniť veľkosť"
+
+msgid "Snap breakpoints"
+msgstr "Uchytiť zalomenia"
+
+msgid "Snap centers"
+msgstr "Uchytiť stredy"
+
+msgid "Snap connection breakpoints."
+msgstr "Uchytiť prepojovacie zalomenia"
+
+msgid "Snap corners"
+msgstr "Uchytiť okraje"
+
+msgid "Snap mode:"
+msgstr "Mód uchytenia"
+
+msgid "Snap position"
+msgstr "Uchytiť pozíciu"
+
+msgid "Snap selected elements on grid."
+msgstr "Uchytiť vybrané elementy na mriežku"
+
+msgid "Snap selected to grid"
+msgstr "Uchytiť výber na mriežku"
+
+msgid "Snap to element centers."
+msgstr "Uchytiť na stredy elementov"
+
+msgid ""
+"Snap to element corners \n"
+"(the one that is closest to the grid)"
+msgstr ""
+"Uchytiť na rohy elementu \n"
+"(podľa najbližšieho k mriežke)"
+
+msgid "Snap top left corner of elements to grid."
+msgstr "Uchytiť ľavý horný okraj na mriežku"
+
+msgid "Space Evenly Horizontally"
+msgstr "Rozmiestniť horizontálne"
+
+msgid "Space Evenly Vertically"
+msgstr "Rozmiestniť vertikálne"
+
+msgid "Spacing"
+msgstr "Rozmiestniť"
 
 msgid "Start"
 msgstr "Spustiť"
@@ -495,7 +634,13 @@ msgstr "Žilinská univerzita"
 msgid "Unset default diagram"
 msgstr "Zrušiť nastavenie východzieho diagramu"
 
+msgid "Upwards most"
+msgstr "Najviac nahor"
+
 msgid "Use the <i>Send</i> button to send this error information directly on our server. If the <i>Include project</i> option is checked your current project will be send to the server as well. You can also write some basic information about what were you doing when this exception occured in the <i>User comments</i> tab to help us recreate it. Or you can use the <i>Home</i> button to post this error directly on our websites bugreport. In case of problems, feel free to write us an email on :"
+msgstr "Stlačte tlačítko <i>Poslať</i> na odoslanie tejto chyby priamo na náš server. Ak je zaznačené <i>Vlož projekt</i>, váš aktuálny projekt bude priložený k tejto správe. Taktiež môžete napísať základné informácie o tom, čo ste robili, keď došlo k vyvolaniu tejto výnimky v záložke <i>Poznámky užívateľa</i> a tak nám pomocť zreprodukovať vyvolanú výnimku. Tlačítko <i>Domov</i> môžete použiť pre zaslanie údajov o tejto chybe do systému správy chýb na našej stránke. V prípade problémov nám napíšte na našu emailovú adresu :"
+
+msgid "Use the <i>Send</i> button to send this warning information directly on our server. If the <i>Include project</i> option is checked your current project will be send to the server as well. You can also write some basic information about what were you doing when this warning occured in the <i>User comments</i> tab to help us recreate it. In case of problems, feel free to write us an email on :"
 msgstr "Stlačte tlačítko <i>Poslať</i> na odoslanie tejto chyby priamo na náš server. Ak je zaznačené <i>Vlož projekt</i>, váš aktuálny projekt bude priložený k tejto správe. Taktiež môžete napísať základné informácie o tom, čo ste robili, keď došlo k vyvolaniu tejto výnimky v záložke <i>Poznámky užívateľa</i> a tak nám pomocť zreprodukovať vyvolanú výnimku. Tlačítko <i>Domov</i> môžete použiť pre zaslanie údajov o tejto chybe do systému správy chýb na našej stránke. V prípade problémov nám napíšte na našu emailovú adresu :"
 
 msgid "Uups! An error during sending occured:\n"
@@ -520,14 +665,17 @@ msgstr "Verzia"
 msgid "Version: %s"
 msgstr "Verzia: %s"
 
+msgid "Vertical Spacing"
+msgstr "Rozmiestniť vertikálne"
+
 msgid "Visible"
 msgstr "Viditeľnosť"
 
 msgid "Warning"
 msgstr "Varovanie"
 
-msgid "_Warnings"
-msgstr "Zobraziť v_arovania"
+msgid "Warning info"
+msgstr "Varovanie"
 
 msgid ""
 "We are looking for people willing to help us improve our\n"
@@ -564,6 +712,9 @@ msgstr "Zväčšenie:"
 
 msgid "_Add diagram"
 msgstr "Pridať _diagram"
+
+msgid "_Align and Distribute"
+msgstr "Rozmiestniť a upraviť"
 
 msgid "_Commandbar"
 msgstr "_Stavový riadok"
@@ -628,8 +779,17 @@ msgstr "_Poznámky užívateľa"
 msgid "_View"
 msgstr "_Zobraziť"
 
+msgid "_Warning info"
+msgstr "Zobraziť varovania"
+
+msgid "_Warnings"
+msgstr "Zobraziť v_arovania"
+
 msgid "_Z-Order"
 msgstr "_Poradie"
+
+msgid "current"
+msgstr "vybraný"
 
 msgid "default file name"
 msgstr "Východzie meno súboru"
@@ -640,11 +800,36 @@ msgstr "Verzia knižnice etree"
 msgid "metamodel"
 msgstr "metamodel"
 
+msgid "metamodel+plugin"
+msgstr "metamodel + plugin"
+
+msgid "most"
+msgstr "najviac"
+
 msgid "none"
 msgstr "nič"
 
+msgid "plugin"
+msgstr "Zásuvné moduly"
+
 msgid "project web"
 msgstr "Web projektu"
+
+#, fuzzy
+#~ msgid "Exit"
+#~ msgstr "_Upraviť"
+
+#~ msgid "Align _bottom"
+#~ msgstr "Zarovnať do_dola"
+
+#~ msgid "Align _left"
+#~ msgstr "Zarovnať do_ľava"
+
+#~ msgid "Align _right"
+#~ msgstr "Zarovnať do_prava"
+
+#~ msgid "Object"
+#~ msgstr "Objekt"
 
 #~ msgid "Class diagram"
 #~ msgstr "Diagram tried"
