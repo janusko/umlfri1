@@ -84,7 +84,7 @@ class CSocketWrapper(object):
         Close socket
         '''
         self.state = False
-        self.socket.close()
+        self.sock.close()
     
     def Opened(self):
         '''
