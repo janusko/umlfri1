@@ -221,9 +221,6 @@ msgstr ""
 msgid "Exception traceback (most recent call last)"
 msgstr ""
 
-msgid "Exit"
-msgstr ""
-
 msgid "Export diagram"
 msgstr ""
 

@@ -475,13 +475,6 @@
                         <property name="use_stock">True</property>
                       </widget>
                     </child>
-                    <child>
-                      <widget class="GtkMenuItem" id="mnuExit">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">Exit</property>
-                        <property name="use_underline">True</property>
-                      </widget>
-                    </child>
                   </widget>
                 </child>
               </widget>
@@ -607,7 +600,7 @@
                       <widget class="GtkToolButton" id="cmdAlignLeftMost">
                         <property name="visible">True</property>
                         <property name="label" translatable="yes">Most Left</property>
-                        <property name="icon">AlignMostLeft.png</property>
+                        <property name="icon">../img/AlignMostLeft.png</property>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
@@ -618,7 +611,7 @@
                       <widget class="GtkToolButton" id="cmdAlignRightMost">
                         <property name="visible">True</property>
                         <property name="label" translatable="yes">Most Right</property>
-                        <property name="icon">AlignMostRight.png</property>
+                        <property name="icon">../img/AlignMostRight.png</property>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
@@ -629,7 +622,7 @@
                       <widget class="GtkToolButton" id="cmdAlignUpMost">
                         <property name="visible">True</property>
                         <property name="label" translatable="yes">Most Up</property>
-                        <property name="icon">AlignMostUp.png</property>
+                        <property name="icon">../img/AlignMostUp.png</property>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
@@ -640,7 +633,7 @@
                       <widget class="GtkToolButton" id="cmdAlignDownMost">
                         <property name="visible">True</property>
                         <property name="label" translatable="yes">Most Down</property>
-                        <property name="icon">AlignMostDown.png</property>
+                        <property name="icon">../img/AlignMostDown.png</property>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
@@ -651,7 +644,7 @@
                       <widget class="GtkToolButton" id="cmdSpaceEvenlyHorizontally">
                         <property name="visible">True</property>
                         <property name="label" translatable="yes">Evenly Horizontally</property>
-                        <property name="icon">SpaceHoriz.png</property>
+                        <property name="icon">../img/SpaceHoriz.png</property>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
@@ -662,7 +655,7 @@
                       <widget class="GtkToolButton" id="cmdSpaceEvenlyVertically">
                         <property name="visible">True</property>
                         <property name="label" translatable="yes">Evenly Vertically</property>
-                        <property name="icon">SpaceVertic.png</property>
+                        <property name="icon">../img/SpaceVertic.png</property>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
@@ -673,7 +666,7 @@
                       <widget class="GtkToolButton" id="cmdResizeByMax">
                         <property name="visible">True</property>
                         <property name="label" translatable="yes">Resize By Max</property>
-                        <property name="icon">ResByMax.png</property>
+                        <property name="icon">../img/ResByMax.png</property>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
@@ -684,7 +677,7 @@
                       <widget class="GtkToolButton" id="cmdResizeByMin">
                         <property name="visible">True</property>
                         <property name="label" translatable="yes">Resize By Min</property>
-                        <property name="icon">ResByMin.png</property>
+                        <property name="icon">../img/ResByMin.png</property>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
