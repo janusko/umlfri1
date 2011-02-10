@@ -7,10 +7,10 @@ from lib.Addons.Plugin.Communication.Encoding import *
 
 class CInterface(object):
     
-    def __init__(self, port):
+    def __init__(self, sock):
         self.mainloop = CEmpty()
         self.inmainloop = False
-        self.connection = CConnection(port, self.mainloop)
+        self.connection = CConnection(sock, self.mainloop)
         self.adapter = classes['IAdapter']('#adapter', self.connection)
         self.stopaction = None
     

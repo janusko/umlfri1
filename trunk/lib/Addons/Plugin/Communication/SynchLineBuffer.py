@@ -1,4 +1,4 @@
-import socket
+from lib.Addons.Plugin.Communication.Medium import MediumError, MediumTimeout
 
 class CSynchLineBuffer(object):
     '''
@@ -10,7 +10,6 @@ class CSynchLineBuffer(object):
         @param sock: connected socket object
         '''
         self.sock = sock
-        self.sock.settimeout(1.)
         self.buf = []
         self.state = True
         self.last = ''
@@ -23,16 +22,16 @@ class CSynchLineBuffer(object):
         '''
         if self.state:
             try:
-                data = self.sock.recv(0x10000)
-            except socket.timeout:
+                data = self.sock.Recv(0x10000)
+            except MediumTimeout:
                 return
-            except socket.error:
+            except MediumError:
                 self.state = None
-                self.sock.close()
+                self.sock.Close()
                 return
             if data == '':
                 self.state = None
-                self.sock.close()
+                self.sock.Close()
                 return
             data = ''.join((self.last, data))
             lines = data.splitlines(True)

@@ -1,9 +1,9 @@
-import thread, base64, array, socket
+import thread, base64, array
 from CommandParser import CCommandParser
 from SynchLineBuffer import CSynchLineBuffer
 from ComSpec import *
 from lib.consts import PLUGIN_DISPLAY_COMMUNICATION
-
+from lib.Addons.Plugin.Communication.Medium import MediumError, MediumTimeout
 
 class CSocketWrapper(object):
     
@@ -66,13 +66,13 @@ class CSocketWrapper(object):
                     for line in data.splitlines():
                         print `line+'\n'`
                 
-                self.sock.sendall(data)
+                self.sock.Send(data)
                 result = True
             
-            except socket.timeout:
+            except MediumTimeout:
                 pass
             
-            except socket.error:
+            except MediumError:
                 self.state = False
             
             finally:
@@ -84,7 +84,7 @@ class CSocketWrapper(object):
         Close socket
         '''
         self.state = False
-        self.sock.close()
+        self.sock.Close()
     
     def Opened(self):
         '''
@@ -93,5 +93,5 @@ class CSocketWrapper(object):
         if not self.state:
             return False
         else:
-            self.state = not isinstance(self.sock._sock, socket._closedsocket)
+            self.state = self.sock.IsOpened()
             return self.state

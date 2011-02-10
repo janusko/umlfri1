@@ -1,4 +1,6 @@
 import thread, socket
+from lib.Addons.Plugin.Communication.Medium import SocketMedium
+
 
 class CAcceptServer(object):
     '''
@@ -64,7 +66,7 @@ class CAcceptServer(object):
                 try:
                     sock, addr = self.sock.accept()
                     if self.run:
-                        self.callback(sock, addr)
+                        self.callback(SocketMedium(sock), addr)
                     else:
                         sock.close()
                     

@@ -1,4 +1,3 @@
-import socket
 import thread
 import ComSpec
 from ComSpec import *
@@ -10,12 +9,10 @@ from ExceptionCarrier import CExceptionCarrier
 
 class CConnection(object):
     
-    def __init__(self, port, mainloop):
+    def __init__(self, sock, mainloop):
         self.lock = thread.allocate()
         self.lastid = 0
         self.results = {}
-        sock = socket.socket()
-        sock.connect(('localhost', port))
         self.wrapper = CSocketWrapper(sock, self, None, False)
         self.guicallback = {}
         self.mainloop = mainloop
