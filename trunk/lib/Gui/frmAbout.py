@@ -68,8 +68,10 @@ class CfrmAbout(CWindow):
         self.lbtnProjectWeb.set_label(WEB)
         
         if not self.showport:
-            self.buff.insert_with_tags_by_name(self.textiter, ((u"\n%%-%ds  : "%self.lengthname)%u"PORT:").encode('utf8'), 'bold')
-            self.buff.insert_with_tags_by_name(self.textiter, str(self.application.GetPluginPort()), 'mono')
+            port = self.application.GetPluginPort()
+            if port:
+                self.buff.insert_with_tags_by_name(self.textiter, ((u"\n%%-%ds  : "%self.lengthname)%u"Plugin port").encode('utf8'), 'bold')
+                self.buff.insert_with_tags_by_name(self.textiter, str(port), 'mono')
             self.showport = True
         
         self.form.run()

@@ -23,8 +23,9 @@ class CPluginManager(object):
         self.pluginAdapter = pluginAdapter
         pluginAdapter._SetPluginManager(self)
         self.proxy = CCore(self, pluginAdapter)
-        self.acceptserver = CAcceptServer(('localhost', PLUGIN_SOCKET), self.NewConnection)
-        self.acceptserver.Start()
+        if PLUGIN_SOCKET is not None:
+            self.acceptserver = CAcceptServer(('localhost', PLUGIN_SOCKET), self.NewConnection)
+            self.acceptserver.Start()
     
     def NewConnection(self, sock, addr):
         '''
@@ -79,7 +80,10 @@ class CPluginManager(object):
             self.conlock.release()
             
     def GetPort(self):
-        return self.acceptserver.GetPort()
+        if PLUGIN_SOCKET is not None:
+            return self.acceptserver.GetPort()
+        else:
+            return None
     
     def GetTransaction(self, addr):
         return self.transaction[addr]

@@ -17,22 +17,24 @@ class PipeMedium(object):
         except OSError:
             return True
             
-    def isOpened(self):
-        return self.__isOpened and not self._isClosedSocket()
+    def IsOpened(self):
+        return self.__isOpened and not self._isClosedPipe()
         
-    def recv(self, buflen):
+    def Recv(self, buflen):
         try:
             if self.__isOpened:
-                data = os.read(self.__fw, buflen)
+                data = os.read(self.__fr, buflen)
                 if data == '':
                     self.__isOpened = False
                 return data
+            else:
+                return ''
         
         except OSError:
             self.__isOpened = False
             raise MediumError()
         
-    def send(self, buffer):
+    def Send(self, buffer):
         try:
             if self.__isOpened:
                 os.write(self.__fw, buffer)
@@ -43,7 +45,7 @@ class PipeMedium(object):
             self.__isOpened = False
             raise MediumError()
     
-    def close(self):
+    def Close(self):
         try:
             os.close(self.__fr)
         except OSError:
