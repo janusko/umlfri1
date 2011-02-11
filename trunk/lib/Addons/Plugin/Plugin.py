@@ -42,11 +42,8 @@ class CPlugin(object):
     def Kill(self):
         self.__starter.Kill()
     
-    def Poll(self):
-        return self.__starter.Poll()
-        
     def IsAlive(self):
-        return self.Poll() is None
+        return self.__starter.IsAlive()
     
     def _SetPluginManager(self, manager):
         self.__pluginManager = weakref.ref(manager)

@@ -26,3 +26,14 @@ class CCompositeAddonComponent(object):
     def Stop(self):
         self.__metamodel.Stop()
         self.__plugin.Stop()
+    
+    def Terminate(self):
+        self.__metamodel.Terminate()
+        self.__plugin.Terminate()
+        
+    def Kill(self):
+        self.__metamodel.Kill()
+        self.__plugin.Kill()
+        
+    def IsRunning(self):
+        return self.__metamodel.IsRunning() or self.__plugin.IsRunning()

@@ -1,8 +1,8 @@
 import socket
-from mediumTimeout import MediumTimeout
-from mediumError import MediumError
+from MediumTimeout import MediumTimeout
+from MediumError import MediumError
 
-class SocketMedium(object):
+class CSocketMedium(object):
     
     def __init__(self, item):
         if isinstance(item, (int, long)):
