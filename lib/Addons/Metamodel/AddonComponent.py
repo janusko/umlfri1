@@ -63,3 +63,12 @@ class CMetamodelAddonComponent(object):
     
     def Stop(self):
         pass
+    
+    def Terminate(self):
+        pass
+        
+    def Kill(self):
+        pass
+        
+    def IsRunning(self):
+        return self.__addon.IsEnabled()

@@ -49,6 +49,15 @@ class CAddon(object):
     
     def Stop(self):
         self.__component.Stop()
+        
+    def Terminate(self):
+        self.__component.Terminate()
+    
+    def Kill(self):
+        self.__component.Kill()
+        
+    def IsRunning(self):
+        return self.__component.IsRunning()
     
     def GetAuthor(self):
         return self.__author

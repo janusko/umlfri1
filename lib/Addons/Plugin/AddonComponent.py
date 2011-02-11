@@ -58,3 +58,18 @@ class CPluginAddonComponent(object):
         if self.__patches is not None:
             for patch in self.__patches:
                 patch.Stop()
+                
+    def Terminate(self):
+        if self.__plugin is not None:
+            self.__plugin.Terminate()
+            
+    def Kill(self):
+        if self.__plugin is not None:
+            self.__plugin.Kill()
+            
+    def IsRunning(self):
+        if self.__plugin is not None:
+            return self.__plugin.IsAlive()
+        else:
+            return False
+        

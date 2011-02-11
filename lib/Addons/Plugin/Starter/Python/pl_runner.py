@@ -21,9 +21,9 @@ sys.path.insert(0, path)
 
 import plugin
 from lib.Addons.Plugin.Client.Interface import CInterface
-from lib.Addons.Plugin.Communication.Medium import PipeMedium
+from lib.Addons.Plugin.Communication.Medium import CPipeMedium
 
-pipe = PipeMedium(pin, pout)
+pipe = CPipeMedium(pin, pout)
 interface = CInterface(pipe)
 interface._Init(uri)
 plugin.pluginMain(interface)

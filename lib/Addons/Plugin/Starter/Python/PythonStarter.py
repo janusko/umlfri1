@@ -1,7 +1,7 @@
 from lib.config import config
 from lib.Distconfig import ROOT_PATH, IS_FROZEN
 from lib.Depend.sysplatform import getPythonVersion
-from lib.Addons.Plugin.Communication.Medium import PipeMedium
+from lib.Addons.Plugin.Communication.Medium import CPipeMedium
 from multiprocessing.forking import duplicate
 
 import os
@@ -32,7 +32,7 @@ class CPythonStarter(object):
         
         pin = os.pipe()
         pout = os.pipe()
-        self.__plugin.GetPluginManager().NewConnection(PipeMedium(pin[0], pout[1]), (pin[0], pout[1]))
+        self.__plugin.GetPluginManager().NewConnection(CPipeMedium(pin[0], pout[1]), (pin[0], pout[1]))
         
         if os.name == 'nt':
             import msvcrt

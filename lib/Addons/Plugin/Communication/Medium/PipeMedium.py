@@ -1,8 +1,8 @@
 import os
-from mediumTimeout import MediumTimeout
-from mediumError import MediumError
+from MediumTimeout import MediumTimeout
+from MediumError import MediumError
 
-class PipeMedium(object):
+class CPipeMedium(object):
     
     def __init__(self, fr, fw):
         self.__fr = fr
