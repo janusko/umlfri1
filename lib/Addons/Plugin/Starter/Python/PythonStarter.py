@@ -79,8 +79,10 @@ class CPythonStarter(object):
         if os.name == 'nt':
             return self.__process.poll() is None
         else:
-            try:
-                os.kill(self.__pid, 0)
-                return True
-            except:
-                return False
+            return (0, 0) == os.waitpid(self.__pid, os.WNOHANG)
+    
+    def GetPid(self):
+        if os.name == 'nt':
+            return self.__process.pid
+        else:
+            return self.__pid

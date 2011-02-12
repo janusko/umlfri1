@@ -23,3 +23,18 @@ class IGuiManager(IBase):
     
     def DisplayWarning(him, text):
         him.DisplayWarning(text)
+        
+    @mainthread
+    @includeAddr
+    def DeleteMe(him, _addr=None):
+        him.DisposeOf(_addr)
+    
+    @mainthread
+    @includeAddr
+    def HideMe(him, _addr=None):
+        him.Hide(_addr)
+    
+    @mainthread
+    @includeAddr
+    def ShowMe(him, _addr=None):
+        him.Show(_addr)

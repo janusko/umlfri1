@@ -277,3 +277,9 @@ class CfrmAddons(CWindow):
                 self.mnuHomepagePlugin.set_sensitive(addon.GetHomepage() is not None)
                 
                 self.mnuPlugin.popup(None, None, None, event.button, event.time)
+    
+    @event("cmdPluginStop", "clicked")
+    def on_cmdPluginStop_click(self, button):
+        addon = self.__GetSelectedAddon(self.twPluginList)
+        if addon is not None and addon.IsRunning:
+            addon.Stop()

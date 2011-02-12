@@ -5,6 +5,7 @@ from Interface.Core import CCore
 from Interface.Transaction import CTransaction
 from Interface.Classes.base import IBase
 from lib.consts import *
+from Watchdog import CWatchdog
 import thread
 
 class CPluginManager(object):
@@ -16,13 +17,16 @@ class CPluginManager(object):
 
     def __init__(self, pluginAdapter):
         IBase.SetAdapter(pluginAdapter)
+        self.pluginlock = thread.allocate()
         self.plugins = {}
         self.conlock = thread.allocate()
         self.connection = {}
         self.transaction = {}
+        self.addr2uri = {}
         self.pluginAdapter = pluginAdapter
         pluginAdapter._SetPluginManager(self)
         self.proxy = CCore(self, pluginAdapter)
+        self.watchdog = CWatchdog(self)
         if PLUGIN_SOCKET is not None:
             self.acceptserver = CAcceptServer(('localhost', PLUGIN_SOCKET), self.NewConnection)
             self.acceptserver.Start()
@@ -34,24 +38,25 @@ class CPluginManager(object):
         @param sock: connected socket from plugin
         @param addr: identifier of connection
         '''
-        try:
-            self.conlock.acquire()
+        with self.conlock:
             self.transaction[addr] = CTransaction()
             self.connection[addr] = CSocketWrapper(sock, self.proxy, addr, True)
-        finally:
-            self.conlock.release()
     
     def AddPlugin(self, plugin):
-        if plugin.GetUri() in self.plugins:
-            raise Exception() # TODO: replace with better exception
-        self.plugins[plugin.GetUri()] = plugin
-        plugin._SetPluginManager(self)
+        with self.pluginlock:
+            uri = plugin.GetUri()
+            if uri in self.plugins:
+                raise Exception() # TODO: replace with better exception
+            self.plugins[uri] = plugin
+            plugin._SetPluginManager(self)
     
     def ConnectPlugin(self, uri, addr):
-        if self.plugins[uri].IsInitialized():
-            raise Exception() # TODO: replace with better exception
-        
-        self.plugins[uri]._Connect(addr)
+        with self.pluginlock:
+            if self.plugins[uri].IsInitialized():
+                raise Exception() # TODO: replace with better exception
+            
+            self.addr2uri[addr] = uri
+            self.plugins[uri]._Connect(addr)
     
     def GetGuiManager(self):
         '''
@@ -63,21 +68,19 @@ class CPluginManager(object):
         return self.pluginAdapter
     
     def Send(self, addr, code, **params):
-        if addr not in self.connection:
-            return
-        if self.connection[addr].Opened():
-            self.connection[addr].Send(code, '', params)
-        else:
-            del self.connection[addr]
+        with self.conlock:
+            if addr not in self.connection:
+                return
+            if self.connection[addr].Opened():
+                self.connection[addr].Send(code, '', params)
+            else:
+                del self.connection[addr]
             
     
     def SendToAll(self, code, **params):
-        try:
-            self.conlock.acquire()
+        with self.conlock:
             for addr in self.connection.keys(): #this must use list, not iterator (beware in python 3.x)
                 self.Send(addr, code, **params)
-        finally:
-            self.conlock.release()
             
     def GetPort(self):
         if PLUGIN_SOCKET is not None:
@@ -87,4 +90,35 @@ class CPluginManager(object):
     
     def GetTransaction(self, addr):
         return self.transaction[addr]
+    
+    def GetPluginList(self):
+        with self.pluginlock:
+            return list(self.plugins.itervalues()) 
+        #this is required to return list because it is used 
+        # for iteration and is likely to change
+    
+    def RemovePlugin(self, plugin):
+        plugin.IsAlive()
+        self.__removePlugin(plugin.GetUri(), plugin.GetAddr())
+    
+    def __removePlugin(self, uri, addr):
+        with self.pluginlock:
+            with self.conlock:
+                if uri in self.plugins:
+                    self.plugins[uri].IsAlive() #just to make sure that process won't remain zombie
+                    del self.plugins[uri]
+                if addr in self.connection:
+                    self.connection[addr].Close()
+                    del self.connection[addr]
+    
+    def RemoveByAddr(self, addr):
+        self.__removePlugin(self.addr2uri.get(addr, None), addr)
+        
+        self.GetGuiManager().DisposeOf(addr)
+        
+    def Stop(self):
+        self.watchdog.Stop()
+        if PLUGIN_SOCKET is not None:
+            self.acceptserver.Stop()
+            
     

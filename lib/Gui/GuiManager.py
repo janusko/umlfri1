@@ -79,3 +79,13 @@ class CGuiManager(CBaseObject):
                 CGuiManager.items.remove(i)
             del self.owners[addr]
     
+    def Hide(self, addr):
+        if addr in self.owners:
+            for i in self.owners[addr]:
+                i.Hide()
+                
+    def Show(self, addr):
+        if addr in self.owners:
+            for i in self.owners[addr]:
+                i.Show()
+        

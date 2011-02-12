@@ -1,4 +1,4 @@
-import thread, time, sys, socket, re, traceback
+import time, sys, socket, re, traceback
 from lib.Depend.gtk2 import gtk
 from lib.Addons.Plugin.Communication.ComSpec import *
 from lib.Exceptions import *
@@ -20,6 +20,7 @@ class CCore(object):
         pass
     
     def Stopped(self, id):
+        self.manager.RemoveByAddr(id)
         return True
     
     def Command(self, command, params, data, addr):
