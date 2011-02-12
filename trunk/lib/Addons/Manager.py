@@ -271,3 +271,4 @@ class CAddonManager(object):
     def StopAll(self):
         for addon in self.__addons.itervalues():
             addon.Stop()
+        self.__pluginManager.Stop()

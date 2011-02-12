@@ -27,6 +27,15 @@ class CWidget(lib.GenericGui.CWidget):
             raise PluginAccessDenied()
             
     def Remove(self):
-        self.obj.parent.remove(self.obj)
+        if self.obj is not None and self.obj.parent is not None:
+            self.obj.parent.remove(self.obj)
         self.obj = None
+        
+    def Hide(self):
+        if self.obj is not None:
+            self.obj.hide()
+        
+    def Show(self):
+        if self.obj is not None:
+            self.obj.show()
     
