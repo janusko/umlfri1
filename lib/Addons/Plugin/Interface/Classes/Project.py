@@ -24,7 +24,7 @@ class IProject(IBase):
     def Save(him):
         him.SaveProject()
     
-    def SaveAs(him, fileName, isZippedFile)
+    def SaveAs(him, fileName, isZippedFile):
         him.SaveProject(fileName, isZippedFile)
     
 
