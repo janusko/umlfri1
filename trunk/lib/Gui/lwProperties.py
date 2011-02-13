@@ -82,26 +82,16 @@ class ClwProperties(CWidget):
         DType = object.GetDomainType(prefix)
         
         for attrID in DType.IterAttributeIDs():
-            if DType.IsHidden(attrID):
-                continue
-                
-            row = self.treeStore.append(parent)
             identifier = ('.' if prefix else '') + attrID
             type = DType.GetAttribute(attrID)['type']
             name = DType.GetAttribute(attrID)['name']
             
-            if not DType.IsAtomic(domain = type):
-                self.treeStore.set(row, 
-                    ID_ID, identifier,
-                    ID_NAME, name, 
-                    ID_VALUE, '', #text representation of nested item
-                    ID_TEXT_VISIBLE, False, 
-                    ID_COMBO_VISIBLE, False, 
-                    ID_BUTTON_VISIBLE, False, 
-                    ID_EDITABLE, False)#Change to True if has parser
-                self._FillBody(object, row, prefix + identifier)
+            if DType.IsHidden(attrID) or type == 'list' or not DType.IsAtomic(domain = type):
+                continue
             
-            elif type in EDITABLE_COMBO_TYPES and not DType.GetAttribute(attrID).has_key('enum'):
+            row = self.treeStore.append(parent)
+            
+            if type in EDITABLE_COMBO_TYPES and not DType.GetAttribute(attrID).has_key('enum'):
                 self.treeStore.set(row, 
                     ID_ID, identifier,
                     ID_NAME, name, 
@@ -125,20 +115,6 @@ class ClwProperties(CWidget):
                     ID_EDITABLE, type in EDITABLE_COMBO_TYPES, 
                     ID_MODEL, model,)
             
-            elif type == 'list':
-                self.treeStore.set(row, 
-                    ID_ID, identifier,
-                    ID_NAME, name, 
-                    ID_VALUE, '', #text representation of list
-                    ID_TEXT_VISIBLE, False, 
-                    ID_COMBO_VISIBLE, False, 
-                    ID_BUTTON_VISIBLE, True, 
-                    ID_EDITABLE, False, #Change to True if has parser
-                    ID_BUTTON_TEXT, 'Add item',
-                    ID_ACTION, 'listadd',
-                    ID_COLOR, "")
-                for idx, item in enumerate(object.GetValue(prefix + identifier)):
-                    self._FillListItem(object, row, prefix + identifier, idx)
             elif type=='color':
                 color = gtk.gdk.color_parse(str(object.GetValue(prefix + identifier)))
                 text = '('+str(int(round(color.red / 256))) + ', '+str(int(round(color.green / 256))) + ', '+str(int(round(color.blue / 256))) +')'
@@ -153,6 +129,7 @@ class ClwProperties(CWidget):
                     ID_BUTTON_TEXT, text,
                     ID_ACTION, 'changecolor',
                     ID_COLOR, str(object.GetValue(prefix + identifier)))
+                    
             elif type=='font':
                 self.treeStore.set(row, 
                     ID_ID, identifier,
