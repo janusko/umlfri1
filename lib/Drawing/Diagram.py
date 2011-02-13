@@ -249,6 +249,8 @@ class CDiagram(CBaseObject):
                             if self.elements.index(el2) > zorder:
                                 elements.add(el2)
         elements |= set(self.GetSelectedElements())
+        condelta = self.grid.SnapPosition(delta) if self.grid.IsActive() \
+            else delta
         for el in elements:
             x, y = el.GetPosition(canvas)
             self.MoveElement(el, (x + deltax, y + deltay), canvas)
@@ -256,10 +258,7 @@ class CDiagram(CBaseObject):
                 for con in el.GetConnections():
                     if (con.GetSource() in elements) and (con.GetDestination() in elements):
                         if con not in movedCon:
-                            points = list(con.GetPoints(canvas))
-                            for idx, point in enumerate(points[1:-1], 1):
-                                pos = (point[0] + delta[0], point[1] + delta[1])
-                                self.MoveConnectionPoint(con, pos, idx, canvas)
+                            con.MoveAll(condelta, canvas)
                             movedCon.add(con)
         if canvas is not None:
             for conn in self.connections:

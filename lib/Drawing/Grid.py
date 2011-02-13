@@ -188,8 +188,12 @@ class CGrid(CBaseObject):
         conn.MovePoint(canvas, pos, idx)
     
     def IsActive(self):
+        if not self.local_settings:
+            self.active = config['/Grid/Active'] == 'true'
         return self.active
         
     def IsVisible(self):
+        if not self.local_settings:
+            self.visible = config['/Grid/Visible'] == 'true'
         return self.visible
     
