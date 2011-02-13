@@ -12,11 +12,6 @@ class CGrid(CBaseObject):
         self.UpdateState(local_settings)
         self.hor_spacing = 0
         self.ver_spacing = 0
-        self.needs_redraw = True
-        self.buffer = None
-    
-    def MarkToRedraw(self):
-        self.needs_redraw = True
     
     def Paint(self, canvas, viewport):
         '''
