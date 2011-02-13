@@ -1,11 +1,12 @@
-from base import Base
-from primitiveType import primitiveTypes, PrimitiveType
+from .base import Base
+from .primitiveType import primitiveTypes, PrimitiveType
 
 class ExceptionProperty(Base):
-    def __init__(self, name, exception, type, iterable = False, documentation = None):
+    def __init__(self, name, exception, type, index, iterable = False, documentation = None):
         Base.__init__(self, name, exception)
         self.__documentation = documentation
         self.__iterable = iterable
+        self.__index = index
         
         if type in primitiveTypes:
             self.__type = primitiveTypes[type]
@@ -27,6 +28,10 @@ class ExceptionProperty(Base):
     @property
     def documentation(self):
         return self.__documentation
+    
+    @property
+    def index(self):
+        return self.__index
     
     def _link(self, builder):
         Base._link(self, builder)

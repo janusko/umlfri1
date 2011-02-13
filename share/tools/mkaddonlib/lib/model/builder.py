@@ -1,21 +1,21 @@
-from baseContainer import BaseContainer
-from delegate import Delegate
-from delegateParameter import DelegateParameter
-from delegateReturn import DelegateReturn
-from delegateThrows import DelegateThrows
-from exception import Exception as ExceptionDefinition
-from exceptionProperty import ExceptionProperty
-from interface import Interface
-from interfaceMethod import InterfaceMethod
-from interfaceMethodParameter import InterfaceMethodParameter
-from interfaceMethodReturn import InterfaceMethodReturn
-from interfaceMethodThrows import InterfaceMethodThrows
-from interfaceProperty import InterfaceProperty
-from interfacePropertyGetter import InterfacePropertyGetter
-from interfacePropertyIndex import InterfacePropertyIndex
-from interfacePropertyIterator import InterfacePropertyIterator
-from interfacePropertySetter import InterfacePropertySetter
-from namespace import Namespace
+from .baseContainer import BaseContainer
+from .delegate import Delegate
+from .delegateParameter import DelegateParameter
+from .delegateReturn import DelegateReturn
+from .delegateThrows import DelegateThrows
+from .exception import Exception as ExceptionDefinition
+from .exceptionProperty import ExceptionProperty
+from .interface import Interface
+from .interfaceMethod import InterfaceMethod
+from .interfaceMethodParameter import InterfaceMethodParameter
+from .interfaceMethodReturn import InterfaceMethodReturn
+from .interfaceMethodThrows import InterfaceMethodThrows
+from .interfaceProperty import InterfaceProperty
+from .interfacePropertyGetter import InterfacePropertyGetter
+from .interfacePropertyIndex import InterfacePropertyIndex
+from .interfacePropertyIterator import InterfacePropertyIterator
+from .interfacePropertySetter import InterfacePropertySetter
+from .namespace import Namespace
 
 import os
 import os.path
@@ -33,6 +33,7 @@ class Builder(object):
     
     def __init__(self):
         self.__rootNamespace = Namespace(None, None)
+        self.__cache = {}
     
     def parse(self, dir = None):
         if dir is None:
@@ -55,6 +56,7 @@ class Builder(object):
     
     def finish(self):
         self.__rootNamespace._link(self)
+        self.__addToCache(self.__rootNamespace)
     
     def getRootNamespace(self):
         return self.__rootNamespace
@@ -71,6 +73,9 @@ class Builder(object):
             raise Exception
         
         return type
+    
+    def getTypeByFQN(self, fqn):
+        return self.__cache[fqn]
     
     ################
     ### Interface
@@ -230,6 +235,7 @@ class Builder(object):
         exception = ExceptionDefinition(
             name,
             namespace,
+            number = int(root.attrib['number']),
             documentation = self.__parseDocumentation(root.find(self.__xmlns%'documentation'))
         )
         
@@ -247,6 +253,7 @@ class Builder(object):
                     child.attrib['name'],
                     exception,
                     type = value.attrib['type'],
+                    index = int(child.attrib['index']),
                     iterable = iterable,
                     documentation = self.__parseDocumentation(child.find(self.__xmlns%'documentation'))
                 )
@@ -340,3 +347,13 @@ class Builder(object):
         if isinstance(object, BaseContainer):
             for child in object.children:
                 self.__printStructureHelper(child, level + 1)
+    
+    def __addToCache(self, object):
+        if object.fqn in self.__cache:
+            raise Exception()
+        
+        self.__cache[object.fqn] = object
+        
+        if isinstance(object, BaseContainer):
+            for child in object.children:
+                self.__addToCache(child)

@@ -1,4 +1,6 @@
 from lib.model import Builder
+from lib.generator import FileList
+from optparse import OptionParser
 
 builder = Builder()
 
@@ -7,4 +9,6 @@ builder.finish()
 
 root = builder.getRootNamespace()
 
-builder.printStructure()
+#builder.printStructure()
+
+

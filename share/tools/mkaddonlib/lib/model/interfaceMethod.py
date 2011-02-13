@@ -1,8 +1,8 @@
-from baseContainer import BaseContainer
-from interfaceMethodParameter import InterfaceMethodParameter
-from interfaceMethodReturn import InterfaceMethodReturn
+from .baseContainer import BaseContainer
+from .interfaceMethodParameter import InterfaceMethodParameter
+from .interfaceMethodReturn import InterfaceMethodReturn
 
-import helper
+from . import helper
 
 class InterfaceMethod(BaseContainer):
     def __init__(self, name, interface, apiName = None, mutator = False, transactional = True, documentation = None):

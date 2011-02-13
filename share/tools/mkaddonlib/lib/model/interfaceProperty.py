@@ -1,10 +1,10 @@
-from baseContainer import BaseContainer
-from identifier import Identifier
-from interfacePropertyGetter import InterfacePropertyGetter
-from interfacePropertySetter import InterfacePropertySetter
-from interfacePropertyIterator import InterfacePropertyIterator
-from interfacePropertyIndex import InterfacePropertyIndex
-from primitiveType import primitiveTypes, PrimitiveType
+from .baseContainer import BaseContainer
+from .identifier import Identifier
+from .interfacePropertyGetter import InterfacePropertyGetter
+from .interfacePropertySetter import InterfacePropertySetter
+from .interfacePropertyIterator import InterfacePropertyIterator
+from .interfacePropertyIndex import InterfacePropertyIndex
+from .primitiveType import primitiveTypes, PrimitiveType
 
 class InterfaceProperty(BaseContainer):
     def __init__(self, name, interface, type, singular = None, documentation = None):

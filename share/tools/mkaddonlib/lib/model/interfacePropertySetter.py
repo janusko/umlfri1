@@ -1,6 +1,6 @@
-from base import Base
+from .base import Base
 
-import helper
+from . import helper
 
 class InterfacePropertySetter(Base):
     def __init__(self, interfaceProperty, apiName = None, transactional = True):
@@ -37,7 +37,7 @@ class InterfacePropertySetter(Base):
     
     @property
     def fqn(self):
-        return self.parent.name + '::' + '__set__'
+        return self.parent.fqn + '::' + '__set__'
     
     @property
     def apiName(self):

@@ -1,6 +1,6 @@
-from base import Base
+from .base import Base
 
-import helper
+from . import helper
 
 class InterfacePropertyGetter(Base):
     def __init__(self, interfaceProperty, apiName = None):
@@ -36,7 +36,7 @@ class InterfacePropertyGetter(Base):
     
     @property
     def fqn(self):
-        return self.parent.name + '::' + '__get__'
+        return self.parent.fqn + '::' + '__get__'
     
     @property
     def apiName(self):

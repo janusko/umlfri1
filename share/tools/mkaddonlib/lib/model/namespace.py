@@ -1,4 +1,4 @@
-from baseContainer import BaseContainer
+from .baseContainer import BaseContainer
 
 class Namespace(BaseContainer):
     def __init__(self, name, parent):

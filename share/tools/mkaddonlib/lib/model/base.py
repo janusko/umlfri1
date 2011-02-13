@@ -1,4 +1,4 @@
-from identifier import Identifier
+from .identifier import Identifier
 
 class Base(object):
     def __init__(self, name, parent):

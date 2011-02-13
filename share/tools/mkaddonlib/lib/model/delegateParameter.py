@@ -1,7 +1,7 @@
-from base import Base
-from primitiveType import primitiveTypes, PrimitiveType
+from .base import Base
+from .primitiveType import primitiveTypes, PrimitiveType
 
-import helper
+from . import helper
 
 class DelegateParameter(Base):
     def __init__(self, name, delegate, type, apiName = None, required = True, default = None, documentation = None):
