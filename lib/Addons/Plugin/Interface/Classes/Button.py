@@ -7,12 +7,9 @@ class IButton(IWidget):
     
     __cls__ = lib.GenericGui.CButton
     
-    @result(r_str)
     def GetLabel(him):
         return him.GetLabel()
     
-    @result(r_none)
-    @parameter('value', t_str)
     @mainthread
     def SetLabel(him, value):
         him.SetLabel(value)

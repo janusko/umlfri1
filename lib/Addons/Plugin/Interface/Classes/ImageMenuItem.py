@@ -7,8 +7,6 @@ class IImageMenuItem(IMenuItem):
     
     __cls__ = lib.GenericGui.CImageMenuItem
     
-    @result(r_none)
-    @parameter('filename', t_str)
     @mainthread
     def SetImageFromFile(him, filename):
         him.SetImageFromFile(filename)

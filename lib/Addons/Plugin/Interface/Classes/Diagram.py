@@ -11,58 +11,39 @@ from lib.Addons.Plugin.Interface.Classes.DomainObject import IDomainObject
 class IDiagram(IDomainObject):
     __cls__ = CDiagram
     
-    @parameter('obj', t_classobject(CElementObject))
-    @result(r_object)
     def GetElement(him, obj):
         return him.HasElementObject(obj)
     
-    @parameter('obj', t_classobject(CConnectionObject))
-    @result(r_object)
     def GetConnection(him, obj):
         return him.GetConnection(obj)
     
-    @result(r_str)
     def GetPath(him):
         return him.GetPath()
     
-    @result(r_objectlist)
     def GetSelected(him):
         return list(him.GetSelected())
     
-    @parameter('nolabels', t_bool)
-    @result(r_objectlist)
     def GetSelectedElements(him, nolabels = False):
         return list(him.GetSelectedElements(nolabels))
     
-    @result(r_objectlist)
     def GetSelectedConnections(him): 
         return list(him.GetSelectedConnections)
         
-    @result(r_2x2intTuple)
     def GetSelectSquare(him):
         return him.GetSelectSquare(IBase.adapter.GetCanvas())
     
-    @parameter('pos', t_2intTuple)
-    @result(r_object)
     def GetElementAtPosition(him, pos): 
         return him.GetElementAtPosition(IBase.adapter.GetCanvas(), pos)
     
-    @parameter('topleft', t_2intTuple)
-    @parameter('bottomright', t_2intTuple)
-    @parameter('includeall', t_bool)
-    @result(r_objectlist)
     def GetElementsInRange(him, topleft, bottomright, includeall = True):
         return list(him.GetElementsInRange(IBase.adapter.GetCanvas(), topleft, bottomright, includeall))
     
-    @result(r_2x2intTuple)
     def GetSizeSquare(him):
         return him.GetSizeSquare(IBase.adapter.GetCanvas())
     
-    @result(r_objectlist)
     def GetElements(him):
         return list(him.GetElements())
         
-    @result(r_objectlist)
     def GetConnections(him):
         return list(him.GetConnections())
     
