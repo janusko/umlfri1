@@ -148,7 +148,7 @@ class CGrid(CBaseObject):
                 else:
                     pos = (new_bottom_right[0] - w, new_bottom_right[1] - h)
                 
-            element.SetPosition(pos)
+        element.SetPosition(pos)
     
     def ResizeElement(self, element, canvas):
         '''
