@@ -51,9 +51,11 @@ class CAddon(object):
         self.__component.Stop()
         
     def Terminate(self):
+        self.Disable()
         self.__component.Terminate()
     
     def Kill(self):
+        self.Disable()
         self.__component.Kill()
         
     def IsRunning(self):

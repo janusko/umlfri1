@@ -278,8 +278,30 @@ class CfrmAddons(CWindow):
                 
                 self.mnuPlugin.popup(None, None, None, event.button, event.time)
     
+    @event("mnuStartPlugin", "activate")
+    @event("cmdPluginStart", "clicked")
+    def on_cmdPluginStart_click(self, button):
+        addon = self.__GetSelectedAddon(self.twPluginList)
+        
+        if addon is not None and not addon.IsRunning():
+            addon.Start()
+            addon.Enable()
+            
+            iter = self.twPluginList.get_selection().get_selected()[1]
+            self.__PluginStore.set(iter, 2, True)
+            
+            self.PluginChanged()
+    
+    @event("mnuStopPlugin", "activate")
     @event("cmdPluginStop", "clicked")
     def on_cmdPluginStop_click(self, button):
         addon = self.__GetSelectedAddon(self.twPluginList)
-        if addon is not None and addon.IsRunning:
+        
+        if addon is not None and addon.IsRunning():
             addon.Stop()
+            addon.Disable()
+            
+            iter = self.twPluginList.get_selection().get_selected()[1]
+            self.__PluginStore.set(iter, 2, False)
+            
+            self.PluginChanged()
