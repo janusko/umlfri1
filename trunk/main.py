@@ -115,6 +115,7 @@ class Application(CApplication):
         return self.recentFiles
     
     def ProjectInit(self):
+        self.clipboard.Clear()
         if self.project is None:
             registrar.Clear()
             self.project = CProject(self.addonManager)
