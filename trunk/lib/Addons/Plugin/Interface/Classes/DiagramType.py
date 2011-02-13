@@ -19,4 +19,7 @@ class IDiagramType(IBase):
     def GetElements(him):
         ef = him.GetMetamodel().GetElementFactory()
         return [ef.GetElement(i) for i in him.GetElements()]
+   
+    def GetDomain(him):
+        return him.GetDomain()
         

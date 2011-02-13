@@ -11,9 +11,15 @@ class IWidget(IBase):
         return him.GetGuiId()
     
     @mainthread
-    def SetSensitive(him, value):
+    def SetEnabled(him, value):
         him.SetSensitive(value)
         
-    def GetSensitive(him):
+    def GetEnabled(him):
         return him.GetSensitive()
+    
+    def GetVisible(him):
+        return him.GetVisible()
+        
+    def SetVisible(him, value):
+        him.SetVisible(value)
     

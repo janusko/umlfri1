@@ -10,6 +10,9 @@ from lib.Project import CProjectNode
 class IElementObject(IDomainObject):
     __cls__ = CElementObject
     
+    def GetName(him):
+        return him.GetName()
+    
     def GetDiagrams(him):
         node = him.GetNode()
         if node is not None:
@@ -18,9 +21,12 @@ class IElementObject(IDomainObject):
     def GetConnections(him):
         return list(him.GetConnections())
         
-    def GetChilds(him):
+    def GetChildren(him):
         node = him.GetNode()
         if node is not None:
             return [n.GetObject() for n in node.GetChilds()]
         
+    def GetAppears(him):
+        return list(him.GetAppears())
+    
     

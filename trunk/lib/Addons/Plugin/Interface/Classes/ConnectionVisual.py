@@ -15,16 +15,13 @@ class IConnectionVisual(IBase):
     def GetSource(him):
         return him.GetSource()
     
-    def GetDestinationObject(him):
-        return him.GetDestinationObject()
-    
-    def GetSourceObject(him):
-        return him.GetSourceObject()
-        
     def GetPoints(him):
         return list(him.GetPoints(IBase.adapter.GetCanvas()))
         
     def GetAllLabelPositions(him):
         return list(him.GetAllLabelPositions())
+    
+    def GetDiagram(him):
+        return him.GetDiagram()
     
     

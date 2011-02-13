@@ -6,9 +6,6 @@ from lib.Domains.Object import CDomainObject
 class IDomainObject(IBase):
     __cls__ = None
     
-    def GetName(him):
-        return him.GetName()
-    
     def GetValue(him, path):
             res = him.GetValue(path)
             if isinstance(res, CDomainObject):
@@ -18,14 +15,23 @@ class IDomainObject(IBase):
             else:
                 return str(res)
     
-    def GetSaveInfo(him):
-        return him.GetSaveInfo()
+    def GetAllValues(him):
+        def encode(prefix, value):
+            if isinstance(value, (str, unicode)):
+                yield (prefix, unicode(value))
+            elif isinstance(value, dict):
+                for k, v in value.iteritems():
+                    for i in encode(prefix + k, v):
+                        yield i
+            elif isinstance(value, list):
+                for i, v in enumerate(value):
+                    for j in encode(prefix + '[' + str(i) + '].', v):
+                        yield j
+        
+        return list(i for i in encode('',him.GetSaveInfo()))
     
     def GetType(him):
-        return him.GetType().GetId()
-    
-    def GetAppears(him):
-        return list(him.GetAppears())
+        return him.GetType()
     
     #destructive 
     
@@ -34,7 +40,4 @@ class IDomainObject(IBase):
         him.SetValue(path, value)
         IBase.adapter.plugin_change_domain_value(him, path)
         
-    def GetDomainType(him):
-        return him.GetDomainType()
-    
 

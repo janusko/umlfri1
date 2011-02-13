@@ -7,6 +7,7 @@ from lib.Drawing.Element import CElement
 from lib.Elements.Object import CElementObject
 from lib.Connections.Object import CConnectionObject
 from lib.Addons.Plugin.Interface.Classes.DomainObject import IDomainObject
+from lib.Drawing import CConLabelInfo
 
 class IDiagram(IDomainObject):
     __cls__ = CDiagram
@@ -17,17 +18,17 @@ class IDiagram(IDomainObject):
     def GetConnection(him, obj):
         return him.GetConnection(obj)
     
-    def GetPath(him):
-        return him.GetPath()
-    
     def GetSelected(him):
         return list(him.GetSelected())
     
-    def GetSelectedElements(him, nolabels = False):
-        return list(him.GetSelectedElements(nolabels))
+    def GetSelectedElements(him):
+        return list(him.GetSelectedElements(True))
+        
+    def GetSelectedLabels(him):
+        return [item for item in him.GetSelectedElements(False) if isinstance(item, CConLabelInfo)]
     
     def GetSelectedConnections(him): 
-        return list(him.GetSelectedConnections)
+        return list(him.GetSelectedConnections())
         
     def GetSelectSquare(him):
         return him.GetSelectSquare(IBase.adapter.GetCanvas())
