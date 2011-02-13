@@ -89,8 +89,8 @@ class CGrid(CBaseObject):
         if not self.local_settings:
             self.hor_spacing = config['/Grid/HorSpacing']
             self.ver_spacing = config['/Grid/VerSpacing']
-        x = self.hor_spacing * round(pos[0]/(float(self.hor_spacing)))# + 0.5
-        y = self.ver_spacing * round(pos[1]/(float(self.ver_spacing)))# + 0.5
+        x = self.hor_spacing * round(pos[0]/(float(self.hor_spacing)))
+        y = self.ver_spacing * round(pos[1]/(float(self.ver_spacing)))
         return (x, y)
     
     def SnapElement(self, element, pos, canvas, override=False):
@@ -102,6 +102,8 @@ class CGrid(CBaseObject):
             self.resize_elements = config['/Grid/ResizeElements'] == 'true'
             self.snap_mode = config['/Grid/SnapMode']
         if self.active or override:
+            if self.resize_elements:
+                self.ResizeElement(element, canvas)
             if self.snap_mode == 'TOP_LEFT':
                 pos = self.SnapPosition(pos)
             elif self.snap_mode == 'CENTER':
@@ -146,9 +148,7 @@ class CGrid(CBaseObject):
                 else:
                     pos = (new_bottom_right[0] - w, new_bottom_right[1] - h)
                 
-        element.SetPosition(pos)
-        if self.resize_elements:
-            self.ResizeElement(element, canvas)
+            element.SetPosition(pos)
     
     def ResizeElement(self, element, canvas):
         '''
@@ -158,21 +158,25 @@ class CGrid(CBaseObject):
         if not self.local_settings:
             self.hor_spacing = config['/Grid/HorSpacing']
             self.ver_spacing = config['/Grid/VerSpacing']
+        
         w, h = element.GetSize(canvas)
-        pos = list(element.GetPosition())
-        # top left corner
-        size_increase = [pos[0] % self.hor_spacing, pos[1] % self.ver_spacing]
-        new_pos = (pos[0] - size_increase[0], pos[1] - size_increase[1])
-        # bottom right corner
-        size_increase[0] += (self.hor_spacing - \
-            ((pos[0]+w) % self.hor_spacing)) % self.hor_spacing
-        size_increase[1] += (self.ver_spacing - \
-            ((pos[1]+h) % self.ver_spacing)) % self.ver_spacing
+        minw, minh = element.GetMinimalSize(canvas)
+        dw = -(w % self.hor_spacing)
+        dh = -(h % self.ver_spacing)
+        if minw > w + dw:
+            dw = self.hor_spacing + dw
+        if minh > h + dh:
+            dh = self.ver_spacing + dh
         rel = element.GetSizeRelative()
-        element.SetSizeRelative((rel[0] + size_increase[0],
-            rel[1] + size_increase[1]))
-        element.SetPosition(new_pos)
-    
+        element.SetSizeRelative((rel[0] + dw, rel[1] + dh))
+        if self.snap_mode == 'CENTER':
+            w, h = element.GetSize(canvas)
+            dw = self.hor_spacing if w % (self.hor_spacing * 2) else 0
+            dh = self.ver_spacing if h % (self.ver_spacing * 2) else 0
+            if dw or dh:
+                rel = element.GetSizeRelative()
+                element.SetSizeRelative((rel[0] + dw, rel[1] + dh))
+        
     def SnapConnection(self, conn, pos, idx, canvas, override=False):
         if not self.local_settings:
             self.hor_spacing = config['/Grid/HorSpacing']
