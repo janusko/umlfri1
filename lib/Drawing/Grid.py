@@ -14,15 +14,18 @@ class CGrid(CBaseObject):
         self.ver_spacing = 0
         self.needs_redraw = True
         self.buffer = None
-        
+    
     def MarkToRedraw(self):
         self.needs_redraw = True
     
-    def Redraw(self, size):
+    def Paint(self, canvas, viewport):
         '''
-        Redraws the grid to pixbuf.
-        Needs to be called to apply grid appearance settings changes.
+        Paints grid onto canvas.
         '''
+        if not self.local_settings:
+            self.visible = config['/Grid/Visible'] == 'true'
+        if not self.visible:
+            return
         if not self.local_settings:
             self.hor_spacing = config['/Grid/HorSpacing']
             self.ver_spacing = config['/Grid/VerSpacing']
@@ -31,30 +34,31 @@ class CGrid(CBaseObject):
         fg2 = config['/Grid/LineColor2']
         line_style = 'solid'
         line_style1 = 'dot'
-        w = size[0]
-        h = size[1]
-        canvas = CExportCanvas(surface_type='pixbuf', 
-            sizeX=int(w) + self.hor_spacing, 
-            sizeY=int(h) + self.ver_spacing)
-        w += 0.5
-        h += 0.5
-        current = 0.5 + self.hor_spacing
         
-        while current <= w:
-            canvas.DrawLine((current, 0.5), (current, h), fg1, self.line_width,
+        scale = canvas.GetScale()
+        canvas.SetScale(1.0)
+        hspace = self.hor_spacing * scale
+        vspace = self.ver_spacing * scale
+        x1 = -round(viewport[0][0] * scale % hspace) + .5
+        y1 = -round(viewport[0][1] * scale % vspace) + .5
+        x2 = x1 + viewport[1][0]
+        y2 = y1 + viewport[1][1]
+        
+        current = x1 + hspace
+        while current <= x2:
+            canvas.DrawLine((current, .5), (current, y2), fg1, self.line_width,
                 line_style)
-            canvas.DrawLine((current, 0.5), (current, h), fg2, self.line_width,
+            canvas.DrawLine((current, .5), (current, y2), fg2, self.line_width,
                 line_style1)
-            current += self.hor_spacing
-        current = 0.5 + self.ver_spacing
-        while current <= h:
-            canvas.DrawLine((0.5, current), (w, current), fg1, self.line_width,
+            current += hspace
+        current = y1 + vspace
+        while current <= y2:
+            canvas.DrawLine((.5, current), (x2, current), fg1, self.line_width,
                 line_style)
-            canvas.DrawLine((0.5, current), (w, current), fg2, self.line_width,
+            canvas.DrawLine((.5, current), (x2, current), fg2, self.line_width,
                 line_style1)
-            current += self.ver_spacing
-        self.buffer = canvas.Finish()
-        self.needs_redraw = False
+            current += vspace
+        canvas.SetScale(scale)
 
     def UpdateState(self, data):
         '''
@@ -184,20 +188,6 @@ class CGrid(CBaseObject):
             pos = self.SnapPosition(pos)
         conn.MovePoint(canvas, pos, idx)
     
-    def Paint(self, canvas, viewport):
-        '''
-        Paints grid buffer onto canvas.
-        '''
-        if not self.local_settings:
-            self.visible = config['/Grid/Visible'] == 'true'
-        if not self.visible:
-            return    
-        if not self.buffer or self.needs_redraw:
-            self.Redraw(viewport[1])
-        x = -(viewport[0][0] % self.hor_spacing)
-        y = -(viewport[0][1] % self.ver_spacing)
-        canvas.DrawPixbuf(self.buffer, (x, y))
-         
     def IsActive(self):
         return self.active
         
