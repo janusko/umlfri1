@@ -593,7 +593,7 @@ class CDiagram(CBaseObject):
         '''
         Called each time settings change.
         '''
-        self.grid.MarkToRedraw()
+        pass
 
     def MoveElement(self, element, pos, canvas):
         if not isinstance(element, ConLabelInfo.CConLabelInfo):
