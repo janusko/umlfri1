@@ -8,7 +8,6 @@ from lib.Drawing.Diagram import CDiagram
 class IElementVisual(IVisibleObject):
     __cls__ = CElement
     
-    @result(r_objectlist)
     def GetConnections(him):
         return list(him.GetConnections())
     

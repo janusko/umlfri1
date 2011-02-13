@@ -7,12 +7,9 @@ class IToggleButton(IButton):
     
     __cls__ = lib.GenericGui.CToggleButton
     
-    @result(r_bool)
     def GetActive(him): 
         return him.GetActive()
         
-    @result(r_none)
-    @parameter('value', t_bool)
     @mainthread
     def SetActive(him, value):
         him.SetActive(value)

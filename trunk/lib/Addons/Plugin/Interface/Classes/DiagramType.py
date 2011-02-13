@@ -8,17 +8,14 @@ from lib.Connections.Type import CConnectionType
 class IDiagramType(IBase):
     __cls__ = CDiagramType
     
-    @result(r_str)
     def GetName(him):
         return him.GetId()
     
-    @result(r_objectlist)
     def GetConnections(him):
         cf = him.GetMetamodel().GetConnectionFactory()
         result = [cf.GetConnection(i) for i in him.GetConnections()]
         return result
     
-    @result(r_objectlist)
     def GetElements(him):
         ef = him.GetMetamodel().GetElementFactory()
         return [ef.GetElement(i) for i in him.GetElements()]

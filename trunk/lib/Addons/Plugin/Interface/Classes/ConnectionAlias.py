@@ -7,6 +7,5 @@ class IConnectionAlias(IConnectionType):
     
     __cls__ = CConnectionAlias
     
-    @result(r_str)
     def GetAlias(him):
         return him.GetAlias()

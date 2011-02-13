@@ -6,7 +6,6 @@ from lib.Domains.Type import CDomainType
 class IDomainType(IBase):
     __cls__ = CDomainType
     
-    @result(r_str)
     def GetName(him):
         return him.GetName()
     

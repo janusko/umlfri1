@@ -7,6 +7,5 @@ class IElementAlias(IElementType):
     
     __cls__ = CElementAlias
     
-    @result(r_str)
     def GetAlias(him):
         return him.GetAlias()

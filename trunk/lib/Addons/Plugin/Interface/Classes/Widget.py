@@ -7,17 +7,13 @@ class IWidget(IBase):
     
     __cls__ = None
     
-    @result(r_str)
     def GetGuiId(him):
         return him.GetGuiId()
     
-    @result(r_none)
-    @parameter('value', t_bool)
     @mainthread
     def SetSensitive(him, value):
         him.SetSensitive(value)
         
-    @result(r_bool)
     def GetSensitive(him):
         return him.GetSensitive()
     

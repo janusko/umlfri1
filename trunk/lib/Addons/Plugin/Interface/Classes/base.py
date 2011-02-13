@@ -17,7 +17,6 @@ class IBase(object):
     def GetAdapter(cls):
         return cls.adapter
     
-    @result(r_str)
     def GetClass(him):
         return Meta.GetClassName(him)
     
