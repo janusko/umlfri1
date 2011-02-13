@@ -120,5 +120,8 @@ class CPluginManager(object):
         self.watchdog.Stop()
         if PLUGIN_SOCKET is not None:
             self.acceptserver.Stop()
+    
+    def Addr2Uri(self, addr):
+        return self.addr2uri.get(addr, None)
             
     

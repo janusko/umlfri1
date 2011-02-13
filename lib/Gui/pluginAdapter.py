@@ -55,6 +55,9 @@ class CPluginAdapter(CBaseObject, CGuiObject):
     
     def GetCurrentDiagram(self):
         return self.application.GetWindow('frmMain').picDrawingArea.GetDiagram()
+    
+    def GetApplication(self):
+        return self.application
         
     @event('application.bus', 'content-update')
     @event('application.bus', 'content-update-from-plugin')
