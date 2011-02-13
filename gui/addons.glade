@@ -1283,10 +1283,15 @@
     </child>
     <child>
       <widget class="GtkImageMenuItem" id="mnuHomepageMetamodel">
-        <property name="label">Homepage</property>
+        <property name="label" translatable="yes">Homepage</property>
         <property name="visible">True</property>
-        <property name="use_underline">True</property>
-        <property name="use_stock">True</property>
+        <property name="use_stock">False</property>
+        <child internal-child="image">
+          <widget class="GtkImage" id="image1">
+            <property name="visible">True</property>
+            <property name="stock">gtk-home</property>
+          </widget>
+        </child>
       </widget>
     </child>
     <child>
@@ -1296,26 +1301,41 @@
     </child>
     <child>
       <widget class="GtkImageMenuItem" id="mnuEnableMetamodel">
-        <property name="label">Enable</property>
+        <property name="label" translatable="yes">Enable</property>
         <property name="visible">True</property>
-        <property name="use_underline">True</property>
-        <property name="use_stock">True</property>
+        <property name="use_stock">False</property>
+        <child internal-child="image">
+          <widget class="GtkImage" id="image2">
+            <property name="visible">True</property>
+            <property name="stock">gtk-yes</property>
+          </widget>
+        </child>
       </widget>
     </child>
     <child>
       <widget class="GtkImageMenuItem" id="mnuDisableMetamodel">
-        <property name="label">Disable</property>
+        <property name="label" translatable="yes">Disable</property>
         <property name="visible">True</property>
-        <property name="use_underline">True</property>
-        <property name="use_stock">True</property>
+        <property name="use_stock">False</property>
+        <child internal-child="image">
+          <widget class="GtkImage" id="image3">
+            <property name="visible">True</property>
+            <property name="stock">gtk-no</property>
+          </widget>
+        </child>
       </widget>
     </child>
     <child>
       <widget class="GtkImageMenuItem" id="mnuUninstallMetamodel">
-        <property name="label">Uninstall</property>
+        <property name="label" translatable="yes">Uninstall</property>
         <property name="visible">True</property>
-        <property name="use_underline">True</property>
-        <property name="use_stock">True</property>
+        <property name="use_stock">False</property>
+        <child internal-child="image">
+          <widget class="GtkImage" id="image4">
+            <property name="visible">True</property>
+            <property name="stock">gtk-remove</property>
+          </widget>
+        </child>
       </widget>
     </child>
   </widget>
@@ -1331,10 +1351,15 @@
     </child>
     <child>
       <widget class="GtkImageMenuItem" id="mnuHomepagePlugin">
-        <property name="label">Homepage</property>
+        <property name="label" translatable="yes">Homepage</property>
         <property name="visible">True</property>
-        <property name="use_underline">True</property>
-        <property name="use_stock">True</property>
+        <property name="use_stock">False</property>
+        <child internal-child="image">
+          <widget class="GtkImage" id="image2">
+            <property name="visible">True</property>
+            <property name="stock">gtk-home</property>
+          </widget>
+        </child>
       </widget>
     </child>
     <child>
@@ -1357,18 +1382,28 @@
     </child>
     <child>
       <widget class="GtkImageMenuItem" id="mnuStopPlugin">
-        <property name="label">gtk-media-stop</property>
+        <property name="label" translatable="yes">Stop</property>
         <property name="visible">True</property>
-        <property name="use_underline">True</property>
-        <property name="use_stock">True</property>
+        <property name="use_stock">False</property>
+        <child internal-child="image">
+          <widget class="GtkImage" id="image3">
+            <property name="visible">True</property>
+            <property name="stock">gtk-media-stop</property>
+          </widget>
+        </child>
       </widget>
     </child>
     <child>
       <widget class="GtkImageMenuItem" id="mnuUninstallPlugin">
-        <property name="label">Uninstall</property>
+        <property name="label" translatable="yes">Uninstall</property>
         <property name="visible">True</property>
-        <property name="use_underline">True</property>
-        <property name="use_stock">True</property>
+        <property name="use_stock">False</property>
+        <child internal-child="image">
+          <widget class="GtkImage" id="image4">
+            <property name="visible">True</property>
+            <property name="stock">gtk-remove</property>
+          </widget>
+        </child>
       </widget>
     </child>
   </widget>
