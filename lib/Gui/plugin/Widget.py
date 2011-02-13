@@ -19,6 +19,15 @@ class CWidget(lib.GenericGui.CWidget):
     def GetSensitive(self):
         return self.obj.get_property('sensitive')
     
+    def GetVisible(self):
+        return self.obj.get_property('visible')
+    
+    def SetVisible(self, value):
+        if value:
+            self.obj.show()
+        else:
+            self.obj.hide()
+    
     def GetObject(self):
         return self.obj
     

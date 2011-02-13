@@ -14,12 +14,6 @@ class IProject(IBase):
     def GetRoot(him):
         return him.GetRoot().GetObject()
     
-    def GetNode(him, path):
-        try:
-            return him.GetNode(path).GetObject()
-        except (ProjectError, ):
-            raise ErrorDuringExecution()
-    
     def GetDefaultDiagrams(him):
         return him.GetDefaultDiagrams()
     
@@ -27,8 +21,10 @@ class IProject(IBase):
         return him.GetMetamodel()
     
     
-    def Save(him, fileName = None, isZippedFile = None):
-        him.SaveProject(fileName, isZippedFile)
+    def Save(him):
+        him.SaveProject()
     
+    def SaveAs(him, fileName, isZippedFile)
+        him.SaveProject(fileName, isZippedFile)
     
 

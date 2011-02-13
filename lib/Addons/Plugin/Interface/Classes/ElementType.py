@@ -16,9 +16,6 @@ class IElementType(IBase):
     def GetIdentity(him):
         return him.GetIdentity()
     
-    def HasIdentity(him):
-        return him.GetIdentity() is not None
-        
     def GetConnections(him):
         cf = him.GetMetamodel().GetConnectionFactory()
         return [cf.GetConnection(i[0]) for i in him.GetConnections()]
