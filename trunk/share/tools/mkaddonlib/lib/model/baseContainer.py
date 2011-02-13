@@ -1,4 +1,4 @@
-from base import Base
+from .base import Base
 
 class BaseContainer(Base):
     def __init__(self, name, parent, children = [], sorted = True):

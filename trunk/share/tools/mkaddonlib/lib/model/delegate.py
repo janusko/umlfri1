@@ -1,8 +1,8 @@
-from baseContainer import BaseContainer
-from delegateParameter import DelegateParameter
-from delegateReturn import DelegateReturn
+from .baseContainer import BaseContainer
+from .delegateParameter import DelegateParameter
+from .delegateReturn import DelegateReturn
 
-import helper
+from . import helper
 
 class Delegate(BaseContainer):
     def __init__(self, name, namespace, documentation = None):

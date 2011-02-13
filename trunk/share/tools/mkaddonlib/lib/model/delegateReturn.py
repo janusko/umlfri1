@@ -1,7 +1,7 @@
-from base import Base
-from primitiveType import primitiveTypes, PrimitiveType
+from .base import Base
+from .primitiveType import primitiveTypes, PrimitiveType
 
-import helper
+from . import helper
 
 class DelegateReturn(Base):
     def __init__(self, delegate, type, iterable = False, documentation = None):
