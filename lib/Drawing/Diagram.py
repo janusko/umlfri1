@@ -256,7 +256,10 @@ class CDiagram(CBaseObject):
                 for con in el.GetConnections():
                     if (con.GetSource() in elements) and (con.GetDestination() in elements):
                         if con not in movedCon:
-                            con.MoveAll(delta, canvas)
+                            points = list(con.GetPoints(canvas))
+                            for idx, point in enumerate(points[1:-1], 1):
+                                pos = (point[0] + delta[0], point[1] + delta[1])
+                                self.MoveConnectionPoint(con, pos, idx, canvas)
                             movedCon.add(con)
         if canvas is not None:
             for conn in self.connections:
