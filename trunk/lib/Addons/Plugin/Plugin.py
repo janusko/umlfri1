@@ -51,12 +51,15 @@ class CPlugin(object):
     def _Connect(self, addr):
         self.__addr = addr
     
+    def _Disconnect(self):
+        self.__addr = None
+    
     def GetAddr(self):
         return self.__addr
         
     def Dispose(self):
         self.ClearGui()
-        self.__pluginManager.RemovePlugin(self)
+        self.__pluginManager().RemovePlugin(self)
         
     def GetPid(self):
         return self.__starter.GetPid()
