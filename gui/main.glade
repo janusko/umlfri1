@@ -1084,7 +1084,7 @@
                   <widget class="GtkVPaned" id="vpaRight">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="position">200</property>
+                    <property name="position">400</property>
                     <child>
                       <widget class="GtkScrolledWindow" id="scrolledwindow1">
                         <property name="visible">True</property>
