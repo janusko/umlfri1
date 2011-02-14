@@ -19,7 +19,7 @@ except ImportError:
 try:
     import glib
 except ImportError:
-    glib = None
+    glib = gobject
 
 try:
     import pango
@@ -42,7 +42,7 @@ def check():
     
     @raise AssertionError: if gtk support is missing
     """
-    assert gobject is not None and glib is not None and gtk is not None, "PyGTK 2.x must be installed"
+    assert gobject is not None and gtk is not None, "PyGTK 2.x must be installed"
     assert pango is not None, "PyGTK have no pango support"
     assert cairo is not None and pangocairo is not None, "PyGTK have no cairo support"
     
