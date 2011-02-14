@@ -9,7 +9,7 @@ from lib.Exceptions import *
 
 ID_ID, ID_NAME, ID_VALUE, ID_TEXT_VISIBLE, ID_COMBO_VISIBLE, ID_EDITABLE, ID_BUTTON_VISIBLE, ID_MODEL, ID_BUTTON_TEXT, ID_ACTION, ID_COLOR,  ID_FONT = range(12)
 
-EDITABLE_COMBO_TYPES = ('int', 'float', 'text', 'str')
+EDITABLE_COMBO_TYPES = ('int', 'float', 'str')
 
 class ClwProperties(CWidget):
     name = 'lwProperties'
@@ -86,7 +86,7 @@ class ClwProperties(CWidget):
             type = DType.GetAttribute(attrID)['type']
             name = DType.GetAttribute(attrID)['name']
             
-            if DType.IsHidden(attrID) or type == 'list' or not DType.IsAtomic(domain = type):
+            if DType.IsHidden(attrID) or type in ('list','text') or not DType.IsAtomic(domain = type):
                 continue
             
             row = self.treeStore.append(parent)
