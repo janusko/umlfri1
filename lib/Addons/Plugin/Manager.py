@@ -106,14 +106,13 @@ class CPluginManager(object):
             with self.conlock:
                 if uri in self.plugins:
                     self.plugins[uri].IsAlive() #just to make sure that process won't remain zombie
-                    del self.plugins[uri]
+                    self.plugins[uri]._Disconnect()
                 if addr in self.connection:
                     self.connection[addr].Close()
                     del self.connection[addr]
     
     def RemoveByAddr(self, addr):
         self.__removePlugin(self.addr2uri.get(addr, None), addr)
-        
         self.GetGuiManager().DisposeOf(addr)
         
     def Stop(self):
