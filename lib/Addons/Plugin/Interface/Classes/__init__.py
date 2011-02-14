@@ -4,7 +4,7 @@ import ElementObject
 import ConnectionVisual
 import ConnectionObject
 import Diagram
-import ConLabelInfo
+import ConnectionLabel
 import Metamodel
 import ConnectionType
 import ConnectionAlias
