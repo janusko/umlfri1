@@ -1,4 +1,4 @@
-from lib.Depend.gtk2 import gtk, pango
+from lib.Depend.gtk2 import gtk, pango, glib
 
 import os.path
 import webbrowser
@@ -21,6 +21,8 @@ class CfrmAddons(CWindow):
         'mnuPlugin', 'mnuUninstallPlugin', 'mnuStartPlugin', 'mnuStopPlugin',
         'mnuHomepagePlugin', 'mnuAboutPlugin',
     )
+    
+    COLUMN_ICON, COLUMN_DESCRIPTION, COLUMN_ENABLED, COLUMN_URI = range(4)
     
     def __init__(self, app, wTree):
         CWindow.__init__(self, app, wTree)
@@ -54,6 +56,7 @@ class CfrmAddons(CWindow):
 
     def Show(self):
         self.__Load()
+        glib.timeout_add(250, self.__ReLoadTimer)
         
         self.twMetamodelList.grab_focus()
         
@@ -89,21 +92,62 @@ class CfrmAddons(CWindow):
             else:
                 continue
             
-            if addon.GetIcon() is None:
+            iter = twStore.append(None)
+            self.__SetAddonValues(twStore, iter, addon)
+    
+    def __SetAddonValues(self, store, iter, addon):
+        if addon.GetIcon() is None:
+            icon = None
+        else:
+            try:
+                icon = PixmapFromPath(addon.GetStorage(), addon.GetIcon())
+            except:
                 icon = None
-            else:
-                try:
-                    icon = PixmapFromPath(addon.GetStorage(), addon.GetIcon())
-                except:
-                    icon = None
+        
+        name = addon.GetName()
+        version = addon.GetVersion()
+        description = addon.GetDescription() or ""
+        enabled = self.__AddonEnabled(addon)
+        uri = addon.GetDefaultUri()
+        
+        store.set(iter,
+            self.COLUMN_ICON, icon,
+            self.COLUMN_DESCRIPTION, "<b>%s</b>     %s\n%s"%(name, version, description),
+            self.COLUMN_ENABLED, enabled,
+            self.COLUMN_URI, uri
+        )
+    
+    def __AddonEnabled(self, addon):
+        if addon.GetType() == 'metamodel':
+            return addon.IsEnabled()
+        else:
+            return addon.IsRunning()
+    
+    def __ReLoad(self):
+        for model in (self.__MetamodelStore, self.__PluginStore):
+            iter = model.get_iter_first()
             
-            name = addon.GetName()
-            version = addon.GetVersion()
-            description = addon.GetDescription() or ""
-            enabled = addon.IsEnabled()
-            uri = addon.GetDefaultUri()
-            
-            twStore.append(None, (icon, "<b>%s</b>     %s\n%s"%(name, version, description), enabled, uri))
+            while iter is not None:
+                uri, enabled = model.get(iter, self.COLUMN_URI, self.COLUMN_ENABLED)
+                addon = self.application.GetAddonManager().GetAddon(uri)
+                
+                if enabled != self.__AddonEnabled(addon):
+                    model.set(iter, self.COLUMN_ENABLED, not enabled)
+                    
+                    if addon == self.__GetSelectedAddon(self.twMetamodelList):
+                        self.MetamodelChanged()
+                    elif addon == self.__GetSelectedAddon(self.twPluginList):
+                        self.PluginChanged()
+                
+                iter = model.iter_next(iter)
+    
+    def __ReLoadTimer(self):
+        if not self.form.get_property("visible"):
+            return False
+        
+        self.__ReLoad()
+        
+        return True
     
     def __GetSelectedAddon(self, treeView, path = None):
         if path is not None:
@@ -124,11 +168,7 @@ class CfrmAddons(CWindow):
         if addon is None:
             return
         
-        iter = self.twMetamodelList.get_selection().get_selected()[1]
-        self.__MetamodelStore.set(iter, 2, True)
-        
         addon.Enable()
-        self.MetamodelChanged()
     
     @event("cmdDisableMetamodel", "clicked")
     @event("mnuDisableMetamodel", "activate")
@@ -138,11 +178,7 @@ class CfrmAddons(CWindow):
         if addon is None:
             return
         
-        iter = self.twMetamodelList.get_selection().get_selected()[1]
-        self.__MetamodelStore.set(iter, 2, False)
-        
         addon.Disable()
-        self.MetamodelChanged()
     
     @event("cmdInstallPlugin", "clicked")
     @event("cmdInstallMetamodel", "clicked")
@@ -213,8 +249,9 @@ class CfrmAddons(CWindow):
             self.cmdDisableMetamodel.set_sensitive(False)
             self.cmdUninstallMetamodel.set_sensitive(False)
         else:
-            self.cmdEnableMetamodel.set_sensitive(not addon.IsEnabled())
-            self.cmdDisableMetamodel.set_sensitive(addon.IsEnabled())
+            enabled = self.__AddonEnabled(addon)
+            self.cmdEnableMetamodel.set_sensitive(not enabled)
+            self.cmdDisableMetamodel.set_sensitive(enabled)
             self.cmdUninstallMetamodel.set_sensitive(addon.IsUninstallable())
     
     @event("twMetamodelList", "button-press-event")
@@ -225,8 +262,9 @@ class CfrmAddons(CWindow):
                 return
             addon = self.__GetSelectedAddon(self.twMetamodelList, path[0])
             if addon is not None:
-                self.mnuEnableMetamodel.set_sensitive(not addon.IsEnabled())
-                self.mnuDisableMetamodel.set_sensitive(addon.IsEnabled())
+                enabled = self.__AddonEnabled(addon)
+                self.mnuEnableMetamodel.set_sensitive(not enabled)
+                self.mnuDisableMetamodel.set_sensitive(enabled)
                 self.mnuUninstallMetamodel.set_sensitive(addon.IsUninstallable())
                 self.mnuHomepageMetamodel.set_sensitive(addon.GetHomepage() is not None)
                 
@@ -259,8 +297,9 @@ class CfrmAddons(CWindow):
             self.cmdPluginStop.set_sensitive(False)
             self.cmdUninstallPlugin.set_sensitive(False)
         else:
-            self.cmdPluginStart.set_sensitive(not addon.IsEnabled())
-            self.cmdPluginStop.set_sensitive(addon.IsEnabled())
+            enabled = self.__AddonEnabled(addon)
+            self.cmdPluginStart.set_sensitive(not enabled)
+            self.cmdPluginStop.set_sensitive(enabled)
             self.cmdUninstallPlugin.set_sensitive(addon.IsUninstallable())
     
     @event("twPluginList", "button-press-event")
@@ -271,8 +310,9 @@ class CfrmAddons(CWindow):
                 return
             addon = self.__GetSelectedAddon(self.twPluginList, path[0])
             if addon is not None:
-                self.mnuStartPlugin.set_sensitive(not addon.IsEnabled())
-                self.mnuStopPlugin.set_sensitive(addon.IsEnabled())
+                enabled = self.__AddonEnabled(addon)
+                self.mnuStartPlugin.set_sensitive(not enabled)
+                self.mnuStopPlugin.set_sensitive(enabled)
                 self.mnuUninstallPlugin.set_sensitive(addon.IsUninstallable())
                 self.mnuHomepagePlugin.set_sensitive(addon.GetHomepage() is not None)
                 
@@ -286,11 +326,6 @@ class CfrmAddons(CWindow):
         if addon is not None and not addon.IsRunning():
             addon.Start()
             addon.Enable()
-            
-            iter = self.twPluginList.get_selection().get_selected()[1]
-            self.__PluginStore.set(iter, 2, True)
-            
-            self.PluginChanged()
     
     @event("mnuStopPlugin", "activate")
     @event("cmdPluginStop", "clicked")
@@ -300,8 +335,3 @@ class CfrmAddons(CWindow):
         if addon is not None and addon.IsRunning():
             addon.Stop()
             addon.Disable()
-            
-            iter = self.twPluginList.get_selection().get_selected()[1]
-            self.__PluginStore.set(iter, 2, False)
-            
-            self.PluginChanged()
