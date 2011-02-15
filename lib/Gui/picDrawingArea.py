@@ -40,23 +40,24 @@ class CpicDrawingArea(CWidget):
                     'pmShift_BringForward',
                     'pmShift_ToBottom',
                     'pmShift_ToTop',
-                    
+                'mnuAlign',
                     'mnuAlignLeftMost', 'mnuAlignLeftCurrent',
                     'mnuAlignRightMost', 'mnuAlignRightCurrent',
                     'mnuAlignUpwardsMost', 'mnuAlignUpwardsCurrent',
                     'mnuAlignDownwardsMost', 'mnuAlignDownwardsCurrent',
                     'mnuAlignCenterHor',
                     'mnuAlignCenterVer',
-                'mnuSizing',
+                'mnuSpacing',
                     'mnuSpaceEvenlyHorizontally',
-                    'mnuSpaceEvenlyVertically',                   
+                    'mnuSpaceEvenlyVertically',
+                'mnuSizing',
+                    'mnuResizeByMaximalElement',
+                    'mnuResizeByMinimalElement',
+                'mnuSnapSelectGrid',
                 'pmOpenSpecification',
                 'mnuResizeHight',
                 'mnuResizeWidth',
-                'mnuResizeHightAndWidth',
-                'mnuResizeByMaximalElement',
-                'mnuResizeByMinimalElement',
-                'mnuSnapElements')
+                'mnuResizeHightAndWidth',)
 
     __gsignals__ = {
         'get-selected':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_PYOBJECT,
@@ -337,6 +338,11 @@ class CpicDrawingArea(CWidget):
             self.application.GetProject().GetRoot().GetObject() in (
                 [item.GetObject() for item in self.Diagram.GetSelectedElements(True)])):
             self.mnuCtxShiftDelete.set_sensitive(False)
+        if (not list(self.Diagram.GetSelectedElements(True))):
+            self.mnuAlign.set_sensitive(False)
+            self.mnuSpacing.set_sensitive(False)
+            self.mnuSizing.set_sensitive(False)
+            self.mnuSnapSelectGrid.set_sensitive(False)
             
     @event('application.bus', 'position-change', False)
     @event('application.bus', 'position-change-from-plugin', True)
@@ -985,8 +991,8 @@ class CpicDrawingArea(CWidget):
         self.Diagram.SpaceElementsEvenlyXY(p1, self.canvas)
         self.Paint()
     
-    @event('mnuSnapElements', 'activate')
-    def on_mnuSnapElements(self, widget):
+    @event('mnuSnapSelectGrid', 'activate')
+    def on_mnuSnapSelected(self, widget):
         self.Diagram.SnapElementsOnGrid(self.canvas)
         self.Paint()
     
