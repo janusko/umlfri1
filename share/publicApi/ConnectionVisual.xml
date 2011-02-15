@@ -15,6 +15,14 @@
         <value type="org.umlfri.api.model.ConnectionObject" readable="true" />
     </property>
     
+    <property name="diagram">
+        <documentation>
+            Diagram, on which the connection is located.
+        </documentation>
+        
+        <value type="org.umlfri.api.model.Diagram" readable="true" />
+    </property>
+    
     <property name="source">
         <documentation>
             Element at source end of the connection.

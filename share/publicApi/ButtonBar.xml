@@ -46,45 +46,6 @@
         <return type="org.umlfri.api.gui.Button" />
     </method>
     
-    <method name="addStockButton" mutator="true">
-        <documentation>
-            Adds a new themed button to the button bar.
-        </documentation>
-        
-        <parameter name="guiId" type="string">
-            <documentation>
-                Button unique ID.
-            </documentation>
-        </parameter>
-        <parameter name="callback" type="org.umlfri.api.gui.BasicEventHandler">
-            <documentation>
-                Callback function delegate.
-            </documentation>
-        </parameter>
-        <parameter name="position" type="int32">
-            <documentation>
-                Button position.
-            </documentation>
-        </parameter>
-        <parameter name="stock" type="string">
-            <documentation>
-                Theme icon identifier.
-            </documentation>
-        </parameter>
-        <parameter name="label" type="string" required="false">
-            <documentation>
-                Button label.
-            </documentation>
-        </parameter>
-        <parameter name="toggleButton" type="boolean" required="false" default="false">
-            <documentation>
-                Dermines, whether it is toggle button or not.
-            </documentation>
-        </parameter>
-        
-        <return type="org.umlfri.api.gui.Button" />
-    </method>
-    
     <method name="addSeparator" mutator="true">
         <documentation>
             Adds a new separator to the button bar.
