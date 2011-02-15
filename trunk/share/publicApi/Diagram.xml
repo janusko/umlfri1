@@ -43,6 +43,30 @@
         <value type="org.umlfri.api.model.Visual" iterable="true" />
     </property>
     
+    <property name="selectedElements">
+        <documentation>
+            Elements selected on the diagram.
+        </documentation>
+        
+        <value type="org.umlfri.api.model.ElementVisual" iterable="true" />
+    </property>
+    
+    <property name="selectedConnections">
+        <documentation>
+            Connections selected on the diagram.
+        </documentation>
+        
+        <value type="org.umlfri.api.model.ConnectionVisual" iterable="true" />
+    </property>
+    
+    <property name="selectedConnectionLabels">
+        <documentation>
+            Connection labels selected on the diagram.
+        </documentation>
+        
+        <value type="org.umlfri.api.model.ConnectionLabel" iterable="true" />
+    </property>
+    
     <property name="selectSquare">
         <documentation>
             Square area of the selection on the diagram.
