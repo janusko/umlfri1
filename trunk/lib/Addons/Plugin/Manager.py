@@ -6,7 +6,7 @@ from Interface.Transaction import CTransaction
 from Interface.Classes.base import IBase
 from lib.consts import *
 from Watchdog import CWatchdog
-import thread
+import thread, threading, time
 
 class CPluginManager(object):
     '''
@@ -23,6 +23,7 @@ class CPluginManager(object):
         self.connection = {}
         self.transaction = {}
         self.addr2uri = {}
+        self.accepting = True
         self.pluginAdapter = pluginAdapter
         pluginAdapter._SetPluginManager(self)
         self.proxy = CCore(self, pluginAdapter)
@@ -38,9 +39,12 @@ class CPluginManager(object):
         @param sock: connected socket from plugin
         @param addr: identifier of connection
         '''
-        with self.conlock:
-            self.transaction[addr] = CTransaction()
-            self.connection[addr] = CSocketWrapper(sock, self.proxy, addr, True)
+        if self.accepting:
+            with self.conlock:
+                self.transaction[addr] = CTransaction()
+                self.connection[addr] = CSocketWrapper(sock, self.proxy, addr, True)
+        else:
+            sock.Close()
     
     def AddPlugin(self, plugin):
         with self.pluginlock:
@@ -116,11 +120,35 @@ class CPluginManager(object):
         self.GetGuiManager().DisposeOf(addr)
         
     def Stop(self):
+        self.accepting = False
         self.watchdog.Stop()
         if PLUGIN_SOCKET is not None:
             self.acceptserver.Stop()
+        for plugin in list(self.plugins.itervalues()):
+            if plugin.IsAlive() and not plugin.GetLongRun():
+                threading.Thread(None, self.KillTask, None, (plugin, )).start()
     
     def Addr2Uri(self, addr):
         return self.addr2uri.get(addr, None)
             
-    
+    def SetLongRun(self, value, addr):
+        with self.conlock:
+            with self.pluginlock:
+                uri = self.Addr2Uri(addr)
+                if uri in self.plugins:
+                    plugin = self.plugins[uri]
+                    plugin.SetLongRun(value)
+                    
+    def KillTask(self, plugin):
+        for i in xrange(10):
+            if plugin.IsAlive():
+                time.sleep(.05)
+            else:
+                return
+        plugin.Terminate()
+        for i in xrange(5):
+            if plugin.IsAlive():
+                time.sleep(.05)
+            else:
+                return 
+        plugin.Kill()

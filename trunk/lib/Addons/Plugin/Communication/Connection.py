@@ -61,6 +61,7 @@ class CConnection(object):
                 self.mainloop.Call(callback, *args, **kwds)
             
             elif code == RESP_FINALIZE:
+                self.wrapper.Close()
                 self.mainloop.Stop()
                 
         finally:

@@ -1,11 +1,11 @@
-import thread, time
+import time, threading
 
 class CWatchdog(object):
     
     def __init__(self, manager):
         self.__manager = manager
         self.__online = True
-        thread.start_new_thread(self.__mainloop, ())
+        threading.Thread(target = self.__mainloop).start()
         
     def __mainloop(self):
         while self.__online:

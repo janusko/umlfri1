@@ -43,7 +43,7 @@ class CSynchLineBuffer(object):
         else:
             return
     
-    def read(self):
+    def Read(self):
         '''
         @return: one line of text read from socket
         '''
@@ -53,3 +53,6 @@ class CSynchLineBuffer(object):
             return self.buf.pop(0)
         else:
             return None
+        
+    def Close(self):
+        self.sock.Close()

@@ -13,6 +13,7 @@ class CPlugin(object):
         self.__pluginManager = None
         self.__addr = None
         self.__starter = starter(self)
+        self.__longrun = False
     
     def GetUri(self):
         return self.__uri
@@ -63,3 +64,9 @@ class CPlugin(object):
         
     def GetPid(self):
         return self.__starter.GetPid()
+    
+    def SetLongRun(self, value):
+        self.__longrun = value
+    
+    def GetLongRun(self):
+        return self.__longrun

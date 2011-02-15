@@ -53,3 +53,6 @@ class CInterface(object):
         
     def SetStopAction(self, action):
         self.stopaction = action
+    
+    def PleaseDontKillMe(self, value = True):
+        self.connection.Execute('plugin', 'longrun', (), {'value': EncodeValue(bool(value), False, self.connection)})()

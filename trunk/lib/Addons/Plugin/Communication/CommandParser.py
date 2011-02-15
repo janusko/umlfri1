@@ -1,4 +1,4 @@
-import thread, re
+import re, threading
 from ComSpec import *
 from lib.consts import PLUGIN_DISPLAY_COMMUNICATION
 
@@ -31,12 +31,13 @@ class CCommandParser(object):
         self.paramline = PARAM_LINE
         self.emptyline = EMPTY_LINE
         
-        thread.start_new(self._mainloop, ())
+        threading.Thread(target = self._mainloop).start()
     
     def Stop(self):
         '''
         Stop reading from socket, thread will be stopped asynchronously
         '''
+        self.buffer.Close()
         self.run = False
     
     def _mainloop(self):
@@ -50,7 +51,7 @@ class CCommandParser(object):
             params = {}
             data = []
             while self.run:
-                line = self.buffer.read()
+                line = self.buffer.Read()
                 if line is None:
                     self.Stop()
                     break
@@ -97,4 +98,3 @@ class CCommandParser(object):
         finally:
             self.run = None
             self.proxy.Stopped(self.addr)
-            
