@@ -85,6 +85,7 @@ class CSocketWrapper(object):
         '''
         self.state = False
         self.sock.Close()
+        self.parser.Stop()
     
     def Opened(self):
         '''

@@ -1,4 +1,4 @@
-import thread, socket
+import socket, threading
 from lib.Addons.Plugin.Communication.Medium import CSocketMedium
 
 
@@ -34,7 +34,7 @@ class CAcceptServer(object):
             self.sock.bind(self.addr)
             self.sock.listen(1)
             self.run = True
-            thread.start_new(self._server, ())
+            threading.Thread(target = self._server).start()
         
         except socket.error:
             return False

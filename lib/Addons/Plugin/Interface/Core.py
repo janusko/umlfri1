@@ -106,6 +106,9 @@ class CCore(object):
         if ctype == 'init':
             self.manager.ConnectPlugin(kwds['uri'], addr)
             self.manager.Send(addr, RESP_OK, __id__ = callid)
+        elif ctype == 'longrun':
+            self.manager.SetLongRun(bool(kwds['value']), addr)
+            self.manager.Send(addr, RESP_OK, __id__ = callid)
         else:
             self.manager.Send(addr, RESP_INVALID_COMMAND_TYPE, command = 'plugin', type = ctype, __id__ = callid)
     

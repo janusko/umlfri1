@@ -47,13 +47,14 @@ class CPipeMedium(object):
     
     def Close(self):
         try:
+            os.close(self.__fw)
+        except OSError:
+            pass
+        
+        try:
             os.close(self.__fr)
         except OSError:
             pass
             
-        try:
-            os.close(self.__fw)
-        except OSError:
-            pass
         
         self.__isOpened = False
