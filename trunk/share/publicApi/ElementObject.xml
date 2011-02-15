@@ -21,15 +21,23 @@
         </documentation>
         
         <index name="path" type="string" />
-        <value type="object" readable="true" writable="true" />
+        <value type="string" readable="true" writable="true" />
+    </property>
+    
+    <property name="allValues">
+        <documentation>
+            Iterator over all property values.
+        </documentation>
+        
+        <value type="keyvalue" iterable="true" />
     </property>
     
     <property name="type">
         <documentation>
-            Element type identifier.
+            Element type.
         </documentation>
         
-        <value type="string" readable="true" />
+        <value type="org.umlfri.api.metamodel.ElementType" readable="true" />
     </property>
     
     <property name="appears">
@@ -56,7 +64,7 @@
         <value type="org.umlfri.api.model.ConnectionObject" iterable="true" />
     </property>
     
-    <property name="childs">
+    <property name="children">
         <documentation>
             Child elements of the element.
         </documentation>

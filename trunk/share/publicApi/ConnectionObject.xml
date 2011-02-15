@@ -41,14 +41,22 @@
             Collection, that contains all property values.
         </documentation>
         <index name="path" type="string" />
-        <value type="object" readable="true" writable="true" />
+        <value type="string" readable="true" writable="true" />
+    </property>
+    
+    <property name="allValues">
+        <documentation>
+            Iterator over all property values.
+        </documentation>
+        
+        <value type="keyvalue" iterable="true" />
     </property>
     
     <property name="type">
         <documentation>
-            Connection type identifier.
+            Connection type.
         </documentation>
-        <value type="string" readable="true" />
+        <value type="org.umlfri.api.metamodel.ConnectionType" readable="true" />
     </property>
     
     <property name="appears">

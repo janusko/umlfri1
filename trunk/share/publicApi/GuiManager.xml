@@ -58,4 +58,22 @@
             </documentation>
         </parameter>
     </method>
+    
+    <method name="deleteMe">
+        <documentation>
+            Remove all plugins widgets from UML .FRI gui.
+        </documentation>
+    </method>
+    
+    <method name="hideMe">
+        <documentation>
+            Hide all plugins widgets from UML .FRI gui.
+        </documentation>
+    </method>
+    
+    <method name="showMe">
+        <documentation>
+            Show all plugins widgets from UML .FRI gui.
+        </documentation>
+    </method>
 </interface>

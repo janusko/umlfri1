@@ -46,40 +46,6 @@
         <return type="org.umlfri.api.gui.MenuItem" />
     </method>
     
-    <method name="addStockMenuItem" mutator="true">
-        <documentation>
-            Adds a new themed menu item to the menu.
-        </documentation>
-        
-        <parameter name="guiId" type="string">
-            <documentation>
-                Menu item unique ID.
-            </documentation>
-        </parameter>
-        <parameter name="callback" type="org.umlfri.api.gui.BasicEventHandler">
-            <documentation>
-                Callback function delegate.
-            </documentation>
-        </parameter>
-        <parameter name="position" type="int32">
-            <documentation>
-                Menu item position.
-            </documentation>
-        </parameter>
-        <parameter name="stock" type="string">
-            <documentation>
-                Theme icon identifier.
-            </documentation>
-        </parameter>
-        <parameter name="label" type="string" required="false">
-            <documentation>
-                Menu item label.
-            </documentation>
-        </parameter>
-        
-        <return type="org.umlfri.api.gui.MenuItem" />
-    </method>
-    
     <method name="addCheckMenuItem" mutator="true">
         <documentation>
             Adds a new themed menu item to the menu.

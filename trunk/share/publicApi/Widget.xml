@@ -8,9 +8,16 @@
         ...
     </documentation>
     
-    <property name="sensitive">
+    <property name="enabled">
         <documentation>
-            Widget's sensitivity. True, if widget is enabled.
+            True, if widget is enabled.
+        </documentation>
+        <value type="boolean" readable="true" writable="true" />
+    </property>
+    
+    <property name="visible">
+        <documentation>
+            Widget's visibility. True, if widget is visible.
         </documentation>
         <value type="boolean" readable="true" writable="true" />
     </property>
