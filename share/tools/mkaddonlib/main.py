@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 from lib.model import Builder
 from lib.generator import FileList
 from optparse import OptionParser

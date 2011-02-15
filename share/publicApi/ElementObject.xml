@@ -21,7 +21,7 @@
         </documentation>
         
         <index name="path" type="string" />
-        <value type="string" readable="true" writable="true" />
+        <value type="variant" readable="true" writable="true" />
     </property>
     
     <property name="allValues">
