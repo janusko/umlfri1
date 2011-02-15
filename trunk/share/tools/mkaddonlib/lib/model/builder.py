@@ -94,6 +94,7 @@ class Builder(object):
             namespace,
             base = root.attrib.get('base'),
             abstract = root.attrib.get('abstract', "false").lower() in ("1", "true"),
+            generate = root.attrib.get('generate', "true").lower() in ("1", "true"),
             documentation = self.__parseDocumentation(root.find(self.__xmlns%'documentation'))
         )
         
