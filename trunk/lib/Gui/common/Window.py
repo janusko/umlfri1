@@ -10,7 +10,9 @@ class CWindow(CWidget):
         
         if self.dont_delete:
             self.form.connect('delete-event', self.__on_delete_event)
-        
+    
+    def IsVisible(self):
+        return self.form.get_property("visible")
     
     def Show(self):
         self.form.show()
