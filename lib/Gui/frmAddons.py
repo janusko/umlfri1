@@ -3,10 +3,49 @@ from lib.Depend.gtk2 import gtk, pango, glib
 import os.path
 import webbrowser
 
+import lib.consts
 from lib.Drawing.Canvas.GtkPlus import PixmapFromPath
 
 from common import event, CWindow
 from dialogs import CQuestionDialog
+import time
+
+class PluginStartStop(object):
+    def __init__(self, application, addon, startStop):
+        self.__application = application
+        self.__addon = addon
+        self.__status = startStop
+        self.__time = time.time()
+    
+    def GetStatus(self):
+        return self.__status
+    
+    def Step(self):
+        if self.__status == 'start':
+            if self.__addon.IsRunning():
+                self.__addon.Enable()
+                self.__status = 'done'
+        else:
+            if not self.__addon.IsRunning():
+                self.__addon.Disable()
+                self.__status = 'done'
+            elif time.time() - self.__time > lib.consts.PLUGIN_KILL_SECONDS:
+                self.__time = time.time()
+                
+                if self.__application.GetWindow('frmAddons').IsVisible():
+                    parent = self.__application.GetWindow('frmAddons')
+                else:
+                    parent = self.__application.GetWindow('frmMain')
+                killDialog = self.__application.GetWindow('frmTerminateAddon')
+                kill = killDialog.ShowDialog(parent, self.__addon)
+                
+                if kill:
+                    if self.__status == 'stop':
+                        self.__status = 'terminate'
+                        self.__addon.Terminate()
+                    else:
+                        self.__status = 'error'
+                        self.__addon.Kill()
 
 class CfrmAddons(CWindow):
     name = 'frmAddons'
@@ -29,6 +68,8 @@ class CfrmAddons(CWindow):
         
         self.__MetamodelStore = self.__InitTw(self.twMetamodelList)
         self.__PluginStore = self.__InitTw(self.twPluginList)
+        self.__StartStopTimerId = None
+        self.__ToStartStop = []
         
     def __InitTw(self, tw):
         store = gtk.TreeStore(gtk.gdk.Pixbuf, str, bool, str)
@@ -160,6 +201,19 @@ class CfrmAddons(CWindow):
         
         selected = treeView.get_model().get(iter, 3)[0]
         return self.application.GetAddonManager().GetAddon(selected)
+    
+    def __StartStopTimer(self):
+        for addon in self.__ToStartStop[:]:
+            addon.Step()
+            
+            if addon.GetStatus() == 'done':
+                self.__ToStartStop.remove(addon)
+        
+        if self.__ToStartStop:
+            return True
+        else:
+            self.__StartStopTimerId = None
+            return False
     
     @event("cmdEnableMetamodel", "clicked")
     @event("mnuEnableMetamodel", "activate")
@@ -325,7 +379,9 @@ class CfrmAddons(CWindow):
         
         if addon is not None and not addon.IsRunning():
             addon.Start()
-            addon.Enable()
+            self.__ToStartStop.append(PluginStartStop(self.application, addon, 'start'))
+            if self.__StartStopTimerId is None:
+                self.__StartStopTimerId = glib.timeout_add(100, self.__StartStopTimer)
     
     @event("mnuStopPlugin", "activate")
     @event("cmdPluginStop", "clicked")
@@ -334,4 +390,6 @@ class CfrmAddons(CWindow):
         
         if addon is not None and addon.IsRunning():
             addon.Stop()
-            addon.Disable()
+            self.__ToStartStop.append(PluginStartStop(self.application, addon, 'stop'))
+            if self.__StartStopTimerId is None:
+                self.__StartStopTimerId = glib.timeout_add(100, self.__StartStopTimer)
