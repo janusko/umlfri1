@@ -20,6 +20,9 @@ class PluginStartStop(object):
     def GetStatus(self):
         return self.__status
     
+    def GetAddon(self):
+        return self.__addon
+    
     def Step(self):
         if self.__status == 'start':
             if self.__addon.IsRunning():
@@ -210,7 +213,7 @@ class CfrmAddons(CWindow):
                 del self.__ToStartStop[uri]
                 seladdon = self.__GetSelectedAddon(self.twPluginList)
                 
-                if addon is seladdon:
+                if addon.GetAddon() is seladdon:
                     self.PluginChanged()
         
         if self.__ToStartStop:
@@ -386,6 +389,7 @@ class CfrmAddons(CWindow):
             self.__ToStartStop[addon.GetDefaultUri()] = PluginStartStop(self.application, addon, 'start')
             if self.__StartStopTimerId is None:
                 self.__StartStopTimerId = glib.timeout_add(100, self.__StartStopTimer)
+            self.PluginChanged()
     
     @event("mnuStopPlugin", "activate")
     @event("cmdPluginStop", "clicked")
@@ -397,3 +401,4 @@ class CfrmAddons(CWindow):
             self.__ToStartStop[addon.GetDefaultUri()] = PluginStartStop(self.application, addon, 'stop')
             if self.__StartStopTimerId is None:
                 self.__StartStopTimerId = glib.timeout_add(100, self.__StartStopTimer)
+            self.PluginChanged()
