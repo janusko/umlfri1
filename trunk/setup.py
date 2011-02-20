@@ -8,6 +8,7 @@ from py2exe.build_exe import py2exe as Cpy2exe
 import re
 from pprint import pprint
 import platform
+import msvcrt
 
 languages = {
     'sk' : 'slovak'
@@ -34,6 +35,12 @@ def search_for_gtk():
         if os.path.isfile(os.path.join(path, 'libglib-2.0-0.dll')):
             return os.path.normpath(os.path.join(path, '..'))
 
+def vc_manifest():
+    proc = platform.machine()
+    vcrt = msvcrt.CRT_ASSEMBLY_VERSION
+    VC = 'VC' + ''.join(vcrt.split('.')[0:2])
+    return os.path.basename(glob.glob('c:\\windows\\WinSxS\\%s_microsoft.%s.crt_*_%s_*'%(proc, VC, vcrt))[0])
+
 class CDllPy2Exe(Cpy2exe):
     GTK_PATH = search_for_gtk()
     GTK_needed_files = ['etc/fonts', 'etc/gtk-2.0', 'etc/pango', ('lib/gtk-2.0/*/engines', 'libwimp.dll'),
@@ -41,9 +48,9 @@ class CDllPy2Exe(Cpy2exe):
                         'share/themes/MS-Windows/gtk-2.0']
     GTK_dll_fixes = ['bin/iconv.dll', 'bin/libxml2-2.dll']
     
-    VC_PATH = 'c:\\windows\\WinSxS\\x86_microsoft.vc90.crt_1fc8b3b9a1e18e3b_9.0.21022.8_none_bcb86ed6ac711f91'
+    VC_PATH = 'c:\\windows\\WinSxS\\%s'%vc_manifest()
     VC_needed_files = ['msvcr90.dll', 'msvcm90.dll', 'msvcp90.dll']
-    VC_MANIFEST = 'c:/Windows/WinSxS/Manifests/x86_microsoft.vc90.crt_1fc8b3b9a1e18e3b_9.0.21022.8_none_bcb86ed6ac711f91.manifest'
+    VC_MANIFEST = 'c:/Windows/WinSxS/Manifests/%s.manifest'%vc_manifest()
     
     def fixup_distribution(self):
         Cpy2exe.fixup_distribution(self)
@@ -239,8 +246,6 @@ setup(
             "dest_base": "bin/uml_fri",
             "company_name": "Faculty of Management Science and Informatics, University of Zilina",
         },
-    ],
-    console = [
         {
             "script": "lib/Addons/Plugin/Starter/Python/pl_runner.py",
             "dest_base": "bin/pl_runner",
@@ -250,7 +255,7 @@ setup(
     zipfile = 'lib/libs.dll',
     options = {
         "py2exe": {
-            "includes": "pango,atk,gobject,cairo,pangocairo",
+            "includes": "pango,atk,gobject,cairo,pangocairo,gio,glib,code",
             'packages': ['lxml'],
             "compressed": 1,
             "optimize": 2,
