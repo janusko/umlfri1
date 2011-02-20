@@ -18,7 +18,7 @@ class CPipeMedium(object):
             return True
             
     def IsOpened(self):
-        return self.__isOpened and not self._isClosedPipe()
+        return self.__isOpened
         
     def Recv(self, buflen):
         try:
