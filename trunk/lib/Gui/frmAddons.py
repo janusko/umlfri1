@@ -69,7 +69,7 @@ class CfrmAddons(CWindow):
         self.__MetamodelStore = self.__InitTw(self.twMetamodelList)
         self.__PluginStore = self.__InitTw(self.twPluginList)
         self.__StartStopTimerId = None
-        self.__ToStartStop = []
+        self.__ToStartStop = {}
         
     def __InitTw(self, tw):
         store = gtk.TreeStore(gtk.gdk.Pixbuf, str, bool, str)
@@ -203,11 +203,15 @@ class CfrmAddons(CWindow):
         return self.application.GetAddonManager().GetAddon(selected)
     
     def __StartStopTimer(self):
-        for addon in self.__ToStartStop[:]:
+        for uri, addon in self.__ToStartStop.items():
             addon.Step()
             
             if addon.GetStatus() == 'done':
-                self.__ToStartStop.remove(addon)
+                del self.__ToStartStop[uri]
+                seladdon = self.__GetSelectedAddon(self.twPluginList)
+                
+                if addon is seladdon:
+                    self.PluginChanged()
         
         if self.__ToStartStop:
             return True
@@ -346,7 +350,7 @@ class CfrmAddons(CWindow):
     def PluginChanged(self, treeView = None):
         addon = self.__GetSelectedAddon(self.twPluginList)
         
-        if addon is None:
+        if addon is None or addon.GetDefaultUri() in self.__ToStartStop:
             self.cmdPluginStart.set_sensitive(False)
             self.cmdPluginStop.set_sensitive(False)
             self.cmdUninstallPlugin.set_sensitive(False)
@@ -363,7 +367,7 @@ class CfrmAddons(CWindow):
             if path is None:
                 return
             addon = self.__GetSelectedAddon(self.twPluginList, path[0])
-            if addon is not None:
+            if addon is not None and addon.GetDefaultUri() not in self.__ToStartStop:
                 enabled = self.__AddonEnabled(addon)
                 self.mnuStartPlugin.set_sensitive(not enabled)
                 self.mnuStopPlugin.set_sensitive(enabled)
@@ -379,7 +383,7 @@ class CfrmAddons(CWindow):
         
         if addon is not None and not addon.IsRunning():
             addon.Start()
-            self.__ToStartStop.append(PluginStartStop(self.application, addon, 'start'))
+            self.__ToStartStop[addon.GetDefaultUri()] = PluginStartStop(self.application, addon, 'start')
             if self.__StartStopTimerId is None:
                 self.__StartStopTimerId = glib.timeout_add(100, self.__StartStopTimer)
     
@@ -390,6 +394,6 @@ class CfrmAddons(CWindow):
         
         if addon is not None and addon.IsRunning():
             addon.Stop()
-            self.__ToStartStop.append(PluginStartStop(self.application, addon, 'stop'))
+            self.__ToStartStop[addon.GetDefaultUri()] = PluginStartStop(self.application, addon, 'stop')
             if self.__StartStopTimerId is None:
                 self.__StartStopTimerId = glib.timeout_add(100, self.__StartStopTimer)
