@@ -1,0 +1,111 @@
+<?xml version="1.0" ?>
+<interface
+    xmlns="http://umlfri.org/xmlschema/publicApi.xsd"
+    name="org.umlfri.api.model.ElementVisual"
+    base="org.umlfri.api.model.Visual">
+    
+    <documentation>
+        ...
+    </documentation>
+    
+    <property name="position">
+        <documentation>
+            Absolute position of the connection label.
+        </documentation>
+        
+        <value type="xy" readable="true" />
+    </property>
+    
+    <property name="center">
+        <documentation>
+            Absolute position of the connection label center.
+        </documentation>
+        
+        <value type="xy" readable="true" />
+    </property>
+    
+    <property name="size">
+        <documentation>
+            Size of the connection label.
+        </documentation>
+        
+        <value type="wh" readable="true" />
+    </property>
+    
+    <property name="minimalSize">
+        <documentation>
+            Minimal size of the connection label.
+        </documentation>
+        
+        <value type="wh" readable="true" />
+    </property>
+    
+    <property name="square">
+        <documentation>
+            Minimal size of the connection label.
+        </documentation>
+        
+        <value type="xywh" readable="true" />
+    </property>
+    
+    <property name="object">
+        <documentation>
+            Connection object associated with the connection label.
+        </documentation>
+        
+        <value type="org.umlfri.api.model.ConnectionObject" readable="true" />
+    </property>
+    
+    <property name="diagram">
+        <documentation>
+            Diagram, on which the connection label is located.
+        </documentation>
+        
+        <value type="org.umlfri.api.model.Diagram" readable="true" />
+    </property>
+    
+    <method name="areYouAtPosition">
+        <documentation>
+            Determines, whether the connection label is located on given
+            coordinates, or not.
+        </documentation>
+        
+        <parameter name="pos" type="xy">
+            <documentation>
+                Tested position.
+            </documentation>
+        </parameter>
+        
+        <return type="boolean" />
+    </method>
+    
+    <method name="areYouInRange">
+        <documentation>
+            Determines, whether the connection label is located in given
+            range of coordinates, or not.
+        </documentation>
+        
+        <parameter name="topLeft" type="xy">
+            <documentation>
+                Top left position of the range.
+            </documentation>
+        </parameter>
+        
+        <parameter name="bottomRight" type="xy">
+            <documentation>
+                Bottom right position of the range.
+            </documentation>
+        </parameter>
+        
+        <return type="boolean" />
+    </method>
+    
+    <property name="connections">
+        <documentation>
+            Collection of all connections attached to the element that
+            are shown on the same diagram.
+        </documentation>
+        
+        <value type="org.umlfri.api.model.ConnectionVisual" iterable="true" />
+    </property>
+</interface>
