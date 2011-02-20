@@ -42,17 +42,18 @@ def check():
     
     @raise AssertionError: if gtk support is missing
     """
-    assert gobject is not None and gtk is not None, "PyGTK 2.x must be installed"
-    assert pango is not None, "PyGTK have no pango support"
-    assert cairo is not None and pangocairo is not None, "PyGTK have no cairo support"
+    from base import checkDependencyMet
     
-    assert gtk.gtk_version >= (2, 10), "GTK+ 2.10 or better is required"
-    assert gtk.pygtk_version >= (2, 10), "PyGTK 2.10 or better is required"
+    checkDependencyMet(gobject is not None and gtk is not None, "PyGTK 2.x must be installed")
+    checkDependencyMet(pango is not None, "PyGTK have no pango support")
+    checkDependencyMet(cairo is not None and pangocairo is not None, "PyGTK have no cairo support")
     
-    assert gtk.gtk_version < (2, 13) or (2, 14, 7) <= gtk.gtk_version, (
-        "GTK+ %s has known bug and is not supported" % ('.'.join(str(i) for i in gtk.gtk_version),))
+    checkDependencyMet(gtk.gtk_version >= (2, 10), "GTK+ 2.10 or better is required")
+    checkDependencyMet(gtk.pygtk_version >= (2, 10), "PyGTK 2.10 or better is required")
     
-    # pygtk.require('2.0')
+    checkDependencyMet(gtk.gtk_version < (2, 13) or (2, 14, 7) <= gtk.gtk_version,
+        ("GTK+ %s has known bug and is not supported" % ('.'.join(str(i) for i in gtk.gtk_version),))
+    )
 
 def version():
     """

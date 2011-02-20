@@ -27,11 +27,14 @@ def check():
     
     @raise AssertionError: if ElementTree is not installed
     """
+    from base import checkDependencyMet
     
-    assert etree is not None, "No implementation of ElementTree library installed"
+    checkDependencyMet(etree is not None, "No implementation of ElementTree library installed")
     
-    if not HAVE_LXML:
-        print "WARNING: lxml library is not installed. Data format validation will not be used"
+    checkDependencyMet(not HAVE_LXML,
+        "WARNING: lxml library is not installed. Data format validation will not be used",
+        optional = True
+    )
 
 def version():
     """

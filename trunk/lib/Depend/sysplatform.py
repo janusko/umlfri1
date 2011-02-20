@@ -38,12 +38,13 @@ def check():
     
     @raise AssertionError: if platform configuration is insufficient
     """
+    from base import checkDependencyMet
+    
     req = [2, 5]
     
     ver = getPythonVersion()
     
-    if ver < req:
-        raise AssertionError("You will need at least Python 2.5 to run UML .FRI")
+    checkDependencyMet(ver >= req, "You will need at least Python 2.5 to run UML .FRI")
 
 def version():
     """
