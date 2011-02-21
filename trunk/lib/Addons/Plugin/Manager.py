@@ -108,8 +108,10 @@ class CPluginManager(object):
     def __removePlugin(self, uri, addr):
         with self.pluginlock:
             with self.conlock:
-                if uri in self.plugins:
-                    self.plugins[uri].IsAlive() #just to make sure that process won't remain zombie
+                plugin = self.plugins.get(uri, None)
+                if plugin is not None:
+                    if plugin.IsAlive() and not plugin.GetLongRun():
+                        threading.Thread(None, self.KillTask, None, (plugin, )).start()
                     self.plugins[uri]._Disconnect()
                 if addr in self.connection:
                     self.connection[addr].Close()
