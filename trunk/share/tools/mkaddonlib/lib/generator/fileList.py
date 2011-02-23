@@ -34,10 +34,10 @@ class FileList(object):
                 data = lxml.etree.parse(path).getroot()
             elif path.endswith('.xml.tmpl'):
                 data = lxml.etree.XML(
-                    str(CheetahTemplate(file(inputFile), {'root': self.__root}))
+                    str(CheetahTemplate(file(path).read(), {'root': self.__root}))
                 )
             
-            for child in data.children:
+            for child in data.getchildren():
                 if child.tag == 'file':
                     self.__appendFile(rel(child.attrib['path']), child.attrib['output'])
                 elif child.tag == 'generator':
@@ -46,6 +46,10 @@ class FileList(object):
                     self.__appendLibrary(rel(child.attrib['path']))
                 elif child.tag == 'template':
                     self.__appendTemplate(rel(child.attrib['path']), child.attrib['output'])
+    
+    def create(self, dir):
+        for f in self.__fileList:
+            f.create(dir)
     
     def __appendFile(self, inputFile, outputFile):
         self.__fileList.append(File(inputFile, outputFile, self.__root))
