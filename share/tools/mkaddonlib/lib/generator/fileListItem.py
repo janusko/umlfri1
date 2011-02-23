@@ -14,7 +14,7 @@ class FileListItem(object):
         
         self.__mkdir(dir)
         
-        with file(os.path.join(dir, relfile)) as f:
+        with file(os.path.join(dir, relfile), 'w') as f:
             f.write(self.generate(self.__inputFile, self.__root))
     
     def generate(self, inputFile, root):
