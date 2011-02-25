@@ -21,9 +21,7 @@ builder = Builder()
 builder.parse()
 builder.finish()
 
-root = builder.getRootNamespace()
-
-out = FileList(root)
+out = FileList(builder)
 
 for index in args:
     out.parse(index)

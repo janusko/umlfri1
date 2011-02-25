@@ -7,4 +7,4 @@ class Template(FileListItem):
         FileListItem.__init__(self, inputFile, outputFile, root)
     
     def generate(self, inputFile, root):
-        return str(CheetahTemplate(file(inputFile), {'root': root}))
+        return str(CheetahTemplate(file(inputFile).read(), {'root': root}))

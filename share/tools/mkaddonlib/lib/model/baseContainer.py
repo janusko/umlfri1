@@ -16,6 +16,11 @@ class BaseContainer(Base):
         for child in self.__orderedChildren:
             yield child
     
+    def childrenOfType(self, typeName):
+        for child in self.__orderedChildren:
+            if child.typeName == typeName:
+                yield child
+    
     def getChild(self, name):
         return self.__children[name]
     
