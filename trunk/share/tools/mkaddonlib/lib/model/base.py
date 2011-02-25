@@ -42,6 +42,10 @@ class Base(object):
     def parent(self):
         return self.__parent
     
+    @property
+    def typeName(self):
+        return self.__class__.__name__
+    
     def _link(self, builder):
         pass
     
