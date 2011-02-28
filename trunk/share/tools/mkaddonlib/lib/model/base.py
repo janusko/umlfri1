@@ -50,7 +50,7 @@ class Base(object):
         pass
     
     def __str__(self):
-        return self.fqn
+        return str(self.fqn)
     
     def __repr__(self):
         return '<%s %s>'%(self.__class__.__name__, self.fqn)
