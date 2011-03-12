@@ -29,6 +29,15 @@ class Interface(BaseContainer):
     def documentation(self):
         return self.__documentation
     
+    @property
+    def referenced(self):
+        if self.__base is not None:
+            yield self.__base
+        
+        for child in self.children:
+            for type in child.referenced:
+                yield type
+    
     def _link(self, builder):
         BaseContainer._link(self, builder)
         

@@ -36,6 +36,11 @@ class InterfaceMethodReturn(Base):
     def documentation(self):
         return self.__documentation
     
+    @property
+    def referenced(self):
+        if not isinstance(self.__type, PrimitiveType):
+            yield self.__type
+    
     def __repr__(self):
         return "<ReturnType of InterfaceMethod %s>"%(self.parent.fqn)
     

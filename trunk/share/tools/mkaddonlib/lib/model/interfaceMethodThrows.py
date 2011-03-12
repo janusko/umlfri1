@@ -26,6 +26,10 @@ class InterfaceMethodThrows(Base):
     def documentation(self):
         return self.__documentation
     
+    @property
+    def referenced(self):
+        yield self.__exception
+    
     def __repr__(self):
         return "<Throws %s from InterfaceMethod %s>"%(self.exception.fqn, self.parent.fqn)
     

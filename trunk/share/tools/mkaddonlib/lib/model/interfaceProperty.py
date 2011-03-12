@@ -57,6 +57,13 @@ class InterfaceProperty(BaseContainer):
     def singular(self):
         return self.__singular
     
+    @property
+    def referenced(self):
+        if not isinstance(self.__type, PrimitiveType):
+            yield self.__type
+        if self.index is not None and not isinstance(self.index.type, PrimitiveType):
+            yield self.index.type
+    
     def _link(self, builder):
         BaseContainer._link(self, builder)
         
