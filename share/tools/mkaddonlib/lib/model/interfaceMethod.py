@@ -50,3 +50,9 @@ class InterfaceMethod(BaseContainer):
     @property
     def documentation(self):
         return self.__documentation
+    
+    @property
+    def referenced(self):
+        for child in self.children:
+            for type in child.referenced:
+                yield type

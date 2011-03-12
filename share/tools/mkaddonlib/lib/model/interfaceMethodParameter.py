@@ -56,6 +56,11 @@ class InterfaceMethodParameter(Base):
     def documentation(self):
         return self.__documentation
     
+    @property
+    def referenced(self):
+        if self.__type != '*' and not isinstance(self.__type, PrimitiveType):
+            yield self.__type
+    
     def __repr__(self):
         return "<Parameter %s of InterfaceMethod %s>"%(self.name, self.parent.fqn)
     
