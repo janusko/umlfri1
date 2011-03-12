@@ -1,4 +1,7 @@
 from .base import Base
+from .interfaceMethod import InterfaceMethod
+from .interfaceMethodParameter import InterfaceMethodParameter
+from .interfaceMethodReturn import InterfaceMethodReturn
 
 from . import helper
 
@@ -47,5 +50,17 @@ class InterfacePropertySetter(Base):
     def transactional(self):
         return self.__transactional
     
+    def createMethod(self, name = None, value = 'value'):
+        if name is None:
+            name = self.name
+        meth = InterfaceMethod(name, self.interfaceProperty.interface, apiName = self.apiName, documentation = self.interfaceProperty.documentation)
+        
+        if self.index is not None:
+            InterfaceMethodParameter(self.index.name, meth, self.index.type, apiName = self.index.apiName, documentation = self.index.documentation)
+        
+        InterfaceMethodParameter(value, meth, self.type, apiName = 'value')
+        
+        return meth
+   
     def __repr__(self):
         return "<Setter of InterfaceProperty %s>"%(self.parent.fqn)

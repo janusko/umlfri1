@@ -3,6 +3,7 @@ from .delegate import Delegate
 from .delegateParameter import DelegateParameter
 from .delegateReturn import DelegateReturn
 from .delegateThrows import DelegateThrows
+from .documentation import Documentation
 from .exception import Exception as ExceptionDefinition
 from .exceptionProperty import ExceptionProperty
 from .interface import Interface
@@ -340,7 +341,7 @@ class Builder(object):
         
         text = documentation.text
         
-        return '\n'.join(line.strip() for line in text.strip().split('\n'))
+        return Documentation('\n'.join(line.strip() for line in text.strip().split('\n')))
     
     def __printStructureHelper(self, object, level):
         print ('    ' * level) + repr(object), ('with api name ' + repr(object.apiName)) if hasattr(object, 'apiName') else ''
