@@ -1,4 +1,7 @@
 from .base import Base
+from .interfaceMethod import InterfaceMethod
+from .interfaceMethodParameter import InterfaceMethodParameter
+from .interfaceMethodReturn import InterfaceMethodReturn
 
 from . import helper
 
@@ -41,6 +44,15 @@ class InterfacePropertyIterator(Base):
     @property
     def apiName(self):
         return self.__apiName
+    
+    def createMethod(self, name = None):
+        if name is None:
+            name = self.name
+        meth = InterfaceMethod(name, self.interfaceProperty.interface, apiName = self.apiName, documentation = self.interfaceProperty.documentation)
+        
+        InterfaceMethodReturn(meth, self.type, iterable = True)
+        
+        return meth
     
     def __repr__(self):
         return "<Iterator of InterfaceProperty %s>"%(self.parent.fqn)

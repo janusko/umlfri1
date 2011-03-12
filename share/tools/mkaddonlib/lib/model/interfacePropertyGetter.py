@@ -1,4 +1,7 @@
 from .base import Base
+from .interfaceMethod import InterfaceMethod
+from .interfaceMethodParameter import InterfaceMethodParameter
+from .interfaceMethodReturn import InterfaceMethodReturn
 
 from . import helper
 
@@ -41,6 +44,18 @@ class InterfacePropertyGetter(Base):
     @property
     def apiName(self):
         return self.__apiName
+    
+    def createMethod(self, name = None):
+        if name is None:
+            name = self.name
+        meth = InterfaceMethod(name, self.interfaceProperty.interface, apiName = self.apiName, documentation = self.interfaceProperty.documentation)
+        
+        if self.index is not None:
+            InterfaceMethodParameter(self.index.name, meth, self.index.type, apiName = self.index.apiName, documentation = self.index.documentation)
+        
+        InterfaceMethodReturn(meth, self.type)
+        
+        return meth
     
     def __repr__(self):
         return "<Getter of InterfaceProperty %s>"%(self.parent.fqn)
