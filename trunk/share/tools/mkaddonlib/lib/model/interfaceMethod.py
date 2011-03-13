@@ -1,6 +1,7 @@
 from .baseContainer import BaseContainer
 from .interfaceMethodParameter import InterfaceMethodParameter
 from .interfaceMethodReturn import InterfaceMethodReturn
+from .interfaceMethodThrows import InterfaceMethodThrows
 
 from . import helper
 
@@ -34,6 +35,12 @@ class InterfaceMethod(BaseContainer):
         for child in self.children:
             if isinstance(child, InterfaceMethodReturn):
                 return child
+    
+    @property
+    def throws(self):
+        for child in self.children:
+            if isinstance(child, InterfaceMethodThrows):
+                yield child
     
     @property
     def apiName(self):

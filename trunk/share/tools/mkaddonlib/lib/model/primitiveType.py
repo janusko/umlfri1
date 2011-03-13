@@ -42,6 +42,10 @@ class PrimitiveType(object):
     
     def convert(self, value):
         return self.__convertor(value)
+    
+    @property
+    def typeName(self):
+        return 'PrimitiveType'
 
 primitiveTypes = {
     'boolean':      PrimitiveType('boolean', isLogic = True, convertor = bool, default = False),
