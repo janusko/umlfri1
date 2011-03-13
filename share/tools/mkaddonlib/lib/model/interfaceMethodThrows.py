@@ -36,5 +36,4 @@ class InterfaceMethodThrows(Base):
     def _link(self, builder):
         Base._link(self, builder)
         
-        if not isinstance(self.__exception, PrimitiveType):
-            self.__exception = builder.getTypeByName(self.__exception)
+        self.__exception = builder.getTypeByName(self.__exception)

@@ -146,7 +146,7 @@ class Builder(object):
                     documentation = self.__parseDocumentation(child.find(self.__xmlns%'documentation')),
                 )
             elif child.tag == self.__xmlns%'throws':
-                returnType = InterfaceMethodThrows(
+                throws = InterfaceMethodThrows(
                     method,
                     child.attrib['exception'],
                     documentation = self.__parseDocumentation(child.find(self.__xmlns%'documentation')),

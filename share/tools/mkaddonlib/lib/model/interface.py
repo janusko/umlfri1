@@ -31,12 +31,16 @@ class Interface(BaseContainer):
     
     @property
     def referenced(self):
+        ret = set()
         if self.__base is not None:
-            yield self.__base
+            ret.add(self.__base)
         
         for child in self.children:
             for type in child.referenced:
-                yield type
+                ret.add(type)
+        
+        for obj in ret:
+            yield obj
     
     def _link(self, builder):
         BaseContainer._link(self, builder)
