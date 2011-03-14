@@ -93,6 +93,7 @@ class Builder(object):
         interface = Interface(
             name,
             namespace,
+            apiName = root.attrib.get('apiName'),
             base = root.attrib.get('base'),
             abstract = root.attrib.get('abstract', "false").lower() in ("1", "true"),
             generate = root.attrib.get('generate', "true").lower() in ("1", "true"),
