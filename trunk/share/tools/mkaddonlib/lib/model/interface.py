@@ -1,8 +1,14 @@
 from .baseContainer import BaseContainer
+from . import helper
 
 class Interface(BaseContainer):
-    def __init__(self, name, namespace, base = None, abstract = False, generate = True, documentation = None):
+    def __init__(self, name, namespace, apiName = None, base = None, abstract = False, generate = True, documentation = None):
         BaseContainer.__init__(self, name, namespace)
+        
+        if apiName is not None:
+            self.__apiName = apiName
+        else:
+            self.__apiName = helper.computeInterfaceApiName(self.identifier)
         
         self.__base = base
         self.__abstract = abstract
@@ -12,6 +18,10 @@ class Interface(BaseContainer):
     @property
     def namespace(self):
         return self.parent
+    
+    @property
+    def apiName(self):
+        return self.__apiName
     
     @property
     def base(self):
