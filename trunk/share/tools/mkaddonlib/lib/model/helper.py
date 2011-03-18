@@ -1,7 +1,7 @@
 import re
 
 def computeInterfaceApiName(name):
-    return name.upperCamelCase
+    return ('I' + name).upperCamelCase
 
 def computeMethodApiName(singular):
     return singular.upperCamelCase
