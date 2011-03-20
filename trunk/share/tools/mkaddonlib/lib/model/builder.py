@@ -353,7 +353,7 @@ class Builder(object):
     
     def __addToCache(self, object):
         if object.fqn in self.__cache:
-            raise Exception()
+            raise Exception("%s is already in cache"%object.fqn)
         
         self.__cache[object.fqn] = object
         
