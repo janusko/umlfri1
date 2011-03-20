@@ -56,38 +56,7 @@
 					</xs:complexType>
 				</xs:element>
 				<xs:element name="Description" type="xs:string" minOccurs="0"/>
-				<xs:element name="Compatibility" minOccurs="0">
-					<xs:complexType>
-						<xs:sequence>
-							<xs:element name="UmlFri">
-								<xs:complexType>
-									<xs:sequence>
-										<xs:element name="Version" maxOccurs="unbounded">
-											<xs:complexType>
-												<xs:attribute name="min" type="xs:string"/>
-												<xs:attribute name="max" type="xs:string"/>
-											</xs:complexType>
-										</xs:element>
-									</xs:sequence>
-								</xs:complexType>
-							</xs:element>
-							<xs:element name="AddOn" maxOccurs="unbounded">
-								<xs:complexType>
-									<xs:sequence>
-										<xs:element name="Version" maxOccurs="unbounded">
-											<xs:complexType>
-												<xs:attribute name="min" type="xs:string"/>
-												<xs:attribute name="max" type="xs:string"/>
-											</xs:complexType>
-										</xs:element>
-									</xs:sequence>
-									<xs:attribute name="uri" use="required"/>
-									<xs:attribute name="required" type="xs:boolean" default="false"/>
-								</xs:complexType>
-							</xs:element>
-						</xs:sequence>
-					</xs:complexType>
-				</xs:element>
+				<xs:element name="Dependencies" type="DependencesType" minOccurs="0"/>
 				<xs:choice>
 					<xs:element name="Metamodel" type="MetamodelType"/>
 					<xs:element name="Plugin" type="PluginType"/>
@@ -113,27 +82,10 @@
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="PluginType">
-		<xs:sequence>
-			<xs:choice>
-				<xs:sequence>
-					<xs:element name="Code" type="PluginCodeType" maxOccurs="unbounded"/>
-					<xs:element name="Patch" type="PluginPatchType" minOccurs="0" maxOccurs="unbounded"/>
-				</xs:sequence>
-				<xs:element name="Patch" type="PluginPatchType" maxOccurs="unbounded"/>
-			</xs:choice>
-			<xs:element name="Metamodel" minOccurs="0" maxOccurs="unbounded">
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="Diagram" minOccurs="0" maxOccurs="unbounded">
-							<xs:complexType>
-								<xs:attribute name="required" type="xs:string" use="required"/>
-							</xs:complexType>
-						</xs:element>
-					</xs:sequence>
-					<xs:attribute name="required" type="xs:string" use="required"/>
-				</xs:complexType>
-			</xs:element>
-		</xs:sequence>
+		<xs:choice maxOccurs="unbounded">
+			<xs:element name="Code" type="PluginCodeType"/>
+			<xs:element name="Patch" type="PluginPatchType"/>
+		</xs:choice>
 	</xs:complexType>
 	<xs:complexType name="CompositeType">
 		<xs:all>
@@ -148,5 +100,35 @@
 	</xs:complexType>
 	<xs:complexType name="PluginPatchType">
 		<xs:attribute name="module" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="DependencesType">
+		<xs:sequence>
+			<xs:element name="UmlFri" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Version">
+							<xs:complexType>
+								<xs:attribute name="min" type="xs:string"/>
+								<xs:attribute name="max" type="xs:string"/>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="AddOn" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Version" minOccurs="0">
+							<xs:complexType>
+								<xs:attribute name="min" type="xs:string"/>
+								<xs:attribute name="max" type="xs:string"/>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="uri" use="required"/>
+					<xs:attribute name="required" type="xs:boolean" default="false"/>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
 	</xs:complexType>
 </xs:schema>
