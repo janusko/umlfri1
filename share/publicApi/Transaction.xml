@@ -1,33 +1,32 @@
 <?xml version="1.0" ?>
 <interface
     xmlns="http://umlfri.org/xmlschema/publicApi.xsd"
-    name="org.umlfri.api.base.ApplicationInterface"
-    generate="false">
+    name="org.umlfri.api.base.Transaction">
     
     <documentation>
         ...
     </documentation>
     
-    <property name="adapter">
+    <property name="autocommit">
         <documentation>
-            Gets a reference to the plugin adapter.
+            Autocommit mode state.
         </documentation>
-        <value type="org.umlfri.api.base.Adapter" readable="true" />
+        <value type="boolean" readable="true" writable="true" />
     </property>
     
-    <method name="beginTransaction">
+    <method name="begin">
         <documentation>
             Enters the manual transactional mode.
         </documentation>
     </method>
     
-    <method name="commitTransaction">
+    <method name="commit">
         <documentation>
             Commits the transaction and ends the manual transactional mode.
         </documentation>
     </method>
     
-    <method name="rollbackTransaction">
+    <method name="rollback">
         <documentation>
             Rollbacks the transaction and ends the manual transactional mode.
         </documentation>

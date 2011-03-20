@@ -81,6 +81,13 @@
         <value type="org.umlfri.api.gui.GuiManager" readable="true" />
     </property>
     
+    <property name="transaction">
+        <documentation>
+            Gets a transaction manager.
+        </documentation>
+        <value type="org.umlfri.api.model.Project" readable="true" />
+    </property>
+    
     <method name="loadProject" mutator="true" transactional="false">
         <documentation>
             Loads the given project in UML .FRI and sets the project instance.
