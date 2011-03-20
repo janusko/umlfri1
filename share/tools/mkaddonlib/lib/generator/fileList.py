@@ -35,7 +35,7 @@ class FileList(object):
                 data = lxml.etree.parse(path).getroot()
             elif path.endswith('.xml.tmpl'):
                 data = lxml.etree.XML(
-                    str(CheetahTemplate(file(path).read(), {'root': self.__builder.getRootNamespace()}))
+                    str(CheetahTemplate(file = path, namespaces = {'root': self.__builder.getRootNamespace()}))
                 )
             
             for child in data.getchildren():

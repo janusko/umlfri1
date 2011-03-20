@@ -1,5 +1,7 @@
 from .fileListItem import FileListItem
 
+import os
+import os.path
 from Cheetah.Template import Template as CheetahTemplate
 
 class Template(FileListItem):
@@ -7,4 +9,9 @@ class Template(FileListItem):
         FileListItem.__init__(self, inputFile, outputFile, root)
     
     def generate(self, inputFile, root):
-        return str(CheetahTemplate(file(inputFile).read(), {'root': root}))
+        oldDir = os.getcwd()
+        os.chdir(os.path.dirname(inputFile))
+        try:
+            return str(CheetahTemplate(file = inputFile, namespaces = {'root': root}))
+        finally:
+            os.chdir(oldDir)
