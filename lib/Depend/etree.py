@@ -31,7 +31,7 @@ def check():
     
     checkDependencyMet(etree is not None, "No implementation of ElementTree library installed")
     
-    checkDependencyMet(not HAVE_LXML,
+    checkDependencyMet(HAVE_LXML,
         "WARNING: lxml library is not installed. Data format validation will not be used",
         optional = True
     )
