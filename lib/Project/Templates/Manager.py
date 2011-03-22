@@ -41,4 +41,4 @@ class CTemplateManager(CBaseObject):
                     if icon is None:
                         icon = addon.GetIcon()
                     
-                    yield CTemplate(name, addon.GetStorage(), path, icon)
+                    yield CTemplate(name, addon.GetStorage(), path, icon, metamodelUri = addon.GetDefaultUri())

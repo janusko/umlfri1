@@ -1,11 +1,12 @@
 from lib.Base import CBaseObject
 
 class CTemplate(CBaseObject):
-    def __init__(self, name, storage, path, icon):
+    def __init__(self, name, storage, path, icon, metamodelUri = None):
         self.__name = name
         self.__storage = storage
         self.__path = path
         self.__icon = icon
+        self.__metamodelUri = metamodelUri
     
     def GetStorage(self):
         return self.__storage
@@ -15,6 +16,9 @@ class CTemplate(CBaseObject):
     
     def GetName(self):
         return self.__name
+    
+    def GetMetamodelUri(self):
+        return self.__metamodelUri
     
     def LoadInto(self, project):
         project.LoadProject(self.__path, True, self.__storage)
