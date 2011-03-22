@@ -12,6 +12,8 @@
             Autocommit mode state.
         </documentation>
         <value type="boolean" readable="true" writable="true" />
+        
+        <setter transactional="false" />
     </property>
     
     <method name="begin">
