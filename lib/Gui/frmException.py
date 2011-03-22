@@ -123,8 +123,8 @@ class CfrmException(CWindow):
 
             ### sending....testing ###
             try:
-                string_to_send = output.getvalue().encode('base64_codec')
                 tar.close() # close tar file
+                string_to_send = output.getvalue().encode('base64_codec')
                 output.close() # close cStringIO
                 
                 values = {'upfile' : string_to_send}
