@@ -1005,7 +1005,7 @@ class CpicDrawingArea(CWidget):
             for d in diagrams:
                 for c in d.GetConnections():
                     if c.GetObject() == sel.GetObject():
-                        c.ChangeConnection(self.canvas)                        
+                        c.ChangeConnection()
                         self.Paint()
                 
     def HasFocus(self):
