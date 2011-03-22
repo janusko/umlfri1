@@ -113,6 +113,7 @@ class Builder(object):
             apiName = root.attrib.get('apiname'),
             mutator = root.attrib.get('mutator', "false").lower() in ("1", "true"),
             transactional = root.attrib.get('transactional', "true").lower() in ("1", "true"),
+            async = root.attrib.get('async', "false").lower() in ("1", "true"),
             documentation = self.__parseDocumentation(root.find(self.__xmlns%'documentation'))
         )
         
@@ -156,9 +157,9 @@ class Builder(object):
     def __parseInterfaceProperty(self, root, interface):
         value = root.find(self.__xmlns%'value')
         index = root.find(self.__xmlns%'index')
-        getter = root.find('getter')
-        setter = root.find('setter')
-        iterator = root.find('iterator')
+        getter = root.find(self.__xmlns%'getter')
+        setter = root.find(self.__xmlns%'setter')
+        iterator = root.find(self.__xmlns%'iterator')
         
         property = InterfaceProperty(
             root.attrib['name'],
