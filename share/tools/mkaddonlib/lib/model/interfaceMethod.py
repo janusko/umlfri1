@@ -6,7 +6,7 @@ from .interfaceMethodThrows import InterfaceMethodThrows
 from . import helper
 
 class InterfaceMethod(BaseContainer):
-    def __init__(self, name, interface, apiName = None, mutator = False, transactional = True, documentation = None):
+    def __init__(self, name, interface, apiName = None, mutator = False, transactional = True, async = False, documentation = None):
         BaseContainer.__init__(self, name, interface, sorted = False)
         if apiName is not None:
             self.__apiName = apiName
@@ -15,6 +15,7 @@ class InterfaceMethod(BaseContainer):
         self.__documentation = documentation
         self.__mutator = mutator
         self.__transactional = mutator and transactional
+        self.__async = self.__transactional or async
     
     @property
     def fqn(self):
@@ -53,6 +54,10 @@ class InterfaceMethod(BaseContainer):
     @property
     def transactional(self):
         return self.__transactional
+    
+    @property
+    def async(self):
+        return self.__async
     
     @property
     def documentation(self):

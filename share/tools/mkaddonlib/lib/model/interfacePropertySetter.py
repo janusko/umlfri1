@@ -53,7 +53,7 @@ class InterfacePropertySetter(Base):
     def createMethod(self, name = None, value = 'value'):
         if name is None:
             name = self.name
-        meth = InterfaceMethod(name, self.interfaceProperty.interface, apiName = self.apiName, documentation = self.interfaceProperty.documentation)
+        meth = InterfaceMethod(name, self.interfaceProperty.interface, apiName = self.apiName, mutator = True, transactional = self.__transactional,  documentation = self.interfaceProperty.documentation)
         
         if self.index is not None:
             InterfaceMethodParameter(self.index.name, meth, self.index.type, apiName = self.index.apiName, documentation = self.index.documentation)
@@ -61,6 +61,6 @@ class InterfacePropertySetter(Base):
         InterfaceMethodParameter(value, meth, self.type, apiName = 'value')
         
         return meth
-   
+    
     def __repr__(self):
         return "<Setter of InterfaceProperty %s>"%(self.parent.fqn)

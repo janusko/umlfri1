@@ -14,6 +14,7 @@
 									<xs:attribute name="apiname" type="xs:string"/>
 									<xs:attribute name="mutator" type="xs:boolean" default="false"/>
 									<xs:attribute name="transactional" type="xs:boolean" default="true"/>
+									<xs:attribute name="async" type="xs:boolean" default="false"/>
 								</xs:extension>
 							</xs:complexContent>
 						</xs:complexType>
