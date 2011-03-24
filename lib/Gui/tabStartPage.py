@@ -24,8 +24,9 @@ class CtabStartPage(CWidget):
     
     __gsignals__ = {
         'open-about-dialog':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()), 
-        'open-project': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
-        'open-file':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)), 
+        'open-project': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
+        'create-project': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
+        'open-file':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,))
         }
     
     def __init__(self, app, wTree):
@@ -99,7 +100,7 @@ class CtabStartPage(CWidget):
     
     @event("ebOpen", "button-press-event")
     def on_ebOpen_button_press_event(self, widget, event):
-        self.emit('open-project',1)
+        self.emit('open-project')
         
     @event("ebAbout", "button-press-event")
     def on_ebAbout_button_press_event(self, widget, event):
@@ -107,7 +108,7 @@ class CtabStartPage(CWidget):
     
     @event("ebCreate", "button-press-event")
     def on_ebCreate_button_press_event(self, widget, event):
-        self.emit('open-project',0)
+        self.emit('create-project')
     
     @event("ebAbout","enter-notify-event")
     def on_ebAbout_mouse_enter(self, widget, event):

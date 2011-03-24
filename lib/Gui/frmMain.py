@@ -331,8 +331,9 @@ class CfrmMain(CWindow):
     @event("tabStartPage","open-project")
     @event("cmdOpen", "clicked")
     @event("mnuOpen", "activate")
-    def ActionOpen(self, widget,tab = 0):
-        filenameOrTemplate, copy = self.application.GetWindow("frmOpen").ShowDialog(self,tab)
+    def ActionOpen(self, widget):
+        filenameOrTemplate, copy = self.application.GetWindow("frmOpenProject").ShowDialog(self)
+        print filenameOrTemplate
         if filenameOrTemplate is not None:
             try:
                 if self.application.GetProject() is not None and CQuestionDialog(self.form, _('Do you want to save project?'), True).run():
@@ -340,6 +341,22 @@ class CfrmMain(CWindow):
             except ECancelPressed:
                 return
             self.LoadProject(filenameOrTemplate, copy)
+            self.tabStartPage.Fill()
+    
+    @event("tabStartPage", "create-project")
+    @event("mnuNewProject", "activate")
+    def ActionNewProject(self, widget):
+        filenameOrTemplate, copy = self.application.GetWindow ("frmNewProject").ShowDialog (self)
+        print filenameOrTemplate
+        if filenameOrTemplate:
+            try:
+                if self.application.GetProject () and \
+                    CQuestionDialog (self.form, _('Do you want to save project?'), True).run ():
+                    self.ActionSave (widget)
+            except ECanceledPressed:
+                print 'ECancelPressed'
+                return
+            self.LoadProject (filenameOrTemplate, copy)
             self.tabStartPage.Fill()
     
     @event("form", "key-press-event")
@@ -506,6 +523,10 @@ class CfrmMain(CWindow):
     @event("picDrawingArea", "add-element")
     def on_add_element(self, widget, Element, diagram, parentElement):
         self.twProjectView.AddElement(Element, diagram, parentElement)
+    
+    @event("mItemFile", "activate")
+    def on_mItemFile_activate (self, widget):
+        pass
 
     @event("mnuItems", "create-diagram")
     @event("twProjectView","create-diagram")
