@@ -22,11 +22,31 @@
                 <child>
                   <widget class="GtkMenu" id="mItemFile_menu">
                     <child>
+                      <widget class="GtkImageMenuItem" id="mnuNewProject">
+                        <property name="label">gtk-new</property>
+                        <property name="visible">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">True</property>
+                      </widget>
+                    </child>
+                    <child>
                       <widget class="GtkImageMenuItem" id="mnuOpen">
                         <property name="label">gtk-open</property>
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkMenuItem" id="mnuOpenRecent">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Open _Recent</property>
+                        <property name="use_underline">True</property>
+                        <child>
+                          <widget class="GtkMenu" id="menu1">
+                            <property name="visible">True</property>
+                          </widget>
+                        </child>
                       </widget>
                     </child>
                     <child>

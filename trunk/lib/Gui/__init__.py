@@ -9,7 +9,8 @@ from frmSplash import CfrmSplash
 from frmAbout import CfrmAbout
 from tbToolBox import CtbToolBox
 from frmProperties import CfrmProperties
-from frmOpen import CfrmOpen
+from frmNewProject import CfrmNewProject
+from frmOpenProject import CfrmOpenProject
 from frmSave import CfrmSave
 from frmFindInDiagram import CFindInDiagram
 from frmOptions import CfrmOptions
