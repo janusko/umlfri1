@@ -31,7 +31,7 @@ class CfrmMain(CWindow):
         #menu
         #############
         'mItemFile',
-        'mnuOpen', 'mnuSave', 'mnuSaveAs', 'mnuPrint', 'mnuProperties', 'mnuQuit',
+        'mnuOpen', 'mnuNewProject', 'mnuSave', 'mnuSaveAs', 'mnuPrint', 'mnuProperties', 'mnuQuit',
         #############
         'mItemEdit',
         'mnuCut', 'mnuCopy', 'mnuCopyAsImage', 'mnuPaste', 'mnuDelete',
