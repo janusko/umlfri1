@@ -1,4 +1,5 @@
 import colors
+import re
 
 from Base import CBaseObject
 
@@ -68,3 +69,43 @@ class CFont(CBaseObject):
             return ' '.join((self.__fontFamily, ' '.join(self.__fontStyle), str(self.__fontSize)))
         else:
             return ' '.join((self.__fontFamily, str(self.__fontSize)))
+
+class CVersion(str):
+    __reVersion = re.compile(r'(?P<version>[0-9]+(\.[0-9]+)*)(?P<verchar>[a-z])?(-(?P<suffix>(alpha|beta|pre|rc|p))(?P<sufnum>[0-9]+))?(@(?P<rev>([0-9]+|\*)))?$')
+    
+    def __init__(self, value):
+        str.__init__(self, value)
+        
+        parsed = self.__reVersion.search(value)
+        
+        if parsed is None:
+            raise Exception("Invalid version number")
+        else:
+            self.__version = tuple(int(i) for i in parsed.group('version').split('.'))
+            if parsed.group('verchar') is not None:
+                self.__version += (parsed.group('verchar'), )
+            
+            if parsed.group('suffix') is None:
+                self.__suffix = None
+            else:
+                self.__suffix = (parsed.group('suffix'), int(parsed.group('sufnum')))
+            
+            if parsed.group('rev') is None:
+                self.__revision = None
+            else:
+                self.__revision = int(parsed.group('rev'))
+    
+    def GetVersion(self):
+        return self.__version
+    
+    def GetSuffix(self):
+        return self.__suffix
+    
+    def GetRevision(self):
+        return self.__revision
+    
+    def __cmp__(self, other):
+        if not isinstance(other, CVersion):
+            return NotImplemented
+        
+        return cmp((self.__version, self.__suffix, self.__revision), (other.__version, other.__suffix, other.__revision))
