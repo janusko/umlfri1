@@ -1,6 +1,8 @@
+from lib.datatypes import CVersion
+
 class CAddon(object):
     def __init__(self, manager, storage, uris, component, enabled, uninstallable,
-                    author, name, version = "", license = (None, None), homepage = None,
+                    author, name, version, license = (None, None), homepage = None,
                     icon = None, description = None):
         self.__manager = manager
         
@@ -18,7 +20,7 @@ class CAddon(object):
         self.__homepage = homepage
         
         self.__name = name
-        self.__version = version
+        self.__version = CVersion(version)
         
         self.__icon = icon
         self.__description = description

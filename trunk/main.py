@@ -31,9 +31,13 @@ from lib.Exceptions import UserException
 
 from lib.Base.Registrar import registrar
 
+from lib.datatypes import CVersion
+
 __version__ = '1.0-rc4'
 
 class Application(CApplication):
+    version = CVersion(__version__)
+    
     windows = lib.Gui
     main_window = 'frmMain'
     textdomain = 'uml_fri'

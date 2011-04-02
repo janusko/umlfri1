@@ -26,9 +26,6 @@ class CApplication(gobject.GObject):
         gobject.GObject.__init__(self)
         self.propertiesWindow = CfrmProperties()
         gtk.glade.set_custom_handler(self.__get_custom_handler)
-        f_globals = sys._getframe().f_back.f_globals
-        if '__version__' in f_globals:
-            self.version = f_globals['__version__']
         
         arg_fncs = {}
         long_params = ['help', 'version']
