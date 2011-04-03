@@ -25,6 +25,7 @@ class CPluginAddonComponent(object):
         self.__metamodel = None
         
         self.__patchParams = patchParams
+        self.__patchStarted = True
     
     def _SetAddon(self, addon):
         self.__addon = addon
@@ -43,6 +44,7 @@ class CPluginAddonComponent(object):
         
         for patch in self.__patches:
             patch.Start()
+            self.__patchStarted = True
         
         if self.__path is not None:
             if self.__plugin is None:
@@ -58,7 +60,8 @@ class CPluginAddonComponent(object):
         if self.__patches is not None:
             for patch in self.__patches:
                 patch.Stop()
-                
+                self.__patchStarted = False
+    
     def Terminate(self):
         if self.__plugin is not None:
             self.__plugin.Terminate()
@@ -71,5 +74,5 @@ class CPluginAddonComponent(object):
         if self.__plugin is not None:
             return self.__plugin.IsAlive()
         else:
-            return False
+            return self.__patchStarted
         
