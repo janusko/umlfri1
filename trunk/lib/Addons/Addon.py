@@ -118,7 +118,7 @@ class CAddon(object):
         """
         
         if self.__umlfriVersionRange is not None:
-            ver = self.__manager.GetPluginAdapter().GetUmlfriVersion()
+            ver = self.__manager.GetPluginManager().GetPluginAdapter().GetUmlfriVersion()
             verFrom, verTo = self.__umlfriVersionRange
             
             if verFrom is not None and ver < verFrom:
