@@ -3,7 +3,8 @@ from lib.datatypes import CVersion
 class CAddon(object):
     def __init__(self, manager, storage, uris, component, enabled, uninstallable,
                     author, name, version, license = (None, None), homepage = None,
-                    icon = None, description = None):
+                    icon = None, description = None,
+                    umlfriVersionRange = None, dependencies = []):
         self.__manager = manager
         
         self.__storage = storage
@@ -24,6 +25,9 @@ class CAddon(object):
         
         self.__icon = icon
         self.__description = description
+        
+        self.__umlfriVersionRange = umlfriVersionRange
+        self.__dependencies = dependencies
     
     def GetStorage(self):
         return self.__storage
@@ -102,3 +106,40 @@ class CAddon(object):
     
     def GetManager(self):
         return self.__manager
+    
+    def CheckDependencies(self):
+        """
+        Check whether dependencies are met.
+        
+        @rtype str
+        @return 'ok' if addon can be started, 'later' if dependences
+        could be met in the future and 'no' if there are some of
+        the dependencies missing
+        """
+        
+        if self.__umlfriVersionRange is not None:
+            ver = self.__manager.GetPluginAdapter().GetUmlfriVersion()
+            verFrom, verTo = self.__umlfriVersionRange
+            
+            if verFrom is not None and ver < verFrom:
+                return 'no'
+            if verTo is not None and ver > verTo:
+                return 'no'
+        
+        ret = 'ok'
+        
+        for dep in self.__dependencies:
+            addon = self.__manager.GetAddon(dep.GetUri())
+            
+            if not dep.GetRequired():
+                if addon is not None and not addon.IsRunning():
+                    if ret == 'ok':
+                        ret = 'later'
+            else:
+                if addon is None:
+                    ret = 'no'
+                if not addon.IsRunning():
+                    if ret == 'ok':
+                        ret = 'later'
+        
+        return ret
