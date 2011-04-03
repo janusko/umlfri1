@@ -90,4 +90,5 @@ class CPluginAdapter(CBaseObject, CGuiObject):
         self.GetProject().LoadProject(fileName)
         gobject.idle_add(self.application.GetBus().emit, 'project-opened-from-plugin-adapter')
         
-    
+    def GetUmlfriVersion(self):
+        return self.application.GetVersion()

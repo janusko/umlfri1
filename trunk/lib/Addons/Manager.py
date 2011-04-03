@@ -8,6 +8,8 @@ import uuid
 from lib.lib import Indent
 from lib.Storages import open_storage, CDirectory
 from Addon import CAddon
+from Dependency import CDependency
+from lib.datatypes import CVersion
 
 from Composite.AddonComponent import CCompositeAddonComponent
 from Metamodel.AddonComponent import CMetamodelAddonComponent
@@ -122,6 +124,8 @@ class CAddonManager(object):
         author = []
         license = None, None
         homepage = None
+        umlfriVersionRange = None
+        dependencies = []
         
         for node in root:
             if node.tag == ADDON_NAMESPACE+'Identity':
@@ -148,6 +152,8 @@ class CAddonManager(object):
                 icon = node.attrib["path"]
             elif node.tag == ADDON_NAMESPACE+'Description':
                 description = self.__FormatMultilineText(node.text or '')
+            elif node.tag == ADDON_NAMESPACE+'Dependencies':
+                umlfriVersionRange, dependencies = self.__LoadDependencies(node)
             elif node.tag == ADDON_NAMESPACE+'Metamodel':
                 component = self.__LoadMetamodelAddonComponent(node)
             elif node.tag == ADDON_NAMESPACE+'Plugin':
@@ -158,7 +164,40 @@ class CAddonManager(object):
         return CAddon(self, storage, uris, component,
             all(self.__enabledAddons.get(uri, True) for uri in uris),
             uninstallable, author, name, version, license, homepage,
-            icon, description)
+            icon, description, umlfriVersionRange, dependencies)
+    
+    def __LoadDependencies(self, node):
+        umlfriVersionRange = None
+        dependencies = []
+        
+        for child in node:
+            if child.tag == ADDON_NAMESPACE+'UmlFri':
+                umlfriVersionRange = self.__LoadDepVersionInfo(child)
+            elif child.tag == ADDON_NAMESPACE+'AddOn':
+                dependencies.append(
+                    CDependency(
+                        child.attrib['uri'],
+                        required = node.attrib.get('required', 'true').lower() in ('true', 'yes', '1'),
+                        versionRange = self.__LoadDepVersionInfo(child)
+                    )
+                )
+        
+        return umlfriVersionRange, dependencies
+    
+    def __LoadDepVersionInfo(self, node):
+        for child in node:
+            if child.tag == ADDON_NAMESPACE+'Version':
+                verFrom = child.attrib.get('min')
+                verTo = child.attrib.get('max')
+                
+                if verFrom is not None:
+                    verFrom = CVersion(verFrom)
+                if verTo is not None:
+                    verTo = CVersion(verTo)
+                
+                return verFrom, verTo
+        
+        return None
     
     def __LoadMetamodelAddonComponent(self, node):
         path = ''
@@ -264,9 +303,24 @@ class CAddonManager(object):
         self.__addons.update(self.__AddAddonToDict(addon))
     
     def StartAll(self):
-        for addon in self.__addons.itervalues():
-            if addon.IsEnabled():
-                addon.Start()
+        toStart = [addon for addon in self.__addons.itervalues() if addon.IsEnabled()]
+        oldToStart = float('inf')
+        while len(toStart) < oldToStart:
+            oldToStart = len(toStart)
+            newToStart = []
+            for addon in toStart:
+                dep = addon.CheckDependencies()
+                if dep == 'ok':
+                    addon.Start()
+                elif dep == 'later':
+                    newToStart.append(addon)
+                else:
+                    print 'WARNING: %s could not be started, dependencies was not met'%addon.GetDefaultUri()
+            
+            toStart = newToStart
+        
+        for addon in toStart:
+            print 'WARNING: %s could not be started, dependencies was not met'%addon.GetDefaultUri()
     
     def StopAll(self):
         for addon in self.__addons.itervalues():
