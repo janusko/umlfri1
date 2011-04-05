@@ -82,9 +82,9 @@ class CfrmMain(CWindow):
         for i in MenuItem.get_submenu().get_children():
             i.set_sensitive(value)
     
-    def UpdateMenuSensitivity(self, project = None, diagram = None, element = None):
+    def UpdateMenuSensitivity(self, project = None, diagram = None, element = None, connection = None):
         if self.__sensitivity_project is None:
-            self.__sensitivity_project = [True, True, True, True, True]
+            self.__sensitivity_project = [True, True, True, True, True, True]
         changes = 0
         if project is not None:
             if not project:
@@ -108,6 +108,12 @@ class CfrmMain(CWindow):
             self.__sensitivity_project[2] = element
         else:
             element = self.__sensitivity_project[2]
+        if connection is not None:
+            if connection != self.__sensitivity_project[5]:
+                changes += 1
+            self.__sensitivity_project[5] = connection
+        else:
+            connection = self.__sensitivity_project[5]
         if not self.application.GetClipboard().IsEmpty():
              changes += 1
 
@@ -122,7 +128,7 @@ class CfrmMain(CWindow):
         if changes == 0:
             return
         
-        self.picDrawingArea.UpdateMenuSensitivity(project, diagram, element)
+        self.picDrawingArea.UpdateMenuSensitivity(project, diagram, element, connection)
         
         self.SetSensitiveMenuChilds(self.mItemProject, project)
         self.SetSensitiveMenuChilds(self.mItemDiagram, diagram)
@@ -131,6 +137,7 @@ class CfrmMain(CWindow):
         self.mnuSaveAs.set_sensitive(project)
         self.mnuPrint.set_sensitive(diagram)
         self.cmdSave.set_sensitive(project)
+        #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         self.cmdCopy.set_sensitive(element)
         self.cmdCut.set_sensitive(element)
         self.cmdPaste.set_sensitive(
@@ -139,13 +146,14 @@ class CfrmMain(CWindow):
         self.cmdZoomIn.set_sensitive(diagram)
         self.cmdZoomOut.set_sensitive(diagram)
         self.mnuSave.set_sensitive(project)
+        
         self.mnuCopy.set_sensitive(element)
         self.mnuCopyAsImage.set_sensitive(element)
         self.mnuCut.set_sensitive(element)
         self.mnuPaste.set_sensitive(
             diagram and not self.application.GetClipboard().IsEmpty() and
             not bool(set(i.GetObject() for i in self.picDrawingArea.GetDiagram().GetElements()).intersection(set(i.GetObject() for i in self.application.GetClipboard().GetContent()))))
-        self.mnuDelete.set_sensitive(element)
+        self.mnuDelete.set_sensitive(element or connection)
         self.mnuNormalSize.set_sensitive(diagram)
         self.mnuZoomIn.set_sensitive(zoomin)
         self.cmdZoomIn.set_sensitive(zoomin)
@@ -572,7 +580,7 @@ class CfrmMain(CWindow):
 
     @event("picDrawingArea", "selected-item")
     def on_picDrawingArea_selected_item(self, widget, selected, new = False):
-        self.UpdateMenuSensitivity(element = len(selected) > 0)
+        self.UpdateMenuSensitivity(element = any(isinstance(x, CElement) for x in selected), connection = any(isinstance(x, CConnection) for x in selected))
         if len(selected) == 1:
             self.nbProperties.Fill(selected[0])
             #if new is True : element or connections was first time created
