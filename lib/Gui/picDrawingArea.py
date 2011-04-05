@@ -321,7 +321,7 @@ class CpicDrawingArea(CWidget):
         self.emit('selected-item', list(self.Diagram.GetSelected()),False)
         self.Paint()
     
-    def UpdateMenuSensitivity(self, project, diagram, element):
+    def UpdateMenuSensitivity(self, project, diagram, element, connection):
         self.pmShowInProjectView.set_sensitive(element)
         for item in self.pMenuShift.get_children():
             item.set_sensitive(element)
@@ -330,19 +330,18 @@ class CpicDrawingArea(CWidget):
             diagram and not self.application.GetClipboard().IsEmpty() and
             not bool(set(i.GetObject() for i in self.Diagram.GetElements()).intersection(set(i.GetObject() for i in self.application.GetClipboard().GetContent())))
         )
+        
         selection = list(self.Diagram.GetSelected())
         self.pmOpenSpecification.set_sensitive(len(selection) <= 1)
-        self.mnuChangeSourceTarget.set_sensitive(len(selection) == 1)
-        if (self.application.GetProject() is not None and 
-            self.Diagram is not None and
-            self.application.GetProject().GetRoot().GetObject() in (
-                [item.GetObject() for item in self.Diagram.GetSelectedElements(True)])):
-            self.mnuCtxShiftDelete.set_sensitive(False)
-        if (not list(self.Diagram.GetSelectedElements(True))):
-            self.mnuAlign.set_sensitive(False)
-            self.mnuSpacing.set_sensitive(False)
-            self.mnuSizing.set_sensitive(False)
-            self.mnuSnapSelectGrid.set_sensitive(False)
+        self.mnuChangeSourceTarget.set_sensitive(connection and len(selection) == 1)
+        self.mnuAlign.set_sensitive(element)
+        self.mnuSpacing.set_sensitive(element)
+        self.mnuSizing.set_sensitive(element)
+        self.mnuSnapSelectGrid.set_sensitive(element)
+        self.mnuCtxCopy.set_sensitive(element)
+        self.mnuCtxCut.set_sensitive(element)
+        self.mnuCtxDelete.set_sensitive(connection or element)
+        self.mnuCtxShiftDelete.set_sensitive(connection or element)
             
     @event('application.bus', 'position-change', False)
     @event('application.bus', 'position-change-from-plugin', True)
@@ -439,7 +438,7 @@ class CpicDrawingArea(CWidget):
             self.Paint()
             self.emit('selected-item', list(self.Diagram.GetSelected()),False)
             #if something is selected:
-            self.UpdateMenuSensitivity(bool(self.application.GetProject()), bool(self.Diagram), int(len(list(self.Diagram.GetSelected())) > 0))
+            #self.UpdateMenuSensitivity(bool(self.application.GetProject()), bool(self.Diagram), int(len(list(self.Diagram.GetSelected())) > 0))
             self.itemSel = itemSel
             self.pMenuShift.popup(None,None,None,event.button,event.time)
             return True
