@@ -341,7 +341,7 @@ class CpicDrawingArea(CWidget):
         self.mnuCtxCopy.set_sensitive(element)
         self.mnuCtxCut.set_sensitive(element)
         self.mnuCtxDelete.set_sensitive(connection or element)
-        self.mnuCtxShiftDelete.set_sensitive(connection or element)
+        self.mnuCtxShiftDelete.set_sensitive(connection or element and not project)
             
     @event('application.bus', 'position-change', False)
     @event('application.bus', 'position-change-from-plugin', True)

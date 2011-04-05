@@ -136,8 +136,7 @@ class CfrmMain(CWindow):
         self.mnuSave.set_sensitive(project)
         self.mnuSaveAs.set_sensitive(project)
         self.mnuPrint.set_sensitive(diagram)
-        self.cmdSave.set_sensitive(project)
-        #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        self.cmdSave.set_sensitive(project)        
         self.cmdCopy.set_sensitive(element)
         self.cmdCut.set_sensitive(element)
         self.cmdPaste.set_sensitive(
