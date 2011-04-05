@@ -96,7 +96,7 @@ class CfrmNewProject (common.CWindow):
 
     @event("ivNewProject", "item-activated")
     def on_ivNewProject_item_activated (self, widget, path):
-        self.form,response (gtk.RESPONSE_OK)
+        self.form.response (gtk.RESPONSE_OK)
     
     @event("ivNewProject", "selection-changed")
     def on_ivNewProject_sel_changed (self, widget):
@@ -126,7 +126,6 @@ class CfrmNewProject (common.CWindow):
         try:
             while True:
                 run  = self.form.run ()
-                print run
                 if run != gtk.RESPONSE_OK:
                     self.form.hide ()
                     return None, False

@@ -31,7 +31,7 @@ class CfrmMain(CWindow):
         #menu
         #############
         'mItemFile',
-        'mnuOpen', 'mnuNewProject', 'mnuSave', 'mnuSaveAs', 'mnuPrint', 'mnuProperties', 'mnuQuit',
+        'mnuOpen', 'mnuNewProject', 'mnuOpenRecent', 'mOpenRecent_menu', 'mnuSave', 'mnuSaveAs', 'mnuPrint', 'mnuProperties', 'mnuQuit',
         #############
         'mItemEdit',
         'mnuCut', 'mnuCopy', 'mnuCopyAsImage', 'mnuPaste', 'mnuDelete',
@@ -56,7 +56,7 @@ class CfrmMain(CWindow):
         'mmShift_SendBack', 'mmShift_BringForward', 'mmShift_ToBottom', 'mmShift_ToTop',
         #############
         #toolbar
-        'cmdOpen', 'cmdSave', 'cmdCopy', 'cmdCut', 'cmdPaste', 'cmdZoomOut', 'cmdZoomIn',
+        'cmdNew', 'cmdOpen', 'cmdSave', 'cmdCopy', 'cmdCut', 'cmdPaste', 'cmdZoomOut', 'cmdZoomIn',
         #############
         #toolbar2
         'cmdAlignLeftMost', 'cmdAlignRightMost', 'cmdAlignUpMost', 'cmdAlignDownMost', 'cmdSpaceEvenlyHorizontally', 'cmdSpaceEvenlyVertically',
@@ -341,7 +341,6 @@ class CfrmMain(CWindow):
     @event("mnuOpen", "activate")
     def ActionOpen(self, widget):
         filenameOrTemplate, copy = self.application.GetWindow("frmOpenProject").ShowDialog(self)
-        print filenameOrTemplate
         if filenameOrTemplate is not None:
             try:
                 if self.application.GetProject() is not None and CQuestionDialog(self.form, _('Do you want to save project?'), True).run():
@@ -351,11 +350,11 @@ class CfrmMain(CWindow):
             self.LoadProject(filenameOrTemplate, copy)
             self.tabStartPage.Fill()
     
+    @event("cmdNew", "clicked")
     @event("tabStartPage", "create-project")
     @event("mnuNewProject", "activate")
     def ActionNewProject(self, widget):
         filenameOrTemplate, copy = self.application.GetWindow ("frmNewProject").ShowDialog (self)
-        print filenameOrTemplate
         if filenameOrTemplate:
             try:
                 if self.application.GetProject () and \
@@ -367,6 +366,31 @@ class CfrmMain(CWindow):
             self.LoadProject (filenameOrTemplate, copy)
             self.tabStartPage.Fill()
     
+    @event("mnuOpenRecent", "activate")
+    def mnuOpenRecent_refresh (self, widget):
+        # clear submenu
+        for child in self.mOpenRecent_menu.get_children ():
+            self.mOpenRecent_menu.remove (child)
+        # reload submenu items
+        i = 1
+        for name, date in self.application.GetRecentFiles ().GetRecentFiles ():
+            item = gtk.MenuItem ("%d %s" % (i, name), False)
+            item.connect ("activate", self.on_RecentItem_activate)
+            self.mOpenRecent_menu.add (item)
+            i += 1
+        widget.show_all ()
+
+    def on_RecentItem_activate (self, widget):
+        try:
+            if self.application.GetProject() is not None and CQuestionDialog(self.form, _('Do you want to save project?'), True).run():
+                self.ActionSave(widget)
+        except ECancelPressed:
+            print 'ECancelPressed'
+            return
+        filename = widget.get_label ().split ()[1]
+        self.LoadProject(filename, False)
+        self.tabStartPage.Fill()
+
     @event("form", "key-press-event")
     def on_key_press_event(self, widget, event):
         if event.keyval in (gtk.keysyms.Tab, gtk.keysyms.ISO_Left_Tab):
