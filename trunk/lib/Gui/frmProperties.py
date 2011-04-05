@@ -573,7 +573,7 @@ class CfrmProperties(object):
     def __onMainDialogApplyButtonClick(self,button,dialog,type):
         if self.__CheckValues(type):
             self.__SaveFunction(type)
-            self.element_changed=False
+            self.element_changed=False            
             button.SetSensitive(False)
         else:
             warning=CResponseDialog('Warning',dialog)
@@ -647,5 +647,8 @@ class CfrmProperties(object):
         self.old_domain_object.SetValues(self.domain_object)
         #self.domain_object=self.old_domain_object.GetCopy()
         if self.element!=None:
-            self.element.GetObject().AddRevision()
+            if isinstance(self.element, CElement):
+                self.element.GetObject().AddRevision()
+            else:
+                self.element.AddRevision()
             self.application.GetBus().emit('all-content-update',self.element)
