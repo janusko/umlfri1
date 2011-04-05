@@ -43,7 +43,7 @@
                         <property name="label" translatable="yes">Open _Recent</property>
                         <property name="use_underline">True</property>
                         <child>
-                          <widget class="GtkMenu" id="menu1">
+                          <widget class="GtkMenu" id="mOpenRecent_menu">
                             <property name="visible">True</property>
                           </widget>
                         </child>
@@ -515,6 +515,17 @@
                   <widget class="GtkToolbar" id="toolbar1">
                     <property name="visible">True</property>
                     <property name="toolbar_style">both</property>
+                    <child>
+                      <widget class="GtkToolButton" id="cmdNew">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">New</property>
+                        <property name="stock_id">gtk-new</property>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
                     <child>
                       <widget class="GtkToolButton" id="cmdOpen">
                         <property name="visible">True</property>
