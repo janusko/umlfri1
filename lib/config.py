@@ -220,7 +220,7 @@ class CConfig(CBaseObject):
                         print>>f, etree.tostring(rootNode, encoding='utf-8')
                 raise ConfigError, ("XMLError", xmlschema_user.error_log.last_error)
         
-        with file(self.file, 'w') as f:
+        with open(self.file, 'w') as f:
             print>>f, '<?xml version="1.0" encoding="utf-8"?>'
             print>>f, etree.tostring(rootNode, encoding='utf-8')
    
