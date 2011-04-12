@@ -321,7 +321,7 @@ class CpicDrawingArea(CWidget):
         self.emit('selected-item', list(self.Diagram.GetSelected()),False)
         self.Paint()
     
-    def UpdateMenuSensitivity(self, project, diagram, element, connection):
+    def UpdateMenuSensitivity(self, project, diagram, element, topElement, connection):
         self.pmShowInProjectView.set_sensitive(element)
         for item in self.pMenuShift.get_children():
             item.set_sensitive(element)
@@ -341,8 +341,9 @@ class CpicDrawingArea(CWidget):
         self.mnuCtxCopy.set_sensitive(element)
         self.mnuCtxCut.set_sensitive(element)
         self.mnuCtxDelete.set_sensitive(connection or element)
-        self.mnuCtxShiftDelete.set_sensitive(element or connection and not project)
-            
+                
+        self.mnuCtxShiftDelete.set_sensitive((connection or element) and not topElement)
+                
     @event('application.bus', 'position-change', False)
     @event('application.bus', 'position-change-from-plugin', True)
     @event('application.bus', 'many-position-change', False)
