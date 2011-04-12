@@ -82,9 +82,9 @@ class CfrmMain(CWindow):
         for i in MenuItem.get_submenu().get_children():
             i.set_sensitive(value)
     
-    def UpdateMenuSensitivity(self, project = None, diagram = None, element = None, connection = None):
+    def UpdateMenuSensitivity(self, project = None, diagram = None, element = None, topElement = None, connection = None):
         if self.__sensitivity_project is None:
-            self.__sensitivity_project = [True, True, True, True, True, True]
+            self.__sensitivity_project = [True, True, True, True, True, True, True]
         changes = 0
         if project is not None:
             if not project:
@@ -114,6 +114,12 @@ class CfrmMain(CWindow):
             self.__sensitivity_project[5] = connection
         else:
             connection = self.__sensitivity_project[5]
+        if topElement is not None:
+            if topElement != self.__sensitivity_project[6]:
+                changes += 1
+            self.__sensitivity_project[6] = topElement
+        else:
+            topElement = self.__sensitivity_project[6]
         if not self.application.GetClipboard().IsEmpty():
              changes += 1
 
@@ -128,7 +134,7 @@ class CfrmMain(CWindow):
         if changes == 0:
             return
         
-        self.picDrawingArea.UpdateMenuSensitivity(project, diagram, element, connection)
+        self.picDrawingArea.UpdateMenuSensitivity(project, diagram, element, topElement, connection)
         
         self.SetSensitiveMenuChilds(self.mItemProject, project)
         self.SetSensitiveMenuChilds(self.mItemDiagram, diagram)
@@ -603,7 +609,11 @@ class CfrmMain(CWindow):
 
     @event("picDrawingArea", "selected-item")
     def on_picDrawingArea_selected_item(self, widget, selected, new = False):
-        self.UpdateMenuSensitivity(element = any(isinstance(x, CElement) for x in selected), connection = any(isinstance(x, CConnection) for x in selected))
+        self.UpdateMenuSensitivity(
+            element = any(isinstance(x, CElement) for x in selected),
+            topElement = any((isinstance(x, CElement) and x.GetObject().GetNode().GetParent() is None) for x in selected),
+            connection = any(isinstance(x, CConnection) for x in selected)
+        )
         if len(selected) == 1:
             self.nbProperties.Fill(selected[0])
             #if new is True : element or connections was first time created
