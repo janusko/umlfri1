@@ -50,3 +50,10 @@ class CtxtNotes(CWidget):
         if self.element is not None and element is self.element:
             self.Fill(self.element)
     
+    @event('txtNotes', 'focus-in-event')
+    def on_focus_in (self, widget, event):
+        self.application.GetBus().emit('properties-editing-started')
+
+    @event('txtNotes', 'focus-out-event')
+    def on_focus_out (self, widget, event):
+        self.application.GetBus().emit('properties-editing-stoped')

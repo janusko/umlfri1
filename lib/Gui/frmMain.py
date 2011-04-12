@@ -646,7 +646,17 @@ class CfrmMain(CWindow):
             self.nbTabs.AddTab(diagram)
             diagram.AddToSelection(diagram.HasElementObject(object))
             self.picDrawingArea.Paint()
-    
+
+    @event('application.bus', 'properties-editing-started')
+    def on_nbProperties_editing_started (self, widget):
+        for menuitem in self.mnuMenubar:
+            menuitem.set_sensitive (False)
+
+    @event('application.bus', 'properties-editing-stoped')
+    def on_nbProperties_editing_stoped (self, widget):
+        for menuitem in self.mnuMenubar:
+            menuitem.set_sensitive (True)
+
     @event('application.bus', 'all-content-update', '', False)
     @event('application.bus', 'content-update', False)
     @event('application.bus', 'content-update-from-plugin', True)
