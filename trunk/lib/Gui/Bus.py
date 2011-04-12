@@ -20,4 +20,6 @@ class CBus(gobject.GObject):
             (gobject.TYPE_PYOBJECT, )),
         'position-change-from-plugin':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
             (gobject.TYPE_PYOBJECT, )),
+        'properties-editing-started': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
+        'properties-editing-stoped': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
     }

@@ -171,7 +171,14 @@ class ClwProperties(CWidget):
         path = path.split(':')
         return ''.join([ model.get(model.get_iter_from_string(':'.join(path[:i+1])), ID_ID)[0] for i in xrange(len(path)) ])
         
+    @event('StrRenderer', 'editing-started')
+    def on_editing_started (self, cellrenderer, editable, path):
+        self.application.GetBus().emit('properties-editing-started')
     
+    @event('StrRenderer', 'editing-canceled')
+    def on_eiditing_canceled (self, cellrenderer):
+        self.application.GetBus().emit('properties-editing-stoped')
+
     @event("StrRenderer", "edited")
     def on_change_text(self, cellrenderer, path, new_value):
         model = self.lwProperties.get_model()
@@ -184,6 +191,7 @@ class ClwProperties(CWidget):
             model.set(iter, ID_VALUE, str(self.elementObject.GetValue(key)))
             raise ParserError(*e.params)
         self.application.GetBus().emit('content-update', self.element, key)
+        self.application.GetBus().emit('properties-editing-stoped')
         
     @event("ComboRenderer", "edited")
     def on_change_combo(self, cellrenderer, path, new_value):
@@ -279,10 +287,8 @@ class ClwProperties(CWidget):
             self.on_changecolor(key, iter)
         elif action == 'changefont':
             self.on_changefont(key, iter)
-        
 
     @event('application.bus', 'content-update-from-plugin')
     def on_content_update(self, widget, element, property):
         if self.element is not None and element is self.element:
             self.Fill(self.element)
-        

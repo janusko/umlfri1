@@ -352,6 +352,14 @@ class CpicDrawingArea(CWidget):
         else:
             self.Paint()
     
+    @event('application.bus', 'properties-editing-started')
+    def on_properties_editing_started (self, widget):
+        self.pMenuShift.set_sensitive (False)
+
+    @event('application.bus', 'properties-editing-stoped')
+    def on_properties_editing_ended (self, widget):
+        self.pMenuShift.set_sensitive (True)
+
     @event("picEventBox", "button-press-event")
     def on_picEventBox_button_press_event(self, widget, event):
         self.picDrawingArea.grab_focus() 
