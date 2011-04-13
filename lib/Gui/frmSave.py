@@ -4,6 +4,8 @@ import common
 
 from lib.consts import PROJECT_EXTENSION, PROJECT_CLEARXML_EXTENSION, PROJECT_TPL_EXTENSION
 
+from win32 import COpenSaveDialog
+
 import os.path
 
 class CfrmSave(common.CWindow):
@@ -12,30 +14,33 @@ class CfrmSave(common.CWindow):
     
     def __init__(self, app, wTree):
         common.CWindow.__init__(self, app, wTree)
-        
-        filter = gtk.FileFilter()
-        filter.set_name(_("UML .FRI Projects"))
-        filter.add_pattern('*'+PROJECT_EXTENSION)
-        self.form.add_filter(filter)
-        
-        filter = gtk.FileFilter()
-        filter.set_name(_("UML .FRI Clear XML Projects"))
-        filter.add_pattern('*'+PROJECT_CLEARXML_EXTENSION)
-        self.form.add_filter(filter)
-        
-        filter = gtk.FileFilter()
-        filter.set_name(_("UML .FRI Project templates"))
-        filter.add_pattern('*'+PROJECT_TPL_EXTENSION)
-        self.form.add_filter(filter)
-        
-        filter = gtk.FileFilter()
-        filter.set_name(_("All files"))
-        filter.add_pattern("*")
-        self.form.add_filter(filter)
 
-        self.zippedFileExtensions = [_("UML .FRI Projects"), _("UML .FRI Project templates")]
+        self.filters = [
+            (_("UML .FRI Projects"), "*"+PROJECT_EXTENSION, True),
+            (_("UML .FRI Clear XML Projects"), "*"+PROJECT_CLEARXML_EXTENSION, False),
+            (_("UML .FRI Projects templates"), "*"+PROJECT_TPL_EXTENSION, True),
+        ]
+        
+        for text, pattern, zipped in self.filters:
+            filter = gtk.FileFilter ()
+            filter.set_name (text)
+            filter.add_pattern (pattern)
+            self.form.add_filter (filter)
     
     def ShowDialog(self, parent):
+        if COpenSaveDialog:
+            win = COpenSaveDialog(parent.form, 'save', self.form.get_title(), self.filters)
+            if win.ShowModal():
+                filename = win.GetAbsolutePath()
+                filter = win.GetSelectedFilter()
+                
+                if '.' not in os.path.basename(filename):
+                    filename += filter[1][1:]
+                
+                return filename, filter[2]
+            else:
+                return None, None
+        
         self.form.set_transient_for(parent.form)
         try:
             while True:
@@ -49,17 +54,18 @@ class CfrmSave(common.CWindow):
                     return None, None
                 else:
                     filename = filename.decode('utf-8')
+                
+                ext = ''
+                isZippedFile = False
+                
+                for text, pattern, zipped in self.filters:
+                    if text == filter:
+                        ext = pattern[1:]
+                        isZippedFile = zipped
+                
                 if '.' not in os.path.basename(filename):
-                    if filter == _("UML .FRI Projects"):
-                        filename += PROJECT_EXTENSION
-                        #isZippedFile = True
-                    elif filter == _("UML .FRI Clear XML Projects"):
-                        filename += PROJECT_CLEARXML_EXTENSION
-                        #isZippedFile = False
-                    elif filter == _("UML .FRI Project templates"):
-                        filename += PROJECT_TPL_EXTENSION
-                        #isZippedFile = True
-                isZippedFile = filter in self.zippedFileExtensions
+                    filename += ext
+                
                 if not os.path.isdir(filename):
                     self.application.GetRecentFiles().AddFile(filename)
                     return filename, isZippedFile
