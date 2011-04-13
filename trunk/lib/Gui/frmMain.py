@@ -202,11 +202,6 @@ class CfrmMain(CWindow):
             self.picDrawingArea.SetDiagram(diagram)
         self.twProjectView.GetRootNode()
         self.twProjectView.twProjectView.grab_focus()
-        gobject.idle_add(self.ReloadedFocus)
-    
-    def ReloadedFocus(self):
-        self.nbProperties.lwProperties.lwProperties.set_cursor_on_cell(
-            0,self.nbProperties.lwProperties.lwProperties.get_column(1),None, True)
     
     def PaintAll(self):
         if not self.nbTabs.IsStartPageActive():
@@ -554,8 +549,6 @@ class CfrmMain(CWindow):
         ElementType = self.application.GetProject().GetMetamodel().GetElementFactory().GetElement(element)
         ElementObject = CElementObject(ElementType)
         self.twProjectView.AddElement(ElementObject, None, parentElement)
-        self.nbProperties.lwProperties.lwProperties.set_cursor_on_cell(
-            0,self.nbProperties.lwProperties.lwProperties.get_column(1),None, True)
 
     @event("picDrawingArea", "add-element")
     def on_add_element(self, widget, Element, diagram, parentElement):
@@ -573,8 +566,6 @@ class CfrmMain(CWindow):
         self.nbTabs.AddTab(diagram)
         self.picDrawingArea.SetDiagram(diagram)
         self.tbToolBox.SetButtons(diagramId)
-        self.nbProperties.lwProperties.lwProperties.set_cursor_on_cell(
-            0,self.nbProperties.lwProperties.lwProperties.get_column(1),None, True)
 
     @event("picDrawingArea", "get-selected")
     def on_picDrawingArea_get_selected(self, widget):
@@ -616,10 +607,6 @@ class CfrmMain(CWindow):
         )
         if len(selected) == 1:
             self.nbProperties.Fill(selected[0])
-            #if new is True : element or connections was first time created
-            if new == True:
-                self.nbProperties.lwProperties.lwProperties.set_cursor_on_cell(
-                  0,self.nbProperties.lwProperties.lwProperties.get_column(1),None, True)
         else:
             self.nbProperties.Fill(None)
 
