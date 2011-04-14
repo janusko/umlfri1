@@ -50,7 +50,7 @@ class CfrmInstallAddon(CWindow):
                 self.imgInstallAddonIcon.clear()
         
         self.lblInstallAddonName.set_markup("<big><b>%s</b></big>"%addon.GetName())
-        self.lblInstallAddonVersion.set_label(addon.GetVersion())
+        self.lblInstallAddonVersion.set_label(addon.GetVersionString())
         if addon.GetType() == 'metamodel':
             self.lblInstallAddonType.set_label(_("metamodel"))
         elif addon.GetType() == 'plugin':

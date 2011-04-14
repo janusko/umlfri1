@@ -58,7 +58,7 @@ class CfrmAbout(CWindow):
         s, e = buff.get_bounds()
         buff.delete(s,e)
         # set the about info
-        text = '<span size="xx-large">UML .FRI</span>\n<b>' + _('Version') + ' ' + self.application.GetVersion() + '</b>\n\n' + _('Free python-based CASE tool.')
+        text = '<span size="xx-large">UML .FRI</span>\n<b>' + _('Version') + ' ' + self.application.GetVersionString() + '</b>\n\n' + _('Free python-based CASE tool.')
         self.lblAboutUmlfri.set_use_markup(True)
         self.lblAboutUmlfri.set_label(text)
         # set credits

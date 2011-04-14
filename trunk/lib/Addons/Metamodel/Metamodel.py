@@ -72,6 +72,9 @@ class CMetamodel(CBaseObject):
     def GetVersion(self):
         return self.__MetamodelVersion
     
+    def GetVersionString(self):
+        return str(self.__MetamodelVersion)
+    
     def GetUri(self):
         return self.__MetamodelUri
 

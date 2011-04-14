@@ -31,7 +31,7 @@ class CfrmAboutAddon(CWindow):
                 self.imgAboutAddonIcon.clear()
         
         self.lblAboutAddonName.set_markup("<big><b>%s</b></big>"%addon.GetName())
-        self.lblAboutAddonVersion.set_label(addon.GetVersion())
+        self.lblAboutAddonVersion.set_label(addon.GetVersionString())
         if addon.GetType() == 'metamodel':
             self.lblAboutAddonType.set_label(_("metamodel"))
         elif addon.GetType() == 'plugin':

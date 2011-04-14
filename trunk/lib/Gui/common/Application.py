@@ -90,7 +90,7 @@ class CApplication(gobject.GObject):
             elif opt in ('-h', '--help'):
                 display_help()
             elif opt in ('-v', '--version'):
-                print self.GetVersion()
+                print self.GetVersionString()
                 sys.exit()
             else:
                 print 'unknown option "%s"'%opt
@@ -153,6 +153,9 @@ class CApplication(gobject.GObject):
         
     def GetVersion(self):
         return self.version
+        
+    def GetVersionString(self):
+        return str(self.version)
     
     def GetWindow(self, name):
         if name!='frmProperties':

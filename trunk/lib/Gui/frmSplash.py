@@ -22,7 +22,7 @@ class CfrmSplash(CWindow):
     def __init__(self, app, wTree):
         CWindow.__init__(self, app, wTree)
         
-        self.lblVersion.set_label(('<span foreground="white" font_desc="Arial bold 9">'+_("Version: %s")+'</span>')%self.application.GetVersion())
+        self.lblVersion.set_label(('<span foreground="white" font_desc="Arial bold 9">'+_("Version: %s")+'</span>')%self.application.GetVersionString())
         
         style = self.form.get_style().copy()
         pixbuf = gtk.gdk.pixbuf_new_from_file(os.path.join(IMAGES_PATH, 'splash.png'))

@@ -248,7 +248,7 @@ class CProject(CBaseObject):
         metamodelUriNode = etree.Element(UMLPROJECT_NAMESPACE+'uri')
         metamodelUriNode.text = self.GetMetamodel().GetUri()
         metamodelVersionNode = etree.Element(UMLPROJECT_NAMESPACE+'version')
-        metamodelVersionNode.text = self.GetMetamodel().GetVersion()
+        metamodelVersionNode.text = self.GetMetamodel().GetVersionString()
         
         metamodelNode.append(metamodelUriNode)
         metamodelNode.append(metamodelVersionNode)

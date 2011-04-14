@@ -33,7 +33,7 @@ class CfrmTerminateAddon(CWindow):
                 self.imgTerminateAddonIcon.clear()
         
         self.lblTerminateAddonName.set_markup("<big><b>%s</b></big>"%addon.GetName())
-        self.lblTerminateAddonVersion.set_label(addon.GetVersion())
+        self.lblTerminateAddonVersion.set_label(addon.GetVersionString())
         if addon.GetType() == 'metamodel':
             self.lblTerminateAddonType.set_label(_("metamodel"))
         elif addon.GetType() == 'plugin':
