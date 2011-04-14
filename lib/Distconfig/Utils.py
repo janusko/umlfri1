@@ -34,9 +34,30 @@ def user():
     
     return syspath(os.path.expanduser('~'))
 
+def svnentry(path):
+    import os.path
+    
+    try:
+        with open(os.path.join(path, '.svn', 'entries')) as svn:
+            result = []
+            for idx, line in enumerate(svn):
+                if idx in [3, 4, 10]:
+                    result.append(line[:-1])
+                if idx > 10:
+                    break
+            return int(result[0]), result[1], int(result[2])
+    except:
+        return None, None, None
+
+def svnrev(path):
+    return svnentry(path)[0]
+
+def svnbranch(path):
+    return svnentry(path)[1]
+
 ROOT = root()
 USER = user()
 
 IS_FROZEN = frozen()
 
-__all__ = ['ROOT', 'USER', 'IS_FROZEN', 'path']
+__all__ = ['ROOT', 'USER', 'IS_FROZEN', 'path', 'svnrev', 'svnbranch']

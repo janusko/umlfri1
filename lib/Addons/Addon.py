@@ -85,6 +85,9 @@ class CAddon(object):
     def GetVersion(self):
         return self.__version
     
+    def GetVersionString(self):
+        return str(self.__version)
+    
     def GetComponent(self):
         return self.__component
     

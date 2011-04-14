@@ -4,7 +4,7 @@ from lib.Depend.gtk2 import pango
 import lib.Depend
 from lib.consts import MAIL, ERROR_LOG_ADDRESS, WEB
 from common import CWindow
-from lib.Distconfig import USERDIR_PATH, ROOT_PATH
+from lib.Distconfig import USERDIR_PATH, SVN_REVISION, SVN_BRANCH
 from lib.Gui.dialogs import CWarningDialog
 import sys, os, time, tarfile, traceback, cStringIO, datetime, urllib, urllib2
 import os.path
@@ -40,20 +40,11 @@ class CfrmException(CWindow):
         
         iter = buff.get_iter_at_offset(0)
         buff.insert_with_tags_by_name(iter, "UML .FRI:\t\t", "bold")
-        buff.insert_with_tags_by_name(iter, self.application.GetVersion(), "mono")
-        try:
-            with open(os.path.join(ROOT_PATH, '.svn', 'entries')) as svn:
-                result = []
-                for idx, line in enumerate(svn):
-                    if idx in [3, 4, 10]: 
-                        result.append(line[:-1])
-                    if idx > 10:
-                        break
-                result = '%s@%s (%s)' % (result[1], result[2], result[0])
-                buff.insert_with_tags_by_name(iter, "\nUML .FRI (svn):\t\t", "bold")
-                buff.insert_with_tags_by_name(iter, result, "mono")
-        except IOError:
-            pass
+        buff.insert_with_tags_by_name(iter, self.application.GetVersionString(), "mono")
+        if SVN_REVISION is not None:
+            result = '%s@%s' % (SVN_BRANCH, SVN_REVISION)
+            buff.insert_with_tags_by_name(iter, "\nUML .FRI (svn):\t\t", "bold")
+            buff.insert_with_tags_by_name(iter, result, "mono")
             
         for name, version in lib.Depend.version():
             buff.insert_with_tags_by_name(iter, "\n%s:\t\t"%name, "bold")

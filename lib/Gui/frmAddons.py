@@ -149,7 +149,7 @@ class CfrmAddons(CWindow):
                 icon = None
         
         name = addon.GetName()
-        version = addon.GetVersion()
+        version = addon.GetVersionString()
         description = addon.GetDescription() or ""
         enabled = self.__AddonEnabled(addon)
         uri = addon.GetDefaultUri()
@@ -279,7 +279,7 @@ class CfrmAddons(CWindow):
         if addon is None:
             return
         
-        if CQuestionDialog(self.form, _("Do you really want to uninstall addon '%(name)s %(version)s'?\nThis is pernament.")%{'name': addon.GetName(), 'version': addon.GetVersion()}).run():
+        if CQuestionDialog(self.form, _("Do you really want to uninstall addon '%(name)s %(version)s'?\nThis is pernament.")%{'name': addon.GetName(), 'version': addon.GetVersionString()}).run():
             addon.Uninstall()
             self.__Load()
     

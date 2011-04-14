@@ -70,20 +70,23 @@ class CFont(CBaseObject):
         else:
             return ' '.join((self.__fontFamily, str(self.__fontSize)))
 
-class CVersion(str):
+class CVersion(object):
     __reVersion = re.compile(r'(?P<version>[0-9]+(\.[0-9]+)*)(?P<verchar>[a-z])?(-(?P<suffix>(alpha|beta|pre|rc|p))(?P<sufnum>[0-9]+))?(@(?P<rev>([0-9]+|\*)))?$')
+    __full = ('full', )
     
     def __init__(self, value):
-        str.__init__(self, value)
-        
         parsed = self.__reVersion.search(value)
         
         if parsed is None:
             raise Exception("Invalid version number")
         else:
-            self.__version = tuple(int(i) for i in parsed.group('version').split('.'))
+            ver = tuple(int(i) for i in parsed.group('version').split('.'))
+            ver = (ver + (0, 0, 0))[:3]
+            
             if parsed.group('verchar') is not None:
-                self.__version += (parsed.group('verchar'), )
+                ver += (parsed.group('verchar'), )
+            
+            self.__version = ver
             
             if parsed.group('suffix') is None:
                 self.__suffix = None
@@ -104,8 +107,56 @@ class CVersion(str):
     def GetRevision(self):
         return self.__revision
     
+    def OfRevision(self, revision):
+        ver = '.'.join(str(part) for part in self.__version)
+        if self.__suffix:
+            ver += '-%s%d'%self.__suffix
+        if revision:
+            ver += '@%d'%revision
+        
+        return self.__class__(ver)
+    
     def __cmp__(self, other):
         if not isinstance(other, CVersion):
             return NotImplemented
         
-        return cmp((self.__version, self.__suffix, self.__revision), (other.__version, other.__suffix, other.__revision))
+        return cmp(
+            (self.__version, self.__suffix or self.__full, self.__revision or 0),
+            (other.__version, other.__suffix or self.__full, other.__revision or 0)
+        )
+    
+    def __lt__(self, other):
+        return cmp(self, other) < 0
+    
+    def __le__(self, other):
+        return cmp(self, other) <= 0
+    
+    def __eq__(self, other):
+        return cmp(self, other) == 0
+    
+    def __ne__(self, other):
+        return cmp(self, other) != 0
+    
+    def __gt__(self, other):
+        return cmp(self, other) > 0
+    
+    def __ge__(self, other):
+        return cmp(self, other) >= 0
+    
+    def __str__(self):
+        ver = '.'.join(str(part) for part in self.__version)
+        if self.__suffix:
+            ver += '-%s%d'%self.__suffix
+        if self.__revision:
+            ver += '@%d'%self.__revision
+        
+        return ver
+    
+    def __repr__(self):
+        return '<%s %s>'%(self.__class__.__name__, self)
+    
+    def __add__(self, other):
+        return str(self) + other
+    
+    def __radd__(self, other):
+        return other + str(self)

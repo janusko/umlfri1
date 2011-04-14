@@ -14,3 +14,6 @@ LOCALES_PATH =   path(ROOT, "share", "locale")
 SCHEMA_PATH =    path(ROOT, "share", "schema")
 
 USERDIR_PATH =   path(USER, ".uml_fri")
+
+SVN_REVISION =   svnrev(ROOT)
+SVN_BRANCH =     svnbranch(ROOT)

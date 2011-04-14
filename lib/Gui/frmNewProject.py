@@ -85,7 +85,7 @@ class CfrmNewProject (common.CWindow):
         )
         buffer.insert_with_tags_by_name (
         	iter,
-        	"\nMetamodel version: " + metamodel.GetVersion () + "\n",
+        	"\nMetamodel version: " + metamodel.GetVersionString() + "\n",
         	"italic"
         )
         buffer.insert (

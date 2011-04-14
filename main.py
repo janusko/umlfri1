@@ -24,7 +24,7 @@ from lib.Gui import CBus, CPluginAdapter
 from lib.Gui.dialogs import CExceptionDialog, CErrorDialog
 
 from lib.config import config
-from lib.Distconfig import LOCALES_PATH, GUI_PATH
+from lib.Distconfig import LOCALES_PATH, GUI_PATH, SVN_REVISION
 from lib.consts import SPLASH_TIMEOUT
 
 from lib.Exceptions import UserException
@@ -37,6 +37,9 @@ __version__ = '1.0-rc4'
 
 class Application(CApplication):
     version = CVersion(__version__)
+    
+    if SVN_REVISION:
+        version = version.OfRevision(SVN_REVISION)
     
     windows = lib.Gui
     main_window = 'frmMain'
