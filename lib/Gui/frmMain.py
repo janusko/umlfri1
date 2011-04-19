@@ -8,7 +8,7 @@ import gobject
 import os.path
 from lib.Drawing import CElement, CDiagram, CConnection, CConLabelInfo
 from lib.Elements import CElementObject, CElementType
-from dialogs import CWarningDialog, CQuestionDialog, ECancelPressed
+from dialogs import CErrorDialog, CWarningDialog, CQuestionDialog, ECancelPressed
 from tbToolBox import CtbToolBox
 from twProjectView import CtwProjectView
 from twWarnings import CtwWarnings
@@ -19,7 +19,7 @@ from tabs import CTabs
 from tabStartPage import CtabStartPage
 from lib.Distconfig import IMAGES_PATH
 from lib.Gui.diagramPrint import CDiagramPrint
-from lib.Exceptions import UserException
+from lib.Exceptions import UserException, ProjectError
 from lib.Gui.frmProperties import CfrmProperties
 from lib.Project import CProjectNode
 
@@ -176,6 +176,8 @@ class CfrmMain(CWindow):
                 self.application.GetProject().CreateProject(filenameOrTemplate)
             else:
                 self.application.GetProject().LoadProject(filenameOrTemplate, copy)
+        except ProjectError as e:
+            CErrorDialog(self.form, str(e)).run()
         except Exception, ex:
             if copy is not None:
                 self.application.GetRecentFiles().RemoveFile(filenameOrTemplate)
@@ -428,9 +430,12 @@ class CfrmMain(CWindow):
     @event("mnuSaveAs", "activate")
     def ActionSaveAs(self, widget):
         filename, isZippedFile = self.application.GetWindow("frmSave").ShowDialog(self)
-        if filename is not None:
-            self.application.GetProject().SaveProject(filename, isZippedFile)
-            self.ReloadTitle()
+        try:
+            if filename is not None:
+                self.application.GetProject().SaveProject(filename, isZippedFile)
+                self.ReloadTitle()
+        except UserException as e:
+            CErrorDialog(self.form, str(e)).run()
 
     @event("mnuProperties", "activate")
     def ActionProperties(self, widget):
