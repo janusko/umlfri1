@@ -158,14 +158,20 @@ class CProject(CBaseObject):
         
         rootNode = self.GetSaveXml()
         
-        if isZippedFile :
-            fZip = ZipFile(filename, 'w', ZIP_DEFLATED)
-            fZip.writestr('content.xml', CProject.XmlToStr(rootNode))
-            fZip.close()
-        else:
-            f = open(filename, 'w')
-            f.write(CProject.XmlToStr(rootNode))
-            f.close()
+        try:
+            if isZippedFile :
+                fZip = ZipFile(filename, 'w', ZIP_DEFLATED)
+                fZip.writestr('content.xml', CProject.XmlToStr(rootNode))
+                fZip.close()
+            else:
+                f = open(filename, 'w')
+                f.write(CProject.XmlToStr(rootNode))
+                f.close()
+        except IOError as err:
+            if err.errno == 2: # IOError: [Errno 2] No such file or directory
+                raise ProjectError("Specified folder/file does not exist:\n" + err.filename)
+            elif err.errno ==  13: # IOError: [Errno 13] Permission denied
+                raise ProjectError("You don't have permission to write:\n" + err.filename)
         
     @staticmethod
     def XmlToStr(rootNode):
@@ -410,8 +416,12 @@ class CProject(CBaseObject):
             data = file.read('content.xml')
         else:
             self.isZippedFile = False
-            file = open(filename, 'r')
-            data = file.read()
+            try:
+                file = open(filename, 'r')
+                data = file.read()
+            except IOError as err:
+                if err.errno == 2:
+                    raise ProjectError("Specified folder / file does not exist:\n" + err.filename)
         
         if copy:
             self.filename = None
