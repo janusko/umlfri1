@@ -374,6 +374,7 @@ class CfrmMain(CWindow):
         for child in self.mOpenRecent_menu.get_children ():
             self.mOpenRecent_menu.remove (child)
         # reload submenu items
+        self.application.GetRecentFiles ().RecheckFiles()
         i = 1
         for name, date in self.application.GetRecentFiles ().GetRecentFiles ():
             item = gtk.MenuItem ("%d %s" % (i, name), False)

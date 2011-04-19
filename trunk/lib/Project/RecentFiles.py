@@ -37,7 +37,14 @@ class CRecentFiles(CBaseObject):
         self.RemoveFile(file)
         self.files.insert(0,(file,datetime.datetime.now().strftime("%d.%m.%Y %H:%M:%S")))
     
-    
+    def RecheckFiles(self):
+        toRemove = []
+        for filename, filedate in self.files:
+            if not os.path.exists(filename):
+                toRemove.append(filename)
+        for filename in toRemove:
+            self.RemoveFile(filename)
+
     def LoadRecentFiles(self):
         try:
             tree = etree.parse(self.filename)     #try to open and parse recentfile.xml file
