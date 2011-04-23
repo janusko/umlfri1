@@ -5,6 +5,7 @@ class CAddon(object):
 		self.__url = url
 		self.__uri.append(uri)
 		self.__version.append(version)
+		self.__description = []
 	
 	def GetUrl(self):
 		return self.__url
@@ -20,3 +21,12 @@ class CAddon(object):
 	
 	def AppendVersion(self,version):
 		self.__version.append(version)
+	
+	def AddDescription(self,desc):
+		self.__description.append(desc)
+
+	def GetDescription(self):
+		return self.__description
+
+	def SetDescription(self,i,uri,url,sys,ver,arch):
+		self.__description[i] = [uri,url,sys,ver,arch]

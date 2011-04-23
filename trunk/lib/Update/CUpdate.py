@@ -1,6 +1,5 @@
-class CUpdateManager(object):
+class CUpdate(object):
 	def __init__(self):
-		self.__data = []
 		self.__ListOfAddons = []
 		
 	def Update(self,List):
@@ -8,8 +7,8 @@ class CUpdateManager(object):
 		self.Vypis()
 		self.Simplify()
 		self.Vypis()
-		#self.ParseXML(ListOfAddons[i].GetUrl())
-		#self.ParseHTML()	
+		self.ParseXML()
+		self.ParseHTML()	
 	
 	def Vypis(self):
 		for i in range (0,len(self.__ListOfAddons)):
@@ -35,16 +34,25 @@ class CUpdateManager(object):
 				ShortList[x].AppendVersion(self.__ListOfAddons[i].GetVersion()[0])
 		self.__ListOfAddons = ShortList
 
-	def ParseXML(self,url):
-		xml =  urllib.urlopen(url).read()
-		#tree = etree.parse(StringIO(xml))
-		context = etree.iterparse(StringIO(xml))
-		desc = []
-		for action, elem in context:
-			if elem.tag == "description" and elem.text!=None:
-				desc.append(elem.text)
-			
-		self.__descriptions = desc
+	def ParseXML(self):
+		for i in range (0,len(self.__ListOfAddons)):
+			try:
+				xml =  urllib.urlopen(self.__ListOfAddons[i].GetUrl()).read()
+				context = etree.iterparse(StringIO(xml))
+				try:				
+					for action, elem in context:
+						if elem.tag == 'description' and elem.text!=None:
+							self.__ListOfAddons[i].AddDescription(elem.text)
+				except SyntaxError:
+					self.__ListOfAddons[i].AddDescription(None)				
+					print 'Incorrect XML format'					
+			except IOError:
+				self.__ListOfAddons[i].AddDescription(None)				
+				print 'Name or service not known'
+		print '-----------------------------'
+		print 'Descriptions:'		
+		for i in range (0,len(self.__ListOfAddons)):
+			print self.__ListOfAddons[i].GetDescription()
 
 	def napln(self,x,html):
 		try: 
@@ -54,22 +62,17 @@ class CUpdateManager(object):
 		return data
 	
 	def ParseHTML(self):
-		books = []	
-		for i in range (0,len(self.__descriptions)):
-			try:
-				#v = htmlFile[i]["description"]
-				html = fromstring(self.__descriptions[i])
-				books.append(self.napln(URI,html))	
-				books.append(self.napln(URL,html))
-				books.append(self.napln(SYS,html))
-				books.append(self.napln(VER,html))
-				books.append(self.napln(ARCH,html))
-				#if (book_dict[URI]!="" and book_dict[URL]!="" and book_dict[VER]!=""):
-				#	books.append(book_dict)
-				self.__data.append(books)
-				books = []
-			except KeyError:
-				pass
-
-	def GetData(self):
-		return self.__data
+		for i in range (0,len(self.__ListOfAddons)):
+			for j in range (0,len(self.__ListOfAddons[i].GetDescription())):
+				try:
+					html = fromstring(self.__ListOfAddons[i].GetDescription()[j])
+					self.__ListOfAddons[i].SetDescription(j,self.napln(URI,html),self.napln(URL,html),self.napln(SYS,html),self.napln(VER,html),self.napln(ARCH,html))
+				except KeyError:
+					pass
+				except TypeError:
+					pass
+		print '-----------------------------'
+		print 'Data z descriptions:'
+		for i in range (0,len(self.__ListOfAddons)):
+			for j in range (0,len(self.__ListOfAddons[i].GetDescription())):
+				print self.__ListOfAddons[i].GetDescription()[j]
