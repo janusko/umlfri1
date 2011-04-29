@@ -1,5 +1,5 @@
 from lxml import etree
-from StringIO import StringIO
+from cStringIO import StringIO
 from lxml.html import fromstring
 import urllib
 import platform
@@ -33,7 +33,7 @@ class CUpdate(object):
                     i.SetDescription(j.GetDescription())
                     y = True
                     break   
-            if y==False:
+            if not y:
                 try:
                     xml = urllib.urlopen(i.GetUrl()).read()
                     context = etree.iterparse(StringIO(xml))
@@ -79,7 +79,10 @@ class CUpdate(object):
         for i in self.__LOA:
             if i.GetRSSUrl()!='':
                 try:
-                    List.append(urllib.urlopen(i.GetRSSUrl()))
+                    netfile = urllib.urlopen(i.GetRSSUrl())
+                    data = netfile.read()
+                    ramfile = StringIO(data)
+                    List.append(ramfile)
                 except IOError:
                     List.append(None)
             else:
