@@ -6,11 +6,11 @@ def check():
     """
     try:
         import sysplatform
-        import etree
+        import libxml
         import gtk2
         
         sysplatform.check()
-        etree.check()
+        libxml.check()
         gtk2.check()
     except (AssertionError, ), e:
         import sys
@@ -18,12 +18,12 @@ def check():
 
 def version():
     import sysplatform
-    import etree
+    import libxml
     import gtk2
     ret = []
     
     ret.extend(sysplatform.version())
-    ret.extend(etree.version())
+    ret.extend(libxml.version())
     ret.extend(gtk2.version())
     
     ret.append(('__debug__', str(__debug__)))

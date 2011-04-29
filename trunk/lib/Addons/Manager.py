@@ -1,4 +1,4 @@
-from lib.Depend.etree import etree, HAVE_LXML
+from lib.Depend.libxml import etree
 
 import re
 import os
@@ -20,12 +20,10 @@ from lib.Distconfig import SCHEMA_PATH, USERDIR_PATH, ADDONS_PATH
 from lib.config import config
 from lib.Exceptions.DevException import *
 
-#if lxml.etree is imported successfully, we use xml validation with xsd schema
-if HAVE_LXML:
-    xmlschema_doc = etree.parse(os.path.join(SCHEMA_PATH, "addon.xsd"))
-    xmlschema = etree.XMLSchema(xmlschema_doc)
-    xmlschema_list_doc = etree.parse(os.path.join(SCHEMA_PATH, "addonList.xsd"))
-    xmlschema_list = etree.XMLSchema(xmlschema_list_doc)
+xmlschema_doc = etree.parse(os.path.join(SCHEMA_PATH, "addon.xsd"))
+xmlschema = etree.XMLSchema(xmlschema_doc)
+xmlschema_list_doc = etree.parse(os.path.join(SCHEMA_PATH, "addonList.xsd"))
+xmlschema_list = etree.XMLSchema(xmlschema_list_doc)
 
 class CAddonManager(object):
     reSpaces = re.compile(' +')
@@ -46,9 +44,8 @@ class CAddonManager(object):
             return ret
         
         root = etree.XML(file(path).read())
-        if HAVE_LXML:
-            if not xmlschema_list.validate(root):
-                raise FactoryError("XMLError", xmlschema_list.error_log.last_error)
+        if not xmlschema_list.validate(root):
+            raise FactoryError("XMLError", xmlschema_list.error_log.last_error)
         
         for node in root:
             ret[node.attrib['uri']] = node.attrib.get('enabled', 'true').lower() in ('true', 'yes', '1')
@@ -61,9 +58,8 @@ class CAddonManager(object):
         for uri, enabled in values.iteritems():
             root.append(etree.Element(ADDON_LIST_NAMESPACE+"AddOn", uri = uri, enabled = str(int(enabled))))
         
-        if HAVE_LXML:
-            if not xmlschema_list.validate(root):
-                raise FactoryError("XMLError", xmlschema_list.error_log.last_error)
+        if not xmlschema_list.validate(root):
+            raise FactoryError("XMLError", xmlschema_list.error_log.last_error)
         
         f = file(path, 'w')
         
@@ -111,9 +107,8 @@ class CAddonManager(object):
             return None
         
         root = etree.XML(storage.read_file('addon.xml'))
-        if HAVE_LXML:
-            if not xmlschema.validate(root):
-                raise FactoryError("XMLError", xmlschema.error_log.last_error)
+        if not xmlschema.validate(root):
+            raise FactoryError("XMLError", xmlschema.error_log.last_error)
         
         uris = []
         name = None

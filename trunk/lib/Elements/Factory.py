@@ -9,13 +9,11 @@ from lib.Distconfig import SCHEMA_PATH
 from lib.consts import METAMODEL_NAMESPACE
 from lib.Drawing.Objects import ALL
 from lib.Drawing.Context import BuildParam
-from lib.Depend.etree import etree, HAVE_LXML
+from lib.Depend.libxml import etree
 from lib.Base import CBaseObject
 
-#if lxml.etree is imported successfully, we use xml validation with xsd schema
-if HAVE_LXML:
-    xmlschema_doc = etree.parse(os.path.join(SCHEMA_PATH, "metamodel.xsd"))
-    xmlschema = etree.XMLSchema(xmlschema_doc)
+xmlschema_doc = etree.parse(os.path.join(SCHEMA_PATH, "metamodel.xsd"))
+xmlschema = etree.XMLSchema(xmlschema_doc)
 
 
 class CElementFactory(CBaseObject):
@@ -78,9 +76,8 @@ class CElementFactory(CBaseObject):
         """
         root = etree.XML(self.storage.read_file(file_path))
         #xml (version) file is validate with xsd schema (metamodel.xsd)
-        if HAVE_LXML:
-            if not xmlschema.validate(root):
-                raise FactoryError("XMLError", xmlschema.error_log.last_error)
+        if not xmlschema.validate(root):
+            raise FactoryError("XMLError", xmlschema.error_log.last_error)
 
         if root.tag == METAMODEL_NAMESPACE + 'ElementType':
             self.__LoadType(root)
