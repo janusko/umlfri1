@@ -211,13 +211,17 @@ class CConfig(CBaseObject):
         if not xmlschema_user.validate(rootNode):
             if __debug__:
                 with open(self.file + '.error', 'w') as f:
-                    print>>f, '<?xml version="1.0" encoding="utf-8"?>'
-                    print>>f, etree.tostring(rootNode, encoding='utf-8')
+                    f.writelines([
+                        '<?xml version="1.0" encoding="utf-8"?>\n',
+                        etree.tostring(rootNode, encoding='utf-8')
+                    ])
             raise ConfigError, ("XMLError", xmlschema_user.error_log.last_error)
         
         with open(self.file, 'w') as f:
-            print>>f, '<?xml version="1.0" encoding="utf-8"?>'
-            print>>f, etree.tostring(rootNode, encoding='utf-8')
+            f.writelines([
+                '<?xml version="1.0" encoding="utf-8"?>\n',
+                etree.tostring(rootNode, encoding='utf-8')
+            ])
    
     def GetRevision(self):
         """
