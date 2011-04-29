@@ -1,4 +1,4 @@
-from lib.Depend.etree import etree, HAVE_LXML
+from lib.Depend.libxml import etree
 
 from lib.lib import XMLEncode, Indent
 from ProjectNode import CProjectNode
@@ -17,15 +17,13 @@ from lib.consts import UMLPROJECT_NAMESPACE, PROJECT_EXTENSION, PROJECT_CLEARXML
 from lib.Distconfig import SCHEMA_PATH
 from lib.Base import CBaseObject
 
-#if lxml.etree is imported successfully, we use xml validation with xsd schema
-if HAVE_LXML:
-    xmlschema_doc = [
-        ((1,0,1), etree.parse(os.path.join(SCHEMA_PATH, "umlproject_1.0.1.xsd"))),
-        ((1,1,0), etree.parse(os.path.join(SCHEMA_PATH, "umlproject_1.1.0.xsd"))),
-    ]
-    xmlschemas = []
-    for version, doc in xmlschema_doc:
-        xmlschemas.append((version, etree.XMLSchema(doc)))
+xmlschema_doc = [
+    ((1,0,1), etree.parse(os.path.join(SCHEMA_PATH, "umlproject_1.0.1.xsd"))),
+    ((1,1,0), etree.parse(os.path.join(SCHEMA_PATH, "umlproject_1.1.0.xsd"))),
+]
+xmlschemas = []
+for version, doc in xmlschema_doc:
+    xmlschemas.append((version, etree.XMLSchema(doc)))
 
 
 class CProject(CBaseObject):
@@ -301,13 +299,12 @@ class CProject(CBaseObject):
         rootNode.append(counterNode)
         
         #xml tree is validate with xsd schema (recentfile.xsd)
-        if HAVE_LXML:
-            xmlschema = xmlschemas[-1][1]
-            if not xmlschema.validate(rootNode):
-                if __debug__:
-                    raise XMLError("Schema validation failed\n" + str(xmlschema.error_log.last_error))
-                else:
-                    raise XMLError("Schema validation failed")
+        xmlschema = xmlschemas[-1][1]
+        if not xmlschema.validate(rootNode):
+            if __debug__:
+                raise XMLError("Schema validation failed\n" + str(xmlschema.error_log.last_error))
+            else:
+                raise XMLError("Schema validation failed")
         
         #make human-friendly tree
         Indent(rootNode)
@@ -438,17 +435,16 @@ class CProject(CBaseObject):
         
         
         #xml (version) file is validate with xsd schema (metamodel.xsd)
-        if HAVE_LXML:
-            xmlschema = xmlschemas[0][1]
-            for ver, sch in xmlschemas:
-                if ver > savever:
-                    break
-                xmlschema = sch
-            if not xmlschema.validate(root):
-                if __debug__:
-                    raise XMLError("Schema validation failed\n" + str(xmlschema.error_log.last_error))
-                else:
-                    raise XMLError("Schema validation failed")
+        xmlschema = xmlschemas[0][1]
+        for ver, sch in xmlschemas:
+            if ver > savever:
+                break
+            xmlschema = sch
+        if not xmlschema.validate(root):
+            if __debug__:
+                raise XMLError("Schema validation failed\n" + str(xmlschema.error_log.last_error))
+            else:
+                raise XMLError("Schema validation failed")
         
         for element in root:
             if element.tag == UMLPROJECT_NAMESPACE+'metamodel':

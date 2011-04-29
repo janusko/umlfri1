@@ -1,4 +1,4 @@
-from lib.Depend.etree import etree, HAVE_LXML
+from lib.Depend.libxml import etree
 from lib.Base import CBaseObject
 
 import os
@@ -13,10 +13,8 @@ from lib.Distconfig import SCHEMA_PATH
 
 import weakref
 
-#if lxml.etree is imported successfully, we use xml validation with xsd schema
-if HAVE_LXML:
-    xmlschema_doc = etree.parse(os.path.join(SCHEMA_PATH, "metamodel.xsd"))
-    xmlschema = etree.XMLSchema(xmlschema_doc)
+xmlschema_doc = etree.parse(os.path.join(SCHEMA_PATH, "metamodel.xsd"))
+xmlschema = etree.XMLSchema(xmlschema_doc)
 
 
 class CConnectionFactory(CBaseObject):
@@ -77,9 +75,8 @@ class CConnectionFactory(CBaseObject):
         root = etree.XML(self.storage.read_file(file_path))
 
         #xml (version) file is validate with xsd schema (metamodel.xsd)
-        if HAVE_LXML:
-            if not xmlschema.validate(root):
-                raise FactoryError("XMLError", xmlschema.error_log.last_error)
+        if not xmlschema.validate(root):
+            raise FactoryError("XMLError", xmlschema.error_log.last_error)
 
         if root.tag == METAMODEL_NAMESPACE + 'ConnectionType':
             self.__LoadType(root)

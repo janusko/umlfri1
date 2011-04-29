@@ -1,4 +1,4 @@
-from lib.Depend.etree import etree, HAVE_LXML
+from lib.Depend.libxml import etree
 
 from lib.lib import XMLEncode, Indent
 from lib.Exceptions.UserException import *
@@ -8,10 +8,8 @@ import datetime
 from lib.consts import RECENTFILES_NAMESPACE
 from lib.Base import CBaseObject
 
-#if lxml.etree is imported successfully, we use xml validation with xsd schema
-if HAVE_LXML:
-    xmlschema_doc = etree.parse(os.path.join(SCHEMA_PATH, "recentfiles.xsd"))
-    xmlschema = etree.XMLSchema(xmlschema_doc)
+xmlschema_doc = etree.parse(os.path.join(SCHEMA_PATH, "recentfiles.xsd"))
+xmlschema = etree.XMLSchema(xmlschema_doc)
 
 
 class CRecentFiles(CBaseObject):
@@ -53,9 +51,8 @@ class CRecentFiles(CBaseObject):
         
         root = tree.getroot()
         #xml (recentfiles.xml) file is validate with xsd schema (recentfile.xsd)
-        if HAVE_LXML:
-            if not xmlschema.validate(root):
-                raise XMLError(xmlschema.error_log.last_error)
+        if not xmlschema.validate(root):
+            raise XMLError(xmlschema.error_log.last_error)
 
         for file in root.getchildren():
             if os.path.exists(file.get("name")):
@@ -68,9 +65,8 @@ class CRecentFiles(CBaseObject):
             root.append(etree.Element(RECENTFILES_NAMESPACE+"File", name=name, date=date))  #namespace {xxx} is required
 
         #xml tree is validate with xsd schema (recentfile.xsd)
-        if HAVE_LXML:
-            if not xmlschema.validate(root):
-                raise XMLError(xmlschema.error_log.last_error)
+        if not xmlschema.validate(root):
+            raise XMLError(xmlschema.error_log.last_error)
         
         #make human-friendly tree
         Indent(root)

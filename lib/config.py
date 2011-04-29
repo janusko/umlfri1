@@ -1,6 +1,6 @@
 from __future__ import with_statement
 
-from Depend.etree import etree, HAVE_LXML, XMLSyntaxError
+from Depend.libxml import etree, XMLSyntaxError
 
 from Distconfig import SCHEMA_PATH, CONFIG_PATH, USERDIR_PATH
 
@@ -54,13 +54,11 @@ types = {
     "/Page/Height": int,
 }
 
-#if lxml.etree is imported successfully, we use xml validation with xsd schema
-if HAVE_LXML:
-    xmlschema_doc = etree.parse(os.path.join(SCHEMA_PATH, "config.xsd"))
-    xmlschema = etree.XMLSchema(xmlschema_doc)
-    
-    xmlschema_user_doc = etree.parse(os.path.join(SCHEMA_PATH, "userconfig.xsd"))
-    xmlschema_user = etree.XMLSchema(xmlschema_user_doc)
+xmlschema_doc = etree.parse(os.path.join(SCHEMA_PATH, "config.xsd"))
+xmlschema = etree.XMLSchema(xmlschema_doc)
+
+xmlschema_user_doc = etree.parse(os.path.join(SCHEMA_PATH, "userconfig.xsd"))
+xmlschema_user = etree.XMLSchema(xmlschema_user_doc)
 
 class CConfig(CBaseObject):
     """
@@ -79,9 +77,8 @@ class CConfig(CBaseObject):
         self.Clear()
         
         tree = etree.XML(open(file).read())
-        if HAVE_LXML:
-            if not xmlschema.validate(tree):
-                raise ConfigError, ("XMLError", xmlschema.error_log.last_error)
+        if not xmlschema.validate(tree):
+            raise ConfigError, ("XMLError", xmlschema.error_log.last_error)
         
         self.original = self.__Load(tree)
         self.cfgs = self.original.copy()
@@ -96,9 +93,8 @@ class CConfig(CBaseObject):
             self.file = os.path.join(USERDIR_PATH, 'config.xml')
             if os.path.isfile(self.file):
                 tree = etree.XML(open(self.file).read())
-                if HAVE_LXML:
-                    if not xmlschema_user.validate(tree):
-                        raise ConfigError, ("XMLError", xmlschema_user.error_log.last_error)
+                if not xmlschema_user.validate(tree):
+                    raise ConfigError, ("XMLError", xmlschema_user.error_log.last_error)
                 self.cfgs.update(self.__Load(tree))
         except (XMLSyntaxError, ConfigError):
             print 'WARNING: Your local config file is malformed. Personal settings will be ignored'
@@ -212,13 +208,12 @@ class CConfig(CBaseObject):
         Indent(rootNode)
         
         #xml tree is validate with xsd schema (recentfile.xsd)
-        if HAVE_LXML:
-            if not xmlschema_user.validate(rootNode):
-                if __debug__:
-                    with open(self.file + '.error', 'w') as f:
-                        print>>f, '<?xml version="1.0" encoding="utf-8"?>'
-                        print>>f, etree.tostring(rootNode, encoding='utf-8')
-                raise ConfigError, ("XMLError", xmlschema_user.error_log.last_error)
+        if not xmlschema_user.validate(rootNode):
+            if __debug__:
+                with open(self.file + '.error', 'w') as f:
+                    print>>f, '<?xml version="1.0" encoding="utf-8"?>'
+                    print>>f, etree.tostring(rootNode, encoding='utf-8')
+            raise ConfigError, ("XMLError", xmlschema_user.error_log.last_error)
         
         with open(self.file, 'w') as f:
             print>>f, '<?xml version="1.0" encoding="utf-8"?>'

@@ -1,17 +1,15 @@
 import weakref
 import os.path
 
-from lib.Depend.etree import etree, HAVE_LXML
+from lib.Depend.libxml import etree
 
 from lib.Exceptions.DevException import *
 from lib.Distconfig import SCHEMA_PATH
 
 from Metamodel import CMetamodel
 
-#if lxml.etree is imported successfully, we use xml validation with xsd schema
-if HAVE_LXML:
-    xmlschema_doc = etree.parse(os.path.join(SCHEMA_PATH, "metamodel.xsd"))
-    xmlschema = etree.XMLSchema(xmlschema_doc)
+xmlschema_doc = etree.parse(os.path.join(SCHEMA_PATH, "metamodel.xsd"))
+xmlschema = etree.XMLSchema(xmlschema_doc)
 
 class CMetamodelAddonComponent(object):
     def __init__(self, path, templates):
@@ -32,9 +30,8 @@ class CMetamodelAddonComponent(object):
             
             root = etree.XML(storage.read_file('metamodel.xml'))
             #xml (version) file is validate with xsd schema (metamodel.xsd)
-            if HAVE_LXML:
-                if not xmlschema.validate(root):
-                    raise FactoryError("XMLError", xmlschema.error_log.last_error)
+            if not xmlschema.validate(root):
+                raise FactoryError("XMLError", xmlschema.error_log.last_error)
             
             self.__metamodel = CMetamodel(storage, self.__addon.GetDefaultUri(), self.__addon.GetVersion())
             
