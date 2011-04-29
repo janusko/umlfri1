@@ -1,6 +1,5 @@
-from lxml import etree
+from lib.Depend.libxml import etree, html
 from cStringIO import StringIO
-from lxml.html import fromstring
 import urllib
 import platform
 
@@ -48,9 +47,9 @@ class CUpdate(object):
                 except IOError:
                     pass   
 
-    def __parse(self,x,html):
+    def __parse(self,x,text):
         try: 
-            data = html.find_class(x)[0].text_content()
+            data = text.find_class(x)[0].text_content()
         except IndexError:
             data = ""
         return data
@@ -59,18 +58,18 @@ class CUpdate(object):
         for i in self.__LOA:
             for j in range(0,len(i.GetDescription())):
                 try:
-                    html = fromstring(i.GetDescription()[j])
-                    if self.__parse(URI,html)!='' and self.__parse(URL,html)!='' and self.__parse(VER,html)!='':
-                        if self.__parse(URI,html)==i.GetUri():
-                            if self.__parse(SYS,html)=='' or platform.system()==self.__parse(SYS,html):
-                                if self.__parse(ARCH,html)=='' or platform.architecture()[0]==self.__parse(ARCH,html):
+                    text = html.fromstring(i.GetDescription()[j])
+                    if self.__parse(URI,text)!='' and self.__parse(URL,text)!='' and self.__parse(VER,text)!='':
+                        if self.__parse(URI,text)==i.GetUri():
+                            if self.__parse(SYS,text)=='' or platform.system()==self.__parse(SYS,text):
+                                if self.__parse(ARCH,text)=='' or platform.architecture()[0]==self.__parse(ARCH,text):
                                     try:
-                                        if i.GetRSSVersion().GetVersion() < CVersion(self.__parse(VER,html)).GetVersion():
-                                            i.SetRSSVersion(CVersion(self.__parse(VER,html)))  
-                                            i.SetRSSUrl(self.__parse(URL,html))
+                                        if i.GetRSSVersion() < CVersion(self.__parse(VER,text)):
+                                            i.SetRSSVersion(CVersion(self.__parse(VER,text)))  
+                                            i.SetRSSUrl(self.__parse(URL,text))
                                     except AttributeError: 
-                                        i.SetRSSVersion(CVersion(self.__parse(VER,html)))  
-                                        i.SetRSSUrl(self.__parse(URL,html)) 
+                                        i.SetRSSVersion(CVersion(self.__parse(VER,text)))  
+                                        i.SetRSSUrl(self.__parse(URL,text)) 
                 except KeyError:
                     pass        
     
