@@ -19,6 +19,8 @@ from lib.consts import ADDON_NAMESPACE, ADDON_LIST_NAMESPACE
 from lib.Distconfig import SCHEMA_PATH, USERDIR_PATH, ADDONS_PATH
 from lib.config import config
 from lib.Exceptions.DevException import *
+from lib.Update.Update import CUpdate as CUpdateManager
+from lib.Update.Addon import CAddon as CUpdateRequest
 
 xmlschema_doc = etree.parse(os.path.join(SCHEMA_PATH, "addon.xsd"))
 xmlschema = etree.XMLSchema(xmlschema_doc)
@@ -36,6 +38,7 @@ class CAddonManager(object):
         self.__addons = self.__LoadAllAddons(open_storage(ADDONS_PATH), False)
         self.__addons.update(self.__LoadAllAddons(open_storage(os.path.join(USERDIR_PATH, 'addons')), True))
         self.__pluginManager = CPluginManager(pluginAdapter)
+        self.__updateManager = CUpdateManager()
     
     def __LoadEnabledAddons(self, path):
         ret = {}
@@ -324,3 +327,45 @@ class CAddonManager(object):
         for addon in self.__addons.itervalues():
             addon.Stop()
         self.__pluginManager.Stop()
+    
+    def CheckAddonUpdates(self):
+        """
+        Check for installed addon updates. No dependency checking for now.
+        
+        @return: Old and new addon description
+        @rtype: iterator over tuple of L{CAddon<Addon.CAddon>}
+        """
+        toUpdates = []
+        for addon in self.__addons.itervalues():
+            url = addon.GetUpdateUrl()
+            if url is not None:
+                toUdate.append(CUpdateRequest(url, addon.GetDefaultUri(), addon.GetVersion()))
+        
+        updated = self.__updateManager.Update(toUdate)
+        
+        for upd in updated:
+            storage = open_storage(upd)
+            
+            if storage is None:
+                # TODO: log update error
+                continue
+            
+            try:
+                newAddon = self.__LoadAddon(storage, False)
+            except:
+                # TODO: log update error
+                continue
+            
+            for a in self.__addons:
+                if not set(a.GetUris()).hasdisjoint(newAddon.GetUris()):
+                    oldAddon = a
+                    break
+            
+            if oldAddon is None:
+                # TODO: log update error
+                continue
+            
+            if oldAddon.GetVersion() >= newAddon.GetVersion():
+                continue
+            
+            yield oldAddon, newAddon

@@ -11,7 +11,23 @@ from lib.Exceptions import *
 
 class CZipStorage(CAbstractStorage):
     @staticmethod
+    def createFromFile(file):
+        try:
+            path.seek(0)
+            isZip = zipfile._EndRecData(path)
+            if not isZip:
+                return None
+            path.seek(0)
+            
+            return CZipStorage(zipfile.ZipFile(path), '')
+        except:
+            return None
+    
+    @staticmethod
     def create(path):
+        if not isinstance(path, basestring):
+            return CZipStorage.createFromFile(path)
+        
         if os.path.isdir(path):
             return None
         
