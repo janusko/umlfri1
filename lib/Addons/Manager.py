@@ -121,6 +121,7 @@ class CAddonManager(object):
         homepage = None
         umlfriVersionRange = None
         dependencies = []
+        updateUrl = None
         
         for node in root:
             if node.tag == ADDON_NAMESPACE+'Identity':
@@ -147,6 +148,8 @@ class CAddonManager(object):
                 icon = node.attrib["path"]
             elif node.tag == ADDON_NAMESPACE+'Description':
                 description = self.__FormatMultilineText(node.text or '')
+            elif node.tag == ADDON_NAMESPACE+'Updates':
+                updateUrl = info.attrib["url"]
             elif node.tag == ADDON_NAMESPACE+'Dependencies':
                 umlfriVersionRange, dependencies = self.__LoadDependencies(node)
             elif node.tag == ADDON_NAMESPACE+'Metamodel':
@@ -159,7 +162,7 @@ class CAddonManager(object):
         return CAddon(self, storage, uris, component,
             all(self.__enabledAddons.get(uri, True) for uri in uris),
             uninstallable, author, name, version, license, homepage,
-            icon, description, umlfriVersionRange, dependencies)
+            icon, description, umlfriVersionRange, dependencies, updateUrl)
     
     def __LoadDependencies(self, node):
         umlfriVersionRange = None

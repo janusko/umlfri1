@@ -4,7 +4,8 @@ class CAddon(object):
     def __init__(self, manager, storage, uris, component, enabled, uninstallable,
                     author, name, version, license = (None, None), homepage = None,
                     icon = None, description = None,
-                    umlfriVersionRange = None, dependencies = []):
+                    umlfriVersionRange = None, dependencies = [],
+                    updateUrl = None):
         self.__manager = manager
         
         self.__storage = storage
@@ -28,6 +29,8 @@ class CAddon(object):
         
         self.__umlfriVersionRange = umlfriVersionRange
         self.__dependencies = dependencies
+        
+        self.__updateUrl = updateUrl
     
     def GetStorage(self):
         return self.__storage
@@ -38,6 +41,9 @@ class CAddon(object):
     def GetUris(self):
         for uri in self.__uris:
             yield uri
+    
+    def GetUpdateUrl(self):
+        return self.__updateUrl
     
     def IsEnabled(self):
         return self.__enabled
