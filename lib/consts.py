@@ -8,6 +8,7 @@ ADDON_EXTENSION = '.fria'
 PROJECT_EXTENSION = '.frip'
 PROJECT_TPL_EXTENSION = '.frit'
 PROJECT_CLEARXML_EXTENSION ='.fripx'
+PROJECT_TPL_CLEARXML_EXTENSION = '.fritx'
 
 METAMODEL_NAMESPACE = '{http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd}'
 UMLPROJECT_NAMESPACE = '{http://umlfri.kst.fri.uniza.sk/xmlschema/umlproject.xsd}'

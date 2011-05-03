@@ -2,7 +2,7 @@ from lib.Depend.gtk2 import gtk
 
 import common
 
-from lib.consts import PROJECT_EXTENSION, PROJECT_CLEARXML_EXTENSION, PROJECT_TPL_EXTENSION
+from lib.consts import PROJECT_EXTENSION, PROJECT_CLEARXML_EXTENSION, PROJECT_TPL_EXTENSION, PROJECT_TPL_CLEARXML_EXTENSION
 
 from win32 import COpenSaveDialog
 
@@ -22,6 +22,7 @@ class CfrmOpenProject (common.CWindow):
             (_("UML .FRI Projects"), "*"+PROJECT_EXTENSION),
             (_("UML .FRI Clear XML Projects"), "*"+PROJECT_CLEARXML_EXTENSION),
             (_("UML .FRI Projects templates"), "*"+PROJECT_TPL_EXTENSION),
+            (_("UML .FRI Clear XML Project templates"), "*"+PROJECT_TPL_CLEARXML_EXTENSION),
         ]
         
         for text, pattern in self.filters:

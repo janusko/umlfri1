@@ -1,4 +1,4 @@
-from lib.Depend.gtk2 import gtk
+from lib.Depend.gtk2 import gtk, pango
 
 from lib.Drawing.Canvas.GtkPlus import PixmapFromPath
 
@@ -18,7 +18,7 @@ class CfrmNewProject (common.CWindow):
 
     glade = 'project.glade'
     
-    widgets = ("ivNewProject", "twNewProject")
+    widgets = ("ivNewProject", "twNewProject", "drawingarea")
     
     COL_NAME, \
     COL_ICON, \
@@ -106,6 +106,31 @@ class CfrmNewProject (common.CWindow):
             iter = selection[0]
             self.__updateDescription (model[iter][self.COL_OBJ])
 
+
+    @event("drawingarea", "expose-event")
+    def on_drawingarea_expose(self, widget, event):
+        context = widget.window.cairo_create()
+        context.rectangle(event.area.x, event.area.y,
+            event.area.width, event.area.height)
+        #context.clip()
+        # get style
+        style = widget.get_style().bg
+        bg = style[gtk.STATE_SELECTED]
+        if bg == None or type(bg) != gtk.gdk.Color:
+            fg = gtk.gdk.Color(65535, 65535, 65535)
+        style = widget.get_style().fg
+        fg = style[gtk.STATE_SELECTED]
+        if fg == None or type(fg) != gtk.gdk.Color:
+            bg = gtk.gdk.Color(0, 0, 0)
+        context.set_source_color(bg)
+        context.fill()
+        # draw text
+        layout = widget.create_pango_layout('Create new project')
+        layout.set_font_description(pango.FontDescription(
+            "Sans Serif Bold 20"))
+        context.set_source_color(fg)
+        context.move_to(5, 5)
+        context.show_layout(layout)
 
     def ShowDialog (self, parent):
     	self.form.set_transient_for (parent.form)
