@@ -4,7 +4,8 @@ import urllib
 import platform
 
 from lib.datatypes import CVersion
-from Addon import CAddon
+from UpdateRequest import CUpdateRequest
+from UpdateResponse import CUpdateResponse
 
 #--constants-----------------------------------------------------------
 URI="Curi"
@@ -13,7 +14,7 @@ SYS="Csystem"
 ARCH="Carchitecture"
 VER="Cversion"
 #----------------------------------------------------------------------
-class CUpdate(object):
+class CUpdateManager(object):
     def __init__(self):
         self.__LOA = []
             
@@ -28,10 +29,11 @@ class CUpdate(object):
         y = False      
         for i in self.__LOA:
             for j in self.__LOA:
-                if i.GetUri()==j.GetUri() and j.GetDescription()!=[]:
-                    i.SetDescription(j.GetDescription())
-                    y = True
-                    break   
+                for k in i.GetUri():
+					if k in j.GetUri() and j.GetDescription()!=[]:
+						i.SetDescription(j.GetDescription())
+						y = True
+						break   
             if not y:
                 try:
                     xml = urllib.urlopen(i.GetUrl()).read()
@@ -60,16 +62,18 @@ class CUpdate(object):
                 try:
                     text = html.fromstring(i.GetDescription()[j])
                     if self.__parse(URI,text)!='' and self.__parse(URL,text)!='' and self.__parse(VER,text)!='':
-                        if self.__parse(URI,text)==i.GetUri():
+                        if self.__parse(URI,text) in i.GetUri():
                             if self.__parse(SYS,text)=='' or platform.system()==self.__parse(SYS,text):
                                 if self.__parse(ARCH,text)=='' or platform.architecture()[0]==self.__parse(ARCH,text):
                                     try:
                                         if i.GetRSSVersion() < CVersion(self.__parse(VER,text)):
                                             i.SetRSSVersion(CVersion(self.__parse(VER,text)))  
                                             i.SetRSSUrl(self.__parse(URL,text))
+                                            i.SetRSSUri(self.__parse(URI,text))
                                     except AttributeError: 
                                         i.SetRSSVersion(CVersion(self.__parse(VER,text)))  
                                         i.SetRSSUrl(self.__parse(URL,text)) 
+                                        i.SetRSSUri(self.__parse(URI,text))
                 except KeyError:
                     pass        
     
@@ -81,7 +85,8 @@ class CUpdate(object):
                     netfile = urllib.urlopen(i.GetRSSUrl())
                     data = netfile.read()
                     ramfile = StringIO(data)
-                    List.append(ramfile)
+                    new = CUpdateResponse(ramfile,i.GetRSSUri())
+                    List.append(new)
                 except IOError:
                     List.append(None)
             else:

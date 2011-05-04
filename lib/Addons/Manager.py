@@ -19,8 +19,8 @@ from lib.consts import ADDON_NAMESPACE, ADDON_LIST_NAMESPACE
 from lib.Distconfig import SCHEMA_PATH, USERDIR_PATH, ADDONS_PATH
 from lib.config import config
 from lib.Exceptions.DevException import *
-from lib.Update.Update import CUpdate as CUpdateManager
-from lib.Update.Addon import CAddon as CUpdateRequest
+from lib.Update.UpdateManager import CUpdateManager as CUpdateManager
+from lib.Update.UpdateRequest import CUpdateRequest as CUpdateRequest
 
 xmlschema_doc = etree.parse(os.path.join(SCHEMA_PATH, "addon.xsd"))
 xmlschema = etree.XMLSchema(xmlschema_doc)
