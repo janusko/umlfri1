@@ -1,8 +1,9 @@
-class CAddon(object):
+class CUpdateRequest(object):
     def __init__(self,url,uri,version=None):
         self.__data = {'url': url, 'uri': uri, 'ver': version, 'des': []}
         self.__RSSVersion = self.__data['ver']
         self.__RSSUrl = ''
+        self.__RSSUri = ''
 
     def GetData(self):
         return self.__data
@@ -36,3 +37,9 @@ class CAddon(object):
 
     def GetRSSUrl(self):
         return self.__RSSUrl
+	
+    def SetRSSUri(self,x):
+        self.__RSSUri = x
+
+    def GetRSSUri(self):
+        return self.__RSSUri
