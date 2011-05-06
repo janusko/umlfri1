@@ -13,13 +13,13 @@ class CZipStorage(CAbstractStorage):
     @staticmethod
     def createFromFile(file):
         try:
-            path.seek(0)
-            isZip = zipfile._EndRecData(path)
+            file.seek(0)
+            isZip = zipfile._EndRecData(file)
             if not isZip:
                 return None
-            path.seek(0)
+            file.seek(0)
             
-            return CZipStorage(zipfile.ZipFile(path), '')
+            return CZipStorage(zipfile.ZipFile(file), '')
         except:
             return None
     
