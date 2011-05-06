@@ -152,7 +152,7 @@ class CAddonManager(object):
             elif node.tag == ADDON_NAMESPACE+'Description':
                 description = self.__FormatMultilineText(node.text or '')
             elif node.tag == ADDON_NAMESPACE+'Updates':
-                updateUrl = info.attrib["url"]
+                updateUrl = node.attrib["url"]
             elif node.tag == ADDON_NAMESPACE+'Dependencies':
                 umlfriVersionRange, dependencies = self.__LoadDependencies(node)
             elif node.tag == ADDON_NAMESPACE+'Metamodel':
@@ -339,12 +339,12 @@ class CAddonManager(object):
         for addon in self.__addons.itervalues():
             url = addon.GetUpdateUrl()
             if url is not None:
-                toUdate.append(CUpdateRequest(url, addon.GetDefaultUri(), addon.GetVersion()))
+                toUpdates.append(CUpdateRequest(url, addon.GetDefaultUri(), addon.GetVersion()))
         
-        updated = self.__updateManager.Update(toUdate)
+        updated = self.__updateManager.Update(toUpdates)
         
         for upd in updated:
-            storage = open_storage(upd)
+            storage = open_storage(upd.GetAddon())
             
             if storage is None:
                 # TODO: log update error
@@ -356,10 +356,7 @@ class CAddonManager(object):
                 # TODO: log update error
                 continue
             
-            for a in self.__addons:
-                if not set(a.GetUris()).hasdisjoint(newAddon.GetUris()):
-                    oldAddon = a
-                    break
+            oldAddon = self.GetAddon(upd.GetUri())
             
             if oldAddon is None:
                 # TODO: log update error

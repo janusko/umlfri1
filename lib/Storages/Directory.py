@@ -11,6 +11,8 @@ from lib.Base import CBaseObject
 class CDirectory(CBaseObject):
     @staticmethod
     def create(path):
+        if not isinstance(path, basestring):
+            return None
         if not os.path.isdir(path):
             return None
         return CDirectory(path)
