@@ -10,6 +10,9 @@ from common import event, CWindow
 from dialogs import CQuestionDialog
 import time
 
+import gobject
+import thread
+
 class PluginStartStop(object):
     def __init__(self, application, addon, startStop):
         self.__application = application
@@ -49,7 +52,7 @@ class PluginStartStop(object):
                     else:
                         self.__status = 'error'
                         self.__addon.Kill()
-
+                      
 class CfrmAddons(CWindow):
     name = 'frmAddons'
     glade = 'addons.glade'
@@ -61,19 +64,22 @@ class CfrmAddons(CWindow):
         
         'twPluginList', 'cmdInstallPlugin', 'cmdUninstallPlugin', 'cmdPluginPreferences', 'cmdPluginStart', 'cmdPluginStop',
         'mnuPlugin', 'mnuUninstallPlugin', 'mnuStartPlugin', 'mnuStopPlugin',
-        'mnuHomepagePlugin', 'mnuAboutPlugin',
+        'mnuHomepagePlugin', 'mnuAboutPlugin', 'twUpdateList', 'cmdInstallUpdates', 'cmdCheckUpdates'
     )
     
     COLUMN_ICON, COLUMN_DESCRIPTION, COLUMN_ENABLED, COLUMN_URI = range(4)
+    COLUMN_UICON, COLUMN_UDESCRIPTION, COLUMN_CHECK, COLUMN_UADDON = range(4)
     
     def __init__(self, app, wTree):
         CWindow.__init__(self, app, wTree)
         
         self.__MetamodelStore = self.__InitTw(self.twMetamodelList)
         self.__PluginStore = self.__InitTw(self.twPluginList)
+        self.__UpdateStore = self.__InitUpdateTw(self.twUpdateList) 
         self.__StartStopTimerId = None
-        self.__ToStartStop = {}
-        
+        self.__ToStartStop = {}   
+        self.__newAddons = []
+                                
     def __InitTw(self, tw):
         store = gtk.TreeStore(gtk.gdk.Pixbuf, str, bool, str)
         tw.set_model(store)
@@ -128,7 +134,7 @@ class CfrmAddons(CWindow):
         
         for addon in self.application.GetAddonManager().ListAddons():
             if addon.GetType() == 'metamodel':
-                twStore = self.__MetamodelStore
+                twStore = self.__MetamodelStore                
             elif addon.GetType() == 'plugin':
                 twStore = self.__PluginStore
             elif addon.GetType() == 'composite':
@@ -221,7 +227,77 @@ class CfrmAddons(CWindow):
         else:
             self.__StartStopTimerId = None
             return False
+            
+    def fixed_toggled(self, cell, path, model):
+        iter = model.get_iter((int(path),))
+        fixed = model.get_value(iter, self.COLUMN_CHECK)
+        fixed = not fixed
+        model.set(iter, self.COLUMN_CHECK, fixed)
+        pass
+        
+    def __InitUpdateTw(self, tw):
+        store = gtk.ListStore(gtk.gdk.Pixbuf, str, bool, object)            
+        tw.set_model(store)     
+        
+        renderer = gtk.CellRendererToggle()
+        renderer.connect_after('toggled', self.fixed_toggled, store)        
+        column = gtk.TreeViewColumn('Fixed', renderer, active=self.COLUMN_CHECK)        
+        tw.append_column(column)            
+        
+        renderer = gtk.CellRendererPixbuf()
+        renderer.set_property('yalign', 0)
+        renderer.set_property('ypad', 3)
+        column = gtk.TreeViewColumn()
+        column.pack_start(renderer)
+        column.add_attribute(renderer, 'pixbuf', 0)
+        column.add_attribute(renderer, 'sensitive', 2)
+        tw.append_column(column)
+        
+        renderer = gtk.CellRendererText()
+        renderer.set_property('wrap-mode', pango.WRAP_WORD)
+        column = gtk.TreeViewColumn()
+        column.pack_start(renderer)
+        column.add_attribute(renderer, 'markup', 1)
+        column.add_attribute(renderer, 'sensitive', 2)
+        tw.append_column(column)
+        tw.connect_after("size-allocate", self.__DoTextWrap, column, renderer)   
+        
+        return store   
+        
+    def __UpdateLoad(self,newUpdates):
+        self.__UpdateStore.clear()
+        for old,addon in newUpdates:
+            twStore = self.__UpdateStore
+            iter = twStore.append(None)
+            self.__SetUpdateValues(twStore, iter, addon)
+            self.__newAddons.append(addon)       
     
+    def __SetUpdateValues(self, store, iter, addon):
+        if addon.GetIcon() is None:
+            icon = None
+        else:
+            try:
+                icon = PixmapFromPath(addon.GetStorage(), addon.GetIcon())
+            except:
+                icon = None
+        
+        name = addon.GetName()
+        version = addon.GetVersionString()
+        description = addon.GetDescription() or ""
+        enabled = self.__AddonEnabled(addon)
+        uri = addon.GetDefaultUri()
+        
+        store.set(iter,
+            self.COLUMN_UICON, icon,
+            self.COLUMN_UDESCRIPTION, "<b>%s</b>     %s\n%s"%(name, version, description),    
+            self.COLUMN_CHECK, True,
+            self.COLUMN_UADDON, addon        
+        )   
+                
+    def __CheckUpdates(self):
+        newUpdates = self.application.GetAddonManager().CheckAddonUpdates()
+        gobject.idle_add(self.__UpdateLoad,(newUpdates))        
+        
     @event("cmdEnableMetamodel", "clicked")
     @event("mnuEnableMetamodel", "activate")
     def on_cmdEnableMetamodel_click(self, button):
@@ -402,3 +478,15 @@ class CfrmAddons(CWindow):
             if self.__StartStopTimerId is None:
                 self.__StartStopTimerId = glib.timeout_add(100, self.__StartStopTimer)
             self.PluginChanged()
+            
+            
+    @event("cmdCheckUpdates", "clicked")
+    def CheckUpdates_clicked(self, button): 
+        thread.start_new(self.__CheckUpdates,())        
+        
+    @event("cmdInstallUpdates", "clicked")
+    def InstallUpdate(self, button):
+        for row in self.__UpdateStore:
+            if row[self.COLUMN_CHECK]:
+                self.application.GetAddonManager().InstallAddon(self.COLUMN_UADDON)
+ 

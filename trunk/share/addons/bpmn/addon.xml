@@ -11,9 +11,12 @@
     </Author>
     
     <Icon path="icons/icon.png" />
+    
     <Description>
         BPMN (Business Process Modelling Notation) is a graphical representation for specifying business processes in a workflow.
     </Description>
+    
+    <Updates url="http://localhost/drupal/?q=rss.xml" />
     
     <Metamodel>
         <Path path="metamodel" />
