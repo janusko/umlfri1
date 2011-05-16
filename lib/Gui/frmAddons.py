@@ -488,5 +488,5 @@ class CfrmAddons(CWindow):
     def InstallUpdate(self, button):
         for row in self.__UpdateStore:
             if row[self.COLUMN_CHECK]:
-                self.application.GetAddonManager().InstallAddon(self.COLUMN_UADDON)
- 
+                print row[self.COLUMN_UADDON]
+                self.application.GetAddonManager().InstallAddon(row[self.COLUMN_UADDON])
