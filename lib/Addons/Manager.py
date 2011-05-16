@@ -339,7 +339,7 @@ class CAddonManager(object):
         for addon in self.__addons.itervalues():
             url = addon.GetUpdateUrl()
             if url is not None:
-                toUpdates.append(CUpdateRequest(url, addon.GetDefaultUri(), addon.GetVersion()))
+                toUpdates.append(CUpdateRequest(url, addon.GetDefaultUri(), addon.GetVersion()))                
         
         updated = self.__updateManager.Update(toUpdates)
         

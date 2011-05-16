@@ -82,13 +82,13 @@ class CUpdateManager(object):
         for i in self.__LOA:
             if i.GetRSSUrl()!='':
                 try:
-                    netfile = urllib.urlopen(i.GetRSSUrl())
+                    netfile = urllib.urlopen(i.GetRSSUrl())#prava, server, port,prerusenie spojenia, neexist. subur
                     data = netfile.read()
                     ramfile = StringIO(data)
                     new = CUpdateResponse(ramfile,i.GetRSSUri())
                     List.append(new)
                 except IOError:
-                    List.append(None)
+                    pass#List.append(None)
             else:
-                List.append(None)
+                pass#List.append(None)
         return List
