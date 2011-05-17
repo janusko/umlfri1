@@ -308,7 +308,7 @@ class CConnection(CCacheableObject, CSelectableObject):
         nextPoint = self.GetPoint(canvas, index + 1)
         
         if not self.ValidPoint([prevPoint, point, nextPoint]):
-            return
+            return False
         
         line1 = CLine(prevPoint, point)
         line2 = CLine(point, nextPoint)
@@ -332,6 +332,7 @@ class CConnection(CCacheableObject, CSelectableObject):
         
         for label in changed:
             label.RecalculatePosition(canvas) # adjust (x, y) to new position
+        return True
     
     def AddPoint(self, point):
         '''

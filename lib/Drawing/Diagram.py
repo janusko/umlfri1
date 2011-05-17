@@ -2,8 +2,6 @@ from lib.Exceptions.UserException import *
 from lib.Exceptions.UMLException import UMLException
 from lib.config import config
 import Connection, Element, ConLabelInfo
-import lib.Math2D
-import operator
 from lib.Math2D import CRectangle
 from lib.Math2D import CPoint
 from lib.Domains import CDomainObject, CDomainFactory
@@ -360,10 +358,7 @@ class CDiagram(CBaseObject):
             result = (page[0] * (result[0]//page[0] + 1), page[1] * (result[1]//page[1] + 1))
             self.size = result
         return result
-        
-    def GetDrawable(self):
-        # wtf ?
-        return self.drawable        
+
         
     def GetElementAtPosition(self, canvas, pos):
         for c in self.connections:
@@ -389,7 +384,7 @@ class CDiagram(CBaseObject):
         
     def GetViewPort(self):
         return self.viewport
-        
+
     #view = ((x, y), (w, h)
     def Paint(self, canvas):
         ((x, y), (w, h)) = self.viewport
@@ -403,11 +398,11 @@ class CDiagram(CBaseObject):
         num=0
         for k in var:
             for e in self.elements:#elements are ordered depending on their layer (if they have one or their layer is set to default value)
-                if(int(e.GetObject().GetType().GetOptions().get('Layer',0))==k):
+                if int(e.GetObject().GetType().GetOptions().get('Layer',0))==k:
                     if not isinstance(e, ConLabelInfo.CConLabelInfo):
                         selectedIdx = self.elements.index(e)
                         del self.elements[selectedIdx]
-                        self.elements.insert(num, e);
+                        self.elements.insert(num, e)
                         num+=1
         for e in self.elements:
             ((ex1, ey1), (ex2, ey2)) = e.GetSquare(canvas)
@@ -470,13 +465,13 @@ class CDiagram(CBaseObject):
             if not isinstance(selectedElement, ConLabelInfo.CConLabelInfo):
                 selectedIdx = self.elements.index(selectedElement)
                 del self.elements[selectedIdx]
-                self.elements.insert(0, selectedElement);
-            
+                self.elements.insert(0, selectedElement)
+
     def ShiftElementsForward(self, canvas):
         for selectedElement in self.GetSelectedElements():
             if not isinstance(selectedElement, ConLabelInfo.CConLabelInfo):
                 selectedIdx = self.elements.index(selectedElement)
-                selSq = selectedElement.GetSquare(canvas);
+                selSq = selectedElement.GetSquare(canvas)
                 selRect = CRectangle(CPoint(selSq[0]), CPoint(selSq[1]))
                 selectedShifted = False
                 otherElementIdx = selectedIdx + 1
@@ -486,7 +481,7 @@ class CDiagram(CBaseObject):
                     prienik = selRect*othRect 
                     if len(prienik) > 0:
                         del self.elements[selectedIdx]
-                        self.elements.insert(otherElementIdx, selectedElement);
+                        self.elements.insert(otherElementIdx, selectedElement)
                         selectedShifted = True
                     otherElementIdx += 1
                 
@@ -494,7 +489,7 @@ class CDiagram(CBaseObject):
         for selectedElement in self.GetSelectedElements():
             if not isinstance(selectedElement, ConLabelInfo.CConLabelInfo):
                 selectedIdx = self.elements.index(selectedElement)
-                selSq = selectedElement.GetSquare(canvas);
+                selSq = selectedElement.GetSquare(canvas)
                 selRect = CRectangle(CPoint(selSq[0]), CPoint(selSq[1]))
                 selectedShifted = False
                 otherElementIdx = selectedIdx - 1
@@ -504,7 +499,7 @@ class CDiagram(CBaseObject):
                     prienik = selRect*othRect
                     if len(prienik) > 0:
                         del self.elements[selectedIdx]
-                        self.elements.insert(otherElementIdx, selectedElement);
+                        self.elements.insert(otherElementIdx, selectedElement)
                         selectedShifted = True
                     otherElementIdx -= 1
     
@@ -562,7 +557,7 @@ class CDiagram(CBaseObject):
             x_min = 100
         if y_min > 100 :
             y_min = 100
-        return (x_max +x_min, y_max + y_min)
+        return x_max +x_min, y_max + y_min
 
     def GetSizeSquare(self, canvas):
         x_max, y_max,x_min, y_min,  = 0, 0,  9999, 9999
@@ -589,13 +584,16 @@ class CDiagram(CBaseObject):
                 if posY < y_min:
                     y_min = posY
                   
-        return ((int(x_min),int(y_min)),(int(x_max), int(y_max)))
+        return (int(x_min),int(y_min)),(int(x_max), int(y_max))
 
     def ApplyNewSettings(self):
         '''
         Called each time settings change.
         '''
         pass
+
+    def SnapPositionToGrid(self, pos):
+        return self.grid.SnapPosition(pos)
 
     def MoveElement(self, element, pos, canvas):
         if not isinstance(element, ConLabelInfo.CConLabelInfo):
@@ -697,9 +695,6 @@ class CDiagram(CBaseObject):
             pos[xy] += e.GetSize(canvas)[xy] + spacing
 
     def ResizeElementsEvenly(self, resizeByWidth, canvas, selectedElement=None):
-        '''
-        Resize all elements based on the size of the selected element
-        '''
         """
         Resize selected elements evenly to minimal or maximal size of selected
         elements or requested size.
@@ -716,9 +711,8 @@ class CDiagram(CBaseObject):
         
         if selectedElement:
             selectedElementSize = selectedElement.GetSize(canvas)
-            relativeSelectedElementSize = selectedElement.GetSizeRelative()
         elements = tuple(self.GetSelectedElements())
-        if (len(elements)<2): return        
+        if len(elements)<2: return
         minSelElSize = selectedElement.GetMinimalSize(canvas)
         
         for e in elements:
@@ -744,7 +738,7 @@ class CDiagram(CBaseObject):
         Resize all elements based on the size of the maximal element
         '''
         elements = tuple(self.GetSelectedElements())
-        if (len(elements)<2): return        
+        if len(elements)<2: return
 
         maxhight = 0
         maxwidth = 0
@@ -767,7 +761,7 @@ class CDiagram(CBaseObject):
         Resize all elements based on the size of the minimal element
         '''
         elements = tuple(self.GetSelectedElements())
-        if (len(elements)<2): return        
+        if len(elements)<2: return
         
         minhight = 99999
         minwidth = 99999
@@ -780,7 +774,6 @@ class CDiagram(CBaseObject):
                 
         for e in elements:
             esize = list(e.GetSizeRelative())
-            selectedElementSize = e.GetSize(canvas)
             actualElementMinimalSize = e.GetMinimalSize(canvas)
             if minhight < actualElementMinimalSize[0]:
                 esize[0] = 0
