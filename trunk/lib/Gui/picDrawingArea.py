@@ -459,6 +459,7 @@ class CpicDrawingArea(CWidget):
             ElementObject = CElementObject(ElementType)
             newElement = CElement(self.Diagram, ElementObject)
             newElement.SetPosition(pos)
+            self.Diagram.MoveElement(newElement, pos, self.canvas)
             self.AdjustScrollBars()
             self.emit('set-selected', None)
             #here, I get prent element of selected elements (if element is on (over) another element)
@@ -517,7 +518,8 @@ class CpicDrawingArea(CWidget):
             elif self.dnd == 'line':
                 point = self.GetAbsolutePos((event.x, event.y))
                 connection, index = self.DragPoint
-                connection.InsertPoint(self.canvas, point, index)
+                if connection.InsertPoint(self.canvas, point, index):
+                    self.Diagram.MoveConnectionPoint(connection, point, index+1, self.canvas)
                 self.dnd = None
             elif self.dnd == 'move':
                 if gtk.keysyms.space in self.pressedKeys:
