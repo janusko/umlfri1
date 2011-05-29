@@ -5,9 +5,6 @@ from lib.Depend.gtk2 import cairo
 from lib.Exceptions.UserException import *
 from Abstract import CAbstractCanvas
 
-import os
-import sys
-
 #  dash sequence for line styles used in self.cr.set_dash(dash_sequence, offset), where
 #  dash_sequence - an array specifying alternate lengths of on and off stroke portions
 #  offset - an offset into the dash pattern at which the stroke should start
@@ -43,7 +40,7 @@ def HexToRGB(hexcolor):
     #r, g, b = hexcolor[:2], hexcolor[2:4], hexcolor[4:]
     #r, g, b = [int(n, 16) for n in (r, g, b)]
     r, g, b = hexcolor.GetRed(), hexcolor.GetGreen(), hexcolor.GetBlue()
-    return (float(r)/255, float(g)/255, float(b)/255)
+    return float(r)/255, float(g)/255, float(b)/255
 
 class CCairoBaseCanvas(CAbstractCanvas):
     def __init__(self, cairo_context, storage = None):

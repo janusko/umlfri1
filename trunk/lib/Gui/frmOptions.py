@@ -5,18 +5,20 @@ from lib.config import config
 from common import event
 from lib.datatypes import CColor, CFont
 
+SOLID, DASHED, DOUBLE_DASHED = range(3)
+
 class CfrmOptions(common.CWindow):
     name = 'frmOptions'
     glade = 'appSettings.glade'
     
     widgets = ('cbElementLine', 'cbElementFill', 'cbElementFill2', 'cbElementFill3', 'cbElementShadow', 'cbElementNameText', 'cbElementText', 'fbElementNameText','fbElementText' ,'cbConnectionLine', 'cbConnectionArrow', 'cbConnectionArrowFill', 'cbConnectionNameText', 'cbConnectionText', 'fbConnectionNameText', 'fbConnectionText', 'sbSelectionPointsSize', 'cbSelectionPoints', 'cbSelectionRectangle' ,'sbSelectionRectangleWidth', 'cbDragRectangle', 'sbDragRectangleWidth', 'expElement', 'expSelection', 'expConnection', 'expDrag',
-               'cmdDefaultOptions', 'cbGridLine1', 'cbGridLine2', 'sbGridLineWidth', 'sbGridHorSpacing', 'sbGridVerSpacing', 'cbGridActive', 'cbGridVisible', 'rbGridSnapPos', 'rbGridSnapCenter', 'rbGridSnapCorners', 'cbGridResizeElements', 'cbGridSnapBreakpoints')
+               'cmdDefaultOptions', 'cbGridLine1', 'cbGridLine2', 'sbGridLineWidth', 'sbGridHorSpacing', 'sbGridVerSpacing', 'cbGridActive', 'cbGridVisible', 'rbGridSnapPos', 'rbGridSnapCenter', 'rbGridSnapCorners', 'cbGridResizeElements', 'cbGridSnapBreakpoints', 'comboLineStyle',)
             
     def __init__(self, app, wTree):
         common.CWindow.__init__(self, app, wTree)
-        
+        self.initComboLineStyle()
         self.form.action_area.child_set_property(self.cmdDefaultOptions, 'secondary', True)
-    
+
     def CColorToGtkColor(self, color):
         return gtk.gdk.color_parse(str(color))
     
@@ -72,6 +74,16 @@ class CfrmOptions(common.CWindow):
                 str(self.cbGridResizeElements.get_active()).lower()
             config['/Grid/SnapBreakpoints'] = \
                 str(self.cbGridSnapBreakpoints.get_active()).lower()
+            if self.comboLineStyle.get_active() == SOLID:
+                config['/Grid/LineStyle1'] = 'solid'
+                config['/Grid/LineStyle2'] = 'none'
+            elif self.comboLineStyle.get_active() == DASHED:
+                config['/Grid/LineStyle1'] = 'dot'
+                config['/Grid/LineStyle2'] = 'none'
+            else:
+                config['/Grid/LineStyle1'] = 'solid'
+                config['/Grid/LineStyle2'] = 'dot'
+            
             self.Hide()
             return True
         else:
@@ -110,19 +122,39 @@ class CfrmOptions(common.CWindow):
         self.cbGridVisible.set_active(config['/Grid/Visible']=='true')
         if config['/Grid/SnapMode']=="TOP_LEFT":
             self.rbGridSnapPos.set_active(True)
-            self.rbGridSnapCenter.set_active(False)
-            self.rbGridSnapCorners.set_active(False)
         elif config['/Grid/SnapMode']=="CENTER":
             self.rbGridSnapCenter.set_active(True)
-            self.rbGridSnapPos.set_active(False)
-            self.rbGridSnapCorners.set_active(False)
         else:
-            self.rbGridSnapCenter.set_active(False)
-            self.rbGridSnapPos.set_active(False)
             self.rbGridSnapCorners.set_active(True)
         self.cbGridResizeElements.set_active(config['/Grid/ResizeElements']=='true')
         self.cbGridSnapBreakpoints.set_active(config['/Grid/SnapBreakpoints']=='true')
-    
+        if config['/Grid/LineStyle1'] == 'solid':
+            if config['/Grid/LineStyle2'] == 'none':
+                self.comboLineStyle.set_active(SOLID)
+            elif config['/Grid/LineStyle2'] == 'dot':
+                self.comboLineStyle.set_active(DOUBLE_DASHED)
+        elif config['/Grid/LineStyle1'] == 'dot':
+            self.comboLineStyle.set_active(DASHED)
+
+    def initComboLineStyle(self):
+        # create liststore containing combobox strings
+        model = gtk.ListStore(str)
+        cell = gtk.CellRendererText()
+        self.comboLineStyle.set_model(model)
+        self.comboLineStyle.pack_start(cell, True)
+        self.comboLineStyle.add_attribute(cell, 'text', 0)
+        # add combo options
+        self.comboLineStyle.append_text('Solid')
+        self.comboLineStyle.append_text('Dashed')
+        self.comboLineStyle.append_text('Double Dashed')
+
+    @event("comboLineStyle", "changed")
+    def onComboLineStyleChange(self, combo):
+        if combo.get_active() in [SOLID, DASHED]:
+            self.cbGridLine2.set_sensitive(False)
+        else:
+            self.cbGridLine2.set_sensitive(True)
+
     @event("expElement", "activate")
     @event("expConnection", "activate")
     @event("expSelection", "activate")
