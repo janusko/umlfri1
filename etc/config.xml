@@ -37,8 +37,8 @@
         </Drag>
     </Styles>
     <Grid>
-        <Active>true</Active>
-        <Visible>true</Visible>
+        <Active>false</Active>
+        <Visible>false</Visible>
         <ResizeElements>false</ResizeElements>
         <SnapBreakpoints>false</SnapBreakpoints>
         <LineColor1>#2B3E42</LineColor1>
@@ -46,6 +46,8 @@
         <HorSpacing>20</HorSpacing>
         <VerSpacing>20</VerSpacing>
         <LineWidth>1</LineWidth>
+        <LineStyle1>dot</LineStyle1>
+        <LineStyle2>none</LineStyle2>
         <SnapMode>TOP_LEFT</SnapMode>
     </Grid>
     <Page>

@@ -155,6 +155,30 @@
 							        <xs:documentation>Defines line width of grid lines</xs:documentation>
 							    </xs:annotation>
 							</xs:element>
+                            <xs:element name="LineStyle1" minOccurs="0">
+							    <xs:annotation>
+							        <xs:documentation>Defines 1. line style 1 of grid lines</xs:documentation>
+							    </xs:annotation>
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:enumeration value="none"/>
+                                        <xs:enumeration value="solid"/>
+                                        <xs:enumeration value="dot"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+							</xs:element>
+							<xs:element name="LineStyle2" minOccurs="0">
+							    <xs:annotation>
+							        <xs:documentation>Defines 2. line style2 of grid lines</xs:documentation>
+							    </xs:annotation>
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:enumeration value="none"/>
+                                        <xs:enumeration value="solid"/>
+                                        <xs:enumeration value="dot"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+							</xs:element>
 							<xs:element name="SnapMode" minOccurs="0">
 							    <xs:annotation>
 							        <xs:documentation>Defines point to which elements will be snaped</xs:documentation>

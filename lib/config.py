@@ -49,6 +49,8 @@ types = {
     "/Grid/HorSpacing": int,
     "/Grid/VerSpacing": int,
     "/Grid/LineWidth": float,
+    "/Grid/LineStyle1": str,
+    "/Grid/LineStyle2": str,
     "/Grid/SnapMode": str,
     "/Page/Width": int,
     "/Page/Height": int,

@@ -157,7 +157,7 @@ class CConnection(CCacheableObject, CSelectableObject):
             for label in self.labels.values():
                 (x1, y1), (x2, y2) = label.GetSquare(canvas)
                 left, top, right, bottom = min(left, x1), min(top, y1), max(right, x2), max(bottom, x2)
-        return ((left, top), (right, bottom))
+        return (left, top), (right, bottom)
         
     def GetSource(self):
         '''

@@ -1,9 +1,6 @@
 from lib.Base import CBaseObject
-from lib.datatypes import CColor
 from lib.config import config
-from lib.Math2D.path import Path
 from math import sqrt
-from lib.Drawing.Canvas.Export import CExportCanvas
 
 class CGrid(CBaseObject):
     
@@ -27,8 +24,8 @@ class CGrid(CBaseObject):
             self.line_width = config['/Grid/LineWidth']
         fg1 = config['/Grid/LineColor1']
         fg2 = config['/Grid/LineColor2']
-        line_style = 'solid'
-        line_style1 = 'dot'
+        line_style1 = config['/Grid/LineStyle1']
+        line_style2 = config['/Grid/LineStyle2']
         
         scale = canvas.GetScale()
         canvas.SetScale(1.0)
@@ -38,21 +35,31 @@ class CGrid(CBaseObject):
         y1 = -round(viewport[0][1] * scale % vspace) + .5
         x2 = x1 + viewport[1][0]
         y2 = y1 + viewport[1][1]
-        
-        current = x1 + hspace
-        while current <= x2:
-            canvas.DrawLine((current, .5), (current, y2), fg1, self.line_width,
-                line_style)
-            canvas.DrawLine((current, .5), (current, y2), fg2, self.line_width,
-                line_style1)
-            current += hspace
-        current = y1 + vspace
-        while current <= y2:
-            canvas.DrawLine((.5, current), (x2, current), fg1, self.line_width,
-                line_style)
-            canvas.DrawLine((.5, current), (x2, current), fg2, self.line_width,
-                line_style1)
-            current += vspace
+
+        #draw line_style1
+        if not line_style1 == 'none':
+            current = x1 + hspace
+            while current <= x2:
+                canvas.DrawLine((current, .5), (current, y2), fg1, self.line_width,
+                    line_style1)
+                current += hspace
+            current = y1 + vspace
+            while current <= y2:
+                canvas.DrawLine((.5, current), (x2, current), fg1, self.line_width,
+                    line_style1)
+                current += vspace
+        # draw line_style2
+        if not line_style2 == 'none':
+            current = x1 + hspace
+            while current <= x2:
+                canvas.DrawLine((current, .5), (current, y2), fg2, self.line_width,
+                    line_style2)
+                current += hspace
+            current = y1 + vspace
+            while current <= y2:
+                canvas.DrawLine((.5, current), (x2, current), fg2, self.line_width,
+                    line_style2)
+                current += vspace
         canvas.SetScale(scale)
 
     def UpdateState(self, data):
@@ -91,7 +98,7 @@ class CGrid(CBaseObject):
             self.ver_spacing = config['/Grid/VerSpacing']
         x = self.hor_spacing * round(pos[0]/(float(self.hor_spacing)))
         y = self.ver_spacing * round(pos[1]/(float(self.ver_spacing)))
-        return (x, y)
+        return x, y
     
     def SnapElement(self, element, pos, canvas, override=False):
         '''
