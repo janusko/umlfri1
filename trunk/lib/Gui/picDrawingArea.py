@@ -573,6 +573,8 @@ class CpicDrawingArea(CWidget):
             self.emit('selected-item', list(self.Diagram.GetSelected()),False)
             self.Paint()
         elif event.keyval == gtk.keysyms.Delete:
+            if self.dnd:
+                return
             if event.state == gtk.gdk.SHIFT_MASK:
                 for sel in self.Diagram.GetSelected():
                     if isinstance(sel, Element.CElement):
