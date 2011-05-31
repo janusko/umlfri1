@@ -39,6 +39,7 @@ class CtbToolBox(CWidget):
         newIconWidget.set_from_pixbuf(PixmapFromPath(self.application.GetProject().GetMetamodel().GetStorage(), Type.GetIcon()))
         newIconWidget.show()
         newButton = gtk.RadioToolButton(Group, None)
+        newButton.set_label(Type.GetId())
         newButton.set_icon_widget(newIconWidget)
         newButton.set_tooltip(self.tooltips, Type.GetId())
         newButton.connect("toggled", self.on_tbButton_toggled, Type.GetId(), TypeDesc)
