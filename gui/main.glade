@@ -1389,6 +1389,20 @@
       </widget>
     </child>
     <child>
+      <widget class="GtkImageMenuItem" id="mnuCtxDuplicate">
+        <property name="label" translatable="yes">Duplicate</property>
+        <property name="visible">True</property>
+        <property name="tooltip" translatable="yes">Duplicate selected elements.</property>
+        <property name="use_stock">False</property>
+        <child internal-child="image">
+          <widget class="GtkImage" id="image6">
+            <property name="visible">True</property>
+            <property name="stock">gtk-copy</property>
+          </widget>
+        </child>
+      </widget>
+    </child>
+    <child>
       <widget class="GtkSeparatorMenuItem" id="separatormenuitem100s">
         <property name="visible">True</property>
       </widget>

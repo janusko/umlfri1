@@ -4,6 +4,7 @@ from lib.Domains import CDomainObject
 from Alias import CElementAlias
 from lib.consts import DEFAULT_IDENTITY
 from lib.Base import CBaseObject
+from lib.Connections.Object import CConnectionObject
 
 class CElementObject(CBaseObject):
     """
@@ -31,6 +32,28 @@ class CElementObject(CBaseObject):
         if isinstance(type, CElementAlias):
             for path, value in type.GetDefaultValues():
                 self.domainobject.SetValue(path, value)
+    
+    def Clone(self):
+        """
+        Make a copy of element object.
+
+        @return: Element object
+        @rtype: L{CElementObject}
+        """
+        clone = CElementObject(self.type)
+        # copy connections
+        for con in self.connections:
+            src =  con.GetSource()
+            dest = con.GetDestination()
+            if src is self:
+                src = clone
+            else:
+                dest = clone
+            newcon = CConnectionObject(con.GetType(), src, dest)
+            clone.AddConnection(newcon)
+        clone.node = self.node
+        clone.domainobject = self.domainobject.GetCopy()
+        return clone
     
     def GetRevision(self):
         """
