@@ -31,6 +31,7 @@ class CpicDrawingArea(CWidget):
                 'mnuCtxCut',
                 'mnuCtxCopy',
                 'mnuCtxPaste',
+                'mnuCtxDuplicate',
                 'mnuCtxDelete',
                 'mnuCtxShiftDelete',
                 'pmShowInProjectView',
@@ -340,6 +341,7 @@ class CpicDrawingArea(CWidget):
         self.mnuSnapSelectGrid.set_sensitive(element)
         self.mnuCtxCopy.set_sensitive(element)
         self.mnuCtxCut.set_sensitive(element)
+        self.mnuCtxDuplicate.set_sensitive(element)
         self.mnuCtxDelete.set_sensitive(connection or element)
                 
         self.mnuCtxShiftDelete.set_sensitive((connection or element) and not topElement)
@@ -936,7 +938,13 @@ class CpicDrawingArea(CWidget):
         self.Diagram.PasteSelection(self.application.GetClipboard())
         self.Paint()
         self.emit('selected-item', list(self.Diagram.GetSelected()),False)
-        
+    
+    @event("mnuCtxDuplicate", "activate")
+    def ActionDuplicate(self, widget=None):
+        self.Diagram.DuplicateSelectedElements()
+        self.Paint()
+        self.emit('selected-item', list(self.Diagram.GetSelected()), False)
+
     @event("mnuCtxShiftDelete","activate")
     def onMnuCtxShiftDelteActivate(self, menuItem):
         for sel in self.Diagram.GetSelected():
