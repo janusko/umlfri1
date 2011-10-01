@@ -19,9 +19,11 @@ class InterfaceMethodParameter(Base):
             
             if not self.__required:
                 if default is None:
-                    self.__default = self.__type.default
+                    self.__default = None
                 else:
                     self.__default = self.__type.convert(default)
+            else:
+                self.__default = None
         else:
             self.__type = type
             self.__default = None

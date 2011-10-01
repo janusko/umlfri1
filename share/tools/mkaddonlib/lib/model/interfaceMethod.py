@@ -15,7 +15,7 @@ class InterfaceMethod(BaseContainer):
         self.__documentation = documentation
         self.__mutator = mutator
         self.__transactional = mutator and transactional
-        self.__async = self.__transactional or async
+        self.__async = async
     
     @property
     def fqn(self):

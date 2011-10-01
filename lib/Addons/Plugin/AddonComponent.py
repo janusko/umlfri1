@@ -8,15 +8,10 @@ from PatchPlugin import CPatchPlugin
 
 class CPluginAddonComponent(object):
     def __init__(self, codes, patches, requiredMetamodels, patchParams):
-        allowedOs = ('all', platform.system(), platform.system() + ' ' + platform.version())
+        self.__allowedOs = ('all', platform.system(), platform.system() + ' ' + platform.version())
         self.__path = None
         self.__starter = None
-        
-        for osName, language, path in codes:
-            if osName in allowedOs and language in starters:
-                self.__path = path
-                self.__starter = starters[language]
-                break
+        self.__codes = codes
         
         self.__patchPaths = patches
         self.__patches = None
@@ -46,11 +41,13 @@ class CPluginAddonComponent(object):
             patch.Start()
             self.__patchStarted = True
         
-        if self.__path is not None:
-            if self.__plugin is None:
-                self.__plugin = CPlugin(os.path.join(root, self.__path), self.__addon.GetDefaultUri(), self.__starter)
+        if self.__plugin is None:
+            path, starter = self.GetStarter()
+            if path is not None:
+                self.__plugin = CPlugin(os.path.join(root, self.__path), self.__addon.GetDefaultUri(), starter)
                 self.__addon.GetManager().GetPluginManager().AddPlugin(self.__plugin)
-            
+        
+        if self.__path is not None:
             self.__plugin.Start()
     
     def Stop(self):
@@ -75,4 +72,12 @@ class CPluginAddonComponent(object):
             return self.__plugin.IsAlive()
         else:
             return self.__patchStarted
-        
+    
+    def GetStarter(self):
+        if self.__starter is None:
+            for osName, language, path in self.__codes:
+                if osName in self.__allowedOs:
+                    self.__starter = starters[language]
+                    self.__path = path
+                    break
+        return self.__path, self.__starter
