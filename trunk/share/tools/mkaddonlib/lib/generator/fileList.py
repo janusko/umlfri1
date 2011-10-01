@@ -1,6 +1,7 @@
 from .file import File
 from .generator import Generator
 from .template import Template
+from .directory import Directory
 
 import sys
 import os.path
@@ -45,6 +46,8 @@ class FileList(object):
                     self.__appendGenerator(rel(child.attrib['path']), child.attrib['output'], child.attrib['root'] or None)
                 elif child.tag == 'template':
                     self.__appendTemplate(rel(child.attrib['path']), child.attrib['output'], child.attrib['root'] or None)
+                elif child.tag == 'directory':
+                    self.__appendDirectory(rel(child.attrib['path']), child.attrib['output'], child.attrib['glob'])
     
     def create(self, dir):
         for f in self.__fileList:
@@ -55,9 +58,9 @@ class FileList(object):
     
     def __appendGenerator(self, inputFile, outputFile, fqn):
         self.__fileList.append(Generator(inputFile, outputFile, self.__builder.getTypeByFQN(fqn)))
-    
-    def __appendLibrary(self, path):
-        self.__fileList.append(Library(path))
-    
+            
     def __appendTemplate(self, inputFile, outputFile, fqn):
         self.__fileList.append(Template(inputFile, outputFile, self.__builder.getTypeByFQN(fqn)))
+            
+    def __appendDirectory(self, inputFile, outputFile, glob):
+        self.__fileList.append(Directory(inputFile, outputFile, glob))

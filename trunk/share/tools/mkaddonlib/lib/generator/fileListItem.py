@@ -8,14 +8,26 @@ class FileListItem(object):
         self.__root = root
     
     def create(self, dir):
-        reldir = os.path.dirname(self.__outputFile)
-        relfile = os.path.basename(self.__outputFile)
-        dir = os.path.abspath(os.path.join(dir, reldir))
+        subitems = self.subItems(self.__inputFile, self.__outputFile)
         
-        self.__mkdir(dir)
+        if subitems is not None:
+            for subitem in subitems:
+                subitem.create(dir)
+        else:
+            reldir = os.path.dirname(self.__outputFile)
+            relfile = os.path.basename(self.__outputFile)
+            dir = os.path.abspath(os.path.join(dir, reldir))
+            
+            self.__mkdir(dir)
+            
+            self.createFile(self.__inputFile, os.path.join(dir, relfile), self.__root)
         
-        with file(os.path.join(dir, relfile), 'w') as f:
-            f.write(self.generate(self.__inputFile, self.__root))
+    def createFile(self, inputFile, outputFile, root):
+        with file(outputFile, 'w') as f:
+            f.write(self.generate(inputFile, root))
+    
+    def subItems(self, inputFile, outputFile):
+        return None
     
     def generate(self, inputFile, root):
         raise Exception()
