@@ -47,8 +47,9 @@ class PrimitiveType(object):
     def typeName(self):
         return 'PrimitiveType'
 
+boolConvertor = lambda x: (True if x == 'true' else False)
 primitiveTypes = {
-    'boolean':      PrimitiveType('boolean', isLogic = True, convertor = bool, default = False),
+    'boolean':      PrimitiveType('boolean', isLogic = True, convertor = boolConvertor, default = False),
     'inputstream':  PrimitiveType('inputstream', isObject = True),
     'int32':        PrimitiveType('int32', isNumeric = True, convertor = int, default = 0),
     'float':        PrimitiveType('float', isNumeric = True, convertor = int, default = 0.0),
