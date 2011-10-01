@@ -6,6 +6,9 @@ from lib.Connections.Type import CConnectionType
 class IConnectionType(IBase):
     __cls__ = CConnectionType
     
+    def GetName(him):
+        return him.GetId()
+    
     def GetDomain(him):
         return him.GetDomain()
     

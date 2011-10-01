@@ -8,10 +8,10 @@ class IMenu(IContainer):
     
     @mainthread
     @includeAddr
-    def AddMenuItem(him, guiId, callback, position, label, underline=True, imagefilename=None, _addr=None):
-        if imagefilename is not None:
-            imagefilename = IMenu.RelativePath2Absolute(_addr, imagefilename)
-        return him.AddMenuItem(guiId, callback, position, label, underline, imagefilename, _addr)
+    def AddMenuItem(him, guiId, callback, position, label, underline=True, imageFileName=None, _addr=None):
+        if imageFileName is not None:
+            imageFileName = IMenu.RelativePath2Absolute(_addr, imageFileName)
+        return him.AddMenuItem(guiId, callback, position, label, underline, imageFileName, _addr)
     
     @mainthread
     @includeAddr

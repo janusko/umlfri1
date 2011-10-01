@@ -24,7 +24,7 @@ class IDiagram(IDomainObject):
     def GetSelectedElements(him):
         return list(him.GetSelectedElements(True))
         
-    def GetSelectedLabels(him):
+    def GetSelectedConnectionLabels(him):
         return [item for item in him.GetSelectedElements(False) if isinstance(item, CConLabelInfo)]
     
     def GetSelectedConnections(him): 
@@ -36,8 +36,8 @@ class IDiagram(IDomainObject):
     def GetElementAtPosition(him, pos): 
         return him.GetElementAtPosition(IBase.adapter.GetCanvas(), pos)
     
-    def GetElementsInRange(him, topleft, bottomright, includeall = True):
-        return list(him.GetElementsInRange(IBase.adapter.GetCanvas(), topleft, bottomright, includeall))
+    def GetElementsInRange(him, topLeft, bottomRight, includeAll = True):
+        return list(him.GetElementsInRange(IBase.adapter.GetCanvas(), topLeft, bottomRight, includeAll))
     
     def GetSizeSquare(him):
         return him.GetSizeSquare(IBase.adapter.GetCanvas())
@@ -47,6 +47,9 @@ class IDiagram(IDomainObject):
         
     def GetConnections(him):
         return list(him.GetConnections())
+    
+    def GetName(him):
+        return him.GetName()
     
     # WRITE METHODS
     

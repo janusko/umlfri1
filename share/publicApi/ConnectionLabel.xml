@@ -96,6 +96,12 @@
             </documentation>
         </parameter>
         
+        <parameter name="includeAll" type="boolean">
+            <documentation>
+                Determines whether to check if element is included fully in defined range.
+            </documentation>
+        </parameter>
+        
         <return type="boolean" />
     </method>
 </interface>

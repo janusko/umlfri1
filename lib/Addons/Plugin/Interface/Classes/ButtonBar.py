@@ -9,10 +9,10 @@ class IButtonBar(IContainer):
     
     @mainthread
     @includeAddr
-    def AddButton(him, guiId, callback, position, label, imagefilename=None, togglebutton=False, _addr=None):
-        if imagefilename is not None:
-            imagefilename = IButtonBar.RelativePath2Absolute(_addr, imagefilename)
-        return him.AddButton(guiId, callback, position, label, imagefilename, togglebutton, _addr)
+    def AddButton(him, guiId, callback, position, label, imageFileName=None, toggleButton=False, _addr=None):
+        if imageFileName is not None:
+            imageFileName = IButtonBar.RelativePath2Absolute(_addr, imageFileName)
+        return him.AddButton(guiId, callback, position, label, imageFileName, toggleButton, _addr)
         
     @mainthread
     @includeAddr

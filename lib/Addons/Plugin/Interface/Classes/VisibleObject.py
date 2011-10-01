@@ -23,8 +23,8 @@ class IVisibleObject(IBase):
     def AreYouAtPosition(him, pos):
         return him.AreYouAtPosition(IBase.adapter.GetCanvas(), pos)
     
-    def AreYouInRange(him, topleft, bottomright, all = False):
-        return him.AreYouInRange(IBase.adapter.GetCanvas(), topleft, bottomright, all)
+    def AreYouInRange(him, topLeft, bottomRight, includeAll = True):
+        return him.AreYouInRange(IBase.adapter.GetCanvas(), topLeft, bottomRight, includeAll)
     
     def GetObject(him):
         return him.GetObject()
