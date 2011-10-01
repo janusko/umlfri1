@@ -4,7 +4,7 @@
     name="org.umlfri.api.model.Diagram">
     
     <documentation>
-        ...
+        Logical and visual information in one piece.
     </documentation>
     
     <method name="getElement">

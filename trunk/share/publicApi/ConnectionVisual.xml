@@ -5,7 +5,7 @@
     base="org.umlfri.api.model.Visual">
     
     <documentation>
-        ...
+        Visual information about connection shown on some diagram.
     </documentation>
     
     <property name="object">

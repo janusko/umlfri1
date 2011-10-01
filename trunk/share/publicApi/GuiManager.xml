@@ -4,7 +4,7 @@
     name="org.umlfri.api.gui.GuiManager">
     
     <documentation>
-        ...
+        Root class for gui management object hierarchy.
     </documentation>
     
     <property name="mainMenu">

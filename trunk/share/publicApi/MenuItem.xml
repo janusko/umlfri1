@@ -5,7 +5,7 @@
     base="org.umlfri.api.gui.Widget">
     
     <documentation>
-        ...
+        Simple labeled menu item.
     </documentation>
     
     <method name="addSubmenu" mutator="true">

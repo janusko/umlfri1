@@ -4,7 +4,7 @@
     name="org.umlfri.api.model.ConnectionLabel">
     
     <documentation>
-        ...
+        Label element associated with some connection.
     </documentation>
     
     <property name="position">

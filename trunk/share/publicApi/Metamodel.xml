@@ -4,7 +4,7 @@
     name="org.umlfri.api.metamodel.Metamodel">
     
     <documentation>
-        ...
+        Root object for metamodel object hierarchy.
     </documentation>
     
     <property name="uri">

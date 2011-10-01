@@ -4,7 +4,7 @@
     name="org.umlfri.api.gui.Menu">
     
     <documentation>
-        ...
+        Container for menu items.
     </documentation>
     
     <method name="addMenuItem" mutator="true">

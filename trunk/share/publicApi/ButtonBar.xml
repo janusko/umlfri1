@@ -4,7 +4,7 @@
     name="org.umlfri.api.gui.ButtonBar">
     
     <documentation>
-        ...
+        UML .FRI toolbar component.
     </documentation>
     
     <method name="addButton" mutator="true">

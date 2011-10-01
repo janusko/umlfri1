@@ -4,7 +4,7 @@
     name="org.umlfri.api.metamodel.DiagramType">
     
     <documentation>
-        ...
+        Type of diagram as defined in the metamodel.
     </documentation>
     
     <property name="name">

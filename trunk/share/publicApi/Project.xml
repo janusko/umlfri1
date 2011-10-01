@@ -4,7 +4,7 @@
     name="org.umlfri.api.model.Project">
     
     <documentation>
-        ...
+        Root object for project definition.
     </documentation>
     
     <property name="fileName">

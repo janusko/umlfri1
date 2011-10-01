@@ -4,7 +4,7 @@
     name="org.umlfri.api.base.Adapter">
     
     <documentation>
-        ...
+        Root of public api object hierarchy.
     </documentation>
     
     <property name="project">

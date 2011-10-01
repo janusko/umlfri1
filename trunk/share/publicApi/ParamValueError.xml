@@ -5,7 +5,7 @@
     number="404">
     
     <documentation>
-        ...
+        Incorrect parameters.
     </documentation>
     
     <property name="message" index="0">

@@ -5,6 +5,6 @@
     number="411">
     
     <documentation>
-        ...
+        Action can be used only in transaction mode.
     </documentation>
 </exception>

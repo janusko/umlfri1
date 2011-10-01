@@ -5,6 +5,6 @@
     number="410">
     
     <documentation>
-        ...
+        Action can be used only when transaction mode is active.
     </documentation>
 </exception>
