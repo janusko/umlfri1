@@ -5,7 +5,7 @@
     base="org.umlfri.api.gui.Button">
     
     <documentation>
-        ...
+        Simple two-state toggle button.
     </documentation>
     
     <property name="active">

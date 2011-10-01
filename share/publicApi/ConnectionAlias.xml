@@ -5,7 +5,7 @@
     base="org.umlfri.api.metamodel.ConnectionType">
     
     <documentation>
-        ...
+        Named alias for connection type.
     </documentation>
     
     <property name="alias">

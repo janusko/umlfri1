@@ -4,7 +4,7 @@
     name="org.umlfri.api.base.Transaction">
     
     <documentation>
-        ...
+        Transaction handling.
     </documentation>
     
     <property name="autocommit">

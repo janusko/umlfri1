@@ -4,7 +4,7 @@
     name="org.umlfri.api.metamodel.ElementType">
     
     <documentation>
-        ...
+        Element type as defined in metamodel.
     </documentation>
     
     <property name="name">

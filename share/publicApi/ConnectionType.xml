@@ -4,7 +4,7 @@
     name="org.umlfri.api.metamodel.ConnectionType">
     
     <documentation>
-        ...
+        Type of connection as defined in metamodel.
     </documentation>
     
     <property name="name">

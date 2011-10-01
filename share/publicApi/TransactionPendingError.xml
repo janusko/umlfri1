@@ -5,6 +5,6 @@
     number="409">
     
     <documentation>
-        ...
+        Transaction is already opened.
     </documentation>
 </exception>

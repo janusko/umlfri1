@@ -5,7 +5,7 @@
     base="org.umlfri.api.gui.MenuItem">
     
     <documentation>
-        ...
+        Menu item with icon.
     </documentation>
     
     <method name="setImageFromFile" mutator="true">

@@ -4,7 +4,7 @@
     name="org.umlfri.api.model.ConnectionObject">
     
     <documentation>
-        ...
+        Logical information about connection.
     </documentation>
     
     <method name="getConnectedObject">

@@ -4,7 +4,7 @@
     name="org.umlfri.api.model.ElementObject">
     
     <documentation>
-        ...
+        Logical information about element in model.
     </documentation>
     
     <property name="name">

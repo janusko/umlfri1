@@ -5,7 +5,7 @@
     base="org.umlfri.api.metamodel.ElementType">
     
     <documentation>
-        ...
+        Named alias for element type.
     </documentation>
     
     <property name="alias">

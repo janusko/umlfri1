@@ -5,6 +5,6 @@
     number="415">
     
     <documentation>
-        ...
+        Action cannot be done in actual transaction mode.
     </documentation>
 </exception>

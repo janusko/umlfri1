@@ -5,7 +5,7 @@
     base="org.umlfri.api.model.Visual">
     
     <documentation>
-        ...
+        Visual information about element in model.
     </documentation>
     
     <property name="position">

@@ -5,7 +5,7 @@
     abstract="true">
     
     <documentation>
-        ...
+        Base class for all widgets.
     </documentation>
     
     <property name="enabled">

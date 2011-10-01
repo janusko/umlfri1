@@ -5,7 +5,7 @@
     base="org.umlfri.api.gui.Widget">
     
     <documentation>
-        ...
+        Toolbar button GUI object.
     </documentation>
     
     <property name="label">

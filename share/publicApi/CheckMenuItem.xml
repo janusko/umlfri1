@@ -5,7 +5,7 @@
     base="org.umlfri.api.gui.MenuItem">
     
     <documentation>
-        ...
+        Menu item with check box with two states.
     </documentation>
     
     <property name="active">
