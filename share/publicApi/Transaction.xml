@@ -13,24 +13,33 @@
         </documentation>
         <value type="boolean" readable="true" writable="true" />
         
-        <setter transactional="false" />
+        <setter transactional="false">
+            <throws exception="org.umlfri.api.exceptions.TransactionPendingError" />
+            <throws exception="org.umlfri.api.exceptions.InvalidTransactionMode" />
+        </setter>
     </property>
     
     <method name="begin">
         <documentation>
             Enters the manual transactional mode.
         </documentation>
+        
+        <throws exception="org.umlfri.api.exceptions.TransactionPendingError" />
     </method>
     
     <method name="commit">
         <documentation>
             Commits the transaction and ends the manual transactional mode.
         </documentation>
+        
+        <throws exception="org.umlfri.api.exceptions.OutOfTransactionError" />
     </method>
     
     <method name="rollback">
         <documentation>
             Rollbacks the transaction and ends the manual transactional mode.
         </documentation>
+        
+        <throws exception="org.umlfri.api.exceptions.OutOfTransactionError" />
     </method>
 </interface>

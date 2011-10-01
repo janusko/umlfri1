@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<exception
+    xmlns="http://umlfri.org/xmlschema/publicApi.xsd"
+    name="org.umlfri.api.exceptions.TransactionModeUnspecifiedError"
+    number="411">
+    
+    <documentation>
+        ...
+    </documentation>
+    
+    <property name="message" index="0">
+        <documentation>
+            Exception message.
+        </documentation>
+        
+        <value type="string" readable="true" />
+    </property>
+</exception>
