@@ -7,12 +7,4 @@
     <documentation>
         ...
     </documentation>
-    
-    <property name="message" index="0">
-        <documentation>
-            Exception message.
-        </documentation>
-        
-        <value type="string" readable="true" />
-    </property>
 </exception>
