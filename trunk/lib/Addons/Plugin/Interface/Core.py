@@ -35,9 +35,6 @@ class CCore(object):
                 if com == 'exec':
                     self._exec(command['type'], args, kwds, addr, callid)
                 
-                elif com == 'transaction':
-                    self._transaction(command['type'], args, kwds, addr, callid)
-                
                 elif com == 'plugin':
                     self._plugin(command['type'], args, kwds, addr, callid)
                     
@@ -51,25 +48,6 @@ class CCore(object):
         
         else:
             self.manager.Send(addr, RESP_UNSUPPORTED_VERSION, version = command['version'], __id__ = callid)
-    
-    def _transaction(self, com, args, kwds, addr, callid):
-        if com == 'autocommit':
-            self.manager.GetTransaction(addr).StartAutocommit()
-        
-        elif com == 'begin':
-            self.manager.GetTransaction(addr).BeginTransaction()
-        
-        elif com == 'commit':
-            self.manager.GetTransaction(addr).CommitTransaction()
-        
-        elif com == 'rollback':
-            self.manager.GetTransaction(addr).RollbackTransaction()
-        
-        else:
-            self.manager.Send(addr, RESP_INVALID_COMMAND_TYPE, command = 'transaction', type = com, __id__ = callid)
-        
-        self.manager.Send(addr, RESP_OK, __id__ = callid)
-        
     
     def _exec(self, com, args, kwds, addr, callid):
         try:
