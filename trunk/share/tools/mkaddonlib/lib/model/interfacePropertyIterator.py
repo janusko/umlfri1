@@ -1,13 +1,14 @@
-from .base import Base
+from .baseContainer import BaseContainer
 from .interfaceMethod import InterfaceMethod
 from .interfaceMethodParameter import InterfaceMethodParameter
 from .interfaceMethodReturn import InterfaceMethodReturn
+from .interfaceMethodThrows import InterfaceMethodThrows
 
 from . import helper
 
-class InterfacePropertyIterator(Base):
+class InterfacePropertyIterator(BaseContainer):
     def __init__(self, interfaceProperty, apiName = None):
-        Base.__init__(self, None, interfaceProperty)
+        BaseContainer.__init__(self, None, interfaceProperty)
         if apiName is not None:
             self.__apiName = apiName
         else:
@@ -28,6 +29,12 @@ class InterfacePropertyIterator(Base):
     @property
     def type(self):
         return self.parent.type
+    
+    @property
+    def throws(self):
+        for child in self.children:
+            if isinstance(child, InterfaceMethodThrows):
+                yield child
     
     @property
     def index(self):
@@ -51,6 +58,9 @@ class InterfacePropertyIterator(Base):
         meth = InterfaceMethod(name, self.interfaceProperty.interface, apiName = self.apiName, documentation = self.interfaceProperty.documentation)
         
         InterfaceMethodReturn(meth, self.type, iterable = True)
+        
+        for throw in self.throws:
+            InterfaceMethodThrows(meth, throw.exception, throw.documentation)
         
         return meth
     

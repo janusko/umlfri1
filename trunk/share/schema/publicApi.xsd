@@ -69,17 +69,47 @@
 			</xs:element>
 			<xs:element name="getter" minOccurs="0">
 				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="throws" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="documentation" type="xs:string" minOccurs="0"/>
+								</xs:sequence>
+								<xs:attribute name="exception" type="xs:string" use="required"/>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
 					<xs:attribute name="apiname" type="xs:string"/>
 				</xs:complexType>
 			</xs:element>
 			<xs:element name="setter" minOccurs="0">
 				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="throws" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="documentation" type="xs:string" minOccurs="0"/>
+								</xs:sequence>
+								<xs:attribute name="exception" type="xs:string" use="required"/>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
 					<xs:attribute name="apiname" type="xs:string"/>
 					<xs:attribute name="transactional" type="xs:boolean" default="true"/>
 				</xs:complexType>
 			</xs:element>
 			<xs:element name="iterator" minOccurs="0">
 				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="throws" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="documentation" type="xs:string" minOccurs="0"/>
+								</xs:sequence>
+								<xs:attribute name="exception" type="xs:string" use="required"/>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
 					<xs:attribute name="apiname" type="xs:string"/>
 				</xs:complexType>
 			</xs:element>
@@ -120,7 +150,7 @@
 					<xs:attribute name="iterable" type="xs:boolean" default="false"/>
 				</xs:complexType>
 			</xs:element>
-			<xs:element name="throws" minOccurs="0">
+			<xs:element name="throws" minOccurs="0" maxOccurs="unbounded">
 				<xs:complexType>
 					<xs:sequence>
 						<xs:element name="documentation" type="xs:string" minOccurs="0"/>

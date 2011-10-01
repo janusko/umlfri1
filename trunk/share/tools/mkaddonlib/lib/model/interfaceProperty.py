@@ -63,6 +63,11 @@ class InterfaceProperty(BaseContainer):
             yield self.__type
         if self.index is not None and not isinstance(self.index.type, PrimitiveType):
             yield self.index.type
+        
+        for method in self.getter, self.setter, self.iterator:
+            if method is not None:
+                for throw in method.throws:
+                    yield throw.exception
     
     def _link(self, builder):
         BaseContainer._link(self, builder)

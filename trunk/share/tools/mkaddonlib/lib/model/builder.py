@@ -185,10 +185,13 @@ class Builder(object):
             if getter is not None:
                 apiName = getter.attrib.get('apiname')
             
-            InterfacePropertyGetter(
+            method = InterfacePropertyGetter(
                 property,
                 apiName = apiName
             )
+            
+            if getter is not None:
+                self.__parseInterfacePropertyThrows(method, getter)
             
             ableChildren += 1
         
@@ -200,11 +203,14 @@ class Builder(object):
                 apiName = setter.attrib.get('apiname')
                 transactional = setter.attrib.get('transactional', "true").lower() in ("1", "true")
             
-            InterfacePropertySetter(
+            method = InterfacePropertySetter(
                 property,
                 apiName = apiName,
                 transactional = transactional
             )
+            
+            if setter is not None:
+                self.__parseInterfacePropertyThrows(method, setter)
             
             ableChildren += 1
         
@@ -214,15 +220,27 @@ class Builder(object):
             if iterator is not None:
                 apiName = iterator.attrib.get('apiname')
             
-            InterfacePropertyIterator(
+            method = InterfacePropertyIterator(
                 property,
                 apiName = apiName
             )
+            
+            if iterator is not None:
+                self.__parseInterfacePropertyThrows(method, iterator)
             
             ableChildren += 1
         
         if ableChildren == 0:
             raise Exception()
+    
+    def __parseInterfacePropertyThrows(self, method, root):
+        for child in root:
+            if child.tag == self.__xmlns%'throws':
+                throws = InterfaceMethodThrows(
+                    method,
+                    child.attrib['exception'],
+                    documentation = self.__parseDocumentation(child.find(self.__xmlns%'documentation')),
+                )
     
     ################
     ### Exception
