@@ -26,3 +26,7 @@ class IAdapter(IBase):
 
     def LoadProject(him, fileName):
         him.LoadProject(fileName)
+    
+    @includeAddr
+    def GetTransaction(him, _addr):
+        return him.GetPluginManager().GetTransaction(_addr)

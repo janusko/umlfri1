@@ -1,7 +1,8 @@
+from lib.Base.BaseObject import CBaseObject
 from lib.Exceptions import *
 #~ import lib.debug
 
-class CTransaction(object):
+class CTransaction(CBaseObject):
     #~ state = lib.debug.DebugAttribute('state')
     
     def __init__(self):
@@ -16,11 +17,20 @@ class CTransaction(object):
         else:
             raise TransactionModeUnspecifiedError()
     
+    def GetState(self):
+        return self.state
+    
     def StartAutocommit(self):
         if self.state == 'transaction':
             raise TransactionPendingError()
         else:
             self.state = 'autocommit'
+    
+    def EndAutocommit(self):
+        if self.state != 'autocommit':
+            raise InvalidTransactionMode()
+        else:
+            self.state = 'unspecified'
     
     def BeginTransaction(self):
         if self.state in ('autocommit', 'unspecified'):

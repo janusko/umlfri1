@@ -35,21 +35,6 @@ class CInterface(object):
     
     def GetAdapter(self):
         return self.adapter
-    
-    def StartAutocommit(self):
-        return self.connection.Execute('transaction', 'autocommit', (), {})()
-    
-    def BeginTransaction(self):
-        return self.connection.Execute('transaction', 'begin', (), {})()
-    
-    def CommitTransaction(self):
-        return self.connection.Execute('transaction', 'commit', (), {})()
-        
-    def RollbackTransaction(self):
-        return self.connection.Execute('transaction', 'rollback', (), {})()
-    
-    def GetTransaction(self):
-        return CTransaction(self)
         
     def SetStopAction(self, action):
         self.stopaction = action

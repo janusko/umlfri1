@@ -14,6 +14,7 @@ import ElementType
 import ElementAlias
 import Adapter
 import GuiManager
+import Transaction
 
 import Button
 import ButtonBar

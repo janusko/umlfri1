@@ -50,6 +50,9 @@ class TransactionError(PluginCommunicationError):
 class TransactionModeUnspecifiedError(TransactionError):
     pass
 
+class InvalidTransactionMode(TransactionError):
+    pass
+
 class TransactionPendingError(TransactionError):
     pass
     
