@@ -20,7 +20,7 @@ class IElementType(IBase):
         cf = him.GetMetamodel().GetConnectionFactory()
         return [cf.GetConnection(i[0]) for i in him.GetConnections()]
     
-    def ConnectWith(him, connection):
+    def ConnectedWith(him, connection):
         return him.connections[connection.GetId()][0] or []
     
     def AllowedRecursive(him, connection):

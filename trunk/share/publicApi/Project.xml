@@ -33,8 +33,13 @@
     
     <method name="save" mutator="true" transactional="false">
         <documentation>
-            Saves project to the given file. If no file name is sent,
-            project is saved to the current location.
+            Saves project to the current location.
+        </documentation>
+    </method>
+    
+    <method name="saveAs" mutator="true" transactional="false">
+        <documentation>
+            Saves project to the given file.
         </documentation>
         
         <parameter name="fileName" type="string">

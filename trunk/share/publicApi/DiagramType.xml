@@ -30,4 +30,11 @@
         
         <value type="org.umlfri.api.metamodel.ConnectionType" iterable="true" />
     </property>
+    
+    <property name="domain">
+        <documentation>
+            Domain type associated with diagram type.
+        </documentation>
+        <value type="org.umlfri.api.metamodel.DomainType" readable="true" />
+    </property>
 </interface>

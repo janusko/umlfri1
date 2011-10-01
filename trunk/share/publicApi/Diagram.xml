@@ -107,6 +107,12 @@
             </documentation>
         </parameter>
         
+        <parameter name="includeAll" type="boolean">
+            <documentation>
+                Determines whether to return only fully included elements.
+            </documentation>
+        </parameter>
+        
         <return type="org.umlfri.api.model.ElementVisual" iterable="true" />
     </method>
     
