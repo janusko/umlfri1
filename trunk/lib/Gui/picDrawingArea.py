@@ -1,4 +1,3 @@
-from portage.localization import _
 from lib.Depend.gtk2 import gtk
 from lib.Depend.gtk2 import gobject
 
