@@ -390,7 +390,6 @@ class Builder(object):
     def __addAutoThrows(self):
         exceptions = {'all': [], 'mutator': [], 'transactional': [], 'getter': [], 'setter': [], 'iterator': []}
         self.__findAutoThrows(self.__rootNamespace, exceptions)
-        print exceptions
         self.__setAutoThrows(self.__rootNamespace, exceptions)
     
     def __findAutoThrows(self, ns, exceptions):
@@ -434,4 +433,3 @@ class Builder(object):
     def __setAutoThrowsToProperty(self, member, exceptions):
         for exc in exceptions:
             InterfacePropertyThrows(member, exc)
-            print member.fqn, list(member.throws)
