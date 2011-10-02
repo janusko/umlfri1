@@ -147,7 +147,7 @@ class CAddon(object):
             else:
                 if addon is None:
                     ret = 'no'
-                if not addon.IsRunning():
+                elif not addon.IsRunning():
                     if ret == 'ok':
                         ret = 'later'
         
