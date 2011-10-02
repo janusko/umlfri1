@@ -8,7 +8,7 @@
         Simple labeled menu item.
     </documentation>
     
-    <method name="addSubmenu" mutator="true">
+    <method name="addSubmenu" mutator="true" transactional="false">
         <documentation>
             Creates submenu for the menu item.
         </documentation>

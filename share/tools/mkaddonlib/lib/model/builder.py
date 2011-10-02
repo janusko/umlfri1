@@ -16,6 +16,7 @@ from .interfacePropertyGetter import InterfacePropertyGetter
 from .interfacePropertyIndex import InterfacePropertyIndex
 from .interfacePropertyIterator import InterfacePropertyIterator
 from .interfacePropertySetter import InterfacePropertySetter
+from .interfacePropertyThrows import InterfacePropertyThrows
 from .namespace import Namespace
 
 import os
@@ -57,6 +58,7 @@ class Builder(object):
     
     def finish(self):
         self.__rootNamespace._link(self)
+        self.__addAutoThrows()
         self.__addToCache(self.__rootNamespace)
     
     def getRootNamespace(self):
@@ -236,7 +238,7 @@ class Builder(object):
     def __parseInterfacePropertyThrows(self, method, root):
         for child in root:
             if child.tag == self.__xmlns%'throws':
-                throws = InterfaceMethodThrows(
+                throws = InterfacePropertyThrows(
                     method,
                     child.attrib['exception'],
                     documentation = self.__parseDocumentation(child.find(self.__xmlns%'documentation')),
@@ -258,6 +260,8 @@ class Builder(object):
             name,
             namespace,
             number = int(root.attrib['number']),
+            base = root.attrib.get('base'),
+            throwsFrom = root.attrib.get('throwsFrom'),
             documentation = self.__parseDocumentation(root.find(self.__xmlns%'documentation'))
         )
         
@@ -379,3 +383,55 @@ class Builder(object):
         if isinstance(object, BaseContainer):
             for child in object.children:
                 self.__addToCache(child)
+
+    ########################
+    # Auto throws processing
+    
+    def __addAutoThrows(self):
+        exceptions = {'all': [], 'mutator': [], 'transactional': [], 'getter': [], 'setter': [], 'iterator': []}
+        self.__findAutoThrows(self.__rootNamespace, exceptions)
+        print exceptions
+        self.__setAutoThrows(self.__rootNamespace, exceptions)
+    
+    def __findAutoThrows(self, ns, exceptions):
+        for child in ns.children:
+            if isinstance(child, Namespace):
+                self.__findAutoThrows(child, exceptions)
+            elif isinstance(child, ExceptionDefinition):
+                for type in child.throwsFrom:
+                    exceptions[type].append(child)
+    
+    def __setAutoThrows(self, ns, exceptions):
+        for child in ns.children:
+            if isinstance(child, Namespace):
+                self.__setAutoThrows(child, exceptions)
+            elif isinstance(child, Interface):
+                for member in child.children:
+                    if isinstance(member, InterfaceMethod):
+                        self.__setAutoThrowsToMethod(member, exceptions['all'])
+                        if member.mutator:
+                            self.__setAutoThrowsToMethod(member, exceptions['mutator'])
+                        if member.transactional:
+                            self.__setAutoThrowsToMethod(member, exceptions['transactional'])
+                    elif isinstance(member, InterfaceProperty):
+                        if member.getter is not None:
+                            self.__setAutoThrowsToProperty(member.getter, exceptions['all'])
+                            self.__setAutoThrowsToProperty(member.getter, exceptions['getter'])
+                        if member.setter is not None:
+                            self.__setAutoThrowsToProperty(member.setter, exceptions['all'])
+                            self.__setAutoThrowsToProperty(member.setter, exceptions['setter'])
+                            self.__setAutoThrowsToProperty(member.setter, exceptions['mutator'])
+                            if member.setter.transactional:
+                                self.__setAutoThrowsToProperty(member.setter, exceptions['transactional'])
+                        if member.iterator is not None:
+                            self.__setAutoThrowsToProperty(member.iterator, exceptions['all'])
+                            self.__setAutoThrowsToProperty(member.iterator, exceptions['iterator'])
+    
+    def __setAutoThrowsToMethod(self, member, exceptions):
+        for exc in exceptions:
+            InterfaceMethodThrows(member, exc)
+    
+    def __setAutoThrowsToProperty(self, member, exceptions):
+        for exc in exceptions:
+            InterfacePropertyThrows(member, exc)
+            print member.fqn, list(member.throws)

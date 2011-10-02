@@ -3,7 +3,7 @@ from .primitiveType import primitiveTypes, PrimitiveType
 
 from . import helper
 
-class InterfaceMethodThrows(Base):
+class InterfacePropertyThrows(Base):
     def __init__(self, interfaceProperty, exception, documentation = None):
         Base.__init__(self, None, interfaceProperty)
         
