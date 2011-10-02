@@ -37,6 +37,7 @@
 			<xs:attribute name="name" type="xs:string" use="required"/>
 			<xs:attribute name="base" type="xs:string"/>
 			<xs:attribute name="number" type="xs:int" use="required"/>
+            <xs:attribute name="throwsFrom" type="xs:string"/>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="delegate">

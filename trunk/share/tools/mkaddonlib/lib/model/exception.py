@@ -1,12 +1,16 @@
 from .baseContainer import BaseContainer
 
 class Exception(BaseContainer):
-    def __init__(self, name, namespace, number, base = None, documentation = None):
+    def __init__(self, name, namespace, number, base = None, throwsFrom = None, documentation = None):
         BaseContainer.__init__(self, name, namespace)
         
         self.__documentation = documentation
         self.__base = base
         self.__number = number
+        if throwsFrom is None:
+            self.__throwsFrom = []
+        else:
+            self.__throwsFrom = throwsFrom.split(',')
     
     @property
     def namespace(self):
@@ -19,6 +23,10 @@ class Exception(BaseContainer):
     @property
     def base(self):
         return self.__base
+    
+    @property
+    def throwsFrom(self):
+        return set(self.__throwsFrom)
     
     @property
     def number(self):

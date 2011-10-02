@@ -1,4 +1,5 @@
 from .baseContainer import BaseContainer
+from .interfacePropertyThrows import InterfacePropertyThrows
 from .interfaceMethod import InterfaceMethod
 from .interfaceMethodParameter import InterfaceMethodParameter
 from .interfaceMethodReturn import InterfaceMethodReturn
@@ -33,7 +34,7 @@ class InterfacePropertyGetter(BaseContainer):
     @property
     def throws(self):
         for child in self.children:
-            if isinstance(child, InterfaceMethodThrows):
+            if isinstance(child, InterfacePropertyThrows):
                 yield child
     
     @property
