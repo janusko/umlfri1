@@ -14,6 +14,7 @@ class CPlugin(object):
         self.__addr = None
         self.__starter = starter(self)
         self.__longrun = False
+        self.__initialized = False
     
     def GetUri(self):
         return self.__uri
@@ -25,7 +26,7 @@ class CPlugin(object):
         return self.__pluginManager()
     
     def IsInitialized(self):
-        return self.__addr is not None
+        return self.__addr is not None and self.__initialized
     
     def Start(self):
         self.__starter.Start()
@@ -52,8 +53,12 @@ class CPlugin(object):
     def _Connect(self, addr):
         self.__addr = addr
     
+    def _SignalInitialized(self):
+        self.__initialized = True
+    
     def _Disconnect(self):
         self.__addr = None
+        self.__initialized = False
     
     def GetAddr(self):
         return self.__addr

@@ -47,6 +47,7 @@ from lib.Addons.Plugin.Communication.Medium import CPipeMedium
 
 pipe = CPipeMedium(pin, pout)
 interface = CInterface(pipe)
-interface._Init(uri)
+interface._Connect(uri)
 plugin.pluginMain(interface)
+interface._Initialized()
 interface.Mainloop()

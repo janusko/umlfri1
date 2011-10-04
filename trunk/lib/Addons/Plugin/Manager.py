@@ -62,6 +62,12 @@ class CPluginManager(object):
             self.addr2uri[addr] = uri
             self.plugins[uri]._Connect(addr)
     
+    def PluginSignalInitialized(self, addr):
+        uri = self.Addr2Uri(addr)
+        if uri in self.plugins:
+            plugin = self.plugins[uri]
+            plugin._SignalInitialized()
+    
     def GetGuiManager(self):
         '''
         @return: GuiManager instance

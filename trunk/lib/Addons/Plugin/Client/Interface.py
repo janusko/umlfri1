@@ -14,8 +14,11 @@ class CInterface(object):
         self.adapter = classes['IAdapter']('#adapter', self.connection)
         self.stopaction = None
     
-    def _Init(self, uri):
-        return self.connection.Execute('plugin', 'init', (), {'uri': EncodeValue(uri, False, self.connection)})()
+    def _Connect(self, uri):
+        return self.connection.Execute('plugin', 'connect', (), {'uri': EncodeValue(uri, False, self.connection)})()
+    
+    def _Initialized(self):
+        return self.connection.Execute('plugin', 'initialized', (), {})()
         
     def SetMainloop(self, mainloop):
         if self.inmainloop:
