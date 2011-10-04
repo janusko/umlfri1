@@ -69,3 +69,6 @@ class CMetamodelAddonComponent(object):
         
     def IsRunning(self):
         return self.__addon.IsEnabled()
+    
+    def GetRunInProcess(self):
+        return False

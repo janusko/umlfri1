@@ -66,6 +66,7 @@ class CPlugin(object):
     def Dispose(self):
         self.ClearGui()
         self.__pluginManager().RemovePlugin(self)
+        self.__initialized = False
         
     def GetPid(self):
         return self.__starter.GetPid()

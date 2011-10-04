@@ -2,6 +2,7 @@ if __debug__:
     SPLASH_TIMEOUT = 0
 else:
     SPLASH_TIMEOUT = 5000
+CHECK_ADDON_INTERVAL = 100
 
 # extensions
 ADDON_EXTENSION = '.fria'

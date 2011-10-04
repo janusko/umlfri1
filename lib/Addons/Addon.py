@@ -1,3 +1,4 @@
+from lib.Addons.AddonStarter import CAddonStarter
 from lib.datatypes import CVersion
 
 class CAddon(object):
@@ -59,6 +60,9 @@ class CAddon(object):
     def Start(self):
         self.__component.Start()
     
+    def StartWithDeps(self):
+        return CAddonStarter(self.__manager, [self])
+    
     def Stop(self):
         self.__component.Stop()
         
@@ -69,6 +73,9 @@ class CAddon(object):
     def Kill(self):
         self.Disable()
         self.__component.Kill()
+    
+    def GetRunInProcess(self):
+        return self.__component.GetRunInProcess()
         
     def IsRunning(self):
         return self.__component.IsRunning()
@@ -116,39 +123,17 @@ class CAddon(object):
     def GetManager(self):
         return self.__manager
     
-    def CheckDependencies(self):
-        """
-        Check whether dependencies are met.
-        
-        @rtype str
-        @return 'ok' if addon can be started, 'later' if dependences
-        could be met in the future and 'no' if there are some of
-        the dependencies missing
-        """
-        
+    def GetDependencies(self):
+        for dep in self.__dependencies:
+            yield dep
+                
+    def CheckUmlFriDependencies(self):
         if self.__umlfriVersionRange is not None:
             ver = self.__manager.GetPluginManager().GetPluginAdapter().GetUmlfriVersion()
             verFrom, verTo = self.__umlfriVersionRange
             
             if verFrom is not None and ver < verFrom:
-                return 'no'
+                return False
             if verTo is not None and ver > verTo:
-                return 'no'
-        
-        ret = 'ok'
-        
-        for dep in self.__dependencies:
-            addon = self.__manager.GetAddon(dep.GetUri())
-            
-            if not dep.GetRequired():
-                if addon is not None and not addon.IsRunning():
-                    if ret == 'ok':
-                        ret = 'later'
-            else:
-                if addon is None:
-                    ret = 'no'
-                elif not addon.IsRunning():
-                    if ret == 'ok':
-                        ret = 'later'
-        
-        return ret
+                return False
+        return True
