@@ -1,3 +1,4 @@
+from lib.Addons.AddonStarter import CAddonStarter
 from lib.Depend.libxml import etree
 
 import re
@@ -163,7 +164,7 @@ class CAddonManager(object):
                 component = self.__LoadCompositeAddonComponent(node)
         
         return CAddon(self, storage, uris, component,
-            all(self.__enabledAddons.get(uri, True) for uri in uris),
+            False,
             uninstallable, author, name, version, license, homepage,
             icon, description, umlfriVersionRange, dependencies, updateUrl)
     
@@ -304,24 +305,8 @@ class CAddonManager(object):
         self.__addons.update(self.__AddAddonToDict(addon))
     
     def StartAll(self):
-        toStart = [addon for addon in self.__addons.itervalues() if addon.IsEnabled()]
-        oldToStart = float('inf')
-        while len(toStart) < oldToStart:
-            oldToStart = len(toStart)
-            newToStart = []
-            for addon in toStart:
-                dep = addon.CheckDependencies()
-                if dep == 'ok':
-                    addon.Start()
-                elif dep == 'later':
-                    newToStart.append(addon)
-                else:
-                    print 'WARNING: %s could not be started, dependencies was not met'%addon.GetDefaultUri()
-            
-            toStart = newToStart
-        
-        for addon in toStart:
-            print 'WARNING: %s could not be started, dependencies was not met'%addon.GetDefaultUri()
+        toStart = set(addon for uri, addon in self.__addons.iteritems() if self.__enabledAddons.get(uri, True))
+        return CAddonStarter(self, toStart)
     
     def StopAll(self):
         for addon in self.__addons.itervalues():

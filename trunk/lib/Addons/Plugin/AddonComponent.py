@@ -69,9 +69,12 @@ class CPluginAddonComponent(object):
             
     def IsRunning(self):
         if self.__plugin is not None:
-            return self.__plugin.IsInitialized()
+            return self.__plugin.IsInitialized() and self.__plugin.IsAlive()
         else:
             return self.__patchStarted
+    
+    def GetRunInProcess(self):
+        return self.__codes is not None
     
     def GetStarter(self):
         if self.__starter is None:

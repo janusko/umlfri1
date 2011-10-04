@@ -25,7 +25,7 @@ from lib.Gui.dialogs import CExceptionDialog, CErrorDialog
 
 from lib.config import config
 from lib.Distconfig import LOCALES_PATH, GUI_PATH, SVN_REVISION
-from lib.consts import SPLASH_TIMEOUT
+from lib.consts import SPLASH_TIMEOUT, CHECK_ADDON_INTERVAL
 
 from lib.Exceptions import UserException
 
@@ -62,9 +62,9 @@ class Application(CApplication):
         self.addonManager = CAddonManager(self.GetPluginAdapter(), ('gtk+', self))
         self.templateManager = CTemplateManager(self.addonManager)
         
-        gobject.timeout_add(SPLASH_TIMEOUT, self.GetWindow('frmSplash').Hide)
-        
-        self.addonManager.StartAll()
+        self.__startupStarter = self.addonManager.StartAll()
+        gobject.timeout_add(CHECK_ADDON_INTERVAL, self.__StartupStarterTimer)
+        #self.GetWindow('frmSplash').Hide()
     
     def GetBus(self):
         return self.bus
@@ -169,6 +169,19 @@ class Application(CApplication):
         config.Save()
         self.addonManager.Save()
         self.recentFiles.SaveRecentFiles()
+    
+    def __StartupStarterTimer(self):
+        self.__startupStarter.Step()
+        if not self.__startupStarter.ToStartCount():
+            gobject.timeout_add(SPLASH_TIMEOUT, self.__HideSplash)
+            return False
+        else:
+            return True
+    
+    def __HideSplash(self):
+        self.GetWindow('frmSplash').Hide()
+        
+        return False
 
 if __name__ == '__main__':
     gobject.threads_init()
