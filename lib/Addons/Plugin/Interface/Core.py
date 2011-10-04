@@ -81,9 +81,11 @@ class CCore(object):
             raise ParamValueError()
     
     def _plugin(self, ctype, args, kwds, addr, callid):
-        if ctype == 'init':
+        if ctype == 'connect':
             self.manager.ConnectPlugin(kwds['uri'], addr)
             self.manager.Send(addr, RESP_OK, __id__ = callid)
+        elif ctype == 'initialized':
+            self.manager.PluginSignalInitialized(addr)
         elif ctype == 'longrun':
             self.manager.SetLongRun(bool(kwds['value']), addr)
             self.manager.Send(addr, RESP_OK, __id__ = callid)

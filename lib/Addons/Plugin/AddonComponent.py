@@ -20,7 +20,7 @@ class CPluginAddonComponent(object):
         self.__metamodel = None
         
         self.__patchParams = patchParams
-        self.__patchStarted = True
+        self.__patchStarted = False
     
     def _SetAddon(self, addon):
         self.__addon = addon
@@ -29,10 +29,10 @@ class CPluginAddonComponent(object):
         return 'plugin'
     
     def Start(self):
+        root = self.__addon.GetStorage().get_path()
+        
         if self.__patches is None:
             self.__patches = []
-            
-            root = self.__addon.GetStorage().get_path()
             
             for path in self.__patchPaths:
                 self.__patches.append(CPatchPlugin(self.__patchParams, self.__addon.GetDefaultUri(), root, path))
@@ -69,7 +69,7 @@ class CPluginAddonComponent(object):
             
     def IsRunning(self):
         if self.__plugin is not None:
-            return self.__plugin.IsAlive()
+            return self.__plugin.IsInitialized()
         else:
             return self.__patchStarted
     
