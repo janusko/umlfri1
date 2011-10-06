@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0"?>
 <glade-interface>
   <!-- interface-requires gtk+ 2.16 -->
   <!-- interface-naming-policy toplevel-contextual -->
@@ -11,6 +11,7 @@
     <child>
       <widget class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
+        <property name="orientation">vertical</property>
         <child>
           <widget class="GtkMenuBar" id="mnuMenubar">
             <property name="visible">True</property>
@@ -508,6 +509,7 @@
         <child>
           <widget class="GtkVBox" id="vbox2">
             <property name="visible">True</property>
+            <property name="orientation">vertical</property>
             <child>
               <widget class="GtkHandleBox" id="hndCommandBar">
                 <property name="visible">True</property>
@@ -764,6 +766,7 @@
                   <widget class="GtkVPaned" id="vpaWarnings">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="orientation">vertical</property>
                     <child>
                       <widget class="GtkNotebook" id="nbTabs">
                         <property name="visible">True</property>
@@ -1113,6 +1116,7 @@
                   <widget class="GtkVPaned" id="vpaRight">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="orientation">vertical</property>
                     <property name="position">400</property>
                     <child>
                       <widget class="GtkScrolledWindow" id="scrolledwindow1">
@@ -1242,6 +1246,7 @@
         <child>
           <widget class="GtkVScrollbar" id="picVBar">
             <property name="visible">True</property>
+            <property name="orientation">vertical</property>
             <property name="adjustment">0 0 0 15 0 0</property>
           </widget>
           <packing>

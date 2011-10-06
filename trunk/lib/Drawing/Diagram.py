@@ -627,7 +627,7 @@ class CDiagram(CBaseObject):
             canvas, defaultElement=None): 
         """
         Aligns selected elements along specified axis and position.
-        If position is't set, elements will be aligned to their average
+        If position isn't set, elements will be aligned to their average
         position.
     
         @param isHorizontal: align horizontaly or verticaly

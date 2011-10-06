@@ -79,6 +79,7 @@ class CpicDrawingArea(CWidget):
     }
 
     def __init__(self, app, wTree):
+        self.disablePaint = False
         self.paintlock = thread.allocate()
         self.tobePainted = False
         self.paintChanged = False
@@ -153,10 +154,54 @@ class CpicDrawingArea(CWidget):
         tmp_scale = (SCALE_INCREASE*((self.scale+0.00001)//SCALE_INCREASE))+scale
         if (tmp_scale+0.00001 >= SCALE_MIN) and (tmp_scale-0.00001 <= SCALE_MAX):
             self.scale = tmp_scale
+            self.disablePaint = True
+            self.CenterZoom(scale)
             self.canvas.SetScale(self.scale)
             self.AdjustScrollBars()
+            self.disablePaint = False
             self.Paint()
 
+    def CenterZoom(self, scale):
+        positionH = 0.0
+        positionW = 0.0
+        shift = 180
+        elements = tuple(self.Diagram.GetSelectedElements())
+        if (len(elements)>0):
+            avgH = 0
+            avgW = 0
+            for e in elements:
+                avgW += e.GetCenter(self.canvas)[0]
+                avgH += e.GetCenter(self.canvas)[1]
+            avgH = avgH/len(elements)
+            avgW = avgW/len(elements)
+            positionH = avgH/5.0
+            positionW = avgW/5.0
+
+            if(scale > 0): #INZOOM
+                pos1 = self.GetPos()[1]
+                pos2 = self.GetPos()[0]
+                if(avgH>shift):
+                    pos1 += positionH
+                else:
+                    pos1 = 0
+                if(avgW>shift):
+                    pos2 += positionW
+                else:
+                    pos2 = 0
+                self.SetPos((pos2,pos1))
+            else: #OUTZOOM
+                pos1 = self.GetPos()[1]
+                pos2 = self.GetPos()[0]
+                if(avgH>shift):
+                    pos1 -= positionH
+                else:
+                    pos1 = 0
+                if(avgW>shift):
+                    pos2 -= positionW
+                else:
+                    pos2 = 0
+                self.SetPos((pos2,pos1))
+            
     def GetScale(self):
         return self.canvas.GetScale()
     
@@ -194,9 +239,9 @@ class CpicDrawingArea(CWidget):
     def GetPos(self):
         return int(self.picHBar.get_value()), int(self.picVBar.get_value())
         
-    def SetPos(self, pos = (0, 0)):
-        self.picHBar.set_value(pos[0])
-        self.picVBar.set_value(pos[1])
+    def SetPos(self, pos = (0, 0)):        
+        self.picHBar.set_value(pos[0])        
+        self.picVBar.set_value(pos[1])       
         
     def GetAbsolutePos(self, (posx, posy)):
         #((bposx, bposy), (bsizx, bsizy)) = self.buffer_size
@@ -221,6 +266,8 @@ class CpicDrawingArea(CWidget):
         
 
     def Paint(self, changed = True):
+        if self.disablePaint:
+            return
         try:
             self.paintlock.acquire()
             self.tobePainted = False
