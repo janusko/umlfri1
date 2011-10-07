@@ -54,7 +54,10 @@ class CPluginAdapter(CBaseObject, CGuiObject):
         return self.application.GetProject()
     
     def GetCurrentDiagram(self):
-        return self.application.GetWindow('frmMain').picDrawingArea.GetDiagram()
+        if self.application.GetWindow('frmMain').nbTabs.IsStartPageActive():
+            return None
+        else:
+            return self.application.GetWindow('frmMain').picDrawingArea.GetDiagram()
     
     def GetApplication(self):
         return self.application
