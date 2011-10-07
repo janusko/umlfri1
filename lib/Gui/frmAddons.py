@@ -3,7 +3,7 @@ from lib.Depend.gtk2 import gtk, pango, glib
 import os.path
 import webbrowser
 
-import lib.consts
+from lib.consts import CHECK_ADDON_INTERVAL
 from lib.Drawing.Canvas.GtkPlus import PixmapFromPath
 
 from common import event, CWindow
@@ -13,45 +13,28 @@ import time
 import gobject
 import thread
 
-class PluginStartStop(object):
+class CPluginStartStop(object):
     def __init__(self, application, addon, startStop):
         self.__application = application
         self.__addon = addon
-        self.__status = startStop
         self.__time = time.time()
+        if startStop == 'start':
+            self.__starterStopper = addon.StartWithDeps()
+        else:
+            self.__starterStopper = addon.StopWithDeps()
     
     def GetStatus(self):
-        return self.__status
+        if self.__starterStopper.Remaining():
+            return 'working'
+        else:
+            return 'done'
     
     def GetAddon(self):
         return self.__addon
     
     def Step(self):
-        if self.__status == 'start':
-            if self.__addon.IsRunning():
-                self.__addon.Enable()
-                self.__status = 'done'
-        else:
-            if not self.__addon.IsRunning():
-                self.__addon.Disable()
-                self.__status = 'done'
-            elif time.time() - self.__time > lib.consts.PLUGIN_KILL_SECONDS:
-                self.__time = time.time()
-                
-                if self.__application.GetWindow('frmAddons').IsVisible():
-                    parent = self.__application.GetWindow('frmAddons')
-                else:
-                    parent = self.__application.GetWindow('frmMain')
-                killDialog = self.__application.GetWindow('frmTerminateAddon')
-                kill = killDialog.ShowDialog(parent, self.__addon)
-                
-                if kill:
-                    if self.__status == 'stop':
-                        self.__status = 'terminate'
-                        self.__addon.Terminate()
-                    else:
-                        self.__status = 'error'
-                        self.__addon.Kill()
+        # TODO: frmTerminateAddon integration
+        self.__starterStopper.Step()
                       
 class CfrmAddons(CWindow):
     name = 'frmAddons'
@@ -461,10 +444,11 @@ class CfrmAddons(CWindow):
         addon = self.__GetSelectedAddon(self.twPluginList)
         
         if addon is not None and not addon.IsRunning():
-            addon.Start()
-            self.__ToStartStop[addon.GetDefaultUri()] = PluginStartStop(self.application, addon, 'start')
+            starterStopper = CPluginStartStop(self.application, addon, 'start')
+            starterStopper.Step()
+            self.__ToStartStop[addon.GetDefaultUri()] = starterStopper
             if self.__StartStopTimerId is None:
-                self.__StartStopTimerId = glib.timeout_add(100, self.__StartStopTimer)
+                self.__StartStopTimerId = glib.timeout_add(CHECK_ADDON_INTERVAL, self.__StartStopTimer)
             self.PluginChanged()
     
     @event("mnuStopPlugin", "activate")
@@ -473,10 +457,11 @@ class CfrmAddons(CWindow):
         addon = self.__GetSelectedAddon(self.twPluginList)
         
         if addon is not None and addon.IsRunning():
-            addon.Stop()
-            self.__ToStartStop[addon.GetDefaultUri()] = PluginStartStop(self.application, addon, 'stop')
+            starterStopper = CPluginStartStop(self.application, addon, 'stop')
+            starterStopper.Step()
+            self.__ToStartStop[addon.GetDefaultUri()] = starterStopper
             if self.__StartStopTimerId is None:
-                self.__StartStopTimerId = glib.timeout_add(100, self.__StartStopTimer)
+                self.__StartStopTimerId = glib.timeout_add(CHECK_ADDON_INTERVAL, self.__StartStopTimer)
             self.PluginChanged()
             
             

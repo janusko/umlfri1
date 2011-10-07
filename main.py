@@ -172,7 +172,7 @@ class Application(CApplication):
     
     def __StartupStarterTimer(self):
         self.__startupStarter.Step()
-        if not self.__startupStarter.ToStartCount():
+        if not self.__startupStarter.Remaining():
             gobject.timeout_add(SPLASH_TIMEOUT, self.__HideSplash)
             return False
         else:
