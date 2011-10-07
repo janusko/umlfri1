@@ -170,6 +170,6 @@
             Diagram type identifier.
         </documentation>
         
-        <value type="string" readable="true" />
+        <value type="org.umlfri.api.metamodel.DiagramType" readable="true" />
     </property>
 </interface>
