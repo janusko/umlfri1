@@ -1,4 +1,5 @@
 from lib.Addons.AddonStarter import CAddonStarter
+from lib.Addons.AddonStopper import CAddonStopper
 from lib.datatypes import CVersion
 
 class CAddon(object):
@@ -65,6 +66,9 @@ class CAddon(object):
     
     def Stop(self):
         self.__component.Stop()
+    
+    def StopWithDeps(self):
+        return CAddonStopper(self.__manager, [self])
         
     def Terminate(self):
         self.Disable()

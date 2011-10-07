@@ -310,7 +310,8 @@ class CAddonManager(object):
     
     def StopAll(self):
         for addon in self.__addons.itervalues():
-            addon.Stop()
+            if addon.IsRunning():
+                addon.Stop()
         self.__pluginManager.Stop()
     
     def CheckAddonUpdates(self):

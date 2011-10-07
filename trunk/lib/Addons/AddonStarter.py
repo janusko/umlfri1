@@ -3,9 +3,9 @@ class CAddonStarter(object):
         self.__manager = manager
         self.__toStart = list(addons)
         self.__toWait = set()
-        self.__cantStart = {}
+        self.__cantStart = set()
     
-    def ToStartCount(self):
+    def Remaining(self):
         return len(self.__toStart)
     
     def GetDependencyTree(self):
@@ -16,16 +16,16 @@ class CAddonStarter(object):
         for dep in addon.GetDependencies():
             depAddon = self.__manager.GetAddon(dep.GetUri())
             
-            if depAddon.GetRequired():
+            if dep.GetRequired():
                 if depAddon is None:
-                    return 'missing', dep.GetUri(), ()
+                    yield 'missing', dep.GetUri(), ()
                 elif depAddon.IsRunning():
-                    return 'running', depAddon, self.__CreateDepTree(depAddon)
+                    yield 'running', depAddon, self.__CreateDepTree(depAddon)
                 else:
-                    return 'stopped', depAddon, self.__CreateDepTree(depAddon)
+                    yield 'stopped', depAddon, self.__CreateDepTree(depAddon)
             else:
                 if depAddon is not None and depAddon.IsRunning():
-                    return 'running', depAddon, self.__CreateDepTree(depAddon)
+                    yield 'running', depAddon, self.__CreateDepTree(depAddon)
     
     def Step(self):
         for addon in self.__toStart[:]:
@@ -35,7 +35,8 @@ class CAddonStarter(object):
         if addon.GetDefaultUri() in self.__toWait:
             if addon.IsRunning():
                 self.__toWait.remove(addon.GetDefaultUri())
-                self.__toStart.remove(addon)
+                if addon in self.__toStart:
+                    self.__toStart.remove(addon)
                 return 'ok'
             else:
                 return 'later'
@@ -53,7 +54,9 @@ class CAddonStarter(object):
         
         for dep in addon.GetDependencies():
             depAddon = self.__manager.GetAddon(dep.GetUri())
-            if not depAddon.IsRunning():
+            if depAddon is None:
+                can = 'no'
+            elif not depAddon.IsRunning():
                 ret = self.__StartAddon(depAddon)
                 if ret == 'no' or can == 'no':
                     can = 'no'
