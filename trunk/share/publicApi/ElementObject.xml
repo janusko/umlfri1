@@ -94,9 +94,21 @@
             Create diagram as child node in project tree.
         </documentation>
         
-        <parameter name="diagramType" type="org.umlfri.api.model.Diagram">
+        <parameter name="diagramType" type="org.umlfri.api.metamodel.DiagramType">
             <documentation>
                 Type of the diagram.
+            </documentation>
+        </parameter>
+    </method>
+    
+    <method name="createChildElement" mutator="true">
+        <documentation>
+            Create element as child node in project tree.
+        </documentation>
+        
+        <parameter name="elementType" type="org.umlfri.api.metamodel.ElementType">
+            <documentation>
+                Type of the element.
             </documentation>
         </parameter>
     </method>

@@ -45,3 +45,13 @@ class IElementObject(IDomainObject):
         diagram.SetPath(node.GetPath() + "/" + diagram.GetName() + ":=Diagram=")
         
         IBase.adapter.plugin_diagram_created(diagram)
+    
+    def CreateChildElement(him, elementType):
+        parentNode = him.GetNode()
+        
+        elementObject = CElementObject(elementType)
+
+        elementNode = CProjectNode(parentNode, elementObject, parentNode.GetPath() + "/" + elementObject.GetName() + ":" + elementObject.GetType().GetId())
+        parentNode.AddChild(elementNode)
+        
+        IBase.adapter.plugin_change_object(elementObject)
