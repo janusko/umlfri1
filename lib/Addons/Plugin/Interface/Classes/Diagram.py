@@ -50,30 +50,3 @@ class IDiagram(IDomainObject):
     
     def GetName(him):
         return him.GetName()
-    
-    # WRITE METHODS
-    
-    @destructive
-    def AddElement(him, elementObject, pos = (0,0)):
-        element = CElement(him, elementObject)
-        element.SetPosition(pos)
-        IBase.adapter.plugin_add_element(element)
-        
-    @destructive
-    def AddNewElement(him, elementType, pos = (0,0)):
-        elementObject = CElementObject(elementType)
-        element = CElement(him, elementObject)
-        element.SetPosition(pos)
-        IBase.adapter.plugin_add_new_element(element)
-        
-    
-    
-    #~ @parameter('connection', t_classobject(CConnection))
-    #~ def AddConnection(him, connection): 
-        #~ him.AddConnection(connection)
-    
-    #~ @parameter('item', t_classobject(CElement))
-    #~ def DeleteElement(him, item):
-        #~ him.DeleteItem(item)
-    
-

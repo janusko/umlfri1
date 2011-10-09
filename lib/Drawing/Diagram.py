@@ -123,9 +123,21 @@ class CDiagram(CBaseObject):
                 return c
         return None
     
-    def HasConnection(self,conObject):
+    def HasConnection(self, conObject):
         for c in self.connections:
             if c.GetObject() is conObject:
+                return True
+        return False
+    
+    def GetElement(self, elObject):
+        for e in self.elements:
+            if e.GetObject() is elObject:
+                return e
+        return None
+    
+    def HasElement(self, elObject):
+        for e in self.elements:
+            if e.GetObject() is elObject:
                 return True
         return False
         

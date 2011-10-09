@@ -71,4 +71,13 @@
         
         <value type="org.umlfri.api.model.ElementObject" iterable="true" />
     </property>
+    
+    <method name="connectWith" mutator="true">
+        <documentation>
+            Create connection between this and other element visual.
+        </documentation>
+        
+        <parameter name="other" type="org.umlfri.api.model.ElementObject" />
+        <parameter name="connectionType" type="org.umlfri.api.metamodel.ConnectionType" />
+    </method>
 </interface>

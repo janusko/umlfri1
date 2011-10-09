@@ -39,12 +39,14 @@
         <value type="org.umlfri.api.metamodel.ElementType" iterable="true" />
     </property>
     
-    <property name="connections">
+    <property name="connections" singular="connection">
         <documentation>
             Connection types defined in the metamodel.
         </documentation>
         
-        <value type="org.umlfri.api.metamodel.ConnectionType" iterable="true" />
+        <index name="name" type="string" />
+        
+        <value type="org.umlfri.api.metamodel.ConnectionType" readable="true" iterable="true" />
     </property>
     
     <property name="domains">
