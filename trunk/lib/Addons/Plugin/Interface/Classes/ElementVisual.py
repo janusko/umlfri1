@@ -23,3 +23,4 @@ class IElementVisual(IVisibleObject):
         connectionVisual = CConnection(diagram, connectionObject, him, other)
         
         IBase.adapter.plugin_change_object(connectionVisual)
+        IBase.adapter.plugin_change_visual(connectionVisual)

@@ -62,3 +62,4 @@ class IDiagram(IDomainObject):
         parentNode.AddChild(elementNode)
         
         IBase.adapter.plugin_change_object(elementVisual)
+        IBase.adapter.plugin_change_visual(elementVisual)

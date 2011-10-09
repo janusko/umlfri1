@@ -3,6 +3,7 @@ from lib.Addons.Plugin.Communication.ComSpec import *
 from lib.Addons.Plugin.Interface.Classes.base import IBase
 from lib.Addons.Plugin.Interface.decorators import *
 from lib.Drawing.Diagram import CDiagram
+from lib.Drawing.Element import CElement
 from lib.Elements.Object import CElementObject
 from lib.Connections.Object import CConnectionObject
 from lib.Domains.Object import CDomainObject
@@ -55,3 +56,11 @@ class IElementObject(IDomainObject):
         parentNode.AddChild(elementNode)
         
         IBase.adapter.plugin_change_object(elementObject)
+    
+    def ShowIn(him, diagram):
+        if diagram.HasElement(him):
+            raise PluginInvalidMethodParameters(him.GetUID(), "element is already shown on given diagram")
+        
+        elementVisual = CElement(diagram, him)
+        
+        IBase.adapter.plugin_change_visual(elementVisual)
