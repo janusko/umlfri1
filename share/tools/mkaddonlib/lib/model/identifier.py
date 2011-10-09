@@ -13,11 +13,11 @@ class Identifier(object):
     
     @property
     def upperCamelCase(self):
-        return ''.join([part.capitalize() for part in self.__splittedIdentifier])
+        return ''.join(part.capitalize() for part in self.__splittedIdentifier)
     
     @property
     def lowerCamelCase(self):
-        return self.__splittedIdentifier[0] + ''.join([part.capitalize() for part in self.__splittedIdentifier[1:]])
+        return self.__splittedIdentifier[0] + ''.join(part.capitalize() for part in self.__splittedIdentifier[1:])
     
     @property
     def lowerUnderscoreSeparated(self):
@@ -29,11 +29,11 @@ class Identifier(object):
     
     @property
     def lowerCase(self):
-        return ''.join(self.__identifier)
+        return ''.join(self.__splittedIdentifier)
     
     @property
-    def uppweCase(self):
-        return ''.join(self.__upperCase)
+    def upperCase(self):
+        return ''.join(part.upper() for part in self.__splittedIdentifier)
     
     def __add__(self, str):
         return Identifier(self.lowerCamelCase + str)
