@@ -23,6 +23,9 @@ class IConnectionObject(IDomainObject):
     
     @destructive
     def ShowIn(him, diagram):
+        if diagram.HasConnection(him):
+            raise PluginInvalidMethodParameters(him.GetUID(), "connection is already shown on given diagram")
+        
         source = diagram.GetElement(him.GetSource())
         destination = diagram.GetElement(him.GetDestination())
         
@@ -30,4 +33,4 @@ class IConnectionObject(IDomainObject):
             raise PluginInvalidMethodParameters(him.GetUID(), "source and destination must be present on the given diagram")
         connectionVisual = CConnection(diagram, him, source, destination)
         
-        IBase.adapter.plugin_change_object(connectionVisual)
+        IBase.adapter.plugin_change_visual(connectionVisual)

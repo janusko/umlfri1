@@ -112,4 +112,12 @@
             </documentation>
         </parameter>
     </method>
+    
+    <method name="showIn" mutator="true">
+        <documentation>
+            Shows element on the given diagram. 
+        </documentation>
+        
+        <parameter name="diagram" type="org.umlfri.api.model.Diagram" />
+    </method>
 </interface>

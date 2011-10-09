@@ -81,13 +81,11 @@ class CPluginAdapter(CBaseObject, CGuiObject):
     
     def plugin_change_object(self, object):
         if isinstance(object, (CElement, CConnection)):
-            obj = object.GetObject()
-        else:
-            obj = object
+            object = object.GetObject()
         
-        if isinstance(obj, CElementObject):
-            gobject.idle_add(self.application.GetBus().emit, 'element-created-from-plugin', obj)
-        
+        gobject.idle_add(self.application.GetBus().emit, 'element-created-from-plugin', object)
+    
+    def plugin_change_visual(self, object):
         gobject.idle_add(self.application.GetBus().emit, 'all-content-update', object)
     
     def plugin_diagram_created(self, diagram):
