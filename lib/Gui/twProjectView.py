@@ -569,3 +569,15 @@ class CtwProjectView(CWidget):
                            1, PixmapFromPath(self.application.GetProject().GetMetamodel().GetStorage(), diagram.GetType().GetIcon()),
                            2, '=Diagram=',
                            3, diagram)
+    
+    @event("application.bus", "element-created-from-plugin")
+    def on_diagram_created(self, widget, element):
+        node = element.GetNode()
+        parent = node.GetParent()
+        iter = self.get_iter_from_path(self.TreeStore, self.TreeStore.get_iter_root(), parent.GetPath())
+        newIter = self.TreeStore.append(iter)
+        self.TreeStore.set(newIter,
+                           0, element.GetName(),
+                           1, PixmapFromPath(self.application.GetProject().GetMetamodel().GetStorage(), element.GetType().GetIcon()),
+                           2, element.GetType().GetId(),
+                           3, node)

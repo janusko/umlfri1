@@ -22,8 +22,9 @@ def event(obj, *args):
                     if fnc.__enabled:
                         return fnc(self, *args, **kw_args)
                 except Exception, e:
-                    exccls, excobj, tb = sys.exc_info()
-                    self.application.DisplayException(exccls, excobj, tb)
+                    raise
+                    #exccls, excobj, tb = sys.exc_info()
+                    #self.application.DisplayException(exccls, excobj, tb)
             
             fnc.__enabled = True
             

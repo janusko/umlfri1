@@ -172,4 +172,16 @@
         
         <value type="org.umlfri.api.metamodel.DiagramType" readable="true" />
     </property>
+    
+    <method name="createElement" mutator="true">
+        <documentation>
+            Creates element object and place its element visual on the given diagram.
+        </documentation>
+        
+        <parameter name="elementType" type="org.umlfri.api.metamodel.ElementType">
+            <documentation>
+                Type of new element.
+            </documentation>
+        </parameter>
+    </method>
 </interface>

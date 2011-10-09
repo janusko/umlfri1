@@ -14,8 +14,7 @@ class CtxtNotes(CWidget):
         CWidget.__init__(self, app, wTree)
         self.txtNotes.set_sensitive(False)
     
-    @property
-    def elementObject(self):
+    def __GetElementObject(self):
         if self.element is None:
             return None
         elif isinstance(self.element, (CElementObject, CConnectionObject, CDiagram)):
@@ -30,8 +29,12 @@ class CtxtNotes(CWidget):
             self.txtNotes.set_sensitive(False)
             return
         
-        if self.elementObject.GetDomainType().HasAttribute('note'):
-            self.txtNotes.get_buffer().set_text(self.elementObject.GetValue('note'))
+        elementObject = self.__GetElementObject()
+        if elementObject.GetDomainType().HasAttribute('note'):
+            buffer = self.txtNotes.get_buffer()
+            text = buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter())
+            if text != elementObject.GetValue('note'):
+                buffer.set_text(elementObject.GetValue('note'))
             self.txtNotes.set_sensitive(True)
         else:
             self.txtNotes.get_buffer().set_text("")
@@ -40,8 +43,10 @@ class CtxtNotes(CWidget):
     @event("txtNotes.buffer", "changed")
     def on_txtNotes_changed(self, buffer):
         text = buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter())
-        if self.element is not None and self.elementObject.GetValue('note') != text:
-            self.elementObject.SetValue('note', text)
+        
+        elementObject = self.__GetElementObject()
+        if self.element is not None and elementObject.GetValue('note') != text:
+            elementObject.SetValue('note', text)
             self.application.GetBus().emit('content-update', self.element, 'note')
                 
     @event('application.bus', 'content-update')

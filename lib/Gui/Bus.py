@@ -26,4 +26,6 @@ class CBus(gobject.GObject):
             [gobject.TYPE_PYOBJECT]),
         'diagram-created-from-plugin': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
             [gobject.TYPE_PYOBJECT]),
+        'element-created-from-plugin': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
+            [gobject.TYPE_PYOBJECT]),
     }

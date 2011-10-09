@@ -19,6 +19,9 @@ class IMetamodel(IBase):
     def GetDiagrams(him):
         return list(him.GetDiagramFactory())
     
+    def GetElement(him, name):
+        return him.GetElementFactory().GetElement(name)
+    
     def GetElements(him):
         return list(him.GetElementFactory().IterTypes())
     
