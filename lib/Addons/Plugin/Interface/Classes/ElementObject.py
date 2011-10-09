@@ -2,6 +2,7 @@ from DomainObject import IDomainObject
 from lib.Addons.Plugin.Communication.ComSpec import *
 from lib.Addons.Plugin.Interface.Classes.base import IBase
 from lib.Addons.Plugin.Interface.decorators import *
+from lib.Drawing.Diagram import CDiagram
 from lib.Elements.Object import CElementObject
 from lib.Connections.Object import CConnectionObject
 from lib.Domains.Object import CDomainObject
@@ -35,3 +36,12 @@ class IElementObject(IDomainObject):
         connectionObject = CConnectionObject(connectionType, him, other)
         
         IBase.adapter.plugin_change_object(connectionObject)
+    
+    @destructive
+    def CreateDiagram(him, diagramType):
+        diagram = CDiagram(diagramType)
+        node = him.GetNode()
+        node.AddDiagram(diagram)
+        diagram.SetPath(node.GetPath() + "/" + diagram.GetName() + ":=Diagram=")
+        
+        IBase.adapter.plugin_diagram_created(diagram)

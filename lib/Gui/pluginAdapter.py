@@ -79,6 +79,9 @@ class CPluginAdapter(CBaseObject, CGuiObject):
     def plugin_change_object(self, object):
         gobject.idle_add(self.application.GetBus().emit, 'all-content-update', object)
     
+    def plugin_diagram_created(self, diagram):
+        gobject.idle_add(self.application.GetBus().emit, 'diagram-created-from-plugin', diagram)
+    
     def plugin_add_new_element(self, element):
         picDrawingArea = self.application.GetWindow('frmMain').picDrawingArea
         picDrawingArea.emit('add-element', element.GetObject(), element.GetDiagram(), element.GetDiagram().GetNode())
@@ -98,3 +101,10 @@ class CPluginAdapter(CBaseObject, CGuiObject):
         
     def GetUmlfriVersion(self):
         return self.application.GetVersion()
+    
+    def SelectDiagramTab(self, diagram):
+        if diagram is not None:
+            self.application.GetWindow('frmMain').nbTabs.AddTab(diagram)
+            self.application.GetWindow('frmMain').picDrawingArea.SetDiagram(diagram)
+        else:
+            self.application.GetWindow('frmMain').nbTabs.SetStartPageAsCurrentPage()

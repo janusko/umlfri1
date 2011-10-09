@@ -23,12 +23,14 @@
         <value type="string" readable="true" />
     </property>
     
-    <property name="diagrams">
+    <property name="diagrams" singular="diagram">
         <documentation>
             Diagram types defined in the metamodel.
         </documentation>
         
-        <value type="org.umlfri.api.metamodel.DiagramType" iterable="true" />
+        <index name="name" type="string" />
+        
+        <value type="org.umlfri.api.metamodel.DiagramType" readable="true" iterable="true" />
     </property>
     
     <property name="elements">

@@ -204,6 +204,10 @@ class CTabs(CWidget):
                     label = l
             label.set_text(diagram.GetName())
     
+    def SetStartPageAsCurrentPage(self):
+        self.nbTabs.get_nth_page(self.__StartPage).show()
+        self.SetCurrentPage(self.__StartPage)
+    
     def on_mnuTab_activate(self, widget, diagram):
         for id, a in enumerate(self.diagrams):
             if diagram is a:

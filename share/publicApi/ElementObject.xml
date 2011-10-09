@@ -74,10 +74,30 @@
     
     <method name="connectWith" mutator="true">
         <documentation>
-            Create connection between this and other element visual.
+            Create connection between this and other element object.
         </documentation>
         
-        <parameter name="other" type="org.umlfri.api.model.ElementObject" />
-        <parameter name="connectionType" type="org.umlfri.api.metamodel.ConnectionType" />
+        <parameter name="other" type="org.umlfri.api.model.ElementObject">
+            <documentation>
+                Element which should be used as connection destination.
+            </documentation>
+        </parameter>
+        <parameter name="connectionType" type="org.umlfri.api.metamodel.ConnectionType">
+            <documentation>
+                Type of the connection.
+            </documentation>
+        </parameter>
+    </method>
+    
+    <method name="createDiagram" mutator="true">
+        <documentation>
+            Create diagram as child node in project tree.
+        </documentation>
+        
+        <parameter name="diagramType" type="org.umlfri.api.model.Diagram">
+            <documentation>
+                Type of the diagram.
+            </documentation>
+        </parameter>
     </method>
 </interface>
