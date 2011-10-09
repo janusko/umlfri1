@@ -13,6 +13,7 @@ import DomainType
 import ElementType
 import ElementAlias
 import Adapter
+import Template
 import GuiManager
 import Transaction
 

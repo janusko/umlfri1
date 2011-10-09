@@ -56,6 +56,9 @@ class CPluginAdapter(CBaseObject, CGuiObject):
     def GetProject(self):
         return self.application.GetProject()
     
+    def GetTemplateManager(self):
+        return self.application.GetTemplateManager()
+    
     def GetCurrentDiagram(self):
         if self.application.GetWindow('frmMain').nbTabs.IsStartPageActive():
             return None
@@ -101,6 +104,12 @@ class CPluginAdapter(CBaseObject, CGuiObject):
         
     def GetCanvas(self):
         return self.application.GetWindow('frmMain').picDrawingArea.canvas
+    
+    def CreateNewProject(self, template):
+        self.application.ProjectDelete()
+        self.application.ProjectInit()
+        self.application.GetProject().CreateProject(template)
+        gobject.idle_add(self.application.GetBus().emit, 'project-opened-from-plugin-adapter')
     
     def LoadProject(self, fileName):
         self.application.ProjectDelete()

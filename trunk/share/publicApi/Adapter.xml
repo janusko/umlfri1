@@ -101,4 +101,12 @@
             </documentation>
         </parameter>
     </method>
+    
+    <property name="templates">
+        <documentation>
+            List of all templates installed in the application.
+        </documentation>
+        
+        <value type="org.umlfri.api.base.Template" iterable="true"/>
+    </property>
 </interface>

@@ -33,3 +33,6 @@ class IAdapter(IBase):
     @includeAddr
     def GetTransaction(him, _addr):
         return him.GetPluginManager().GetTransaction(_addr)
+    
+    def GetTemplates(him):
+        return list(him.GetTemplateManager().GetAllTemplates())
