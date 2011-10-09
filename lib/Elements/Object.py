@@ -23,7 +23,6 @@ class CElementObject(CBaseObject):
         else:
             self.type = type
         self.domainobject = CDomainObject(self.type.GetDomain())
-        self.path = None
         self.connections = []
         self.node = lambda: None
         self.appears = []
@@ -103,24 +102,6 @@ class CElementObject(CBaseObject):
         for id, value in enumerate(self.appears):
             if value() is diagram:
                 del self.appears[id]
-    
-    def GetPath(self):
-        """
-        Get path of this element object in the project
-        
-        @return: Element object path
-        @rtype:  string
-        """
-        return self.path
-    
-    def SetPath(self, path):
-        """
-        Set path of this element object in the project
-        
-        @param path: Element object path
-        @type  path:  string
-        """
-        self.path = path 
     
     def GetNode(self):
         """

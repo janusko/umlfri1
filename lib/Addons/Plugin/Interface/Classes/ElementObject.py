@@ -43,7 +43,6 @@ class IElementObject(IDomainObject):
         diagram = CDiagram(diagramType)
         node = him.GetNode()
         node.AddDiagram(diagram)
-        diagram.SetPath(node.GetPath() + "/" + diagram.GetName() + ":=Diagram=")
         
         IBase.adapter.plugin_diagram_created(diagram)
     
@@ -52,7 +51,7 @@ class IElementObject(IDomainObject):
         
         elementObject = CElementObject(elementType)
 
-        elementNode = CProjectNode(parentNode, elementObject, parentNode.GetPath() + "/" + elementObject.GetName() + ":" + elementObject.GetType().GetId())
+        elementNode = CProjectNode(parentNode, elementObject)
         parentNode.AddChild(elementNode)
         
         IBase.adapter.plugin_change_object(elementObject)
