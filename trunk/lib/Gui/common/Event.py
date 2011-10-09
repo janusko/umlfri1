@@ -22,9 +22,13 @@ def event(obj, *args):
                     if fnc.__enabled:
                         return fnc(self, *args, **kw_args)
                 except Exception, e:
-                    raise
-                    #exccls, excobj, tb = sys.exc_info()
-                    #self.application.DisplayException(exccls, excobj, tb)
+                    recl = sys.getrecursionlimit()
+                    sys.setrecursionlimit(recl + 100)
+                    try:
+                        exccls, excobj, tb = sys.exc_info()
+                        self.application.DisplayException(exccls, excobj, tb)
+                    finally:
+                        sys.setrecursionlimit(recl)
             
             fnc.__enabled = True
             
