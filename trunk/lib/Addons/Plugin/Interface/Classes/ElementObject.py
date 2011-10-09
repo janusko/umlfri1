@@ -1,5 +1,6 @@
 from DomainObject import IDomainObject
 from lib.Addons.Plugin.Communication.ComSpec import *
+from lib.Addons.Plugin.Interface.Classes.base import IBase
 from lib.Addons.Plugin.Interface.decorators import *
 from lib.Elements.Object import CElementObject
 from lib.Connections.Object import CConnectionObject
@@ -29,4 +30,8 @@ class IElementObject(IDomainObject):
     def GetAppears(him):
         return list(him.GetAppears())
     
-    
+    @destructive
+    def ConnectWith(him, other, connectionType):
+        connectionObject = CConnectionObject(connectionType, him, other)
+        
+        IBase.adapter.plugin_change_object(connectionObject)

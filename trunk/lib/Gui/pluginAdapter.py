@@ -76,6 +76,9 @@ class CPluginAdapter(CBaseObject, CGuiObject):
     def plugin_change_domain_value(self, element, property):
         gobject.idle_add(self.application.GetBus().emit, 'content-update-from-plugin', element, property)
     
+    def plugin_change_object(self, object):
+        gobject.idle_add(self.application.GetBus().emit, 'all-content-update', object)
+    
     def plugin_add_new_element(self, element):
         picDrawingArea = self.application.GetWindow('frmMain').picDrawingArea
         picDrawingArea.emit('add-element', element.GetObject(), element.GetDiagram(), element.GetDiagram().GetNode())

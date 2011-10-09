@@ -19,6 +19,9 @@ class IMetamodel(IBase):
     def GetElements(him):
         return list(him.GetElementFactory().IterTypes())
     
+    def GetConnection(him, name):
+        return him.GetConnectionFactory().GetConnection(name)
+    
     def GetConnections(him):
         return list(him.GetConnectionFactory().IterTypes())
     

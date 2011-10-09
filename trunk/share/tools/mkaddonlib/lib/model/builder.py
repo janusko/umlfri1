@@ -146,7 +146,7 @@ class Builder(object):
                 returnType = InterfaceMethodReturn(
                     method,
                     child.attrib['type'],
-                    iterable = child.attrib.get('iterable', "true").lower() in ("1", "true"),
+                    iterable = child.attrib.get('iterable', "false").lower() in ("1", "true"),
                     documentation = self.__parseDocumentation(child.find(self.__xmlns%'documentation')),
                 )
             elif child.tag == self.__xmlns%'throws':

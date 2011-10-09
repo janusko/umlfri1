@@ -661,6 +661,7 @@ class CfrmMain(CWindow):
             menuitem.set_sensitive (True)
 
     @event('application.bus', 'all-content-update', '', False)
+    @event('application.bus', 'all-content-update-from-plugin', '', True)
     @event('application.bus', 'content-update', False)
     @event('application.bus', 'content-update-from-plugin', True)
     def on_nbProperties_content_update(self, widget, element, property, fromPlugin):
