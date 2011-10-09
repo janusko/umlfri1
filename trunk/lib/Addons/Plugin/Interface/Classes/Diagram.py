@@ -8,6 +8,7 @@ from lib.Elements.Object import CElementObject
 from lib.Connections.Object import CConnectionObject
 from lib.Addons.Plugin.Interface.Classes.DomainObject import IDomainObject
 from lib.Drawing import CConLabelInfo
+from lib.Project.ProjectNode import CProjectNode
 
 class IDiagram(IDomainObject):
     __cls__ = CDiagram
@@ -50,3 +51,14 @@ class IDiagram(IDomainObject):
     
     def GetName(him):
         return him.GetName()
+    
+    def CreateElement(him, elementType):
+        parentNode = him.GetNode()
+        
+        elementObject = CElementObject(elementType)
+        elementVisual = CElement(him, elementObject)
+
+        elementNode = CProjectNode(parentNode, elementObject, parentNode.GetPath() + "/" + elementObject.GetName() + ":" + elementObject.GetType().GetId())
+        parentNode.AddChild(elementNode)
+        
+        IBase.adapter.plugin_change_object(elementVisual)

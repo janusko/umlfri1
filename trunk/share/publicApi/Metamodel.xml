@@ -33,12 +33,14 @@
         <value type="org.umlfri.api.metamodel.DiagramType" readable="true" iterable="true" />
     </property>
     
-    <property name="elements">
+    <property name="elements" singular="element">
         <documentation>
             Element types defined in the metamodel.
         </documentation>
         
-        <value type="org.umlfri.api.metamodel.ElementType" iterable="true" />
+        <index name="name" type="string" />
+        
+        <value type="org.umlfri.api.metamodel.ElementType" readable="true" iterable="true" />
     </property>
     
     <property name="connections" singular="connection">

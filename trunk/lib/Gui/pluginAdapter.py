@@ -2,6 +2,9 @@ from common import CGuiObject, event
 from lib.Depend.gtk2 import gobject
 from GuiManager import CGuiManager
 from lib.Base import CBaseObject
+from lib.Drawing.Connection import CConnection
+from lib.Drawing.Element import CElement
+from lib.Elements.Object import CElementObject
 from lib.Project import CProjectNode
 
 
@@ -77,6 +80,14 @@ class CPluginAdapter(CBaseObject, CGuiObject):
         gobject.idle_add(self.application.GetBus().emit, 'content-update-from-plugin', element, property)
     
     def plugin_change_object(self, object):
+        if isinstance(object, (CElement, CConnection)):
+            obj = object.GetObject()
+        else:
+            obj = object
+        
+        if isinstance(obj, CElementObject):
+            gobject.idle_add(self.application.GetBus().emit, 'element-created-from-plugin', obj)
+        
         gobject.idle_add(self.application.GetBus().emit, 'all-content-update', object)
     
     def plugin_diagram_created(self, diagram):

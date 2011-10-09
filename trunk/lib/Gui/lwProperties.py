@@ -144,8 +144,7 @@ class ClwProperties(CWidget):
                     ID_FONT, str(object.GetValue(prefix + identifier)),
                     ID_COLOR, "")
     
-    @property
-    def elementObject(self):
+    def __GetElementObject(self):
         if self.element is None:
             return None
         elif isinstance(self.element, (CElementObject, CConnectionObject, CDiagram)):
@@ -160,7 +159,7 @@ class ClwProperties(CWidget):
         
         if Element is  None:
             return
-        self._FillBody(self.elementObject, None, '')
+        self._FillBody(self.__GetElementObject(), None, '')
     
     def Clear(self):
         self.element = None
@@ -185,10 +184,13 @@ class ClwProperties(CWidget):
         iter = model.get_iter_from_string(path)
         model.set(iter, ID_VALUE, new_value) 
         key = self.get_key(path)
+        
+        elementObject = self.__GetElementObject()
+        
         try:
-            self.elementObject.SetValue(key, new_value)
+            elementObject.SetValue(key, new_value)
         except (DomainTypeError, ), e:
-            model.set(iter, ID_VALUE, str(self.elementObject.GetValue(key)))
+            model.set(iter, ID_VALUE, str(elementObject.GetValue(key)))
             raise ParserError(*e.params)
         self.application.GetBus().emit('content-update', self.element, key)
         self.application.GetBus().emit('properties-editing-stoped')
@@ -199,37 +201,46 @@ class ClwProperties(CWidget):
         iter = model.get_iter_from_string(path)
         model.set(iter, ID_VALUE, new_value)
         key = self.get_key(path)
+        
+        elementObject = self.__GetElementObject()
+        
         try:
-            self.elementObject.SetValue(key, new_value)
+            elementObject.SetValue(key, new_value)
         except (DomainTypeError, ), e:
-            model.set(iter, ID_VALUE, str(self.elementObject.GetValue(key)))
+            model.set(iter, ID_VALUE, str(elementObject.GetValue(key)))
             raise ParserError(*e.params)
         self.application.GetBus().emit('content-update', self.element, key)
         
     def on_changecolor(self, key, iter):
         cdia = gtk.ColorSelectionDialog("Select color")
         colorsel = cdia.colorsel
-        if self.elementObject.GetValue(key) is not None:
-            colorsel.set_current_color(gtk.gdk.color_parse(self.elementObject.GetValue(key)))
+        
+        elementObject = self.__GetElementObject()
+        
+        if elementObject.GetValue(key) is not None:
+            colorsel.set_current_color(gtk.gdk.color_parse(elementObject.GetValue(key)))
         response = cdia.run()
         
         if response == gtk.RESPONSE_OK:
             colorsel = cdia.colorsel
             color = colorsel.get_current_color()
             model = self.lwProperties.get_model()
-            self.elementObject.SetValue(key, color.to_string())
-            model.set(iter, ID_VALUE, str(self.elementObject.GetValue(key)))
+            elementObject.SetValue(key, color.to_string())
+            model.set(iter, ID_VALUE, str(elementObject.GetValue(key)))
             text = '('+str(int(round(color.red / 256))) + ', '+str(int(round(color.green / 256))) + ', '+str(int(round(color.blue / 256))) +')'
             model.set(iter, ID_BUTTON_TEXT, text)
-            model.set(iter, ID_COLOR, self.elementObject.GetValue(key))
+            model.set(iter, ID_COLOR, elementObject.GetValue(key))
         cdia.destroy()
 
         self.application.GetBus().emit('content-update', self.element, key)
         
     def on_changefont(self, key, iter):
         fdia = gtk.FontSelectionDialog("Select font")
-        if self.elementObject.GetValue(key) is not None:
-            fdia.set_font_name(self.elementObject.GetValue(key))
+        
+        elementObject = self.__GetElementObject()
+        
+        if elementObject.GetValue(key) is not None:
+            fdia.set_font_name(elementObject.GetValue(key))
         
         response = fdia.run()
         
@@ -239,17 +250,19 @@ class ClwProperties(CWidget):
 
             
             model = self.lwProperties.get_model()
-            self.elementObject.SetValue(key, font_desc)
-            model.set(iter, ID_VALUE, str(self.elementObject.GetValue(key)))
-            model.set(iter, ID_BUTTON_TEXT, str(self.elementObject.GetValue(key)))
-            model.set(iter, ID_FONT, str(self.elementObject.GetValue(key)))
+            elementObject.SetValue(key, font_desc)
+            model.set(iter, ID_VALUE, str(elementObject.GetValue(key)))
+            model.set(iter, ID_BUTTON_TEXT, str(elementObject.GetValue(key)))
+            model.set(iter, ID_FONT, str(elementObject.GetValue(key)))
         fdia.destroy()
 
         self.application.GetBus().emit('content-update', self.element, key)
         
     def on_listadd(self, key, iter):
-        self.elementObject.AppendItem(key)
-        self._FillListItem(self.elementObject, iter, key, len(self.elementObject.GetValue(key)) - 1)
+        elementObject = self.__GetElementObject()
+        
+        elementObject.AppendItem(key)
+        self._FillListItem(elementObject, iter, key, len(elementObject.GetValue(key)) - 1)
         self.application.GetBus().emit('content-update', self.element, key)
         
     def on_listdel(self, key, iter, path):
@@ -257,12 +270,15 @@ class ClwProperties(CWidget):
         parent_path = path.rsplit(':', 1)[0]
         parent_iter = model.get_iter_from_string(parent_path)
         parent_key = self.get_key(parent_path)
-        if len(self.elementObject.GetValue(parent_key)) == 1:
+        
+        elementObject = self.__GetElementObject()
+        
+        if len(elementObject.GetValue(parent_key)) == 1:
             self.lwProperties.collapse_row(parent_path)
             self.on_listadd(parent_key, parent_iter)
-        self.elementObject.RemoveItem(key)
+        elementObject.RemoveItem(key)
         self.treeStore.remove(iter)
-        for idx in xrange(int(path.rsplit(':', 1)[-1]), len(self.elementObject.GetValue(parent_key))):
+        for idx in xrange(int(path.rsplit(':', 1)[-1]), len(elementObject.GetValue(parent_key))):
             npath = parent_path + ':' + str(idx)
             niter = model.get_iter_from_string(npath)
             self.treeStore.set(niter,
