@@ -120,7 +120,15 @@
             Create connection between this and other element visual.
         </documentation>
         
-        <parameter name="other" type="org.umlfri.api.model.ElementVisual" />
-        <parameter name="connectionType" type="org.umlfri.api.metamodel.ConnectionType" />
+        <parameter name="other" type="org.umlfri.api.model.ElementVisual">
+            <documentation>
+                Element which should be used as connection destination. 
+            </documentation>
+        </parameter>
+        <parameter name="connectionType" type="org.umlfri.api.metamodel.ConnectionType">
+            <documentation>
+                Type of the connection.
+            </documentation>
+        </parameter>
     </method>
 </interface>

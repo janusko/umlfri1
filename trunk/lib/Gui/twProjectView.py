@@ -558,3 +558,14 @@ class CtwProjectView(CWidget):
                 context.finish(True, True, etime)
             else:
                 context.finish(False, False, etime)
+    
+    @event("application.bus", "diagram-created-from-plugin")
+    def on_diagram_created(self, widget, diagram):
+        parent = diagram.GetNode()
+        iter = self.get_iter_from_path(self.TreeStore, self.TreeStore.get_iter_root(), parent.GetPath())
+        newIter = self.TreeStore.append(iter)
+        self.TreeStore.set(newIter,
+                           0, diagram.GetName(),
+                           1, PixmapFromPath(self.application.GetProject().GetMetamodel().GetStorage(), diagram.GetType().GetIcon()),
+                           2, '=Diagram=',
+                           3, diagram)

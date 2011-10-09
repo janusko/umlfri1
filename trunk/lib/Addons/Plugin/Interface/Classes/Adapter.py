@@ -12,6 +12,9 @@ class IAdapter(IBase):
     def GetCurrentDiagram(him):
         return him.GetCurrentDiagram()
     
+    def SetCurrentDiagram(him, value):
+        him.SelectDiagramTab(value)
+    
     def AddNotification(him, event, callback):
         him.AddNotification(event, callback)
 

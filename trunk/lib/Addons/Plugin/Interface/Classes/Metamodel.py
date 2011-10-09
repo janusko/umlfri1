@@ -12,6 +12,9 @@ class IMetamodel(IBase):
     
     def GetVersion(him):
         return him.GetVersionString()
+    
+    def GetDiagram(him, name):
+        return him.GetDiagramFactory().GetDiagram(name)
         
     def GetDiagrams(him):
         return list(him.GetDiagramFactory())

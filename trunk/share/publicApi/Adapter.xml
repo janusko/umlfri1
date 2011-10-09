@@ -20,7 +20,9 @@
             Gets a reference to the current diagram, or null if no diagram
             is selected.
         </documentation>
-        <value type="org.umlfri.api.model.Diagram" readable="true" />
+        <value type="org.umlfri.api.model.Diagram" readable="true" writable="true" />
+        
+        <setter transactional="false" />
     </property>
     
     <method name="addNotification" mutator="true" transactional="false">
