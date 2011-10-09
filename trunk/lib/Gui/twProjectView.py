@@ -123,125 +123,53 @@ class CtwProjectView(CWidget):
             self.__DrawTree(node, novy)
             
          
-
-    def get_iter_from_path(self, model, root, path):
-        chld = root
-        
-        i = path.split('/')[0]
-        j,k = i.rsplit(':',1)
-        name, type = model.get(root, 0, 2)
-        
-        if len(path.split('/')) == 1 and name == j and type == k:
-            return root
-            
-        if name == j and type == k:
-            for i in path.split('/')[1:]:
-                j, k = i.rsplit(':',1)
-                for id in xrange(model.iter_n_children(root)):
-                    chld = model.iter_nth_child(root, id)
-                    name, type = model.get(chld, 0, 2)
-                    
-                    if k == "=Diagram=":
-                        return root
-                        
-                    if name == j and type == k:
-                        break 
-                        
-                root = chld
-            return root
+    def get_iter_from_node(self, node):
+        if isinstance(node, CDiagram):
+            parent = node.GetNode()
+        elif isinstance(node, CProjectNode):
+            parent = node.GetParent()
         else:
-            raise ProjectError("BadPath4")
-
-
-    def get_iters_from_path(self, model, root, path):
-        chld = root
-        iter = []
+            node = node.GetNode()
+            parent = node.GetParent()
         
-        i = path.split('/')[0]
-        j,k = i.rsplit(':',1)
-        name, type = model.get(root, 0, 2)
-        endName, endType = path.split('/')[-1].rsplit(':', 1)
-        
-        if len(path.split('/')) == 1 and name == j and type == k:
-            return [root]
-        
-        if name == j and type == k:
-            def rekurzia(root,path):
-                j, k = path.split('/')[0].rsplit(':',1)
-                for id in xrange(model.iter_n_children(root)):
-                    chld = model.iter_nth_child(root, id)
-                    name, type = model.get(chld, 0, 2)
-                    
-                    if k == "=Diagram=":
-                        iter.append(root) 
-                    
-                    if name == j and type == k:
-                        if len(path.split('/')) > 1:
-                            rekurzia(chld,path.split('/',1)[1])
-                        else:
-                            iter.append(chld)
-            
-            rekurzia(root,path.split('/',1)[1])                        
-
+        if parent is not None:
+            parentIter = self.get_iter_from_node(parent)
+            childIter = self.TreeStore.iter_children(parentIter)
+            if parentIter is None:
+                return None
         else:
-            raise ProjectError("BadPath4")
-        return iter
+            childIter = self.TreeStore.get_iter_root()
         
+        while childIter is not None:
+            childNode = self.TreeStore.get(childIter, 3)[0]
+            if childNode is node:
+                return childIter
+            childIter = self.TreeStore.iter_next(childIter)
         
-    def get_diagrams_iter_from_path(self, model, root, path):
-        chld = root
-        diagrams = []
-        i = path.split('/')[0]
-        j,k = i.rsplit(':',1)
-        name, type = model.get(root, 0, 2)
-        if name == j and type == k:
-            for i in path.split('/')[1:]:
-                j, k = i.rsplit(':',1)
-                for id in xrange(model.iter_n_children(root)):
-                    chld = model.iter_nth_child(root, id)
-                    name, type = model.get(chld, 0, 2)
-                    
-                    if k == "=Diagram=" and j == name:
-                        diagrams.append(chld)
-                root = chld
-        else:
-            raise ProjectError("BadPath5")
-        return diagrams
-    
+        return None
     
     def ShowElement(self,Element):
         object = Element.GetObject()
-        for i in self.get_iters_from_path(self.twProjectView.get_model(),self.twProjectView.get_model().get_iter_root() ,object.GetPath()):
-            node = self.twProjectView.get_model().get(i,3)[0]
-            if object is node.GetObject():
-                iter = i
-                break
-        else:
-            return
+        iter = self.get_iter_from_node(object)
         self.twProjectView.expand_to_path(self.TreeStore.get_path(iter))
         self.twProjectView.get_selection().select_iter(iter)
         self.twProjectView.scroll_to_cell(self.TreeStore.get_path(iter))  
     
     def ShowDiagram(self, diagram):
-        for i in self.get_iters_from_path(self.twProjectView.get_model(),self.twProjectView.get_model().get_iter_root() ,diagram.GetPath()):
-            diagram = self.twProjectView.get_model().get(i,3)[0]
-            if diagram is diagram:
-                iter = i
-                break
+        iter = self.get_iter_from_node(diagram)
         self.twProjectView.expand_to_path(self.TreeStore.get_path(iter))
         self.twProjectView.get_selection().select_iter(iter)
                     
     
     def AddElement(self, element, diagram, parentElement = None):
         if parentElement is None:
-            path = diagram.GetPath()
+            parent = diagram.GetNode()
         else:
-            path = parentElement.GetPath()
+            parent = parentElement.GetNode()
 
-        parent = self.application.GetProject().GetNode(path)
-        node = CProjectNode(parent, element, parent.GetPath() + "/" + element.GetName() + ":" + element.GetType().GetId())
+        node = CProjectNode(parent, element)
         self.application.GetProject().AddNode(node, parent)
-        novy = self.TreeStore.append(self.get_iter_from_path(self.twProjectView.get_model(), self.twProjectView.get_model().get_iter_root() ,path))
+        novy = self.TreeStore.append(self.get_iter_from_node(parent))
         self.TreeStore.set(novy, 0, element.GetName() , 1, PixmapFromPath(self.application.GetProject().GetMetamodel().GetStorage(), element.GetType().GetIcon()), 2, element.GetType().GetId(),3,node)
         self.twProjectView.get_selection().select_iter(novy)
         self.emit('selected-item-tree',self.twProjectView.get_model().get(novy,3)[0])
@@ -258,9 +186,8 @@ class CtwProjectView(CWidget):
         if model.get(iter,2)[0] == "=Diagram=":
             iter = model.iter_parent(iter)
         node = model.get(iter,3)[0]
-        diagram.SetPath(node.GetPath() + "/" + diagram.GetName() + ":=Diagram=")
         node.AddDiagram(diagram)
-        novy = self.TreeStore.insert(iter,len(node.diagrams)-1)
+        novy = self.TreeStore.insert(iter,len(node.GetDiagrams())-1)
         self.TreeStore.set(novy, 0, diagram.GetName() , 1, PixmapFromPath(self.application.GetProject().GetMetamodel().GetStorage(), diagram.GetType().GetIcon()), 2, '=Diagram=',3,diagram)
         path = self.TreeStore.get_path(novy)
         self.twProjectView.expand_to_path(path)
@@ -271,26 +198,14 @@ class CtwProjectView(CWidget):
     
     def UpdateElement(self, object):
         if isinstance(object, CElementObject):
-            for iter in self.get_iters_from_path(self.twProjectView.get_model(),self.twProjectView.get_model().get_iter_root() ,object.GetPath()):
-                node = self.twProjectView.get_model().get(iter,3)[0]
-                if object is node.GetObject():
-                    break
-
-            node.Change()
+            iter = self.get_iter_from_node(object)
+            node = object.GetNode()
             model = self.twProjectView.get_model()
             self.TreeStore.set_value(iter, 0, object.GetName())
 
         if isinstance(object, CDiagram):
-            for iter in self.get_iters_from_path(self.twProjectView.get_model(),self.twProjectView.get_model().get_iter_root() ,object.GetPath()):
-                node = self.twProjectView.get_model().get(iter,3)[0]
-                if object is node:
-                    break
-                parent = node
-            
-            if parent == object:
-                node.SetPath(parent.GetPath().split('/')[0] + '/' + object.GetName() + ":=Diagram=")
-            else:
-                node.SetPath(parent.GetPath() + '/' + object.GetName() + ":=Diagram=")
+            iter = self.get_iter_from_node(object)
+            node = object.GetNode()
             
             model = self.twProjectView.get_model()
             self.TreeStore.set_value(iter, 0, object.GetName())
@@ -361,15 +276,13 @@ class CtwProjectView(CWidget):
     
     
     def DeleteElement(self, elementObject):
-        iter = self.twProjectView.get_model().get_iter_root()
+        rootIter = self.twProjectView.get_model().get_iter_root()
         
-        if elementObject is self.twProjectView.get_model().get(iter,3)[0].GetObject():
+        if elementObject is self.twProjectView.get_model().get(rootIter,3)[0].GetObject():
             return
         
-        for i in self.get_iters_from_path(self.twProjectView.get_model(),self.twProjectView.get_model().get_iter_root() ,elementObject.GetPath()):
-            node = self.twProjectView.get_model().get(i,3)[0]
-            if elementObject is node.GetObject():
-                break
+        iter = self.get_iter_from_node(elementObject)
+        node = elementObject.GetNode()
 
         self.TreeStore.remove(i)
         self.RemoveFromArea(node)
@@ -562,8 +475,8 @@ class CtwProjectView(CWidget):
     @event("application.bus", "diagram-created-from-plugin")
     def on_diagram_created(self, widget, diagram):
         parent = diagram.GetNode()
-        iter = self.get_iter_from_path(self.TreeStore, self.TreeStore.get_iter_root(), parent.GetPath())
-        newIter = self.TreeStore.append(iter)
+        iter = self.get_iter_from_node(parent)
+        newIter = self.TreeStore.insert(iter, len(parent.GetDiagrams())-1)
         self.TreeStore.set(newIter,
                            0, diagram.GetName(),
                            1, PixmapFromPath(self.application.GetProject().GetMetamodel().GetStorage(), diagram.GetType().GetIcon()),
@@ -571,10 +484,10 @@ class CtwProjectView(CWidget):
                            3, diagram)
     
     @event("application.bus", "element-created-from-plugin")
-    def on_diagram_created(self, widget, element):
+    def on_element_created(self, widget, element):
         node = element.GetNode()
         parent = node.GetParent()
-        iter = self.get_iter_from_path(self.TreeStore, self.TreeStore.get_iter_root(), parent.GetPath())
+        iter = self.get_iter_from_node(parent)
         newIter = self.TreeStore.append(iter)
         self.TreeStore.set(newIter,
                            0, element.GetName(),

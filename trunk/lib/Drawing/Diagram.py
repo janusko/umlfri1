@@ -15,7 +15,6 @@ class CDiagram(CBaseObject):
         self.elements = []
         self.connections = []
         self.selected = set()
-        self.path = None
         self.type = type
         if type is not None:
             self.domainobject = CDomainObject(type.GetDomain())
@@ -140,12 +139,6 @@ class CDiagram(CBaseObject):
             if e.GetObject() is elObject:
                 return True
         return False
-        
-    def GetPath(self):
-        return self.path
-    
-    def SetPath(self, Path):
-        self.path = Path
     
     def GetType(self):
         return self.type

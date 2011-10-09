@@ -76,29 +76,6 @@ class CProject(CBaseObject):
     def GetFileName(self):
         return self.filename
     
-    def GetNode(self, path):
-        node = self.root
-        
-        #e.g. path = Project:Package/New Class diagram:=Diagram=
-        k = path.split('/')[0]
-        i,j = k.split(':')
-        
-        if i == self.root.GetName() and j == self.root.GetType() and len(path.split('/')) == 1:
-            return self.root
-        
-        if i == self.root.GetName() and j == self.root.GetType():
-            for i in path.split('/')[1:]:
-                j, k  = i.rsplit(':', 1)
-                if k == "=Diagram=":
-                    return node
-                else:
-                    node = node.GetChild(j, k)
-                if node is None:
-                    raise ProjectError("BadPath")
-            return node
-        raise ProjectError("BadPath3")
-    
-    
     def Find(self, name):
         stack = [self.root]
         while len(stack) > 0:
@@ -318,7 +295,7 @@ class CProject(CBaseObject):
                 for node in elem:
                     elemid = node.get("id")
                     if elemid in ListObj:
-                        proNode = CProjectNode(parentNode,ListObj[elemid],parentNode.GetPath() + "/" + ListObj[elemid].GetName() + ":" + ListObj[elemid].GetType().GetId())
+                        proNode = CProjectNode(parentNode,ListObj[elemid])
                         self.AddNode(proNode,parentNode)
                         self.__CreateTree(ListObj, ListCon, ListDiag, node, proNode, savever)
                     else:
@@ -339,7 +316,6 @@ class CProject(CBaseObject):
                                 diagram = None
                         
                         if diagram is not None:
-                            diagram.SetPath(parentNode.GetPath() + "/" + diagram.GetName() + ":=Diagram=")
                             if 'default' in area.attrib and area.attrib['default'].lower() in ('1', 'true'):
                                 self.defaultDiagram = diagram
                             parentNode.AddDiagram(diagram)
@@ -518,7 +494,7 @@ class CProject(CBaseObject):
                 for subelem in element:
                     if subelem.tag == UMLPROJECT_NAMESPACE+'node':
                         elemid = subelem.get("id")
-                        proNode = CProjectNode(None,ListObj[elemid],ListObj[elemid].GetName() + ":" + ListObj[elemid].GetType().GetId())
+                        proNode = CProjectNode(None,ListObj[elemid])
                         self.SetRoot(proNode)
                         self.__CreateTree(ListObj, ListCon, ListDiag, subelem, proNode, savever)
             

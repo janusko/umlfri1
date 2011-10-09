@@ -58,7 +58,7 @@ class IDiagram(IDomainObject):
         elementObject = CElementObject(elementType)
         elementVisual = CElement(him, elementObject)
 
-        elementNode = CProjectNode(parentNode, elementObject, parentNode.GetPath() + "/" + elementObject.GetName() + ":" + elementObject.GetType().GetId())
+        elementNode = CProjectNode(parentNode, elementObject)
         parentNode.AddChild(elementNode)
         
         IBase.adapter.plugin_change_object(elementVisual)

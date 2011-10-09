@@ -4,29 +4,12 @@ from lib.Base import CBaseObject
 
 class CProjectNode(CBaseObject):
     
-    def __init__(self, parent = None, object = None, path = None):
+    def __init__(self, parent = None, object = None):
         self.SetParent(parent)
         self.childs = []
         self.diagrams = []
         self.object = object
-        if path is not None:
-            self.object.SetPath(path)
         self.object.Assign(self)
-
-    def Change(self):
-        if self.GetParent() is not None:  
-            parentPath = self.GetParent().GetPath()+ "/"
-        else:
-            parentPath = ""
-
-
-        self.SetPath(parentPath + self.GetName() + ":" + self.GetType())
-        for i in self.diagrams:
-            i.SetPath(self.GetPath() + "/" +  i.GetName() + ":=Diagram=")
-            
-        for i in self.childs:
-            i.Change()
-
 
     def GetAppears(self):
         return self.GetObject().GetAppears()
@@ -39,12 +22,6 @@ class CProjectNode(CBaseObject):
 
     def HasDiagram(self):
         return len(self.diagrams) > 0
-
-    def GetPath(self):
-        return self.object.GetPath()
-
-    def SetPath(self, path):
-        self.object.SetPath(path)
 
     def GetObject(self):
         return self.object
@@ -78,7 +55,6 @@ class CProjectNode(CBaseObject):
             newNode.diagrams.append(diagram)
         else:
             newNode.diagrams.insert(pos,diagram)
-        diagram.SetPath(newNode.GetPath()+'/'+diagram.GetPath().split('/')[-1])
     
     def MoveNode(self, parentNode, pos = None):
         self.GetParent().RemoveChild(self)
@@ -87,7 +63,6 @@ class CProjectNode(CBaseObject):
             parentNode.AddChild(self)
         else:
             parentNode.AddChild(self,pos)
-        self.SetPath(parentNode.GetPath() + "/" + self.GetPath().split('/')[-1])
     
     def FindDiagram(self, name):
         for i in self.diagrams:
