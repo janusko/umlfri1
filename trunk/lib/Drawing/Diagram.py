@@ -435,12 +435,14 @@ class CDiagram(CBaseObject):
         canvas.Clear()
         old_selected =  self.selected
         self.DeselectAll()
-        for e in old_selected:
-            if isinstance(e, Element.CElement):
+        setElements = set(e for e in old_selected if isinstance(e, Element.CElement))
+        setConnections = set(e for e in old_selected if isinstance(e, Element.CConnection))
+        for e in self.elements:
+            if e in setElements:
                 e.Paint(canvas)
                 self.AddToSelection(e)
-        for e in old_selected:
-            if isinstance(e, Connection.CConnection):
+        for e in self.connections:
+            if e in setConnections:
                 e.Paint(canvas)
                 self.AddToSelection(e)
  
