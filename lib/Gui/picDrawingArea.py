@@ -375,8 +375,9 @@ class CpicDrawingArea(CWidget):
             item.set_sensitive(element)
             
         self.mnuCtxPaste.set_sensitive(
-            diagram and not self.application.GetClipboard().IsEmpty() and
-            not bool(set(i.GetObject() for i in self.Diagram.GetElements()).intersection(set(i.GetObject() for i in self.application.GetClipboard().GetContent())))
+            diagram and not self.application.GetClipboard().IsEmpty()
+            # enable pasting duplicate elements, duplicity is handled in diagram.PasteSelecton
+            # and not bool(set(i.GetObject() for i in self.Diagram.GetElements()).intersection(set(i.GetObject() for i in self.application.GetClipboard().GetContent())))
         )
         
         selection = list(self.Diagram.GetSelected())
