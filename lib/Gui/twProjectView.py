@@ -164,8 +164,10 @@ class CtwProjectView(CWidget):
     def AddElement(self, element, diagram, parentElement = None):
         if parentElement is None:
             parent = diagram.GetNode()
+        elif isinstance(parentElement, CProjectNode):
+            parent = parentElement
         else:
-            parent = parentElement.GetNode()
+            parent = parentElement
 
         node = CProjectNode(parent, element)
         self.application.GetProject().AddNode(node, parent)
