@@ -94,10 +94,12 @@ class CTabs(CWidget):
         self.__RefreshEnable()
     
     def Show(self):
-        self.nbTabs.show()
+        #self.nbTabs.show() # this wil show/hide the whole notebook
+        self.nbTabs.set_property('show-tabs', True)
     
     def Hide(self):
-        self.nbTabs.hide()
+        #self.nbTabs.hide() # this wil show/hide the whole notebook
+        self.nbTabs.set_property('show-tabs', False)
     
     def SetVisible(self, value):
         if value:
