@@ -165,7 +165,7 @@ class CfrmMain(CWindow):
         self.mnuZoomOut.set_sensitive(zoomout)
         self.cmdZoomOut.set_sensitive(zoomout)
         self.mnuBestFit.set_sensitive(diagram)
-        # self.mnuFullscreen.set_sensitive(diagram)
+        self.mnuFullscreen.set_sensitive(diagram)
     
     def LoadProject(self, filenameOrTemplate, copy = None):
         self.nbTabs.CloseAll()
