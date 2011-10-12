@@ -1,4 +1,5 @@
 from lib.Base import CBaseObject
+from lib.Drawing.Canvas.BufferCanvas import CBufferCanvas
 from lib.config import config
 from math import sqrt
 
@@ -9,11 +10,35 @@ class CGrid(CBaseObject):
         self.UpdateState(local_settings)
         self.hor_spacing = 0
         self.ver_spacing = 0
-    
-    def Paint(self, canvas, viewport):
-        '''
-        Paints grid onto canvas.
-        '''
+        self.__CreatePattern()
+
+    def __CreatePattern(self):
+        """
+        Redraws current grid pattern.
+        """
+        # load grid appearance settings
+        if not self.local_settings:
+            self.hor_spacing = config['/Grid/HorSpacing']
+            self.ver_spacing = config['/Grid/VerSpacing']
+            self.line_width = config['/Grid/LineWidth']
+        fg1 = config['/Grid/LineColor1']
+        fg2 = config["/Grid/LineColor2"]
+        line_style1 = config['/Grid/LineStyle1']
+        line_style2 = config['/Grid/LineStyle2']
+        self.pattern_canvas = CBufferCanvas((self.hor_spacing, self.ver_spacing))
+        # actual drawing
+        if line_style1 != 'none':
+            self.pattern_canvas.DrawLine((0.5, 0.5), (self.hor_spacing, 0.5), fg1,
+                                                 self.line_width, line_style1)
+            self.pattern_canvas.DrawLine((0.5, 0.5), (0.5, self.ver_spacing), fg1,
+                                                 self.line_width, line_style1)
+        if line_style2 != 'none':
+            self.pattern_canvas.DrawLine((0.5, 0.5), (self.hor_spacing, 0.5), fg2,
+                                                 self.line_width, line_style2)
+            self.pattern_canvas.DrawLine((0.5, 0.5), (0.5, self.ver_spacing), fg2,
+                                                 self.line_width, line_style2)
+
+    def PaintPattern(self, canvas, viewport):
         if not self.local_settings:
             self.visible = config['/Grid/Visible'] == 'true'
         if not self.visible:
@@ -21,46 +46,24 @@ class CGrid(CBaseObject):
         if not self.local_settings:
             self.hor_spacing = config['/Grid/HorSpacing']
             self.ver_spacing = config['/Grid/VerSpacing']
-            self.line_width = config['/Grid/LineWidth']
-        fg1 = config['/Grid/LineColor1']
-        fg2 = config['/Grid/LineColor2']
-        line_style1 = config['/Grid/LineStyle1']
-        line_style2 = config['/Grid/LineStyle2']
-        
-        scale = canvas.GetScale()
-        canvas.SetScale(1.0)
-        hspace = self.hor_spacing * scale
-        vspace = self.ver_spacing * scale
-        x1 = -round(viewport[0][0] * scale % hspace) + .5
-        y1 = -round(viewport[0][1] * scale % vspace) + .5
+        hspace = self.hor_spacing
+        vspace = self.ver_spacing
+        # region where pattern is applied
+        x1 = -round(viewport[0][0] % hspace)
+        y1 = -round(viewport[0][1] % vspace)
         x2 = x1 + viewport[1][0]
         y2 = y1 + viewport[1][1]
+        x, y = x1, y1
+        # pave the region with pattern
+        while y < y2:
+            while x < x2:
+                canvas.DrawFromBuffer(self.pattern_canvas, (x, y), ((x, y), (x+hspace, y+vspace)))
+                x += hspace
+            x = x1
+            y += vspace
 
-        #draw line_style1
-        if not line_style1 == 'none':
-            current = x1 + hspace
-            while current <= x2:
-                canvas.DrawLine((current, .5), (current, y2), fg1, self.line_width,
-                    line_style1)
-                current += hspace
-            current = y1 + vspace
-            while current <= y2:
-                canvas.DrawLine((.5, current), (x2, current), fg1, self.line_width,
-                    line_style1)
-                current += vspace
-        # draw line_style2
-        if not line_style2 == 'none':
-            current = x1 + hspace
-            while current <= x2:
-                canvas.DrawLine((current, .5), (current, y2), fg2, self.line_width,
-                    line_style2)
-                current += hspace
-            current = y1 + vspace
-            while current <= y2:
-                canvas.DrawLine((.5, current), (x2, current), fg2, self.line_width,
-                    line_style2)
-                current += vspace
-        canvas.SetScale(scale)
+
+
 
     def UpdateState(self, data):
         '''
@@ -80,16 +83,15 @@ class CGrid(CBaseObject):
             self.snap_mode = data['snap_mode']
             
     def GetState(self):
-        ret = {}
-        ret['local'] = self.local_settings
-        ret['active'] = self.active
-        ret['visible'] = self.visible
-        ret['resize_elements'] = self.resize_elements
-        ret['snap_breakpoints'] = self.snap_breakpoints
-        ret['hor_space'] = self.hor_spacing
-        ret['ver_space'] = self.ver_spacing
-        ret['line_width'] = self.line_width
-        ret['snap_mode'] = self.snap_mode
+        ret = {'local': self.local_settings,
+               'active': self.active,
+               'visible': self.visible,
+               'resize_elements': self.resize_elements,
+               'snap_breakpoints': self.snap_breakpoints,
+               'hor_space': self.hor_spacing,
+               'ver_space': self.ver_spacing,
+               'line_width': self.line_width,
+               'snap_mode': self.snap_mode}
         return ret
     
     def SnapPosition(self, pos):

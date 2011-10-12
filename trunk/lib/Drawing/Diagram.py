@@ -247,7 +247,7 @@ class CDiagram(CBaseObject):
                 if not isinstance(el, ConLabelInfo.CConLabelInfo):
                     pos1, pos2 = el.GetSquare(canvas)
                     zorder = self.elements.index(el)
-                    for el2 in self.GetElementsInRange(canvas, pos1, pos2, True):
+                    for el2 in self.GetElementsInRange(canvas, pos1, pos2):
                         if not isinstance(el2, ConLabelInfo.CConLabelInfo):
                             if self.elements.index(el2) > zorder:
                                 elements.add(el2)
@@ -394,7 +394,7 @@ class CDiagram(CBaseObject):
     def Paint(self, canvas):
         ((x, y), (w, h)) = self.viewport
         canvas.Clear()
-        self.grid.Paint(canvas, self.viewport)
+        self.grid.PaintPattern(canvas, self.viewport)
         var = set([])
         for e in self.elements:#here is created a set of layer values
             var.add(int(e.GetObject().GetType().GetOptions().get('Layer', 0)))
@@ -419,9 +419,9 @@ class CDiagram(CBaseObject):
                 c.Paint(canvas, delta = (-x, -y))
             
     def PaintFull(self, canvas):
-        '''Paints the whole diagram. Used
+        """Paints the whole diagram. Used
         for exporting.
-        '''               
+        """
         canvas.Clear()
         for e in self.elements:
             e.Paint(canvas)
@@ -429,9 +429,9 @@ class CDiagram(CBaseObject):
             c.Paint(canvas)
         
     def PaintSelected(self, canvas):
-        '''Paints _only_ selected items (elements + connections)
+        """Paints _only_ selected items (elements + connections)
         as if they were deselected. Used for pixbuf copying.
-        '''        
+        """
         canvas.Clear()
         old_selected =  self.selected
         self.DeselectAll()
@@ -613,9 +613,9 @@ class CDiagram(CBaseObject):
         return (int(x_min),int(y_min)),(int(x_max), int(y_max))
 
     def ApplyNewSettings(self):
-        '''
+        """
         Called each time settings change.
-        '''
+        """
         pass
 
     def SnapPositionToGrid(self, pos):
@@ -638,7 +638,7 @@ class CDiagram(CBaseObject):
         position.
     
         @param isHorizontal: align horizontaly or verticaly
-        @type isHorizonatal: bool
+        @type isHorizontal: bool
         @param isLowerBoundary: align to lower or higher boundary
         @type isLowerBoundary: bool
         @param canvas: drawing canvas
@@ -693,10 +693,10 @@ class CDiagram(CBaseObject):
             pos = list(e.GetPosition())
             pos[xy] = position - e.GetSize(canvas)[xy]/2
             self.MoveElement(e, pos, canvas)
-    
+
     def SpaceElementsEvenlyXY(self, isHorizontal, canvas):
         """
-        Spaces selected elements evenly along x or y axis.
+        Spaces selected elements evenly along x or y axis. 
         
         @param xy: space horizontaly or verticaly
         @type xy: bool

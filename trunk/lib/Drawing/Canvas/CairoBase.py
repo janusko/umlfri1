@@ -276,6 +276,28 @@ class CCairoBaseCanvas(CAbstractCanvas):
         self.cr.paint()
         self.cr.restore()
 
+    def DrawFromBuffer(self, buffer, origin, region):
+        """
+        Draws contents of buffer onto canvas.
+
+        @param buffer: BufferCanvas containig pattern/image...
+        @type buffer: L{CBufferCanvas
+        <lib.Drawing.Canvas.BufferCanvas.CBufferCanvas>}
+
+        @param origin: coordinate at which the surface origin should appear
+        @type: tuple
+
+        @param region: rectangular region on target canvas to be filled with buffer canvas
+        @type region: (tuple, tuple)
+        """
+        self.cr.save()
+        self.cr.scale(self.scale, self.scale)
+        surface = buffer.GetSurface()
+        self.cr.set_source_surface(surface, *origin)
+        self.cr.rectangle(region[0][0], region[0][1], region[1][0], region[1][1])
+        self.cr.fill()
+        self.cr.restore()
+
     def GetIconSize(self, filename):
         if self.storage is None:
             raise DrawingError('storage')
