@@ -31,6 +31,13 @@ class CShowConnectionCommand(CCommand):
         return [
             ('connectionChanged', (self.__connectionVisual, []))
         ]
+    
+    def __str__(self):
+        return _("Connection between %s and %s is shown on diagram %s") % (
+            self.__connectionObject.GetSource().GetName(),
+            self.__connectionObject.GetDestination().GetName(),
+            self.__diagram.GetName()
+        ) 
 
     def GetConnectionVisual(self):
         return self.__connectionVisual

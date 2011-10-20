@@ -1,6 +1,7 @@
 from base import IBase
 from lib.Addons.Plugin.Communication.ComSpec import *
 from lib.Addons.Plugin.Interface.decorators import *
+from lib.Commands.Diagram import CCreateElementCommand
 from lib.Drawing.Connection import CConnection
 from lib.Drawing.Diagram import CDiagram
 from lib.Drawing.Element import CElement
@@ -54,13 +55,6 @@ class IDiagram(IDomainObject):
     
     @destructive
     def CreateElement(him, command, elementType):
-        parentNode = him.GetNode()
-        
-        elementObject = CElementObject(elementType)
-        elementVisual = CElement(him, elementObject)
-
-        elementNode = CProjectNode(parentNode, elementObject)
-        parentNode.AddChild(elementNode)
-        
-        IBase.adapter.plugin_change_object(elementVisual)
-        IBase.adapter.plugin_change_visual(elementVisual)
+        cmd = CCreateElementCommand(elementType, him)
+        command.Execute(cmd)
+        return cmd.GetElementVisual()
