@@ -286,7 +286,7 @@ class CtwProjectView(CWidget):
         iter = self.get_iter_from_node(elementObject)
         node = elementObject.GetNode()
 
-        self.TreeStore.remove(i)
+        self.TreeStore.remove(iter)
         self.RemoveFromArea(node)
         self.application.GetProject().RemoveNode(node)
     
