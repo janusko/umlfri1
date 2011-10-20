@@ -150,6 +150,9 @@ class CConnectionObject(CBaseObject):
         for id, value in enumerate(self.appears):
             if value() is diagram:
                 del self.appears[id]
+    
+    def AppearsAt(self, diagram):
+        return diagram in self.appears
 
     def GetType(self):
         """

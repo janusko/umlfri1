@@ -1094,3 +1094,8 @@ class CpicDrawingArea(CWidget):
         canvas.MoveBase(x - padding, y - padding)
         self.Diagram.PaintSelected(canvas)
         return canvas.Finish()
+                
+    @event('application.bus', 'connection-changed')
+    @event('application.bus', 'element-changed')
+    def ConnectionChanged(self, bus, *args):
+        self.ToPaint()
