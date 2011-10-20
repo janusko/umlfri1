@@ -1,3 +1,5 @@
+import traceback
+from lib.Connections.Object import CConnectionObject
 from lib.Exceptions.UserException import *
 from lib.Exceptions.UMLException import UMLException
 from lib.config import config
@@ -392,9 +394,13 @@ class CDiagram(CBaseObject):
 
     #view = ((x, y), (w, h)
     def Paint(self, canvas):
+        # TODO
+        # optimize: multiple call for one update event:
+        #   double calling on click-to-select-element
+
         ((x, y), (w, h)) = self.viewport
         canvas.Clear()
-        self.grid.PaintPattern(canvas, self.viewport)
+        self.grid.Paint(canvas, self.viewport)
         var = set([])
         for e in self.elements:#here is created a set of layer values
             var.add(int(e.GetObject().GetType().GetOptions().get('Layer', 0)))
@@ -536,6 +542,7 @@ class CDiagram(CBaseObject):
     
     def DuplicateSelectedElements(self):
         dupls = set()
+        duplsobj = {}
         for i in tuple(self.GetSelectedElements()):
             try:
                 elementobject = i.GetObject().Clone()
@@ -549,6 +556,23 @@ class CDiagram(CBaseObject):
             # shift element (5, 5) units
             element.SetPosition(map(sum, zip(element.GetPosition(), (5.0, 5.0))))
             dupls.add(element)
+            duplsobj[i.GetObject()] = element.GetObject()
+
+        # recreate connections
+        for origin in duplsobj:
+            clone = duplsobj[origin]
+            print origin, clone
+            for con in list(origin.GetConnections()):
+                src =  con.GetSource()
+                dest = con.GetDestination()
+                print '\t', src, dest
+                if src in set(duplsobj.keys()):
+                    src = duplsobj[src]
+                if dest in set(duplsobj.keys()):
+                    dest = duplsobj[dest]
+                newcon = CConnectionObject(con.GetType(), src, dest)
+                clone.AddConnection(newcon)
+
         self.DeselectAll()
         for dupl in dupls:
             self.AddToSelection(dupl)
@@ -616,7 +640,7 @@ class CDiagram(CBaseObject):
         """
         Called each time settings change.
         """
-        pass
+        self.grid.UpdatePattern()
 
     def SnapPositionToGrid(self, pos):
         return self.grid.SnapPosition(pos)

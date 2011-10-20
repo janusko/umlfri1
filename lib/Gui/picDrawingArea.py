@@ -266,6 +266,12 @@ class CpicDrawingArea(CWidget):
         
 
     def Paint(self, changed = True):
+        # TODO
+        # optimize: multiple calling for one update event:
+        #   triple calling on click-to-select-element >P
+        #   triple on focus gained (window switching)
+        #   drag-mouse-motion-event: can't even count that :`-/
+
         if self.disablePaint:
             return
         try:
@@ -284,8 +290,8 @@ class CpicDrawingArea(CWidget):
         sizx, sizy = self.GetWindowSize()    
         ((bposx, bposy), (bsizx, bsizy)) = self.buffer_size
         (bposx, bposy) = self.canvas.ToPhysical((bposx, bposy))
-        
-        
+
+
         if posx < bposx or bposx + bsizx < posx + sizx or \
            posy < bposy or bposy + bsizy < posy + sizy:
        

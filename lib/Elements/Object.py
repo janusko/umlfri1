@@ -31,7 +31,7 @@ class CElementObject(CBaseObject):
         if isinstance(type, CElementAlias):
             for path, value in type.GetDefaultValues():
                 self.domainobject.SetValue(path, value)
-    
+
     def Clone(self):
         """
         Make a copy of element object.
@@ -41,19 +41,19 @@ class CElementObject(CBaseObject):
         """
         clone = CElementObject(self.type)
         # copy connections
-        for con in self.connections:
-            src =  con.GetSource()
-            dest = con.GetDestination()
-            if src is self:
-                src = clone
-            else:
-                dest = clone
-            newcon = CConnectionObject(con.GetType(), src, dest)
-            clone.AddConnection(newcon)
+#        for con in self.connections:
+#            src =  con.GetSource()
+#            dest = con.GetDestination()
+#            if src is self:
+#                src = clone
+#            else:
+#                dest = clone
+#            newcon = CConnectionObject(con.GetType(), src, dest)
+#            clone.AddConnection(newcon)
         clone.node = self.node
         clone.domainobject = self.domainobject.GetCopy()
         return clone
-    
+
     def GetRevision(self):
         """
         Get revision of this object. Revision is incremented after each
