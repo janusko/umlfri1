@@ -15,7 +15,7 @@ class IElementVisual(IVisibleObject):
         return list(him.GetConnections())
     
     @destructive
-    def ConnectWith(him, other, connectionType):
+    def ConnectWith(him, command, other, connectionType):
         diagram = him.GetDiagram()
         if diagram is not other.GetDiagram():
             raise PluginInvalidMethodParameters(him.GetUID(), 'Elements must be on the same diagram')

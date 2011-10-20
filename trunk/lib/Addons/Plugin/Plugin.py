@@ -7,7 +7,7 @@ from Communication.ComSpec import *
 from lib.config import config
 
 class CPlugin(object):
-    def __init__(self, path, uri, starter):
+    def __init__(self, path, uri, starter, addon):
         self.__uri = uri
         self.__path = path
         self.__pluginManager = None
@@ -15,9 +15,13 @@ class CPlugin(object):
         self.__starter = starter(self)
         self.__longrun = False
         self.__initialized = False
+        self.__addon = addon
     
     def GetUri(self):
         return self.__uri
+    
+    def GetAddon(self):
+        return self.__addon
     
     def GetPath(self):
         return self.__path

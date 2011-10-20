@@ -56,6 +56,9 @@ class CPluginAdapter(CBaseObject, CGuiObject):
     def GetProject(self):
         return self.application.GetProject()
     
+    def GetCommands(self):
+        return self.application.GetCommands()
+    
     def GetTemplateManager(self):
         return self.application.GetTemplateManager()
     
@@ -90,9 +93,6 @@ class CPluginAdapter(CBaseObject, CGuiObject):
     
     def plugin_change_visual(self, object):
         gobject.idle_add(self.application.GetBus().emit, 'all-content-update', object)
-    
-    def plugin_diagram_created(self, diagram):
-        gobject.idle_add(self.application.GetBus().emit, 'diagram-created-from-plugin', diagram)
     
     def plugin_add_new_element(self, element):
         picDrawingArea = self.application.GetWindow('frmMain').picDrawingArea

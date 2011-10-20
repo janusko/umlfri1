@@ -41,7 +41,7 @@ class CPluginManager(object):
         '''
         if self.accepting:
             with self.conlock:
-                self.transaction[addr] = CTransaction()
+                self.transaction[addr] = CTransaction(self, addr)
                 self.connection[addr] = CSocketWrapper(sock, self.proxy, addr, True)
         else:
             sock.Close()
@@ -67,6 +67,13 @@ class CPluginManager(object):
         if uri in self.plugins:
             plugin = self.plugins[uri]
             plugin._SignalInitialized()
+    
+    def GetPlugin(self, addr):
+        uri = self.Addr2Uri(addr)
+        if uri in self.plugins:
+            return self.plugins[uri]
+        else:
+            return None
     
     def GetGuiManager(self):
         '''

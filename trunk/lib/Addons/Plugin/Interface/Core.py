@@ -66,7 +66,7 @@ class CCore(object):
             
             if Meta.IsDestructive(obj, fname):
                 result = None
-                self.manager.GetTransaction(addr).Action(Meta.Execute, (obj, fname, args, kwds, self, addr))
+                self.manager.GetTransaction(addr).Action(Meta.Execute, obj, fname, args, kwds, self, addr)
             else:
                 result = Meta.Execute(obj, fname, args, kwds, self, addr)
             

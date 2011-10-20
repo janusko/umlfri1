@@ -24,8 +24,20 @@ class CBus(gobject.GObject):
         'properties-editing-stoped': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
         'all-content-update-from-plugin': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
             [gobject.TYPE_PYOBJECT]),
-        'diagram-created-from-plugin': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
+        'diagram-created': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
+            [gobject.TYPE_PYOBJECT]),
+        'diagram-removed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
             [gobject.TYPE_PYOBJECT]),
         'element-created-from-plugin': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
             [gobject.TYPE_PYOBJECT]),
     }
+    
+    def DoUpdates(self, updates):
+        for upd, param in updates:
+            if upd == 'createDiagram':
+                self.emit('diagram-created', param)
+    
+    def UndoUpdates(self, updates):
+        for upd, param in updates:
+            if upd == 'createDiagram':
+                self.emit('diagram-removed', param)

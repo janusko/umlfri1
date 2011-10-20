@@ -33,6 +33,8 @@ from lib.Base.Registrar import registrar
 
 from lib.datatypes import CVersion
 
+from lib.Commands import CCommandProcessor
+
 __version__ = '1.0-rc4'
 
 class Application(CApplication):
@@ -56,6 +58,7 @@ class Application(CApplication):
         self.recentFiles = CRecentFiles()
         self.clipboard = CClipboard()
         self.bus = CBus()
+        self.commands = CCommandProcessor(self.bus)
         
         CApplication.__init__(self)
         self.pluginAdapter = CPluginAdapter(self)
@@ -78,6 +81,9 @@ class Application(CApplication):
             return manager.GetPort()
         else:
             return None
+    
+    def GetCommands(self):
+        return self.commands
     
     @argument("-o", "--open", True)
     def DoOpen(self, value):
