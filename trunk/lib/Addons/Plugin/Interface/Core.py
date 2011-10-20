@@ -75,6 +75,8 @@ class CCore(object):
             self.manager.Send(addr, RESP_RESULT, __id__ = callid, result = result)
         
         except (TypeError, ), e:
+            import traceback
+            traceback.print_exc()
             raise ParamMissingError()
         
         except (ValueError, ), e:

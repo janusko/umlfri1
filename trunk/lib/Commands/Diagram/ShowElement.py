@@ -22,6 +22,12 @@ class CShowElementCommand(CCommand):
         return [
             ('elementChanged', (self.__elementVisual, []))
         ]
+    
+    def __str__(self):
+        return _("Element %s is shown on diagram %s") % (
+            self.__elementObject.GetName(),
+            self.__diagram.GetName()
+        ) 
 
     def GetElementVisual(self):
         return self.__elementVisual
