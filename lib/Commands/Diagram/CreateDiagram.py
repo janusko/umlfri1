@@ -1,5 +1,5 @@
 from ..Base.Command import CCommand
-from lib.Drawing.Diagram import CDiagram
+from lib.Drawing import CDiagram
 
 class CCreateDiagramCommand(CCommand):
     def __init__(self, diagramType, parentNode):

@@ -2,6 +2,7 @@ from DomainObject import IDomainObject
 from lib.Addons.Plugin.Interface.Classes.base import IBase
 from lib.Addons.Plugin.Interface.decorators import *
 from lib.Addons.Plugin.Communication.ComSpec import *
+from lib.Commands.Diagram import CShowConnectionCommand, ShowConnectionError
 from lib.Connections import CConnectionObject
 from lib.Drawing.Connection import CConnection
 from lib.Elements import CElementObject
@@ -26,11 +27,10 @@ class IConnectionObject(IDomainObject):
         if diagram.HasConnection(him):
             raise PluginInvalidMethodParameters(him.GetUID(), "connection is already shown on given diagram")
         
-        source = diagram.GetElement(him.GetSource())
-        destination = diagram.GetElement(him.GetDestination())
+        try:
+            cmd = CShowConnectionCommand(him, diagram)
+            command.Execute(cmd)
+        except ShowConnectionError, e:
+            raise PluginInvalidMethodParameters(him.GetUID(), str(e))
         
-        if source is None or destination is None:
-            raise PluginInvalidMethodParameters(him.GetUID(), "source and destination must be present on the given diagram")
-        connectionVisual = CConnection(diagram, him, source, destination)
-        
-        IBase.adapter.plugin_change_visual(connectionVisual)
+        return cmd.GetConnectionVisual()

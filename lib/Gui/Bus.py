@@ -32,6 +32,10 @@ class CBus(gobject.GObject):
             [gobject.TYPE_PYOBJECT]),
         'element-object-removed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
             [gobject.TYPE_PYOBJECT]),
+        'connection-changed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
+            [gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT]),
+        'element-changed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
+            [gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT]),
     }
     
     def DoUpdates(self, updates):
@@ -40,6 +44,10 @@ class CBus(gobject.GObject):
                 self.emit('diagram-created', param)
             elif upd == 'createElementObject':
                 self.emit('element-object-created', param)
+            elif upd == 'connectionChanged':
+                self.emit('connection-changed', param[0], param[1])
+            elif upd == 'elementChanged':
+                self.emit('element-changed', param[0], param[1])
     
     def UndoUpdates(self, updates):
         for upd, param in updates:
@@ -47,3 +55,7 @@ class CBus(gobject.GObject):
                 self.emit('diagram-removed', param)
             elif upd == 'createElementObject':
                 self.emit('element-object-removed', param)
+            elif upd == 'connectionChanged':
+                self.emit('connection-changed', param[0], param[1])
+            elif upd == 'elementChanged':
+                self.emit('element-changed', param[0], param[1])

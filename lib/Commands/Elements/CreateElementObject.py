@@ -1,6 +1,6 @@
 from ..Base.Command import CCommand
-from lib.Elements.Object import CElementObject
-from lib.Project.ProjectNode import CProjectNode
+from lib.Elements import CElementObject
+from lib.Project import CProjectNode
 
 class CCreateElementObjectCommand(CCommand):
     def __init__(self, elementType, parentNode):

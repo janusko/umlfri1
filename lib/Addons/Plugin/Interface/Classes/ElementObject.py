@@ -2,7 +2,7 @@ from DomainObject import IDomainObject
 from lib.Addons.Plugin.Communication.ComSpec import *
 from lib.Addons.Plugin.Interface.Classes.base import IBase
 from lib.Addons.Plugin.Interface.decorators import *
-from lib.Commands.Diagram import CCreateDiagramCommand
+from lib.Commands.Diagram import CCreateDiagramCommand, CShowElementCommand
 from lib.Commands.Elements import CCreateElementObjectCommand
 from lib.Drawing.Diagram import CDiagram
 from lib.Drawing.Element import CElement
@@ -57,6 +57,6 @@ class IElementObject(IDomainObject):
         if diagram.HasElement(him):
             raise PluginInvalidMethodParameters(him.GetUID(), "element is already shown on given diagram")
         
-        elementVisual = CElement(diagram, him)
-        
-        IBase.adapter.plugin_change_visual(elementVisual)
+        cmd = CShowElementCommand(him, diagram)
+        command.Execute(cmd)
+        return cmd.GetElementVisual()

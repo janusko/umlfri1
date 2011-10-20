@@ -52,7 +52,8 @@ class IDiagram(IDomainObject):
     def GetName(him):
         return him.GetName()
     
-    def CreateElement(him, elementType):
+    @destructive
+    def CreateElement(him, command, elementType):
         parentNode = him.GetNode()
         
         elementObject = CElementObject(elementType)
