@@ -490,7 +490,7 @@ class CtwProjectView(CWidget):
         iter = self.get_iter_from_node(diagram)
         self.TreeStore.remove(iter)
     
-    @event("application.bus", "element-created-from-plugin")
+    @event("application.bus", "element-object-created")
     def on_element_created(self, widget, element):
         node = element.GetNode()
         parent = node.GetParent()
@@ -501,3 +501,8 @@ class CtwProjectView(CWidget):
                            1, PixmapFromPath(self.application.GetProject().GetMetamodel().GetStorage(), element.GetType().GetIcon()),
                            2, element.GetType().GetId(),
                            3, node)
+    
+    @event("application.bus", "element-object-removed")
+    def on_element_removed(self, widget, element):
+        iter = self.get_iter_from_node(element)
+        self.TreeStore.remove(iter)

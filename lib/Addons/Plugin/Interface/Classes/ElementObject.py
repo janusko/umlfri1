@@ -3,6 +3,7 @@ from lib.Addons.Plugin.Communication.ComSpec import *
 from lib.Addons.Plugin.Interface.Classes.base import IBase
 from lib.Addons.Plugin.Interface.decorators import *
 from lib.Commands.Diagram import CCreateDiagramCommand
+from lib.Commands.Elements import CCreateElementObjectCommand
 from lib.Drawing.Diagram import CDiagram
 from lib.Drawing.Element import CElement
 from lib.Elements.Object import CElementObject
@@ -45,17 +46,14 @@ class IElementObject(IDomainObject):
         command.Execute(cmd)
         return cmd.GetDiagram()
     
-    def CreateChildElement(him, elementType):
-        parentNode = him.GetNode()
-        
-        elementObject = CElementObject(elementType)
-
-        elementNode = CProjectNode(parentNode, elementObject)
-        parentNode.AddChild(elementNode)
-        
-        IBase.adapter.plugin_change_object(elementObject)
+    @destructive
+    def CreateChildElement(him, command, elementType):
+        cmd = CCreateElementObjectCommand(elementType, him.GetNode())
+        command.Execute(cmd)
+        return cmd.GetElementObject()
     
-    def ShowIn(him, diagram):
+    @destructive
+    def ShowIn(him, command, diagram):
         if diagram.HasElement(him):
             raise PluginInvalidMethodParameters(him.GetUID(), "element is already shown on given diagram")
         

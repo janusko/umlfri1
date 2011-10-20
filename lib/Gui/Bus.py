@@ -28,7 +28,9 @@ class CBus(gobject.GObject):
             [gobject.TYPE_PYOBJECT]),
         'diagram-removed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
             [gobject.TYPE_PYOBJECT]),
-        'element-created-from-plugin': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
+        'element-object-created': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
+            [gobject.TYPE_PYOBJECT]),
+        'element-object-removed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
             [gobject.TYPE_PYOBJECT]),
     }
     
@@ -36,8 +38,12 @@ class CBus(gobject.GObject):
         for upd, param in updates:
             if upd == 'createDiagram':
                 self.emit('diagram-created', param)
+            elif upd == 'createElementObject':
+                self.emit('element-object-created', param)
     
     def UndoUpdates(self, updates):
         for upd, param in updates:
             if upd == 'createDiagram':
                 self.emit('diagram-removed', param)
+            elif upd == 'createElementObject':
+                self.emit('element-object-removed', param)
