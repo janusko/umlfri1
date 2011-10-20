@@ -44,7 +44,7 @@ class CPluginAddonComponent(object):
         if self.__plugin is None:
             path, starter = self.GetStarter()
             if path is not None:
-                self.__plugin = CPlugin(os.path.join(root, self.__path), self.__addon.GetDefaultUri(), starter)
+                self.__plugin = CPlugin(os.path.join(root, self.__path), self.__addon.GetDefaultUri(), starter, self.__addon)
                 self.__addon.GetManager().GetPluginManager().AddPlugin(self.__plugin)
         
         if self.__path is not None:

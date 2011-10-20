@@ -22,7 +22,7 @@ class IConnectionObject(IDomainObject):
         return list(him.GetAppears())
     
     @destructive
-    def ShowIn(him, diagram):
+    def ShowIn(him, command, diagram):
         if diagram.HasConnection(him):
             raise PluginInvalidMethodParameters(him.GetUID(), "connection is already shown on given diagram")
         
