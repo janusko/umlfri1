@@ -1,4 +1,4 @@
-from lib.Commands.Base.Command import CCommand
+from ..Base.Command import CCommand
 from lib.Drawing.Diagram import CDiagram
 
 class CCreateDiagramCommand(CCommand):
