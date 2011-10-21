@@ -25,6 +25,7 @@ class CTabs(CWidget):
         CWidget.__init__(self, app, wTree)
         diagram = CDiagram(None,'StartPage')
         self.diagrams = [diagram]
+        self.labels = {}
         self.__Current = 0
         self.__StartPage = 0
         
@@ -35,7 +36,7 @@ class CTabs(CWidget):
         sp = self.nbTabs.get_nth_page(0)
         splbl = self.nbTabs.get_tab_label(sp)
         self.nbTabs.remove_page(0)
-        self.__AddNbPage(None, splbl, sp)
+        self.__AddNbPage(None, None, sp, label = splbl)
         self.__RefreshEnable()
     
     def __RefreshEnable(self):
@@ -45,7 +46,7 @@ class CTabs(CWidget):
         splbl = self.nbTabs.get_tab_label(sp)
         splbl.get_children()[-1].set_sensitive(len(self.diagrams) > 1)
     
-    def __AddNbPage(self, pixbuf, label, page):
+    def __AddNbPage(self, diagram, pixbuf, page, label = None):
         hboxbut = gtk.HBox(spacing = 3)
         hboxbut.show()
         
@@ -54,11 +55,9 @@ class CTabs(CWidget):
             img.set_from_pixbuf(pixbuf)
             img.show()
         
-        if isinstance(label, (str, unicode)):
-            label1 = gtk.Label(label)
-            label1.show()
-        else:
-            label1 = label 
+        if label is None:
+            label = gtk.Label(diagram.GetName())
+            label.show()
         
         button = gtk.Button()
         image = gtk.image_new_from_stock(gtk.STOCK_CLOSE, gtk.ICON_SIZE_SMALL_TOOLBAR)       
@@ -70,10 +69,12 @@ class CTabs(CWidget):
         
         if pixbuf is not None:
             hboxbut.add(img)
-        hboxbut.add(label1)
+        hboxbut.add(label)
         hboxbut.add(button)
-        idx = self.nbTabs.append_page(page, hboxbut)
+        self.nbTabs.append_page(page, hboxbut)
         self.nbTabs.set_tab_reorderable(page, True)
+        if diagram is not None:
+            self.labels[id(diagram)] = label
         
     def AddTab(self, diagram):
         for i in self.diagrams:
@@ -86,8 +87,8 @@ class CTabs(CWidget):
         
         self.diagrams.append(diagram)
         self.__AddNbPage(
+            diagram,
             PixmapFromPath(self.application.GetProject().GetMetamodel().GetStorage(), diagram.GetType().GetIcon()),
-            diagram.GetName(),
             page)
        
         self.SetCurrentPage(self.nbTabs.get_n_pages()-1)
@@ -114,6 +115,8 @@ class CTabs(CWidget):
     def on_reorder_page(self, notebook, page, page_num):
         diagram = self.diagrams.pop(self.__Current)
         self.diagrams.insert(page_num, diagram)
+        label = self.labels.pop(self.__Current)
+        self.labels.insert(page_num, label)
         if self.__Current == self.__StartPage:
             self.__StartPage = page_num
         elif self.__StartPage > self.__Current and self.__StartPage <= page_num:
@@ -165,6 +168,8 @@ class CTabs(CWidget):
                     self.__StartPage -= 1
                 if self.__Current == num:
                     self.__Current -= 1
+        if id(diagram) in self.labels:
+            del self.labels[id(diagram)]
         self.__RefreshEnable()
     
     def CloseCurrentTab(self):
@@ -254,3 +259,9 @@ class CTabs(CWidget):
             return
         else:
             self.emit("export-svg-from-TabMenu")
+    
+    @event('application.bus', 'diagram-changed')
+    def DiagramChanged(self, bus, params):
+        for obj, path in params:
+            if path and obj in self.diagrams:
+                self.labels[id(obj)].set_text(obj.GetName())

@@ -1,0 +1,1 @@
+from .SetPropertyValues import CSetPropertyValuesCommand

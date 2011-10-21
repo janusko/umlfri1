@@ -1097,5 +1097,5 @@ class CpicDrawingArea(CWidget):
                 
     @event('application.bus', 'connection-changed')
     @event('application.bus', 'element-changed')
-    def ConnectionChanged(self, bus, *args):
+    def ObjectChanged(self, bus, params):
         self.ToPaint()
