@@ -22,9 +22,11 @@ class CCommandProcessor(object):
             if MAX_UNDO_STACK_SIZE is not None and len(self.__undoStack) > MAX_UNDO_STACK_SIZE:
                 del self.__undoStack[MAX_UNDO_STACK_SIZE:]
             
-            guiUpd = command.GetGuiUpdates()
+            guiUpd = {}
+            for upd, param in command.GetGuiUpdates():
+                guiUpd.setdefault(upd, []).append(param)
             if guiUpd:
-                self.__guiBus.DoUpdates(guiUpd)
+                self.__guiBus.DoUpdates(guiUpd.items())
     
     def Undo(self, count = 1):
         '''
@@ -34,31 +36,33 @@ class CCommandProcessor(object):
         toUndo = self.__undoStack[:count]
         del self.__undoStack[:count]
         
-        guiUpd = []
+        guiUpd = {}
         
         for cmd in toUndo:
             cmd.Undo()
-            guiUpd.extend(cmd.GetGuiUpdates())
+            for upd, param in cmd.GetGuiUpdates():
+                guiUpd.setdefault(upd, []).append(param)
         
         self.__redoStack[:0] = toUndo
-            
+        
         if guiUpd:
-            self.__guiBus.UndoUpdates(guiUpd)
+            self.__guiBus.UndoUpdates(guiUpd.items())
     
     def Redo(self, count = 1):
         toRedo = self.__redoStack[:count]
         del self.__redoStack[:count]
         
-        guiUpd = []
+        guiUpd = {}
         
         for cmd in toRedo:
             cmd.Redo()
-            guiUpd.extend(cmd.GetGuiUpdates())
+            for upd, param in cmd.GetGuiUpdates():
+                guiUpd.setdefault(upd, []).append(param)
         
         self.__undoStack[:0] = toRedo
             
         if guiUpd:
-            self.__guiBus.Undo(guiUpd)
+            self.__guiBus.Undo(guiUpd.items())
     
     def GetUndoStack(self, limitation = None):
         if limitation is None:

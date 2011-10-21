@@ -506,3 +506,13 @@ class CtwProjectView(CWidget):
     def on_element_removed(self, widget, element):
         iter = self.get_iter_from_node(element)
         self.TreeStore.remove(iter)
+    
+    @event('application.bus', 'diagram-changed')
+    @event('application.bus', 'element-changed')
+    def ObjectChanged(self, bus, params):
+        for obj, path in params:
+            if path:
+                if not isinstance(obj, CElementObject):
+                    obj = obj.GetObject()
+                iter = self.get_iter_from_node(obj)
+                self.TreeStore.set(iter, 0, obj.GetName())

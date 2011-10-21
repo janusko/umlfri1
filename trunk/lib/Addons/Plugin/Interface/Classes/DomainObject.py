@@ -1,6 +1,7 @@
 from base import IBase
 from lib.Addons.Plugin.Communication.ComSpec import *
 from lib.Addons.Plugin.Interface.decorators import *
+from lib.Commands.Properties import CSetPropertyValuesCommand
 from lib.Domains.Object import CDomainObject
 
 class IDomainObject(IBase):
@@ -9,10 +10,13 @@ class IDomainObject(IBase):
     def GetValue(him, path):
             res = him.GetValue(path)
             if isinstance(res, CDomainObject):
+                # TODO: error
                 return str(res.GetSaveInfo())
             elif isinstance(res, list):
+                # TODO: error
                 return '[' + ','.join(str(i.GetSaveInfo()) for i in res) + ']'
             else:
+                # TODO: remove str
                 return str(res)
     
     def GetAllValues(him):
@@ -37,7 +41,5 @@ class IDomainObject(IBase):
     
     @destructive
     def SetValue(him, command, path, value):
-        him.SetValue(path, value)
-        IBase.adapter.plugin_change_domain_value(him, path)
-        
-
+        cmd = CSetPropertyValuesCommand(him, {path: value})
+        command.Execute(cmd)

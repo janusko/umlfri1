@@ -308,3 +308,17 @@ class ClwProperties(CWidget):
     def on_content_update(self, widget, element, property):
         if self.element is not None and element is self.element:
             self.Fill(self.element)
+    
+    @event('application.bus', 'diagram-changed')
+    @event('application.bus', 'connection-changed')
+    @event('application.bus', 'element-changed')
+    def ObjectChanged(self, bus, params):
+        if self.element is None:
+            return
+        
+        for obj, path in params:
+            if path:
+                if not isinstance(obj, (CElementObject, CConnectionObject)):
+                    obj = obj.GetObject()
+                if self.__GetElementObject() is obj:
+                    self.Fill(self.element)

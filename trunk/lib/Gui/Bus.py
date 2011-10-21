@@ -33,29 +33,33 @@ class CBus(gobject.GObject):
         'element-object-removed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
             [gobject.TYPE_PYOBJECT]),
         'connection-changed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
-            [gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT]),
+            [gobject.TYPE_PYOBJECT]),
         'element-changed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
-            [gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT]),
+            [gobject.TYPE_PYOBJECT]),
+        'diagram-changed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
+            [gobject.TYPE_PYOBJECT]),
+    }
+    
+    __doMap = {
+        'createDiagram': 'diagram-created',
+        'createElementObject': 'element-object-created',
+        'connectionChanged': 'connection-changed',
+        'elementChanged': 'element-changed',
+        'diagramChanged': 'diagram-changed'
+    }
+    
+    __undoMap = {
+        'createDiagram': 'diagram-removed',
+        'createElementObject': 'element-object-removed',
+        'connectionChanged': 'connection-changed',
+        'elementChanged': 'element-changed',
+        'diagramChanged': 'diagram-changed'
     }
     
     def DoUpdates(self, updates):
-        for upd, param in updates:
-            if upd == 'createDiagram':
-                self.emit('diagram-created', param)
-            elif upd == 'createElementObject':
-                self.emit('element-object-created', param)
-            elif upd == 'connectionChanged':
-                self.emit('connection-changed', param[0], param[1])
-            elif upd == 'elementChanged':
-                self.emit('element-changed', param[0], param[1])
+        for upd, params in updates:
+            self.emit(self.__doMap[upd], params)
     
     def UndoUpdates(self, updates):
-        for upd, param in updates:
-            if upd == 'createDiagram':
-                self.emit('diagram-removed', param)
-            elif upd == 'createElementObject':
-                self.emit('element-object-removed', param)
-            elif upd == 'connectionChanged':
-                self.emit('connection-changed', param[0], param[1])
-            elif upd == 'elementChanged':
-                self.emit('element-changed', param[0], param[1])
+        for upd, params in updates:
+            self.emit(self.__doMap[upd], params)
