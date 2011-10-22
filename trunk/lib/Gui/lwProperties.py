@@ -1,3 +1,4 @@
+from lib.Commands.Properties.SetPropertyValues import CSetPropertyValuesCommand
 from lib.Depend.gtk2 import gobject
 from lib.Depend.gtk2 import gtk
 
@@ -188,11 +189,11 @@ class ClwProperties(CWidget):
         elementObject = self.__GetElementObject()
         
         try:
-            elementObject.SetValue(key, new_value)
+            cmd = CSetPropertyValuesCommand(elementObject, {key: new_value})
+            self.application.GetCommands().Execute(cmd)
         except (DomainTypeError, ), e:
             model.set(iter, ID_VALUE, str(elementObject.GetValue(key)))
             raise ParserError(*e.params)
-        self.application.GetBus().emit('content-update', self.element, key)
         self.application.GetBus().emit('properties-editing-stoped')
         
     @event("ComboRenderer", "edited")
@@ -205,7 +206,8 @@ class ClwProperties(CWidget):
         elementObject = self.__GetElementObject()
         
         try:
-            elementObject.SetValue(key, new_value)
+            cmd = CSetPropertyValuesCommand(elementObject, {key: new_value})
+            self.application.GetCommands().Execute(cmd)
         except (DomainTypeError, ), e:
             model.set(iter, ID_VALUE, str(elementObject.GetValue(key)))
             raise ParserError(*e.params)
@@ -225,14 +227,9 @@ class ClwProperties(CWidget):
             colorsel = cdia.colorsel
             color = colorsel.get_current_color()
             model = self.lwProperties.get_model()
-            elementObject.SetValue(key, color.to_string())
-            model.set(iter, ID_VALUE, str(elementObject.GetValue(key)))
-            text = '('+str(int(round(color.red / 256))) + ', '+str(int(round(color.green / 256))) + ', '+str(int(round(color.blue / 256))) +')'
-            model.set(iter, ID_BUTTON_TEXT, text)
-            model.set(iter, ID_COLOR, elementObject.GetValue(key))
+            cmd = CSetPropertyValuesCommand(elementObject, {key: color.to_string()})
+            self.application.GetCommands().Execute(cmd)
         cdia.destroy()
-
-        self.application.GetBus().emit('content-update', self.element, key)
         
     def on_changefont(self, key, iter):
         fdia = gtk.FontSelectionDialog("Select font")
@@ -250,13 +247,9 @@ class ClwProperties(CWidget):
 
             
             model = self.lwProperties.get_model()
-            elementObject.SetValue(key, font_desc)
-            model.set(iter, ID_VALUE, str(elementObject.GetValue(key)))
-            model.set(iter, ID_BUTTON_TEXT, str(elementObject.GetValue(key)))
-            model.set(iter, ID_FONT, str(elementObject.GetValue(key)))
+            cmd = CSetPropertyValuesCommand(elementObject, {key: font_desc})
+            self.application.GetCommands().Execute(cmd)
         fdia.destroy()
-
-        self.application.GetBus().emit('content-update', self.element, key)
         
     def on_listadd(self, key, iter):
         elementObject = self.__GetElementObject()
