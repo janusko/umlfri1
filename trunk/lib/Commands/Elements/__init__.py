@@ -1,1 +1,2 @@
+from .CreateDiagram import CCreateDiagramCommand
 from .CreateElementObject import CCreateElementObjectCommand

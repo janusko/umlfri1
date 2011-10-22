@@ -32,6 +32,10 @@ class CBus(gobject.GObject):
             [gobject.TYPE_PYOBJECT]),
         'element-object-removed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
             [gobject.TYPE_PYOBJECT]),
+        'connection-object-created': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
+            [gobject.TYPE_PYOBJECT]),
+        'connection-object-removed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
+            [gobject.TYPE_PYOBJECT]),
         'connection-changed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
             [gobject.TYPE_PYOBJECT]),
         'element-changed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
@@ -43,17 +47,19 @@ class CBus(gobject.GObject):
     __doMap = {
         'createDiagram': 'diagram-created',
         'createElementObject': 'element-object-created',
+        'createConnectionObject': 'connection-object-created',
         'connectionChanged': 'connection-changed',
         'elementChanged': 'element-changed',
-        'diagramChanged': 'diagram-changed'
+        'diagramChanged': 'diagram-changed',
     }
     
     __undoMap = {
         'createDiagram': 'diagram-removed',
         'createElementObject': 'element-object-removed',
+        'createConnectionObject': 'connection-object-removed',
         'connectionChanged': 'connection-changed',
         'elementChanged': 'element-changed',
-        'diagramChanged': 'diagram-changed'
+        'diagramChanged': 'diagram-changed',
     }
     
     def DoUpdates(self, updates):
