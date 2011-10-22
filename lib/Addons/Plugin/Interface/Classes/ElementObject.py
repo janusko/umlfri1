@@ -2,8 +2,9 @@ from DomainObject import IDomainObject
 from lib.Addons.Plugin.Communication.ComSpec import *
 from lib.Addons.Plugin.Interface.Classes.base import IBase
 from lib.Addons.Plugin.Interface.decorators import *
-from lib.Commands.Diagram import CCreateDiagramCommand, CShowElementCommand
-from lib.Commands.Elements import CCreateElementObjectCommand
+from lib.Commands.Connections import CCreateConnectionObjectCommand
+from lib.Commands.Diagrams import CShowElementCommand
+from lib.Commands.Elements import CCreateDiagramCommand, CCreateElementObjectCommand
 from lib.Drawing.Diagram import CDiagram
 from lib.Drawing.Element import CElement
 from lib.Elements.Object import CElementObject
@@ -36,9 +37,9 @@ class IElementObject(IDomainObject):
     
     @destructive
     def ConnectWith(him, command, other, connectionType):
-        connectionObject = CConnectionObject(connectionType, him, other)
-        
-        IBase.adapter.plugin_change_object(connectionObject)
+        cmd = CCreateConnectionObjectCommand(him, other, connectionType)
+        command.Execute(cmd)
+        return cmd.GetConnectionObject()
     
     @destructive
     def CreateDiagram(him, command, diagramType):

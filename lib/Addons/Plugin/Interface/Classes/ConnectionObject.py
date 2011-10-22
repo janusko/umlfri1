@@ -2,7 +2,7 @@ from DomainObject import IDomainObject
 from lib.Addons.Plugin.Interface.Classes.base import IBase
 from lib.Addons.Plugin.Interface.decorators import *
 from lib.Addons.Plugin.Communication.ComSpec import *
-from lib.Commands.Diagram import CShowConnectionCommand, ShowConnectionError
+from lib.Commands.Diagrams import CShowConnectionCommand, ShowConnectionError
 from lib.Connections import CConnectionObject
 from lib.Drawing.Connection import CConnection
 from lib.Elements import CElementObject

@@ -2,6 +2,7 @@ from VisibleObject import IVisibleObject
 from lib.Addons.Plugin.Communication.ComSpec import *
 from lib.Addons.Plugin.Interface.Classes.base import IBase
 from lib.Addons.Plugin.Interface.decorators import *
+from lib.Commands.Diagrams.CreateConnection import CCreateConnectionCommand
 from lib.Connections.Object import CConnectionObject
 from lib.Drawing.Connection import CConnection
 from lib.Drawing.Element import CElement
@@ -19,8 +20,7 @@ class IElementVisual(IVisibleObject):
         diagram = him.GetDiagram()
         if diagram is not other.GetDiagram():
             raise PluginInvalidMethodParameters(him.GetUID(), 'Elements must be on the same diagram')
-        connectionObject = CConnectionObject(connectionType, him.GetObject(), other.GetObject())
-        connectionVisual = CConnection(diagram, connectionObject, him, other)
         
-        IBase.adapter.plugin_change_object(connectionVisual)
-        IBase.adapter.plugin_change_visual(connectionVisual)
+        cmd = CCreateConnectionCommand(him, other, connectionType)
+        command.Execute(cmd)
+        return cmd.GetConnectionVisual()
