@@ -40,18 +40,18 @@ class CElementObject(CBaseObject):
         @rtype: L{CElementObject}
         """
         clone = CElementObject(self.type)
-        # copy connections
-#        for con in self.connections:
-#            src =  con.GetSource()
-#            dest = con.GetDestination()
-#            if src is self:
-#                src = clone
-#            else:
-#                dest = clone
-#            newcon = CConnectionObject(con.GetType(), src, dest)
-#            clone.AddConnection(newcon)
         clone.node = self.node
-        clone.domainobject = self.domainobject.GetCopy()
+        clone.domainobject.CopyFrom(self.domainobject)
+        # copy connections
+        for con in self.connections:
+            src =  con.GetSource()
+            dest = con.GetDestination()
+            if src is self:
+                src = clone
+            else:
+                dest = clone
+            newcon = CConnectionObject(con.GetType(), src, dest)
+            clone.AddConnection(newcon)
         return clone
 
     def GetRevision(self):

@@ -266,11 +266,6 @@ class CpicDrawingArea(CWidget):
         
 
     def Paint(self, changed = True):
-        # TODO
-        # optimize: multiple calling for one update event:
-        #   triple calling on click-to-select-element >P
-        #   triple on focus gained (window switching)
-        #   drag-mouse-motion-event: can't even count that :`-/
 
         if self.disablePaint:
             return
@@ -995,9 +990,13 @@ class CpicDrawingArea(CWidget):
     
     @event("mnuCtxDuplicate", "activate")
     def ActionDuplicate(self, widget=None):
-        self.Diagram.DuplicateSelectedElements()
+        duplicates = self.Diagram.DuplicateSelectedElements()
+        self.Diagram.DeselectAll()
+        for element in duplicates:
+            self.emit('add-element', element.GetObject(), self.Diagram, None)
+            self.Diagram.AddToSelection(element)
+        self.emit('selected-item', list(self.Diagram.GetSelected()),True)
         self.Paint()
-        self.emit('selected-item', list(self.Diagram.GetSelected()), False)
 
     @event("mnuCtxShiftDelete","activate")
     def onMnuCtxShiftDelteActivate(self, menuItem):
