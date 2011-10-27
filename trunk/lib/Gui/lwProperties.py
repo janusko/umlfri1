@@ -315,3 +315,16 @@ class ClwProperties(CWidget):
                     obj = obj.GetObject()
                 if self.__GetElementObject() is obj:
                     self.Fill(self.element)
+    
+    @event('application.bus', 'diagram-removed')
+    @event('application.bus', 'connection-object-removed')
+    @event('application.bus', 'element-object-removed')
+    def ObjectRemoved(self, bus, params):
+        if self.element is None:
+            return
+        
+        for obj in params:
+            if not isinstance(obj, (CElementObject, CConnectionObject)):
+                obj = obj.GetObject()
+            if self.__GetElementObject() is obj:
+                self.Fill(None)
