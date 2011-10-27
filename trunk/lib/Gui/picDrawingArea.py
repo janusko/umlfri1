@@ -1,3 +1,4 @@
+from lib.Commands.Diagrams.DuplicateElements import CDuplicateElementsCommand
 from lib.Depend.gtk2 import gtk
 from lib.Depend.gtk2 import gobject
 
@@ -743,7 +744,7 @@ class CpicDrawingArea(CWidget):
             self.__Scroll(self.picVBar, event.direction)
         self.Paint(False)
 
-    #@event("picDrawingArea", "focus-out-event")
+    @event("picDrawingArea", "focus-out-event")
     def on_picDrawingArea_foucus_out_event(self, widget, event):
         self.emit('set-selected', None)
         self.ResetAction()
@@ -990,12 +991,14 @@ class CpicDrawingArea(CWidget):
     
     @event("mnuCtxDuplicate", "activate")
     def ActionDuplicate(self, widget=None):
-        duplicates = self.Diagram.DuplicateSelectedElements()
-        self.Diagram.DeselectAll()
-        for element in duplicates:
-            self.emit('add-element', element.GetObject(), self.Diagram, None)
-            self.Diagram.AddToSelection(element)
-        self.emit('selected-item', list(self.Diagram.GetSelected()),True)
+#        duplicates = self.Diagram.DuplicateSelectedElements()
+#        self.Diagram.DeselectAll()
+#        for element in duplicates:
+#            self.emit('add-element', element.GetObject(), self.Diagram, None)
+#            self.Diagram.AddToSelection(element)
+#        self.emit('selected-item', list(self.Diagram.GetSelected()),True)
+        cmd  = CDuplicateElementsCommand(tuple(self.Diagram.GetSelectedElements()), self.Diagram)
+        self.application.GetCommands().Execute(cmd)
         self.Paint()
 
     @event("mnuCtxShiftDelete","activate")

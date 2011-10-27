@@ -17,9 +17,9 @@ class CfrmNewProject (common.CWindow):
     name = 'frmNewProject'
 
     glade = 'project.glade'
-    
+
     widgets = ("ivNewProject", "twNewProject", "drawingarea")
-    
+
     COL_NAME, \
     COL_ICON, \
     COL_OBJ = range (3)
@@ -44,7 +44,7 @@ class CfrmNewProject (common.CWindow):
         f = os.tempnam()
         ext = filename.split('.')
         ext.reverse()
-        
+
         if (("."+ext[0]) != PROJECT_CLEARXML_EXTENSION):
             try:
                 z = zipfile.ZipFile(filename)
@@ -62,13 +62,13 @@ class CfrmNewProject (common.CWindow):
     def __createTextTags (self):
         buffer = self.twNewProject.get_buffer ()
         buffer.create_tag (
-        	"heading",
-        	weight=pango.WEIGHT_BOLD,
-        	size=15*pango.SCALE
+            "heading",
+            weight=pango.WEIGHT_BOLD,
+            size=15*pango.SCALE
         )
         buffer.create_tag (
-        	"italic",
-        	style=pango.STYLE_ITALIC
+            "italic",
+            style=pango.STYLE_ITALIC
         )
 
     def __updateDescription (self, template):
@@ -79,25 +79,25 @@ class CfrmNewProject (common.CWindow):
         buffer.set_text ("")
         iter = buffer.get_iter_at_offset (0)
         buffer.insert_with_tags_by_name (
-        	iter,
-        	metamodel.GetName (),
-        	"heading"
+            iter,
+            metamodel.GetName (),
+            "heading"
         )
         buffer.insert_with_tags_by_name (
-        	iter,
-        	"\nMetamodel version: " + metamodel.GetVersionString() + "\n",
-        	"italic"
+            iter,
+            "\nMetamodel version: " + metamodel.GetVersionString() + "\n",
+            "italic"
         )
         buffer.insert (
-        	iter,
-        	metamodel.GetDescription ()
+            iter,
+            metamodel.GetDescription ()
         )
 
 
     @event("ivNewProject", "item-activated")
     def on_ivNewProject_item_activated (self, widget, path):
         self.form.response (gtk.RESPONSE_OK)
-    
+
     @event("ivNewProject", "selection-changed")
     def on_ivNewProject_sel_changed (self, widget):
         selection = widget.get_selected_items ()
@@ -133,7 +133,7 @@ class CfrmNewProject (common.CWindow):
         context.show_layout(layout)
 
     def ShowDialog (self, parent):
-    	self.form.set_transient_for (parent.form)
+        self.form.set_transient_for (parent.form)
         self.ivNewModel.clear ()
         for template in self.application.GetTemplateManager ().GetAllTemplates ():
             iter = self.ivNewModel.append ()
