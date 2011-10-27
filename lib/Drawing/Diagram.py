@@ -557,25 +557,7 @@ class CDiagram(CBaseObject):
             element.SetPosition(map(sum, zip(element.GetPosition(), (5.0, 5.0))))
             dupls.add(element)
             duplsobj[i.GetObject()] = element.GetObject()
-
-        # recreate connections
-        for origin in duplsobj:
-            clone = duplsobj[origin]
-            print origin, clone
-            for con in list(origin.GetConnections()):
-                src =  con.GetSource()
-                dest = con.GetDestination()
-                print '\t', src, dest
-                if src in set(duplsobj.keys()):
-                    src = duplsobj[src]
-                if dest in set(duplsobj.keys()):
-                    dest = duplsobj[dest]
-                newcon = CConnectionObject(con.GetType(), src, dest)
-                clone.AddConnection(newcon)
-
-        self.DeselectAll()
-        for dupl in dupls:
-            self.AddToSelection(dupl)
+        return dupls
 
     def GetExpSquare(self, canvas):
         #square for export, the minimal size is measured so the exported diagram has the same edges - looks better

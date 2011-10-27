@@ -62,7 +62,10 @@ class CDomainObject(CBaseObject):
                     self.__CopyFromObjectToObject(att,copy.GetValue(id)[ind])
                     ind=ind+1
         return copy
-    
+
+    def CopyFrom(self, domainobject):
+        self.__CopyFromObjectToObject(domainobject, self)
+
     def GetCopy(self):
         '''
         Copy of this domain object
@@ -93,7 +96,7 @@ class CDomainObject(CBaseObject):
                         ind=ind+1
         else:
             raise DomainObjectError('Domain type mismatch.')
-    
+
     def GetValue(self, id):
         '''
         @return: value of attribute
