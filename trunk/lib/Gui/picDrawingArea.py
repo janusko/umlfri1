@@ -285,7 +285,7 @@ class CpicDrawingArea(CWidget):
             if changed:
                 self.__invalidated = True # redraw completly on next configure event
             return
-        
+
         posx, posy = int(self.picHBar.get_value()), int(self.picVBar.get_value())
         sizx, sizy = self.GetWindowSize()    
         ((bposx, bposy), (bsizx, bsizy)) = self.buffer_size
@@ -444,7 +444,7 @@ class CpicDrawingArea(CWidget):
                 if itemSel in self.Diagram.GetSelected(): # deselecting:
                     if (event.state & gtk.gdk.CONTROL_MASK) or (event.state & gtk.gdk.SHIFT_MASK):
                         self.Diagram.RemoveFromSelection(itemSel)
-                        self.Paint()
+                        #self.Paint()
                         self.emit('selected-item', list(self.Diagram.GetSelected()),False)
                     elif isinstance(itemSel, CConnection): #Connection is selected
                         i = itemSel.GetPointAtPosition(pos)
@@ -455,7 +455,7 @@ class CpicDrawingArea(CWidget):
                             itemSel.DeselectPoint()
                             i = itemSel.WhatPartOfYouIsAtPosition(self.canvas, pos)
                             self.__BeginDragLine(event, itemSel, i)
-                        self.Paint()    
+                        #self.Paint()
                         self.emit('selected-item', list(self.Diagram.GetSelected()),False)
                     else: #elements are selected
                         self.__BeginDragRect(event)
@@ -477,17 +477,17 @@ class CpicDrawingArea(CWidget):
                         if len(selElements) == 1:
                             self.selSq = self.selElem.GetSquareAtPosition(pos)
                         self.__BeginDragRect(event)
-                    self.Paint()
+                    #self.Paint()
                     self.emit('selected-item', list(self.Diagram.GetSelected()),False)
                 else:
                     self.Diagram.AddToSelection(itemSel)
-                    self.Paint()
+                    #self.Paint()
                     self.emit('selected-item', list(self.Diagram.GetSelected()),False)
             else: # nothing under pointer
                 if self.Diagram.SelectedCount() > 0:
                     if not (event.state & gtk.gdk.CONTROL_MASK):
                         self.Diagram.DeselectAll()
-                        self.Paint()
+                        #self.Paint()
                         self.emit('selected-item', list(self.Diagram.GetSelected()),False)
                 self.__BeginDragSel(event)
 
@@ -748,7 +748,7 @@ class CpicDrawingArea(CWidget):
             self.__Scroll(self.picVBar, event.direction)
         self.Paint(False)
 
-    @event("picDrawingArea", "focus-out-event")
+    #@event("picDrawingArea", "focus-out-event")
     def on_picDrawingArea_foucus_out_event(self, widget, event):
         self.emit('set-selected', None)
         self.ResetAction()
