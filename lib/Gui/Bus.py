@@ -71,5 +71,5 @@ class CBus(gobject.GObject):
     
     def UndoUpdates(self, updates):
         for upd, params in updates:
-            self.emit(self.__doMap[upd], params)
+            self.emit(self.__undoMap[upd], params)
         self.emit('undo-redo-action', 'undo')
