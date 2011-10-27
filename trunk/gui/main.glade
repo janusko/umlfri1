@@ -587,6 +587,43 @@
                       </packing>
                     </child>
                     <child>
+                      <widget class="GtkSeparatorToolItem" id="sepUndoRedo">
+                        <property name="visible">False</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_action_appearance">False</property>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkMenuToolButton" id="cmdUndo">
+                        <property name="visible">False</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_action_appearance">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="stock_id">gtk-undo</property>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkMenuToolButton" id="cmdRedo">
+                        <property name="visible">False</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_action_appearance">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="stock_id">gtk-redo</property>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
                       <widget class="GtkSeparatorToolItem" id="separatortoolitem2">
                         <property name="visible">True</property>
                       </widget>

@@ -75,7 +75,7 @@ class CCommand(object):
         if not self.__done:
             raise Exception("Cannot redo command that was not executed")
         
-        if self.__undone:
+        if not self.__undone:
             raise Exception("Cannot redo operation that was not undone")
         
         self._Redo()
