@@ -1,5 +1,3 @@
-import traceback
-from lib.Connections.Object import CConnectionObject
 from lib.Exceptions.UserException import *
 from lib.Exceptions.UMLException import UMLException
 from lib.config import config
@@ -539,25 +537,6 @@ class CDiagram(CBaseObject):
             self.AddToSelection(el)
             el.CopyFromElement(i)
             pasted.add(el)
-    
-    def DuplicateSelectedElements(self):
-        dupls = set()
-        duplsobj = {}
-        for i in tuple(self.GetSelectedElements()):
-            try:
-                elementobject = i.GetObject().Clone()
-                element = Element.CElement(self, elementobject)
-            except UMLException, e:
-                for el in dupls:
-                    self.DeleteElement(el)
-                raise
-            self.AddToSelection(element)
-            element.CopyFromElement(i)
-            # shift element (5, 5) units
-            element.SetPosition(map(sum, zip(element.GetPosition(), (5.0, 5.0))))
-            dupls.add(element)
-            duplsobj[i.GetObject()] = element.GetObject()
-        return dupls
 
     def GetExpSquare(self, canvas):
         #square for export, the minimal size is measured so the exported diagram has the same edges - looks better
