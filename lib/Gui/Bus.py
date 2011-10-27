@@ -42,6 +42,8 @@ class CBus(gobject.GObject):
             [gobject.TYPE_PYOBJECT]),
         'diagram-changed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
             [gobject.TYPE_PYOBJECT]),
+        'undo-redo-action': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
+            [gobject.TYPE_STRING]),
     }
     
     __doMap = {
@@ -65,7 +67,9 @@ class CBus(gobject.GObject):
     def DoUpdates(self, updates):
         for upd, params in updates:
             self.emit(self.__doMap[upd], params)
+        self.emit('undo-redo-action', 'do')
     
     def UndoUpdates(self, updates):
         for upd, params in updates:
             self.emit(self.__doMap[upd], params)
+        self.emit('undo-redo-action', 'undo')

@@ -43,7 +43,7 @@ class CCommandProcessor(object):
             for upd, param in cmd.GetGuiUpdates():
                 guiUpd.setdefault(upd, []).append(param)
         
-        self.__redoStack[:0] = toUndo
+        self.__redoStack[:0] = toUndo[::-1]
         
         if guiUpd:
             self.__guiBus.UndoUpdates(guiUpd.items())
@@ -59,10 +59,10 @@ class CCommandProcessor(object):
             for upd, param in cmd.GetGuiUpdates():
                 guiUpd.setdefault(upd, []).append(param)
         
-        self.__undoStack[:0] = toRedo
+        self.__undoStack[:0] = toRedo[::-1]
             
         if guiUpd:
-            self.__guiBus.Undo(guiUpd.items())
+            self.__guiBus.DoUpdates(guiUpd.items())
     
     def GetUndoStack(self, limitation = None):
         if limitation is None:

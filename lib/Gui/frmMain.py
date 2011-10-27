@@ -1,7 +1,7 @@
 from lib.Depend.gtk2 import gtk
 from common import CWindow, event
 
-from lib.consts import SCALE_MIN, SCALE_MAX, SCALE_INCREASE, WEB
+from lib.consts import SCALE_MIN, SCALE_MAX, SCALE_INCREASE, WEB, UNDO_BUTTONS_VISIBLE, SHOW_UNDO_REDO_ITEMS
 from lib.Exceptions import *
 
 import gobject
@@ -57,6 +57,7 @@ class CfrmMain(CWindow):
         #############
         #toolbar
         'cmdNew', 'cmdOpen', 'cmdSave', 'cmdCopy', 'cmdCut', 'cmdPaste', 'cmdZoomOut', 'cmdZoomIn',
+        'cmdUndo', 'cmdRedo', 'sepUndoRedo',
         #############
         #toolbar2
         'cmdAlignLeftMost', 'cmdAlignRightMost', 'cmdAlignUpMost', 'cmdAlignDownMost', 'cmdSpaceEvenlyHorizontally', 'cmdSpaceEvenlyVertically',
@@ -77,6 +78,17 @@ class CfrmMain(CWindow):
         self.__sensitivity_project = None
         self.UpdateMenuSensitivity(project = False)
         self.ReloadTitle()
+        
+        self.__undoMenu = gtk.Menu()
+        self.__redoMenu = gtk.Menu()
+        
+        self.cmdUndo.set_visible(UNDO_BUTTONS_VISIBLE)
+        self.cmdUndo.set_menu(self.__undoMenu)
+        self.cmdRedo.set_visible(UNDO_BUTTONS_VISIBLE)
+        self.cmdRedo.set_menu(self.__redoMenu)
+        self.sepUndoRedo.set_visible(UNDO_BUTTONS_VISIBLE)
+        
+        self.on_undo_redo_action(None, 'start')
         
     def SetSensitiveMenuChilds(self, MenuItem, value):
         for i in MenuItem.get_submenu().get_children():
@@ -204,6 +216,8 @@ class CfrmMain(CWindow):
             self.picDrawingArea.SetDiagram(diagram)
         self.twProjectView.GetRootNode()
         self.twProjectView.twProjectView.grab_focus()
+        self.application.GetCommands().Clear()
+        self.on_undo_redo_action(None, 'start')
     
     def PaintAll(self):
         if not self.nbTabs.IsStartPageActive():
@@ -738,6 +752,30 @@ class CfrmMain(CWindow):
     @event("mmShift_ToTop", "activate")
     def on_mnuItems_mmShift_ToTop(self, menuItem):
         self.picDrawingArea.Shift_activate('ToTop')        
+    
+    @event("cmdUndo", "clicked")
+    def on_cmdUndo_clicked(self, cmd):
+        self.application.GetCommands().Undo()
+    
+    @event("cmdRedo", "clicked")
+    def on_cmdRedo_clicked(self, cmd):
+        self.application.GetCommands().Redo()
+    
+    def __fillUndoRedoMenu(self, type, menu, items):
+        for child in menu.get_children():
+            menu.remove(child)
+        
+        for id, item in enumerate(items):
+            menuItem = gtk.MenuItem(label = item)
+            menuItem.connect('activate', self.on_undo_redo_menu_item, type, id + 1)
+            menuItem.show()
+            menu.append(menuItem)
+    
+    def on_undo_redo_menu_item(self, mnuItem, type, count):
+        if type == 'undo':
+            self.application.GetCommands().Undo(count)
+        else:
+            self.application.GetCommands().Redo(count)
 
     @event("picDrawingArea.picEventBox", "scroll-event")
     def on_picEventBox_scroll_event(self, widget, event):
@@ -756,3 +794,12 @@ class CfrmMain(CWindow):
         for diagram in self.application.GetProject().GetDefaultDiagrams():
             self.nbTabs.AddTab(diagram)
             self.picDrawingArea.SetDiagram(diagram)
+        self.application.GetCommands().Clear()
+        self.on_undo_redo_action(None, 'start')
+    
+    @event('application.bus', 'undo-redo-action')
+    def on_undo_redo_action(self, bus, action):
+        self.cmdUndo.set_sensitive(self.application.GetCommands().CanUndo())
+        self.__fillUndoRedoMenu('undo', self.__undoMenu, self.application.GetCommands().GetUndoStack(SHOW_UNDO_REDO_ITEMS))
+        self.cmdRedo.set_sensitive(self.application.GetCommands().CanRedo())
+        self.__fillUndoRedoMenu('redo', self.__redoMenu, self.application.GetCommands().GetRedoStack(SHOW_UNDO_REDO_ITEMS))
