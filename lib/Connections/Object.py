@@ -312,8 +312,8 @@ class CConnectionObject(CBaseObject):
     def HasVisualAttribute(self, key):
         return self.domainobject.HasVisualAttribute(key)
     
-    def AppendItem(self, key):
-        self.domainobject.AppendItem(key)
+    def AppendItem(self, key, value = None):
+        self.domainobject.AppendItem(key, value)
         self.revision += 1
     
     def RemoveItem(self, key):
