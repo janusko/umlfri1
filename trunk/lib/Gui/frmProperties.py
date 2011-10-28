@@ -1,10 +1,8 @@
-from lib.Depend.gtk2 import gtk
-from lib.Depend.gtk2 import gobject
+from lib.Commands.Properties import CApplyPropertyPatchCommand
+from lib.Domains import CDomainObject, CDomainObjectComparator
 from lib.Exceptions import DomainTypeError
 from lib.Drawing import CElement, CConnection, CDiagram
-from lib.Domains.Object import CDomainObject
-import pygtk
-from frmPropertiesWidgets.__init__ import *
+from frmPropertiesWidgets import *
 
 class CfrmProperties(object):
     
@@ -282,13 +280,14 @@ class CfrmProperties(object):
             self.tables[type.GetName()]['save'].SetSensitive(False)
     
     def ShowPropertiesWindow(self,element,app):
-        self.element=element
-        self.application=app
         if isinstance(element,(CElement,CConnection,CDiagram)):
-            element=element.GetObject()
-        self.old_domain_object=element.GetDomainObject()
-        self.domain_object=element.GetDomainObject().GetCopy()
-        type=element.GetDomainObject().GetType()
+            self.element=element.GetObject()
+        else:
+            self.element=element
+        self.application=app
+        self.old_domain_object=None
+        self.domain_object=self.element.GetDomainObject().GetCopy()
+        type=self.element.GetDomainObject().GetType()
         self.attributes={}
         self.tables={}
         dlg=self.__CreateBoneWindow(type,'Properties',self.parent,True)
@@ -644,11 +643,10 @@ class CfrmProperties(object):
             elif type.GetAttribute(id)['type']=='list':
                 continue
             self.domain_object.SetValue(id,val)
-        self.old_domain_object.SetValues(self.domain_object)
+        if self.old_domain_object is not None:
+            self.old_domain_object.SetValues(self.domain_object)
         #self.domain_object=self.old_domain_object.GetCopy()
-        if self.element!=None:
-            if isinstance(self.element, CElement):
-                self.element.GetObject().AddRevision()
-            else:
-                self.element.AddRevision()
-            self.application.GetBus().emit('all-content-update',self.element)
+        if self.element is not None:
+            diff = CDomainObjectComparator(self.element.GetDomainObject(), self.domain_object)
+            cmd = CApplyPropertyPatchCommand(self.element, list(diff))
+            self.application.GetCommands().Execute(cmd)

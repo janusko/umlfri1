@@ -49,8 +49,8 @@ class CDiagram(CBaseObject):
         self.domainobject.SetValue(key, value)
         self.revision += 1
         
-    def AppendItem(self, key):
-        self.domainobject.AppendItem(key)
+    def AppendItem(self, key, value = None):
+        self.domainobject.AppendItem(key, value)
         self.revision += 1
     
     def RemoveItem(self, key):
