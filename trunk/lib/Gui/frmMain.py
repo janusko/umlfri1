@@ -82,11 +82,13 @@ class CfrmMain(CWindow):
         self.__undoMenu = gtk.Menu()
         self.__redoMenu = gtk.Menu()
         
-        self.cmdUndo.set_visible(UNDO_BUTTONS_VISIBLE)
         self.cmdUndo.set_menu(self.__undoMenu)
-        self.cmdRedo.set_visible(UNDO_BUTTONS_VISIBLE)
         self.cmdRedo.set_menu(self.__redoMenu)
-        self.sepUndoRedo.set_visible(UNDO_BUTTONS_VISIBLE)
+        
+        if UNDO_BUTTONS_VISIBLE:
+            self.cmdUndo.show()
+            self.cmdRedo.show()
+            self.sepUndoRedo.show()
         
         self.on_undo_redo_action(None, 'start')
         
