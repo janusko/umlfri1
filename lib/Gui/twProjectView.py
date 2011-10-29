@@ -1,6 +1,7 @@
 from lib.Depend.gtk2 import gobject
 from lib.Depend.gtk2 import gtk
 
+from lib.Commands.Project import CCreateElementObjectCommand, CCreateDiagramCommand
 from common import CWidget
 from lib.Project import CProject, CProjectNode
 from lib.Elements import CElementObject
@@ -22,7 +23,6 @@ class CtwProjectView(CWidget):
     __gsignals__ = {
         'selected_diagram':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT)), 
         'selected-item-tree':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
-        'add-element':   (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_STRING,)),
         'create-diagram':   (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_STRING, )),
         'repaint':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
         'close-diagram': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
@@ -235,6 +235,7 @@ class CtwProjectView(CWidget):
     
     @event("twProjectView", "cursor-changed")
     def on_twProjectView_change_selection(self, treeView):
+        self.application.bus.emit('project-selection-changed', self.GetSelectedNode())
         
         iter = treeView.get_selection().get_selected()[1]
         if iter is None:
@@ -256,10 +257,12 @@ class CtwProjectView(CWidget):
             self.menuTreeElement.popup(None,None,None,self.EventButton[0],self.EventButton[1])
         
         self.emit('selected-item-tree',treeView.get_model().get(iter,3)[0])
-            
     
     def on_mnuAddElement_activate(self, widget, element):
-        self.emit('add-element', element)
+        node = self.GetSelectedNode()
+        type = self.application.GetProject().GetMetamodel().GetElementFactory().GetElement(element)
+        cmd = CCreateElementObjectCommand(type, node)
+        self.application.GetCommands().Execute(cmd)
     
     def on_mnuTreeAddDiagram_activate(self, widget, diagramId):
         self.emit('create-diagram', diagramId)
@@ -334,7 +337,7 @@ class CtwProjectView(CWidget):
         else:
             return None
         
-    def GetSelectedNode(self):
+    def GetSelectedElement(self):
         iter = self.twProjectView.get_selection().get_selected()[1]
         if iter == None:
             return None
@@ -343,6 +346,15 @@ class CtwProjectView(CWidget):
             return node
         else:
             return None
+    
+    def GetSelectedNode(self):
+        iter = self.twProjectView.get_selection().get_selected()[1]
+        if iter is None:
+            return self.application.GetProject().GetRoot()
+        node, = self.TreeStore.get(iter, 3)
+        if isinstance(node, CDiagram):
+            node = node.GetNode()
+        return node
         
     def GetRootNode(self):
         iter = self.twProjectView.get_model().get_iter_root()

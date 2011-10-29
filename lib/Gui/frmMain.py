@@ -550,7 +550,6 @@ class CfrmMain(CWindow):
         self.picDrawingArea.on_mnuResizeByMinimalElement(widget)
     
     # User defined signals
-    @event("twProjectView", "add-element")
     @event("mnuItems", "add-element")
     def on_directAdd_element(self, widget, element):
         """
@@ -562,8 +561,8 @@ class CfrmMain(CWindow):
         @param element: Id (name) of added element
         @type element:  String
         """
-        if self.twProjectView.GetSelectedNode()!=None:
-            parentElement = self.twProjectView.GetSelectedNode()
+        if self.twProjectView.GetSelectedElement()!=None:
+            parentElement = self.twProjectView.GetSelectedElement()
         elif self.twProjectView.GetSelectedDiagram()!=None:
             parentElement = self.twProjectView.GetSelectedDiagram()
         else:
@@ -684,7 +683,7 @@ class CfrmMain(CWindow):
     
     @event("picDrawingArea","drop-from-treeview")
     def on_drop_from_treeview(self, widget, position):
-        node = self.twProjectView.GetSelectedNode()
+        node = self.twProjectView.GetSelectedElement()
         if node is not None:
             diagram = self.picDrawingArea.GetDiagram()
             try:

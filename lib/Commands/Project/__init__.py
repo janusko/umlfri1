@@ -1,2 +1,3 @@
+from .CreateConnectionObject import CCreateConnectionObjectCommand
 from .CreateDiagram import CCreateDiagramCommand
 from .CreateElementObject import CCreateElementObjectCommand
