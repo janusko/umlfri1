@@ -2,9 +2,8 @@ from DomainObject import IDomainObject
 from lib.Addons.Plugin.Communication.ComSpec import *
 from lib.Addons.Plugin.Interface.Classes.base import IBase
 from lib.Addons.Plugin.Interface.decorators import *
-from lib.Commands.Connections import CCreateConnectionObjectCommand
 from lib.Commands.Diagrams import CShowElementCommand
-from lib.Commands.Elements import CCreateDiagramCommand, CCreateElementObjectCommand
+from lib.Commands.Project import CCreateConnectionObjectCommand, CCreateDiagramCommand, CCreateElementObjectCommand
 from lib.Drawing.Diagram import CDiagram
 from lib.Drawing.Element import CElement
 from lib.Elements.Object import CElementObject

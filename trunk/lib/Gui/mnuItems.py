@@ -4,6 +4,7 @@ from lib.Depend.gtk2 import gobject
 from lib.Drawing.Canvas.GtkPlus import PixmapFromPath
 
 from common import CWidget, event
+from lib.Commands.Project import CCreateElementObjectCommand
 
 class CmnuItems(CWidget):
     name = 'mnuItems'
@@ -13,7 +14,12 @@ class CmnuItems(CWidget):
         'create-diagram':   (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_STRING, )),
         'add-element':   (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_STRING,)),
     }
+
+    def __init__(self, app, wTree):
+        CWidget.__init__(self, app, wTree)
         
+        self.__selectedNode = None
+
     def Redraw(self):
         """
         This function load Project Add menu from enabled diagrams and options of elements
@@ -45,10 +51,18 @@ class CmnuItems(CWidget):
             newItem.set_image(img)
             self.mItemAddDiagram_menu.append(newItem)
             newItem.show()
+    
+    @event("application.bus", "project-selection-changed")
+    def on_project_selection_changed(self, bus, selectedNode):
+        self.__selectedNode = selectedNode
         
     def on_mnuDiagrams_activate(self, widget, diagramId):
         self.emit('create-diagram', diagramId)
         
     def on_mnuAddElement_activate(self, widget, element):
-        self.emit('add-element', element)
+        if self.__selectedNode is None:
+            return
+        type = self.application.GetProject().GetMetamodel().GetElementFactory().GetElement(element)
+        cmd = CCreateElementObjectCommand(type, self.__selectedNode)
+        self.application.GetCommands().Execute(cmd)
         
