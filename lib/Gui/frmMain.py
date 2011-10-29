@@ -593,11 +593,6 @@ class CfrmMain(CWindow):
     def on_picDrawingArea_get_selected(self, widget):
         return self.tbToolBox.GetSelected()
 
-    @event("twProjectView", "selected_diagram")
-    def on_select_diagram(self, widget, diagram):
-        self.nbTabs.AddTab(diagram)
-        self.picDrawingArea.SetDiagram(diagram)
-
     @event("twProjectView", "close-diagram")
     def on_remove_diagram(self, widget, diagram):
         self.nbTabs.CloseTab(diagram)
@@ -646,25 +641,12 @@ class CfrmMain(CWindow):
     def on_repaint_picDravingArea(self, widget):
         self.picDrawingArea.Paint()
     
-    @event("twProjectView","selected_diagram_and_select_element")
+    @event("twProjectView","selected_diagram")
     def on_select_diagram_and_element(self, widget, diagram, object):
         self.picDrawingArea.SetDiagram(diagram)
         self.nbTabs.AddTab(diagram)
-        diagram.AddToSelection(diagram.HasElementObject(object))                
-        y=self.picDrawingArea.canvas.ToPhysical(self.picDrawingArea.Diagram.GetSelected().next().position)[1]-self.picDrawingArea.GetAbsolutePos(self.picDrawingArea.GetWindowSize())[1]/2
-        x=self.picDrawingArea.canvas.ToPhysical(self.picDrawingArea.Diagram.GetSelected().next().position)[0]-self.picDrawingArea.GetAbsolutePos(self.picDrawingArea.GetWindowSize())[0]/2
-        self.picDrawingArea.SetPos((x,y))
-        self.picDrawingArea.Paint()                
-    
-    @event("twProjectView","show_frmFindInDiagram")
-    def on_show_frmFindInDiagram(self, widget, diagrams, object):
-        diagram = self.application.GetWindow('frmFindInDiagram').ShowDialog(diagrams, object)
-        
-        if diagram is not None:
-            self.picDrawingArea.SetDiagram(diagram)
-            self.nbTabs.AddTab(diagram)
-            diagram.AddToSelection(diagram.HasElementObject(object))
-            self.picDrawingArea.Paint()
+        if object is not None:
+            self.picDrawingArea.SelectObject(object)
 
     @event('application.bus', 'properties-editing-started')
     def on_nbProperties_editing_started (self, widget):
@@ -728,14 +710,6 @@ class CfrmMain(CWindow):
     @event("picDrawingArea","show-element-in-treeView")
     def on_show_element_in_treeView(self, widget, Element):
         self.twProjectView.ShowElement(Element)
-    
-    @event("twProjectView","open-specification")
-    @event("picDrawingArea","open-specification")
-    def on_show_open_specification(self, widget, Element):
-        tmp = self.application.GetWindow('frmProperties')
-        tmp.SetParent(self.application.GetWindow('frmMain'))
-        tmp.ShowPropertiesWindow(Element,self.application)
-        self.picDrawingArea.Paint()
     
     #Z-Order 
     # 'mmShift_SendBack', 'mmShift_BringForward', 'mmShift_ToBottom', 'mmShift_ToTop'    

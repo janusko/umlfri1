@@ -9,8 +9,6 @@ from lib.Exceptions.UserException import *
 from lib.Drawing.Canvas.GtkPlus import PixmapFromPath
 
 from common import  event
-import common
-
 
 class CtwProjectView(CWidget):
     name = 'twProjectView'
@@ -22,15 +20,12 @@ class CtwProjectView(CWidget):
               )
     
     __gsignals__ = {
-        'selected_diagram':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)), 
+        'selected_diagram':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT)), 
         'selected-item-tree':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
         'add-element':   (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_STRING,)),
         'create-diagram':   (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_STRING, )),
         'repaint':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, ()),
         'close-diagram': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
-        'selected_diagram_and_select_element': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT)), 
-        'show_frmFindInDiagram': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,gobject.TYPE_PYOBJECT,)),
-        'open-specification': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
     }
     
     def __init__(self, app, wTree):
@@ -222,7 +217,10 @@ class CtwProjectView(CWidget):
         iter = self.twProjectView.get_selection().get_selected()[1]
         node=self.twProjectView.get_model().get(iter,3)[0]
         self.emit('selected-item-tree',node)
-        self.emit('open-specification',node.GetObject())
+        
+        props = self.application.GetWindow('frmProperties')
+        props.SetParent(self.application.GetWindow('frmMain'))
+        props.ShowPropertiesWindow(node.GetObject(), self.application)
     
     @event("twProjectView", "row-activated")
     def on_twProjectView_set_selected(self, treeView, path, column):
@@ -233,7 +231,7 @@ class CtwProjectView(CWidget):
             if diagram is None:
                 raise ProjectError("Diagram is None.")
             else:
-                self.emit('selected_diagram',diagram)
+                self.emit('selected_diagram',diagram, None)
     
     @event("twProjectView", "cursor-changed")
     def on_twProjectView_change_selection(self, treeView):
@@ -319,9 +317,12 @@ class CtwProjectView(CWidget):
         if cnt == 0:
             pass
         elif cnt == 1:
-            self.emit('selected_diagram_and_select_element',list(node.GetAppears())[0], node.GetObject())
+            self.emit('selected_diagram',list(node.GetAppears())[0], node.GetObject())
         elif cnt > 1:
-            self.emit('show_frmFindInDiagram', list(node.GetAppears()), node.GetObject())
+            diagram = self.application.GetWindow('frmFindInDiagram').ShowDialog(list(node.GetAppears()), object)
+        
+            if diagram is not None:
+                self.emit('selected_diagram', diagram, node.GetObject())
 
     def GetSelectedDiagram(self):
         iter = self.twProjectView.get_selection().get_selected()[1]

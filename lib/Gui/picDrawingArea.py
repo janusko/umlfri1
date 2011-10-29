@@ -76,7 +76,6 @@ class CpicDrawingArea(CWidget):
             (gobject.TYPE_PYOBJECT, )),
         'drop-from-treeview': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
         'show-element-in-treeView': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
-        'open-specification': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
     }
 
     def __init__(self, app, wTree):
@@ -121,6 +120,11 @@ class CpicDrawingArea(CWidget):
                 0
             )
         self.__invalidated = False
+    
+    def __OpenSpecification(self, obj):
+        frmProps = self.application.GetWindow('frmProperties')
+        frmProps.SetParent(self.application.GetWindow('frmMain'))
+        frmProps.ShowPropertiesWindow(obj, self.application)
 
     def __SetCursor(self, cursor = None):
         self.picDrawingArea.window.set_cursor(self.cursors[cursor])
@@ -421,10 +425,10 @@ class CpicDrawingArea(CWidget):
             if len(tuple(self.Diagram.GetSelected())) == 1:
                 for Element in self.Diagram.GetSelected():
                     if isinstance(Element, (CElement,CConnection)):
-                        self.emit('open-specification',Element)
+                        self.__OpenSpecification(Element)
                         return True
             elif len(tuple(self.Diagram.GetSelected())) == 0:
-                self.emit('open-specification',self.Diagram)
+                self.__OpenSpecification(self.Diagram)
         
         if event.button == 1:
             if gtk.keysyms.space in self.pressedKeys:
@@ -941,9 +945,9 @@ class CpicDrawingArea(CWidget):
         if len(tuple(self.Diagram.GetSelected())) == 1:
             for Element in self.Diagram.GetSelected():
                 if isinstance(Element, CElement) or isinstance(Element, CConnection):
-                    self.emit('open-specification',Element)
+                    self.__OpenSpecification(Element)
         elif len(tuple(self.Diagram.GetSelected())) == 0:
-            self.emit('open-specification',self.Diagram)
+            self.__OpenSpecification(self.Diagram)
         
     # Z-Order menu:  
     def Shift_activate(self, actionName):
@@ -1096,7 +1100,14 @@ class CpicDrawingArea(CWidget):
         canvas.MoveBase(x - padding, y - padding)
         self.Diagram.PaintSelected(canvas)
         return canvas.Finish()
-                
+    
+    def SelectObject(self, object):
+        self.Diagram.AddToSelection(self.Diagram.GetElement(object))                
+        y=self.canvas.ToPhysical(self.Diagram.GetSelected().next().position)[1]-self.GetAbsolutePos(self.GetWindowSize())[1]/2
+        x=self.canvas.ToPhysical(self.Diagram.GetSelected().next().position)[0]-self.GetAbsolutePos(self.GetWindowSize())[0]/2
+        self.SetPos((x, y))
+        self.Paint()
+    
     @event('application.bus', 'connection-changed')
     @event('application.bus', 'element-changed')
     def ObjectChanged(self, bus, params):
