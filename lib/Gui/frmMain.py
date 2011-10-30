@@ -579,15 +579,6 @@ class CfrmMain(CWindow):
     def on_mItemFile_activate (self, widget):
         pass
 
-    @event("mnuItems", "create-diagram")
-    @event("twProjectView","create-diagram")
-    def on_mnuItems_create_diagram(self, widget, diagramId):
-        diagram = CDiagram(self.application.GetProject().GetMetamodel().GetDiagramFactory().GetDiagram(diagramId))
-        self.twProjectView.AddDiagram(diagram)
-        self.nbTabs.AddTab(diagram)
-        self.picDrawingArea.SetDiagram(diagram)
-        self.tbToolBox.SetButtons(diagramId)
-
     @event("picDrawingArea", "get-selected")
     def on_picDrawingArea_get_selected(self, widget):
         return self.tbToolBox.GetSelected()
