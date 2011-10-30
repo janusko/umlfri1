@@ -27,8 +27,8 @@ class CMoveDiagramCommand(CCommand):
         self.__newParent.AddDiagram(self.__diagram, pos = self.__newPosition)
     
     def _Undo(self):
-        self.__newParent.RemoveChild(self.__diagram)
-        self.__oldParent.AddChild(self.__diagram, pos = self.__oldPosition)
+        self.__newParent.RemoveDiagram(self.__diagram)
+        self.__oldParent.AddDiagram(self.__diagram, pos = self.__oldPosition)
     
     def GetGuiUpdates(self):
         return [
