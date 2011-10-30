@@ -265,7 +265,10 @@ class CtwProjectView(CWidget):
         self.application.GetCommands().Execute(cmd)
     
     def on_mnuTreeAddDiagram_activate(self, widget, diagramId):
-        self.emit('create-diagram', diagramId)
+        node = self.GetSelectedNode()
+        type = self.application.GetProject().GetMetamodel().GetDiagramFactory().GetDiagram(diagramId)
+        cmd = CCreateDiagramCommand(type, node)
+        self.application.GetCommands().Execute(cmd)
     
     def RemoveFromArea(self,node):
         for i in node.GetDiagrams():
@@ -488,20 +491,22 @@ class CtwProjectView(CWidget):
                 context.finish(False, False, etime)
     
     @event("application.bus", "diagram-created")
-    def on_diagram_created(self, bus, diagram):
-        parent = diagram.GetNode()
-        iter = self.get_iter_from_node(parent)
-        newIter = self.TreeStore.insert(iter, len(parent.GetDiagrams())-1)
-        self.TreeStore.set(newIter,
-                           0, diagram.GetName(),
-                           1, PixmapFromPath(self.application.GetProject().GetMetamodel().GetStorage(), diagram.GetType().GetIcon()),
-                           2, '=Diagram=',
-                           3, diagram)
+    def on_diagram_created(self, bus, diagrams):
+        for diagram in diagrams:
+            parent = diagram.GetNode()
+            iter = self.get_iter_from_node(parent)
+            newIter = self.TreeStore.insert(iter, len(parent.GetDiagrams())-1)
+            self.TreeStore.set(newIter,
+                               0, diagram.GetName(),
+                               1, PixmapFromPath(self.application.GetProject().GetMetamodel().GetStorage(), diagram.GetType().GetIcon()),
+                               2, '=Diagram=',
+                               3, diagram)
     
     @event("application.bus", "diagram-removed")
-    def on_diagram_removed(self, bus, diagram):
-        iter = self.get_iter_from_node(diagram)
-        self.TreeStore.remove(iter)
+    def on_diagram_removed(self, bus, diagrams):
+        for diagram in diagrams:
+            iter = self.get_iter_from_node(diagram)
+            self.TreeStore.remove(iter)
     
     @event("application.bus", "element-object-created")
     def on_element_created(self, widget, elements):

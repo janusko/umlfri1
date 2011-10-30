@@ -4,7 +4,7 @@ from lib.Depend.gtk2 import gobject
 from lib.Drawing.Canvas.GtkPlus import PixmapFromPath
 
 from common import CWidget, event
-from lib.Commands.Project import CCreateElementObjectCommand
+from lib.Commands.Project import CCreateElementObjectCommand, CCreateDiagramCommand
 
 class CmnuItems(CWidget):
     name = 'mnuItems'
@@ -57,8 +57,12 @@ class CmnuItems(CWidget):
         self.__selectedNode = selectedNode
         
     def on_mnuDiagrams_activate(self, widget, diagramId):
-        self.emit('create-diagram', diagramId)
-        
+        if self.__selectedNode is None:
+            return
+        type = self.application.GetProject().GetMetamodel().GetDiagramFactory().GetDiagram(diagramId)
+        cmd = CCreateDiagramCommand(type, self.__selectedNode)
+        self.application.GetCommands().Execute(cmd)
+    
     def on_mnuAddElement_activate(self, widget, element):
         if self.__selectedNode is None:
             return
