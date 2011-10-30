@@ -1,7 +1,7 @@
 from lib.Depend.gtk2 import gobject
 from lib.Depend.gtk2 import gtk
 
-from lib.Commands.Project import CCreateElementObjectCommand, CCreateDiagramCommand
+from lib.Commands.Project import CCreateElementObjectCommand, CCreateDiagramCommand, CMoveNodeCommand, CMoveDiagramCommand
 from common import CWidget
 from lib.Project import CProject, CProjectNode
 from lib.Elements import CElementObject
@@ -118,14 +118,15 @@ class CtwProjectView(CWidget):
             self.__DrawTree(node, novy)
             
          
-    def get_iter_from_node(self, node):
-        if isinstance(node, CDiagram):
-            parent = node.GetNode()
-        elif isinstance(node, CProjectNode):
-            parent = node.GetParent()
-        else:
-            node = node.GetNode()
-            parent = node.GetParent()
+    def get_iter_from_node(self, node, parent = None):
+        if parent is None:
+            if isinstance(node, CDiagram):
+                parent = node.GetNode()
+            elif isinstance(node, CProjectNode):
+                parent = node.GetParent()
+            else:
+                node = node.GetNode()
+                parent = node.GetParent()
         
         if parent is not None:
             parentIter = self.get_iter_from_node(parent)
@@ -371,94 +372,22 @@ class CtwProjectView(CWidget):
         model, iter = treeselection.get_selected()
         data = model.get_value(iter, 0)
         selection_data.set(selection_data.target, 8, data)
-
-        
     
-    def CheckSanity(self, model, iter_to_copy, target_iter):
-        path_of_iter_to_copy = model.get_path(iter_to_copy)
-        path_of_target_iter = model.get_path(target_iter)
-        if path_of_target_iter[0:len(path_of_iter_to_copy)] == path_of_iter_to_copy:
-            return False
-        elif len(path_of_target_iter) < 2:
-            return False
-        else:
-            return True
-    
-    
-    def IterCopy(self, treeview, model, iter_to_copy, target_iter, pos):
-        new_pos_str=(model.get_string_from_iter(target_iter)).split(':')
-        old_pos_str=(model.get_string_from_iter(iter_to_copy)).split(':')
-        new_el_pos=int(new_pos_str[len(new_pos_str)-1])
-        old_el_pos=int(old_pos_str[len(old_pos_str)-1])
-        
-        if treeview.get_model().get(iter_to_copy,2)[0] == "=Diagram=":
-            node_to_copy = treeview.get_model().get(treeview.get_model().iter_parent(iter_to_copy),3)[0]
-        else:
-            node_to_copy = treeview.get_model().get(iter_to_copy,3)[0]
-        if treeview.get_model().get(target_iter,2)[0] == "=Diagram=":
-            target_node = treeview.get_model().get(treeview.get_model().iter_parent(target_iter),3)[0]
-        else:
-            target_node = treeview.get_model().get(target_iter,3)[0]
-        
-        if (pos == gtk.TREE_VIEW_DROP_INTO_OR_BEFORE) or (pos == gtk.TREE_VIEW_DROP_INTO_OR_AFTER):
-            if treeview.get_model().get(target_iter,2)[0] == "=Diagram=":
-                raise ProjectError("BadMove")#MoveElementToDiagram
-            elif treeview.get_model().get(iter_to_copy,2)[0] == "=Diagram=":
-                node_to_copy.MoveDiagramToNewNode(target_node,treeview.get_model().get(iter_to_copy,3)[0])
-                new_iter = model.insert(target_iter,len(target_node.diagrams)-1)
-            else:
-                node_to_copy.MoveNode(target_node)
-                new_iter = model.append(target_iter)
-        
+    # Adopted from the discussion at http://www.daa.com.au/pipermail/pygtk/2003-November/006304.html
+    def IterCopy(self, model, iter_to_copy, target_iter, pos):
+        source_row = model[iter_to_copy]
+        if pos == gtk.TREE_VIEW_DROP_INTO_OR_BEFORE or pos == gtk.TREE_VIEW_DROP_INTO_OR_AFTER:
+            new_iter = model.append(parent=target_iter, row=source_row)
         elif pos == gtk.TREE_VIEW_DROP_BEFORE:
-            if treeview.get_model().get(iter_to_copy,2)[0] == "=Diagram=":
-                if treeview.get_model().get(target_iter,2)[0] != "=Diagram=":
-                    if new_el_pos>len(target_node.GetParent().diagrams):
-                        raise ProjectError("BadMove")#MoveDiagramBeforeElement
-                    else:
-                        if target_node.GetParent()==node_to_copy and old_el_pos<new_el_pos:
-                            new_el_pos=new_el_pos-1
-                        node_to_copy.MoveDiagramToNewNode(target_node.GetParent(),treeview.get_model().get(iter_to_copy,3)[0],new_el_pos)
-                else:
-                    if target_node==node_to_copy and old_el_pos<new_el_pos:
-                        new_el_pos=new_el_pos-1
-                    node_to_copy.MoveDiagramToNewNode(target_node,treeview.get_model().get(iter_to_copy,3)[0],new_el_pos)
-            elif treeview.get_model().get(target_iter,2)[0] == "=Diagram=":
-                raise ProjectError("BadMove")#MoveElementBeforeDiagram
-            else:
-                if target_node.GetParent()==node_to_copy.GetParent() and old_el_pos<new_el_pos:
-                    new_el_pos=new_el_pos-1
-                node_to_copy.MoveNode(target_node.GetParent(),new_el_pos-len(target_node.GetParent().diagrams))
-            new_iter = model.insert_before(None, target_iter)
-        
+            new_iter = model.insert_before(parent=None, sibling=target_iter, row=source_row)
         elif pos == gtk.TREE_VIEW_DROP_AFTER:
-            if treeview.get_model().get(iter_to_copy,2)[0] == "=Diagram=":
-                if treeview.get_model().get(target_iter,2)[0] != "=Diagram=":
-                    raise ProjectError("BadMove")#MoveDiagramAfterElement
-                else:
-                    if (target_node==node_to_copy and old_el_pos>new_el_pos) or (target_node!=node_to_copy):
-                        new_el_pos=new_el_pos+1
-                    node_to_copy.MoveDiagramToNewNode(target_node,treeview.get_model().get(iter_to_copy,3)[0],new_el_pos)
-            elif treeview.get_model().get(target_iter,2)[0] == "=Diagram=":
-                if new_el_pos+1<len(target_node.diagrams):
-                    raise ProjectError("BadMove")#MoveElementAfterDiagram
-                else:
-                    if (target_node==node_to_copy.GetParent() and old_el_pos>new_el_pos) or (target_node!=node_to_copy.GetParent()):
-                        new_el_pos=new_el_pos+1
-                    node_to_copy.MoveNode(target_node,new_el_pos-len(target_node.diagrams))
-            else:
-                if (target_node.GetParent()==node_to_copy.GetParent() and old_el_pos>new_el_pos) or (target_node.GetParent()!=node_to_copy.GetParent()):
-                    new_el_pos=new_el_pos+1
-                node_to_copy.MoveNode(target_node.GetParent(),new_el_pos-len(target_node.GetParent().diagrams))
-            new_iter = model.insert_after(None, target_iter)
-                    
-        for i in range(4):
-            model.set_value(new_iter, i, model.get_value(iter_to_copy, i))
-              
-        if model.iter_has_child(iter_to_copy):
-            for i in range(0, model.iter_n_children(iter_to_copy)):
-                next_iter_to_copy = model.iter_nth_child(iter_to_copy, i)
-                self.IterCopy(treeview, model, next_iter_to_copy, new_iter, gtk.TREE_VIEW_DROP_INTO_OR_BEFORE)
+            new_iter = model.insert_after(parent=None, sibling=target_iter, row=source_row)
+        else:
+            return
+
+        for i in range(model.iter_n_children(iter_to_copy)):
+            next_iter_to_copy = model.iter_nth_child(iter_to_copy, i)
+            self.IterCopy(model, next_iter_to_copy, new_iter, gtk.TREE_VIEW_DROP_INTO_OR_BEFORE)
     
     @event("mnuTreeSetAsDefault", "activate", "set")
     @event("mnuTreeUnSetDefault", "activate", "unset")
@@ -476,19 +405,59 @@ class CtwProjectView(CWidget):
     def on_drag_data_received(self, widget, context, x, y, selection, info, etime):
         if widget.get_dest_row_at_pos(x, y) is not None:
             path, pos = widget.get_dest_row_at_pos(x, y)
-            model, iter_to_copy = widget.get_selection().get_selected()
+            model, source_iter = widget.get_selection().get_selected()
             target_iter = model.get_iter(path)
-                       
-            if self.CheckSanity(model, iter_to_copy, target_iter):
-                try:
-                    self.IterCopy(widget, model, iter_to_copy, target_iter, pos)
-                except ProjectError, e:
-                    if e.GetName() == "BadMove":
-                        context.finish(False, False, etime)
-                        return
-                context.finish(True, True, etime)
-            else:
-                context.finish(False, False, etime)
+            
+            node, = self.TreeStore.get(source_iter, 3)
+            target, = self.TreeStore.get(target_iter, 3)
+            if isinstance(node, CProjectNode):
+                if isinstance(target, CDiagram):
+                    newParent = target.GetNode()
+                    newPosition = 0
+                elif pos in (gtk.TREE_VIEW_DROP_INTO_OR_BEFORE, gtk.TREE_VIEW_DROP_INTO_OR_AFTER):
+                    newParent = target
+                    newPosition = newParent.GetChildrenCount()
+                else:
+                    newParent = target.GetParent()
+                    if newParent is None:
+                        newPosition = 0
+                    else:
+                        newPosition = newParent.GetChildIndex(target)
+                    
+                    if pos == gtk.TREE_VIEW_DROP_AFTER:
+                        newPosition += 1
+                
+                if node.GetParent() is newParent:
+                    oldPosition = newParent.GetChildIndex(node)
+                    if oldPosition < newPosition:
+                        # position fix if both project nodes have same parents and old position is lower
+                        newPosition -= 1
+                
+                cmd = CMoveNodeCommand(node, newParent, newPosition)
+                self.application.GetCommands().Execute(cmd)
+            elif isinstance(node, CDiagram):
+                if isinstance(target, CProjectNode):
+                    if pos in (gtk.TREE_VIEW_DROP_INTO_OR_BEFORE, gtk.TREE_VIEW_DROP_INTO_OR_AFTER):
+                        newParent = target
+                        newPosition = newParent.GetChildrenCount()
+                    else:
+                        newParent = target.GetParent()
+                        newPosition = newParent.GetDiagramCount()
+                else:
+                    newParent = target.GetNode()
+                    newPosition = newParent.GetDiagramIndex(target)
+                    
+                    if pos == gtk.TREE_VIEW_DROP_AFTER:
+                        newPosition += 1
+                
+                if node.GetNode() is newParent:
+                    oldPosition = newParent.GetDiagramIndex(node)
+                    if oldPosition < newPosition:
+                        # position fix if both diagrams have same parents and old position is lower
+                        newPosition -= 1
+                
+                cmd = CMoveDiagramCommand(node, newParent, newPosition)
+                self.application.GetCommands().Execute(cmd)
     
     @event("application.bus", "diagram-created")
     def on_diagram_created(self, bus, diagrams):
@@ -536,3 +505,47 @@ class CtwProjectView(CWidget):
                     obj = obj.GetObject()
                 iter = self.get_iter_from_node(obj)
                 self.TreeStore.set(iter, 0, obj.GetName())
+    
+    @event('application.bus', 'node-moved-in-tree')
+    def ObjectMoved(self, bus, params):
+        for node, oldParent in params:
+            newParent = node.GetParent()
+            newPosition = newParent.GetChildIndex(node)
+            
+            iterNode = self.get_iter_from_node(node, oldParent)
+            iterParent = self.get_iter_from_node(newParent)
+            
+            if not self.TreeStore.iter_has_child(iterParent):
+                self.IterCopy(self.TreeStore, iterNode, iterParent, gtk.TREE_VIEW_DROP_INTO_OR_AFTER)
+            elif newPosition > 0:
+                iterAfter = self.get_iter_from_node(newParent.GetChild(newPosition - 1))
+                self.IterCopy(self.TreeStore, iterNode, iterAfter, gtk.TREE_VIEW_DROP_AFTER)
+            else:
+                iterBefore = self.TreeStore.iter_children(iterParent)
+                while isinstance(self.TreeStore.get(iterBefore, 3)[0], CDiagram):
+                    iterBefore = self.TreeStore.iter_next(iterBefore)
+                self.IterCopy(self.TreeStore, iterNode, iterBefore, gtk.TREE_VIEW_DROP_BEFORE)
+            
+            self.TreeStore.remove(iterNode)
+    
+    @event('application.bus', 'diagram-moved-in-tree')
+    def DiagramMoved(self, bus, params):
+        for diagram, oldParent in params:
+            newParent = diagram.GetNode()
+            newPosition = newParent.GetDiagramIndex(diagram)
+            
+            iterDiagram = self.get_iter_from_node(diagram, oldParent)
+            iterParent = self.get_iter_from_node(newParent)
+            
+            diagramRow = self.TreeStore[iterDiagram]
+            
+            if not self.TreeStore.iter_has_child(iterParent):
+                self.TreeStore.append(parent=iterParent, row = diagramRow)
+            elif newPosition > 0:
+                iterAfter = self.get_iter_from_node(newParent.GetDiagram(newPosition - 1))
+                self.TreeStore.insert_after(parent = None, sibling = iterAfter, row = diagramRow)
+            else:
+                iterBefore = self.TreeStore.iter_children(iterParent)
+                self.TreeStore.insert_before(parent = None, sibling = iterBefore, row = diagramRow)
+            
+            self.TreeStore.remove(iterDiagram)

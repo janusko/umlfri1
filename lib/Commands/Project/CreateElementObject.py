@@ -33,7 +33,7 @@ class CCreateElementObjectCommand(CCommand):
         ]
     
     def __str__(self):
-        return _('Element %s created in the project') % self.__elementType.GetId()
+        return _("Element %s created in the project") % self.__elementType.GetId()
     
     def GetElementObject(self):
         return self.__elementObject

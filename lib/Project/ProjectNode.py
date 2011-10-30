@@ -34,7 +34,7 @@ class CProjectNode(CBaseObject):
 
     def AddChild(self, child, pos = None):
         if child not in self.childs:
-            if pos==None or pos<0 or pos>len(self.childs):
+            if pos is None or pos<0 or pos>=len(self.childs):
                 self.childs.append(child)
             else:
                 self.childs.insert(pos,child)
@@ -44,9 +44,12 @@ class CProjectNode(CBaseObject):
             raise ProjectError("ExistsChild")
 
 
-    def AddDiagram(self, diagram):
+    def AddDiagram(self, diagram, pos = None):
         if diagram not in self.diagrams:
-            self.diagrams.append(diagram)
+            if pos is None or pos<0 or pos>=len(self.diagrams):
+                self.diagrams.append(diagram)
+            else:
+                self.diagrams.insert(pos, diagram)
             diagram.Assign(self)
     
     def MoveDiagramToNewNode(self, newNode, diagram, pos = None):
@@ -63,26 +66,24 @@ class CProjectNode(CBaseObject):
             parentNode.AddChild(self)
         else:
             parentNode.AddChild(self,pos)
-    
+                
     def FindDiagram(self, name):
         for i in self.diagrams:
             if i.GetName() == name:
                 return i
         return None
 
-
-    def GetChild(self, name, type):
-        for i in self.childs:
-            if i.GetName() == name and i.GetType() == type:
-                return i
-        else:
-            return None
-
-    def GetIndexChild(self, index):
+    def GetChild(self, index):
         if index <= len(self.childs) - 1:
             return self.childs[index]
         else:
             raise ProjectError("NodeNotExists")
+
+    def GetDiagram(self, index):
+        if index <= len(self.diagrams) - 1:
+            return self.diagrams[index]
+        else:
+            raise ProjectError("DiagramNotExists")
 
     def GetChilds(self):
         for i in self.childs:
@@ -112,5 +113,21 @@ class CProjectNode(CBaseObject):
             self.diagrams.remove(diagram)
         else:
             raise ProjectError("AreaNotExists")
-
-    Parent = property(GetParent,SetParent)
+    
+    def GetChildIndex(self, child):
+        try:
+            return self.childs.index(child)
+        except ValueError:
+            return None
+    
+    def GetChildrenCount(self):
+        return len(self.childs)
+    
+    def GetDiagramIndex(self, diagram):
+        try:
+            return self.diagrams.index(diagram)
+        except ValueError:
+            return None
+    
+    def GetDiagramCount(self):
+        return len(self.diagrams)
