@@ -44,6 +44,10 @@ class CBus(gobject.GObject):
             [gobject.TYPE_PYOBJECT]),
         'diagram-changed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
             [gobject.TYPE_PYOBJECT]),
+        'node-moved-in-tree': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
+            [gobject.TYPE_PYOBJECT]),
+        'diagram-moved-in-tree': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
+            [gobject.TYPE_PYOBJECT]),
         'undo-redo-action': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
             [gobject.TYPE_STRING]),
     }
@@ -55,6 +59,8 @@ class CBus(gobject.GObject):
         'connectionChanged': 'connection-changed',
         'elementChanged': 'element-changed',
         'diagramChanged': 'diagram-changed',
+        'moveNodeInProject': 'node-moved-in-tree',
+        'moveDiagramInProject': 'diagram-moved-in-tree',
     }
     
     __undoMap = {
@@ -64,14 +70,32 @@ class CBus(gobject.GObject):
         'connectionChanged': 'connection-changed',
         'elementChanged': 'element-changed',
         'diagramChanged': 'diagram-changed',
+        'moveNodeInProject': 'node-moved-in-tree',
+        'moveDiagramInProject': 'diagram-moved-in-tree',
+    }
+    
+    __doParamMangle = {
+        'moveNodeInProject': lambda param: (param[0], param[1]),
+        'moveDiagramInProject': lambda param: (param[0], param[1]),
+    }
+    
+    __undoParamMangle = {
+        'moveNodeInProject': lambda param: (param[0], param[2]),
+        'moveDiagramInProject': lambda param: (param[0], param[2]),
     }
     
     def DoUpdates(self, updates):
         for upd, params in updates:
+            if upd in self.__doParamMangle:
+                mangleFnc = self.__doParamMangle[upd]
+                params = [mangleFnc(param) for param in params]
             self.emit(self.__doMap[upd], params)
         self.emit('undo-redo-action', 'do')
     
     def UndoUpdates(self, updates):
         for upd, params in updates:
+            if upd in self.__undoParamMangle:
+                mangleFnc = self.__undoParamMangle[upd]
+                params = [mangleFnc(param) for param in params]
             self.emit(self.__undoMap[upd], params)
         self.emit('undo-redo-action', 'undo')
