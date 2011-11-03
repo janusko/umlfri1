@@ -1,4 +1,5 @@
 from ..Base.Command import CCommand
+from lib.Connections.Object import CConnectionObject
 from lib.Drawing import Element
 from lib.Exceptions import UMLException
 from lib.Project import CProjectNode
@@ -13,19 +14,44 @@ class CDuplicateElementsCommand(CCommand):
 
     def _Do(self):
         self.__diagram.DeselectAll()
+        newElementObjects = []
         try:
             for element in self.__originalElements:
                 newElementobject = element.GetObject().Clone()
-                newElement = Element.CElement(self.__diagram, newElementobject)
-                self.__diagram.AddToSelection(newElement)
-                newElement.CopyFromElement(element)
-                # shift element +(5, 5) units
-                newElement.SetPosition(map(sum, zip(newElement.GetPosition(), (5.0, 5.0))))
-                self.__duplicatedElements.append(newElement)
+                newElementObjects.append(newElementobject)
         except UMLException, e:
             for el in self.__duplicatedElements:
                 self.__diagram.DeleteElement(el)
             raise
+
+        #recreate connections
+        mapping = dict(zip((x.GetObject() for x in self.__originalElements), newElementObjects))
+        parsed = set()
+        for element in (x.GetObject() for x in self.__originalElements):
+            for con in element.GetConnections():
+                src, dest = con.GetSource(), con.GetDestination()
+                if src in mapping:
+                    src = mapping[src]
+                if dest in mapping:
+                    dest = mapping[dest]
+                if src in parsed or dest in parsed:
+                    continue
+                newcon = CConnectionObject(con.GetType(), src, dest)
+                newcon.GetDomainObject().CopyFrom(con.GetDomainObject())
+                src.AddConnection(newcon)
+                dest.AddConnection(newcon)
+            parsed.add(mapping[element])
+
+        backward_mapping = dict(zip(newElementObjects, self.__originalElements))
+        for elobj in mapping.values():
+            newElement = Element.CElement(self.__diagram, elobj)
+            self.__diagram.AddToSelection(newElement)
+            element = backward_mapping[elobj]
+            newElement.CopyFromElement(element)
+            #shift element +(5, 5) units
+            newElement.SetPosition(map(sum, zip(newElement.GetPosition(), (5.0, 5.0))))
+            self.__duplicatedElements.append(newElement)
+
         self.__parentNode = self.__diagram.GetNode()
         for element in self.__duplicatedElements:
             elementNode = CProjectNode(self.__parentNode, element.GetObject())
