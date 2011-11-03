@@ -440,7 +440,6 @@ class CfrmMain(CWindow):
     def ActionSave(self, widget):
         if self.application.GetProject().GetFileName() is None:
             self.ActionSaveAs(widget)
-            self.tabStartPage.Fill()
         else:
             self.application.GetProject().SaveProject()
 
@@ -451,6 +450,7 @@ class CfrmMain(CWindow):
             if filename is not None:
                 self.application.GetProject().SaveProject(filename, isZippedFile)
                 self.ReloadTitle()
+                self.tabStartPage.Fill()
         except UserException as e:
             CErrorDialog(self.form, str(e)).run()
 
