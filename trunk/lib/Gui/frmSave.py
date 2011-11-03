@@ -33,10 +33,10 @@ class CfrmSave(common.CWindow):
             if win.ShowModal():
                 filename = win.GetAbsolutePath()
                 filter = win.GetSelectedFilter()
-                
+
                 if '.' not in os.path.basename(filename):
                     filename += filter[1][1:]
-                
+                    self.application.GetRecentFiles ().AddFile (filename)
                 return filename, filter[2]
             else:
                 return None, None

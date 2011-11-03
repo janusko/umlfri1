@@ -34,11 +34,15 @@ class CfrmOpenProject (common.CWindow):
     def ShowDialog (self, parent):
         if COpenSaveDialog:
             win = COpenSaveDialog(parent.form, 'open', self.form.get_title(), self.filters)
+
             if win.ShowModal():
-                return win.GetAbsolutePath(), False
+                filename = win.GetAbsolutePath()
+                if os.path.isfile(filename):
+                    self.application.GetRecentFiles ().AddFile (filename)
+                return filename, False
             else:
                 return None, None
-        
+
         self.form.set_transient_for (parent.form)
         self.chkOpenAsCopy.set_active (False)
         try:
