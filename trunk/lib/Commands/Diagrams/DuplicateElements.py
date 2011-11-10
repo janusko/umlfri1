@@ -60,12 +60,16 @@ class CDuplicateElementsCommand(CCommand):
 
     def _Redo(self):
         self.__diagram.DeselectAll()
+        new_duplicates = []
         for element in self.__duplicatedElements:
-            self.__diagram.AddElement(element)
-            self.__diagram.AddToSelection(element)
-            elementNode = CProjectNode(self.__parentNode, element.GetObject())
+            new_element = Element.CElement(self.__diagram, element.GetObject())
+            new_element.CopyFromElement(element)
+            self.__diagram.AddToSelection(new_element)
+            elementNode = CProjectNode(self.__parentNode, new_element.GetObject())
             self.__parentNode.AddChild(elementNode)
             self.__elementNodes.append(elementNode)
+            new_duplicates.append(new_element)
+        self.__duplicatedElements = new_duplicates
 
     def _Undo(self):
         self.__diagram.DeselectAll()
