@@ -7,6 +7,7 @@ from lib.Drawing import CDiagram
 from lib.Elements.Object import CElementObject
 from lib.Connections.Object import CConnectionObject
 from lib.Exceptions import *
+from lib.datatypes import CColor, CFont
 
 ID_ID, ID_NAME, ID_VALUE, ID_TEXT_VISIBLE, ID_COMBO_VISIBLE, ID_EDITABLE, ID_BUTTON_VISIBLE, ID_MODEL, ID_BUTTON_TEXT, ID_ACTION, ID_COLOR,  ID_FONT = range(12)
 
@@ -220,14 +221,14 @@ class ClwProperties(CWidget):
         elementObject = self.__GetElementObject()
         
         if elementObject.GetValue(key) is not None:
-            colorsel.set_current_color(gtk.gdk.color_parse(elementObject.GetValue(key)))
+            colorsel.set_current_color(gtk.gdk.color_parse(str(elementObject.GetValue(key))))
         response = cdia.run()
         
         if response == gtk.RESPONSE_OK:
             colorsel = cdia.colorsel
             color = colorsel.get_current_color()
             model = self.lwProperties.get_model()
-            cmd = CSetPropertyValuesCommand(elementObject, {key: color.to_string()})
+            cmd = CSetPropertyValuesCommand(elementObject, {key: CColor(color.to_string())})
             self.application.GetCommands().Execute(cmd)
         cdia.destroy()
         

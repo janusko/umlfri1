@@ -801,6 +801,16 @@
 				<xs:element name="Attribute" minOccurs="1" maxOccurs="unbounded">
 					<xs:complexType>
 						<xs:choice>
+                            <xs:element name="Color" minOccurs="1" maxOccurs="1">
+                                <xs:complexType>
+                                    <xs:attribute name="default" type="xs:string" use="optional"/>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="Font" minOccurs="1" maxOccurs="1">
+                                <xs:complexType>
+                                    <xs:attribute name="default" type="xs:string" use="optional"/>
+                                </xs:complexType>
+                            </xs:element>
 							<xs:element name="Int" minOccurs="1" maxOccurs="1">
 								<xs:complexType>
 									<xs:sequence>

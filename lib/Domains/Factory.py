@@ -10,6 +10,7 @@ from Joiner import CDomainJoiner
 from lib.Exceptions import DomainFactoryError
 from lib.Depend.libxml import etree
 from lib.Base import CBaseObject
+from lib.datatypes import CColor, CFont
 
 xmlschema_doc = etree.parse(os.path.join(SCHEMA_PATH, "metamodel.xsd"))
 xmlschema = etree.XMLSchema(xmlschema_doc)
@@ -220,6 +221,10 @@ class CDomainFactory(CBaseObject):
                     if option.tag == METAMODEL_NAMESPACE + 'Value':
                         obj.AppendEnumValue(id, option.text)
                 
+            elif type == 'Color':
+                obj.AppendAttribute(id,attribute.get('name'),'color',trycast(CColor, child.get('default')),attribute.get('hidden'))
+            elif type == 'Font':
+                obj.AppendAttribute(id,attribute.get('name'),'font',trycast(CFont, child.get('default')),attribute.get('hidden'))
             elif type == 'Str':
                 obj.AppendAttribute(id,attribute.get('name'),'str',child.get('default'),attribute.get('hidden'))
                 enum=child.find(METAMODEL_NAMESPACE + 'Enum')
