@@ -3,6 +3,7 @@ from Object import CDomainObject
 from lib.Exceptions import DomainTypeError
 import weakref
 from lib.Base import CBaseObject
+from lib.datatypes import CColor, CFont
 
 class CDomainType(CBaseObject):
     '''
@@ -325,6 +326,10 @@ class CDomainType(CBaseObject):
                 return self.attributes[id]['default'] or ''
             elif type == 'list':
                 return []
+            elif type == 'color':
+                return self.attributes[id]['default'] or CColor("#000000")
+            elif type == 'font':
+                return self.attributes[id]['default'] or CFont("Arial 10")
             elif type == 'enum':
                 return self.attributes[id]['default'] or self.attributes[id]['enum'][0]
         else:
