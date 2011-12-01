@@ -19,7 +19,7 @@ import os.path
 
 class CtabStartPage(CWidget):
     name = 'tabStartPage'
-    widgets = ('ebStartPage', 'fixStartPage', 'lblCreateProject', 'lblOpenProject', 'lblAbout', 'ebAbout', 'ebCreate', 'ebOpen',
+    widgets = ('ebStartPage','fixStartPage', 'lblCreateProject', 'lblOpenProject', 'lblAbout', 'ebAbout', 'ebCreate', 'ebOpen',
                 'ebRecent1', 'ebRecent2', 'ebRecent3', 'ebRecent4', 'ebRecent5', 'lblRecent1', 'lblRecent2', 'lblRecent3', 'lblRecent4', 'lblRecent5',)
     
     __gsignals__ = {
