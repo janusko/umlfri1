@@ -40,7 +40,7 @@ class OPENFILENAME(ctypes.Structure):
 
 class COpenSaveDialog(object):
     def __init__(self, parent, type, title, filter):
-        self.__title = title
+        self.__title = title.decode('utf8')
         self.__type = type
         self.__filter = filter
         self.__parentDialog = parent
