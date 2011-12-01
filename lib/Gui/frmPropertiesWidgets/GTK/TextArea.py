@@ -6,6 +6,7 @@ class CTextArea(CAbstractTextArea):
     
     def __init__(self):
         self.textarea=gtk.TextView()
+        self.textarea.set_size_request(-1, 50)
         self.textarea.show()
         sw=gtk.ScrolledWindow()
         sw.set_policy(gtk.POLICY_AUTOMATIC,gtk.POLICY_AUTOMATIC)

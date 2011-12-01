@@ -22,6 +22,7 @@ class CTable(CAbstractTable):
             types.append(gobject.TYPE_STRING)
         liststore=gtk.ListStore(*types)
         self.table=gtk.TreeView(liststore)
+        self.table.set_size_request(-1, 100)
         self.table.show()
         self.table.set_grid_lines(gtk.TREE_VIEW_GRID_LINES_HORIZONTAL)
         for i in range(len(model)):
