@@ -51,18 +51,18 @@ class CDialog(CAbstractDialog):
     
     def AppendTab(self,title):
         tab=gtk.Frame()
-        tab.show()
         self.dialog_tab[title]=tab
         self.dialog_tab_items_count[title]=0
         self.dialog_tabs.prepend_page(tab,gtk.Label(title))
         vbox=gtk.VBox(False)
-        vbox.show()
         tab.add(vbox)
         table=gtk.Table(0,2)
         table.set_col_spacings(5)
         table.set_row_spacings(1)
-        table.show()
         vbox.pack_start(table,False,False,0)
+        vpaned = gtk.VPaned()
+        vbox.pack_start(vpaned)
+        tab.show_all()
         
     
     def SetCurrentTab(self,idx):
@@ -83,10 +83,22 @@ class CDialog(CAbstractDialog):
             table.attach(algn,0,1,rows,rows+1,)
             table.attach((item.GetWidget()),1,2,rows,rows+1)
         elif isinstance(item,CTextArea):
+            vpaned = self.dialog_tab[tabname].get_child().get_children()[1]
+            if len(vpaned.get_children()) < 1:
+                vpaned.add1(item.GetWidget())
+            elif  len(vpaned.get_children()) < 2:
+                vpaned.add2(item.GetWidget())
+            else:
+                self.dialog_tab[tabname].get_child().pack_start(item.GetWidget(),True,True)
             item.GetWidget().set_label(itemname)
-            self.dialog_tab[tabname].get_child().pack_start(item.GetWidget(),True,True)
         elif isinstance(item,CTable):
-            self.dialog_tab[tabname].get_child().pack_start(item.GetWidget(),True,True)
+            vpaned = self.dialog_tab[tabname].get_child().get_children()[1]
+            if len(vpaned.get_children()) < 1:
+                vpaned.add1(item.GetWidget())
+            elif  len(vpaned.get_children()) < 2:
+                vpaned.add2(item.GetWidget())
+            else:
+                self.dialog_tab[tabname].get_child().pack_start(item.GetWidget(),True,True)
     
     def SetHandler(self,event,func,data):
         if event=='close':
