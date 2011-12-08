@@ -210,7 +210,7 @@ class CApplication(gobject.GObject):
         for e in ('LANGUAGE', 'LC_ALL', 'LC_MESSAGES', 'LANG'):
             if e in os.environ:
                 return os.environ[e]
-        tmp = locale.getdefaultlocale()
+        tmp = locale.getlocale()
         if tmp[0] is None:
             return 'POSIX'
         elif tmp[1] is None:
