@@ -80,7 +80,6 @@ class CpicDrawingArea(CWidget):
 
     def __init__(self, app, wTree):
         self.disablePaint = False
-        self.adjustElement = True   #NEW NEW NEW
         self.paintlock = thread.allocate()
         self.tobePainted = False
         self.paintChanged = False
@@ -167,20 +166,6 @@ class CpicDrawingArea(CWidget):
             self.disablePaint = False
             self.Paint()
 
-    def ShiftScrollbars(self, pos):
-        pos1, pos2 = self.GetPos()  #pos1 je pozicia spodneho scrollbaru #Dorobit, aby sa posun prisposoboval velkosti mriezky
-        print "p1: ",pos1," p2: ",pos2
-        move = 30   #Problem: pri posuvani Scrollbarov sa o rovnaku vzdialenost posuva aj element -asi je problem v Paint()
-        if(pos == "left"):
-            self.SetPos((pos1-move, pos2))
-        if(pos == "right"):
-            self.SetPos((pos1+move, pos2))
-        if(pos == "up"):
-            self.SetPos((pos1, pos2-move))
-        if(pos == "down"):
-            self.SetPos((pos1, pos2+move))
-        self.adjustElement = False
-
     def CenterZoom(self, scale):
         positionH = 0.0
         positionW = 0.0
@@ -261,7 +246,7 @@ class CpicDrawingArea(CWidget):
         
     def SetPos(self, pos = (0, 0)):        
         self.picHBar.set_value(pos[0])        
-        self.picVBar.set_value(pos[1])
+        self.picVBar.set_value(pos[1])       
         
     def GetAbsolutePos(self, (posx, posy)):
         #((bposx, bposy), (bsizx, bsizy)) = self.buffer_size
@@ -286,6 +271,7 @@ class CpicDrawingArea(CWidget):
         
 
     def Paint(self, changed = True):
+
         if self.disablePaint:
             return
         try:
@@ -304,12 +290,14 @@ class CpicDrawingArea(CWidget):
         sizx, sizy = self.GetWindowSize()    
         ((bposx, bposy), (bsizx, bsizy)) = self.buffer_size
         (bposx, bposy) = self.canvas.ToPhysical((bposx, bposy))
+
+
         if posx < bposx or bposx + bsizx < posx + sizx or \
            posy < bposy or bposy + bsizy < posy + sizy:
-
+       
             bposx = posx + (sizx - bsizx)//2
             bposy = posy + (sizy - bsizy)//2
-
+                      
             (bposx, bposy) = self.canvas.ToLogical((bposx, bposy))
             self.buffer_size = ((bposx, bposy), (bsizx, bsizy))
             changed = True
@@ -317,15 +305,12 @@ class CpicDrawingArea(CWidget):
             self.Diagram.SetViewPort(self.buffer_size)
             self.Diagram.Paint(self.canvas)
             
-        #self.AdjustScrollBars()
+        self.AdjustScrollBars()
         wgt = self.picDrawingArea.window
         gc = wgt.new_gc()
         #def draw_drawable(gc, src, xsrc, ysrc, xdest, ydest, width, height)
-
-        if(self.adjustElement):
-            wgt.draw_drawable(gc, self.buffer, posx - bposx, posy - bposy, 0, 0, sizx, sizy)
-        else:
-            wgt.draw_drawable(gc, self.buffer, posx - bposx, posy - bposy, 0, 0, sizx, sizy) #Vyskusat pomenit jednotlive hodnoty
+        
+        wgt.draw_drawable(gc, self.buffer, posx - bposx, posy - bposy, 0, 0, sizx, sizy)
         
         if self.dnd == 'resize':
             self.__DrawResRect((None, None), True, False)  
@@ -339,7 +324,6 @@ class CpicDrawingArea(CWidget):
             self.__DrawNewConnection((None, None), False)
 
     def AdjustScrollBars(self):
-        print "Som v AdjustScrollBars"
         if self.canvas is None:
             dasx, dasy = self.GetDiagramSize()
         else : 
@@ -420,7 +404,6 @@ class CpicDrawingArea(CWidget):
     @event('application.bus', 'position-change-from-plugin', True)
     @event('application.bus', 'many-position-change', False)
     def ElementPositionChange(self, widget, elements, plugin):
-        print "Som v ElementPositionChange"
         if plugin:
             self.ToPaint()
         else:
@@ -678,16 +661,12 @@ class CpicDrawingArea(CWidget):
                         self.keydragPosition = list(selected[0].GetCenter(self.canvas))
                     if gtk.keysyms.Right in self.pressedKeys:
                         self.keydragPosition[0] += 10
-                        self.ShiftScrollbars("right")
                     if gtk.keysyms.Left in self.pressedKeys:
                         self.keydragPosition[0] -= 10
-                        self.ShiftScrollbars("left")
                     if gtk.keysyms.Up in self.pressedKeys:
                         self.keydragPosition[1] -= 10
-                        self.ShiftScrollbars("up")
                     if gtk.keysyms.Down in self.pressedKeys:
                         self.keydragPosition[1] += 10
-                        self.ShiftScrollbars("down")
                     self.__DrawDragRect(self.keydragPosition)
         return True
     
@@ -751,7 +730,6 @@ class CpicDrawingArea(CWidget):
 
     @event("picEventBox", "scroll-event")
     def on_picEventBox_scroll_event(self, widget, event):
-        print "Som v on_picEventBox_scroll_event"
         if (event.state & gtk.gdk.CONTROL_MASK):
             if event.direction == gtk.gdk.SCROLL_UP:
                 self.IncScale(SCALE_INCREASE)
