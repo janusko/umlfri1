@@ -79,6 +79,8 @@ class CpicDrawingArea(CWidget):
     }
 
     def __init__(self, app, wTree):
+        self.setResize = True
+        self.adjScrollbars = ""
         self.disablePaint = False
         self.paintlock = thread.allocate()
         self.tobePainted = False
@@ -165,6 +167,23 @@ class CpicDrawingArea(CWidget):
             self.AdjustScrollBars()
             self.disablePaint = False
             self.Paint()
+
+    def ShiftScrollbars(self, direction):
+        posx,posy = self.GetPos()
+        move = 5
+        if(direction == "right"):
+            self.SetPos((posx + move, posy))
+        if(direction == "left"):
+            self.SetPos((posx - move, posy))
+        if(direction == "up"):
+            self.SetPos((posx, posy+move))
+        if(direction == "down"):
+            self.SetPos((posx, posy-move))
+        self.setResize = False
+        #self.adjScrollbars = direction
+
+    def GetDirection(self, direction):
+        self.adjScrollbars = direction
 
     def CenterZoom(self, scale):
         positionH = 0.0
@@ -311,7 +330,11 @@ class CpicDrawingArea(CWidget):
         #def draw_drawable(gc, src, xsrc, ysrc, xdest, ydest, width, height)
         
         wgt.draw_drawable(gc, self.buffer, posx - bposx, posy - bposy, 0, 0, sizx, sizy)
-        
+
+        if(self.adjScrollbars != ""): #TU TO BOLO NEJAKO INAK, ALE NEVIEM UZ AKO :( -celkovy posun cez ShiftScrollbars musi byt az tu
+            self.ShiftScrollbars(self.adjScrollbars)
+            self.adjScrollbars = ""
+
         if self.dnd == 'resize':
             self.__DrawResRect((None, None), True, False)  
         elif self.dnd == 'rect':
@@ -322,6 +345,8 @@ class CpicDrawingArea(CWidget):
             self.__DrawDragSel((None, None), True, False)
         if self.__NewConnection is not None:
             self.__DrawNewConnection((None, None), False)
+
+
 
     def AdjustScrollBars(self):
         if self.canvas is None:
@@ -661,12 +686,16 @@ class CpicDrawingArea(CWidget):
                         self.keydragPosition = list(selected[0].GetCenter(self.canvas))
                     if gtk.keysyms.Right in self.pressedKeys:
                         self.keydragPosition[0] += 10
+                        self.GetDirection("right")
                     if gtk.keysyms.Left in self.pressedKeys:
                         self.keydragPosition[0] -= 10
+                        self.GetDirection("left")
                     if gtk.keysyms.Up in self.pressedKeys:
                         self.keydragPosition[1] -= 10
+                        self.GetDirection("down")
                     if gtk.keysyms.Down in self.pressedKeys:
                         self.keydragPosition[1] += 10
+                        self.GetDirection("up")
                     self.__DrawDragRect(self.keydragPosition)
         return True
     
@@ -777,6 +806,9 @@ class CpicDrawingArea(CWidget):
         self.DragStartPos = self.GetAbsolutePos((event.x, event.y))
         if len(selElements) == 1:
             self.selSq = self.selElem.GetSquareAtPosition(self.DragStartPos)
+            if(self.setResize == False):
+                self.selSq = None
+                self.setResize = True
         else:
             self.selSq = None
         
