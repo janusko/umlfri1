@@ -29,7 +29,6 @@ class CDiagram(CBaseObject):
             self.SetName(name)
         self.revision = 0
         self.grid = CGrid()
-        self.move = (0,0)
         
     def GetObject(self):
         return self
@@ -267,10 +266,7 @@ class CDiagram(CBaseObject):
         if canvas is not None:
             for conn in self.connections:
                 conn.ValidatePoints(canvas)
-
-    def SendMove(self):
-        return self.p
-
+    
     def DeleteObject(self, object):
         self.size = None
         for o in self.elements:
