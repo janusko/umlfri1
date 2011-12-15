@@ -187,7 +187,8 @@ class CDialog(CAbstractDialog):
     def GrabTable(self):
         ntb=self.dialog.vbox.get_children()[0]
         items=ntb.get_children()[ntb.get_current_page()].get_child().get_children()
-        treeview=items[len(items)-1].get_child().get_children()[1].get_child()
+        treeview=items[len(items)-1].get_child2().get_child().get_children()[1].get_child()
+
         treeview.grab_focus()
     
     def __Focus_handler(self,ntb,num):
