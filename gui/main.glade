@@ -806,6 +806,7 @@
                               <widget class="GtkViewport" id="viewport1">
                                 <property name="visible">True</property>
                                 <property name="resize_mode">queue</property>
+                                <property name="shadow_type">none</property>
                                 <child>
                                   <widget class="GtkEventBox" id="ebStartPage">
                                     <property name="visible">True</property>
