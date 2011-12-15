@@ -81,6 +81,7 @@ class CpicDrawingArea(CWidget):
     def __init__(self, app, wTree):
         self.setResize = True
         self.adjScrollbars = ""
+        self.getPlusMove = 0
         self.disablePaint = False
         self.paintlock = thread.allocate()
         self.tobePainted = False
@@ -170,7 +171,10 @@ class CpicDrawingArea(CWidget):
 
     def ShiftScrollbars(self, direction):
         posx,posy = self.GetPos()
-        move = 5
+        if(self.getPlusMove > 0):
+            move = int(self.getPlusMove / 2)
+        else:
+            move = 5
         if(direction == "right"):
             self.SetPos((posx + move, posy))
         if(direction == "left"):
@@ -180,10 +184,28 @@ class CpicDrawingArea(CWidget):
         if(direction == "down"):
             self.SetPos((posx, posy-move))
         self.setResize = False
-        #self.adjScrollbars = direction
+        self.getPlusMove = 0
 
     def GetDirection(self, direction):
         self.adjScrollbars = direction
+
+    def GetPlusMove(self, plusmove):
+        self.getPlusMove = plusmove
+
+    def PlusMove(self, horVer):
+        active = config['/Grid/Active']
+        hor_spacing = config['/Grid/HorSpacing']
+        ver_spacing = config['/Grid/VerSpacing']
+        print "active: ",active
+        print "hor_spacing",hor_spacing
+        print horVer
+        plusmove = 0
+        if(active == "true"):
+            if((horVer == "hor") & (hor_spacing >= 10)):
+                plusmove = (hor_spacing - 10)
+            if((horVer == "ver") & (ver_spacing >= 10)):
+                plusmove = (ver_spacing - 10)
+        return plusmove
 
     def CenterZoom(self, scale):
         positionH = 0.0
@@ -331,7 +353,7 @@ class CpicDrawingArea(CWidget):
         
         wgt.draw_drawable(gc, self.buffer, posx - bposx, posy - bposy, 0, 0, sizx, sizy)
 
-        if(self.adjScrollbars != ""): #TU TO BOLO NEJAKO INAK, ALE NEVIEM UZ AKO :( -celkovy posun cez ShiftScrollbars musi byt az tu
+        if(self.adjScrollbars != ""):
             self.ShiftScrollbars(self.adjScrollbars)
             self.adjScrollbars = ""
 
@@ -676,7 +698,7 @@ class CpicDrawingArea(CWidget):
         elif event.keyval in (gtk.keysyms.Right, gtk.keysyms.Left, gtk.keysyms.Up, gtk.keysyms.Down):
             selected = list(self.Diagram.GetSelectedElements())
             if selected:
-                if self.dnd is None: #Zacinam posuvat
+                if self.dnd is None:
                     self.keydragPosition = list(selected[0].GetCenter(self.canvas))
                     e = Record()
                     e.x, e.y = self.keydragPosition
@@ -685,17 +707,21 @@ class CpicDrawingArea(CWidget):
                     if self.keydragPosition is None:
                         self.keydragPosition = list(selected[0].GetCenter(self.canvas))
                     if gtk.keysyms.Right in self.pressedKeys:
-                        self.keydragPosition[0] += 10
+                        self.keydragPosition[0] += 10 + self.PlusMove("hor")
                         self.GetDirection("right")
+                        self.GetPlusMove((10 + self.PlusMove("hor")))
                     if gtk.keysyms.Left in self.pressedKeys:
-                        self.keydragPosition[0] -= 10
+                        self.keydragPosition[0] -= 10 + self.PlusMove("hor")
                         self.GetDirection("left")
+                        self.GetPlusMove((10 + self.PlusMove("hor")))
                     if gtk.keysyms.Up in self.pressedKeys:
-                        self.keydragPosition[1] -= 10
+                        self.keydragPosition[1] -= 10 + self.PlusMove("ver")
                         self.GetDirection("down")
+                        self.GetPlusMove((10 + self.PlusMove("ver")))
                     if gtk.keysyms.Down in self.pressedKeys:
-                        self.keydragPosition[1] += 10
+                        self.keydragPosition[1] += 10 + self.PlusMove("ver")
                         self.GetDirection("up")
+                        self.GetPlusMove((10 + self.PlusMove("ver")))
                     self.__DrawDragRect(self.keydragPosition)
         return True
     
