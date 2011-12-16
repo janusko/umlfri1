@@ -196,9 +196,7 @@ class CpicDrawingArea(CWidget):
         active = config['/Grid/Active']
         hor_spacing = config['/Grid/HorSpacing']
         ver_spacing = config['/Grid/VerSpacing']
-        print "active: ",active
-        print "hor_spacing",hor_spacing
-        print horVer
+
         plusmove = 0
         if(active == "true"):
             if((horVer == "hor") & (hor_spacing >= 10)):
