@@ -4,8 +4,9 @@ from lib.Gui.frmPropertiesWidgets.Abstract.AbstractButton import CAbstractButton
 
 class CButton(CAbstractButton):
     
-    def __init__(self,title=''):
-        self.button=gtk.Button(title)
+    def __init__(self,title='', stock=None, tooltip=None):
+        self.button=gtk.Button(title, stock)
+        if tooltip: self.button.set_tooltip_text(tooltip)
         self.button.set_size_request(82,26)
         self.button.show()
     
