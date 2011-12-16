@@ -53,17 +53,17 @@ class CfrmProperties(object):
         return ';'.join(val)
         
     def __CreateTable(self,type,dialog):
-        btnNew=CButton('_New')
+        btnNew=CButton('_New', 'gtk-new')
         btnNew.SetHandler('clicked',self.__onTableNewButtonClick,(type,dialog))
         
-        btnSave=CButton('_Save')
+        btnSave=CButton('_Save', 'gtk-save')
         btnSave.SetSensitive(False)
         btnSave.SetHandler('clicked',self.__onTableSaveButtonClick,(type,dialog))
         
-        btnDelete=CButton('_Delete')
+        btnDelete=CButton('_Delete', 'gtk-delete')
         btnDelete.SetSensitive(False)
         btnDelete.SetHandler('clicked',self.__onTableDeleteButtonClick,(type,dialog))
-        
+
         model=[]
         for key in type.IterAttributeIDs():
             model.append(type.GetAttribute(key)['name'])
@@ -74,7 +74,7 @@ class CfrmProperties(object):
         self.tables[type.GetName()]['new']=btnNew
         self.tables[type.GetName()]['save']=btnSave
         self.tables[type.GetName()]['delete']=btnDelete
-        
+
         table.SetHandler('row-selected',self.__onTableRowSelect,(type,dialog))
         if len(type.GetName().split('.'))==2 or len(type.GetName().split('.'))%2==1:
             self.__FillTable(type)
@@ -92,7 +92,7 @@ class CfrmProperties(object):
             atts=self.domain_object.GetValue(type.GetName()[type.GetName().rfind('.')+1:])
         elif self.table_values.has_key(type.GetName()):
             atts = self.table_values[type.GetName()]
-        if atts!=None and len(atts)>0:
+        if atts is not None and len(atts)>0:
             for att in atts:
                 tmp=[]
                 for key in type.IterAttributeIDs():
@@ -104,7 +104,7 @@ class CfrmProperties(object):
     
     def __onTableNewButtonClick(self,type,dialog):
         dialog.GrabFirst()
-        if self.tables[type.GetName()]['save'].GetSensitive()==True:
+        if self.tables[type.GetName()]['save'].GetSensitive():
             question=CResponseDialog('Question',dialog)
             question.AppendResponse('continue','C_ontinue')
             question.AppendResponse('cancel','_Cancel',True)
@@ -133,12 +133,12 @@ class CfrmProperties(object):
                 domainobject=table.GetRowObject(table.GetSelectedRowIndex())
                 idx=0
                 for id in type.IterAttributeIDs():
-                    if type.GetAttribute(id)['type']=='str'or type.GetAttribute(id)['type']=='int' or type.GetAttribute(id)['type']=='float':
+                    if type.GetAttribute(id)['type'] in ('str', 'int', 'float'):
                         if isinstance(self.attributes[type.GetName()][id],CEditableComboBox):
                             val=self.attributes[type.GetName()][id].GetActiveItemText()
                         elif isinstance(self.attributes[type.GetName()][id],CEditBox):
                             val=self.attributes[type.GetName()][id].GetText()
-                    elif type.GetAttribute(id)['type']=='bool' or type.GetAttribute(id)['type']=='enum':
+                    elif type.GetAttribute(id)['type'] in ('bool', 'enum'):
                         val=self.attributes[type.GetName()][id].GetActiveItemText()
                     elif type.GetAttribute(id)['type']=='text':
                         val=self.attributes[type.GetName()][id].GetText()
@@ -172,14 +172,14 @@ class CfrmProperties(object):
                     self.table_values.setdefault(type.GetName(),[]).append(item)
                 tmp=[]
                 for id in type.IterAttributeIDs():
-                    if type.GetAttribute(id)['type']=='str'or type.GetAttribute(id)['type']=='int' or type.GetAttribute(id)['type']=='float':
+                    if type.GetAttribute(id)['type'] in ('str', 'int', 'float'):
                         if isinstance(self.attributes[type.GetName()][id],CEditableComboBox):
                             val=self.attributes[type.GetName()][id].GetActiveItemText()
                         elif isinstance(self.attributes[type.GetName()][id],CEditBox):
                             val=self.attributes[type.GetName()][id].GetText()
                         tmp.append(val)
                         item.SetValue(id,val)
-                    elif type.GetAttribute(id)['type']=='bool' or type.GetAttribute(id)['type']=='enum':
+                    elif type.GetAttribute(id)['type'] in ('bool', 'enum'):
                         val=self.attributes[type.GetName()][id].GetActiveItemText()
                         tmp.append(val)
                         item.SetValue(id,val)
@@ -235,7 +235,7 @@ class CfrmProperties(object):
     def __onTableRowSelect(self,type,dialog):
         change=True
         table=self.tables[type.GetName()]['ref']
-        if self.tables[type.GetName()]['save'].GetSensitive()==True:
+        if self.tables[type.GetName()]['save'].GetSensitive():
             if table.GetLastSelect()!=str(table.GetSelectedRowIndex()):
                 question=CResponseDialog('Question',dialog)
                 question.AppendResponse('continue','C_ontinue')
@@ -278,7 +278,7 @@ class CfrmProperties(object):
                         self.attributes[type.GetName()][id].SetText(self.__ObjectsToString(objects))
             self.tables[type.GetName()]['delete'].SetSensitive(True)
             self.tables[type.GetName()]['save'].SetSensitive(False)
-    
+
     def ShowPropertiesWindow(self,element,app):
         if isinstance(element,(CElement,CConnection,CDiagram)):
             self.element=element.GetObject()
@@ -365,7 +365,7 @@ class CfrmProperties(object):
                 entry.AppendItem(str(val))
             entry.SetActiveItemText(str(type.GetDefaultValue(key)))
         else:
-            entry=CEditBox(True,'int')
+            entry=CEditBox(style='int')
             entry.SetText(str(type.GetDefaultValue(key)))
         self.attributes.setdefault(type.GetName(),{})
         self.attributes[type.GetName()][key]=entry
@@ -382,7 +382,7 @@ class CfrmProperties(object):
                 entry.AppendItem(str(val))
             entry.SetActiveItemText(str(type.GetDefaultValue(key)))
         else:
-            entry=CEditBox(True,'float')
+            entry=CEditBox(style='float')
             entry.SetText(str(type.GetDefaultValue(key)))
         self.attributes.setdefault(type.GetName(),{})
         self.attributes[type.GetName()][key]=entry
@@ -572,7 +572,7 @@ class CfrmProperties(object):
     def __onMainDialogApplyButtonClick(self,button,dialog,type):
         if self.__CheckValues(type):
             self.__SaveFunction(type)
-            self.element_changed=False            
+            self.element_changed=False
             button.SetSensitive(False)
         else:
             warning=CResponseDialog('Warning',dialog)
@@ -598,7 +598,7 @@ class CfrmProperties(object):
     def __CheckValues(self,type):
         try:
             for id in type.IterAttributeIDs():
-                if type.GetAttribute(id)['type']=='str' or type.GetAttribute(id)['type']=='int' or type.GetAttribute(id)['type']=='float':
+                if type.GetAttribute(id)['type'] in ('str', 'int', 'float'):
                     if isinstance(self.attributes[type.GetName()][id],CEditableComboBox):
                         val=self.attributes[type.GetName()][id].GetActiveItemText()
                     elif isinstance(self.attributes[type.GetName()][id],CEditBox):
@@ -622,7 +622,7 @@ class CfrmProperties(object):
         close_dialog.SetToggleButton(button)
         close_dialog.Show()
         ret_val=close_dialog.Close()
-        if ret_val==None or ret_val=='cancel':
+        if ret_val is None or ret_val=='cancel':
            return 'cancel'
         elif ret_val=='close':
            return 'close'
@@ -631,12 +631,12 @@ class CfrmProperties(object):
     
     def __SaveFunction(self,type):
         for id in type.IterAttributeIDs():
-            if type.GetAttribute(id)['type']=='str' or type.GetAttribute(id)['type']=='int' or type.GetAttribute(id)['type']=='float':
+            if type.GetAttribute(id)['type'] in ('str', 'int', 'float'):
                 if isinstance(self.attributes[type.GetName()][id],CEditableComboBox):
                     val=self.attributes[type.GetName()][id].GetActiveItemText()
                 elif isinstance(self.attributes[type.GetName()][id],CEditBox):
                     val=self.attributes[type.GetName()][id].GetText()
-            elif type.GetAttribute(id)['type']=='bool' or type.GetAttribute(id)['type']=='enum':
+            elif type.GetAttribute(id)['type'] in ('bool', 'enum'):
                 val=self.attributes[type.GetName()][id].GetActiveItemText()
             elif type.GetAttribute(id)['type']=='text':
                 val=self.attributes[type.GetName()][id].GetText()

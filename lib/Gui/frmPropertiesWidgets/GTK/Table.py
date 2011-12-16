@@ -23,18 +23,14 @@ class CTable(CAbstractTable):
         liststore=gtk.ListStore(*types)
         self.table=gtk.TreeView(liststore)
         self.table.set_size_request(-1, 100)
-        self.table.show()
         self.table.set_grid_lines(gtk.TREE_VIEW_GRID_LINES_HORIZONTAL)
         for i in range(len(model)):
             self.table.append_column(cols[i])
         window=gtk.ScrolledWindow()
         window.set_policy(gtk.POLICY_AUTOMATIC,gtk.POLICY_AUTOMATIC)
         window.add(self.table)
-        window.show()
         vbox=gtk.VBox()
-        vbox.show()
         hbox=gtk.HBox()
-        hbox.show()
         hbox.pack_end(new.GetWidget(),False,False,1)
         hbox.pack_end(save.GetWidget(),False,False,1)
         hbox.pack_end(delete.GetWidget(),False,False,1)
@@ -42,7 +38,7 @@ class CTable(CAbstractTable):
         vbox.pack_start(window,True,True)
         self.frm=gtk.Frame()
         self.frm.add(vbox)
-        self.frm.show()
+        self.frm.show_all()
         
     
     def GetWidget(self):
@@ -79,7 +75,7 @@ class CTable(CAbstractTable):
         self.table.get_selection().unselect_all()
     
     def SelectLast(self):
-        if self.last_select!=None:
+        if self.last_select is not None:
             self.table.get_selection().select_path(self.last_select)
         else:
             self.table.get_selection().unselect_all()
