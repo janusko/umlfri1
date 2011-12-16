@@ -64,17 +64,27 @@ class CfrmProperties(object):
         btnDelete.SetSensitive(False)
         btnDelete.SetHandler('clicked',self.__onTableDeleteButtonClick,(type,dialog))
 
+        btnUp = CButton('Up', 'gtk-go-up', 'Move selected item up.')
+        btnUp.SetSensitive(False)
+        btnUp.SetHandler('clicked', self.__onTableUpButtonClick, (type, dialog))
+
+        btnDown = CButton('Down', 'gtk-go-down', 'Move selected item down.')
+        btnDown.SetSensitive(False)
+        btnDown.SetHandler('clicked', self.__onTableDownButtonClick, (type, dialog))
+        
         model=[]
         for key in type.IterAttributeIDs():
             model.append(type.GetAttribute(key)['name'])
-        table=CTable(model,btnDelete,btnSave,btnNew)
+        table=CTable(model,btnDelete,btnSave,btnNew, btnUp, btnDown)
         
         self.tables[type.GetName()]={}
         self.tables[type.GetName()]['ref']=table
         self.tables[type.GetName()]['new']=btnNew
         self.tables[type.GetName()]['save']=btnSave
         self.tables[type.GetName()]['delete']=btnDelete
-
+        self.tables[type.GetName()]['up']  = btnUp
+        self.tables[type.GetName()]['down'] = btnDown
+        
         table.SetHandler('row-selected',self.__onTableRowSelect,(type,dialog))
         if len(type.GetName().split('.'))==2 or len(type.GetName().split('.'))%2==1:
             self.__FillTable(type)
@@ -117,6 +127,8 @@ class CfrmProperties(object):
         self.__ClearFormular(type)
         self.tables[type.GetName()]['save'].SetSensitive(False)
         self.tables[type.GetName()]['delete'].SetSensitive(False)
+        self.tables[type.GetName()]['up'].SetSensitive(False)
+        self.tables[type.GetName()]['down'].SetSensitive(False)
         for key in self.table_values.keys():
             if key.find(type.GetName())!=-1 and len(key)!=len(type.GetName()):
                 self.table_values.pop(key)
@@ -201,6 +213,8 @@ class CfrmProperties(object):
             self.__ClearFormular(type)
             self.tables[type.GetName()]['save'].SetSensitive(False)
             self.tables[type.GetName()]['delete'].SetSensitive(False)
+            self.tables[type.GetName()]['up'].SetSensitive(False)
+            self.tables[type.GetName()]['down'].SetSensitive(False)
         else:
             warning=CResponseDialog('Warning',dialog)
             warning.AppendResponse('ok','Ok')
@@ -231,7 +245,27 @@ class CfrmProperties(object):
             self.__ClearFormular(type)
             self.tables[type.GetName()]['save'].SetSensitive(False)
             self.tables[type.GetName()]['delete'].SetSensitive(False)
-    
+            self.tables[type.GetName()]['up'].SetSensitive(False)
+            self.tables[type.GetName()]['down'].SetSensitive(False)
+
+    def __onTableUpButtonClick(self, type, dialog):
+        table = self.tables[type.GetName()]['ref']
+        idxs = table.MoveItemUp()
+        if idxs:
+            item=self.domain_object.SwapItems(type.GetName()[type.GetName().find('.')+1:], idxs)
+            self.element_changed=True
+            self.apply_button.SetSensitive(True)
+            self.apply_button.SetSensitive(True)
+
+    def __onTableDownButtonClick(self, type, dialog):
+        table = self.tables[type.GetName()]['ref']
+        idxs = table.MoveItemDown()
+        if idxs:
+            item=self.domain_object.SwapItems(type.GetName()[type.GetName().find('.')+1:], idxs)
+            self.element_changed=True
+            self.apply_button.SetSensitive(True)
+            self.apply_button.SetSensitive(True)
+
     def __onTableRowSelect(self,type,dialog):
         change=True
         table=self.tables[type.GetName()]['ref']
@@ -278,7 +312,9 @@ class CfrmProperties(object):
                         self.attributes[type.GetName()][id].SetText(self.__ObjectsToString(objects))
             self.tables[type.GetName()]['delete'].SetSensitive(True)
             self.tables[type.GetName()]['save'].SetSensitive(False)
-
+            self.tables[type.GetName()]['up'].SetSensitive(True)
+            self.tables[type.GetName()]['down'].SetSensitive(True)
+    
     def ShowPropertiesWindow(self,element,app):
         if isinstance(element,(CElement,CConnection,CDiagram)):
             self.element=element.GetObject()
@@ -648,5 +684,6 @@ class CfrmProperties(object):
         #self.domain_object=self.old_domain_object.GetCopy()
         if self.element is not None:
             diff = CDomainObjectComparator(self.element.GetDomainObject(), self.domain_object)
+            l = list(diff)
             cmd = CApplyPropertyPatchCommand(self.element, list(diff))
             self.application.GetCommands().Execute(cmd)

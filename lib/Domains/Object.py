@@ -126,8 +126,8 @@ class CDomainObject(CBaseObject):
         @param id: path to the attribute
         @type id: str
         
-        @param id: path to the attribute
-        @type id: str
+        @param item: new item
+        @type item: variously varies
         '''
         self._TracePath(id, 'append',item)
         items=self._TracePath(id, 'getvalue')
@@ -141,6 +141,18 @@ class CDomainObject(CBaseObject):
         @type id: str
         '''
         self._TracePath(id, 'remove')
+
+    def SwapItems(self, id, indexes):
+        '''
+        Swap two values of attribute with type list
+
+        @param id: path to the attribute
+        @type id: str
+
+        @param indexes: two indexes to be swaped
+        @type indexes: tuple
+        '''
+        self._TracePath(id, 'swap', indexes)
     
     def HasVisualAttribute(self, id):
         '''
@@ -186,6 +198,17 @@ class CDomainObject(CBaseObject):
                         self.values[path[0]].append(self.type.GetDefaultValue(domain = self.type.GetAttribute(path[0])['list']['type']))
                     else:
                         self.values[path[0]].append(value)
+                else:
+                    raise DomainObjectError('Attribute %s of domain %s is not of type "list"'%\
+                    (path[0], self.type.GetName()))
+            elif action == 'swap':
+                if self.type.GetAttribute(path[0])['type'] == 'list':
+                    lenght = len(self.values[path[0]])
+                    if (min(value) >= 0 and max(value)<len):
+                        self.values[path[0]][value[0]], self.values[path[0]][value[1]] = \
+                            self.values[path[0]][value[1]], self.values[path[0]][value[0]]
+                    else:
+                        raise DomainObjectError('Trying to swap values out of index: %s' % value)
                 else:
                     raise DomainObjectError('Attribute %s of domain %s is not of type "list"'%\
                     (path[0], self.type.GetName()))

@@ -6,7 +6,7 @@ from lib.Gui.frmPropertiesWidgets.Abstract.AbstractTable import CAbstractTable
 
 class CTable(CAbstractTable):
     
-    def __init__(self,model,delete,save,new):
+    def __init__(self,model,delete,save,new,up,down):
         self.last_select=None
         self.row_object=[]
         cols=[]
@@ -29,8 +29,11 @@ class CTable(CAbstractTable):
         window=gtk.ScrolledWindow()
         window.set_policy(gtk.POLICY_AUTOMATIC,gtk.POLICY_AUTOMATIC)
         window.add(self.table)
+
         vbox=gtk.VBox()
         hbox=gtk.HBox()
+        hbox.pack_start(up.GetWidget(), False, False, 1)
+        hbox.pack_start(down.GetWidget(), False, False, 1)
         hbox.pack_end(new.GetWidget(),False,False,1)
         hbox.pack_end(save.GetWidget(),False,False,1)
         hbox.pack_end(delete.GetWidget(),False,False,1)
@@ -92,3 +95,29 @@ class CTable(CAbstractTable):
     
     def __TableEventHandler(self,button,func,data):
         func(*data)
+
+    def Select(self, index):
+        #self.table.sele
+        pass
+
+    def MoveItemUp(self, index=None):
+        if not index:
+            index = self.GetSelectedRowIndex()
+        if index > 0 and index <= len(self.row_object) - 1:
+            self.row_object[index-1], self.row_object[index] = \
+                self.row_object[index], self.row_object[index-1]
+            model = self.table.get_model()
+            model.swap(model.get_iter(index-1), model.get_iter(index))
+            return (index-1, index)
+        return False
+
+    def MoveItemDown(self, index=None):
+        if not index:
+            index = self.GetSelectedRowIndex()
+        if index >= 0 and index <= len(self.row_object) - 2:
+            self.row_object[index], self.row_object[index+1] = \
+                self.row_object[index+1], self.row_object[index]
+            model = self.table.get_model()
+            model.swap(model.get_iter(index), model.get_iter(index+1))
+            return (index, index+1)
+        return False
