@@ -93,7 +93,7 @@
         <documentation>
             Gets a transaction manager.
         </documentation>
-        <value type="org.umlfri.api.model.Project" readable="true" />
+        <value type="org.umlfri.api.base.Transaction" readable="true" />
     </property>
     
     <method name="loadProject" mutator="true" transactional="false">

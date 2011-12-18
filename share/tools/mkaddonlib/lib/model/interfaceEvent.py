@@ -25,6 +25,10 @@ class InterfaceEvent(Base):
     def documentation(self):
         return self.__documentation
     
+    @property
+    def referenced(self):
+        yield self.__type
+    
     def _link(self, builder):
         Base._link(self, builder)
         
