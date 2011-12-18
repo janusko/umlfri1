@@ -28,7 +28,11 @@
             Diagram types defined in the metamodel.
         </documentation>
         
-        <index name="name" type="string" />
+        <index name="name" type="string">
+            <documentation>
+                Identifier of the diagram type.
+            </documentation>
+        </index>
         
         <value type="org.umlfri.api.metamodel.DiagramType" readable="true" iterable="true" />
     </property>
@@ -38,7 +42,11 @@
             Element types defined in the metamodel.
         </documentation>
         
-        <index name="name" type="string" />
+        <index name="name" type="string">
+            <documentation>
+                Identifier of the element type.
+            </documentation>
+        </index>
         
         <value type="org.umlfri.api.metamodel.ElementType" readable="true" iterable="true" />
     </property>
@@ -48,7 +56,11 @@
             Connection types defined in the metamodel.
         </documentation>
         
-        <index name="name" type="string" />
+        <index name="name" type="string">
+            <documentation>
+                Identifier of the connection type.
+            </documentation>
+        </index>
         
         <value type="org.umlfri.api.metamodel.ConnectionType" readable="true" iterable="true" />
     </property>

@@ -104,7 +104,11 @@
             Contains all menu items. It can be used to to iterate over them,
             or access one of them through guiId.
         </documentation>
-        <index type="string" name="guiId" />
+        <index type="string" name="guiId">
+            <documentation>
+                Item unique ID.
+            </documentation>
+        </index>
         <value type="org.umlfri.api.gui.MenuItem" readable="true" iterable="true" />
     </property>
 </interface>

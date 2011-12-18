@@ -82,9 +82,6 @@ class CPluginAdapter(CBaseObject, CGuiObject):
     def gui_project_opened(self, widget):
         self.Notify('project-opened')
     
-    def plugin_change_domain_value(self, element, property):
-        gobject.idle_add(self.application.GetBus().emit, 'content-update-from-plugin', element, property)
-    
     def plugin_change_object(self, object):
         if isinstance(object, (CElement, CConnection)):
             object = object.GetObject()

@@ -40,7 +40,11 @@
         <documentation>
             Collection, that contains all property values.
         </documentation>
-        <index name="path" type="string" />
+        <index name="path" type="string">
+            <documentation>
+                Identifier of the connection attribute.
+            </documentation>
+        </index>
         <value type="variant" readable="true" writable="true" />
     </property>
     

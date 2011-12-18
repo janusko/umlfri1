@@ -11,3 +11,11 @@ class Namespace(BaseContainer):
             if isinstance(child, Namespace):
                 for grandDescendant in child.descendants:
                     yield grandDescendant
+    
+    def descendantsOfType(self, *typeNames):
+        for child in self.children:
+            if child.typeName in typeNames:
+                yield child
+            if isinstance(child, Namespace):
+                for grandDescendant in child.descendantsOfType(*typeNames):
+                    yield grandDescendant

@@ -70,7 +70,11 @@
             Contains all buttons. It can be used to to iterate over them,
             or access one of them through guiId.
         </documentation>
-        <index type="string" name="guiId" />
+        <index type="string" name="guiId">
+            <documentation>
+                Item unique ID.
+            </documentation>
+        </index>
         <value type="org.umlfri.api.gui.Widget" readable="true" iterable="true" />
     </property>
 </interface>

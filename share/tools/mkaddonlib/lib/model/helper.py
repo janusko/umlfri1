@@ -20,3 +20,7 @@ def computePropertySetterApiName(singular, plural):
 
 def computePropertyIteratorApiName(singular, plural):
     return ('get' + plural).upperCamelCase
+
+
+def computeEventApiName(identifier):
+    return identifier.lowerDashSeparated

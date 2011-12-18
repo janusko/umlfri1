@@ -18,7 +18,7 @@ class FileList(object):
         rel = lambda f: os.path.abspath(os.path.join(dir, f))
         
         if os.path.exists(os.path.join(dir, 'lib')):
-            sys.path.append(os.path.join(dir, 'lib'))
+            sys.path.append(os.path.abspath(os.path.join(dir, 'lib')))
         
         if path.endswith('.py'):
             locals = {}
