@@ -29,6 +29,11 @@ class CCommand(object):
         '''
         self._Do()
     
+    def _CopyStatusTo(self, other):
+        other.__done = self.__done
+        other.__undone = self.__undone
+        other.__error = self.__error
+    
     def Do(self):
         '''
         Execute operation for the first time
@@ -80,7 +85,10 @@ class CCommand(object):
         
         self._Redo()
         self.__undone = False
-            
+    
+    def Fold(self, other):
+        return None
+    
     def IsError(self):
         '''
         Informs about the state of the command
