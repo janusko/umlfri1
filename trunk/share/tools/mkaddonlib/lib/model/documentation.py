@@ -7,3 +7,11 @@ class Documentation(str):
             ret = indent + ret
         
         return Documentation(ret)
+    
+    @property
+    def firstSentence(self):
+        if '.' in self:
+            sentences = self.split('.')
+            return sentences[0] + '.'
+        else:
+            return str(self)

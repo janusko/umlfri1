@@ -7,6 +7,7 @@ from .documentation import Documentation
 from .exception import Exception as ExceptionDefinition
 from .exceptionProperty import ExceptionProperty
 from .interface import Interface
+from .interfaceEvent import InterfaceEvent
 from .interfaceMethod import InterfaceMethod
 from .interfaceMethodParameter import InterfaceMethodParameter
 from .interfaceMethodReturn import InterfaceMethodReturn
@@ -107,6 +108,9 @@ class Builder(object):
                 self.__parseInterfaceProperty(child, interface)
             elif child.tag == self.__xmlns%'method':
                 self.__parseInterfaceMethod(child, interface)
+            elif child.tag == self.__xmlns%'event':
+                self.__parseInterfaceEvent(child, interface)
+                
     
     def __parseInterfaceMethod(self, root, interface):
         method = InterfaceMethod(
@@ -177,7 +181,7 @@ class Builder(object):
                 property,
                 type = index.attrib['type'],
                 apiName = index.attrib.get('apiname'),
-                documentation = self.__parseDocumentation(root.find(self.__xmlns%'documentation'))
+                documentation = self.__parseDocumentation(index.find(self.__xmlns%'documentation'))
             )
         ableChildren = 0
         
@@ -243,6 +247,15 @@ class Builder(object):
                     child.attrib['exception'],
                     documentation = self.__parseDocumentation(child.find(self.__xmlns%'documentation')),
                 )
+    
+    def __parseInterfaceEvent(self, root, interface):
+        property = InterfaceEvent(
+            root.attrib['name'],
+            interface,
+            root.attrib.get('apiname'),
+            type = root.attrib['type'],
+            documentation = self.__parseDocumentation(root.find(self.__xmlns%'documentation'))
+        )
     
     ################
     ### Exception

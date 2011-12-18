@@ -7,6 +7,12 @@
         Root of public api object hierarchy.
     </documentation>
     
+    <event name="projectOpened" type="org.umlfri.api.base.ProjectOpenedEventHandler">
+        <documentation>
+            Event occurs when the project of any type is opened in the UML .FRI tool.
+        </documentation>
+    </event>
+    
     <property name="project">
         <documentation>
             Gets a reference to the current project, or null if no project

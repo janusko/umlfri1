@@ -16,10 +16,22 @@ class BaseContainer(Base):
         for child in self.__orderedChildren:
             yield child
     
-    def childrenOfType(self, typeName):
+    @property
+    def hasChildren(self):
         for child in self.__orderedChildren:
-            if child.typeName == typeName:
+            return True
+        return False
+    
+    def childrenOfType(self, *typeNames):
+        for child in self.__orderedChildren:
+            if child.typeName in typeNames:
                 yield child
+    
+    def hasChildrenOfType(self, *typeNames):
+        for child in self.__orderedChildren:
+            if child.typeName in typeNames:
+                return True
+        return False
     
     def getChild(self, name):
         return self.__children[name]

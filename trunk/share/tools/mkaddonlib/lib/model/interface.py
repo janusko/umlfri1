@@ -14,6 +14,7 @@ class Interface(BaseContainer):
         self.__abstract = abstract
         self.__generate = generate
         self.__documentation = documentation
+        self.__descendants = []
     
     @property
     def namespace(self):
@@ -40,6 +41,20 @@ class Interface(BaseContainer):
         return self.__documentation
     
     @property
+    def descendants(self):
+        return tuple(self.__descendants)
+    
+    @property
+    def allBases(self):
+        ret = []
+        if self.__base is not None:
+            base = self.base
+            while base is not None:
+                ret.insert(0, base)
+                base = base.base
+        return tuple(ret)
+    
+    @property
     def referenced(self):
         ret = set()
         if self.__base is not None:
@@ -57,3 +72,8 @@ class Interface(BaseContainer):
         
         if self.__base is not None:
             self.__base = builder.getTypeByName(self.__base)
+            
+            if not isinstance(self, Interface):
+                raise Exception
+            
+            self.__base.__descendants.append(self)

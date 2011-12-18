@@ -28,6 +28,14 @@ class Identifier(object):
         return '_'.join(self.__splittedIdentifier).upper()
     
     @property
+    def lowerDashSeparated(self):
+        return '-'.join(self.__splittedIdentifier)
+    
+    @property
+    def upperDashSeparated(self):
+        return '-'.join(self.__splittedIdentifier).upper()
+    
+    @property
     def lowerCase(self):
         return ''.join(self.__splittedIdentifier)
     

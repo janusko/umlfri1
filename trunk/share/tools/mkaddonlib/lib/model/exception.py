@@ -11,6 +11,7 @@ class Exception(BaseContainer):
             self.__throwsFrom = []
         else:
             self.__throwsFrom = throwsFrom.split(',')
+        self.__descendants = []
     
     @property
     def namespace(self):
@@ -32,8 +33,27 @@ class Exception(BaseContainer):
     def number(self):
         return self.__number
     
+    @property
+    def descendants(self):
+        return tuple(self.__descendants)
+    
+    @property
+    def allBases(self):
+        ret = []
+        if self.__base is not None:
+            base = self.base
+            while base is not None:
+                ret.insert(0, base)
+                base = base.base
+        return tuple(ret)
+    
     def _link(self, builder):
         BaseContainer._link(self, builder)
         
         if self.__base is not None:
             self.__base = builder.getTypeByName(self.__base)
+            
+            if not isinstance(self, Exception):
+                raise Exception
+            
+            self.__base.__descendants.append(self)

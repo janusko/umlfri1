@@ -7,6 +7,7 @@
 				<xs:element name="documentation" type="xs:string" minOccurs="0"/>
 				<xs:choice minOccurs="0" maxOccurs="unbounded">
 					<xs:element name="property" type="propertyType"/>
+					<xs:element name="event" type="eventType"/>
 					<xs:element name="method">
 						<xs:complexType>
 							<xs:complexContent>
@@ -37,7 +38,7 @@
 			<xs:attribute name="name" type="xs:string" use="required"/>
 			<xs:attribute name="base" type="xs:string"/>
 			<xs:attribute name="number" type="xs:int" use="required"/>
-            <xs:attribute name="throwsFrom" type="xs:string"/>
+			<xs:attribute name="throwsFrom" type="xs:string"/>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="delegate">
@@ -175,5 +176,12 @@
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" use="required"/>
 		<xs:attribute name="index" type="xs:int" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="eventType">
+		<xs:sequence>
+			<xs:element name="documentation" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="type" type="xs:string" use="required"/>
 	</xs:complexType>
 </xs:schema>

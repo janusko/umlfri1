@@ -1,0 +1,151 @@
+#import paths
+#def baseIndent
+    #repeat $indent
+        &nbsp;&nbsp;&nbsp;
+    #end repeat
+    #if $indent > 0
+        <img src="inherit.gif" />
+    #end if
+    #set global $indent += 1
+#end def
+#def linkTo($element, $fqn = False)
+    #if $element == '*':
+        param array
+    #else if $element.typeName == 'PrimitiveType'
+        #if $fqn
+            $element.fqn
+        #else
+            $element.name
+        #end if
+    #else
+        #if $fqn
+            <a href="$paths.getPath($element)">$element.fqn</a>
+        #else
+            <a href="$paths.getPath($element)">$element.name</a>
+        #end if
+    #end if
+#end def
+<html>
+    <head>
+        <title>Documentation for exception $root.fqn</title>
+        <style>
+            .TableHeadingColor     { background: #CCCCFF; color:#000000 } /* Dark mauve */
+            .TableSubHeadingColor  { background: #EEEEFF; color:#000000 } /* Light mauve */
+            .TableRowColor         { background: #FFFFFF; color:#000000 } /* White */
+        </style>
+    </head>
+    <body>
+        <h2><font size="-1">$root.namespace.fqn</font><br />Exception $root.name</h2>
+        <div>
+            #set global $indent = 0
+            #for $base in $root.allBases
+                $baseIndent()$linkTo($base, True)<br />
+            #end for
+            $baseIndent()<b>$root.fqn</b>
+        </div>
+        #if $root.descendants
+            <dl>
+                <dt><b>All Known Descendants:</b></dt>
+                <dd>
+                    #for $idx, $descendant in $enumerate($root.descendants)
+                        #if $idx > 0
+                            , 
+                        #end if
+                        $linkTo($descendant)
+                    #end for
+                </dd>
+            </dl>
+        #end if
+        <hr />
+        <code>
+            exception $root.name
+            #if $root.base
+                <br />
+                extends $linkTo($root.base)
+            #end if
+        </code>
+        <br /><br />
+        $root.documentation
+        <br /><br />
+        #if $root.hasChildrenOfType('ExceptionProperty')
+            <table border="1" width="100%" cellpadding="3" cellspacing="0">
+                <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+                    <th align="left" colspan="2"><font size="+2"><b>Property Summary</b></font></th>
+                </tr>
+                #for $property in $root.childrenOfType('ExceptionProperty')
+                    <tr bgcolor="white" class="TableRowColor">
+                        <td align="right" valign="top" width="1%" nowrap="nowrap">
+                            <font size="-1">
+                                <code>
+                                    $linkTo($property.type)
+                                    #if $property.iterable
+                                        []
+                                    #end if
+                                </code>
+                            </font>
+                        </td>
+                        <td>
+                            <code>
+                                <b>
+                                    <a href="\#member-$property.name">$property.name</a>
+                                </b>
+                            </code><br />
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            $property.documentation.firstSentence
+                        </td>
+                    </tr>
+                #end for
+            </table>
+            <br />
+        #end if
+        #for $base in $root.allBases
+            #if $base.hasChildren
+                <table border="1" width="100%" cellpadding="3" cellspacing="0">
+                    <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+                        <th align="left">
+                            <b>Members inherited from exception $linkTo($base)</b>
+                        </th>
+                    </tr>
+                    <tr bgcolor="white" class="TableRowColor">
+                        <td>
+                            #for $idx, $member in $enumerate($base.children)
+                                #if $idx > 0
+                                    ,
+                                #end if
+                                <code><a href="$paths.getPath($base)#member-$member.name">$member.name</a></code>
+                            #end for
+                        </td>
+                    </tr>
+                </table>
+                <br />
+            #end if
+        #end for
+        #if $root.hasChildrenOfType('ExceptionProperty')
+            <table border="1" width="100%" cellpadding="3" cellspacing="0">
+                <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+                    <th align="left" colspan="2"><font size="+2"><b>Property Detail</b></font></th>
+                </tr>
+            </table>
+            #for $idx, $property in $enumerate($root.childrenOfType('ExceptionProperty'))
+                #if $idx > 0
+                    <hr />
+                #end if
+                <a name="member-$property.name"></a>
+                <h3>$property.name</h3>
+                <code>
+                    $linkTo($property.type)
+                    #if $property.iterable
+                        []
+                    #end if
+                    $property.name
+                </code>
+                <dl>
+                    <dd>
+                        <p>$property.documentation.replace("\n\n", "</p><p>")</p>
+                    </dd>
+                </dl>
+            #end for
+            <br />
+        #end if
+    </body>
+</html>
