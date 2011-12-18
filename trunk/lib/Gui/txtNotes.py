@@ -1,7 +1,7 @@
 from common import CWidget, event
+from lib.Commands.Properties import CSetPropertyValuesCommand
 from lib.Exceptions.UserException import *
 from lib.Drawing import CDiagram
-import gobject
 from lib.Elements.Object import CElementObject
 from lib.Connections.Object import CConnectionObject
 
@@ -46,14 +46,35 @@ class CtxtNotes(CWidget):
         
         elementObject = self.__GetElementObject()
         if self.element is not None and elementObject.GetValue('note') != text:
-            elementObject.SetValue('note', text)
-            self.application.GetBus().emit('content-update', self.element, 'note')
-                
-    @event('application.bus', 'content-update')
-    @event('application.bus', 'content-update-from-plugin')
-    def on_content_update(self, widget, element, property):
-        if self.element is not None and element is self.element:
-            self.Fill(self.element)
+            cmd = CSetPropertyValuesCommand(elementObject, {'note': text})
+            self.application.GetCommands().Execute(cmd, allowFolding = True)
+    
+    @event('application.bus', 'diagram-changed')
+    @event('application.bus', 'connection-changed')
+    @event('application.bus', 'element-changed')
+    def ObjectChanged(self, bus, params):
+        if self.element is None:
+            return
+        
+        for obj, path in params:
+            if path:
+                if not isinstance(obj, (CElementObject, CConnectionObject)):
+                    obj = obj.GetObject()
+                if self.__GetElementObject() is obj:
+                    self.Fill(self.element)
+    
+    @event('application.bus', 'diagram-removed')
+    @event('application.bus', 'connection-object-removed')
+    @event('application.bus', 'element-object-removed')
+    def ObjectRemoved(self, bus, params):
+        if self.element is None:
+            return
+        
+        for obj in params:
+            if not isinstance(obj, (CElementObject, CConnectionObject)):
+                obj = obj.GetObject()
+            if self.__GetElementObject() is obj:
+                self.Fill(None)
     
     @event('txtNotes', 'focus-in-event')
     def on_focus_in (self, widget, event):

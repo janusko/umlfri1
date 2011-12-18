@@ -1,4 +1,4 @@
-from lib.Commands.Properties.SetPropertyValues import CSetPropertyValuesCommand
+from lib.Commands.Properties import CSetPropertyValuesCommand
 from lib.Depend.gtk2 import gobject
 from lib.Depend.gtk2 import gtk
 

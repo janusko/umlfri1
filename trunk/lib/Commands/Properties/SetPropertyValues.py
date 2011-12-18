@@ -29,6 +29,14 @@ class CSetPropertyValuesCommand(CCommand):
         for name, value in self.__oldValues.iteritems():
             self.__object.SetValue(name, value)
     
+    def Fold(self, other):
+        if isinstance(other, CSetPropertyValuesCommand) and other.__newValues.keys() == self.__newValues.keys():
+            ret = CSetPropertyValuesCommand(self.__object, self.__newValues)
+            ret.__oldValues = other.__oldValues
+            self._CopyStatusTo(ret)
+            return ret
+        return None
+    
     def GetGuiUpdates(self):
         if isinstance(self.__object, CElementObject):
             return [
