@@ -12,6 +12,9 @@ class Documentation(str):
     def firstSentence(self):
         if '.' in self:
             sentences = self.split('.')
-            return sentences[0] + '.'
+            ret = sentences.pop(0) + '.'
+            while len(sentences) > 0 and sentences[0].startswith('FRI'):
+                ret += sentences.pop(0) + '.'
+            return ret
         else:
             return str(self)
