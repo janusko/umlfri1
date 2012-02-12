@@ -296,6 +296,9 @@ class CConnection(CCacheableObject, CSelectableObject):
         
         @param index: position at polyline to which to put new point. 
         @type  index: int
+
+        @return: point was added ?
+        @rtype: bool
         
         @raise IndexError: if 0 > index or len(self.points) < index
         '''
@@ -328,11 +331,13 @@ class CConnection(CCacheableObject, CSelectableObject):
                 label.idx += 1
         
         self.points.insert(index, point)
+        points_count = len(self.points)
         self.ValidatePoints(canvas)
         
         for label in changed:
             label.RecalculatePosition(canvas) # adjust (x, y) to new position
-        return True
+        #return True # returns True even if no point was added ?
+        return points_count == len(self.points)
     
     def AddPoint(self, point):
         '''
