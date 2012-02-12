@@ -658,7 +658,7 @@ class CDiagram(CBaseObject):
         center position.
         
         @param isHorizontal: align horizontaly or verticaly
-        @type xy: bool
+        @type isHorizontal: bool
         @param canvas: drawing canvas
         @type canvas: L{CCairoCanvas<lib.Drawing.Canvas.Cairo.CCairoCanvas>}
         @param defaultElement: Element to align to
@@ -683,8 +683,8 @@ class CDiagram(CBaseObject):
         """
         Spaces selected elements evenly along x or y axis. 
         
-        @param xy: space horizontaly or verticaly
-        @type xy: bool
+        @param isHorizontal: space horizontaly or verticaly
+        @type isHorizontal: bool
         @param canvas: drawing canvas
         @type canvas: L{CCairoCanvas<lib.Drawing.Canvas.Cairo.CCairoCanvas>}
         """
@@ -696,7 +696,7 @@ class CDiagram(CBaseObject):
             elemtotal += e.GetSize(canvas)[xy]
         total = self.GetSelectSquare(canvas)[1][xy]
         spacing = (total - elemtotal)/(len(elements) - 1)
-        elements.sort(lambda x, y: cmp(x.GetPosition()[xy],\
+        elements.sort(lambda x, y: cmp(x.GetPosition()[xy],
             y.GetPosition()[xy]))
         pos = [0, 0]
         pos[xy] = elements[0].GetPosition()[xy]
@@ -710,12 +710,12 @@ class CDiagram(CBaseObject):
         Resize selected elements evenly to minimal or maximal size of selected
         elements or requested size.
         
-        @param reziseByWidth: resize to maximum or minimum
+        @param resizeByWidth: resize to maximum or minimum
         @type resizeByWidth: bool
         @param canvas: drawing canvas
         @type canvas: L{CCairoCanvas<lib.Drawing.Canvas.Cairo.CCairoCanvas>}
-        @param size: requested size
-        @type size: list
+        @param selectedElement: element used as reference for resizing
+        @type selectedElement: L{CElement<lib.Drawing.Element.CElement>}
         """    
 
         xy = 1 - int(resizeByWidth)
@@ -745,9 +745,9 @@ class CDiagram(CBaseObject):
                     e.SetSizeRelative(esize)
     
     def ResizeByMaximalElement(self, canvas):
-        '''
+        """
         Resize all elements based on the size of the maximal element
-        '''
+        """
         elements = tuple(self.GetSelectedElements())
         if len(elements)<2: return
 
@@ -768,9 +768,9 @@ class CDiagram(CBaseObject):
             e.SetSizeRelative(esize)
             
     def ResizeByMinimalElement(self, canvas):
-        '''
+        """
         Resize all elements based on the size of the minimal element
-        '''
+        """
         elements = tuple(self.GetSelectedElements())
         if len(elements)<2: return
         
@@ -797,9 +797,9 @@ class CDiagram(CBaseObject):
             e.SetSizeRelative(esize)
             
     def SnapElementsOnGrid(self, canvas):
-        '''
+        """
         Snaps selected elements on grid. Grid doesn't have to be active.
-        '''
+        """
         elements = list(self.GetSelectedElements())
         if len(elements)<1: return
         for e in elements:
