@@ -220,7 +220,7 @@ class CGrid(CBaseObject):
             self.ver_spacing = config['/Grid/VerSpacing']
         x = self.hor_spacing * round(pos[0]/(float(self.hor_spacing)))
         y = self.ver_spacing * round(pos[1]/(float(self.ver_spacing)))
-        return x, y
+        return int(x), int(y)
     
     def SnapElement(self, element, pos, canvas, override=False):
         """
@@ -288,7 +288,7 @@ class CGrid(CBaseObject):
                     pos = (new_bottom_left[0], new_bottom_left[1] - h)
                 else:
                     pos = (new_bottom_right[0] - w, new_bottom_right[1] - h)
-                
+        pos = (int(pos[0]), int(pos[1]))
         element.SetPosition(pos)
     
     def ResizeElement(self, element, canvas):
