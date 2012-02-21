@@ -1,4 +1,5 @@
 from common import CWindow, event
+from lib.datatypes import CColor
 import os
 import re
 
@@ -7,7 +8,7 @@ class CfrmExport(CWindow):
     glade = 'export.glade'
     
     widgets = ('entExportFileName','fcbDirectorySelect', 'tbtnPDF', 'tbtnPNG', 'tbtnPS', 'tbtnSVG',
-    'btnExport', 'btnCancelExport', 'hbuttonboxExportType', )
+    'btnExport', 'btnCancelExport', 'hbuttonboxExportType', 'chbBackground', 'cbBackground', )
     
     def __init__(self, app, wTree):
         CWindow.__init__(self, app, wTree)
@@ -36,7 +37,10 @@ class CfrmExport(CWindow):
                 break
         if not isSomeToggled:
             self.tbtnSVG.set_active(True)
-            
+
+    @event("chbBackground", "toggled")
+    def onChbBackgroundToggled(self, widget):
+        self.cbBackground.set_sensitive(widget.get_active())
 
     @event("entExportFileName", "focus-out-event")
     def OnEntExportFileNameFocusLost(self, widget, event):
@@ -58,16 +62,20 @@ class CfrmExport(CWindow):
     def OnBtnExportClicked(self, widget):
         
         filename = os.path.join(self.fcbDirectorySelect.get_current_folder(), self.entExportFileName.get_text())
-        
+        if self.chbBackground.get_active():
+            color = self.cbBackground.get_color()
+            color = CColor('#%02x%02x%02x'%(color.red >> 8, color.green >> 8, color.blue >> 8))
+        else:
+            color = None
         if self.tbtnSVG.get_active():        
-            self.picDrawingArea.Export(filename + '.svg', 'svg')
+            self.picDrawingArea.Export(filename + '.svg', 'svg', color)
         
         if self.tbtnPDF.get_active():        
-            self.picDrawingArea.Export(filename + '.pdf', 'pdf')
+            self.picDrawingArea.Export(filename + '.pdf', 'pdf', color)
         
         if self.tbtnPNG.get_active():        
-            self.picDrawingArea.Export(filename + '.png', 'png')
+            self.picDrawingArea.Export(filename + '.png', 'png', color)
         
         if self.tbtnPS.get_active():        
-            self.picDrawingArea.Export(filename + '.ps', 'ps')
+            self.picDrawingArea.Export(filename + '.ps', 'ps', color)
 

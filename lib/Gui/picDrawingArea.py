@@ -386,14 +386,15 @@ class CpicDrawingArea(CWidget):
         tmp.page_size = wisy
         self.picVBar.set_adjustment(tmp)
 
-    def Export(self, filename, export_type):
+    def Export(self, filename, export_type, background=None):
         self.Diagram.DeselectAll()
         #what u see export(only currently visible area will be exported): sizeX, sizeY = self.GetWindowSize() 
         sizeX, sizeY = self.Diagram.GetExpSquare(self.canvas)
-        canvas = CExportCanvas(self.application.GetProject().GetMetamodel().GetStorage(), export_type, filename, sizeX, sizeY)
+        canvas = CExportCanvas(self.application.GetProject().GetMetamodel().GetStorage(), export_type,
+            filename, sizeX, sizeY, background)
         self.Diagram.PaintFull(canvas)
         canvas.Finish()
-        self.Paint()    
+        self.Paint()
 
     def ExportSvg(self, filename):
         # obsolete
