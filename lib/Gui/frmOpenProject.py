@@ -60,7 +60,8 @@ class CfrmOpenProject (common.CWindow):
                 print run
                 if run != gtk.RESPONSE_OK:
                     self.form.hide ()
-                    return None, None
+                    parent.OnOpen((None, None))
+                    return
                 copy = self.chkOpenAsCopy.get_active ()
                 filename = self.form.get_filename ()
                 if not filename:
@@ -70,6 +71,7 @@ class CfrmOpenProject (common.CWindow):
                 if filename and os.path.isfile (filename):
                     if not copy:
                         self.application.GetRecentFiles ().AddFile (filename)
-                    return filename, copy
+                    parent.OnOpen((filename, copy))
+                    return
         finally:
             self.form.hide ()
