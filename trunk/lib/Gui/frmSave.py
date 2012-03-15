@@ -47,35 +47,38 @@ class CfrmSave(common.CWindow):
     def ShowDialog(self, parent):
         if COpenSaveDialog:
             thread.start_new(self.__NewDialog,(parent, self.form.get_title(), self.filters))
-            return None, None
-        self.form.set_transient_for(parent.form)
-        try:
-            while True:
-                if self.form.run() == gtk.RESPONSE_CANCEL:
-                    self.form.hide()
-                    return None, None
-                filter = self.form.get_filter().get_name()
-                filename = self.form.get_filename()
-                if filename is None:
-                    self.form.hide()
-                    return None, None
-                else:
-                    filename = filename.decode('utf-8')
+        else:
+            self.form.set_transient_for(parent.form)
+            try:
+                while True:
+                    if self.form.run() == gtk.RESPONSE_CANCEL:
+                        self.form.hide()
+                        parent.OnSaveAs((None, None))
+                        return
+                    filter = self.form.get_filter().get_name()
+                    filename = self.form.get_filename()
+                    if filename is None:
+                        self.form.hide()
+                        parent.OnSaveAs((None, None))
+                        return
+                    else:
+                        filename = filename.decode('utf-8')
 
-                ext = ''
-                isZippedFile = False
+                    ext = ''
+                    isZippedFile = False
 
-                for text, pattern, zipped in self.filters:
-                    if text == filter:
-                        ext = pattern[1:]
-                        isZippedFile = zipped
+                    for text, pattern, zipped in self.filters:
+                        if text == filter:
+                            ext = pattern[1:]
+                            isZippedFile = zipped
 
-                if '.' not in os.path.basename(filename):
-                    filename += ext
+                    if '.' not in os.path.basename(filename):
+                        filename += ext
 
-                if not os.path.isdir(filename):
-                    self.application.GetRecentFiles().AddFile(filename)
-                    return filename, isZippedFile
+                    if not os.path.isdir(filename):
+                        self.application.GetRecentFiles().AddFile(filename)
+                        parent.OnSaveAs((filename, isZippedFile))
+                        return
 
-        finally:
-            self.form.hide()
+            finally:
+                self.form.hide()

@@ -92,6 +92,11 @@ class CfrmMain(CWindow):
 
         self.on_undo_redo_action(None, 'start')
 
+        self.actionQuit = False
+        self.after_on_open_file = False
+        self.afterActionOpen = False
+        self.copy = None
+
     def SetSensitiveMenuChilds(self, MenuItem, value):
         for i in MenuItem.get_submenu().get_children():
             i.set_sensitive(value)
@@ -238,11 +243,15 @@ class CfrmMain(CWindow):
         if filenameOrTemplate is not None:
             try:
                 if self.application.GetProject() is not None and CQuestionDialog(self.form, _('Do you want to save project?'), True).run():
-                    self.ActionSave(widget)
+                    self.afterActionOpen = True
+                    self.filename = filenameOrTemplate
+                    self.copy = copy
+                    self.ActionSave(None)
+                else:
+                    self.LoadProject(filenameOrTemplate, copy)
+                    self.tabStartPage.Fill()
             except ECancelPressed:
                 return
-            self.LoadProject(filenameOrTemplate, copy)
-            self.tabStartPage.Fill()
 
     def OnSaveAs(self, win):
         filename, isZippedFile = win
@@ -253,6 +262,19 @@ class CfrmMain(CWindow):
                 self.tabStartPage.Fill()
         except UserException as e:
             CErrorDialog(self.form, str(e)).run()
+        self.AfterSaveAction()
+
+    def AfterSaveAction(self):
+        if self.actionQuit:
+            self.application.Quit()
+        if self.after_on_open_file:
+            self.LoadProject(self.filename, False)
+            self.tabStartPage.Fill()
+            self.after_on_open_file = False
+        if self.afterActionOpen:
+            self.LoadProject(self.filename, self.copy)
+            self.tabStartPage.Fill()
+            self.afterActionOpen = False
 
     # Diagrams
     @event("mnuViewTools", "activate")
@@ -359,36 +381,34 @@ class CfrmMain(CWindow):
     def ActionQuit(self, widget, event = None):
         try:
             if self.application.GetProject() is not None and CQuestionDialog(self.form, _('Do you want to save project?'), True).run():
+                self.actionQuit = True
                 self.ActionSave(widget)
+            else:
+                self.application.Quit()
+            return True
         except ECancelPressed:
             return True
-        self.application.Quit()
 
     @event("tabStartPage","open-file")
     def on_open_file(self, widget, filename):
         if filename is not None:
             try:
                 if self.application.GetProject() is not None and CQuestionDialog(self.form, _('Do you want to save project?'), True).run():
+                    self.after_on_open_file = True
+                    self.filename = filename
                     self.ActionSave(widget)
+                else:
+                    self.LoadProject(filename, False)
+                    self.tabStartPage.Fill()
             except ECancelPressed:
                 return
-            self.LoadProject(filename, False)
-            self.tabStartPage.Fill()
 
     @event("tabStartPage","open-project")
     @event("cmdOpen", "clicked")
     @event("mnuOpen", "activate")
     def ActionOpen(self, widget):
-        filenameOrTemplate, copy = self.application.GetWindow("frmOpenProject").ShowDialog(self, widget)
-        if filenameOrTemplate is not None:
-            try:
-                if self.application.GetProject() is not None and CQuestionDialog(self.form, _('Do you want to save project?'), True).run():
-                    self.ActionSave(widget)
-            except ECancelPressed:
-                return
-            self.LoadProject(filenameOrTemplate, copy)
-            self.tabStartPage.Fill()
-
+        self.application.GetWindow("frmOpenProject").ShowDialog(self, widget)
+	
     @event("cmdNew", "clicked")
     @event("tabStartPage", "create-project")
     @event("mnuNewProject", "activate")
@@ -396,14 +416,17 @@ class CfrmMain(CWindow):
         filenameOrTemplate, copy = self.application.GetWindow ("frmNewProject").ShowDialog (self)
         if filenameOrTemplate:
             try:
-                if self.application.GetProject () and \
-                    CQuestionDialog (self.form, _('Do you want to save project?'), True).run ():
+                if self.application.GetProject () and CQuestionDialog (self.form, _('Do you want to save project?'), True).run ():
+                    self.filename = filenameOrTemplate
+                    self.copy = copy
+                    self.afterActionOpen = True
                     self.ActionSave (widget)
+                else:
+                    self.LoadProject (filenameOrTemplate, copy)
+                    self.tabStartPage.Fill()
             except ECanceledPressed:
                 print 'ECancelPressed'
                 return
-            self.LoadProject (filenameOrTemplate, copy)
-            self.tabStartPage.Fill()
 
     @event("mnuOpenRecent", "activate")
     def mnuOpenRecent_refresh (self, widget):
@@ -423,13 +446,16 @@ class CfrmMain(CWindow):
     def on_RecentItem_activate (self, widget):
         try:
             if self.application.GetProject() is not None and CQuestionDialog(self.form, _('Do you want to save project?'), True).run():
+                self.filename = widget.get_label ().split ()[1]
+                self.copy = False
+                self.afterActionOpen = True
                 self.ActionSave(widget)
+            else:
+                filename = widget.get_label ().split ()[1]
+                self.LoadProject(filename, False)
+                self.tabStartPage.Fill()
         except ECancelPressed:
-            print 'ECancelPressed'
             return
-        filename = widget.get_label ().split ()[1]
-        self.LoadProject(filename, False)
-        self.tabStartPage.Fill()
 
     @event("form", "key-press-event")
     def on_key_press_event(self, widget, event):
@@ -463,17 +489,11 @@ class CfrmMain(CWindow):
             self.ActionSaveAs(widget)
         else:
             self.application.GetProject().SaveProject()
+            self.AfterSaveAction()
 
     @event("mnuSaveAs", "activate")
     def ActionSaveAs(self, widget):
-        filename, isZippedFile = self.application.GetWindow("frmSave").ShowDialog(self)
-        try:
-            if filename is not None:
-                self.application.GetProject().SaveProject(filename, isZippedFile)
-                self.ReloadTitle()
-                self.tabStartPage.Fill()
-        except UserException as e:
-            CErrorDialog(self.form, str(e)).run()
+        self.application.GetWindow("frmSave").ShowDialog(self)
 
     @event("mnuProperties", "activate")
     def ActionProperties(self, widget):
