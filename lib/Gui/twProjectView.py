@@ -522,9 +522,12 @@ class CtwProjectView(CWidget):
                 self.IterCopy(self.TreeStore, iterNode, iterAfter, gtk.TREE_VIEW_DROP_AFTER)
             else:
                 iterBefore = self.TreeStore.iter_children(iterParent)
-                while isinstance(self.TreeStore.get(iterBefore, 3)[0], CDiagram):
+                while iterBefore is not None and isinstance(self.TreeStore.get(iterBefore, 3)[0], CDiagram):
                     iterBefore = self.TreeStore.iter_next(iterBefore)
-                self.IterCopy(self.TreeStore, iterNode, iterBefore, gtk.TREE_VIEW_DROP_BEFORE)
+                if iterBefore is None:
+                    self.IterCopy(self.TreeStore, iterNode, iterParent, gtk.TREE_VIEW_DROP_INTO_OR_AFTER)
+                else:
+                    self.IterCopy(self.TreeStore, iterNode, iterBefore, gtk.TREE_VIEW_DROP_BEFORE)
             
             self.TreeStore.remove(iterNode)
     
