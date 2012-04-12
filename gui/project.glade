@@ -327,13 +327,7 @@
       <child internal-child="vbox">
         <widget class="GtkVBox" id="dialog-vbox8">
           <property name="visible">True</property>
-          <property name="spacing">2</property>
-          <child>            
-            <packing>
-              <property name="expand">False</property>
-              <property name="position">2</property>
-            </packing>
-          </child>
+          <property name="spacing">2</property>          
           <child internal-child="action_area">
             <widget class="GtkHButtonBox" id="dialog-action_area8">
               <property name="visible">True</property>
