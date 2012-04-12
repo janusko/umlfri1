@@ -79,6 +79,20 @@
                       </widget>
                     </child>
                     <child>
+                      <widget class="GtkImageMenuItem" id="mnuImport">
+                        <property name="label">Import</property>
+                        <property name="visible">True</property>
+                        <property name="use_underline">True</property>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkImageMenuItem" id="mnuExportToFile">
+                        <property name="label">Export</property>
+                        <property name="visible">True</property>
+                        <property name="use_underline">True</property>
+                      </widget>
+                    </child>
+                    <child>
                       <widget class="GtkImageMenuItem" id="mnuProperties">
                         <property name="label">gtk-page-setup</property>
                         <property name="visible">True</property>

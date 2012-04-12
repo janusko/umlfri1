@@ -72,3 +72,6 @@ class COpenSaveDialog(object):
     
     def GetSelectedFilter(self):
         return self.__filter[self.__filterIndex - 1]
+        
+    def GetSelectedFilterIndex(self):        
+        return self.__filterIndex - 1

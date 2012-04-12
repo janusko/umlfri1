@@ -31,7 +31,7 @@ class CfrmMain(CWindow):
         #menu
         #############
         'mItemFile',
-        'mnuOpen', 'mnuNewProject', 'mnuOpenRecent', 'mOpenRecent_menu', 'mnuSave', 'mnuSaveAs', 'mnuPrint', 'mnuProperties', 'mnuQuit',
+        'mnuOpen', 'mnuNewProject', 'mnuOpenRecent', 'mOpenRecent_menu', 'mnuSave', 'mnuSaveAs', 'mnuPrint', 'mnuImport','mnuExportToFile', 'mnuProperties', 'mnuQuit',
         #############
         'mItemEdit',
         'mnuCut', 'mnuCopy', 'mnuCopyAsImage', 'mnuPaste', 'mnuDelete',
@@ -276,6 +276,12 @@ class CfrmMain(CWindow):
             self.tabStartPage.Fill()
             self.afterActionOpen = False
 
+    def OnImport(self, win):        
+        filename, filterIndex = win        
+
+    def OnExportToFile(self, win):
+        filename, filterIndex = win
+
     # Diagrams
     @event("mnuViewTools", "activate")
     def ActionViewTools(self, *args):
@@ -424,8 +430,7 @@ class CfrmMain(CWindow):
                 else:
                     self.LoadProject (filenameOrTemplate, copy)
                     self.tabStartPage.Fill()
-            except ECanceledPressed:
-                print 'ECancelPressed'
+            except ECancelPressed:
                 return
 
     @event("mnuOpenRecent", "activate")
@@ -503,6 +508,14 @@ class CfrmMain(CWindow):
     def ActionPrint(self, widget):
         self.diagramPrint.printStart(self.picDrawingArea.GetDiagram())
 
+    @event("mnuImport", "activate")
+    def ActionImport(self, widget):
+        self.application.GetWindow("frmImport").ShowDialog(self, widget)
+
+    @event("mnuExportToFile", "activate")
+    def ActionExportToFile(self, widget):
+        self.application.GetWindow("frmExportToFile").ShowDialog(self)
+    
     @event("mnuDelete","activate")
     def on_mnuDelete_click(self, widget):
         self.picDrawingArea.DeleteElements()
