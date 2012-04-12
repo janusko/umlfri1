@@ -12,12 +12,10 @@ import thread
 
 import gobject
 
-class CfrmOpenProject (common.CWindow):
-    name = "frmOpenProject"
+class CfrmImport (common.CWindow):
+    name = "frmImport"
 
-    glade = "project.glade"
-
-    widgets = ("chkOpenAsCopy", )
+    glade = "project.glade"    
 
     def __init__ (self, app, wTree):
         common.CWindow.__init__ (self, app, wTree)
@@ -39,12 +37,11 @@ class CfrmOpenProject (common.CWindow):
         win = COpenSaveDialog(parent.form, 'open', title, filters)
         if win.ShowModal():
             filename = win.GetAbsolutePath()
-            if os.path.isfile(filename):
-                    self.application.GetRecentFiles ().AddFile (filename)
-            win = filename, False
+            filters = win.GetSelectedFilterIndex()
+            win = filename, filters
         else:
             win =  None, None
-        gobject.idle_add(parent.OnOpen,(win))
+        gobject.idle_add(parent.OnImport,(win))
 
     def ShowDialog (self, parent, widget):
         if COpenSaveDialog:
@@ -52,25 +49,22 @@ class CfrmOpenProject (common.CWindow):
             filters = self.filters
             thread.start_new(self.__NewDialog,(title, filters, parent, widget))
             return None, None
-        self.form.set_transient_for (parent.form)
-        self.chkOpenAsCopy.set_active (False)
+        self.form.set_transient_for (parent.form)        
         try:
             while True:
                 run  = self.form.run ()
                 if run != gtk.RESPONSE_OK:
                     self.form.hide ()
-                    parent.OnOpen((None, None))
-                    return
-                copy = self.chkOpenAsCopy.get_active ()
-                filename = self.form.get_filename ()
+                    parent.OnImport((None, None))
+                    return                
+                filename = self.form.get_filename ()                   
                 if not filename:
                     continue
                 else:
                     filename = filename.decode ('utf-8')
-                if filename and os.path.isfile (filename):
-                    if not copy:
-                        self.application.GetRecentFiles ().AddFile (filename)
-                    parent.OnOpen((filename, copy))
+                if filename and os.path.isfile (filename):                    
+                    filterIndex = self.form.list_filters().index(self.form.get_filter())
+                    parent.OnImport((filename, filterIndex))
                     return
         finally:
             self.form.hide ()
