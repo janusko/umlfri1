@@ -451,12 +451,12 @@ class CfrmMain(CWindow):
     def on_RecentItem_activate (self, widget):
         try:
             if self.application.GetProject() is not None and CQuestionDialog(self.form, _('Do you want to save project?'), True).run():
-                self.filename = widget.get_label ().split ()[1]
+                self.filename = widget.get_label().split(' ', 1)[1]
                 self.copy = False
                 self.afterActionOpen = True
                 self.ActionSave(widget)
-            else:
-                filename = widget.get_label ().split ()[1]
+            else:                
+                filename = widget.get_label().split(' ', 1)[1]                
                 self.LoadProject(filename, False)
                 self.tabStartPage.Fill()
         except ECancelPressed:
