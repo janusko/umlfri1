@@ -6,15 +6,20 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: UML .FRI 1.0-rc3\n"
+"Project-Id-Version: UML .FRI 1.0-rc4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-10 13:15+0100\n"
+"POT-Creation-Date: 2012-04-12 10:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#, python-format
+msgid "%s added to the project"
+msgstr ""
 
 msgid "<b>project e-mail address</b>"
 msgstr ""
@@ -24,6 +29,13 @@ msgstr ""
 
 #, python-format
 msgid "Academic year %s:"
+msgstr ""
+
+msgid "Action from plugin"
+msgstr ""
+
+#, python-format
+msgid "Action from plugin %s"
 msgstr ""
 
 msgid "Active"
@@ -45,9 +57,6 @@ msgid "Addons"
 msgstr ""
 
 msgid "Align"
-msgstr ""
-
-msgid "All files"
 msgstr ""
 
 msgid "An error during printing has occured."
@@ -92,6 +101,17 @@ msgstr ""
 msgid "Change source and target"
 msgstr ""
 
+#, python-format
+msgid "Changed properties of the %s"
+msgstr ""
+
+#, python-format
+msgid "Changed property %s of the %s"
+msgstr ""
+
+msgid "Check for Updates"
+msgstr ""
+
 msgid "Close all diagram"
 msgstr ""
 
@@ -99,6 +119,18 @@ msgid "Close diagram"
 msgstr ""
 
 msgid "Connection"
+msgstr ""
+
+#, python-format
+msgid "Connection between %s and %s is shown on diagram %s"
+msgstr ""
+
+#, python-format
+msgid "Connection created between objects %s and %s"
+msgstr ""
+
+#, python-format
+msgid "Connection created between objects %s and %s on the diagram %s"
 msgstr ""
 
 msgid "Connections"
@@ -111,9 +143,6 @@ msgid "Copy without background (transparent)"
 msgstr ""
 
 msgid "Create New Project"
-msgstr ""
-
-msgid "Create _New Project"
 msgstr ""
 
 msgid "Current Center horizontaly"
@@ -134,9 +163,6 @@ msgstr ""
 msgid "Current upwards"
 msgstr ""
 
-msgid "Date"
-msgstr ""
-
 msgid "Date/Time"
 msgstr ""
 
@@ -144,6 +170,10 @@ msgid "Delete from Project"
 msgstr ""
 
 msgid "Description:"
+msgstr ""
+
+#, python-format
+msgid "Diagram %s moved in project tree"
 msgstr ""
 
 msgid "Diagram Export"
@@ -182,7 +212,30 @@ msgstr ""
 msgid "Drag"
 msgstr ""
 
+msgid "Duplicate selected elements."
+msgstr ""
+
+#, python-format
+msgid "Duplicated %d elements in diagram %s"
+msgstr ""
+
 msgid "Element"
+msgstr ""
+
+#, python-format
+msgid "Element %s created in diagram %s"
+msgstr ""
+
+#, python-format
+msgid "Element %s created in the project"
+msgstr ""
+
+#, python-format
+msgid "Element %s is shown on diagram %s"
+msgstr ""
+
+#, python-format
+msgid "Element %s moved in project tree"
 msgstr ""
 
 msgid "Element is already in this diagram"
@@ -228,12 +281,6 @@ msgid "Export file format"
 msgstr ""
 
 msgid "Fakulty of Management Science and Informatics"
-msgstr ""
-
-msgid "File does not exist"
-msgstr ""
-
-msgid "File name"
 msgstr ""
 
 msgid ""
@@ -311,6 +358,9 @@ msgstr ""
 msgid "Line Color 2"
 msgstr ""
 
+msgid "Line Style"
+msgstr ""
+
 msgid "Line Width"
 msgstr ""
 
@@ -347,6 +397,9 @@ msgstr ""
 msgid "Name text font"
 msgstr ""
 
+msgid "New"
+msgstr ""
+
 msgid "Notes"
 msgstr ""
 
@@ -356,7 +409,7 @@ msgstr ""
 msgid "Open Project"
 msgstr ""
 
-msgid "Open _Recent Project"
+msgid "Open _Recent"
 msgstr ""
 
 msgid "Open as _copy"
@@ -550,6 +603,9 @@ msgstr ""
 msgid "System _info"
 msgstr ""
 
+msgid "Terminate"
+msgstr ""
+
 msgid "Text Font"
 msgstr ""
 
@@ -557,6 +613,11 @@ msgid "Text color"
 msgstr ""
 
 msgid "Text font"
+msgstr ""
+
+msgid ""
+"The addon is not responding for the stop request. Do you want me to "
+"terminate the addon?"
 msgstr ""
 
 msgid ""
@@ -577,16 +638,19 @@ msgstr ""
 msgid "UML .FRI Addons"
 msgstr ""
 
-msgid "UML .FRI Clear XML Projects"
+msgid "UML .FRI Clear XML Project templates"
 msgstr ""
 
-msgid "UML .FRI Project templates"
+msgid "UML .FRI Clear XML Projects"
 msgstr ""
 
 msgid "UML .FRI Project with embedded metamodels"
 msgstr ""
 
 msgid "UML .FRI Projects"
+msgstr ""
+
+msgid "UML .FRI Projects templates"
 msgstr ""
 
 msgid "UML .FRI designer"
@@ -625,6 +689,9 @@ msgid "University of Žilina"
 msgstr ""
 
 msgid "Unset default diagram"
+msgstr ""
+
+msgid "Updates"
 msgstr ""
 
 msgid "Upwards most"
@@ -674,6 +741,9 @@ msgstr ""
 msgid "Visible"
 msgstr ""
 
+msgid "Wait"
+msgstr ""
+
 msgid "Warning"
 msgstr ""
 
@@ -716,6 +786,9 @@ msgstr ""
 msgid "_Diagram"
 msgstr ""
 
+msgid "_Duplicate"
+msgstr ""
+
 msgid "_Edit"
 msgstr ""
 
@@ -747,9 +820,6 @@ msgid "_Install"
 msgstr ""
 
 msgid "_License"
-msgstr ""
-
-msgid "_Open Existing Project"
 msgstr ""
 
 msgid "_PDF"
@@ -807,4 +877,7 @@ msgid "plugin"
 msgstr ""
 
 msgid "project web"
+msgstr ""
+
+msgid "use background"
 msgstr ""
