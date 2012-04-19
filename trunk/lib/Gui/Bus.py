@@ -50,6 +50,8 @@ class CBus(gobject.GObject):
             [gobject.TYPE_PYOBJECT]),
         'undo-redo-action': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
             [gobject.TYPE_STRING]),
+        'add-element':(gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE,
+            (gobject.TYPE_PYOBJECT,gobject.TYPE_PYOBJECT,gobject.TYPE_PYOBJECT,)),
     }
     
     __doMap = {

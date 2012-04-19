@@ -82,6 +82,11 @@ class CPluginAdapter(CBaseObject, CGuiObject):
     def gui_project_opened(self, widget):
         self.Notify('project-opened')
     
+    @event('application.bus', 'add-element')
+    def gui_added_element(self, bus, elementobject, diagram, parentobject):
+        self.Notify('add-element', elementobject, diagram, parentobject)
+
+    
     def plugin_change_object(self, object):
         if isinstance(object, (CElement, CConnection)):
             object = object.GetObject()
@@ -92,8 +97,8 @@ class CPluginAdapter(CBaseObject, CGuiObject):
         gobject.idle_add(self.application.GetBus().emit, 'all-content-update', object)
     
     def plugin_add_new_element(self, element):
-        picDrawingArea = self.application.GetWindow('frmMain').picDrawingArea
-        picDrawingArea.emit('add-element', element.GetObject(), element.GetDiagram(), element.GetDiagram().GetNode())
+        self.application.GetBus().emit('add-element', element.GetObject(), element.GetDiagram(), element.GetDiagram().GetNode())
+
         picDrawingArea.ToPaint()
         
     def plugin_add_element(self, element):

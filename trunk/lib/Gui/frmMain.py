@@ -625,7 +625,7 @@ class CfrmMain(CWindow):
         ElementObject = CElementObject(ElementType)
         self.twProjectView.AddElement(ElementObject, None, parentElement)
 
-    @event("picDrawingArea", "add-element")
+    @event("application.bus", "add-element")
     def on_add_element(self, widget, Element, diagram, parentElement):
         self.twProjectView.AddElement(Element, diagram, parentElement)
 

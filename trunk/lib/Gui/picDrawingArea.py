@@ -70,8 +70,6 @@ class CpicDrawingArea(CWidget):
             (gobject.TYPE_PYOBJECT, gobject.TYPE_BOOLEAN, )),
         'run-dialog':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_PYOBJECT,
             (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT, )), #type, message
-        'add-element':(gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
-            (gobject.TYPE_PYOBJECT,gobject.TYPE_PYOBJECT,gobject.TYPE_PYOBJECT,)),
         'delete-element-from-all':(gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
             (gobject.TYPE_PYOBJECT, )),
         'drop-from-treeview': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
@@ -577,7 +575,7 @@ class CpicDrawingArea(CWidget):
                             parentElement = el2.GetObject()
                     
             self.Diagram.DeselectAll()
-            self.emit('add-element', ElementObject, self.Diagram, parentElement)
+            self.application.GetBus().emit('add-element', ElementObject, self.Diagram, parentElement)
             self.Diagram.AddToSelection(newElement)
             self.emit('selected-item', list(self.Diagram.GetSelected()),True)
             self.Paint()
