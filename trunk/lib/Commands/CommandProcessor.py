@@ -22,9 +22,11 @@ class CCommandProcessor(object):
             if allowFolding:
                 while len(self.__undoStack) >= 2:
                     replaceCommand = self.__undoStack[0].Fold(self.__undoStack[1])
-                    if replaceCommand is not None:
+                    if replaceCommand is None:
+                        break
+                    else:
                         del self.__undoStack[:2]
-                        self.__undoStack.append(replaceCommand)
+                        self.__undoStack.insert(0, replaceCommand)
             
             if MAX_UNDO_STACK_SIZE is not None and len(self.__undoStack) > MAX_UNDO_STACK_SIZE:
                 del self.__undoStack[MAX_UNDO_STACK_SIZE:]
