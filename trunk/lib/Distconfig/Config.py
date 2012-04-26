@@ -2,8 +2,9 @@ from Utils import *
 
 ROOT_PATH =      path(ROOT)
 DOCS_PATH =      path(ROOT)
-CONFIG_PATH =    path(ROOT, "etc", "config.xml")
-TEMPLATES_PATH = path(ROOT, "etc", "templates")
+ETC_PATH =       path(ROOT, "etc")
+CONFIG_PATH =    path(ETC_PATH, "config.xml")
+TEMPLATES_PATH = path(ETC_PATH, "templates")
 
 GUI_PATH =       path(ROOT, "gui")
 

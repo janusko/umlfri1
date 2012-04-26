@@ -24,7 +24,7 @@ from lib.Gui import CBus, CPluginAdapter
 from lib.Gui.dialogs import CExceptionDialog, CErrorDialog
 
 from lib.config import config
-from lib.Distconfig import LOCALES_PATH, GUI_PATH, SVN_REVISION
+from lib.Distconfig import LOCALES_PATH, GUI_PATH, SVN_REVISION, IS_FROZEN, ETC_PATH
 from lib.consts import SPLASH_TIMEOUT, CHECK_ADDON_INTERVAL
 
 from lib.Exceptions import UserException
@@ -35,7 +35,12 @@ from lib.datatypes import CVersion
 
 from lib.Commands import CCommandProcessor
 
-__version__ = '1.0-rc4'
+if IS_FROZEN:
+    gtkrc = os.path.join(ETC_PATH, 'gtkrc')
+    gtk.rc_set_default_files([gtkrc])
+    gtk.rc_reparse_all_for_settings(gtk.settings_get_default(), True)
+
+__version__ = '1.0-rc5'
 
 class Application(CApplication):
     version = CVersion(__version__)
