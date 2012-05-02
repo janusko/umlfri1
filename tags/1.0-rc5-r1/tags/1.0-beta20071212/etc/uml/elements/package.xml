@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ElementType id="Package">
+    <Icon path="icons/package.png" />
+    <Connections>
+        <!--Item value="Association" />
+        <Item value="Generalization" with="Class" allowrecursive="0" /-->
+    </Connections>
+    <Attributes>
+        <Item value="Name" type="str" propid="name" />
+        <Item value="Scope" type="enum">
+            <Option value="public" />
+            <Option value="private" />
+            <Option value="protected" />
+        </Item>
+        <Item value="Notes" type="note" />
+    </Attributes>
+    <Appearance>
+        <Shadow padding="3" color="/Styles/Element/ShadowColor">
+            <HBox expand="-1">
+                <VBox>
+                    <Rectangle fill="/Styles/Element/FillColor" border="/Styles/Element/LineColor">
+                        <Padding padding="5">
+                            <TextBox text="#name" font="/Styles/Element/NameTextFont" color="/Styles/Element/NameTextColor" />
+                        </Padding>
+                    </Rectangle>
+                    <Padding padding="8" />
+                </VBox>
+                <Rectangle fill="/Styles/Element/FillColor" border="/Styles/Element/LineColor">
+                    <Sizer minwidth="60" minheight="60">
+                        <Padding padding="5">
+                            <HBox>
+                                <Loop collection="CHILDREN">
+                                    <VBox>
+                                        <Icon filename="@icon" />
+                                        <Align align="left center">
+                                            <TextBox text="@name" font="/Styles/Element/NameTextFont" color="/Styles/Element/NameTextColor" />
+                                        </Align>
+                                    </VBox>
+                                </Loop>
+                            </HBox>
+                        </Padding>
+                    </Sizer>
+                </Rectangle>
+            </HBox>
+        </Shadow>
+    </Appearance>
+</ElementType>

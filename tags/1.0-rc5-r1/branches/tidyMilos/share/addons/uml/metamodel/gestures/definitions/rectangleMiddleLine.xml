@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Gesture name="rectangleMiddleLine" type="connection" xmlns="http://umlfri.org/xmlschema/gestures.xsd">
+	<Algorithm name="Boundary Box Algorithm">
+		<Description id="1_1">
+			<Line from="0,0" to="1,0"/>
+			<Line from="1,0" to="1,1"/>
+			<Line from="1,1" to="0,1"/>
+			<Line from="0,1" to="0,0"/>
+			<Line from="0,0.5" to="1,0.5"/>	
+		</Description>
+		<Description id="1_2">
+			<Line from="0,0" to="1,0"/>
+			<Line from="1,0" to="1,1"/>
+			<Line from="1,1" to="0,1"/>
+			<Line from="0,1" to="0,0"/>
+			<Line from="0.5,0" to="0.5,1"/>	
+		</Description>		
+	</Algorithm>
+</Gesture>

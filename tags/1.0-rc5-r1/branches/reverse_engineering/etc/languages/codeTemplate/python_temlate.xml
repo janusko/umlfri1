@@ -1,0 +1,86 @@
+<?xml version="1.0" ?>
+<Template diagram="Class Diagram" language="Python" indents="True">
+
+    <Terminal id="code-line" value="[0-9a-zA-Z_ ]+" />
+    <Terminal id="identifier" value="(?!(def|class)($|(.?[^0-9a-zA-Z_])))[a-zA-Z_][0-9a-zA-Z_]*" />
+    <Terminal id="obsah" value="[0-9a-zA-Z_]+" />
+    <Terminal id="params" value=".[^\)]*" />
+    <Rule id="code">
+        <Loop>
+            <Alternate>
+                <Flow>
+                    <Sub value="code-line" /> 
+                    <br required="Optional" />
+                </Flow>
+                <Flow>
+                    <Indent required="True">
+                        <Sub value="code" />
+                    </Indent>
+                </Flow>
+            </Alternate>
+        </Loop>
+    </Rule>
+    
+    <Element id="Package">
+        <Directory name="#Name" value="[_0-9a-zA-Z]+">
+            <Recursive>
+                <AllowElement id="Package" />
+                <AllowElement id="Class" />
+            </Recursive>
+        </Directory>
+    </Element>
+    <Element id="Class">
+        <File name="#Name" value="[_0-9a-zA-Z]+\.py" sufix=".py">
+            class <whitespace />
+            <Property id="#Name" value="identifier" />
+                <Optional>
+                    ( 
+                        <ConnectionLoop id="type" value="Generalization" separator=", "> 
+                            <Property id="@dest">
+                                <Property id="#Name" value="identifier" />
+                            </Property>
+                        </ConnectionLoop>
+                    )
+                </Optional>
+            :<br/>
+            <Indent required="True" defsize="4">
+            
+                <Optional>
+                    '''<br required="True"/>
+                    <Property id="#Notes" value="code"/>
+                    '''<br required="Optional" />
+                </Optional>
+                <PropertyLoop id="Attributes">
+                    <Property id="@name" value="identifier" />
+                    =
+                    <Property id="@initial" value="identifier" default="None" />
+                    <br required="Optional" />
+                    <Optional>
+                        '''<br required="True" />
+                        <Property id="@doc" value="code"/>
+                        '''<br required="Optional" />
+                    </Optional>
+                </PropertyLoop>
+                <PropertyLoop id="Operations">
+                    def
+                    <Property id="@name" value="identifier" />
+                    (self, <Property id="@params" value="params" />):
+                    <br required="Optional" />
+                    <Indent required="True" defsize="4">
+                        <Optional>
+                            '''<br required="True" />
+                            <Property id="@doc" value="code"/>
+                            '''<br required="Optional" />
+                        </Optional>
+                        <Property id="@initial" value="code"/>
+                    </Indent>
+                </PropertyLoop>
+            </Indent>
+            <!--Indent required="True" defsize="4">
+                <PropertyLoop id="codes" separator="\n">
+                    <Property id="code" value="code-line" />
+                </PropertyLoop>
+            </Indent-->
+        </File>
+    </Element>
+</Template>

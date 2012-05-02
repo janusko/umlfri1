@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   version="1.0"
+   width="64"
+   height="64"
+   id="svg27640">
+  <defs
+     id="defs27642">
+    <linearGradient
+       id="linearGradient9512">
+      <stop
+         style="stop-color:#7bedff;stop-opacity:1"
+         offset="0"
+         id="stop9522" />
+      <stop
+         style="stop-color:#7beeff;stop-opacity:1"
+         offset="0.7037037"
+         id="stop13024" />
+      <stop
+         style="stop-color:#0078fd;stop-opacity:1"
+         offset="1"
+         id="stop9516" />
+    </linearGradient>
+    <radialGradient
+       cx="257.5"
+       cy="257"
+       r="239"
+       fx="257.5"
+       fy="257"
+       id="radialGradient9520"
+       xlink:href="#linearGradient9512"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1,0,0,0.98954,7.341405e-15,2.688285)" />
+    <linearGradient
+       x1="-520.38086"
+       y1="147.0589"
+       x2="-282.85645"
+       y2="147.0589"
+       id="linearGradient23795"
+       xlink:href="#linearGradient22734"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       id="linearGradient24674">
+      <stop
+         style="stop-color:black;stop-opacity:1"
+         offset="0"
+         id="stop24676" />
+      <stop
+         style="stop-color:black;stop-opacity:0"
+         offset="1"
+         id="stop24678" />
+    </linearGradient>
+    <linearGradient
+       x1="-520.38086"
+       y1="147.0589"
+       x2="-449.84863"
+       y2="147.0589"
+       id="linearGradient24680"
+       xlink:href="#linearGradient24674"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       id="linearGradient22734">
+      <stop
+         style="stop-color:#991414;stop-opacity:1"
+         offset="0"
+         id="stop22736" />
+      <stop
+         style="stop-color:#4c1461;stop-opacity:1"
+         offset="0.64814812"
+         id="stop22742" />
+      <stop
+         style="stop-color:#231287;stop-opacity:1"
+         offset="1"
+         id="stop22738" />
+    </linearGradient>
+  </defs>
+  <g
+     id="layer1">
+    <g
+       transform="matrix(0.216914,0,0,0.238369,-22.71128,-27.74662)"
+       style="fill:#00123c;fill-opacity:1;display:inline"
+       id="g7716">
+      <flowRoot
+         transform="matrix(1.253829,0,0,1.437085,757.1704,73.69598)"
+         style="font-size:150px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#8f1414;fill-opacity:1;font-family:impact"
+         id="flowRoot4093"
+         xml:space="preserve"><flowRegion
+           style="fill:url(#linearGradient24680);fill-opacity:1"
+           id="flowRegion4095"><rect
+             width="509.11688"
+             height="353.55338"
+             x="-526.08746"
+             y="66.522728"
+             style="font-size:150px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#8f1414;fill-opacity:1;font-family:impact"
+             id="rect4097" /></flowRegion><flowPara
+           style="fill:#8f1414;fill-opacity:1"
+           id="flowPara4099">U</flowPara></flowRoot>      <text
+         x="214.81802"
+         y="292.20193"
+         transform="scale(0.883498,1.131864)"
+         style="font-size:226.1721344px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ad6e00;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:impact"
+         id="text4113"
+         xml:space="preserve"><tspan
+           x="214.81802"
+           y="292.20193"
+           style="fill:#ad6e00;fill-opacity:1"
+           id="tspan4115">M</tspan></text>
+      <flowRoot
+         transform="matrix(1.422873,0,0,1.437085,1068.396,74.90683)"
+         style="font-size:150px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#231287;fill-opacity:1;display:inline;font-family:impact"
+         id="flowRoot23785"
+         xml:space="preserve"><flowRegion
+           style="fill:url(#linearGradient23795);fill-opacity:1"
+           id="flowRegion23787"><rect
+             width="509.11688"
+             height="353.55338"
+             x="-526.08746"
+             y="66.522728"
+             style="font-size:150px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#231287;fill-opacity:1;font-family:impact"
+             id="rect23789" /></flowRegion><flowPara
+           style="fill:#231287;fill-opacity:1"
+           id="flowPara23791">L</flowPara></flowRoot>    </g>
+  </g>
+</svg>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ElementType id="Activity" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Icon path="icons/state.png" />
+    <Domain id="activity" identity="name" />
+    <Connections>
+        <Item value="ActivityFlow" />
+    </Connections>
+    <Appearance>
+        <Shadow padding="3" color="/Styles/Element/ShadowColor">
+            <Rectangle fill="/Styles/Element/FillColor" border="/Styles/Element/LineColor" right="10 rounded" left="10 rounded">
+                <Sizer minheight="50">
+                    <Align align="center center">
+                        <Padding padding="5">
+                            <HBox>
+                                <Condition condition="#stereotype" type="empty" negate="1">
+                                    <Align align="center">
+                                        <VBox>
+                                            <TextBox text="&#171;" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                            <TextBox text="#stereotype" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                            <TextBox text="&#187;" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                        </VBox>
+                                    </Align>
+                                </Condition>
+                                <Align align="center">
+                                    <TextBox text="#name" font="/Styles/Element/NameTextFont" color="/Styles/Element/NameTextColor" />
+                                </Align>
+                            </HBox>
+                        </Padding>
+                    </Align>
+                </Sizer>
+            </Rectangle>
+        </Shadow>
+    </Appearance>
+    <Options>
+    </Options>
+</ElementType>

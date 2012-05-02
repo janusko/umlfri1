@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ElementType id="EndState">
+    <Icon path="icons/final.png" />
+    <Connections>
+        <Item value="StateTransition"/>
+        <Item value="ActivityFlow" />
+    </Connections>
+    <Attributes>
+        <Item value="Name" type="str" propid="name" notgenerate="True"/>
+        <Item value="Notes" type="note"/>
+    </Attributes>
+    <Appearance>
+        <HBox expand="0">
+            <Ellipse fill="/Styles/Element/FillColor" border="/Styles/Element/LineColor">
+                <Padding padding="10">
+                    <Ellipse fill="/Styles/Element/Fill3Color">
+                        <Sizer width="15" height="15" />
+                    </Ellipse>
+                </Padding>
+            </Ellipse>
+            <Align align="center center">
+                <Condition condition="name" type="empty" negate="1">
+                    <TextBox text="#name" font="/Styles/Element/NameTextFont" color="/Styles/Element/NameTextColor" />
+                </Condition>
+            </Align>
+        </HBox>
+    </Appearance>
+</ElementType>

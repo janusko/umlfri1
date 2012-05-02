@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ElementAlias id="Interface" alias="Class" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Icon path="icons/interface.png" />
+    <DefaultValues>
+        <Item path="stereotype" value="interface" />
+    </DefaultValues>
+    <Options />
+</ElementAlias>

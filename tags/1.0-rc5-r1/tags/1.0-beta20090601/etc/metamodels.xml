@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE Config [<!ENTITY apppath "&#255;">]>
+<Metamodels xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodelList.xsd">
+    <Metamodel>
+        <Uri>http://umlfri.kst.fri.uniza.sk/metamodel/uml.frim</Uri>
+        <Version>1.4.0</Version>
+        <Path>&apppath;/etc/uml/</Path>
+    </Metamodel>
+    <Metamodel>
+        <Uri>http://umlfri.kst.fri.uniza.sk/metamodel/flowchart.frim</Uri>
+        <Version>0.0.1</Version>
+        <Path>&apppath;/etc/flowchart/</Path>
+    </Metamodel>
+</Metamodels>

@@ -1,0 +1,331 @@
+<xml version="1.0" ?>
+<Template diagram="Class Diagram" language="C++" type="Code">
+    <Element id="Package">
+        <Directory name="{name}" value="[_0-9a-zA-Z]+">
+            <Recursive>
+                <AllowElement id="All" />
+            </Recursive>
+        </Directory>
+    </Element>
+    <Element id="Class">
+        <File name="#name" value="[_0-9a-zA-Z]+\.h" sufix=".h">
+            <Optional>
+                /**<br />
+                <Property id="#Notes" newLine=" * " />
+                <br />
+                */<br />
+            </Optional>
+            <ConnectionLoop id="type" value="Note Link" separator=", "> 
+                <Property id="@dest">
+                    /**<br />
+                    <Property id="#Notes" newLine=" * " /><br />
+                    */<br />
+                </Property>
+                <Property id="@source">
+                    /**<br />
+                    <Property id="#Notes" newLine=" * " /><br />
+                    */<br />
+                </Property>
+            </ConnectionLoop>
+            class<whitespace />
+                <Property id="#name" value="[a-z0-9A-Z]+" />
+                
+                <Optional> 
+                    : <whitespace /> 
+                    <ConnectionLoop id="type" value="Generalization" separator=", "> 
+                       <Property id="@dest">
+                            <Property id="#name" value="[a-z0-9A-Z]+" />
+                        </Property>
+                    </ConnectionLoop>
+                </Optional>
+                
+                {<br />
+                 <Alternate>
+                    <Optional>
+                        <Optional>
+                            <Token value="private:" default="private:" />
+                            <br />
+                        </Optional>
+                        <Indent>
+                            <Alternate>
+                                <Condition id="#scope" value="private">
+                                    <Recursive>
+                                        <AllowElement id="Class" />
+                                    </Recursive>
+                                </Condition> 
+                                <PropertyLoop id="attributes">
+                                   <Condition id="@scope" value="private">
+                                        <Optional>
+                                            /** <br />
+                                            <Property id="@doc" newLine=" * "/>
+                                            <br />
+                                            */<br />
+                                        </Optional>
+                                        <Condition id="@static" value="True">
+                                            static <whitespace />
+                                        </Condition>
+                                        <Property id="@type" /> 
+                                        <whitespace />
+                                        <Condition id="@containment" value="1">
+                                            *
+                                        </Condition>
+                                        <Property id="@name" />;
+                                    </Condition>
+                                </PropertyLoop>
+                                <ConnectionLoop id="type" value="Association" >
+                                    <Optional>
+                                        <Property id="@source">
+                                            <Property id="#name" value="[a-z0-9A-Z]+" />
+                                        </Property> <whitespace />
+                                        <Property id="@name" />; <br />
+                                    </Optional>
+                                </ConnectionLoop>  
+                                <ConnectionLoop id="type" value="Agregation" >
+                                    <Optional>
+                                        <Property id="@source">
+                                            <Property id="#name" value="[a-z0-9A-Z]+" />
+                                        </Property> <whitespace />
+                                        <Property id="@name" prefix="*"/>; <br />
+                                    </Optional>
+                                </ConnectionLoop>  
+                                <ConnectionLoop id="type" value="Compose" >
+                                    <Optional>
+                                        <Property id="@source">
+                                            <Property id="#name" value="[a-z0-9A-Z]+" />
+                                        </Property> <whitespace />
+                                        <Property id="@name" />; <br />
+                                    </Optional>
+                                </ConnectionLoop>  
+                                <br />
+                                <PropertyLoop id="operations">
+                                    <Condition id="@scope" value="private">
+                                        <Optional>
+                                            /** <br />
+                                            <Property id="@doc" newLine=" * "/>
+                                            <br />
+                                            */<br />
+                                        </Optional>
+                                        <Condition id="@abstract" value="True">
+                                            virtual <whitespace />
+                                        </Condition>
+                                        <Condition id="@static" value="True">
+                                            static <whitespace />
+                                        </Condition>
+                                        <Condition id="@const" value="True">
+                                            const <whitespace />
+                                        </Condition>
+                                        <Property id="@type" default="void" /> 
+                                        <whitespace />
+                                        <Property id="@name" />
+                                        (
+                                        <PropertyLoop id="@params" separator="," parse="params">
+                                            <Property id="@paramsType" /> <whitespace />
+                                            <Property id="@paramsName" />
+                                            <Optional>
+                                                =
+                                                <Property id="@paramsDefault" />
+                                            </Optional>     
+                                        </PropertyLoop> 
+                                        )
+                                        <Condition id="@isquery" value="True">
+                                            const <whitespace />
+                                        </Condition>
+                                        <Condition id="@pure" value="True">
+                                            =0 
+                                        </Condition>
+                                        ;
+                                    </Condition>
+                                </PropertyLoop>
+                            </Alternate>
+                        </Indent>
+                    </Optional>
+                    
+                    
+                    <Optional>
+                        <Optional>
+                            <Token value="protected:" default="protected:" />
+                            <br />
+                        </Optional>
+                        <Indent>
+                            <Alternate>
+                                <Condition id="#scope" value="protected">
+                                    <Recursive>
+                                        <AllowElement id="Class" />
+                                    </Recursive>
+                                </Condition> 
+                                <PropertyLoop id="attributes">
+                                    <Condition id="@scope" value="protected">
+                                        <Optional>
+                                            /** <br />
+                                            <Property id="@doc" newLine=" * "/>
+                                            <br />
+                                            */<br />
+                                        </Optional>
+                                        <Condition id="@static" value="True">
+                                            static <whitespace />
+                                        </Condition>
+                                        <Property id="@type" /> 
+                                        <whitespace />
+                                        <Condition id="@containment" value="1">
+                                            *
+                                        </Condition>
+                                        <Property id="@name" />;
+                                    </Condition>
+                                </PropertyLoop>
+                                <br />
+                                <PropertyLoop id="operations">
+                                    <Condition id="@scope" value="protected">
+                                        <Optional>
+                                            /** <br />
+                                            <Property id="@doc" newLine=" * "/>
+                                            <br />
+                                            */<br />
+                                        </Optional>
+                                        <Condition id="@abstract" value="True">
+                                            virtual <whitespace />
+                                        </Condition>
+                                        <Condition id="@static" value="True">
+                                            static <whitespace />
+                                        </Condition>
+                                        <Condition id="@const" value="True">
+                                            const <whitespace />
+                                        </Condition>
+                                        <Property id="@type" default="void" /> 
+                                        <whitespace />
+                                        <Property id="@name" />
+                                        (
+                                        <PropertyLoop id="@params" separator="," parse="params">
+                                            <Property id="@paramsType" /> <whitespace />
+                                            <Property id="@paramsName" />
+                                            <Optional>
+                                                =
+                                                <Property id="@paramsDefault" />
+                                            </Optional>     
+                                        </PropertyLoop> 
+                                        )
+                                        <Condition id="@isquery" value="True">
+                                            const <whitespace />
+                                        </Condition>
+                                        <Condition id="@pure" value="True">
+                                            =0 
+                                        </Condition>
+                                        ;
+                                    </Condition>
+                                </PropertyLoop>
+                            </Alternate>
+                        </Indent>
+                    </Optional>
+                    
+                    <Optional>
+                        <Optional>
+                            <Token value="public:" default="public:" />
+                            <br />
+                        </Optional>
+                        <Indent>
+                            <Alternate>
+                                <Condition id="#scope" value="public">
+                                    <Recursive>
+                                        <AllowElement id="Class" />
+                                    </Recursive>
+                                </Condition> 
+                                <PropertyLoop id="attributes">
+                                    <Condition id="@scope" value="public">
+                                        <Optional>
+                                            /** <br />
+                                            <Property id="@doc" newLine=" * "/>
+                                            <br />
+                                            */<br />
+                                        </Optional>
+                                        <Condition id="@static" value="True">
+                                            static <whitespace />
+                                        </Condition>
+                                        <Property id="@type" /> 
+                                        <whitespace />
+                                        <Condition id="@containment" value="1">
+                                            *
+                                        </Condition>
+                                        <Property id="@name" />;
+                                    </Condition>
+                                </PropertyLoop>
+                                <br />
+                                <PropertyLoop id="operations">
+                                    <Condition id="@scope" value="public">
+                                        <Optional>
+                                            /** <br />
+                                            <Property id="@doc" newLine=" * "/>
+                                            <br />
+                                            */<br />
+                                        </Optional>
+                                        <Condition id="@abstract" value="True">
+                                            virtual <whitespace />
+                                        </Condition>
+                                        <Condition id="@static" value="True">
+                                            static <whitespace />
+                                        </Condition>
+                                        <Condition id="@const" value="True">
+                                            const <whitespace />
+                                        </Condition>
+                                        <Property id="@type" default="void" /> 
+                                        <whitespace />
+                                        <Property id="@name" />
+                                        (
+                                        <PropertyLoop id="@params" separator="," parse="params">
+                                            <Property id="@paramsType" /> <whitespace />
+                                            <Property id="@paramsName" />
+                                            <Optional>
+                                                =
+                                                <Property id="@paramsDefault" />
+                                            </Optional>     
+                                        </PropertyLoop> 
+                                        )
+                                        <Condition id="@isquery" value="True">
+                                            const <whitespace />
+                                        </Condition>
+                                        <Condition id="@pure" value="True">
+                                            =0 
+                                        </Condition>
+                                        ;
+                                    </Condition>
+                                </PropertyLoop>
+                            </Alternate>
+                        </Indent>
+                    </Optional>
+                </Alternate>
+                
+                }; <br />
+        </File>
+        <File name="#name" value="[_0-9a-zA-Z]+\.cpp" sufix=".cpp">
+            <Condition id="Recursive" value="0">
+                #include <whitespace />"
+                <Property id="#name" sufix=".h" />" <br count="2" />
+            </Condition>
+            <PropertyLoop id="operations">
+                <Condition id="@pure" value="False">
+                    <Indent defsize="0">
+                        <Optional>
+                            /** <br />
+                            <Property id="@doc" newLine=" * "/>
+                            <br />
+                            */<br />
+                        </Optional>
+                        <Property id="@type" default="void" />
+                        <whitespace />
+                        <Property id="#fullname" />
+                        ::<Property id="@name" />
+                        (
+                        <PropertyLoop id="@params" separator="," parse="params">
+                            <Property id="@paramsType" /> <whitespace />
+                            <Property id="@paramsName" />
+                        </PropertyLoop>
+                        ){<br />
+                        <Indent required="False" defsize="4">
+                            <Property id="@initial" />
+                            <br />
+                        </Indent>
+                        }<br />
+                    </Indent>
+                </Condition>
+            </PropertyLoop>
+        </File>
+    </Element>
+</Template>

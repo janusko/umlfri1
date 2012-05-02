@@ -1,0 +1,45 @@
+from base import IBase
+from lib.Addons.Plugin.Communication.ComSpec import *
+from lib.Addons.Plugin.Interface.decorators import *
+from lib.Addons.Metamodel.Metamodel import CMetamodel
+from lib.Exceptions import *
+
+class IMetamodel(IBase):
+    __cls__ = CMetamodel
+    
+    @result(r_str)
+    def GetUri(him):
+        return him.GetUri()
+    
+    @result(r_str)
+    def GetVersion(him):
+        return him.GetVersion()
+        
+    @result(r_objectlist)
+    def GetDiagrams(him):
+        return list(him.GetDiagramFactory())
+    
+    @result(r_objectlist)
+    def GetElements(him):
+        return list(him.GetElementFactory().IterTypes())
+    
+    @result(r_objectlist)
+    def GetConnections(him):
+        return list(him.GetConnectionFactory().IterTypes())
+    
+    @result(r_objectlist)
+    def GetDomains(him):
+        return list(him.GetDomainFactory().IterTypes())
+    
+    def ListDir(him, path):
+        try:
+            return him.GetStorage().listdir(path)
+        except:
+            raise ParamValueError('invalid path')
+    
+    def ReadFile(him, path):
+        try:
+            return him.GetStorage().read_file(path)
+        except:
+            raise ParamValueError('invalid path')
+        

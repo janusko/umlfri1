@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ElementType id="Note" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Icon path="icons/note.png" />
+    <Domain id="note" identity="name" />
+    <Connections>
+        <Item value="Note Link" with="*"/>
+    </Connections>
+    <Appearance>
+        <Shadow padding="3" color="#cfg.Styles.Element.ShadowColor">
+            <Rectangle fill="#cfg.Styles.Element.FillColor" border="#cfg.Styles.Element.LineColor" righttop="#(10, 'note_corner', cfg.Styles.Element.Fill2Color)">
+                <Sizer minwidth="50">
+                    <Padding padding="5">
+                        <TextBox text="#self.note" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                    </Padding>
+                </Sizer>
+            </Rectangle>
+        </Shadow>
+    </Appearance>
+    <Options>
+    </Options>
+</ElementType>

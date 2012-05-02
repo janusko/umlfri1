@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ConnectionType id="Association" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Icon path="icons/associate.png" />
+    <Domain id="association" identity="name" />
+    
+    <Appearance>
+        <ConnectionLine style="solid" color="/Styles/Connection/LineColor" />
+        <Switch value="#direction">
+            <Case condition="Source to Destination">
+                <ConnectionArrow index="-1" style="simple" color="/Styles/Connection/ArrowColor" />
+            </Case>
+            <Case condition="Destination to Source">
+                <ConnectionArrow index="0" style="simple" color="/Styles/Connection/ArrowColor" />
+            </Case>
+            <Case condition="Bidirectional">
+                <ConnectionArrow index="-1" style="simple" color="/Styles/Connection/ArrowColor" />
+                <ConnectionArrow index="0" style="simple" color="/Styles/Connection/ArrowColor" />
+            </Case>
+        </Switch>
+        
+        <Label position="center">
+            <HBox>
+                <Condition condition="#stereotype" type="empty" negate="1">
+                    <Align align="center">
+                        <Rectangle fill="/Styles/Connection/TextFill">
+                            <VBox>
+                                <TextBox text="&#171;" font="/Styles/Connection/TextFont" color="/Styles/Connection/TextColor" />
+                                <TextBox text="#stereotype" font="/Styles/Connection/TextFont" color="/Styles/Connection/TextColor" />
+                                <TextBox text="&#187;" font="/Styles/Connection/TextFont" color="/Styles/Connection/TextColor" />
+                            </VBox>
+                        </Rectangle>
+                    </Align>
+                </Condition>
+                <Condition condition="#name" type="empty" negate="1">
+                    <Align align="center">
+                        <Rectangle fill="/Styles/Connection/TextFill">
+                            <TextBox text="#name" font="/Styles/Connection/NameTextFont" color="/Styles/Connection/NameTextColor" />
+                        </Rectangle>
+                    </Align>
+                </Condition>
+            </HBox>
+        </Label>
+        <Label position="source">
+            <Condition condition="#SCardinality" type="empty" negate="1">
+                <Rectangle fill="/Styles/Connection/TextFill">
+                    <TextBox text="#SCardinality" font="/Styles/Connection/NameTextFont" color="/Styles/Connection/NameTextColor" />
+                </Rectangle>
+            </Condition>
+        </Label>
+        <Label position="destination">
+            <Condition condition="#DCardinality" type="empty" negate="1">
+                <Rectangle fill="/Styles/Connection/TextFill">
+                    <TextBox text="#DCardinality" font="/Styles/Connection/NameTextFont" color="/Styles/Connection/NameTextColor" />
+                </Rectangle>
+            </Condition>
+        </Label>
+        <Label position="source+1">
+            <Condition condition="#SRole" type="empty" negate="1">
+                <Rectangle fill="/Styles/Connection/TextFill">
+                    <TextBox text="#SRole" font="/Styles/Connection/NameTextFont" color="/Styles/Connection/NameTextColor" />
+                </Rectangle>
+            </Condition>
+        </Label>
+        <Label position="destination+1">
+            <Condition condition="#DRole" type="empty" negate="1">
+                <Rectangle fill="/Styles/Connection/TextFill">
+                    <TextBox text="#DRole" font="/Styles/Connection/NameTextFont" color="/Styles/Connection/NameTextColor" />
+                </Rectangle>
+            </Condition>
+        </Label>
+    </Appearance>
+</ConnectionType>

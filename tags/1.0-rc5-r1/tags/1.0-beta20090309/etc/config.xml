@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE Config [<!ENTITY apppath "&#255;">]>
+<Config xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/config.xsd">
+    <Styles>
+        <Element>
+            <LineColor>black</LineColor>
+            <FillColor>lightyellow</FillColor>
+            <Fill2Color>lightyellow</Fill2Color>
+            <Fill3Color>black</Fill3Color>
+            <ShadowColor>#505050</ShadowColor>
+            <NameTextColor>black</NameTextColor>
+            <TextColor>black</TextColor>
+            <NameTextFont>Arial 10</NameTextFont>
+            <TextFont>Arial 10</TextFont>
+        </Element>
+        <Connection>
+            <LineColor>black</LineColor>
+            <ArrowColor>black</ArrowColor>
+            <ArrowFillColor>white</ArrowFillColor>
+            <ArrowAngleSteps>128</ArrowAngleSteps>
+            <NameTextColor>black</NameTextColor>
+            <TextColor>black</TextColor>
+            <NameTextFont>Arial 10</NameTextFont>
+            <TextFont>Arial 10</TextFont>
+            <TextFill>white</TextFill>
+            <MinimalAngle>0.1</MinimalAngle>
+        </Connection>
+        <Selection>
+            <PointsSize>7</PointsSize>
+            <PointsColor>darkgray</PointsColor>
+            <RectangleColor>blue</RectangleColor>
+            <RectangleWidth>2</RectangleWidth>
+        </Selection>
+        <Drag>
+            <RectangleColor>black</RectangleColor>
+            <RectangleWidth>2</RectangleWidth>
+        </Drag>
+    </Styles>
+    <Paths>
+        <Root>&apppath;</Root>
+        <MetamodelList>&apppath;/etc/metamodels.xml</MetamodelList>
+        <Templates>&apppath;/etc/templates/</Templates>
+        <Images>&apppath;/img/</Images>
+        <Gui>&apppath;/gui/</Gui>
+        <Locales>&apppath;/share/locale/</Locales>
+        <Schema>&apppath;/share/schema/</Schema>
+        <UserDir>~/.uml_fri</UserDir>
+        <UserConfig>~/.uml_fri/config.xml</UserConfig>
+        <RecentFiles>~/.uml_fri/RecentFiles.xml</RecentFiles>
+        <UserGui>~/.uml_fri/UserGui.xml</UserGui>
+    </Paths>
+    <Page>
+        <Width>797</Width>
+        <Height>1123</Height>
+    </Page>
+</Config>

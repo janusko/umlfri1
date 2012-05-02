@@ -1,0 +1,2 @@
+class MediumTimeout(Exception): pass
+    

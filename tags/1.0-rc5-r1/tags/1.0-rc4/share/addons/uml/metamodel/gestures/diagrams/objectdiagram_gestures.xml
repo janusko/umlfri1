@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GestureDiagramType id="Object diagram" xmlns="http://umlfri.org/xmlschema/gestures.xsd">
+    <GestureElements>
+        <GestureRecognizer objectId="Note" gestureName="rectangleRightUpperCornerLine" help="Create element: Note" />
+        <GestureRecognizer objectId="Package" gestureName="package" help="Create element: Package" />
+        <GestureRecognizer objectId="Object" gestureName="rectangleUpperLine" help="Create element: Object" />        
+    </GestureElements>
+    <GestureConnections>
+        <GestureRecognizer objectId="AssociationInstance" gestureName="empty" help="Create connection: Association instance" />
+        <GestureRecognizer objectId="Note Link" gestureName="empty" help="Create connection: Note link" />
+    </GestureConnections>
+</GestureDiagramType>

@@ -1,0 +1,79 @@
+<?xml version="1.0" ?>
+<interface
+    xmlns="http://umlfri.org/xmlschema/publicApi.xsd"
+    name="org.umlfri.api.gui.GuiManager">
+    
+    <documentation>
+        Root class for gui management object hierarchy.
+    </documentation>
+    
+    <property name="mainMenu">
+        <documentation>
+            Application main menu.
+        </documentation>
+        
+        <value type="org.umlfri.api.gui.Menu" readable="true" />
+    </property>
+    
+    <property name="tabMenu">
+        <documentation>
+            Tab context menu.
+        </documentation>
+        
+        <value type="org.umlfri.api.gui.Menu" readable="true" />
+    </property>
+    
+    <property name="treeMenu">
+        <documentation>
+            Project tree item context menu.
+        </documentation>
+        
+        <value type="org.umlfri.api.gui.Menu" readable="true" />
+    </property>
+    
+    <property name="drawMenu">
+        <documentation>
+            Drawing area context menu.
+        </documentation>
+        
+        <value type="org.umlfri.api.gui.Menu" readable="true" />
+    </property>
+    
+    <property name="buttonBar">
+        <documentation>
+            Application main toolbar.
+        </documentation>
+        
+        <value type="org.umlfri.api.gui.ButtonBar" readable="true" />
+    </property>
+    
+    <method name="displayWarning">
+        <documentation>
+            Show warning dialog to user.
+        </documentation>
+        
+        <parameter name="text" type="string">
+            <documentation>
+                Warning text.
+            </documentation>
+        </parameter>
+    </method>
+    
+    <method name="deleteMe">
+        <documentation>
+            Remove all plugins widgets from UML .FRI gui.
+        </documentation>
+    </method>
+    
+    <method name="hideMe">
+        <documentation>
+            Hide all plugins widgets from UML .FRI gui.
+        </documentation>
+    </method>
+    
+    <method name="showMe">
+        <documentation>
+            Show all plugins widgets from UML .FRI gui.
+        </documentation>
+    </method>
+</interface>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Gesture name="decision" type="element" xmlns="http://umlfri.org/xmlschema/gestures.xsd">
+	<Algorithm name="Boundary Box Algorithm">
+		<Description id="1_1">
+			<Line from="0,0" to="1,0"/>
+			<Line from="0.5,1" to="0.5,0"/>
+		</Description>
+	</Algorithm>
+</Gesture>

@@ -1,0 +1,1 @@
+from .PluginCommand import CPluginCommand

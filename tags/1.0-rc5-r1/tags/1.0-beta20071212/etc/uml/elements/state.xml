@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ElementType id="State">
+    <Icon path="icons/state.png" />
+    <Connections>
+        <Item value="StateTransition" />
+    </Connections>
+    <Attributes>
+        <Item value="Name" type="str" propid="name" />
+        <Item value="Notes" type="note" />
+    </Attributes>
+    <Appearance>
+        <Shadow padding="3" color="/Styles/Element/ShadowColor">
+            <Rectangle fill="/Styles/Element/FillColor" border="/Styles/Element/LineColor" righttop="10 rounded" rightbottom="10 rounded" lefttop="10 rounded" leftbottom="10 rounded">
+                <Sizer minheight="50">
+                    <HBox>
+                        <Padding padding="5">
+                            <Align align="center">
+                                <TextBox text="#name" font="/Styles/Element/NameTextFont" color="/Styles/Element/NameTextColor" />
+                            </Align>
+                        </Padding>
+                        <Line type="horizontal" color="/Styles/Element/LineColor" />
+                    </HBox>
+                </Sizer>
+            </Rectangle>
+        </Shadow>
+    </Appearance>
+</ElementType>

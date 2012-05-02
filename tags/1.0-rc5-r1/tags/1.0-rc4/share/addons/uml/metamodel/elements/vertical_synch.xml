@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ElementType id="VerticalSynchronization" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Icon path="icons/vertical_line.png" />
+    <Domain id="synchronization" identity="name" />
+    <Connections>
+        <Item value="StateTransition"/>
+        <Item value="Control Flow"/>
+    </Connections>
+    <Appearance>
+        <VBox>
+            <Sizer width="5" minheight="50">
+                <Rectangle fill="#cfg.Styles.Element.Fill3Color" border="#cfg.Styles.Element.LineColor"/>
+            </Sizer>
+            <Condition condition="#self.name">
+                <Padding padding="10">
+                    <Align align="center center">
+                        <TextBox text="#self.name" font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/>
+                    </Align>
+                </Padding>
+            </Condition>
+        </VBox>
+    </Appearance>
+    <Options>
+    </Options>
+</ElementType>

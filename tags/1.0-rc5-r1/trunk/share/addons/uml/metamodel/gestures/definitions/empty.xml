@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Gesture name="empty" type="connection" xmlns="http://umlfri.org/xmlschema/gestures.xsd">
+	<Algorithm name="Boundary Box Algorithm">
+		<Description id="1_1">
+		</Description>
+	</Algorithm>
+</Gesture>

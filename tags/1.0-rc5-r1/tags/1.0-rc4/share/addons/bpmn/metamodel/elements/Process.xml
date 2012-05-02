@@ -1,0 +1,23 @@
+<ElementType id="Process" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Icon path="icons/Process.png"/>
+    <Domain id="Process"/>
+    <Connections>
+        <Item value="MessageFlow" with="*"/>
+        <Item value="SequenceFlow" with="*"/>
+    </Connections>
+    <Appearance>
+        <Shadow padding="3" color="#cfg.Styles.Element.ShadowColor">
+            <Rectangle fill="##f6e675" border="#cfg.Styles.Element.LineColor" right="15 rounded_side" left="15 rounded_side">
+                <Sizer minheight="50" minwidth="100">
+                    <Padding padding="5">             
+                        <Align align="center center">
+                            <TextBox text="#self.process" font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/>  
+                        </Align>         
+                    </Padding>    
+                </Sizer>
+            </Rectangle>
+        </Shadow>
+    </Appearance>
+    <Options>
+    </Options>
+</ElementType>

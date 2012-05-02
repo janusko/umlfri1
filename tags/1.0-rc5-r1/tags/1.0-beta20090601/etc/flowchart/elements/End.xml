@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ElementType id="End" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Icon path="icons/End.png" />
+    <Domain id="End" />
+    <Connections>
+        <Item value="Note Link" with="Note" />
+        <Item value="Flow Line" />
+    </Connections>
+    <Appearance>
+        <Shadow padding="3" color="/Styles/Element/ShadowColor">
+            <Rectangle fill="/Styles/Element/FillColor" border="/Styles/Element/LineColor" right="10 rounded" left="10 rounded">
+                <Padding padding="5">
+                    <Align align="center center">
+                        <TextBox text="END" font="/Styles/Element/NameTextFont" color="/Styles/Element/NameTextColor" />
+                    </Align>
+                </Padding>                    
+            </Rectangle>
+        </Shadow>
+    </Appearance>
+</ElementType>

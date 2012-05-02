@@ -1,0 +1,15 @@
+<ConnectionType id="Compose">
+    <Icon path="icons/compose.png" />
+	<SrcArrow possible="0" default="0" />
+	<DestArrow possible="1" default="1" />
+    <Attributes>
+        <Item value="Name" type="str" propid="name" />
+    </Attributes>
+    <Appearance>
+    	<LineStyle style="solid" color="black" />
+    	<ArrowStyle style="fdiamond" fill="blue" color="black" />
+        <Label position="center">
+            <TextBox align="left" text="#name" />
+        </Label>
+    </Appearance>
+</ConnectionType>

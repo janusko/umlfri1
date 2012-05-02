@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ElementType id="Merge" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Icon path="icons/decision.png" />
+    <Domain id="decision" identity="name" />
+    <Connections>
+        <Item value="Control Flow"/>
+        <Item value="StateTransition"/>
+    </Connections>
+    <Appearance>
+        <Shadow padding="3" color="#cfg.Styles.Element.ShadowColor">
+            <Diamond fill="#cfg.Styles.Element.FillColor" border="#cfg.Styles.Element.LineColor">
+                <Proportional ratio="2:1">
+                    <Padding padding="12">
+                        <Align align="center center">
+                            <HBox>
+                                <Condition condition="#self.stereotype">
+                                    <Align align="center">
+                                        <VBox>
+                                            <TextBox text="&#171;" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                                            <TextBox text="#self.stereotype" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                                            <TextBox text="&#187;" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                                        </VBox>
+                                    </Align>
+                                </Condition>
+                                <Align align="center">
+                                    <TextBox text="#self.name" font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/>
+                                </Align>
+                            </HBox>
+                        </Align>
+                    </Padding>
+                </Proportional>
+            </Diamond>
+        </Shadow>
+    </Appearance>
+    <Options>
+    </Options>
+</ElementType>

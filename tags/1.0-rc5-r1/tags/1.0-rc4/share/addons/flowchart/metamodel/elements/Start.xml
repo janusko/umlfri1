@@ -1,0 +1,19 @@
+<ElementType id="Start" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Icon path="icons/Start.png"/>
+    <Domain id="Start"/>
+    <Connections>
+        <Item value="Note Link" with="Note"/>
+        <Item value="Flow Line"/>
+    </Connections>
+    <Appearance>
+        <Shadow padding="3" color="#cfg.Styles.Element.ShadowColor">
+            <Rectangle fill="#cfg.Styles.Element.FillColor" border="#cfg.Styles.Element.LineColor" right="10 rounded_side" left="10 rounded_side">
+                <Padding padding="5">
+                    <Align align="center center">
+                        <TextBox text="START" font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/>
+                    </Align>
+                </Padding>                    
+            </Rectangle>
+        </Shadow>
+    </Appearance>
+</ElementType>

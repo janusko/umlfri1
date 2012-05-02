@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (c) UML.FRI -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://umlfri.org/xmlschema/addonList.xsd" targetNamespace="http://umlfri.org/xmlschema/addonList.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="AddOns">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="AddOn" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:attribute name="uri" type="xs:string" use="required"/>
+						<xs:attribute name="enabled" type="xs:boolean" default="true"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

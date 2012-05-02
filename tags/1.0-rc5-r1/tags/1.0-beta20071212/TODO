@@ -1,0 +1,92 @@
+[x] Abstraktna vrstva na vykreslovanie (janik)
+[x] XML pre verzie UML (BG)
+[x] Prehodenie eventov z glade suboru do kodu
+[x] ODSTRANIT Drag and Drop (palino)
+[x] Automaticke nazvy diagramov
+[x] Automaticke nazvy elementov
+[x] Presunut CProjekt do Application
+[x] Nastavovanie fontu z XML
+[x] Presunutie konfiguracnych hodnot z const.py do /etc
+[x] Pridanie moznosti citania atributov elementov a spojeni z config.xml
+[x] Prerobit Get* na yield, kde treba
+[x] Drag 'n Drop pridavanie elementov zo stromu do diagramu
+    [x] Automaticke pridavanie spojeni
+[x] Project tree (miroslav, frizi)
+    [x] Tabovanie
+    [x] Prerobit menu (na pridaj diagram)
+    [x] Content menu na pridavanie
+    [x] Samotny project tree
+    [x] Ikonky na diagramy
+    [x] Ikonky na elementy
+[?] Generovanie formulara
+[x] Ciary
+    [x] Pridavanie ciar (palino)
+    [x] Kreslenie ciar pri stlacenom mouse tlacidle
+    [x] Priebezne kreslenie ciary pri kresleni ciary
+    [x] Zmena ciar (posuvanie)
+    [x] Presuvanie ciar s elementami (palino)
+    [x] Select ciar (palino)
+    [x] Zarovnanie konca ciary s koncom elementu
+    [x] Ked zmenim ciaru, neposunie sa label
+    [x] Lamanie ciar
+    [x] Kontrola validity ciar
+[x] Flexibilna plocha
+    [x] Zmenit sprosty backbuffer
+[x] Mazanie elementov
+    [x] Zmazanie z drawing area (palino)
+    [x] Mazanie vsetkych pozozstatkov
+        [x] Mazanie cez kontextove menu v strome
+        [x] Mazanie priamo z diagramu (klavesovou skratkou)
+[x] Mazanie ciar
+    [x] Zmazanie z drawing area
+    [x] Mazanie vsetkych pozozstatkov
+[x] CProportional kontainer (janik)
+[x] CAlign kontainer (janik)
+[x] CSVG Visual object (janik)
+    [x] Group object (janik)
+    [x] Optimalizacia
+    [x] path
+        [x] move (janik)
+        [x] line (janik)
+        [x] cubic bezier curve (janik)
+    [x] styles
+        [x] stroke color (janik)
+        [x] stroke style
+        [x] fill color
+    [x] transformation matrixes
+        [x] translate (janik)
+        [x] matrix (janik)
+[x] Zaoblene rohy na Rectangle Visual Object-e
+[x] Visual object na min, max - width, height
+[x] Visual object na ikonu
+[x] Specialna visual property CHILDREN
+[x] Zobrazovanie childov v Package
+[x] Preklady sk_SK, en_US
+[x] Export do SVG
+[x] Pri spusteni zakazat menu, povolit az pri otvoreni projektu
+[x] Save on Quit
+[x] StartPage
+[x] Recent files in xml in home directory
+[x] Spravit exe
+[x] Kontrolu, ci sa da element resizovat
+[x] Zaobleny CRectangle
+[ ] Otoceny CRectangle
+[-] Optravit kontrolu ciar
+[-] Opravit resize elementu
+...
+[x] ZOrder
+[?] Menenie kurzoru po prechode nad volaco
+[x] Resizovanie elementov
+[x] Save
+[x] Load
+    [x] Sablony
+[x] Napisat README
+[x] Zefektivnit menu
+[x] (mozno) poprepisovat nazvy premennych/metod
+[x] Vyhodit autorov z gui (Automaticke parsovanie ABOUT :D )
+[x] Pacicka na skrolovanie
+...
+[?] Easter Eggs
+[ ] Help
+... (Far in future)
+[ ] Spinka

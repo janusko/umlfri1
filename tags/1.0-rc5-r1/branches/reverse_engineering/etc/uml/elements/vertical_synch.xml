@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ElementType id="VerticalSynchronization">
+    <Icon path="icons/vertical_line.png" />
+    <Connections>
+        <Item value="StateTransition" />
+        <Item value="ActivityFlow" />
+    </Connections>
+    <Attributes>
+        <Item value="Name" type="str" propid="name" notgenerate="True" />
+        <Item value="Notes" type="note" />
+    </Attributes>
+    <Appearance>
+        <VBox>
+            <Sizer width="5" minheight="50">
+                <Rectangle fill="/Styles/Element/Fill3Color" border="/Styles/Element/LineColor" />
+            </Sizer>
+            <Condition condition="name" type="empty" negate="1">
+                <Padding padding="10">
+                    <Align align="center center">
+                        <TextBox text="#name" font="/Styles/Element/NameTextFont" color="/Styles/Element/NameTextColor" />
+                    </Align>
+                </Padding>
+            </Condition>
+        </VBox>
+    </Appearance>
+</ElementType>

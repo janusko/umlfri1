@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DiagramType id="Data Flow Diagram" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Icon path="icons/logodfd.png" />
+    <Special swimlines="0" lifelines="0" />
+    <Elements>
+        <Item value="Function"/>
+        <Item value="InputOutput"/>
+        <Item value="FileDatabase"/>
+        <Item value="Note"/>
+    </Elements>
+    <Connections>
+        <Item value="FlowLine"/>
+        <Item value="NoteLink"/>
+    </Connections>
+</DiagramType>

@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+<interface
+    xmlns="http://umlfri.org/xmlschema/publicApi.xsd"
+    name="org.umlfri.api.gui.MenuItem"
+    base="org.umlfri.api.gui.Widget">
+    
+    <documentation>
+        Simple labeled menu item.
+    </documentation>
+    
+    <method name="addSubmenu" mutator="true" transactional="false">
+        <documentation>
+            Creates submenu for the menu item.
+        </documentation>
+    </method>
+    
+    <property name="submenu">
+        <documentation>
+            Item's submenu.
+        </documentation>
+        
+        <value type="org.umlfri.api.gui.Menu" readable="true" />
+    </property>
+    
+    <property name="label">
+        <documentation>
+            Item's label.
+        </documentation>
+        
+        <value type="string" readable="true" writable="true" />
+    </property>
+</interface>
