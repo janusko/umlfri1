@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<interface
+    xmlns="http://umlfri.org/xmlschema/publicApi.xsd"
+    name="org.umlfri.api.base.ApplicationInterface"
+    generate="false">
+    
+    <documentation>
+        ...
+    </documentation>
+    
+    <property name="adapter">
+        <documentation>
+            Gets a reference to the plugin adapter.
+        </documentation>
+        <value type="org.umlfri.api.base.Adapter" readable="true" />
+    </property>
+    
+    <method name="beginTransaction">
+        <documentation>
+            Enters the manual transactional mode.
+        </documentation>
+    </method>
+    
+    <method name="commitTransaction">
+        <documentation>
+            Commits the transaction and ends the manual transactional mode.
+        </documentation>
+    </method>
+    
+    <method name="rollbackTransaction">
+        <documentation>
+            Rollbacks the transaction and ends the manual transactional mode.
+        </documentation>
+    </method>
+</interface>

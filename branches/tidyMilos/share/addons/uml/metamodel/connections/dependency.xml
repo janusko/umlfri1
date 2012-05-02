@@ -1,0 +1,32 @@
+<ConnectionType xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" id="Dependency">
+    <Icon path="icons/dependency.png"/>
+    <Domain id="dependency" identity="name"/>
+    
+    <Appearance>
+        <ConnectionLine style="dot" color="#cfg.Styles.Connection.LineColor"/>
+        <ConnectionArrow index="-1" style="simple_arrow" color="#cfg.Styles.Connection.ArrowColor"/>
+        
+        <Label position="center">
+            <HBox>
+                <Condition condition="#self.stereotype">
+                    <Align align="center">
+                        <Rectangle fill="#cfg.Styles.Connection.TextFill">
+                            <VBox>
+                                <TextBox text="&#171;" font="#cfg.Styles.Connection.TextFont" color="#cfg.Styles.Connection.TextColor"/>
+                                <TextBox text="#self.stereotype" font="#cfg.Styles.Connection.TextFont" color="#cfg.Styles.Connection.TextColor"/>
+                                <TextBox text="&#187;" font="#cfg.Styles.Connection.TextFont" color="#cfg.Styles.Connection.TextColor"/>
+                            </VBox>
+                        </Rectangle>
+                    </Align>
+                </Condition>
+                <Condition condition="#self.name">
+                    <Align align="center">
+                        <Rectangle fill="#cfg.Styles.Connection.TextFill">
+                            <TextBox text="#self.name" font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>
+                        </Rectangle>
+                    </Align>
+                </Condition>
+            </HBox>
+        </Label>
+    </Appearance>
+</ConnectionType>

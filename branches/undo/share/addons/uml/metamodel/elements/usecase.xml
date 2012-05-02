@@ -1,0 +1,38 @@
+<ElementType id="UseCase" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Icon path="icons/usecase.png"/>
+    <Domain id="usecase" identity="name"/>
+    <Connections>
+        <Item value="AssociationUseCase" />
+        <Item value="Generalization" with="UseCase" allowrecursive="0" />
+        <Item value="Include"/>
+        <Item value="Extend"/>
+    </Connections>
+    <Appearance>
+        <Shadow padding="3" color="#cfg.Styles.Element.ShadowColor">
+            <Ellipse fill="#cfg.Styles.Element.FillColor" border="#cfg.Styles.Element.LineColor">
+                <Proportional ratio="3:1">
+                    <Padding padding="8">
+                        <Align align="center center">
+                            <HBox>
+                                <Condition condition="#self.stereotype">
+                                    <Align align="center">
+                                        <VBox>
+                                            <TextBox text="&#171;" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                                            <TextBox text="#self.stereotype" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                                            <TextBox text="&#187;" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                                        </VBox>
+                                    </Align>
+                                </Condition>
+                                <Align align="center">
+                                    <TextBox text="#self.name" font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/>
+                                </Align>
+                            </HBox>
+                        </Align>
+                    </Padding>
+                </Proportional>
+            </Ellipse>
+        </Shadow>
+    </Appearance>
+    <Options>
+    </Options>
+</ElementType>

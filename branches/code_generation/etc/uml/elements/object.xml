@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ElementType id="Object">
+    <Icon path="icons/object.png" />
+    <Connections>
+        <Item value="Association" />
+        <Item value="Generalization" with="Object" allowrecursive="0" />
+    </Connections>
+    <Attributes>
+        <Item value="Name" type="str" propid="name" />
+        <Item value="Scope" type="enum">
+            <Option value="public" />
+            <Option value="private" />
+            <Option value="protected" />
+         </Item>
+        <Item value="Attributes" type="attrs" propid="attributes" />
+        <Item value="Abstract" type="bool" propid="abstract"/>
+        <Item value="Notes" type="note" />
+    </Attributes>
+    <Appearance>
+        <Shadow padding="3" color="/Styles/Element/ShadowColor">
+            <Rectangle fill="/Styles/Element/FillColor" border="/Styles/Element/LineColor">
+                <HBox>
+                    <Padding padding="5">
+                        <HBox>
+                            <Condition condition="#abstract" type="True" negate="0">
+                                <TextBox text="#name" font="/Styles/Element/ObjectNameAbstractTextFont" color="/Styles/Element/NameTextColor" />
+                            </Condition>
+                            <Condition condition="#abstract" type="True" negate="1">
+                                <TextBox text="#name" font="/Styles/Element/ObjectNameTextFont" color="/Styles/Element/NameTextColor" />
+                            </Condition>
+                        </HBox>
+                    </Padding>
+                    <Condition condition="attributes" type="empty" negate="1">
+                        <HBox>
+                            <Line type="horizontal" />
+                            <Padding padding="5">
+                                <HBox>
+                                    <Loop collection="attributes">
+                                        <VBox>
+                                            <TextBox text="@scope" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                            <TextBox text="@line" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                        </VBox>
+                                    </Loop>
+                                </HBox>
+                            </Padding>
+                        </HBox>
+                    </Condition>
+                </HBox>
+            </Rectangle>
+        </Shadow>
+    </Appearance>
+</ElementType>

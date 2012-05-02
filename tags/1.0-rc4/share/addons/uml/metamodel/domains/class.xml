@@ -1,0 +1,124 @@
+<Domain id="class" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" >
+    <Attribute id="name" name="Name" >
+		<Str/>
+	</Attribute>
+    <Attribute id="stereotype" name="Stereotype" >
+		<Str/>
+	</Attribute>
+    <Attribute id="scope" name="Scope" >
+        <Enum default="Private">
+			<Value>Private</Value>
+	        <Value>Protected</Value>
+	        <Value>Public</Value>
+		</Enum>
+    </Attribute>
+    <Attribute id="abstract" name="Abstract" >
+		<Bool default="False"/>
+	</Attribute>
+    <Attribute id="attributes" name="Attributes" >
+		<List>
+        	<Domain>
+        	    <Attribute id="name" name="Name" >
+					<Str/>
+				</Attribute>
+        	    <Attribute id="stereotype" name="Stereotype" >
+					<Str/>
+				</Attribute>
+        	    <Attribute id="scope" name="Scope" >
+        	        <Enum default="Private">
+						<Value>Private</Value>
+	        	        <Value>Protected</Value>
+	        	        <Value>Public</Value>
+					</Enum>
+        	    </Attribute>
+        	    <Attribute id="type" name="Type" >
+					<Str/>
+				</Attribute>
+        	    <Attribute id="static" name="Static"  >
+					<Bool default="False"/>
+				</Attribute>
+        	    <Attribute id="default" name="Default" >
+					<Str/>
+				</Attribute>
+        	    <Attribute id="note" name="Note" >
+					<Text/>
+				</Attribute>
+        	</Domain>
+		</List>
+    </Attribute>
+    <Attribute id="operations" name="Operations" >
+			<List>
+				<Domain>
+		            <Attribute id="name" name="Name" >
+						<Str/>
+					</Attribute>
+		            <Attribute id="rtype" name="Return type" >
+						<Str/>
+					</Attribute>
+		            <Attribute id="parameters" name="Parameters" >
+		                <List>
+		                    <Parse separator="," />
+		              		<Domain>
+		              			<Attribute id="name" name="Name" >
+									<Str/>
+								</Attribute>	
+		              			<Attribute id="type" name="Type" >
+									<Str/>
+								</Attribute>
+		              			<Attribute id="scope" name="Scope" >
+		              				<Enum default="in">
+										<Value>in</Value>
+			            		  	    <Value>out</Value>
+			            		        <Value>in out</Value>
+									</Enum>
+		              			</Attribute>
+		              			<Attribute id="const" name="Const" >
+									<Bool default="False"/>
+								</Attribute>
+		              			<Attribute id="default" name="Default" >
+									<Str/>
+								</Attribute>
+		              			<Attribute id="note" name="Note" >
+									<Text/>
+								</Attribute>
+		              			<Parse regexp="
+		              	    	   	[ ]* ( \[ (?P&lt;scope&gt; (in|out|in[ ]out) ) \])? 
+		              	    	   	[ ]* (?P&lt;name&gt;[a-zA-Z_][a-zA-Z0-9_]*) 
+		              	    	   	[ ]* : [ ]* (?P&lt;type&gt; [a-zA-Z_][a-zA-Z0-9_]*) 
+		              	    		[ ]* ( = [ ]* (?P&lt;default&gt; .+? ) [ ]*$ )?" />
+		              	  		<Join joiner="#scope #name : #type = #default"/>
+		              		</Domain>
+						</List>
+		            </Attribute>
+		            <Attribute id="stereotype" name="Stereotype" >
+						<Str/>
+					</Attribute>
+		            <Attribute id="scope"  name="Scope" >
+		                <Enum default="Public">
+							<Value>Private</Value>
+			                <Value>Protected</Value>
+			                <Value>Public</Value>
+						</Enum>
+	            	</Attribute>
+	            	<Attribute id="static" name="Static" >
+						<Bool default="False"/>
+					</Attribute>
+	            	<Attribute id="virtual" name="Virtual" >
+						<Bool default="False"/>
+					</Attribute>
+	            	<Attribute id="abstract" name="Abstract"  >
+						<Bool default="False"/>
+					</Attribute>
+	            	<Attribute id="override" name="Override" >
+						<Bool default="False"/>
+					</Attribute>
+	            	<Attribute id="note" name="Note" >
+						<Text/>
+					</Attribute>
+	        	</Domain>
+			</List>
+	</Attribute>
+    <Attribute id="note" name="Note" >
+		<Text/>
+	</Attribute>
+</Domain>

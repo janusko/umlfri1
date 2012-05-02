@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DiagramType id="Activity diagram" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Icon path="icons/activity_diagram.png" />
+    <Domain id="basic_diagram" identity="name" />
+    <Special swimlines="0" lifelines="0" />
+    <Elements>
+        <Item value="Note" />
+        <Item value="Package" />
+        <Item value="Activity" />
+        <Item value="StartState" />
+        <Item value="EndState" />
+        <Item value="Decision" />
+        <Item value="Merge" />
+        <Item value="VerticalSynchronization" />
+        <Item value="HorizontalSynchronization" />
+    </Elements>
+    <Connections>
+        <Item value="Control Flow" />
+        <Item value="Note Link" />
+    </Connections>
+</DiagramType>

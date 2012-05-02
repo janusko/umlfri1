@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ElementType id="Class">
+    <Icon path="icons/class.png" />
+    <Connections>
+        <Item value="Association" />
+        <Item value="Generalization" with="Class" allowrecursive="0" />
+        <Item value="Agregation" with="Class" allowrecursive="1" />
+        <Item value="Compose" with="Class" allowrecursive="0" />
+    </Connections>
+    <Attributes>
+        <Item value="Name" type="str" propid="name" />
+        <Item value="Scope" type="enum" propid="scope">
+            <Option value="private" />
+            <Option value="protected" />
+            <Option value="public" />
+        </Item>
+        <Item value="Attributes" type="attrs" propid="attributes" />
+        <Item value="Operations" type="opers" propid="operations" />
+        <Item value="Abstract" type="bool" propid="abstract"/>
+        <Item value="Stereotype" type="enum" >
+            <Option value="" />
+        </Item>
+        <Item value="Notes" type="note" />
+    </Attributes>
+    <Appearance>
+        <Shadow padding="3" color="/Styles/Element/ShadowColor">
+            <Rectangle fill="/Styles/Element/FillColor" border="/Styles/Element/LineColor">
+                <HBox>
+                    <Padding padding="5">
+                        <Align align="center">
+                            <HBox>
+                                <Condition condition="#abstract" type="True" negate="1">                         
+                                    <TextBox text="#name" font="/Styles/Element/NameTextFont" color="/Styles/Element/NameTextColor" />
+                                </Condition>
+                                <Condition condition="#abstract" type="True" negate="0">
+                                    <TextBox text="#name" font="/Styles/Element/NameTextFontAbstract" color="/Styles/Element/NameTextColor" />
+                                </Condition>
+                            </HBox>
+                        </Align>
+                    </Padding>
+                    <Line type="horizontal" color="/Styles/Element/LineColor" />
+                    <Padding padding="5">
+                        <HBox>
+                            <Loop collection="attributes">
+                                <VBox>
+                                    <TextBox text="@scope" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                    <Condition condition="@static" type="True" negate="0">
+                                        <TextBox text="@line" font="/Styles/Element/ObjectNameTextFont" color="/Styles/Element/TextColor" />
+                                    </Condition>
+                                    <Condition condition="@static" type="True" negate="1">
+                                        <TextBox text="@line" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                    </Condition>
+                                </VBox>
+                            </Loop>
+                        </HBox>
+                    </Padding>
+                    <Condition condition="operations" type="empty" negate="1">
+                        <HBox>
+                            <Line type="horizontal" color="/Styles/Element/LineColor" />
+                            <Padding padding="5">
+                                <HBox>
+                                    <Loop collection="operations">
+                                        <VBox>
+                                            <TextBox text="@scope" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                            <Condition condition="@static" type="True" negate="0">
+                                                <TextBox text="@line" font="/Styles/Element/ObjectNameTextFont" color="/Styles/Element/TextColor" />
+                                            </Condition>
+                                            <Condition condition="@static" type="True" negate="1">
+                                                <HBox>
+                                                    <Condition condition="@abstract" type="True" negate="0">
+                                                        <TextBox text="@line" font="/Styles/Element/AbstractTextFont" color="/Styles/Element/TextColor" />
+                                                    </Condition>
+                                                    <Condition condition="@abstract" type="True" negate="1">
+                                                        <TextBox text="@line" font="/Styles/Element/TextFont" color="/Styles/Element/TextColor" />
+                                                    </Condition>
+                                                </HBox>
+                                            </Condition>
+                                        </VBox>
+                                    </Loop>
+                                </HBox>
+                            </Padding>
+                        </HBox>
+                    </Condition>
+                </HBox>
+            </Rectangle>
+        </Shadow>
+    </Appearance>
+</ElementType>

@@ -1,0 +1,4 @@
+<Domain id="Package" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" >
+    <Attribute id="name" type="str" name="Name" />
+    <Attribute id="note" type="text" name="Note" />
+</Domain>

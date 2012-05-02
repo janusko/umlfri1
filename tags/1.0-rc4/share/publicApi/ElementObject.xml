@@ -1,0 +1,74 @@
+<?xml version="1.0" ?>
+<interface
+    xmlns="http://umlfri.org/xmlschema/publicApi.xsd"
+    name="org.umlfri.api.model.ElementObject">
+    
+    <documentation>
+        ...
+    </documentation>
+    
+    <property name="name">
+        <documentation>
+            Element name.
+        </documentation>
+        
+        <value type="string" readable="true" />
+    </property>
+    
+    <property name="values" singular="value">
+        <documentation>
+            Collection, that contains all property values.
+        </documentation>
+        
+        <index name="path" type="string" />
+        <value type="variant" readable="true" writable="true" />
+    </property>
+    
+    <property name="allValues">
+        <documentation>
+            Iterator over all property values.
+        </documentation>
+        
+        <value type="keyvalue" iterable="true" />
+    </property>
+    
+    <property name="type">
+        <documentation>
+            Element type.
+        </documentation>
+        
+        <value type="org.umlfri.api.metamodel.ElementType" readable="true" />
+    </property>
+    
+    <property name="appears">
+        <documentation>
+            Element appearances in project diagrams.
+        </documentation>
+        
+        <value type="org.umlfri.api.model.Diagram" iterable="true" />
+    </property>
+    
+    <property name="diagrams">
+        <documentation>
+            Child diagrams of the element.
+        </documentation>
+        
+        <value type="org.umlfri.api.model.Diagram" iterable="true" />
+    </property>
+    
+    <property name="connections">
+        <documentation>
+            Connections attached to the element.
+        </documentation>
+        
+        <value type="org.umlfri.api.model.ConnectionObject" iterable="true" />
+    </property>
+    
+    <property name="children">
+        <documentation>
+            Child elements of the element.
+        </documentation>
+        
+        <value type="org.umlfri.api.model.ElementObject" iterable="true" />
+    </property>
+</interface>

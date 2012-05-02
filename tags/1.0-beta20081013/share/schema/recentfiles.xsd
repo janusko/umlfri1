@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (c) UML.FRI -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/recentfiles.xsd" targetNamespace="http://umlfri.kst.fri.uniza.sk/xmlschema/recentfiles.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="RecentFiles">
+		<xs:annotation>
+			<xs:documentation>Include  names and  dates of recent files</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="File" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:attribute name="name" type="xs:string" use="required"/>
+						<xs:attribute name="date" type="xs:string" use="required"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

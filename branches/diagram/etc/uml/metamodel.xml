@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Metamodel xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Identity>
+        <Uri>http://umlfri.kst.fri.uniza.sk/metamodel/uml.frim</Uri>
+        <Version>1.4.0</Version>
+    </Identity>
+    <Diagrams>
+        <Item value="Class diagram" />
+        <Item value="Object diagram" />
+        <Item value="Use Case diagram" />
+        <Item value="State diagram" />
+        <Item value="Activity diagram" />
+    </Diagrams>
+</Metamodel>

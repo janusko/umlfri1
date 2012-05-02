@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Template diagram="All" language="HTML">
+    <Element id="documentation">
+        <Directory name="icons" value="[_0-9a-zA-Z]+" >
+            <CopyFile what="icons" />
+        </Directory>
+        <Directory name="images" value="[_0-9a-zA-Z]+" >
+            <CopyFile what="diagrams" />
+        </Directory>
+        <Directory name="style" value="[_0-9a-zA-Z]+" >
+            <CopyFile what="style" />
+        </Directory>
+
+        <File name="treeView.html" value="[_0-9a-zA-Z]+">
+            &lt;html&gt; <br /> 
+            <Indent>
+                &lt;head&gt; <br />
+                <Indent>
+                    &lt;title&gt; <br />
+                    <Property id="#name" /> <br />
+                    &lt;/title&gt; <br />
+                    &lt;link rel="stylesheet" type="text/css" href="./style/Style.css"&gt;
+                </Indent>
+                &lt;/head&gt; <br />
+            </Indent>
+            <Indent>
+                &lt;body&gt;<br />
+                <PropertyLoop id="treeView">
+                    <Directory name="pages" value="[_0-9a-zA-Z]+" >
+                        <File name="@path" value="[_0-9a-zA-Z]+" sufix=".html">
+                            &lt;html&gt; <br /> 
+                                &lt;head&gt; <br />
+                                    &lt;title&gt; <br />
+                                    <Property id="@name" /> <br />
+                                    &lt;/title&gt; <br />
+                                    &lt;meta http-equiv="Content-Type" content="text/html; charset=iso-8859-2"&gt;
+                                    &lt;link rel="stylesheet" type="text/css" href="../style/Style.css"&gt;
+                                &lt;/head&gt; <br />
+                                &lt;body&gt; <br />
+                                    &lt;h1&gt; <Property id="@name" />&lt;/h1&gt;
+                                    <Condition id="@isdiagram" value="True">
+                                        &lt;embed src="../images/<Property id="@path" />.svg" width="100%" height="100%" /&gt;
+                                    </Condition>
+                                    <Condition id="@isdiagram" value="False">
+                                        <ChangeElement id="@element">
+                                            <Optional>
+                                                &lt;h2&gt;Specification element:&lt;/h2&gt;
+                                                &lt;div&gt;<Property id="#Notes" /> &lt;/div&gt;&lt;br&gt;
+                                            </Optional>
+                                            <Optional>
+                                                &lt;table&gt;
+                                                &lt;tr&gt;&lt;th colspan="3"&gt;Attributes&lt;/th&gt;&lt;/tr&gt;
+                                                &lt;tr&gt;
+                                                    &lt;th class="popis"&gt;Type&lt;/th&gt;
+                                                    &lt;th class="popis"&gt;Name&lt;/th&gt;
+                                                    &lt;th class="popis"&gt;Notes&lt;/th&gt;
+                                                &lt;/tr&gt;
+                                                <PropertyLoop id="attributes">
+                                                    &lt;tr&gt;
+                                                        &lt;td&gt;
+                                                            <Condition id="@static" value="True">
+                                                                static <whitespace />
+                                                            </Condition>
+                                                            <Property id="@type" /> 
+                                                        &lt;/td&gt;
+                                                        &lt;td class="name"&gt;<Property id="@name" />&lt;/td&gt;
+                                                        &lt;td&gt;<Property id="@doc" />&lt;/td&gt;
+                                                    &lt;/tr&gt;
+                                                </PropertyLoop>
+                                                &lt;/table&gt;
+                                                &lt;br&gt;
+                                            </Optional>
+                                            <Optional>
+                                                &lt;table&gt;
+                                                &lt;tr&gt;&lt;th colspan="3"&gt;Operations&lt;/th&gt;&lt;/tr&gt;
+                                                &lt;tr&gt;
+                                                    &lt;th class="popis"&gt;Type&lt;/th&gt;
+                                                    &lt;th class="popis"&gt;Name&lt;/th&gt;
+                                                    &lt;th class="popis"&gt;Notes&lt;/th&gt;
+                                                &lt;/tr&gt;
+                                                <PropertyLoop id="operations">
+                                                    &lt;tr&gt;
+                                                        &lt;td&gt;
+                                                            <Condition id="@abstract" value="True">
+                                                                abstract <whitespace />
+                                                            </Condition>
+                                                            <Condition id="@static" value="True">
+                                                                static <whitespace />
+                                                            </Condition>
+                                                            <Condition id="@const" value="True">
+                                                                const <whitespace />
+                                                            </Condition>
+                                                            <Property id="@type" /> &lt;br&gt;
+                                                        &lt;/td&gt;
+                                                        &lt;td class="name"&gt;<Property id="@name" />(<Property id="@params" />)
+                                                        &lt;/td&gt;
+                                                        &lt;td&gt;<Property id="@doc" />&lt;/td&gt;
+                                                    &lt;/tr&gt;
+                                                </PropertyLoop>
+                                                &lt;/table&gt;
+                                                &lt;br&gt;
+                                            </Optional>
+                                            <Optional>
+                                                &lt;table&gt;
+                                                &lt;tr&gt;&lt;th colspan="4"&gt;Links&lt;/th&gt;&lt;/tr&gt;
+                                                &lt;tr&gt;
+                                                    &lt;th class="popis"&gt;Type&lt;/th&gt;
+                                                    &lt;th class="popis"&gt;Name&lt;/th&gt;
+                                                    &lt;th class="popis"&gt;Source element&lt;/th&gt;
+                                                    &lt;th class="popis"&gt;Destination element&lt;/th&gt;                                                    
+                                                &lt;/tr&gt;
+                                                <ConnectionLoop id="type" value="All">
+                                                    &lt;tr&gt;
+                                                        &lt;td&gt;<Property id="@type" />&lt;/td&gt;
+                                                        &lt;td&gt;<Property id="@name" />&lt;/td&gt;
+                                                        &lt;td&gt;
+                                                        <Property id="@source" recursive="1">
+                                                            <Property id="#name" value="[a-z0-9A-Z]+" />
+                                                        </Property>
+                                                        &lt;/td&gt;
+                                                        &lt;td&gt;
+                                                        <Property id="@dest" recursive="1">
+                                                            <Property id="#name" value="[a-z0-9A-Z]+" />
+                                                        </Property>
+                                                        &lt;/td&gt;
+                                                    &lt;/tr&gt;
+                                                </ConnectionLoop>
+                                                &lt;/table&gt;
+                                                &lt;br&gt;
+                                            </Optional>
+                                        </ChangeElement>
+                                    </Condition>
+                                &lt;/body&gt; <br />
+                            &lt;/html&gt;<br />
+                        </File>
+                    </Directory>
+                    &lt;a href="./pages/<Property id="@path" />.html" target=Data style="margin-left:<Property id="@indent" />px":&gt;
+                    &lt;img src="./<Property id="@icon" />" &gt;
+                    <Property id="@name" />                    
+                    &lt;/a&gt;
+                    &lt;br&gt;
+                </PropertyLoop>
+                &lt;/body&gt;<br />
+            </Indent>
+            &lt;/html&gt; <br />
+        </File>
+        
+        <File name="blank.html" value="[_0-9a-zA-Z]+">
+            &lt;html&gt; <br /> 
+            <Indent>
+                &lt;head&gt; <br />
+                <Indent>
+                    &lt;title&gt; <br />
+                    <Property id="#name" /> <br />
+                    &lt;/title&gt; <br />
+                </Indent>
+                &lt;/head&gt; <br />
+            </Indent>
+            <Indent>
+                &lt;body&gt;<br />
+                &lt;/body&gt;<br />
+            </Indent>
+            &lt;/html&gt; <br />
+        </File>
+        
+        <File name="Logo.html" value="[_0-9a-zA-Z]+">
+            &lt;html&gt; <br /> 
+            <Indent>
+                &lt;head&gt; <br />
+                <Indent>
+                    &lt;title&gt; <br />
+                    Logo
+                    &lt;/title&gt; <br />
+                    &lt;link rel="stylesheet" type="text/css" href="./style/Style.css"&gt;
+                </Indent>
+                &lt;/head&gt; <br />
+            </Indent>
+            <Indent>
+                &lt;body bgcolor="#C3D9FF"&gt;<br />
+                &lt;h3 class="productName"&gt;UML.FRI 1.0&lt;/h3&gt;
+                &lt;img class="logo" src="./icons/logo.png"&gt;
+                &lt;/body&gt;<br />
+            </Indent>
+            &lt;/html&gt; <br />
+        </File>
+        
+        <File name="index.html" value="[_0-9a-zA-Z]+">
+            &lt;html&gt; <br /> 
+            <Indent>
+                &lt;head&gt; <br />
+                <Indent>
+                    &lt;title&gt; <br />
+                    <Property id="#name" /> <br />
+                    &lt;/title&gt; <br />
+                </Indent>
+                &lt;/head&gt; <br />
+            </Indent>
+            <Indent>
+                &lt;frameset rows="130,*" frameborder="0"&gt;
+                    &lt;frame name="Logo" src="Logo.html" noresize scrolling="no" &gt;
+                    &lt;frameset cols="30%,70%"&gt;
+                        &lt;frame name="treeView" src="treeView.html"&gt;
+                        &lt;frame name="Data" src="blank.html"&gt;
+                    &lt;/frameset&gt;
+                &lt;/frameset&gt;
+            </Indent>
+            &lt;/html&gt; <br />
+        </File>
+    </Element>
+</Template>

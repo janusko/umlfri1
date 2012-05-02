@@ -1,0 +1,32 @@
+<ElementType id="Preparation" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Icon path="icons/Preparation.png"/>
+    <Domain id="Preparation"/>
+    <Connections>
+        <Item value="Note Link" with="Note"/>
+        <Item value="Flow Line"/>
+    </Connections>
+    <Appearance>
+        <Shadow padding="3" color="#cfg.Styles.Element.ShadowColor">
+            <Rectangle fill="#cfg.Styles.Element.FillColor" border="#cfg.Styles.Element.LineColor" right="10 beak" left="10 beak">
+                <Sizer minheight="30" minwidth="100">
+                    <Padding padding="10"> 
+                        <Align align="center center">
+                            <VBox>
+                                <TextBox text="Do " font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/>  
+                                <TextBox text="#self.variable" font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/>
+                                <TextBox text=" = " font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/>  
+                                <TextBox text="#self.initialvalue" font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/>                                                                                                                               
+                                <TextBox text=" " font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/> 
+                                <TextBox text="#self.looptype" font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/>
+                                <TextBox text=" " font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/> 
+                                <TextBox text="#self.endvalue" font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/>                                
+                            </VBox>
+                        </Align>
+                    </Padding>
+                </Sizer>
+            </Rectangle>
+        </Shadow>
+    </Appearance>
+    <Options>
+    </Options>
+</ElementType>

@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<interface
+    xmlns="http://umlfri.org/xmlschema/publicApi.xsd"
+    name="org.umlfri.api.gui.CheckMenuItem"
+    base="org.umlfri.api.gui.MenuItem">
+    
+    <documentation>
+        ...
+    </documentation>
+    
+    <property name="active">
+        <documentation>
+            Contains (checked) state of menu item.
+        </documentation>
+        <value type="boolean" readable="true" writable="true" />
+    </property>
+    
+    <property name="inconsistent">
+        <documentation>
+            Contains (inconsistent) state of menu item.
+        </documentation>
+        <value type="boolean" readable="true" writable="true" />
+    </property>
+    
+    <property name="radio">
+        <documentation>
+            True, if it is a radio item.
+        </documentation>
+        <value type="boolean" readable="true" writable="true" />
+    </property>
+</interface>
