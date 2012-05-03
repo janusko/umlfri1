@@ -21,7 +21,7 @@ class CfrmFileImportExportBase(common.CWindow):
     def OnOk(self, filename, fileType):
         pass
 
-    def __NewDialog(self, title, fileTypes):
+    def __NewDialog(self, parent, title, fileTypes):
         filters = [(fileType.GetDescription(), ';'.join(fileType.GetExtensions())) for fileType in fileTypes]
         
         win = COpenSaveDialog(parent.form, 'save' if self.__type == 'export' else 'open', title, filters)
@@ -34,7 +34,7 @@ class CfrmFileImportExportBase(common.CWindow):
         fileTypes = [fileType for fileType in self.application.GetFileTypeManager().GetFileTypes() if fileType.GetExportPossible()]
         
         if COpenSaveDialog:
-            thread.start_new(self.__NewDialog, (self.form.get_title(), fileTypes))
+            thread.start_new(self.__NewDialog, (parent, self.form.get_title(), fileTypes))
         else:
             for fileType in fileTypes:
                 filter = gtk.FileFilter()
