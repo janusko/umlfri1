@@ -19,6 +19,8 @@ from lib.Project import CRecentFiles
 from lib.Project.Templates import CTemplateManager
 from lib.Addons import CAddonManager
 
+from lib.GenericGui import CFileTypeManager
+
 import lib.Gui
 from lib.Gui import CBus, CPluginAdapter
 from lib.Gui.dialogs import CExceptionDialog, CErrorDialog
@@ -63,6 +65,7 @@ class Application(CApplication):
         self.recentFiles = CRecentFiles()
         self.clipboard = CClipboard()
         self.bus = CBus()
+        self.fileTypes = CFileTypeManager()
         self.commands = CCommandProcessor(self.bus)
         
         CApplication.__init__(self)
@@ -149,6 +152,9 @@ class Application(CApplication):
     
     def GetTemplateManager(self):
         return self.templateManager
+    
+    def GetFileTypeManager(self):
+        return self.fileTypes
     
     def GetClipboard(self):
         return self.clipboard

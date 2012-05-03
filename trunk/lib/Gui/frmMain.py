@@ -276,12 +276,6 @@ class CfrmMain(CWindow):
             self.tabStartPage.Fill()
             self.afterActionOpen = False
 
-    def OnImport(self, win):        
-        filename, filterIndex = win        
-
-    def OnExportToFile(self, win):
-        filename, filterIndex = win
-
     # Diagrams
     @event("mnuViewTools", "activate")
     def ActionViewTools(self, *args):
@@ -510,7 +504,7 @@ class CfrmMain(CWindow):
 
     @event("mnuImport", "activate")
     def ActionImport(self, widget):
-        self.application.GetWindow("frmImport").ShowDialog(self, widget)
+        self.application.GetWindow("frmImport").ShowDialog(self)
 
     @event("mnuExportToFile", "activate")
     def ActionExportToFile(self, widget):
@@ -631,7 +625,14 @@ class CfrmMain(CWindow):
 
     @event("mItemFile", "activate")
     def on_mItemFile_activate (self, widget):
-        pass
+        toImport = False
+        toExport = False
+        
+        for fileType in self.application.GetFileTypeManager().GetFileTypes():
+            toImport = toImport or fileType.GetImportPossible()
+            toExport = toExport or fileType.GetExportPossible()
+        self.mnuImport.set_sensitive(toImport)
+        self.mnuExportToFile.set_sensitive(toExport)
 
     @event("picDrawingArea", "get-selected")
     def on_picDrawingArea_get_selected(self, widget):

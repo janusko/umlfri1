@@ -62,6 +62,9 @@ class CPluginAdapter(CBaseObject, CGuiObject):
     def GetTemplateManager(self):
         return self.application.GetTemplateManager()
     
+    def GetFileTypeManager(self):
+        return self.application.GetFileTypeManager()
+    
     def GetCurrentDiagram(self):
         if self.application.GetWindow('frmMain').nbTabs.IsStartPageActive():
             return None
