@@ -21,7 +21,7 @@ from frmWarning import CfrmWarning
 from diagramPrint import CDiagramPrint
 from frmExport import CfrmExport
 from frmCopyImage import CfrmCopyImage
-from frmImport import CfrmImport
+from frmFileImport import CfrmFileImport
 from frmExport import CfrmExport
-from frmExportToFile import CfrmExportToFile
+from frmFileExport import CfrmFileExport
 from Bus import CBus

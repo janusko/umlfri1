@@ -7,3 +7,5 @@ from MenuItem import CMenuItem
 from ToggleButton import CToggleButton
 from Widget import CWidget
 from Separator import CSeparator
+from FileTypeManager import CFileTypeManager
+from FileType import CFileType

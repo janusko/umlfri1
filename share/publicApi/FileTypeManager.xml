@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<interface
+    xmlns="http://umlfri.org/xmlschema/publicApi.xsd"
+    name="org.umlfri.api.fileTypes.FileTypeManager">
+    
+    <documentation>
+        File type manager.
+    </documentation>
+    
+    <method name="registerFileType">
+        <documentation>
+            Registers the file type.
+        </documentation>
+        
+        <parameter name="mimeType" type="string">
+            <documentation>
+                Mimetype of the new file type.
+            </documentation>
+        </parameter>
+        
+        <parameter name="description" type="string">
+            <documentation>
+                Short description of the new file type.
+            </documentation>
+        </parameter>
+        
+        <return type="org.umlfri.api.fileTypes.FileType" />
+    </method>
+</interface>

@@ -89,6 +89,13 @@
         <value type="org.umlfri.api.gui.GuiManager" readable="true" />
     </property>
     
+    <property name="fileTypeManager">
+        <documentation>
+            Gets a file type manager.
+        </documentation>
+        <value type="org.umlfri.api.fileTypes.FileTypeManager" readable="true" />
+    </property>
+    
     <property name="transaction">
         <documentation>
             Gets a transaction manager.

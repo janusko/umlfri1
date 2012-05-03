@@ -36,3 +36,6 @@ class IAdapter(IBase):
     
     def GetTemplates(him):
         return list(him.GetTemplateManager().GetAllTemplates())
+    
+    def GetFileTypeManager(him):
+        return him.GetFileTypeManager()

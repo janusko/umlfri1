@@ -26,3 +26,6 @@ import MenuItem
 import ToggleButton
 import Widget
 import Separator
+
+import FileTypeManager
+import FileType
