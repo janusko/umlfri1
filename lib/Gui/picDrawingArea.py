@@ -586,7 +586,7 @@ class CpicDrawingArea(CWidget):
             if itemSel is None:
                 if self.__NewConnection is not None:
                     pass
-            elif isinstance(itemSel, CConnection):
+            elif isinstance(itemSel, (CConnection, CConLabelInfo)):
                 return
             elif self.__NewConnection is None:
                 ConnectionType = self.application.GetProject().GetMetamodel().GetConnectionFactory().GetConnection(toolBtnSel[1])
@@ -640,7 +640,7 @@ class CpicDrawingArea(CWidget):
             elif self.__NewConnection is not None:
                 pos = self.GetAbsolutePos((event.x, event.y))
                 itemSel = self.Diagram.GetElementAtPosition(self.canvas, pos)
-                if itemSel is None or isinstance(itemSel, CConnection):
+                if itemSel is None or isinstance(itemSel, (CConnection, CConLabelInfo)):
                     self.__NewConnection[1].append(pos)
                     self.__DrawNewConnection((None, None))
                 elif itemSel is not self.__NewConnection[2] or len(self.__NewConnection[1]) > 2:
