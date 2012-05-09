@@ -194,17 +194,19 @@ class CLine(object):
         ux = float(Bx - Ax)
         uy = float(By - Ay)
         
-        if ux == 0:
+        if ux == uy == 0:
+            t = 0
+        elif ux == 0:
             t = (Cy - Ay) / uy
         elif uy == 0:
             t = (Cx - Ax) / ux
         else:
             t = ((Cx - Ax) * ux + (Cy - Ay) * uy) / (ux**2 + uy**2)
         
-        if t < 0:
+        if t <= 0:
             t = 0.0
             d = CPoint((Ax, Ay)) - CPoint((Cx, Cy))
-        elif t > 1:
+        elif t >= 1:
             t = 1.0
             d = CPoint((Bx, By)) - CPoint((Cx, Cy))
         else:
