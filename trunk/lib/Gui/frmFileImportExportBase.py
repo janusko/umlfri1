@@ -1,6 +1,7 @@
 from lib.Depend.gtk2 import gtk
 
 import common
+from lib.GenericGui import CFileType
 
 from win32 import COpenSaveDialog
 
@@ -31,7 +32,12 @@ class CfrmFileImportExportBase(common.CWindow):
             gobject.idle_add(self.OnOk, filename, fileTypes[filterIndex])
     
     def ShowDialog(self, parent):
-        fileTypes = [fileType for fileType in self.application.GetFileTypeManager().GetFileTypes() if fileType.GetExportPossible()]
+        if self.__type == 'export':
+            isPossible = CFileType.GetExportPossible
+        else:
+            isPossible = CFileType.GetImportPossible
+        
+        fileTypes = [fileType for fileType in self.application.GetFileTypeManager().GetFileTypes() if isPossible(fileType)]
         
         if COpenSaveDialog:
             thread.start_new(self.__NewDialog, (parent, self.form.get_title(), fileTypes))
