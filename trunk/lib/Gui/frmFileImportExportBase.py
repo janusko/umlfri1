@@ -23,8 +23,8 @@ class CfrmFileImportExportBase(common.CWindow):
         pass
 
     def __NewDialog(self, parent, title, fileTypes):
-        filters = [(fileType.GetDescription(), ';'.join(fileType.GetExtensions())) for fileType in fileTypes]
-        
+        filters = [(fileType.GetDescription(), ';'.join('*.%s'%ext for ext in fileType.GetExtensions())) for fileType in fileTypes]
+
         win = COpenSaveDialog(parent.form, 'save' if self.__type == 'export' else 'open', title, filters)
         if win.ShowModal():
             filename = win.GetAbsolutePath()
