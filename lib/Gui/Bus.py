@@ -52,6 +52,19 @@ class CBus(gobject.GObject):
             [gobject.TYPE_STRING]),
         'add-element':(gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE,
             (gobject.TYPE_PYOBJECT,gobject.TYPE_PYOBJECT,gobject.TYPE_PYOBJECT,)),
+        'project-expand-node': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
+            [gobject.TYPE_PYOBJECT]),
+        'open-diagram': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
+            [gobject.TYPE_PYOBJECT]),
+    }
+    
+    __actionMap = {
+        'expandNode': 'project-expand-node',
+        'openDiagram': 'open-diagram',
+    }
+    
+    __actionParamMangle = {
+        
     }
     
     __doMap = {
@@ -85,6 +98,13 @@ class CBus(gobject.GObject):
         'moveNodeInProject': lambda param: (param[0], param[2]),
         'moveDiagramInProject': lambda param: (param[0], param[2]),
     }
+    
+    def ExecuteActions(self, actions):
+        for action, params in actions:
+            if action in self.__actionParamMangle:
+                mangleFnc = self.__actionParamMangle[action]
+                params = [mangleFnc(param) for param in params]
+            self.emit(self.__actionMap[action], params)
     
     def DoUpdates(self, updates):
         for upd, params in updates:

@@ -36,6 +36,12 @@ class CCommandProcessor(object):
                 guiUpd.setdefault(upd, []).append(param)
             if guiUpd:
                 self.__guiBus.DoUpdates(guiUpd.items())
+            
+            guiActions = {}
+            for action, param in command.GetGuiActions():
+                guiActions.setdefault(action, []).append(param)
+            if guiActions:
+                self.__guiBus.ExecuteActions(guiActions.items())
     
     def Undo(self, count = 1):
         '''

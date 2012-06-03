@@ -693,6 +693,11 @@ class CfrmMain(CWindow):
         if object is not None:
             self.picDrawingArea.SelectObject(object)
 
+    @event("application.bus","open-diagram")
+    def on_open_diagram(self, widget, diagrams):
+        for diagram in diagrams:
+            self.on_select_diagram_and_element(widget, diagram, None)
+    
     @event('application.bus', 'properties-editing-started')
     def on_nbProperties_editing_started (self, widget):
         for menuitem in self.mnuMenubar:
