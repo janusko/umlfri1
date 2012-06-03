@@ -32,6 +32,11 @@ class CCreateElementObjectCommand(CCommand):
             ('createElementObject', self.__elementObject)
         ]
     
+    def GetGuiActions(self):
+        return [
+            ('expandNode', self.__parentNode)
+        ]
+    
     def __str__(self):
         return _("Element %s created in the project") % self.__elementType.GetId()
     

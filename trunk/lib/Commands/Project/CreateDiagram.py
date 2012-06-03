@@ -25,6 +25,12 @@ class CCreateDiagramCommand(CCommand):
             ('createDiagram', self.__diagram)
         ]
     
+    def GetGuiActions(self):
+        return [
+            ('expandNode', self.__parentNode),
+            ('openDiagram', self.__diagram)
+        ]
+    
     def __str__(self):
         return _("%s added to the project") % self.__diagramType.GetId()
     

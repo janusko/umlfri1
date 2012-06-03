@@ -552,3 +552,12 @@ class CtwProjectView(CWidget):
                 self.TreeStore.insert_before(parent = None, sibling = iterBefore, row = diagramRow)
             
             self.TreeStore.remove(iterDiagram)
+    
+    @event('application.bus', 'project-expand-node')
+    def DiagramMoved(self, bus, params):
+        for node in params:
+            iterNode = self.get_iter_from_node(node)
+            iterPath = self.TreeStore.get_path(iterNode)
+            
+            
+            self.twProjectView.expand_to_path(iterPath)

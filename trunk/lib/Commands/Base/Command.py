@@ -109,3 +109,6 @@ class CCommand(object):
     
     def GetGuiUpdates(self):
         return []
+    
+    def GetGuiActions(self):
+        return []
