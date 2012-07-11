@@ -58,7 +58,6 @@ class Application(CApplication):
     guipath = GUI_PATH
 
     project = None
-    canopen = True
     
     def __init__(self):
         self.warnings = lib.Warnings.List.WarningList()
@@ -67,6 +66,7 @@ class Application(CApplication):
         self.bus = CBus()
         self.fileTypes = CFileTypeManager()
         self.commands = CCommandProcessor(self.bus)
+        self.__action = None
         
         CApplication.__init__(self)
         self.pluginAdapter = CPluginAdapter(self)
@@ -96,23 +96,19 @@ class Application(CApplication):
     @argument("-o", "--open", True)
     def DoOpen(self, value):
         "Opens selected project file"
-        if self.canopen:
-            self.GetWindow('frmMain').LoadProject(value, False)
-            self.canopen = False
+        self.__action = 'open', value
             
     
     @argument("-n", "--new", True)
     def DoNew(self, value):
         "Creates new project from template"
-        if self.canopen:
-            self.GetWindow('frmMain').LoadProject(value, True)
-            self.canopen = False
+        self.__action = 'new', value
     
     @argument(None, "--install-addon", True)
     def DoInstallAddon(self, value):
         "Install addon for UML .FRI"
-        if self.canopen:
-            self.canopen = False
+        if self.__action is None:
+            self.__action = 'install', value
             addon = self.addonManager.LoadAddon(value)
             
             self.GetWindow('frmSplash').Hide()
@@ -128,9 +124,7 @@ class Application(CApplication):
     @argument()
     def DoArguments(self, *files):
         "File to open"
-        if self.canopen:
-            self.GetWindow('frmMain').LoadProject(files[0], False)
-            self.canopen = False
+        self.__action = 'open', files[0]
     
     def GetRecentFiles(self):
         return self.recentFiles
@@ -197,6 +191,13 @@ class Application(CApplication):
     
     def __HideSplash(self):
         self.GetWindow('frmSplash').Hide()
+        
+        if self.__action[0] == 'open':
+            self.GetWindow('frmMain').LoadProject(self.__action[1], False)
+        elif self.__action[0] == 'new':
+            self.GetWindow('frmMain').LoadProject(self.__action[1], True)
+        
+        del self.__action
         
         return False
 
