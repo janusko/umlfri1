@@ -192,10 +192,11 @@ class Application(CApplication):
     def __HideSplash(self):
         self.GetWindow('frmSplash').Hide()
         
-        if self.__action[0] == 'open':
-            self.GetWindow('frmMain').LoadProject(self.__action[1], False)
-        elif self.__action[0] == 'new':
-            self.GetWindow('frmMain').LoadProject(self.__action[1], True)
+        if self.__action is not None:
+            if self.__action[0] == 'open':
+                self.GetWindow('frmMain').LoadProject(self.__action[1], False)
+            elif self.__action[0] == 'new':
+                self.GetWindow('frmMain').LoadProject(self.__action[1], True)
         
         del self.__action
         
