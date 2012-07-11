@@ -8,7 +8,8 @@ class CfrmExport(CWindow):
     glade = 'export.glade'
     
     widgets = ('entExportFileName','fcbDirectorySelect', 'tbtnPDF', 'tbtnPNG', 'tbtnPS', 'tbtnSVG',
-    'btnExport', 'btnCancelExport', 'hbuttonboxExportType', 'chbBackground', 'cbBackground', )
+    'btnExport', 'btnCancelExport', 'hbuttonboxExportType', 'chbBackground', 'cbBackground',
+    'spinExportZoom', 'spinExportPadding')
     
     def __init__(self, app, wTree):
         CWindow.__init__(self, app, wTree)
@@ -18,7 +19,7 @@ class CfrmExport(CWindow):
         self.picDrawingArea = picDrawingArea
     
     def Show(self):
-        self.tbtnPNG.set_active(True)
+        self.tbtnPDF.set_active(True)
         self.entExportFileName.set_text(self.picDrawingArea.GetDiagram().GetName())
         self.form.run()
         self.Hide()
@@ -67,15 +68,19 @@ class CfrmExport(CWindow):
             color = CColor('#%02x%02x%02x'%(color.red >> 8, color.green >> 8, color.blue >> 8))
         else:
             color = None
+        
+        zoom = self.spinExportZoom.get_value_as_int()
+        padding = self.spinExportPadding.get_value_as_int()
+        
         if self.tbtnSVG.get_active():        
-            self.picDrawingArea.Export(filename + '.svg', 'svg', color)
+            self.picDrawingArea.Export(filename + '.svg', 'svg', zoom, padding, color)
         
         if self.tbtnPDF.get_active():        
-            self.picDrawingArea.Export(filename + '.pdf', 'pdf', color)
+            self.picDrawingArea.Export(filename + '.pdf', 'pdf', zoom, padding, color)
         
         if self.tbtnPNG.get_active():        
-            self.picDrawingArea.Export(filename + '.png', 'png', color)
+            self.picDrawingArea.Export(filename + '.png', 'png', zoom, padding, color)
         
         if self.tbtnPS.get_active():        
-            self.picDrawingArea.Export(filename + '.ps', 'ps', color)
+            self.picDrawingArea.Export(filename + '.ps', 'ps', zoom, padding, color)
 
