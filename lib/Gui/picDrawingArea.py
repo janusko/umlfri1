@@ -384,24 +384,24 @@ class CpicDrawingArea(CWidget):
         tmp.page_size = wisy
         self.picVBar.set_adjustment(tmp)
 
-    def Export(self, filename, export_type, background=None):
+    def Export(self, filename, export_type, zoom, padding, background=None):
         self.Diagram.DeselectAll()
-        #what u see export(only currently visible area will be exported): sizeX, sizeY = self.GetWindowSize() 
-        sizeX, sizeY = self.Diagram.GetExpSquare(self.canvas)
+        
+        (x1, y1), (x2, y2) = self.Diagram.GetSizeSquare(self.canvas)
+        sizeX = x2 - x1
+        sizeY = y2 - y1
+        x = x1
+        y = y1
+        
+        sizeX = (sizeX + padding*2) * zoom
+        sizeY = (sizeY + padding*2) * zoom
         canvas = CExportCanvas(self.application.GetProject().GetMetamodel().GetStorage(), export_type,
-            filename, sizeX, sizeY, background)
+            filename, sizeX, sizeY, background = background)
+        canvas.SetScale(zoom)
+        canvas.MoveBase(x - padding, y - padding)
         self.Diagram.PaintFull(canvas)
         canvas.Finish()
         self.Paint()
-
-    def ExportSvg(self, filename):
-        # obsolete
-        self.Diagram.DeselectAll()
-        self.Paint()
-        canvas = CSvgCanvas(1000, 1000, self.canvas, self.application.GetProject().GetMetamodel().GetStorage())
-        canvas.Clear()
-        self.Diagram.Paint(canvas)
-        canvas.WriteOut(file(filename, 'w'))
     
     @event("mnuCtxDelete","activate")
     def DeleteElements(self, widget = None):
