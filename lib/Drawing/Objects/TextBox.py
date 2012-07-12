@@ -20,6 +20,7 @@ class CTextBox(CVisualObject):
 
     def ComputeSize(self, context):
         txt, font = self.GetVariables(context, 'text', 'font')
+        txt = unicode(txt)
         
         if font is None:
             font = context.GetDefault('textfont')
