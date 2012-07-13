@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DiagramType id="Flow Chart Diagram" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Icon path="icons/FlowChart.png" />
+    <Domain id="SimpleDiagram" identity="name" />
+    <Special swimlines="0" lifelines="0" />
+    <Elements>
+        <Item value="Note"/>
+        <Item value="Process" />
+        <Item value="Input Output" />
+        <Item value="Decision"/>
+        <Item value="Preparation" />
+        <Item value="Preparation End" />
+        <Item value="Start" />
+        <Item value="End" />       
+        <Item value="Connector"/>
+        <Item value="Subroutine Call"/>
+    </Elements>
+    <Connections>
+        <Item value="Flow Line" />
+        <Item value="Note Link" />
+    </Connections>
+</DiagramType>

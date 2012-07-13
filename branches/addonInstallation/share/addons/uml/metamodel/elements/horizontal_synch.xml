@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ElementType id="HorizontalSynchronization" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Icon path="icons/horizontal_line.png" />
+    <Domain id="synchronization" identity="name" />
+    <Connections>
+        <Item value="StateTransition"/>
+        <Item value="Control Flow"/>
+    </Connections>
+    <Appearance>
+        <HBox>
+            <Sizer minwidth="50" height="5">
+                <Rectangle fill="#cfg.Styles.Element.Fill3Color" border="#cfg.Styles.Element.LineColor"/>
+            </Sizer>
+            <Condition condition="#self.name">
+                <Padding padding="10">
+                    <Align align="center center">
+                        <TextBox text="#self.name" font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/>
+                    </Align>
+                </Padding>
+            </Condition>
+        </HBox>
+    </Appearance>
+    <Options>
+    </Options>
+</ElementType>

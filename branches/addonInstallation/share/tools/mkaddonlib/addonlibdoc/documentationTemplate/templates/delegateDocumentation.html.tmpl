@@ -1,0 +1,58 @@
+#import paths
+#def linkTo($element, $fqn = False)
+    #if $element == '*':
+        param array
+    #else if $element.typeName == 'PrimitiveType'
+        #if $fqn
+            $element.fqn
+        #else
+            $element.name
+        #end if
+    #else
+        #if $fqn
+            <a href="$paths.getPath($element)">$element.fqn</a>
+        #else
+            <a href="$paths.getPath($element)">$element.name</a>
+        #end if
+    #end if
+#end def
+#def methodParams($method)
+    (
+    #for $idx, $param in $enumerate($method.parameters)
+        #if $idx > 0
+            ,
+        #end if
+        $linkTo($param.type)
+        $param.name
+    #end for
+    )
+#end def
+<html>
+    <head>
+        <title>Documentation for interface $root.fqn</title>
+        <style>
+            .TableHeadingColor     { background: #CCCCFF; color:#000000 } /* Dark mauve */
+            .TableSubHeadingColor  { background: #EEEEFF; color:#000000 } /* Light mauve */
+            .TableRowColor         { background: #FFFFFF; color:#000000 } /* White */
+        </style>
+    </head>
+    <body>
+        <h2><font size="-1">$root.namespace.fqn</font><br />Delegate $root.name</h2>
+        <hr />
+        <code>
+            delegate
+            #if $root.returnType
+                $linkTo($root.returnType.type)
+                #if $root.returnType.iterable
+                    []
+                #end if
+            #else
+                void
+            #end if
+            $root.name
+            $methodParams($root)
+        </code>
+        <br /><br />
+        $root.documentation
+    </body>
+</html>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GestureDiagramType id="State diagram" xmlns="http://umlfri.org/xmlschema/gestures.xsd">
+    <GestureElements>
+        <GestureRecognizer objectId="Note" gestureName="rectangleRightUpperCornerLine" help="Create element: Note" />
+        <GestureRecognizer objectId="Package" gestureName="package" help="Create element: Package" />
+        <GestureRecognizer objectId="State" gestureName="rectangle" help="Create element: State" />
+        <GestureRecognizer objectId="VerticalSynchronization" gestureName="vertical" help="Create element: Vertical synchronization" />
+        <GestureRecognizer objectId="HorizontalSynchronization" gestureName="horizontal" help="Create element: Horizontal synchronization" />
+        <GestureRecognizer objectId="StartState" gestureName="start" help="Create element: Start State" />
+        <GestureRecognizer objectId="EndState" gestureName="end" help="Create element: End State" />
+        <GestureRecognizer objectId="Decision" gestureName="decision" help="Create element: Decision" />
+    </GestureElements>
+    <GestureConnections>
+        <GestureRecognizer objectId="StateTransition" gestureName="empty" help="Create connection: State transition" />
+        <GestureRecognizer objectId="Note Link" gestureName="empty" help="Create connection: Note link" />
+    </GestureConnections>
+</GestureDiagramType>

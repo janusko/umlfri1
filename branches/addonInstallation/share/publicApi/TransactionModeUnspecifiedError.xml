@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<exception
+    xmlns="http://umlfri.org/xmlschema/publicApi.xsd"
+    name="org.umlfri.api.exceptions.TransactionModeUnspecifiedError"
+    number="411"
+    throwsFrom="transactional">
+    
+    <documentation>
+        Action can be used only in transaction mode.
+    </documentation>
+</exception>

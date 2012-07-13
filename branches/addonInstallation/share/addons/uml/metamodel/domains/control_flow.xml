@@ -1,0 +1,17 @@
+<Domain id="control_flow" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" >
+    <Attribute id="name" name="Name" >
+		<Str/>
+	</Attribute>
+    <Attribute id="stereotype" name="Stereotype" >
+		<Str/>
+	</Attribute>
+    <Attribute id="guard" name="Guard" >
+		<Str/>
+	</Attribute>
+    <Attribute id="weight" name="Weight" >
+		<Str/>
+	</Attribute>
+    <Attribute id="note" name="Note" >
+		<Text/>
+	</Attribute>
+</Domain>
