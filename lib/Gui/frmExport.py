@@ -62,7 +62,7 @@ class CfrmExport(CWindow):
     @event("btnExport", "clicked")
     def OnBtnExportClicked(self, widget):
         
-        filename = os.path.join(self.fcbDirectorySelect.get_current_folder(), self.entExportFileName.get_text())
+        filename = os.path.join(self.fcbDirectorySelect.get_filename(), self.entExportFileName.get_text())
         if self.chbBackground.get_active():
             color = self.cbBackground.get_color()
             color = CColor('#%02x%02x%02x'%(color.red >> 8, color.green >> 8, color.blue >> 8))
