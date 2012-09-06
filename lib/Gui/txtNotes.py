@@ -45,9 +45,10 @@ class CtxtNotes(CWidget):
         text = buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter())
         
         elementObject = self.__GetElementObject()
-        if self.element is not None and elementObject.GetValue('note') != text:
-            cmd = CSetPropertyValuesCommand(elementObject, {'note': text})
-            self.application.GetCommands().Execute(cmd, allowFolding = True)
+        if self.element is not None and elementObject.GetDomainType().HasAttribute('note'):
+            if elementObject.GetValue('note') != text:
+                cmd = CSetPropertyValuesCommand(elementObject, {'note': text})
+                self.application.GetCommands().Execute(cmd, allowFolding = True)
     
     @event('application.bus', 'diagram-changed')
     @event('application.bus', 'connection-changed')
