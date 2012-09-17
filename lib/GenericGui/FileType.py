@@ -1,6 +1,8 @@
 from lib.Base import CBaseObject
 
 class CFileType(CBaseObject):
+    _persistent = True
+    
     def __init__(self, mimeType, description):
         self.__mimeType = mimeType
         self.__description = description

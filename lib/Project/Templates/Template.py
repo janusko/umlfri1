@@ -1,6 +1,8 @@
 from lib.Base import CBaseObject
 
 class CTemplate(CBaseObject):
+    _persistent = True
+    
     def __init__(self, name, storage, path, icon, metamodelUri = None):
         self.__name = name
         self.__storage = storage

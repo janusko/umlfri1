@@ -8,7 +8,6 @@ class CWidget(lib.GenericGui.CWidget):
         self.manager = manager
         self.owner = owner
         self._guiId = guiId
-        self._persistent = True
         
     def GetGuiId(self):
         return self._guiId

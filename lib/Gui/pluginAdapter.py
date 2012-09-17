@@ -9,13 +9,13 @@ from lib.Project import CProjectNode
 
 
 class CPluginAdapter(CBaseObject, CGuiObject):
+    _persistent = True
     
     def __init__(self, app):
         CGuiObject.__init__(self, app)
         self.guiManager = CGuiManager(app)
         self.manager = None
         self.GetUID()
-        self._persistent = True
         self.notifications = {}
     
     def AddNotification(self, event, callback):
@@ -41,7 +41,7 @@ class CPluginAdapter(CBaseObject, CGuiObject):
                 else:
                     callback(*args, **kwds)
         
-    def _generateUID(self):
+    def _GenerateUID(self):
         return 'adapter'
         
     def _SetPluginManager(self, pluginManager):
