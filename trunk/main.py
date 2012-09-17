@@ -42,7 +42,7 @@ if IS_FROZEN:
     gtk.rc_set_default_files([gtkrc])
     gtk.rc_reparse_all_for_settings(gtk.settings_get_default(), True)
 
-__version__ = '1.0-rc5'
+__version__ = '1.0'
 
 class Application(CApplication):
     version = CVersion(__version__)
