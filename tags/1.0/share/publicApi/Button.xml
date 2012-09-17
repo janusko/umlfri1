@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<interface
+    xmlns="http://umlfri.org/xmlschema/publicApi.xsd"
+    name="org.umlfri.api.gui.Button"
+    base="org.umlfri.api.gui.Widget">
+    
+    <documentation>
+        Toolbar button GUI object.
+    </documentation>
+    
+    <property name="label">
+        <documentation>
+            Gets botton's label.
+        </documentation>
+        <value type="string" readable="true" writable="true" />
+    </property>
+</interface>

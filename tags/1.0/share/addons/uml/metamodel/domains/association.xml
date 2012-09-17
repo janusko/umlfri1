@@ -1,0 +1,53 @@
+<Domain id="association" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" >
+    <Attribute id="name" name="Name" >
+		<Str/>
+	</Attribute>
+    <Attribute id="direction" name="Direction" >
+		<Enum>
+        	<Value>Unspecified</Value>
+        	<Value>Source to Destination</Value>
+        	<Value>Destination to Source</Value>
+        	<Value>Bidirectional</Value>
+		</Enum>
+    </Attribute>
+    <Attribute id="stereotype" name="Stereotype" >
+		<Str/>
+	</Attribute>
+    <Attribute id="SCardinality" name="Source Cardinality" >
+        <Str>
+			<Enum>
+				<Value> </Value>
+	        	<Value>*</Value>
+	        	<Value>0</Value>
+	        	<Value>0..*</Value>
+	        	<Value>0..1</Value>
+	        	<Value>1</Value>
+	        	<Value>1..</Value>
+	        	<Value>1..*</Value>
+			</Enum>
+		</Str>
+    </Attribute>
+    <Attribute id="DCardinality" name="Destination Cardinality" >
+		<Str>        	
+			<Enum>
+				<Value> </Value>
+	    	    <Value>*</Value>
+	    	    <Value>0</Value>
+	    	    <Value>0..*</Value>
+	    	    <Value>0..1</Value>
+	    	    <Value>1</Value>
+	    	    <Value>1..</Value>
+	    	    <Value>1..*</Value>
+			</Enum>
+		</Str>
+    </Attribute>
+    <Attribute id="SRole" name="Source Role" >
+		<Str/>
+	</Attribute>
+    <Attribute id="DRole" name="Destination Role" >
+		<Str/>
+	</Attribute>
+    <Attribute id="note" name="Note" >
+		<Text/>
+	</Attribute>
+</Domain>

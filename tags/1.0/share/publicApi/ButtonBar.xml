@@ -1,0 +1,80 @@
+<?xml version="1.0" ?>
+<interface
+    xmlns="http://umlfri.org/xmlschema/publicApi.xsd"
+    name="org.umlfri.api.gui.ButtonBar">
+    
+    <documentation>
+        UML .FRI toolbar component.
+    </documentation>
+    
+    <method name="addButton" mutator="true">
+        <documentation>
+            Adds a new button with label to the button bar.
+        </documentation>
+        
+        <parameter name="guiId" type="string">
+            <documentation>
+                Button unique ID.
+            </documentation>
+        </parameter>
+        <parameter name="callback" type="org.umlfri.api.gui.BasicEventHandler">
+            <documentation>
+                Callback function delegate.
+            </documentation>
+        </parameter>
+        <parameter name="position" type="int32">
+            <documentation>
+                Button position.
+            </documentation>
+        </parameter>
+        <parameter name="label" type="string">
+            <documentation>
+                Button label.
+            </documentation>
+        </parameter>
+        <parameter name="imageFileName" type="string" required="false">
+            <documentation>
+                Full path to button image.
+            </documentation>
+        </parameter>
+        <parameter name="toggleButton" type="boolean" required="false" default="false">
+            <documentation>
+                Dermines, whether it is toggle button or not.
+            </documentation>
+        </parameter>
+        
+        <return type="org.umlfri.api.gui.Button" />
+    </method>
+    
+    <method name="addSeparator" mutator="true">
+        <documentation>
+            Adds a new separator to the button bar.
+        </documentation>
+        
+        <parameter name="guiId" type="string">
+            <documentation>
+                Separator unique ID.
+            </documentation>
+        </parameter>
+        <parameter name="position" type="int32">
+            <documentation>
+                Separator position.
+            </documentation>
+        </parameter>
+        
+        <return type="org.umlfri.api.gui.Separator" />
+    </method>
+    
+    <property name="items" singular="item">
+        <documentation>
+            Contains all buttons. It can be used to to iterate over them,
+            or access one of them through guiId.
+        </documentation>
+        <index type="string" name="guiId">
+            <documentation>
+                Item unique ID.
+            </documentation>
+        </index>
+        <value type="org.umlfri.api.gui.Widget" readable="true" iterable="true" />
+    </property>
+</interface>

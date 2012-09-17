@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GestureDiagramType id="Use Case diagram" xmlns="http://umlfri.org/xmlschema/gestures.xsd">
+    <GestureElements>
+        <GestureRecognizer objectId="Note" gestureName="rectangleRightUpperCornerLine" help="Create element: Note" />
+        <GestureRecognizer objectId="Package" gestureName="package" help="Create element: Package" />
+        <GestureRecognizer objectId="UseCase" gestureName="rectangle" help="Create element: Use Case" />
+        <GestureRecognizer objectId="Boundary" gestureName="horizontal" help="Create element: Boundary" />
+        <GestureRecognizer objectId="Actor" gestureName="actor" help="Create element: Actor" />
+    </GestureElements>
+    <GestureConnections>
+        <GestureRecognizer objectId="AssociationUseCase" gestureName="empty" help="Create connection: Association Use Case" />
+        <GestureRecognizer objectId="Note Link" gestureName="empty" help="Create connection: Note link" />
+        <GestureRecognizer objectId="Include" gestureName="include" help="Create connection: Include" />
+        <GestureRecognizer objectId="Extend" gestureName="extend" help="Create connection: Extend" />
+        <GestureRecognizer objectId="Generalization" gestureName="filledArrow" help="Create connection: Generalization" />        
+    </GestureConnections>
+</GestureDiagramType>

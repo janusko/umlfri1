@@ -1,0 +1,407 @@
+#import paths
+#def baseIndent
+    #repeat $indent
+        &nbsp;&nbsp;&nbsp;
+    #end repeat
+    #if $indent > 0
+        <img src="inherit.gif" />
+    #end if
+    #set global $indent += 1
+#end def
+#def linkTo($element, $fqn = False)
+    #if $element == '*':
+        param array
+    #else if $element.typeName == 'PrimitiveType'
+        #if $fqn
+            $element.fqn
+        #else
+            $element.name
+        #end if
+    #else
+        #if $fqn
+            <a href="$paths.getPath($element)">$element.fqn</a>
+        #else
+            <a href="$paths.getPath($element)">$element.name</a>
+        #end if
+    #end if
+#end def
+#def methodParams($method)
+    (
+    #for $idx, $param in $enumerate($method.parameters)
+        #if $idx > 0
+            ,
+        #end if
+        $linkTo($param.type)
+        $param.name
+    #end for
+    )
+#end def
+<html>
+    <head>
+        <title>Documentation for interface $root.fqn</title>
+        <style>
+            .TableHeadingColor     { background: #CCCCFF; color:#000000 } /* Dark mauve */
+            .TableSubHeadingColor  { background: #EEEEFF; color:#000000 } /* Light mauve */
+            .TableRowColor         { background: #FFFFFF; color:#000000 } /* White */
+        </style>
+    </head>
+    <body>
+        <h2><font size="-1">$root.namespace.fqn</font><br />Interface $root.name</h2>
+        <div>
+            #set global $indent = 0
+            #for $base in $root.allBases
+                $baseIndent()$linkTo($base, True)<br />
+            #end for
+            $baseIndent()<b>$root.fqn</b>
+        </div>
+        #if $root.descendants
+            <dl>
+                <dt><b>All Known Descendants:</b></dt>
+                <dd>
+                    #for $idx, $descendant in $enumerate($root.descendants)
+                        #if $idx > 0
+                            , 
+                        #end if
+                        $linkTo($descendant)
+                    #end for
+                </dd>
+            </dl>
+        #end if
+        <hr />
+        <code>
+            #if $root.isAbstract
+                abstract
+            #end if
+            interface $root.name
+            #if $root.base
+                <br />
+                extends $linkTo($root.base)
+            #end if
+        </code>
+        <br /><br />
+        $root.documentation
+        <br /><br />
+        #if $root.hasChildrenOfType('InterfaceProperty')
+            <table border="1" width="100%" cellpadding="3" cellspacing="0">
+                <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+                    <th align="left" colspan="2"><font size="+2"><b>Property Summary</b></font></th>
+                </tr>
+                #for $property in $root.childrenOfType('InterfaceProperty')
+                    <tr bgcolor="white" class="TableRowColor">
+                        <td align="right" valign="top" width="1%" nowrap="nowrap">
+                            <font size="-1">
+                                <code>
+                                    $linkTo($property.type)
+                                    #if $property.iterator and not $property.index
+                                        []
+                                    #end if
+                                </code>
+                            </font>
+                        </td>
+                        <td>
+                            <code>
+                                <b>
+                                    <a href="\#member-$property.name">$property.name</a>
+                                </b>
+                                #if $property.index
+                                    [ $linkTo($property.index.type) $property.index.name ]
+                                #end if
+                            </code><br />
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            $property.documentation.firstSentence
+                        </td>
+                    </tr>
+                #end for
+            </table>
+            <br />
+        #end if
+        #if $root.hasChildrenOfType('InterfaceMethod')
+            <table border="1" width="100%" cellpadding="3" cellspacing="0">
+                <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+                    <th align="left" colspan="2"><font size="+2"><b>Method Summary</b></font></th>
+                </tr>
+                #for $method in $root.childrenOfType('InterfaceMethod')
+                    <tr bgcolor="white" class="TableRowColor">
+                        <td align="right" valign="top" width="1%" nowrap="nowrap">
+                            <font size="-1">
+                                <code>
+                                    #if $method.returnType
+                                        $linkTo($method.returnType.type)
+                                        #if $method.returnType.iterable
+                                            []
+                                        #end if
+                                    #else
+                                        void
+                                    #end if
+                                </code>
+                            </font>
+                        </td>
+                        <td>
+                            <code>
+                                <b><a href="\#member-$method.name">$method.name</a></b>$methodParams($method)
+                            </code><br />
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            $method.documentation.firstSentence
+                        </td>
+                    </tr>
+                #end for
+            </table>
+            <br />
+        #end if
+        #if $root.hasChildrenOfType('InterfaceEvent')
+            <table border="1" width="100%" cellpadding="3" cellspacing="0">
+                <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+                    <th align="left" colspan="2"><font size="+2"><b>Event Summary</b></font></th>
+                </tr>
+                #for $event in $root.childrenOfType('InterfaceEvent')
+                    <tr bgcolor="white" class="TableRowColor">
+                        <td align="right" valign="top" width="1%" nowrap="nowrap">
+                            <font size="-1">
+                                <code>
+                                    $linkTo($event.type)
+                                </code>
+                            </font>
+                        </td>
+                        <td>
+                            <code><b><a href="\#member-$event.name">$event.name</a></b></code><br />
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            $event.documentation.firstSentence
+                        </td>
+                    </tr>
+                #end for
+            </table>
+            <br />
+        #end if
+        #for $base in $root.allBases
+            #if $base.hasChildren
+                <table border="1" width="100%" cellpadding="3" cellspacing="0">
+                    <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+                        <th align="left">
+                            <b>Members inherited from interface $linkTo($base)</b>
+                        </th>
+                    </tr>
+                    <tr bgcolor="white" class="TableRowColor">
+                        <td>
+                            #for $idx, $member in $enumerate($base.children)
+                                #if $idx > 0
+                                    ,
+                                #end if
+                                <code><a href="$paths.getPath($base)#member-$member.name">$member.name</a></code>
+                            #end for
+                        </td>
+                    </tr>
+                </table>
+                <br />
+            #end if
+        #end for
+        #if $root.hasChildrenOfType('InterfaceProperty')
+            <table border="1" width="100%" cellpadding="3" cellspacing="0">
+                <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+                    <th align="left" colspan="2"><font size="+2"><b>Property Detail</b></font></th>
+                </tr>
+            </table>
+            #for $idx, $property in $enumerate($root.childrenOfType('InterfaceProperty'))
+                #if $idx > 0
+                    <hr />
+                #end if
+                <a name="member-$property.name"></a>
+                <h3>$property.name</h3>
+                <code>
+                    $linkTo($property.type)
+                    #if $property.iterator and not $property.index
+                        []
+                    #end if
+                    $property.name
+                    #if $property.index
+                        [ $linkTo($property.index.type) $property.index.name ]
+                    #end if
+                </code>
+                <dl>
+                    <dd>
+                        <p>$property.documentation.replace("\n\n", "</p><p>")</p>
+                    </dd>
+                </dl>
+                <dl>
+                    <dt><b>Access:</b></dt>
+                    <dd>
+                        #set $word = 0
+                        #if $property.getter
+                            #if $word > 0
+                                ,  
+                            #end if
+                            Readable
+                            #set $word += 1
+                        #end if
+                        #if $property.setter
+                            #if $word > 0
+                                ,  
+                            #end if
+                            Writable
+                            #set $word += 1
+                        #end if
+                        #if $property.iterator
+                            #if $word > 0
+                                ,  
+                            #end if
+                            Iterable
+                            #set $word += 1
+                        #end if
+                    </dd>
+                </dl>
+                #if $property.index and $property.index.documentation
+                    <dl>
+                        <dt><b>Parameters:</b></dt>
+                        <dd>
+                            <ul>
+                                <li>$property.index.name &mdash; $property.index.documentation</li>
+                            </ul>
+                        </dd>
+                    </dl>
+                #end if
+                #if $property.getter and property.getter.hasChildrenOfType('InterfacePropertyThrows')
+                    <dl>
+                        <dt><b>Getter Throws:</b></dt>
+                        <dd>
+                            <ul>
+                                #for $throw in $property.getter.throws
+                                    #if $throw.documentation
+                                        <li>$linkTo($throw.exception) &mdash; $throw.documentation</li>
+                                    #else
+                                        <li>$linkTo($throw.exception)</li>
+                                    #end if
+                                #end for
+                            </ul>
+                        </dd>
+                    </dl>
+                #end if
+                #if $property.setter and property.setter.hasChildrenOfType('InterfacePropertyThrows')
+                    <dl>
+                        <dt><b>Setter Throws:</b></dt>
+                        <dd>
+                            <ul>
+                                #for $throw in $property.setter.throws
+                                    #if $throw.documentation
+                                        <li>$linkTo($throw.exception) &mdash; $throw.documentation</li>
+                                    #else
+                                        <li>$linkTo($throw.exception)</li>
+                                    #end if
+                                #end for
+                            </ul>
+                        </dd>
+                    </dl>
+                #end if
+                #if $property.iterator and property.iterator.hasChildrenOfType('InterfacePropertyThrows')
+                    <dl>
+                        <dt><b>Iterator Throws:</b></dt>
+                        <dd>
+                            <ul>
+                                #for $throw in $property.iterator.throws
+                                    #if $throw.documentation
+                                        <li>$linkTo($throw.exception) &mdash; $throw.documentation</li>
+                                    #else
+                                        <li>$linkTo($throw.exception)</li>
+                                    #end if
+                                #end for
+                            </ul>
+                        </dd>
+                    </dl>
+                #end if
+            #end for
+            <br />
+        #end if
+        #if $root.hasChildrenOfType('InterfaceMethod')
+            <table border="1" width="100%" cellpadding="3" cellspacing="0">
+                <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+                    <th align="left" colspan="2"><font size="+2"><b>Method Detail</b></font></th>
+                </tr>
+            </table>
+            #for $idx, $method in $enumerate($root.childrenOfType('InterfaceMethod'))
+                #if $idx > 0
+                    <hr />
+                #end if
+                <a name="member-$method.name"></a>
+                <h3>$method.name</h3>
+                <code>
+                    #if $method.returnType
+                        $linkTo($method.returnType.type)
+                        #if $method.returnType.iterable
+                            []
+                        #end if
+                    #else
+                        void
+                    #end if
+                    $method.name
+                    $methodParams($method)
+                </code>
+                <dl>
+                    <dd>
+                        <p>$method.documentation.replace("\n\n", "</p><p>")</p>
+                    </dd>
+                </dl>
+                #if $method.hasChildrenOfType('InterfaceMethodParameter')
+                    <dl>
+                        <dt><b>Parameters:</b></dt>
+                        <dd>
+                            <ul>
+                                #for $param in $method.parameters
+                                    #if $param.documentation
+                                        <li>$param.name &mdash; $param.documentation</li>
+                                    #end if
+                                #end for
+                            </ul>
+                        </dd>
+                    </dl>
+                #end if
+                #if $method.returnType and $method.returnType.documentation
+                    <dl>
+                        <dt><b>Returns:</b></dt>
+                        <dd>
+                            $method.returnType.documentation
+                        </dd>
+                    </dl>
+                #end if
+                #if $method.hasChildrenOfType('InterfaceMethodThrows')
+                    <dl>
+                        <dt><b>Throws:</b></dt>
+                        <dd>
+                            <ul>
+                                #for $throw in $method.throws
+                                    #if $throw.documentation
+                                        <li>$linkTo($throw.exception) &mdash; $throw.documentation</li>
+                                    #else
+                                        <li>$linkTo($throw.exception)</li>
+                                    #end if
+                                #end for
+                            </ul>
+                        </dd>
+                    </dl>
+                #end if
+            #end for
+            <br />
+        #end if
+        #if $root.hasChildrenOfType('InterfaceEvent')
+            <table border="1" width="100%" cellpadding="3" cellspacing="0">
+                <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+                    <th align="left" colspan="2"><font size="+2"><b>Event Detail</b></font></th>
+                </tr>
+            </table>
+            #for $idx, $event in $enumerate($root.childrenOfType('InterfaceEvent'))
+                #if $idx > 0
+                    <hr />
+                #end if
+                <a name="member-$event.name"></a>
+                <h3>$event.name</h3>
+                <code>
+                    $linkTo($event.type)
+                    $event.name
+                </code>
+                <dl>
+                    <dd>
+                        <p>$event.documentation.replace("\n\n", "</p><p>")</p>
+                    </dd>
+                </dl>
+            #end for
+            <br />
+        #end if
+    </body>
+</html>
