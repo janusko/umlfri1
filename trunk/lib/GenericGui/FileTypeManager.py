@@ -2,6 +2,8 @@ from lib.Base import CBaseObject
 from FileType import CFileType
 
 class CFileTypeManager(CBaseObject):
+    _persistent = True
+    
     def __init__(self):
         self.__fileTypes = []
     

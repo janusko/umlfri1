@@ -1,6 +1,7 @@
 from Widget import CWidget
 
 class CMenu(CWidget):
+    _persistent = True
     
     def GetItems(self):
         pass

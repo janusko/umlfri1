@@ -1,6 +1,7 @@
 from lib.Base import CBaseObject
 
 class CWidget(CBaseObject):
+    _persistent = True
     
     def GetGuiId(self):
         pass

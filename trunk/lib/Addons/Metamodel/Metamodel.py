@@ -10,7 +10,6 @@ import os
 
 class CMetamodel(CBaseObject):
     def __init__(self, storage, uri, version):
-        self._persistent = True
         self.__Storage = storage
         self.__PathFactory = CPathFactory(self.__Storage, 'paths.xml')
         self.__DomainFactory = CDomainFactory(self.__Storage, 'domains')

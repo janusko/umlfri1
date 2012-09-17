@@ -12,6 +12,8 @@ class CGuiManager(CBaseObject):
     Encapsulates handling of GUI modifications
     '''
     
+    _persistent = True
+    
     transformations = {
         gtk.MenuBar: plugin.CMenu,
         gtk.Menu: plugin.CMenu,
@@ -30,7 +32,6 @@ class CGuiManager(CBaseObject):
         self.lock = thread.allocate()
         self.app = app
         self.frmMain = self.app.GetWindow('frmMain')
-        self._persistent = True
         self.owners = {}
         
     def GetItem(self, item, _addr=None):

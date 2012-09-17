@@ -15,6 +15,7 @@ class CRegistrar(object):
         items = self.__dict.items()
         for key, value in items:
             if not getattr(value, '_persistent', False):
+                value._ClearUID()
                 del self.__dict[key]
         del items
     
