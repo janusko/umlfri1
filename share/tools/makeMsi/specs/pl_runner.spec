@@ -3,8 +3,8 @@ import os
 project_dir=os.environ.get("code_path")
 out_dir='..\\bins'
 pl_dir=project_dir+'\\share\\addons\\pythonStarter'
-hiddenimports=['code']
-a = Analysis([os.path.join(HOMEPATH,'support\\_mountzlib.py'), os.path.join(HOMEPATH,'support\\useUnicode.py'),pl_dir+'\\starter\\pl_runner.py'],[pl_dir+'\\library'])
+hiddenimports=['code','codeop','platform','gtk.keysyms']
+a = Analysis([os.path.join(HOMEPATH,'support\\_mountzlib.py'), os.path.join(HOMEPATH,'support\\useUnicode.py'),pl_dir+'\\starter\\pl_runner.py'],[pl_dir+'\\library'], hiddenimports = hiddenimports)
 pyz = PYZ(a.pure)
 exe = EXE( pyz,
           a.scripts,
