@@ -22,7 +22,7 @@ class IAdapter(IBase):
         him.RemoveNotification(event, callback)
         
     def Notify(him, event, *args, **kwds):
-        return him.Notify(event, *args, **kwds)
+        return him.Notify(event, *(args + kwds.get('args', ())), **kwds)
     
     def GetGuiManager(him):
         return him.GetGuiManager()
