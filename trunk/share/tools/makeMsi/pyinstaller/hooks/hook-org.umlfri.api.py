@@ -1,1 +1,0 @@
-hiddenimports=['code','platform','gtk.keysyms']
