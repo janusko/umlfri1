@@ -6,6 +6,7 @@
     <property name="title" translatable="yes">Save Project As</property>
     <property name="type_hint">dialog</property>
     <property name="action">save</property>
+    <property name="do_overwrite_confirmation">True</property>
     <child internal-child="vbox">
       <widget class="GtkVBox" id="dialog-vbox7">
         <property name="visible">True</property>

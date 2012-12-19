@@ -2,7 +2,12 @@
 import ctypes
 from ctypes import c_int, c_ulong, c_char_p, c_wchar_p, c_ushort
 
-OFN_HIDEREADONLY = 4
+OFN_OVERWRITEPROMPT     = 0x00000002
+OFN_HIDEREADONLY        = 0x00000004
+OFN_ALLOWMULTISELECT    = 0x00000200
+OFN_PATHMUSTEXIST       = 0x00000800
+OFN_FILEMUSTEXIST       = 0x00001000
+OFN_EXPLORER            = 0x00080000
 
 class OPENFILENAME(ctypes.Structure):
     _fields_ = (("lStructSize", c_int),
@@ -36,7 +41,7 @@ class OPENFILENAME(ctypes.Structure):
         self.nMaxFile = 1024
         self.hwndOwner = win
         self.lpstrTitle = title
-        self.Flags = OFN_HIDEREADONLY
+        self.flags = OFN_HIDEREADONLY | OFN_EXPLORER
 
 class COpenSaveDialog(object):
     def __init__(self, parent, type, title, filter):
@@ -57,9 +62,11 @@ class COpenSaveDialog(object):
         
         if self.__type == 'open':
             fnc = ctypes.windll.comdlg32.GetOpenFileNameW
+            ofx.flags |= OFN_FILEMUSTEXIST
         else:
             fnc = ctypes.windll.comdlg32.GetSaveFileNameW
-        
+            ofx.flags |= OFN_PATHMUSTEXIST | OFN_OVERWRITEPROMPT
+
         if fnc(ctypes.byref(ofx)):
             self.__path = ofx.lpstrFile.replace("\0", "")
             self.__filterIndex = ofx.nFilterIndex
