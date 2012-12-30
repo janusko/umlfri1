@@ -47,7 +47,6 @@ class CfrmAbout(CWindow):
             buff.insert_with_tags_by_name(iter, version, "mono")
             begin = '\n'
         
-        self.showport = False
         self.lengthname = l
         self.textiter = iter
         self.buff = buff
@@ -66,13 +65,6 @@ class CfrmAbout(CWindow):
         # set web address 
         self.lbtnProjectWeb.set_uri(WEB)
         self.lbtnProjectWeb.set_label(WEB)
-        
-        if not self.showport:
-            port = self.application.GetPluginPort()
-            if port:
-                self.buff.insert_with_tags_by_name(self.textiter, ((u"\n%%-%ds  : "%self.lengthname)%u"Plugin port").encode('utf8'), 'bold')
-                self.buff.insert_with_tags_by_name(self.textiter, str(port), 'mono')
-            self.showport = True
         
         self.form.run()
         self.Hide()
