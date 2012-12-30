@@ -93,12 +93,6 @@ class CPluginManager(object):
         with self.conlock:
             for addr in self.connection.keys(): #this must use list, not iterator (beware in python 3.x)
                 self.Send(addr, code, **params)
-            
-    def GetPort(self):
-        if PLUGIN_SOCKET is not None:
-            return self.acceptserver.GetPort()
-        else:
-            return None
     
     def GetTransaction(self, addr):
         return self.transaction[addr]
@@ -132,8 +126,6 @@ class CPluginManager(object):
     def Stop(self):
         self.accepting = False
         self.watchdog.Stop()
-        if PLUGIN_SOCKET is not None:
-            self.acceptserver.Stop()
         for plugin in list(self.plugins.itervalues()):
             if plugin.IsAlive() and not plugin.GetLongRun():
                 threading.Thread(None, self.KillTask, None, (plugin, )).start()

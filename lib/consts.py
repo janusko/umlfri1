@@ -37,7 +37,6 @@ BUFFER_MAX_SIZE=(6400,6400)     # the graphic buffer will be extended to max thi
 
 DEFAULT_IDENTITY='@id'
 
-PLUGIN_SOCKET = None            # None -> use only pipes, 0 -> random empty port for socket, 1024..65535 -> fixed port number for socket
 PLUGIN_DISPLAY_COMMUNICATION = False
 PLUGIN_KILL_SECONDS = 10
 

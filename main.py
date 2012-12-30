@@ -83,13 +83,6 @@ class Application(CApplication):
     def GetPluginAdapter(self):
         return self.pluginAdapter
     
-    def GetPluginPort(self):
-        manager = self.pluginAdapter.GetPluginManager()
-        if manager:
-            return manager.GetPort()
-        else:
-            return None
-    
     def GetCommands(self):
         return self.commands
     
