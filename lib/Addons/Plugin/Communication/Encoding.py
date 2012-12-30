@@ -1,6 +1,5 @@
 import ComSpec
 from lib.Base import CBaseObject
-from lib.Addons.Plugin.Client import classes
 
 def t_eval(*a):
     return ComSpec.t_eval(*a)
@@ -8,13 +7,13 @@ def t_eval(*a):
 def r_eval(*a):
     return ComSpec.r_eval(*a)
 
-def EncodeValue(value, app, con = None, addr = None):
+def EncodeValue(value, con = None, addr = None):
     fun = None
     if isinstance(value, bool):
         fun = 'bool'
-    elif isinstance(value, (CBaseObject, ) + tuple(classes.values())):
+    elif isinstance(value, CBaseObject):
         fun = 'object'
-    elif app and isinstance(con.GetGuiManager().GetItem(value), CBaseObject):
+    elif isinstance(con.GetGuiManager().GetItem(value), CBaseObject):
         value = con.guimanager.GetItem(value)
         fun = 'object'
     elif isinstance(value, (str, unicode)):
@@ -35,20 +34,14 @@ def EncodeValue(value, app, con = None, addr = None):
             pass
     
     if fun is not None:
-        if app:
-            ff = getattr(ComSpec, 'r_' + fun)
-        else:
-            ff = getattr(ComSpec, 't_' + fun)._reverse
+        ff = getattr(ComSpec, 'r_' + fun)
     else:
         raise ValueError
     
     return fun, ff(value, con, addr)
     
-def DecodeValue(value, app, con = None, addr = None):
-    if app:
-        fun = getattr(ComSpec, 't_' + value[0])
-    else:
-        fun = getattr(ComSpec, 'r_' + value[0])._reverse
+def DecodeValue(value, con = None, addr = None):
+    fun = getattr(ComSpec, 't_' + value[0])
     
     return fun(value[1], con, addr)
     

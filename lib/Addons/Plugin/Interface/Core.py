@@ -29,8 +29,8 @@ class CCore(object):
                 com = command['command'].lower()
                 callid = params.pop('__id__', None)
                 
-                args = tuple(DecodeValue(i, True, self, addr) for i in t_eval(params['args']))
-                kwds = dict((k, DecodeValue(v, True, self, addr)) for k, v in t_eval(params['kwds']).iteritems())
+                args = tuple(DecodeValue(i, self, addr) for i in t_eval(params['args']))
+                kwds = dict((k, DecodeValue(v, self, addr)) for k, v in t_eval(params['kwds']).iteritems())
             
                 if com == 'exec':
                     self._exec(command['type'], args, kwds, addr, callid)
@@ -70,7 +70,7 @@ class CCore(object):
             else:
                 result = Meta.Execute(obj, fname, args, kwds, self, addr)
             
-            result = EncodeValue(result, True, self, addr)
+            result = EncodeValue(result, self, addr)
             
             self.manager.Send(addr, RESP_RESULT, __id__ = callid, result = result)
         
@@ -95,8 +95,8 @@ class CCore(object):
             self.manager.Send(addr, RESP_INVALID_COMMAND_TYPE, command = 'plugin', type = ctype, __id__ = callid)
     
     def _callback(self, id, addr, *args, **kwds):
-        args = tuple(EncodeValue(i, True, self, addr) for i in args)
-        kwds = dict((k, EncodeValue(v, True, self, addr)) for k, v in kwds.iteritems())
+        args = tuple(EncodeValue(i, self, addr) for i in args)
+        kwds = dict((k, EncodeValue(v, self, addr)) for k, v in kwds.iteritems())
             
         self.manager.Send(addr, RESP_CALLBACK, callback = id, args = r_eval(args), kwds = r_eval(kwds))
             

@@ -2,7 +2,6 @@ import re
 import base64
 from lib.Addons.Plugin.Interface.decorators import *
 from lib.Addons.Plugin.Interface.meta import Meta
-from lib.Addons.Plugin.Client import classes
 from lib.Base.Registrar import registrar
 from lib.Exceptions import *
 
@@ -142,29 +141,10 @@ def t_2x2intTuple(val, conn = None, addr = None):
     else:
         raise ValueError()
 
-def rc_object(val, connection, addr = None):
-    if val.find('::') >= 0:
-        val, cls = val.split('::')
-        if val == 'None':
-            return None
-        else:
-            try:
-                return classes[cls](val, connection)
-            except KeyError:
-                raise ValueError()
-    else:
-        raise ValueError()
-    
-def rc_objectlist(val, connection, addr = None):
-    return [rc_object(i, connection) for i in val[1:-1].split(',') if i != '']
-    
-
-@reverse(rc_object)
 def r_object(val, conn = None, addr = None):
     return ('#%s::%s' % (val.GetUID(), Meta.GetClassName(val)) if val is not None else 'None::NoneType') 
         
 
-@reverse(rc_objectlist)
 def r_objectlist(val, conn = None, addr = None):
     return '[' + ','.join(r_object(i) for i in val) + ']'
 

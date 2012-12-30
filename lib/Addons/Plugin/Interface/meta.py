@@ -1,7 +1,5 @@
 import re
 from lib.Exceptions import *
-from lib.Addons.Plugin.Client import classes
-from lib.Addons.Plugin.Client.Proxy import CProxy
 
 class Meta(type):
     
@@ -26,7 +24,6 @@ class Meta(type):
                     and self.__valid_fname(fname) 
                     and not getattr(getattr(self, fname), '_not_iterface', False))))
             self.names[name] = dictionary['__cls__']
-            classes[name] = type(name, (CProxy, ), {'Meta': Meta})
         for fname, fun in dictionary.iteritems():
             if callable(fun) and self.__valid_fname(fname):
                 setattr(self, fname, staticmethod(fun))

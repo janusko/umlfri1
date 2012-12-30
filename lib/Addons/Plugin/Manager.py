@@ -1,6 +1,4 @@
-from Communication.AcceptServer import CAcceptServer
 from Communication.SocketWrapper import CSocketWrapper
-from Communication.ComSpec import *
 from Interface.Core import CCore
 from Interface.Transaction import CTransaction
 from Interface.Classes.base import IBase
@@ -28,9 +26,6 @@ class CPluginManager(object):
         pluginAdapter._SetPluginManager(self)
         self.proxy = CCore(self, pluginAdapter)
         self.watchdog = CWatchdog(self)
-        if PLUGIN_SOCKET is not None:
-            self.acceptserver = CAcceptServer(('localhost', PLUGIN_SOCKET), self.NewConnection)
-            self.acceptserver.Start()
     
     def NewConnection(self, sock, addr):
         '''
