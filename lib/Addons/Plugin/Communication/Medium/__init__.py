@@ -1,4 +1,3 @@
 from MediumError import MediumError
 from MediumTimeout import MediumTimeout
-from SocketMedium import CSocketMedium
 from PipeMedium import CPipeMedium
