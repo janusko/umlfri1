@@ -554,7 +554,7 @@ class CtwProjectView(CWidget):
             self.TreeStore.remove(iterDiagram)
     
     @event('application.bus', 'project-expand-node')
-    def DiagramMoved(self, bus, params):
+    def ExpandNode(self, bus, params):
         for node in params:
             iterNode = self.get_iter_from_node(node)
             iterPath = self.TreeStore.get_path(iterNode)
