@@ -38,10 +38,12 @@ class CTransaction(CBaseObject):
             command = self.__command
         else:
             raise TransactionModeUnspecifiedError()
-        callable(obj, fname, (command, ) + args, kwds, other, addr)
+        ret = callable(obj, fname, (command, ) + args, kwds, other, addr)
         
         if self.state == 'autocommit':
             self.__DoCommand(command)
+        
+        return ret
     
     def GetState(self):
         return self.state

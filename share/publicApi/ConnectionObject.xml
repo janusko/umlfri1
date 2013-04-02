@@ -76,5 +76,7 @@
         </documentation>
         
         <parameter name="diagram" type="org.umlfri.api.model.Diagram" />
+        
+        <return type="org.umlfri.api.model.ConnectionVisual" />
     </method>
 </interface>

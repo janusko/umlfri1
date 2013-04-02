@@ -183,5 +183,7 @@
                 Type of new element.
             </documentation>
         </parameter>
+        
+        <return type="org.umlfri.api.model.ElementVisual" />
     </method>
 </interface>

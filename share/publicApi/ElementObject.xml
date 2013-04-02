@@ -91,6 +91,8 @@
                 Type of the connection.
             </documentation>
         </parameter>
+        
+        <return type="org.umlfri.api.model.ConnectionObject" />
     </method>
     
     <method name="createDiagram" mutator="true">
@@ -103,6 +105,8 @@
                 Type of the diagram.
             </documentation>
         </parameter>
+        
+        <return type="org.umlfri.api.model.Diagram" />
     </method>
     
     <method name="createChildElement" mutator="true">
@@ -115,6 +119,8 @@
                 Type of the element.
             </documentation>
         </parameter>
+        
+        <return type="org.umlfri.api.model.ElementObject" />
     </method>
     
     <method name="showIn" mutator="true">
@@ -123,5 +129,7 @@
         </documentation>
         
         <parameter name="diagram" type="org.umlfri.api.model.Diagram" />
+        
+        <return type="org.umlfri.api.model.ElementVisual" />
     </method>
 </interface>
