@@ -23,7 +23,7 @@ class FileList(object):
         if path.endswith('.py'):
             locals = {}
             globals = {}
-            execfile(inputFile, globals, locals)
+            execfile(path, globals, locals)
             for type, params in locals['generate'](self.__builder.getRootNamespace()):
                 if type == 'file':
                     self.__appendFile(rel(params[0]), params[1])
