@@ -99,22 +99,34 @@ class CBus(gobject.GObject):
         'moveDiagramInProject': lambda param: (param[0], param[2]),
     }
     
-    def ExecuteActions(self, actions):
+    def __ExecuteActions(self, actions):
         for action, params in actions:
             if action in self.__actionParamMangle:
                 mangleFnc = self.__actionParamMangle[action]
                 params = [mangleFnc(param) for param in params]
             self.emit(self.__actionMap[action], params)
+
+    def ExecuteActions(self, actions, postpone = False):
+        if postpone:
+            gobject.idle_add(self.__ExecuteActions, actions)
+        else:
+            self.__ExecuteActions(actions)
     
-    def DoUpdates(self, updates):
+    def __DoUpdates(self, updates):
         for upd, params in updates:
             if upd in self.__doParamMangle:
                 mangleFnc = self.__doParamMangle[upd]
                 params = [mangleFnc(param) for param in params]
             self.emit(self.__doMap[upd], params)
         self.emit('undo-redo-action', 'do')
+
+    def DoUpdates(self, updates, postpone = False):
+        if postpone:
+            gobject.idle_add(self.__DoUpdates, updates)
+        else:
+            self.__DoUpdates(updates)
     
-    def UndoUpdates(self, updates):
+    def UndoUpdates(self, updates, postpone = False):
         for upd, params in updates:
             if upd in self.__undoParamMangle:
                 mangleFnc = self.__undoParamMangle[upd]
