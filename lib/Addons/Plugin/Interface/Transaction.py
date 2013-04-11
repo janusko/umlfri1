@@ -29,7 +29,7 @@ class CTransaction(CBaseObject):
         command.Rollback()
     
     def __DoCommand(self, command):
-        self.__manager.GetPluginAdapter().GetCommands().Execute(command)
+        self.__manager.GetPluginAdapter().GetCommands().Execute(command, postpone = True)
     
     def Action(self, callable, obj, fname, args, kwds, other, addr):
         if self.state == 'autocommit':

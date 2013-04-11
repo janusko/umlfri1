@@ -9,7 +9,7 @@ class CCommandProcessor(object):
         self.__redoStack = []
         self.__guiBus = guiBus
     
-    def Execute(self, command, allowFolding = False):
+    def Execute(self, command, allowFolding = False, postpone = False):
         '''
         Executes the given command and stores it in the history
         '''
@@ -35,13 +35,13 @@ class CCommandProcessor(object):
             for upd, param in command.GetGuiUpdates():
                 guiUpd.setdefault(upd, []).append(param)
             if guiUpd:
-                self.__guiBus.DoUpdates(guiUpd.items())
+                self.__guiBus.DoUpdates(guiUpd.items(), postpone)
             
             guiActions = {}
             for action, param in command.GetGuiActions():
                 guiActions.setdefault(action, []).append(param)
             if guiActions:
-                self.__guiBus.ExecuteActions(guiActions.items())
+                self.__guiBus.ExecuteActions(guiActions.items(), postpone)
     
     def Undo(self, count = 1):
         '''
