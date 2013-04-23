@@ -36,6 +36,7 @@ BUFFER_SIZE=(2000,1500)         # buffer size at the start
 BUFFER_MAX_SIZE=(6400,6400)     # the graphic buffer will be extended to max this values
 
 DEFAULT_IDENTITY='@id'
+LENGTH_PROPERTY='@length'
 
 PLUGIN_DISPLAY_COMMUNICATION = False
 PLUGIN_KILL_SECONDS = 10
