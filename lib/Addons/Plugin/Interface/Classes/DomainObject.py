@@ -1,8 +1,10 @@
 from base import IBase
 from lib.Addons.Plugin.Communication.ComSpec import *
 from lib.Addons.Plugin.Interface.decorators import *
-from lib.Commands.Properties import CSetPropertyValuesCommand
+from lib.Commands.Properties import CSetPropertyValuesCommand, CAppendPropertyItemCommand, CRemovePropertyItemCommand
 from lib.Domains.Object import CDomainObject
+from lib.consts import LENGTH_PROPERTY
+
 
 class IDomainObject(IBase):
     __cls__ = None
@@ -28,6 +30,7 @@ class IDomainObject(IBase):
                     for i in encode(prefix + k, v):
                         yield i
             elif isinstance(value, list):
+                yield (prefix + '.' + LENGTH_PROPERTY, len(value))
                 for i, v in enumerate(value):
                     for j in encode(prefix + '[' + str(i) + '].', v):
                         yield j
@@ -42,4 +45,14 @@ class IDomainObject(IBase):
     @destructive
     def SetValue(him, command, path, value):
         cmd = CSetPropertyValuesCommand(him, {path: value})
+        command.Execute(cmd)
+    
+    @destructive
+    def AppendItem(him, command, path):
+        cmd = CAppendPropertyItemCommand(him, path)
+        command.Execute(cmd)
+    
+    @destructive
+    def RemoveItem(him, command, path):
+        cmd = CRemovePropertyItemCommand(him, path)
         command.Execute(cmd)
