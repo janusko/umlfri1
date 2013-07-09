@@ -22,6 +22,11 @@ from lib.config import config
 from lib.Exceptions.DevException import *
 from lib.Update.UpdateManager import CUpdateManager as CUpdateManager
 from lib.Update.UpdateRequest import CUpdateRequest as CUpdateRequest
+from AddonInfo import CAddonInfo
+
+import urllib
+from cStringIO import StringIO
+from lib.Drawing.Canvas.GtkPlus import PixmapFromPath, PixmapFromString
 
 xmlschema_doc = etree.parse(os.path.join(SCHEMA_PATH, "addon.xsd"))
 xmlschema = etree.XMLSchema(xmlschema_doc)
@@ -104,10 +109,9 @@ class CAddonManager(object):
         return tmp
     
     def __LoadAddon(self, storage, uninstallable):
-        if storage is None:
-            return None
-        
-        if not storage.exists('addon.xml'):
+        if storage is None:            
+            return None        
+        if not storage.exists('addon.xml'):            
             return None
         
         root = etree.XML(storage.read_file('addon.xml'))
@@ -252,10 +256,10 @@ class CAddonManager(object):
     
     def _RefreshAddonEnabled(self, addon):
         for uri in addon.GetUris():
-            if uri in self.__enabledAddons:
+            if uri in self.__enabledAddons:                
                 del self.__enabledAddons[uri]
         
-        self.__enabledAddons[addon.GetDefaultUri()] = addon.IsEnabled()
+        self.__enabledAddons[addon.GetDefaultUri()] = addon.IsEnabled()        
     
     def _DeleteAddon(self, addon):
         for uri in addon.GetUris():
@@ -352,3 +356,37 @@ class CAddonManager(object):
                 continue
             
             yield oldAddon, newAddon
+            
+    def GetAddonListFromServer(self, searchString = ''):
+        uris = []
+        for addon in self.ListAddons():
+            for uri in addon.GetUris():
+                uris.append(uri)
+        try:
+            xml = urllib.urlopen('http://new2.umlfri.org/plugins/addon?searchKey='+searchString).read()            
+            context = etree.iterparse(StringIO(xml))
+            try:                             
+                for action, elem in context:
+                    if elem.tag == "item":                                               
+                        if elem.find("Identity") != None:
+                            if elem.find("Identity").get("uri") not in uris:
+                                addon = CAddonInfo() 
+                                addon.icon = PixmapFromString(urllib.urlopen(elem.find("Icon").text).read())
+                                addon.name = elem.find("FriendlyName").get("name")
+                                addon.version = elem.find("FriendlyName").get("version")
+                                addon.description = elem.find("Description").text                               
+                                addon.uri = elem.find("Identity").get("uri")
+                                addon.download = elem.find("Download").text.strip()                                                                                              
+                                yield addon                   
+            except SyntaxError:
+                pass            
+        except IOError:
+            pass
+            
+    def DownloadAddon(self, link):
+        netfile = urllib.urlopen(link)
+        data = netfile.read()
+        ramfile = StringIO(data)
+        storage = open_storage(ramfile)
+        newAddon = self.__LoadAddon(storage, False)
+        return newAddon 

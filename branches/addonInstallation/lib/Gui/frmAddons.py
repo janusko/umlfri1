@@ -4,7 +4,7 @@ import os.path
 import webbrowser
 
 from lib.consts import CHECK_ADDON_INTERVAL
-from lib.Drawing.Canvas.GtkPlus import PixmapFromPath
+from lib.Drawing.Canvas.GtkPlus import PixmapFromPath#, PixmapFromString
 
 from common import event, CWindow
 from dialogs import CQuestionDialog
@@ -12,6 +12,8 @@ import time
 
 import gobject
 import thread
+
+from lib.Depend.libxml import etree, html
 
 class CPluginStartStop(object):
     def __init__(self, application, addon, startStop):
@@ -47,7 +49,8 @@ class CfrmAddons(CWindow):
         
         'twPluginList', 'cmdInstallPlugin', 'cmdUninstallPlugin', 'cmdPluginPreferences', 'cmdPluginStart', 'cmdPluginStop',
         'mnuPlugin', 'mnuUninstallPlugin', 'mnuStartPlugin', 'mnuStopPlugin',
-        'mnuHomepagePlugin', 'mnuAboutPlugin', 'twUpdateList', 'cmdInstallUpdates', 'cmdCheckUpdates'
+        'mnuHomepagePlugin', 'mnuAboutPlugin', 'twUpdateList', 'cmdInstallUpdates', 'cmdCheckUpdates', 'twAddonsList', 'cmdInstallAddons',
+        'cmdSearchAddons', 'entrySearchAddons', 'cmdCloseButton'
     )
     
     COLUMN_ICON, COLUMN_DESCRIPTION, COLUMN_ENABLED, COLUMN_URI = range(4)
@@ -59,6 +62,7 @@ class CfrmAddons(CWindow):
         self.__MetamodelStore = self.__InitTw(self.twMetamodelList)
         self.__PluginStore = self.__InitTw(self.twPluginList)
         self.__UpdateStore = self.__InitUpdateTw(self.twUpdateList) 
+        self.__AddonsStore = self.__InitTw(self.twAddonsList)
         self.__StartStopTimerId = None
         self.__ToStartStop = {}   
         self.__newAddons = []
@@ -114,6 +118,7 @@ class CfrmAddons(CWindow):
     def __Load(self):
         self.__MetamodelStore.clear()
         self.__PluginStore.clear()
+        self.__AddonsStore.clear()
         
         for addon in self.application.GetAddonManager().ListAddons():
             if addon.GetType() == 'metamodel':
@@ -127,6 +132,16 @@ class CfrmAddons(CWindow):
             
             iter = twStore.append(None)
             self.__SetAddonValues(twStore, iter, addon)
+        
+        twStore = self.__AddonsStore               
+        for addonInfo in self.application.GetAddonManager().GetAddonListFromServer():
+            iter = twStore.append(None)
+            twStore.set(iter,
+            self.COLUMN_ICON, addonInfo.icon,
+            self.COLUMN_DESCRIPTION, "<b>%s</b>     %s\n%s"%(addonInfo.name, addonInfo.version, addonInfo.description), 
+            self.COLUMN_ENABLED, True,           
+            self.COLUMN_URI, addonInfo.download
+            )    
     
     def __SetAddonValues(self, store, iter, addon):
         if addon.GetIcon() is None:
@@ -440,8 +455,9 @@ class CfrmAddons(CWindow):
     
     @event("mnuStartPlugin", "activate")
     @event("cmdPluginStart", "clicked")
-    def on_cmdPluginStart_click(self, button):
-        addon = self.__GetSelectedAddon(self.twPluginList)
+    def on_cmdPluginStart_click(self, button, addon = None):
+        if not addon:
+            addon = self.__GetSelectedAddon(self.twPluginList)
         
         if addon is not None and not addon.IsRunning():
             starterStopper = CPluginStartStop(self.application, addon, 'start')
@@ -475,3 +491,36 @@ class CfrmAddons(CWindow):
             if row[self.COLUMN_CHECK]:
                 print row[self.COLUMN_UADDON]
                 self.application.GetAddonManager().InstallAddon(row[self.COLUMN_UADDON])
+                
+    @event("cmdInstallAddons", "clicked")
+    def InstallAddons(self, button):
+        iter = self.twAddonsList.get_selection().get_selected()[1]
+        if iter is None:
+            return None        
+        selected = self.twAddonsList.get_model().get(iter, 3)[0] 
+        addon = self.application.GetAddonManager().DownloadAddon(selected)        
+        if addon is None:
+            return
+        if self.application.GetWindow("frmInstallAddon").ShowDialog(self, addon):
+            self.application.GetAddonManager().InstallAddon(addon)           
+            self.__Load()        
+            addon = self.application.GetAddonManager().GetAddon(addon.GetDefaultUri())
+            self.on_cmdPluginStart_click(button, addon)            
+            
+    @event("cmdSearchAddons", "clicked")
+    def SearchAddon(self, button):
+        searchString = self.entrySearchAddons.get_text().strip()
+        self.__AddonsStore.clear()      
+        twStore = self.__AddonsStore             
+        for addonInfo in self.application.GetAddonManager().GetAddonListFromServer(searchString):
+            iter = twStore.append(None)
+            twStore.set(iter,
+            self.COLUMN_ICON, addonInfo.icon,
+            self.COLUMN_DESCRIPTION, "<b>%s</b>     %s\n%s"%(addonInfo.name, addonInfo.version, addonInfo.description), 
+            self.COLUMN_ENABLED, True,           
+            self.COLUMN_URI, addonInfo.download
+            ) 
+                
+    @event("cmdCloseButton", "clicked")
+    def CloseAction(self, button):
+        self.entrySearchAddons.set_text('')           
