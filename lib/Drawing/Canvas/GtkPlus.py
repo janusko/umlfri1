@@ -10,6 +10,14 @@ LINE_STYLES = {'solid': gtk.gdk.LINE_SOLID,
 
 pixmaps = {}
 
+def PixmapFromString(data):
+    loader = gtk.gdk.PixbufLoader()    
+    tmp = data
+    loader.write(tmp)
+    loader.close()
+    tmp = loader.get_pixbuf()
+    return tmp
+
 def PixmapFromPath(storage, path):
     if (storage, path) in pixmaps:
         tmp = pixmaps[(storage, path)]
