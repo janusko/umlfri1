@@ -1,4 +1,4 @@
-from ..PluginBase import params, mainthread, polymorphic
+from .Decorators import params, mainthread, polymorphic
 
 class IConnectionType(object):
     def __init__(self, connectionType):

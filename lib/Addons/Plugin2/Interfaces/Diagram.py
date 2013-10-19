@@ -1,4 +1,5 @@
-from ..PluginBase import params, mainthread, polymorphic
+from .Decorators import params, mainthread, polymorphic
+
 from lib.Commands.Diagrams import CCreateElementCommand
 
 from lib.Drawing import CElement, CConnection, CConLabelInfo

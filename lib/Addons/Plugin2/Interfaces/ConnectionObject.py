@@ -1,4 +1,4 @@
-from ..PluginBase import params, mainthread, polymorphic
+from .Decorators import params, mainthread, polymorphic
 
 from lib.Commands.Diagrams import CShowConnectionCommand, ShowConnectionError
 from lib.Connections import CConnectionAlias, CConnectionType

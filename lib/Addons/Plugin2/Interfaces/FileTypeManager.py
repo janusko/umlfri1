@@ -1,4 +1,4 @@
-from ..PluginBase import params, mainthread, polymorphic
+from .Decorators import params, mainthread, polymorphic
 
 from lib.Addons.Plugin2.Interfaces import FileType
 

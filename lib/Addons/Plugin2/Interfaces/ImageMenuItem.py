@@ -1,9 +1,11 @@
-from ..PluginBase import params, mainthread, polymorphic
+from .Decorators import params, mainthread, polymorphic
 
 from .MenuItem import IMenuItem
 
 class IImageMenuItem(IMenuItem):
     def __init__(self, plugin, menuItem):
+        IMenuItem.__init__(self, plugin, menuItem)
+        
         self.__plugin = plugin
         self.__menuItem = menuItem
     

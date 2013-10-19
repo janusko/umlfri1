@@ -1,4 +1,4 @@
-from ..PluginBase import params, mainthread, polymorphic
+from .Decorators import params, mainthread, polymorphic
 
 class ITemplate(object):
     def __init__(self, plugin, template):
