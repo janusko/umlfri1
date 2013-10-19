@@ -60,3 +60,6 @@ class Base(object):
     
     def __eq__(self, other):
         return self is other
+    
+    def __ne__(self, other):
+        return self is not other
