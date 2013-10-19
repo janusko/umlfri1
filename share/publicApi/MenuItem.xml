@@ -2,10 +2,11 @@
 <interface
     xmlns="http://umlfri.org/xmlschema/publicApi.xsd"
     name="org.umlfri.api.gui.MenuItem"
-    base="org.umlfri.api.gui.Widget">
+    base="org.umlfri.api.gui.Widget"
+    abstract="true">
     
     <documentation>
-        Simple labeled menu item.
+        Representation for one item in menu.
     </documentation>
     
     <method name="addSubmenu" mutator="true" transactional="false">

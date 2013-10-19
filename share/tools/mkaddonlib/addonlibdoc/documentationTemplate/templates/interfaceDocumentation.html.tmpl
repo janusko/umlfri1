@@ -33,6 +33,14 @@
         #end if
         $linkTo($param.type)
         $param.name
+        #if not $param.required
+            =
+            #if $param.default is None
+                None
+            #else
+                $param.default
+            #end if
+        #end if
     #end for
     )
 #end def

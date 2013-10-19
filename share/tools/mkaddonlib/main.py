@@ -22,6 +22,8 @@ def main(*cmdargs):
     builder.parse()
     builder.finish()
     
+    #builder.validate()
+    
     out = FileList(builder)
     
     for index in args:

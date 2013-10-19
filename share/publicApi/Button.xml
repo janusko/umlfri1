@@ -2,7 +2,8 @@
 <interface
     xmlns="http://umlfri.org/xmlschema/publicApi.xsd"
     name="org.umlfri.api.gui.Button"
-    base="org.umlfri.api.gui.Widget">
+    base="org.umlfri.api.gui.Widget"
+    abstract="true">
     
     <documentation>
         Toolbar button GUI object.
