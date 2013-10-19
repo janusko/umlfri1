@@ -7,10 +7,11 @@ from .interfacePropertyIndex import InterfacePropertyIndex
 from .primitiveType import primitiveTypes, PrimitiveType
 
 class InterfaceProperty(BaseContainer):
-    def __init__(self, name, interface, type, singular = None, documentation = None):
+    def __init__(self, name, interface, type, nullable = False, singular = None, documentation = None):
         BaseContainer.__init__(self, name, interface)
         self.__singular = Identifier(singular or name)
         self.__documentation = documentation
+        self.__nullable = nullable
         
         if type in primitiveTypes:
             self.__type = primitiveTypes[type]
@@ -56,6 +57,10 @@ class InterfaceProperty(BaseContainer):
     @property
     def singular(self):
         return self.__singular
+    
+    @property
+    def nullable(self):
+        return self.__nullable
     
     @property
     def referenced(self):

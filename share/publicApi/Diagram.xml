@@ -18,7 +18,7 @@
             </documentation>
         </parameter>
         
-        <return type="org.umlfri.api.model.ElementVisual" />
+        <return type="org.umlfri.api.model.ElementVisual" nullable="true" />
     </method>
     
     <method name="getConnection">
@@ -32,7 +32,7 @@
             </documentation>
         </parameter>
         
-        <return type="org.umlfri.api.model.ConnectionVisual" />
+        <return type="org.umlfri.api.model.ConnectionVisual" nullable="true" />
     </method>
     
     <property name="selected">
@@ -86,10 +86,10 @@
             </documentation>
         </parameter>
         
-        <return type="org.umlfri.api.model.ElementVisual" />
+        <return type="org.umlfri.api.model.ElementVisual" nullable="true" />
     </method>
     
-    <method name="getElementInRange">
+    <method name="getElementsInRange">
         <documentation>
             Gets all elemnts located in given range of coordinates.
         </documentation>

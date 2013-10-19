@@ -4,10 +4,11 @@ from .primitiveType import primitiveTypes, PrimitiveType
 from . import helper
 
 class InterfaceMethodReturn(Base):
-    def __init__(self, interfaceMethod, type, iterable = False, documentation = None):
+    def __init__(self, interfaceMethod, type, nullable = False, iterable = False, documentation = None):
         Base.__init__(self, None, interfaceMethod)
         
         self.__iterable = iterable
+        self.__nullable = nullable
         
         if type in primitiveTypes:
             self.__type = primitiveTypes[type]
@@ -27,6 +28,10 @@ class InterfaceMethodReturn(Base):
     @property
     def fqn(self):
         return self.parent.fqn + "::__return__"
+    
+    @property
+    def nullable(self):
+        return self.__nullable
     
     @property
     def iterable(self):

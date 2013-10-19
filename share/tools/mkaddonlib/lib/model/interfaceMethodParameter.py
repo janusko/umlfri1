@@ -4,10 +4,11 @@ from .primitiveType import primitiveTypes, PrimitiveType
 from . import helper
 
 class InterfaceMethodParameter(Base):
-    def __init__(self, name, interfaceMethod, type, apiName = None, required = True, default = None, documentation = None):
+    def __init__(self, name, interfaceMethod, type, apiName = None, required = True, nullable = False, default = None, documentation = None):
         Base.__init__(self, name, interfaceMethod)
         
         self.__required = required
+        self.__nullable = nullable
         
         if apiName is not None:
             self.__apiName = apiName
@@ -49,6 +50,10 @@ class InterfaceMethodParameter(Base):
     @property
     def required(self):
         return self.__required
+    
+    @property
+    def nullable(self):
+        return self.__nullable
     
     @property
     def default(self):

@@ -134,6 +134,7 @@ class Builder(object):
                     child.attrib['type'],
                     apiName = child.attrib.get('apiname'),
                     required = child.attrib.get('required', "true").lower() in ("1", "true"),
+                    nullable = child.attrib.get('nullable', "false").lower() in ("1", "true"),
                     default = child.attrib.get('default'),
                     documentation = self.__parseDocumentation(child.find(self.__xmlns%'documentation')),
                 )
@@ -150,6 +151,7 @@ class Builder(object):
                 returnType = InterfaceMethodReturn(
                     method,
                     child.attrib['type'],
+                    nullable = child.attrib.get('nullable', "false").lower() in ("1", "true"),
                     iterable = child.attrib.get('iterable', "false").lower() in ("1", "true"),
                     documentation = self.__parseDocumentation(child.find(self.__xmlns%'documentation')),
                 )
@@ -171,6 +173,7 @@ class Builder(object):
             root.attrib['name'],
             interface,
             singular = root.attrib.get('singular'),
+            nullable = value.attrib.get('nullable', "false").lower() in ("1", "true"),
             type = value.attrib['type'],
             documentation = self.__parseDocumentation(root.find(self.__xmlns%'documentation'))
         )

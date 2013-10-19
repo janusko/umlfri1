@@ -18,15 +18,15 @@
             Gets a reference to the current project, or null if no project
             is loaded.
         </documentation>
-        <value type="org.umlfri.api.model.Project" readable="true" />
+        <value type="org.umlfri.api.model.Project" readable="true" nullable="true" />
     </property>
     
     <property name="currentDiagram">
         <documentation>
-            Gets a reference to the current diagram, or null if no diagram
+            Gets or sets a reference to the current diagram, or null if no diagram
             is selected.
         </documentation>
-        <value type="org.umlfri.api.model.Diagram" readable="true" writable="true" />
+        <value type="org.umlfri.api.model.Diagram" readable="true" writable="true" nullable="true" />
         
         <setter transactional="false" />
     </property>

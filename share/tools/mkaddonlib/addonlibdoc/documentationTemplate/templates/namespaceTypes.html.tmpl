@@ -12,7 +12,7 @@
     <body>
         <font size="+1" class="FrameHeadingFont"><b>Types in namespace $root.fqn</b></font><br />
         <ul>
-            #for $element in $root.childrenOfType('Interface', 'Exception', 'Delegate'):
+            #for $element in $sorted($root.childrenOfType('Interface', 'Exception', 'Delegate')):
                 <li>
                     #if $element.typeName != 'Interface'
                         <i><a href="$paths.getPath(element)" target="documentation">$element.name</a></i>

@@ -219,6 +219,9 @@
                 <dl>
                     <dd>
                         <p>$property.documentation.replace("\n\n", "</p><p>")</p>
+                            #if $property.nullable
+                                <p><i>Property can contain null values.</i></p>
+                            #end if
                     </dd>
                 </dl>
                 <dl>
@@ -345,18 +348,26 @@
                             <ul>
                                 #for $param in $method.parameters
                                     #if $param.documentation
-                                        <li>$param.name &mdash; $param.documentation</li>
+                                        <li>
+                                            $param.name &mdash; $param.documentation
+                                            #if $param.nullable
+                                                <i>Parameter can be used with null value.</i>
+                                            #end if
+                                        </li>
                                     #end if
                                 #end for
                             </ul>
                         </dd>
                     </dl>
                 #end if
-                #if $method.returnType and $method.returnType.documentation
+                #if $method.returnType and ($method.returnType.documentation or $method.returnType.nullable)
                     <dl>
                         <dt><b>Returns:</b></dt>
                         <dd>
                             $method.returnType.documentation
+                            #if $method.returnType.nullable
+                                <i>Return value can be null in some cases.</i>
+                            #end if
                         </dd>
                     </dl>
                 #end if
