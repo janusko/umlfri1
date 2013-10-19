@@ -77,7 +77,7 @@
             </documentation>
         </parameter>
         
-        <return type="org.umlfri.api.gui.MenuItem" />
+        <return type="org.umlfri.api.gui.CheckMenuItem" />
     </method>
     
     <method name="addSeparator" mutator="true">
@@ -109,6 +109,6 @@
                 Item unique ID.
             </documentation>
         </index>
-        <value type="org.umlfri.api.gui.MenuItem" readable="true" iterable="true" nullable="true" />
+        <value type="org.umlfri.api.gui.Widget" readable="true" iterable="true" nullable="true" />
     </property>
 </interface>
