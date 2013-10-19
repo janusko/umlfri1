@@ -46,6 +46,9 @@ class Base(object):
     def typeName(self):
         return self.__class__.__name__
     
+    def validate(self):
+        pass
+    
     def _link(self, builder):
         pass
     

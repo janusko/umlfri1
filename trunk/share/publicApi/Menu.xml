@@ -43,7 +43,7 @@
             </documentation>
         </parameter>
         
-        <return type="org.umlfri.api.gui.MenuItem" />
+        <return type="org.umlfri.api.gui.LabeledMenuItem" />
     </method>
     
     <method name="addCheckMenuItem" mutator="true">

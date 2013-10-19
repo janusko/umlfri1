@@ -67,6 +67,12 @@ class Interface(BaseContainer):
         for obj in ret:
             yield obj
     
+    def validate(self):
+        BaseContainer.validate(self)
+        
+        if self.__base is not None and not self.__base.isAbstract:
+            raise Exception("Base interface of %s is not marked as abstract" % self.fqn)
+    
     def _link(self, builder):
         BaseContainer._link(self, builder)
         

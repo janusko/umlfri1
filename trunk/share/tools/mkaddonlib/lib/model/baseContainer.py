@@ -35,6 +35,12 @@ class BaseContainer(Base):
     
     def getChild(self, name):
         return self.__children[name]
+
+    def validate(self):
+        Base.validate(self)
+        
+        for child in self.children:
+            child.validate()
     
     def _link(self, builder):
         Base._link(self, builder)

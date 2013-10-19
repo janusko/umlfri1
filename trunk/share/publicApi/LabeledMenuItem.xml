@@ -1,0 +1,11 @@
+<interface
+    xmlns="http://umlfri.org/xmlschema/publicApi.xsd"
+    name="org.umlfri.api.gui.LabeledMenuItem"
+    base="org.umlfri.api.gui.MenuItem"
+    apiName="IMenuItem">
+    
+    <documentation>
+        Simple labeled menu item.
+    </documentation>
+
+</interface>

@@ -61,6 +61,9 @@ class Builder(object):
         self.__rootNamespace._link(self)
         self.__addAutoThrows()
         self.__addToCache(self.__rootNamespace)
+
+    def validate(self):
+        self.__rootNamespace.validate()
     
     def getRootNamespace(self):
         return self.__rootNamespace
