@@ -34,7 +34,7 @@
             </documentation>
         </index>
         
-        <value type="org.umlfri.api.metamodel.DiagramType" readable="true" iterable="true" />
+        <value type="org.umlfri.api.metamodel.DiagramType" readable="true" iterable="true" nullable="true" />
     </property>
     
     <property name="elements" singular="element">
@@ -48,7 +48,7 @@
             </documentation>
         </index>
         
-        <value type="org.umlfri.api.metamodel.ElementType" readable="true" iterable="true" />
+        <value type="org.umlfri.api.metamodel.ElementType" readable="true" iterable="true" nullable="true" />
     </property>
     
     <property name="connections" singular="connection">
@@ -62,7 +62,7 @@
             </documentation>
         </index>
         
-        <value type="org.umlfri.api.metamodel.ConnectionType" readable="true" iterable="true" />
+        <value type="org.umlfri.api.metamodel.ConnectionType" readable="true" iterable="true" nullable="true" />
     </property>
     
     <property name="domains">
@@ -70,7 +70,7 @@
             Domain types defined in the metamodel.
         </documentation>
         
-        <value type="org.umlfri.api.metamodel.DomainType" iterable="true" />
+        <value type="org.umlfri.api.metamodel.DomainType" iterable="true" nullable="true" />
     </property>
     
     <method name="listDir">

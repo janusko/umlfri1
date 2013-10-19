@@ -54,3 +54,9 @@ class Base(object):
     
     def __repr__(self):
         return '<%s %s>'%(self.__class__.__name__, self.fqn)
+    
+    def __cmp__(self, other):
+        return cmp(self.name, other.name)
+    
+    def __eq__(self, other):
+        return self is other

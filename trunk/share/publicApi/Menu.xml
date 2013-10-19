@@ -109,6 +109,6 @@
                 Item unique ID.
             </documentation>
         </index>
-        <value type="org.umlfri.api.gui.MenuItem" readable="true" iterable="true" />
+        <value type="org.umlfri.api.gui.MenuItem" readable="true" iterable="true" nullable="true" />
     </property>
 </interface>
