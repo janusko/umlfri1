@@ -1,4 +1,4 @@
-from ..PluginBase import params, mainthread, polymorphic
+from .Decorators import params, mainthread, polymorphic
 
 from lib.Commands.Properties import CSetPropertyValuesCommand, CAppendPropertyItemCommand, CRemovePropertyItemCommand
 from lib.Domains import CDomainObject

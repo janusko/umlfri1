@@ -1,9 +1,8 @@
-from ..PluginBase import params, mainthread, polymorphic
+from .Decorators import params, mainthread, polymorphic
 
 from . import ConnectionType
 from . import ElementType
 from . import DomainType
-
 
 class IDiagramType(object):
     def __init__(self, diagramType):
