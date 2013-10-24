@@ -14,19 +14,21 @@ class CVisibleObject(CCacheableObject, CSelectableObject):
         Common initialization of the visible object
         '''
         self.position = (0,0)
-        self.deltaSize = (0,0)
+        # tuple for actual size of element
+        # delta size-based computing of size
+        self.actualSize = (0,0)
         CCacheableObject.__init__(self)
         CSelectableObject.__init__(self)
 
     def AreYouAtPosition(self, canvas, pos):
         x, y = pos
-        width, height = self.GetSize(canvas)
+        width, height = self.GetSize()
         return self.position[0] <= x <= self.position[0] + width and \
             self.position[1] <= y <= self.position[1] + height
     
     def AreYouInRange(self, canvas, topleft, bottomright, all = False):
         (x1, y1), (x2, y2) = topleft, bottomright
-        width, height = self.GetSize(canvas)
+        width, height = self.GetSize()
         
         if all:
             return (x1 <= self.position[0] <= self.position[0] + width <= x2) and (y1 <= self.position[1] <= self.position[1] + height <= y2)
@@ -42,13 +44,14 @@ class CVisibleObject(CCacheableObject, CSelectableObject):
         return self.position
         
     def GetCenter(self, canvas):
-        w, h = self.GetSize(canvas)
+        w, h = self.GetSize()
         return w / 2 + self.position[0], h / 2 + self.position[1]
-    
-    def GetSize(self, canvas):
-        w, h = self.GetMinimalSize(canvas)
-        w, h = w + self.deltaSize[0], h + self.deltaSize[1]
-        return w, h 
+
+    def SetSize(self, size):
+        self.actualSize = size
+
+    def GetSize(self):
+        return self.actualSize
         
     def GetMinimalSize(self, canvas):
         w, h = self.object.GetSize(CDrawingContext(canvas, self, (0, 0)))
@@ -56,7 +59,7 @@ class CVisibleObject(CCacheableObject, CSelectableObject):
         
     def GetSquare(self, canvas):
         x, y = self.GetPosition()
-        w, h = self.GetSize(canvas)
+        w, h = self.GetSize()
         return ((x, y), (x + w, y + h))
     
     def SetPosition(self, pos, *ignored):

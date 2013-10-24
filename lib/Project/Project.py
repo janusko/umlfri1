@@ -191,7 +191,7 @@ class CProject(CBaseObject):
                         diagramNode.attrib['default'] = 'true'
                     for e in area.GetElements():
                         pos = e.GetPosition()
-                        dw, dh = e.GetSizeRelative()
+                        dw, dh = e.GetSize()
                         elementNode = etree.Element(UMLPROJECT_NAMESPACE+'element', id=unicode(e.GetObject().GetUID()), x=unicode(int(pos[0])), y=unicode(int(pos[1])), dw=unicode(int(dw)), dh=unicode(int(dh)))
                         diagramNode.append(elementNode)
                         
@@ -327,7 +327,7 @@ class CProject(CBaseObject):
                                         element.SetPosition((int(pic.get("x")),int(pic.get("y"))))
                                         dw = int(pic.get("dw"))
                                         dh = int(pic.get("dh"))
-                                        element.SetSizeRelative((dw, dh))
+                                        element.SetSize((dw, dh))
                                     else:
                                         # show warning
                                         pass

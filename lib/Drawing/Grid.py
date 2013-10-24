@@ -248,7 +248,7 @@ class CGrid(CBaseObject):
             if self.snap_mode == 'TOP_LEFT':
                 pos = self.SnapPosition(pos)
             elif self.snap_mode == 'CENTER':
-                width, height = element.GetSize(canvas)
+                width, height = element.GetSize()
                 center = (pos[0] + width/2.0, pos[1] + height/2.0)
                 newCenter = self.SnapPosition(center)
                 pos = (newCenter[0]-width/2.0, newCenter[1]-height/2.0)
@@ -256,7 +256,7 @@ class CGrid(CBaseObject):
                 if not self.local_settings:
                     self.hor_spacing = config['/Grid/HorSpacing']
                     self.ver_spacing = config['/Grid/VerSpacing']
-                w, h = element.GetSize(canvas)
+                w, h = element.GetSize()
                 # finds out which element corner is nearest to grid
                 top_left = list(pos)
                 new_top_left = self.SnapPosition(top_left)
@@ -306,7 +306,7 @@ class CGrid(CBaseObject):
             self.hor_spacing = config['/Grid/HorSpacing']
             self.ver_spacing = config['/Grid/VerSpacing']
         
-        w, h = element.GetSize(canvas)
+        w, h = element.GetSize()
         minw, minh = element.GetMinimalSize(canvas)
         dw = -(w % self.hor_spacing)
         dh = -(h % self.ver_spacing)
@@ -314,15 +314,17 @@ class CGrid(CBaseObject):
             dw = self.hor_spacing + dw
         if minh > h + dh:
             dh = self.ver_spacing + dh
-        rel = element.GetSizeRelative()
-        element.SetSizeRelative((rel[0] + dw, rel[1] + dh))
+        #rel = element.GetSizeRelative()
+        #element.SetSizeRelative((rel[0] + dw, rel[1] + dh))
+        element.SetSize((w + dw, h + dh))
         if self.snap_mode == 'CENTER':
-            w, h = element.GetSize(canvas)
+            w, h = element.GetSize()
             dw = self.hor_spacing if w % (self.hor_spacing * 2) else 0
             dh = self.ver_spacing if h % (self.ver_spacing * 2) else 0
             if dw or dh:
-                rel = element.GetSizeRelative()
-                element.SetSizeRelative((rel[0] + dw, rel[1] + dh))
+                #rel = element.GetSizeRelative()
+                #element.SetSizeRelative((rel[0] + dw, rel[1] + dh))
+                element.SetSize((w + dw, h + dh))
         
     def SnapConnection(self, conn, pos, idx, canvas, override=False):
         """
