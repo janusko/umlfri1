@@ -56,12 +56,22 @@ class CElement(CVisibleObject):
         
         rx, ry = self.object.GetType().GetResizable(context)
         
-        self.deltaSize = (
-            self.deltaSize[0] if rx else 0,
-            self.deltaSize[1] if ry else 0,
-        )
-        
-        w, h = self.GetSize(canvas)
+        #self.deltaSize = (
+        #    self.deltaSize[0] if rx else 0,
+        #    self.deltaSize[1] if ry else 0,
+        #)
+
+        minsize = self.GetMinimalSize(canvas)
+        w, h = self.GetSize()
+        wasSmall = False
+        if w < minsize[0]:
+            w = minsize[0]
+            wasSmall = True
+        if h < minsize[1]:
+            h = minsize[1]
+            wasSmall = True
+        if wasSmall:
+            self.SetSize((w, h))
         
         context.Resize((w, h))
         self.object.Paint(context)
@@ -104,38 +114,34 @@ class CElement(CVisibleObject):
             if (x >= sqbx and x <= sqex and y >= sqby and y <= sqey):
                 return sq[0]
     
-    def Resize(self, canvas, delta, selSquareIdx):
-        resRect = self.GetResizedRect(canvas, delta, selSquareIdx)
-        minSize = self.GetMinimalSize(canvas)
+    def Resize(self, delta, selSquareIdx):
+        '''
+        Updates actual size according to delta size and if necessary changes position
+        '''
+        resRect = self.GetResizedRect(delta, selSquareIdx)
         self.position = resRect[0]
-        self.deltaSize = (max(0, resRect[1][0]-minSize[0]), max(0, resRect[1][1]-minSize[1]))
-            
-    def GetSizeRelative(self):
-        return self.deltaSize
-        
-    def SetSizeRelative(self, relatSize):
-        self.deltaSize = relatSize
-    
-    def GetResizedRect(self, canvas, delta, mult):
+        self.actualSize = (max(0, resRect[1][0]), max(0, resRect[1][1]))
+
+    def GetResizedRect(self, delta, mult):
+        # updates position and checks if delta size is not greater than actual size
         pos = list(self.GetPosition())
-        size = list(self.GetSize(canvas))
-        minsize = self.GetMinimalSize(canvas)
+        size = list(self.actualSize)
         
         for i in (0, 1):
             if mult[i] < 0:
-                if delta[i] > size[i] - minsize[i]:
-                    pos[i] += size[i] - minsize[i]
-                    size[i] = minsize[i]
+                if delta[i] > size[i]:
+                    pos[i] += size[i]
+                    size[i] = 0
                 else:
                     pos[i] += delta[i]
                     size[i] -= delta[i]
             else:
-                size[i] = max(minsize[i], size[i] + mult[i] * delta[i])
-                
+                size[i] = max(0, size[i] + mult[i] * delta[i])
+
         return pos, size
         
     def CopyFromElement(self, element):
-        self.deltaSize = element.deltaSize
+        self.actualSize = element.actualSize
         self.position = element.position
     
     def GetObject(self):

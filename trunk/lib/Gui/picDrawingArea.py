@@ -601,7 +601,7 @@ class CpicDrawingArea(CWidget):
         try:
             if self.dnd == 'resize':
                 delta = self.__GetDelta((event.x, event.y), True)
-                self.selElem.Resize(self.canvas, delta, self.selSq)
+                self.selElem.Resize(delta, self.selSq)
                 self.selElem = None
                 self.selSq = None
                 self.dnd = None 
@@ -917,7 +917,7 @@ class CpicDrawingArea(CWidget):
             self.picDrawingArea.window.draw_rectangle(self.DragGC, False, x1, y1, x2, y2)
         if draw:
             delta = self.__GetDelta(pos, True)
-            rect = self.selElem.GetResizedRect(self.canvas, delta, self.selSq)
+            rect = self.selElem.GetResizedRect(delta, self.selSq)
             rect = self.GetRelativePos(rect[0]), rect[1]
             x2,y2 = self.canvas.ToPhysical(rect[1])
             self.picDrawingArea.window.draw_rectangle(self.DragGC, False, rect[0][0], rect[0][1], x2, y2)

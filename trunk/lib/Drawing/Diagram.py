@@ -217,8 +217,8 @@ class CDiagram(CBaseObject):
         x2, y2 = 0, 0
         
         for el in self.GetSelectedElements():
-            x, y = el.GetPosition(canvas)
-            w, h = el.GetSize(canvas)
+            x, y = el.GetPosition()
+            w, h = el.GetSize()
             if x < x1:
                 x1 = x
             if y < y1:
@@ -357,7 +357,7 @@ class CDiagram(CBaseObject):
                 for point in connection.GetMiddlePoints():
                     result = tuple(max(x) for x in zip(result, point))
             for element in self.elements:
-                    point = tuple(sum(x) for x in zip(element.GetPosition(canvas), element.GetSize(canvas)))
+                    point = tuple(sum(x) for x in zip(element.GetPosition(), element.GetSize()))
                     result = tuple(max(x) for x in zip(result, point))
             page = (config['/Page/Width'], config['/Page/Height'])
             result = (page[0] * (result[0]//page[0] + 1), page[1] * (result[1]//page[1] + 1))
@@ -542,8 +542,8 @@ class CDiagram(CBaseObject):
         #square for export, the minimal size is measured so the exported diagram has the same edges - looks better
         x_max, y_max,x_min, y_min,  = 0, 0,  101, 101
         for el in self.elements:
-            posX, posY = el.GetPosition(canvas)
-            w, h = el.GetSize(canvas)
+            posX, posY = el.GetPosition()
+            w, h = el.GetSize()
             if posX + w > x_max:
                 x_max = posX + w
             if posY + h > y_max:
@@ -573,8 +573,8 @@ class CDiagram(CBaseObject):
     def GetSizeSquare(self, canvas):
         x_max, y_max,x_min, y_min,  = 0, 0,  9999, 9999
         for el in self.elements:
-            posX, posY = el.GetPosition(canvas)
-            w, h = el.GetSize(canvas)
+            posX, posY = el.GetPosition()
+            w, h = el.GetSize()
             if posX + w > x_max:
                 x_max = posX + w
             if posY + h > y_max:
@@ -637,17 +637,17 @@ class CDiagram(CBaseObject):
         if not defaultElement:
             fun = min if isLowerBoundary else max
             most = elements[0].GetPosition()[xy] + \
-                (0 if isLowerBoundary else elements[0].GetSize(canvas)[xy])
+                (0 if isLowerBoundary else elements[0].GetSize()[xy])
             for e in elements:
                 most = fun( most, e.GetPosition()[xy] + \
-                    (0 if isLowerBoundary else e.GetSize(canvas)[xy]) )
+                    (0 if isLowerBoundary else e.GetSize()[xy]) )
         else: 
             most = defaultElement.GetPosition()[xy] + \
-                (0 if isLowerBoundary else defaultElement.GetSize(canvas)[xy])
+                (0 if isLowerBoundary else defaultElement.GetSize()[xy])
         for e in elements:
             pos = list(e.GetPosition())
             pos[xy] = most - \
-                ( 0 if isLowerBoundary else e.GetSize(canvas)[xy] )
+                ( 0 if isLowerBoundary else e.GetSize()[xy] )
             self.MoveElement(e, pos, canvas)
     
     def AlignElementCentersXY(self, isHorizontal, canvas, defaultElement=None):
@@ -693,7 +693,7 @@ class CDiagram(CBaseObject):
         if len(elements)<3: return
         elemtotal = 0
         for e in elements:
-            elemtotal += e.GetSize(canvas)[xy]
+            elemtotal += e.GetSize()[xy]
         total = self.GetSelectSquare(canvas)[1][xy]
         spacing = (total - elemtotal)/(len(elements) - 1)
         elements.sort(lambda x, y: cmp(x.GetPosition()[xy],
@@ -703,7 +703,7 @@ class CDiagram(CBaseObject):
         for e in elements:
             pos[1-xy] = e.GetPosition()[1-xy]
             self.MoveElement(e, pos, canvas)
-            pos[xy] += e.GetSize(canvas)[xy] + spacing
+            pos[xy] += e.GetSize()[xy] + spacing
 
     def ResizeElementsEvenly(self, resizeByWidth, canvas, selectedElement=None):
         """
@@ -721,7 +721,7 @@ class CDiagram(CBaseObject):
         xy = 1 - int(resizeByWidth)
         
         if selectedElement:
-            selectedElementSize = selectedElement.GetSize(canvas)
+            selectedElementSize = selectedElement.GetSize()
         elements = tuple(self.GetSelectedElements())
         if len(elements)<2: return
         minSelElSize = selectedElement.GetMinimalSize(canvas)
