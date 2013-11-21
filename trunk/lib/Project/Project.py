@@ -27,7 +27,7 @@ for version, doc in xmlschema_doc:
 
 
 class CProject(CBaseObject):
-    SaveVersion = (1, 1, 0) # save file format version
+    SaveVersion = (1, 2, 0) # save file format version
     def __init__(self, addonManager):
         self.root = None
         
@@ -323,7 +323,11 @@ class CProject(CBaseObject):
                                 if pic.tag == UMLPROJECT_NAMESPACE+"element":
                                     elemid = pic.get("id")
                                     if elemid in ListObj:
-                                        element = CElement(diagram,ListObj[elemid],True)
+                                        # backward compatibility with old project files
+                                        hasDeltaSize = False
+                                        if savever < (1, 2, 0):
+                                            hasDeltaSize = True
+                                        element = CElement(diagram,ListObj[elemid],True,hasDeltaSize)
                                         element.SetPosition((int(pic.get("x")),int(pic.get("y"))))
                                         dw = int(pic.get("dw"))
                                         dh = int(pic.get("dh"))
