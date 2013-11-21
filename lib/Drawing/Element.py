@@ -5,9 +5,10 @@ from VisibleObject import CVisibleObject
 import weakref
 
 class CElement(CVisibleObject):
-    def __init__(self, diagram, obj, isLoad = False):
+    def __init__(self, diagram, obj, isLoad = False, hasDeltaSize = False):
         CVisibleObject.__init__(self)
         self.isLoad = isLoad
+        self.hasDeltaSize = hasDeltaSize
         self.object = obj
         self.squares = []
         self.diagram = weakref.ref(diagram)
@@ -62,6 +63,12 @@ class CElement(CVisibleObject):
         #)
 
         minsize = self.GetMinimalSize(canvas)
+
+        # calculate actual size from delta size, if loaded older version of project (1.1.0)
+        if self.hasDeltaSize:
+            self.hasDeltaSize = False
+            self.actualSize = ( minsize[0] + self.actualSize[0], minsize[1] + self.actualSize[1] )
+
         w, h = self.GetSize()
         wasSmall = False
         if w < minsize[0]:
