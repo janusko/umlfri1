@@ -30,6 +30,7 @@ class CConLabelInfo(CCacheableObject):
         self.pos = 0.5
         self.angle = pi/2
         self.position = position
+        self.actualSize = (0, 0)
         self.connection = weakref.ref(connection)
         self.logicalLabel = logicalLabel
     
@@ -78,7 +79,7 @@ class CConLabelInfo(CCacheableObject):
     def GetConnection(self):
         return self.connection()
     
-    def GetPosition(self, canvas):
+    def GetPosition(self):
         '''
         @return: absolute position of top-left corner in 2-tuple (x, y)
         @rtype: tuple
@@ -86,11 +87,11 @@ class CConLabelInfo(CCacheableObject):
         @param canvas: 
         @type canvas:L{CCairoCanvas<lib.Drawing.Canvas.CairoCanvas.CCairoCanvas>}
         '''
-        width, height = self.GetSize(canvas)
-        x, y = self.GetAbsolutePosition(canvas)
+        width, height = self.GetSize()
+        x, y = self.GetAbsolutePosition()
         x, y = x - width / 2.0, y - height / 2.0
         if x < 0 or y < 0:
-            self.SetPosition((x, y), canvas)
+            self.SetPosition((x, y))
         return int(max((0, x))), int(max((0, y)))
     
     def SetLogicalLabel(self, logicalLabel):
@@ -116,24 +117,16 @@ class CConLabelInfo(CCacheableObject):
         @param canvas: 
         @type canvas: L{CCairoCanvas<lib.Drawing.Canvas.CairoCanvas.CCairoCanvas>}
         '''
-        width, height = self.GetSize(canvas)
+        width, height = self.GetSize()
         pos = max((0, pos[0])), max((0, pos[1]))
-        self.RecalculatePosition(canvas, 
-            (pos[0] + width / 2.0, pos[1] + height / 2.0))
+        self.RecalculatePosition((pos[0] + width / 2.0, pos[1] + height / 2.0))
     
-    def GetSize(self, canvas):
+    def GetSize(self):
         '''
         @return: size of label in 2-tuple (width, height)
         @rtype:  tuple
-        
-        @param canvas: 
-        @type canvas: L{CCairoCanvas<lib.Drawing.Canvas.CairoCanvas.CCairoCanvas>}
         '''
-        
-        context = CDrawingContext(canvas, self.connection(), (0, 0))
-        
-        return (self.logicalLabel.GetSize(context) 
-            if self.logicalLabel is not None else (0, 0))
+        return self.actualSize
     
     def GetMinimalSize(self, canvas):
         '''
@@ -145,9 +138,9 @@ class CConLabelInfo(CCacheableObject):
         @param canvas: 
         @type canvas: L{CCairoCanvas<lib.Drawing.Canvas.CairoCanvas.CCairoCanvas>}
         '''
-        return self.GetSize(canvas)
+        return self.GetSize()
         
-    def GetSquare(self, canvas):
+    def GetSquare(self):
         '''
         Get absolute position of rectangle to wich label fits
         
@@ -158,8 +151,8 @@ class CConLabelInfo(CCacheableObject):
         @type canvas: L{CCairoCanvas<lib.Drawing.Canvas.CairoCanvas.CCairoCanvas>}
         '''
         
-        width, height = self.GetSize(canvas)
-        x, y = self.GetAbsolutePosition(canvas)
+        width, height = self.GetSize()
+        x, y = self.GetAbsolutePosition()
         
         return ( (int(x - width / 2.), int(y - height / 2.) ),
                  (int(x + width / 2.), int(y + height / 2.) ) )
@@ -174,7 +167,7 @@ class CConLabelInfo(CCacheableObject):
         '''
         return None
     
-    def GetAbsolutePosition(self, canvas):
+    def GetAbsolutePosition(self):
         '''
         Get center position of label
         
@@ -188,13 +181,13 @@ class CConLabelInfo(CCacheableObject):
         @type  canvas: L{CCairoCanvas<lib.Drawing.Canvas.CairoCanvas.CCairoCanvas>}
         '''
         
-        points = list(self.connection().GetPoints(canvas))
+        points = list(self.connection().GetPoints())
         angle = CLine(points[self.idx], points[self.idx + 1]).Angle()
         scaled = CLine(points[self.idx], points[self.idx + 1]).Scale(self.pos)
         return CLine.CreateAsVector(scaled.GetEnd(), 
             angle + self.angle, self.dist).GetEnd().GetPos()
     
-    def RecalculatePosition(self, canvas, pos = None):
+    def RecalculatePosition(self, pos = None):
         '''
         Reset relative position so that label is bound to closest line segment
         of connection
@@ -207,12 +200,12 @@ class CConLabelInfo(CCacheableObject):
         @param pos: new absolute position (x, y) of label or None
         @type pos: tuple / NoneType
         '''
-        x, y = (pos or self.GetAbsolutePosition(canvas))
-        points = self.connection().GetPoints(canvas)
+        x, y = (pos or self.GetAbsolutePosition())
+        points = self.connection().GetPoints()
         self.idx, self.pos, self.dist, self.angle = \
             CPolyLine(tuple(points)).Nearest(CPoint((x, y)))
         
-        self.GetPosition(canvas)
+        self.GetPosition()
     
     def AreYouAtPosition(self, canvas, point):
         '''
@@ -226,7 +219,7 @@ class CConLabelInfo(CCacheableObject):
         @type  canvas: L{CCairoCanvas<lib.Drawing.Canvas.CairoCanvas.CCairoCanvas>}
         '''
         x, y = point
-        ((x1, y1), (x2, y2)) = self.GetSquare(canvas)
+        ((x1, y1), (x2, y2)) = self.GetSquare()
         return x1 <= x <= x2 and y1 <= y <= y2
             
     def AreYouInRange(self, canvas, topleft, bottomright, all = False):
@@ -263,7 +256,7 @@ class CConLabelInfo(CCacheableObject):
         
         t, l = topleft
         b, r = bottomright
-        ((x1, y1), (x2, y2)) = self.GetSquare(canvas)
+        ((x1, y1), (x2, y2)) = self.GetSquare()
         if all:
             return l <= x1 <= x2 <= r and t <= y1 <= y2 <= b
         else:
@@ -285,7 +278,7 @@ class CConLabelInfo(CCacheableObject):
         @type  position: str
         '''
         
-        points = list(self.connection().GetPoints(canvas))
+        points = list(self.connection().GetPoints())
         if position.count('+'): # if there is offset specified
             position, offset = position.split('+', 1) # separate them
             try:
@@ -335,8 +328,8 @@ class CConLabelInfo(CCacheableObject):
         if offset is not None:
             multi = -1 if (points[self.idx][1] - points[self.idx + 1][1]) * \
                 (.5 - self.pos) > 0 else 1
-            x, y = self.GetAbsolutePosition(canvas)
-            self.RecalculatePosition(canvas, (x, y + multi * offset * 15))
+            x, y = self.GetAbsolutePosition()
+            self.RecalculatePosition((x, y + multi * offset * 15))
     
     def Select(self):
         '''
@@ -360,6 +353,10 @@ class CConLabelInfo(CCacheableObject):
         if self.position:
             self.SetToDefaultPosition(canvas, self.position)
             self.position = None
-        pos = self.GetPosition(canvas)
+
+        pos = self.GetPosition()
         context = CDrawingContext(canvas, self.connection(), (pos[0] + delta[0], pos[1] + delta[1]))
+
+        self.actualSize = self.logicalLabel.GetSize(context)
+
         self.logicalLabel.Paint(context)

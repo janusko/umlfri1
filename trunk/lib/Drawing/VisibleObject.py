@@ -43,7 +43,7 @@ class CVisibleObject(CCacheableObject, CSelectableObject):
     def GetPosition(self, *ignored):
         return self.position
         
-    def GetCenter(self, canvas):
+    def GetCenter(self):
         w, h = self.GetSize()
         return w / 2 + self.position[0], h / 2 + self.position[1]
 
@@ -57,7 +57,7 @@ class CVisibleObject(CCacheableObject, CSelectableObject):
         w, h = self.object.GetSize(CDrawingContext(canvas, self, (0, 0)))
         return w, h
         
-    def GetSquare(self, canvas):
+    def GetSquare(self):
         x, y = self.GetPosition()
         w, h = self.GetSize()
         return ((x, y), (x + w, y + h))
