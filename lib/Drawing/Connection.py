@@ -138,7 +138,7 @@ class CConnection(CCacheableObject, CSelectableObject):
         else:
             return None
             
-    def GetSquare(self, canvas, includeLabels=False):
+    def GetSquare(self, includeLabels=False):
         '''get absolute positoin of minimal rectangle to which fits connection
         
         @param canvas: Canvas on which its being drawn
@@ -151,11 +151,11 @@ class CConnection(CCacheableObject, CSelectableObject):
         @rtype: tuple
         '''
         left, top, right, bottom = 1000000, 1000000, -1000000, -1000000
-        for x, y in self.GetPoints(canvas):
+        for x, y in self.GetPoints():
             left, top, right, bottom = min(left, x), min(top, y), max(right, x), max(bottom, x)
         if includeLabels:
             for label in self.labels.values():
-                (x1, y1), (x2, y2) = label.GetSquare(canvas)
+                (x1, y1), (x2, y2) = label.GetSquare()
                 left, top, right, bottom = min(left, x1), min(top, y1), max(right, x2), max(bottom, x2)
         return (left, top), (right, bottom)
         
@@ -214,11 +214,11 @@ class CConnection(CCacheableObject, CSelectableObject):
         if not (0 < index  <= len(self.points)):
             raise ConnectionError("PointNotExists")
         if index == 1:
-            previous = self.source().GetCenter(canvas)
+            previous = self.source().GetCenter()
         else:
             previous = self.points[index - 2]
         if index == len(self.points):
-            next = self.destination().GetCenter(canvas)
+            next = self.destination().GetCenter()
         else:
             next = self.points[index]
         return previous, next
@@ -248,7 +248,7 @@ class CConnection(CCacheableObject, CSelectableObject):
         @type logicalLabelInfo: tuple
         '''
         
-        return self.labels[id].GetPosition(canvas)
+        return self.labels[id].GetPosition()
     
     def GetAllLabelPositions(self):
         '''Yield information about positions of all labels, generator
@@ -307,8 +307,8 @@ class CConnection(CCacheableObject, CSelectableObject):
         if index < 0 or index > len(self.points):
             raise IndexError('index out of range') 
         
-        prevPoint = self.GetPoint(canvas, index)
-        nextPoint = self.GetPoint(canvas, index + 1)
+        prevPoint = self.GetPoint(index)
+        nextPoint = self.GetPoint(index + 1)
         
         if not self.ValidPoint([prevPoint, point, nextPoint]):
             return False
@@ -332,10 +332,10 @@ class CConnection(CCacheableObject, CSelectableObject):
         
         self.points.insert(index, point)
         points_count = len(self.points)
-        self.ValidatePoints(canvas)
+        self.ValidatePoints()
         
         for label in changed:
-            label.RecalculatePosition(canvas) # adjust (x, y) to new position
+            label.RecalculatePosition() # adjust (x, y) to new position
         #return True # returns True even if no point was added ?
         return points_count == len(self.points)
     
@@ -368,7 +368,7 @@ class CConnection(CCacheableObject, CSelectableObject):
             for label in self.labels.values():
                 if label.AreYouAtPosition(canvas, point):
                     return label
-        points = list(self.GetPoints(canvas))
+        points = list(self.GetPoints())
         point = CPoint(point)
         point1 = points[0]
         for index, point2 in enumerate(points[1:]):
@@ -427,17 +427,17 @@ class CConnection(CCacheableObject, CSelectableObject):
         
         pos = max((0, pos[0])), max((0, pos[1]))
         
-        prevPoint = self.GetPoint(canvas, index - 1)
-        nextPoint = self.GetPoint(canvas, index + 1)
+        prevPoint = self.GetPoint(index - 1)
+        nextPoint = self.GetPoint(index + 1)
 
         if self.ValidPoint([prevPoint, pos, nextPoint]):
             self.points[index - 1] = pos
             for label in self.labels.values():
                 if label.idx in (index - 1, index):
-                    label.RecalculatePosition(canvas)
-            self.ValidatePoints(canvas)
+                    label.RecalculatePosition()
+            self.ValidatePoints()
         else:
-            self.RemovePoint(canvas, index)
+            self.RemovePoint(index)
 
     def Paint(self, canvas, delta = (0, 0)):
         '''
@@ -454,7 +454,7 @@ class CConnection(CCacheableObject, CSelectableObject):
         @type  delta: tuple
         '''
         
-        self.ValidatePoints(canvas)
+        self.ValidatePoints()
         self.object.Paint(CDrawingContext(canvas, self, delta))
         
         for lbl in self.labels.values():
@@ -464,12 +464,12 @@ class CConnection(CCacheableObject, CSelectableObject):
             size = config['/Styles/Selection/PointsSize']
             color = config['/Styles/Selection/PointsColor']
             dx, dy = delta
-            for index, i in enumerate(self.GetPoints(canvas)):
+            for index, i in enumerate(self.GetPoints()):
                 canvas.DrawRectangle((i[0] + dx - size//2, i[1] + dy - size//2), (size, size), color)
             for label in self.labels.values():
-                canvas.DrawRectangle(label.GetPosition(canvas), label.GetSize(canvas), color)
+                canvas.DrawRectangle(label.GetPosition(), label.GetSize(), color)
 
-    def RemovePoint(self, canvas, index, runValidation = True):
+    def RemovePoint(self, index, runValidation = True):
         '''
         Delete point from polyline and colapse two neighbouring segments of 
         polyline
@@ -489,9 +489,9 @@ class CConnection(CCacheableObject, CSelectableObject):
         if index <= 0 or index > len(self.points):
             raise IndexError('Out of range')
         
-        prevpoint = self.GetPoint(canvas, index - 1)
-        point = self.GetPoint(canvas, index)
-        nextpoint = self.GetPoint(canvas, index + 1)
+        prevpoint = self.GetPoint(index - 1)
+        point = self.GetPoint(index)
+        nextpoint = self.GetPoint(index + 1)
         len1 = abs(CLine(prevpoint, point))
         len2 = abs(CLine(point, nextpoint))
         changed = []
@@ -514,51 +514,51 @@ class CConnection(CCacheableObject, CSelectableObject):
             self.selpoint -= 1
 
         for label in changed:
-            label.RecalculatePosition(canvas)
+            label.RecalculatePosition()
         
         if runValidation:
-            self.ValidatePoints(canvas)
+            self.ValidatePoints()
     
-    def GetPoints(self, canvas):
+    def GetPoints(self):
         '''
         
         @param canvas: Canvas on which its being drawn
         @type  canvas: L{CCairoCanvas<CCairoCanvas>}
         '''
-        yield self.GetPoint(canvas, 0)
+        yield self.GetPoint(0)
             
         for point in self.points:
             yield point
             
-        yield self.GetPoint(canvas, len(self.points) + 1)
+        yield self.GetPoint(len(self.points) + 1)
     
-    def GetPoint(self, canvas, index):
+    def GetPoint(self, index):
         '''
         
         @param canvas: Canvas on which its being drawn
         @type  canvas: L{CCairoCanvas<CCairoCanvas>}
         '''
         if self.source() is self.destination() and len(self.points) == 0:
-            topleft, bottomright = self.source().GetSquare(canvas)
+            topleft, bottomright = self.source().GetSquare()
             y = bottomright[1] + 30
             xc = (topleft[0] + bottomright[0])/2
             self.points = [(xc - 10, y),( xc + 10, y)]
         if index == 0:
-            center = self.source().GetCenter(canvas)
+            center = self.source().GetCenter()
             if len(self.points) == 0:
-                point = self.destination().GetCenter(canvas)
+                point = self.destination().GetCenter()
             else:
                 point = self.points[0]
-            return self.__ComputeIntersect(canvas, self.source(), center, point)
+            return self.__ComputeIntersect(self.source(), center, point)
         elif index - 1 < len(self.points):
             return self.points[index - 1]
         elif index - 1 == len(self.points) :
-            center = self.destination().GetCenter(canvas)
+            center = self.destination().GetCenter()
             if len(self.points) == 0:
-                point = self.source().GetCenter(canvas)
+                point = self.source().GetCenter()
             else:
                 point = self.points[-1]
-            return self.__ComputeIntersect(canvas, self.destination(), center, point)
+            return self.__ComputeIntersect(self.destination(), center, point)
         else:
             raise ConnectionError("PointNotExists")
         
@@ -569,13 +569,13 @@ class CConnection(CCacheableObject, CSelectableObject):
     def GetDiagram(self):
         return self.diagram()
         
-    def __ComputeIntersect(self, canvas, element, center, point):
+    def __ComputeIntersect(self, element, center, point):
         '''
         
         @param canvas: Canvas on which its being drawn
         @type  canvas: L{CCairoCanvas<CCairoCanvas>}
         '''
-        topLeft, bottomRight = element.GetSquare(canvas)
+        topLeft, bottomRight = element.GetSquare()
         square = CRectangle(CPoint(topLeft), CPoint(bottomRight))
         line = CLine(CPoint(center), CPoint(point))
         intersects = square * line
@@ -593,7 +593,7 @@ class CConnection(CCacheableObject, CSelectableObject):
             else:
                 return point[0], bottomRight[1]
     
-    def ValidatePoints(self, canvas):
+    def ValidatePoints(self):
         '''
         Remove unnecessary points from polyline forming connection and colapse
         segments
@@ -607,12 +607,12 @@ class CConnection(CCacheableObject, CSelectableObject):
         '''
         
         i = 1
-        points = list(self.GetPoints(canvas))
+        points = list(self.GetPoints())
         while i + 1 < len(points):
             if self.ValidPoint(points[i - 1 : i + 2]):
                 i += 1
             else:
-                self.RemovePoint(canvas, i, False)
+                self.RemovePoint(i, False)
                 del points[i]
 
     def ValidPoint(self, points):

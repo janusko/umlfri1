@@ -238,14 +238,14 @@ class CDiagram(CBaseObject):
     
     def MoveSelection(self, delta, canvas = None):
         self.size = None
-        deltax = max(delta[0], -min(el.GetSquare(canvas)[0][0] for el in self.GetSelectedElements()))
-        deltay = max(delta[1], -min(el.GetSquare(canvas)[0][1] for el in self.GetSelectedElements()))
+        deltax = max(delta[0], -min(el.GetSquare()[0][0] for el in self.GetSelectedElements()))
+        deltay = max(delta[1], -min(el.GetSquare()[0][1] for el in self.GetSelectedElements()))
         movedCon = set()
         elements = set()
         if canvas is not None:
             for el in self.GetSelectedElements():
                 if not isinstance(el, ConLabelInfo.CConLabelInfo):
-                    pos1, pos2 = el.GetSquare(canvas)
+                    pos1, pos2 = el.GetSquare()
                     zorder = self.elements.index(el)
                     for el2 in self.GetElementsInRange(canvas, pos1, pos2):
                         if not isinstance(el2, ConLabelInfo.CConLabelInfo):
@@ -255,7 +255,7 @@ class CDiagram(CBaseObject):
         condelta = self.grid.SnapPosition(delta) if self.grid.IsActive() \
             else delta
         for el in elements:
-            x, y = el.GetPosition(canvas)
+            x, y = el.GetPosition()
             self.MoveElement(el, (x + deltax, y + deltay), canvas)
             if not isinstance(el, ConLabelInfo.CConLabelInfo):
                 for con in el.GetConnections():
@@ -265,7 +265,7 @@ class CDiagram(CBaseObject):
                             movedCon.add(con)
         if canvas is not None:
             for conn in self.connections:
-                conn.ValidatePoints(canvas)
+                conn.ValidatePoints()
     
     def DeleteObject(self, object):
         self.size = None
@@ -414,11 +414,11 @@ class CDiagram(CBaseObject):
                         self.elements.insert(num, e)
                         num+=1
         for e in self.elements:
-            ((ex1, ey1), (ex2, ey2)) = e.GetSquare(canvas)
+            ((ex1, ey1), (ex2, ey2)) = e.GetSquare()
             if not (ex2 < x or x + w < ex1 or ey2 < y or y + w < ey1):
                 e.Paint(canvas, delta = (-x, -y))
         for c in self.connections:
-            ((ex1, ey1), (ex2, ey2)) = c.GetSquare(canvas)
+            ((ex1, ey1), (ex2, ey2)) = c.GetSquare()
             if not (ex2 < x or x + w < ex1 or ey2 < y or y + w < ey1):
                 c.Paint(canvas, delta = (-x, -y))
             
@@ -482,12 +482,12 @@ class CDiagram(CBaseObject):
         for selectedElement in self.GetSelectedElements():
             if not isinstance(selectedElement, ConLabelInfo.CConLabelInfo):
                 selectedIdx = self.elements.index(selectedElement)
-                selSq = selectedElement.GetSquare(canvas)
+                selSq = selectedElement.GetSquare()
                 selRect = CRectangle(CPoint(selSq[0]), CPoint(selSq[1]))
                 selectedShifted = False
                 otherElementIdx = selectedIdx + 1
                 while otherElementIdx < len(self.elements) and selectedShifted == False:
-                    othSq = self.elements[otherElementIdx].GetSquare(canvas)
+                    othSq = self.elements[otherElementIdx].GetSquare()
                     othRect = CRectangle(CPoint(othSq[0]), CPoint(othSq[1]))
                     prienik = selRect*othRect 
                     if len(prienik) > 0:
@@ -500,12 +500,12 @@ class CDiagram(CBaseObject):
         for selectedElement in self.GetSelectedElements():
             if not isinstance(selectedElement, ConLabelInfo.CConLabelInfo):
                 selectedIdx = self.elements.index(selectedElement)
-                selSq = selectedElement.GetSquare(canvas)
+                selSq = selectedElement.GetSquare()
                 selRect = CRectangle(CPoint(selSq[0]), CPoint(selSq[1]))
                 selectedShifted = False
                 otherElementIdx = selectedIdx - 1
                 while otherElementIdx >= 0 and selectedShifted == False:
-                    othSq = self.elements[otherElementIdx].GetSquare(canvas)
+                    othSq = self.elements[otherElementIdx].GetSquare()
                     othRect = CRectangle(CPoint(othSq[0]), CPoint(othSq[1]))
                     prienik = selRect*othRect
                     if len(prienik) > 0:

@@ -212,8 +212,8 @@ class CpicDrawingArea(CWidget):
             avgH = 0
             avgW = 0
             for e in elements:
-                avgW += e.GetCenter(self.canvas)[0]
-                avgH += e.GetCenter(self.canvas)[1]
+                avgW += e.GetCenter()[0]
+                avgH += e.GetCenter()[1]
             avgH = avgH/len(elements)
             avgW = avgW/len(elements)
             positionH = avgH/5.0
@@ -565,7 +565,7 @@ class CpicDrawingArea(CWidget):
             minzorder = 9999999
             parentElement = None
             for el in self.Diagram.GetSelectedElements(True):
-                pos1, pos2 = el.GetSquare(self.canvas)
+                pos1, pos2 = el.GetSquare()
                 zorder = self.Diagram.GetElementZOrder(el)
                 if newElement.AreYouInRange(self.canvas, pos1, pos2, True):
                     for el2 in self.Diagram.GetElementsInRange(self.canvas, pos1, pos2, True):
@@ -589,7 +589,7 @@ class CpicDrawingArea(CWidget):
                 return
             elif self.__NewConnection is None:
                 ConnectionType = self.application.GetProject().GetMetamodel().GetConnectionFactory().GetConnection(toolBtnSel[1])
-                center = itemSel.GetCenter(self.canvas)
+                center = itemSel.GetCenter()
                 relcenter = self.GetRelativePos(center)
                 self.__NewConnection = (ConnectionType, [center], itemSel)
                 self.__DrawNewConnection(relcenter, False)
@@ -695,13 +695,13 @@ class CpicDrawingArea(CWidget):
             selected = list(self.Diagram.GetSelectedElements())
             if selected:
                 if self.dnd is None:
-                    self.keydragPosition = list(selected[0].GetCenter(self.canvas))
+                    self.keydragPosition = list(selected[0].GetCenter())
                     e = Record()
                     e.x, e.y = self.keydragPosition
                     self.__BeginDragRect(e)
                 if self.dnd == 'rect':
                     if self.keydragPosition is None:
-                        self.keydragPosition = list(selected[0].GetCenter(self.canvas))
+                        self.keydragPosition = list(selected[0].GetCenter())
                     if gtk.keysyms.Right in self.pressedKeys:
                         self.keydragPosition[0] += 10 + self.PlusMove("hor")
                         self.GetDirection("right")
@@ -946,7 +946,7 @@ class CpicDrawingArea(CWidget):
         x, y = max(abspos[0], 0), max(abspos[1], 0)
         x, y = self.GetRelativePos((x, y))
         connection, index = self.DragPoint
-        all = tuple(connection.GetPoints(self.canvas))
+        all = tuple(connection.GetPoints())
         prev, next = all[index], all[index + 1]
         points = [self.GetRelativePos(prev), (int(x), int(y)), self.GetRelativePos(next)]
         if erase:

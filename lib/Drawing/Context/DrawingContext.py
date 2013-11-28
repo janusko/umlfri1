@@ -92,7 +92,7 @@ class CDrawingContext(CBaseObject):
     
     def GetPoints(self):
         dx, dy = self.pos
-        for x, y in self.element.GetPoints(self.canvas):
+        for x, y in self.element.GetPoints():
             yield x + dx, y + dy
     
     def GetLoopPath(self):
