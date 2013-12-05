@@ -18,7 +18,14 @@ class CDrawingContext(CBaseObject):
     
     def Pop(self):
         self.pos, self.size, self.variables, self.stack, self.shadowcolor, self.line, self.defaults = self.stack.pop()
-    
+
+    '''
+    Set position to the center of the DrawinContext
+    @param position: actual pisition of DrawingContenxt
+    '''
+    def SetPosition(self, position):
+        self.pos=position
+
     def ComputeSize(self, object):
         size = self.size
         if None in size:
