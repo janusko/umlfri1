@@ -20,6 +20,7 @@ from lib.Base import CBaseObject
 xmlschema_doc = [
     ((1,0,1), etree.parse(os.path.join(SCHEMA_PATH, "umlproject_1.0.1.xsd"))),
     ((1,1,0), etree.parse(os.path.join(SCHEMA_PATH, "umlproject_1.1.0.xsd"))),
+    ((1,2,0), etree.parse(os.path.join(SCHEMA_PATH, "umlproject_1.2.0.xsd")))
 ]
 xmlschemas = []
 for version, doc in xmlschema_doc:
