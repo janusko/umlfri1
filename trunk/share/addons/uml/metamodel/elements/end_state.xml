@@ -3,8 +3,8 @@
     <Icon path="icons/final.png" />
     <Domain id="state" identity="name" />
     <Connections>
-        <Item value="StateTransition" with="State"/>
-        <Item value="Control Flow" with="Activity,Decision,Merge"/>
+        <Item value="StateTransition" with="State,VerticalSynchronization,HorizontalSynchronization"/>
+        <Item value="Control Flow" with="Activity,Decision,Merge,VerticalSynchronization,HorizontalSynchronization"/>
     </Connections>
     <Appearance>
         <HBox expand="0">
