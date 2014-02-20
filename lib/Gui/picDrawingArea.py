@@ -409,7 +409,7 @@ class CpicDrawingArea(CWidget):
             if isinstance(sel, CConnection):
                 index = sel.GetSelectedPoint()
                 if index is not None and (sel.GetSource() != sel.GetDestination() or len(tuple(sel.GetMiddlePoints())) > 2):
-                    sel.RemovePoint(self.canvas, index)
+                    sel.RemovePoint(index)
                     self.Diagram.DeselectAll()
                     self.Paint()
                     return
