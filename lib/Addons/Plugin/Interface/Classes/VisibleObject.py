@@ -21,7 +21,7 @@ class IVisibleObject(IBase):
         return him.GetSquare(IBase.adapter.GetCanvas())
         
     def AreYouAtPosition(him, pos):
-        return him.AreYouAtPosition(IBase.adapter.GetCanvas(), pos)
+        return him.AreYouAtPosition(pos)
     
     def AreYouInRange(him, topLeft, bottomRight, includeAll = True):
         return him.AreYouInRange(IBase.adapter.GetCanvas(), topLeft, bottomRight, includeAll)

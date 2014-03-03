@@ -36,7 +36,7 @@ class IDiagram(IDomainObject):
         return him.GetSelectSquare(IBase.adapter.GetCanvas())
     
     def GetElementAtPosition(him, pos): 
-        return him.GetElementAtPosition(IBase.adapter.GetCanvas(), pos)
+        return him.GetElementAtPosition(pos)
     
     def GetElementsInRange(him, topLeft, bottomRight, includeAll = True):
         return list(him.GetElementsInRange(IBase.adapter.GetCanvas(), topLeft, bottomRight, includeAll))

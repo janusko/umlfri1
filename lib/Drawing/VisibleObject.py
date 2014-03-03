@@ -20,7 +20,7 @@ class CVisibleObject(CCacheableObject, CSelectableObject):
         CCacheableObject.__init__(self)
         CSelectableObject.__init__(self)
 
-    def AreYouAtPosition(self, canvas, pos):
+    def AreYouAtPosition(self, pos):
         x, y = pos
         width, height = self.GetSize()
         return self.position[0] <= x <= self.position[0] + width and \

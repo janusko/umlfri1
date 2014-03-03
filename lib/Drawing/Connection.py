@@ -351,22 +351,19 @@ class CConnection(CCacheableObject, CSelectableObject):
         '''
         self.points.append(point)
         
-    def WhatPartOfYouIsAtPosition(self, canvas, point):
+    def WhatPartOfYouIsAtPosition(self, point):
         '''
         What is on the position defined by point
         
             - L{CConLabelInfo<CConLabelInfo>} instance
             - index of line, forming connection
             - None, if not hit
-        
-        @param canvas: Canvas on which its being drawn
-        @type  canvas: L{CCairoCanvas<CCairoCanvas>}
 
         @rtype: L{CConLabelInfo<CConLabelInfo>} / int / NoneType
         '''
         if LABELS_CLICKABLE:
             for label in self.labels.values():
-                if label.AreYouAtPosition(canvas, point):
+                if label.AreYouAtPosition(point):
                     return label
         points = list(self.GetPoints())
         point = CPoint(point)
@@ -379,7 +376,7 @@ class CConnection(CCacheableObject, CSelectableObject):
         else:
             return None
     
-    def AreYouAtPosition(self, canvas, point):
+    def AreYouAtPosition(self, point):
         '''
         Get state whether point hits a part of connection, labels including
         
@@ -390,7 +387,7 @@ class CConnection(CCacheableObject, CSelectableObject):
         <self.WhatPartOfYouIsAtPosition>} returns something
         @rtype: bool
         '''
-        return self.WhatPartOfYouIsAtPosition(canvas, point) is not None
+        return self.WhatPartOfYouIsAtPosition(point) is not None
 
     def MoveAll(self, delta, canvas):
         '''Move all points and labels of connection
