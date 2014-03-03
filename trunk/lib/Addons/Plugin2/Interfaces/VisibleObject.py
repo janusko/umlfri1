@@ -24,7 +24,7 @@ class IVisibleObject(object):
     
     @params((int, int))
     def AreYouAtPosition(self, pos):
-        return self.__object.AreYouAtPosition(self.__plugin.GetCanvas(), pos)
+        return self.__object.AreYouAtPosition(pos)
     
     @params((int, int), (int, int), bool)
     def AreYouInRange(self, topLeft, bottomRight, includeAll):

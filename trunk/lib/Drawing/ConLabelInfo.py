@@ -207,16 +207,13 @@ class CConLabelInfo(CCacheableObject):
         
         self.GetPosition()
     
-    def AreYouAtPosition(self, canvas, point):
+    def AreYouAtPosition(self, point):
         '''
         @return: True if (x, y) hits label
         @rtype: bool
         
         @param point: (x, y) position
         @type  point: tuple
-        
-        @param canvas: Canvas on which its being drawn
-        @type  canvas: L{CCairoCanvas<lib.Drawing.Canvas.CairoCanvas.CCairoCanvas>}
         '''
         x, y = point
         ((x1, y1), (x2, y2)) = self.GetSquare()

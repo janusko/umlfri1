@@ -72,7 +72,7 @@ class IDiagram(IDomainObject):
     @polymorphic
     @params((int, int))
     def GetElementAtPosition(self, pos): 
-        return self.__castItem(self.__diagram.GetElementAtPosition(self.__plugin.GetCanvas(), pos))
+        return self.__castItem(self.__diagram.GetElementAtPosition(pos))
     
     @params((int, int), (int, int), bool)
     def GetElementsInRange(self, topLeft, bottomRight, includeAll):

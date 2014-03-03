@@ -365,16 +365,16 @@ class CDiagram(CBaseObject):
         return result
 
         
-    def GetElementAtPosition(self, canvas, pos):
+    def GetElementAtPosition(self, pos):
         for c in self.connections:
-            r = c.WhatPartOfYouIsAtPosition(canvas, pos)
+            r = c.WhatPartOfYouIsAtPosition(pos)
             if isinstance(r, (int, long)):
                 return c
             elif r is not None:
                 return r
                 
         for e in self.elements[::-1]:
-            if e.AreYouAtPosition(canvas, pos):
+            if e.AreYouAtPosition(pos):
                 return e
             
         return None

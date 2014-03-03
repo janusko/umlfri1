@@ -482,7 +482,7 @@ class CpicDrawingArea(CWidget):
                 self.__AddItem(toolBtnSel, event)
                 return True
             
-            itemSel = self.Diagram.GetElementAtPosition(self.canvas, pos)
+            itemSel = self.Diagram.GetElementAtPosition(pos)
             if itemSel is not None: #something is hit:
                 if itemSel in self.Diagram.GetSelected(): # deselecting:
                     if (event.state & gtk.gdk.CONTROL_MASK) or (event.state & gtk.gdk.SHIFT_MASK):
@@ -496,7 +496,7 @@ class CpicDrawingArea(CWidget):
                             self.__BeginDragPoint(event, itemSel, i)
                         else:
                             itemSel.DeselectPoint()
-                            i = itemSel.WhatPartOfYouIsAtPosition(self.canvas, pos)
+                            i = itemSel.WhatPartOfYouIsAtPosition(pos)
                             self.__BeginDragLine(event, itemSel, i)
                         #self.Paint()
                         self.emit('selected-item', list(self.Diagram.GetSelected()),False)
@@ -512,7 +512,7 @@ class CpicDrawingArea(CWidget):
                             self.__BeginDragPoint(event, itemSel, i)
                         else:
                             itemSel.DeselectPoint()
-                            i = itemSel.WhatPartOfYouIsAtPosition(self.canvas, pos)
+                            i = itemSel.WhatPartOfYouIsAtPosition(pos)
                             self.__BeginDragLine(event, itemSel, i)
                     else:
                         selElements = list(self.Diagram.GetSelectedElements())
@@ -538,7 +538,7 @@ class CpicDrawingArea(CWidget):
             self.__BeginDragMove(event)
 
         elif event.button == 3:
-            itemSel = self.Diagram.GetElementAtPosition(self.canvas, pos)
+            itemSel = self.Diagram.GetElementAtPosition(pos)
             if itemSel not in frozenset(self.Diagram.GetSelected()):
                 self.Diagram.DeselectAll()
             if itemSel is not None:
@@ -580,7 +580,7 @@ class CpicDrawingArea(CWidget):
             self.Paint()
 
         elif toolBtnSel[0] == 'Connection':
-            itemSel = self.Diagram.GetElementAtPosition(self.canvas, pos)
+            itemSel = self.Diagram.GetElementAtPosition(pos)
 
             if itemSel is None:
                 if self.__NewConnection is not None:
@@ -638,7 +638,7 @@ class CpicDrawingArea(CWidget):
                 self.emit('selected-item', list(self.Diagram.GetSelected()),False)
             elif self.__NewConnection is not None:
                 pos = self.GetAbsolutePos((event.x, event.y))
-                itemSel = self.Diagram.GetElementAtPosition(self.canvas, pos)
+                itemSel = self.Diagram.GetElementAtPosition(pos)
                 if itemSel is None or isinstance(itemSel, (CConnection, CConLabelInfo)):
                     self.__NewConnection[1].append(pos)
                     self.__DrawNewConnection((None, None))
