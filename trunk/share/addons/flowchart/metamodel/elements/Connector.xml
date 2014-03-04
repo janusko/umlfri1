@@ -1,6 +1,6 @@
 <ElementType id="Connector" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
     <Icon path="icons/Connector.png"/>
-    <Domain id="Connector"/>
+    <Domain id="Connector" identity="name"/>
     <Connections>
         <Item value="Note Link" with="Note"/>
         <Item value="Flow Line"/>

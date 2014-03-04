@@ -1,6 +1,6 @@
 <ElementType id="Preparation" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
     <Icon path="icons/Preparation.png"/>
-    <Domain id="Preparation"/>
+    <Domain id="Preparation" identity="name"/>
     <Connections>
         <Item value="Note Link" with="Note"/>
         <Item value="Flow Line"/>

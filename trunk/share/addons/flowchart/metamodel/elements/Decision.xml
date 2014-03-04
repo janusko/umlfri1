@@ -1,6 +1,6 @@
 <ElementType id="Decision" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
     <Icon path="icons/Decision.png"/>
-    <Domain id="Decision"/>
+    <Domain id="Decision" identity="name"/>
     <Connections>
         <Item value="Note Link" with="Note"/>
         <Item value="Flow Line"/>
