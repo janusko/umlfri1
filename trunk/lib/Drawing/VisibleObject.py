@@ -26,7 +26,7 @@ class CVisibleObject(CCacheableObject, CSelectableObject):
         return self.position[0] <= x <= self.position[0] + width and \
             self.position[1] <= y <= self.position[1] + height
     
-    def AreYouInRange(self, canvas, topleft, bottomright, all = False):
+    def AreYouInRange(self, topleft, bottomright, all = False):
         (x1, y1), (x2, y2) = topleft, bottomright
         width, height = self.GetSize()
         

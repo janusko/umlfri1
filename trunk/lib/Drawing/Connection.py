@@ -202,7 +202,7 @@ class CConnection(CCacheableObject, CSelectableObject):
         """
         return self.object.GetDestination()
         
-    def GetNeighbours(self, index, canvas):
+    def GetNeighbours(self, index):
         '''get positions of neighbouring points to point 
         selected by index.
         
@@ -231,7 +231,7 @@ class CConnection(CCacheableObject, CSelectableObject):
         '''
         return self.object
     
-    def GetLabelPosition(self, canvas, id):
+    def GetLabelPosition(self, id):
         '''
         Get absolute (x,y) position of label defined by id
         
@@ -274,7 +274,7 @@ class CConnection(CCacheableObject, CSelectableObject):
         if id in self.labels:
             self.labels[id].SetSaveInfo(**info)
         
-    def InsertPoint(self, canvas, point, index = None):
+    def InsertPoint(self, point, index = None):
         '''
         Add new point forming polyline of connection
         
@@ -287,10 +287,7 @@ class CConnection(CCacheableObject, CSelectableObject):
         Creation of new point is ignored if new point is too close to 
         neighbouring point or angle the two new segments form is too close to
         pi. 
-        
-        @param canvas: Canvas on which its being drawn
-        @type  canvas: L{CCairoCanvas<CCairoCanvas>}
-        
+
         @param point: (x, y) position of point to be appended
         @type  point: tuple
         
@@ -403,13 +400,10 @@ class CConnection(CCacheableObject, CSelectableObject):
                 self.MovePoint(canvas, point, idx+1)
             
         
-    def MovePoint(self, canvas, pos, index):
+    def MovePoint(self, pos, index):
         '''
         Change position of point defined by index to to new position pos
-        
-        @param canvas: Canvas on which its being drawn
-        @type  canvas: L{CCairoCanvas<CCairoCanvas>}
-        
+
         @param pos: (x, y) new position of point
         @type  pos: tuple
         

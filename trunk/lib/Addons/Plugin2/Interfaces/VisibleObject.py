@@ -28,7 +28,7 @@ class IVisibleObject(object):
     
     @params((int, int), (int, int), bool)
     def AreYouInRange(self, topLeft, bottomRight, includeAll):
-        return self.__object.AreYouInRange(self.__plugin.GetCanvas(), topLeft, bottomRight, includeAll)
+        return self.__object.AreYouInRange(topLeft, bottomRight, includeAll)
     
     def GetDiagram(self):
         return Diagram.IDiagram(self.__plugin, self.__object.GetDiagram())
