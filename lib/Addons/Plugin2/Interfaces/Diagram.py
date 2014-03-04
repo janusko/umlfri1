@@ -67,7 +67,7 @@ class IDiagram(IDomainObject):
             yield ConnectionVisual.IConnectionVisual(self.__plugin, item)
         
     def GetSelectSquare(self):
-        return self.__diagram.GetSelectSquare(self.__plugin.GetCanvas())
+        return self.__diagram.GetSelectSquare()
     
     @polymorphic
     @params((int, int))
@@ -76,11 +76,11 @@ class IDiagram(IDomainObject):
     
     @params((int, int), (int, int), bool)
     def GetElementsInRange(self, topLeft, bottomRight, includeAll):
-        for item in self.__diagram.GetElementsInRange(self.__plugin.GetCanvas(), topLeft, bottomRight, includeAll):
+        for item in self.__diagram.GetElementsInRange(topLeft, bottomRight, includeAll):
             yield ElementVisual.IElementVisual(self.__plugin, item)
     
     def GetSizeSquare(self):
-        return self.__diagram.GetSizeSquare(self.__plugin.GetCanvas())
+        return self.__diagram.GetSizeSquare()
     
     def GetElements(self):
         for item in self.__diagram.GetElements(True):

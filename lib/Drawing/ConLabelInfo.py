@@ -107,15 +107,12 @@ class CConLabelInfo(CCacheableObject):
         '''
         self.logicalLabel = logicalLabel
     
-    def SetPosition(self, pos, canvas):
+    def SetPosition(self, pos):
         '''
         Set absolute position of top-left corner of label
         
         @param pos: (x, y)
         @type  pos: tuple
-        
-        @param canvas: 
-        @type canvas: L{CCairoCanvas<lib.Drawing.Canvas.CairoCanvas.CCairoCanvas>}
         '''
         width, height = self.GetSize()
         pos = max((0, pos[0])), max((0, pos[1]))
@@ -219,7 +216,7 @@ class CConLabelInfo(CCacheableObject):
         ((x1, y1), (x2, y2)) = self.GetSquare()
         return x1 <= x <= x2 and y1 <= y <= y2
             
-    def AreYouInRange(self, canvas, topleft, bottomright, all = False):
+    def AreYouInRange(self, topleft, bottomright, all = False):
         '''
         Check wheter label is withinin rectangular area
         
@@ -263,14 +260,11 @@ class CConLabelInfo(CCacheableObject):
                 (x1 <= l <= r <= x2 and t <= y1 <= y2 <= b ) or
                 (l <= x1 <= x2 <= r and y1 <= t <= b <= y2 ) )
     
-    def SetToDefaultPosition(self, canvas, position):
+    def SetToDefaultPosition(self, position):
         '''Set absolute and relative position according to default position
         defined by parameter position. Can be moved by offset by appending sign
         "+" or "-" and float number to recognized names of position.
-        
-        @param canvas: Canvas on which its being drawn
-        @type  canvas: L{CCairoCanvas<lib.Drawing.Canvas.CairoCanvas.CCairoCanvas>}
-        
+
         @param position: one of "center", "source", "destination"
         @type  position: str
         '''
@@ -348,7 +342,7 @@ class CConLabelInfo(CCacheableObject):
     
     def Paint(self, canvas, delta = (0, 0)):
         if self.position:
-            self.SetToDefaultPosition(canvas, self.position)
+            self.SetToDefaultPosition(self.position)
             self.position = None
 
         context = CDrawingContext(canvas, self.connection(), (0,0))

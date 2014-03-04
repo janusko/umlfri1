@@ -132,7 +132,7 @@ class CpicDrawingArea(CWidget):
     
     def BestFitScale(self):
         winSizeX, winSizeY = self.GetWindowSize()
-        (diaSizeMinX, diaSizeMinY), (diaSizeMaxX, diaSizeMaxY) = self.Diagram.GetSizeSquare(self.canvas)
+        (diaSizeMinX, diaSizeMinY), (diaSizeMaxX, diaSizeMaxY) = self.Diagram.GetSizeSquare()
         scaleX = float(winSizeX) / float(diaSizeMaxX-diaSizeMinX)
         scaleY = float(winSizeY) / float(diaSizeMaxY-diaSizeMinY)
         if scaleX > scaleY :
@@ -275,7 +275,7 @@ class CpicDrawingArea(CWidget):
         return (tmpx, tmpy)
 
     def GetDiagramSize(self):
-        tmp = [int(max(i)) for i in zip(self.Diagram.GetSize(self.canvas), self.picDrawingArea.window.get_size())]
+        tmp = [int(max(i)) for i in zip(self.Diagram.GetSize(), self.picDrawingArea.window.get_size())]
         return tuple(tmp)
     
     def GetPos(self):
@@ -387,7 +387,7 @@ class CpicDrawingArea(CWidget):
     def Export(self, filename, export_type, zoom, padding, background=None):
         self.Diagram.DeselectAll()
         
-        (x1, y1), (x2, y2) = self.Diagram.GetSizeSquare(self.canvas)
+        (x1, y1), (x2, y2) = self.Diagram.GetSizeSquare()
         sizeX = x2 - x1
         sizeY = y2 - y1
         x = x1
@@ -567,8 +567,8 @@ class CpicDrawingArea(CWidget):
             for el in self.Diagram.GetSelectedElements(True):
                 pos1, pos2 = el.GetSquare()
                 zorder = self.Diagram.GetElementZOrder(el)
-                if newElement.AreYouInRange(self.canvas, pos1, pos2, True):
-                    for el2 in self.Diagram.GetElementsInRange(self.canvas, pos1, pos2, True):
+                if newElement.AreYouInRange(pos1, pos2, True):
+                    for el2 in self.Diagram.GetElementsInRange(pos1, pos2, True):
                         if self.Diagram.GetElementZOrder(el2) < minzorder:        #get element with minimal zorder
                             minzorder = self.Diagram.GetElementZOrder(el2)
                             parentElement = el2.GetObject()
@@ -612,13 +612,13 @@ class CpicDrawingArea(CWidget):
             elif self.dnd == 'point':
                 point = self.GetAbsolutePos((event.x, event.y))
                 connection, index = self.DragPoint
-                self.Diagram.MoveConnectionPoint(connection, point, index, self.canvas)
+                self.Diagram.MoveConnectionPoint(connection, point, index)
                 self.dnd = None
             elif self.dnd == 'line':
                 point = self.GetAbsolutePos((event.x, event.y))
                 connection, index = self.DragPoint
-                if connection.InsertPoint(self.canvas, point, index):
-                    self.Diagram.MoveConnectionPoint(connection, point, index+1, self.canvas)
+                if connection.InsertPoint(point, index):
+                    self.Diagram.MoveConnectionPoint(connection, point, index+1)
                 self.dnd = None
             elif self.dnd == 'move':
                 if gtk.keysyms.space in self.pressedKeys:
@@ -633,7 +633,7 @@ class CpicDrawingArea(CWidget):
                     x2, x1 = x1, x2
                 if y2 < y1:
                     y2, y1 = y1, y2
-                self.Diagram.AddRangeToSelection(self.canvas, (x1, y1), (x2, y2))
+                self.Diagram.AddRangeToSelection((x1, y1), (x2, y2))
                 self.dnd = None
                 self.emit('selected-item', list(self.Diagram.GetSelected()),False)
             elif self.__NewConnection is not None:
@@ -735,7 +735,7 @@ class CpicDrawingArea(CWidget):
             
             delta = self.__GetDelta(self.keydragPosition)
             self.keydragPosition = None
-            self.Diagram.MoveSelection(delta, self.canvas)
+            self.Diagram.MoveSelection(delta)
             self.dnd = None
             self.Paint()
 
@@ -834,7 +834,7 @@ class CpicDrawingArea(CWidget):
         else:
             self.selSq = None
         
-        self.DragRect = (self.Diagram.GetSelectSquare(self.canvas))
+        self.DragRect = (self.Diagram.GetSelectSquare())
         self.DragPoint = list(self.DragRect[0])
         if (self.selSq is None): # Neresizujem
             self.__DrawDragRect((event.x, event.y), False)
@@ -927,7 +927,7 @@ class CpicDrawingArea(CWidget):
         if x is None:
             x, y = self.__oldPoints2
         connection, index = self.DragPoint
-        prev, next = connection.GetNeighbours(index, self.canvas)
+        prev, next = connection.GetNeighbours(index)
         abspos = self.GetAbsolutePos((x, y))
         x, y = max(abspos[0], 0), max(abspos[1], 0)
         x, y = self.GetRelativePos((x, y))
@@ -1146,7 +1146,7 @@ class CpicDrawingArea(CWidget):
         return self.picDrawingArea.is_focus()
 
     def GetSelectionPixbuf(self, zoom, padding, bg):
-        (x, y), (sizeX, sizeY) = self.Diagram.GetSelectSquare(self.canvas, True)
+        (x, y), (sizeX, sizeY) = self.Diagram.GetSelectSquare(True)
         sizeX = (sizeX + padding*2) * zoom
         sizeY = (sizeY + padding*2) * zoom
         canvas = CExportCanvas(self.application.GetProject().GetMetamodel().GetStorage(), 'pixbuf', None, sizeX, sizeY, background = bg)

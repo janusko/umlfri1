@@ -70,7 +70,7 @@ class CDiagramPrint(gobject.GObject):
         # getting diagram size square, perhaps it would be better
         # to implement a new method to prevent blank pages,
         # because diagram.GetExpSquare gets one biiig square
-        diagram_width, diagram_height = self.diagram.GetExpSquare(canvas)
+        diagram_width, diagram_height = self.diagram.GetExpSquare()
         # re-set matrix
         self.cur_matrix_pos = 0
         self.print_matrix = []

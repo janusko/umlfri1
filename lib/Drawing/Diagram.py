@@ -189,8 +189,8 @@ class CDiagram(CBaseObject):
         self.selected.add(element)
         element.Select()
     
-    def AddRangeToSelection(self, canvas, topleft, rightbottom):
-        for el in self.GetElementsInRange(canvas, topleft, rightbottom, False):
+    def AddRangeToSelection(self, topleft, rightbottom):
+        for el in self.GetElementsInRange(topleft, rightbottom, False):
             self.selected.add(el)
             el.Select()
     
@@ -212,8 +212,8 @@ class CDiagram(CBaseObject):
             self.selected.add(c)
             c.Select()
     
-    def GetSelectSquare(self, canvas, includeConnections = False):
-        x1, y1 = self.GetSize(canvas)
+    def GetSelectSquare(self, includeConnections = False):
+        x1, y1 = self.GetSize()
         x2, y2 = 0, 0
         
         for el in self.GetSelectedElements():
@@ -247,7 +247,7 @@ class CDiagram(CBaseObject):
                 if not isinstance(el, ConLabelInfo.CConLabelInfo):
                     pos1, pos2 = el.GetSquare()
                     zorder = self.elements.index(el)
-                    for el2 in self.GetElementsInRange(canvas, pos1, pos2):
+                    for el2 in self.GetElementsInRange(pos1, pos2):
                         if not isinstance(el2, ConLabelInfo.CConLabelInfo):
                             if self.elements.index(el2) > zorder:
                                 elements.add(el2)
@@ -348,7 +348,7 @@ class CDiagram(CBaseObject):
         else:
             raise DrawingError("ConnectionDoesNotExists")
     
-    def GetSize(self, canvas):
+    def GetSize(self):
         if self.size is not None:
             return self.size
         else:
@@ -379,9 +379,9 @@ class CDiagram(CBaseObject):
             
         return None
     
-    def GetElementsInRange(self, canvas, topleft, bottomright, includeall = True):
+    def GetElementsInRange(self, topleft, bottomright, includeall = True):
         for e in self.elements:
-            if e.AreYouInRange(canvas, topleft, bottomright, includeall):
+            if e.AreYouInRange(topleft, bottomright, includeall):
                 yield e
     
     def SetViewPort(self, view):
@@ -538,7 +538,7 @@ class CDiagram(CBaseObject):
             el.CopyFromElement(i)
             pasted.add(el)
 
-    def GetExpSquare(self, canvas):
+    def GetExpSquare(self):
         #square for export, the minimal size is measured so the exported diagram has the same edges - looks better
         x_max, y_max,x_min, y_min,  = 0, 0,  101, 101
         for el in self.elements:
@@ -570,7 +570,7 @@ class CDiagram(CBaseObject):
             y_min = 100
         return x_max +x_min, y_max + y_min
 
-    def GetSizeSquare(self, canvas):
+    def GetSizeSquare(self):
         x_max, y_max,x_min, y_min,  = 0, 0,  9999, 9999
         for el in self.elements:
             posX, posY = el.GetPosition()
@@ -610,10 +610,10 @@ class CDiagram(CBaseObject):
         if not isinstance(element, ConLabelInfo.CConLabelInfo):
             self.grid.SnapElement(element, pos, canvas)
         else:
-            element.SetPosition(pos, canvas)
+            element.SetPosition(pos)
     
-    def MoveConnectionPoint(self, conn, pos, idx, canvas):
-        self.grid.SnapConnection(conn, pos, idx, canvas)
+    def MoveConnectionPoint(self, conn, pos, idx):
+        self.grid.SnapConnection(conn, pos, idx)
 
     def AlignElementsXY(self, isHorizontal, isLowerBoundary,
             canvas, defaultElement=None): 
@@ -694,7 +694,7 @@ class CDiagram(CBaseObject):
         elemtotal = 0
         for e in elements:
             elemtotal += e.GetSize()[xy]
-        total = self.GetSelectSquare(canvas)[1][xy]
+        total = self.GetSelectSquare()[1][xy]
         spacing = (total - elemtotal)/(len(elements) - 1)
         elements.sort(lambda x, y: cmp(x.GetPosition()[xy],
             y.GetPosition()[xy]))
