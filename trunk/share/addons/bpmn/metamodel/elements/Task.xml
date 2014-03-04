@@ -1,6 +1,6 @@
 <ElementType id="Task" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
     <Icon path="icons/Task.png"/>
-    <Domain id="Task"/>
+    <Domain id="Task" identity="name"/>
     <Connections>
         <Item value="MessageFlow" with="*"/>
         <Item value="SequenceFlow" with="*"/>

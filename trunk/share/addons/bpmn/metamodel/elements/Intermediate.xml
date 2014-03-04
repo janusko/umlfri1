@@ -1,6 +1,6 @@
 <ElementType id="Intermediate" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
     <Icon path="icons/Intermediate.png"/>
-    <Domain id="Intermediate"/>
+    <Domain id="Intermediate" identity="name"/>
     <Connections>
         <Item value="MessageFlow" with="*"/>
         <Item value="SequenceFlow" with="*"/>
