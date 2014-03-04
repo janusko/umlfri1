@@ -141,9 +141,6 @@ class CConnection(CCacheableObject, CSelectableObject):
     def GetSquare(self, includeLabels=False):
         '''get absolute positoin of minimal rectangle to which fits connection
         
-        @param canvas: Canvas on which its being drawn
-        @type  canvas: L{CCairoCanvas<CCairoCanvas>}
-        
         @param includeLabels: if True, labels are included into the square
         @type includeLabels: bool
         
@@ -205,9 +202,6 @@ class CConnection(CCacheableObject, CSelectableObject):
     def GetNeighbours(self, index):
         '''get positions of neighbouring points to point 
         selected by index.
-        
-        @param canvas: Canvas on which its being drawn
-        @type  canvas: L{CCairoCanvas<CCairoCanvas>}
 
         @return: ((x1,y1),(x2,y2)) 
         '''
@@ -238,9 +232,6 @@ class CConnection(CCacheableObject, CSelectableObject):
         If connection doesn't have id in cache, it saves it and writes
         it's position. Position is calculated from position and size so that
         center of label is at the default position.
-        
-        @param canvas: Canvas on which its being drawn
-        @type  canvas: L{CCairoCanvas<CCairoCanvas>}
         
         @param id: identifier of label
         @type  id: int
@@ -376,9 +367,6 @@ class CConnection(CCacheableObject, CSelectableObject):
     def AreYouAtPosition(self, point):
         '''
         Get state whether point hits a part of connection, labels including
-        
-        @param canvas: Canvas on which its being drawn
-        @type  canvas: L{CCairoCanvas<CCairoCanvas>}
 
         @return: True if L{WhatPartOfYouIsAtPosition
         <self.WhatPartOfYouIsAtPosition>} returns something
@@ -468,9 +456,6 @@ class CConnection(CCacheableObject, CSelectableObject):
         @param index: index of point to be deleted
         @type  index: int
         
-        @param canvas: Canvas on which its being drawn
-        @type  canvas: L{CCairoCanvas<lib.Drawing.Canvas.CairoCanvas.CCairoCanvas>}
-        
         @param runValidation: if True then at the end executes 
         L{self.ValidatePoints<self.ValidatePoints>}
         @type  runValidation: bool
@@ -512,9 +497,7 @@ class CConnection(CCacheableObject, CSelectableObject):
     
     def GetPoints(self):
         '''
-        
-        @param canvas: Canvas on which its being drawn
-        @type  canvas: L{CCairoCanvas<CCairoCanvas>}
+
         '''
         yield self.GetPoint(0)
             
@@ -525,9 +508,7 @@ class CConnection(CCacheableObject, CSelectableObject):
     
     def GetPoint(self, index):
         '''
-        
-        @param canvas: Canvas on which its being drawn
-        @type  canvas: L{CCairoCanvas<CCairoCanvas>}
+
         '''
         if self.source() is self.destination() and len(self.points) == 0:
             topleft, bottomright = self.source().GetSquare()
@@ -562,9 +543,7 @@ class CConnection(CCacheableObject, CSelectableObject):
         
     def __ComputeIntersect(self, element, center, point):
         '''
-        
-        @param canvas: Canvas on which its being drawn
-        @type  canvas: L{CCairoCanvas<CCairoCanvas>}
+
         '''
         topLeft, bottomRight = element.GetSquare()
         square = CRectangle(CPoint(topLeft), CPoint(bottomRight))
@@ -592,9 +571,6 @@ class CConnection(CCacheableObject, CSelectableObject):
         If two points are too close to each other, first of them is discarted.
         If two segments contain angle too close to pi => create almost straight
         line, middle point is discarted
-        
-        @param canvas: Canvas on which its being drawn
-        @type  canvas: L{CCairoCanvas<CCairoCanvas>}
         '''
         
         i = 1
