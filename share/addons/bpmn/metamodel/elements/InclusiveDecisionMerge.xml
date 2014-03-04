@@ -1,6 +1,6 @@
 <ElementType id="InclusiveDecisionMerge" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
     <Icon path="icons/InclusiveDecisionMerge.png"/>
-    <Domain id="InclusiveDecisionMerge"/>
+    <Domain id="InclusiveDecisionMerge" identity="name"/>
     <Connections>
         <Item value="MessageFlow" with="*"/>
         <Item value="SequenceFlow" with="*"/>

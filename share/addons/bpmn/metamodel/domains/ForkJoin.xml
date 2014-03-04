@@ -1,4 +1,7 @@
 <Domain id="ForkJoin" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" >
+    <Attribute id="name" name="Name" >
+		<Str/>
+	</Attribute>
     <Attribute id="notes" name="Note" >
 		<Text/>
 	</Attribute>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ElementType id="Annotation" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
     <Icon path="icons/Annotation.png" />
-    <Domain id="Annotation"/>
+    <Domain id="Annotation" identity="name"/>
     <Connections>
         <Item value="Association" with="*"/>
     </Connections>

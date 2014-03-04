@@ -1,6 +1,6 @@
 <ElementType id="Gateway" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
     <Icon path="icons/Gateway.png"/>
-    <Domain id="Gateway"/>
+    <Domain id="Gateway" identity="name"/>
     <Connections>
         <Item value="MessageFlow" with="*"/>
         <Item value="SequenceFlow" with="*"/>
