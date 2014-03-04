@@ -33,16 +33,16 @@ class IDiagram(IDomainObject):
         return list(him.GetSelectedConnections())
         
     def GetSelectSquare(him):
-        return him.GetSelectSquare(IBase.adapter.GetCanvas())
+        return him.GetSelectSquare()
     
     def GetElementAtPosition(him, pos): 
         return him.GetElementAtPosition(pos)
     
     def GetElementsInRange(him, topLeft, bottomRight, includeAll = True):
-        return list(him.GetElementsInRange(IBase.adapter.GetCanvas(), topLeft, bottomRight, includeAll))
+        return list(him.GetElementsInRange(topLeft, bottomRight, includeAll))
     
     def GetSizeSquare(him):
-        return him.GetSizeSquare(IBase.adapter.GetCanvas())
+        return him.GetSizeSquare()
     
     def GetElements(him):
         return list(him.GetElements())

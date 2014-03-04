@@ -23,7 +23,7 @@ class IConnectionVisual(object):
         return ElementVisual.IElementVisual(self.__plugin, self.__connection.GetSource())
     
     def GetPoints(self):
-        for point in self.__connection.GetPoints(self.__plugin.GetCanvas()):
+        for point in self.__connection.GetPoints():
             yield point
     
     def GetAllLabelPositions(self):

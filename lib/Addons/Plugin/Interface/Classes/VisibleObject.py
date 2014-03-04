@@ -6,25 +6,25 @@ class IVisibleObject(IBase):
     __cls__ = None
     
     def GetPosition(him):
-        return him.GetPosition(IBase.adapter.GetCanvas())
+        return him.GetPosition()
     
     def GetCenter(him):
-        return him.GetCenter(IBase.adapter.GetCanvas())
+        return him.GetCenter()
     
     def GetSize(him):
-        return him.GetSize(IBase.adapter.GetCanvas())
+        return him.GetSize()
     
     def GetMinimalSize(him):
-        return him.GetMinimalSize(IBase.adapter.GetCanvas())
+        return him.GetMinimalSize()
     
     def GetSquare(him):
-        return him.GetSquare(IBase.adapter.GetCanvas())
+        return him.GetSquare()
         
     def AreYouAtPosition(him, pos):
         return him.AreYouAtPosition(pos)
     
     def AreYouInRange(him, topLeft, bottomRight, includeAll = True):
-        return him.AreYouInRange(IBase.adapter.GetCanvas(), topLeft, bottomRight, includeAll)
+        return him.AreYouInRange(topLeft, bottomRight, includeAll)
     
     def GetObject(him):
         return him.GetObject()
