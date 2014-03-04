@@ -16,7 +16,7 @@ class IConnectionVisual(IBase):
         return him.GetSource()
     
     def GetPoints(him):
-        return list(him.GetPoints(IBase.adapter.GetCanvas()))
+        return list(him.GetPoints())
         
     def GetAllLabelPositions(him):
         return list(him.GetAllLabelPositions())

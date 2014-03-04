@@ -8,19 +8,19 @@ class IVisibleObject(object):
         self.__object = object
     
     def GetPosition(self):
-        return self.__object.GetPosition(self.__plugin.GetCanvas())
+        return self.__object.GetPosition()
     
     def GetCenter(self):
-        return self.__object.GetCenter(self.__plugin.GetCanvas())
+        return self.__object.GetCenter()
     
     def GetSize(self):
-        return self.__object.GetSize(self.__plugin.GetCanvas())
+        return self.__object.GetSize()
     
     def GetMinimalSize(self):
-        return self.__object.GetMinimalSize(self.__plugin.GetCanvas())
+        return self.__object.GetMinimalSize()
     
     def GetSquare(self):
-        return self.__object.GetSquare(self.__plugin.GetCanvas())
+        return self.__object.GetSquare()
     
     @params((int, int))
     def AreYouAtPosition(self, pos):
