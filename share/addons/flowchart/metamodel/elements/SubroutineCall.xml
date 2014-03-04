@@ -1,6 +1,6 @@
 <ElementType id="Subroutine Call" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
     <Icon path="icons/SubroutineCall.png"/>
-    <Domain id="SubroutineCall"/>
+    <Domain id="SubroutineCall" identity="name"/>
     <Connections>
         <Item value="Note Link" with="Note"/>
         <Item value="Flow Line"/>

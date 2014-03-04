@@ -1,6 +1,6 @@
 <ElementType id="Start" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
     <Icon path="icons/Start.png"/>
-    <Domain id="Start"/>
+    <Domain id="Start" identity="name"/>
     <Connections>
         <Item value="Note Link" with="Note"/>
         <Item value="Flow Line"/>

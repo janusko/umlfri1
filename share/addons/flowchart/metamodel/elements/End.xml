@@ -1,6 +1,6 @@
 <ElementType id="End" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
     <Icon path="icons/End.png"/>
-    <Domain id="End"/>
+    <Domain id="End" identity="name"/>
     <Connections>
         <Item value="Note Link" with="Note"/>
         <Item value="Flow Line"/>

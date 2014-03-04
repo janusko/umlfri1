@@ -1,6 +1,6 @@
 <ElementType id="Process" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
     <Icon path="icons/Process.png"/>
-    <Domain id="Process"/>
+    <Domain id="Process" identity="name"/>
     <Connections>
         <Item value="Note Link" with="Note"/>
         <Item value="Flow Line"/>

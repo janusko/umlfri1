@@ -1,6 +1,6 @@
 <ElementType id="Input Output" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
     <Icon path="icons/InputOutput.png"/>
-    <Domain id="InputOutput"/>
+    <Domain id="InputOutput" identity="name"/>
     <Connections>
         <Item value="Note Link" with="Note"/>
         <Item value="Flow Line"/>

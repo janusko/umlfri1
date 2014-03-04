@@ -1,4 +1,7 @@
 <Domain id="Connector" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" >
+    <Attribute id="name" name="Name" >
+		<Str/>
+	</Attribute>
     <Attribute id="connectorid" name="Connector ID" >
 		<Str/>
 	</Attribute>
