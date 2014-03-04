@@ -83,9 +83,6 @@ class CConLabelInfo(CCacheableObject):
         '''
         @return: absolute position of top-left corner in 2-tuple (x, y)
         @rtype: tuple
-        
-        @param canvas: 
-        @type canvas:L{CCairoCanvas<lib.Drawing.Canvas.CairoCanvas.CCairoCanvas>}
         '''
         width, height = self.GetSize()
         x, y = self.GetAbsolutePosition()
@@ -127,25 +124,23 @@ class CConLabelInfo(CCacheableObject):
     
     def GetMinimalSize(self, canvas):
         '''
-        The same as L{GetSize<self.GetSize>}
+        The same as L{GetSize<self.GetSize>}. Canvas parameter is necessary, because this method also
+        exists on other classes.
         
         @return: size of label in 2-tuple (width, height)
         @rtype:  tuple
-        
-        @param canvas: 
+
+        @param canvas:
         @type canvas: L{CCairoCanvas<lib.Drawing.Canvas.CairoCanvas.CCairoCanvas>}
         '''
         return self.GetSize()
         
     def GetSquare(self):
         '''
-        Get absolute position of rectangle to wich label fits
+        Get absolute position of rectangle to which label fits
         
         @return: ((left, top), (right, bottom)) positions of corners
         @rtype:  tuple
-        
-        @param canvas: 
-        @type canvas: L{CCairoCanvas<lib.Drawing.Canvas.CairoCanvas.CCairoCanvas>}
         '''
         
         width, height = self.GetSize()
@@ -173,9 +168,6 @@ class CConLabelInfo(CCacheableObject):
         
         @return: (x, y) position of the middle point of the label
         @rtype: tuple
-        
-        @param canvas: Canvas on which its being drawn
-        @type  canvas: L{CCairoCanvas<lib.Drawing.Canvas.CairoCanvas.CCairoCanvas>}
         '''
         
         points = list(self.connection().GetPoints())
@@ -190,9 +182,6 @@ class CConLabelInfo(CCacheableObject):
         of connection
         
         if pos is None then current position of label is used.
-        
-        @param canvas: Canvas on which its being drawn
-        @type  canvas: L{CCairoCanvas<lib.Drawing.Canvas.CairoCanvas.CCairoCanvas>}
         
         @param pos: new absolute position (x, y) of label or None
         @type pos: tuple / NoneType
@@ -227,9 +216,6 @@ class CConLabelInfo(CCacheableObject):
         
         @return: True if label is in area
         @rtype: bool
-        
-        @param canvas: Canvas on which its being drawn.
-        @type  canvas: L{CCairoCanvas<lib.Drawing.Canvas.CairoCanvas.CCairoCanvas>}
         
         @param topleft: (x, y) position of top-left corner
         @type  topleft: tuple
