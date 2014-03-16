@@ -751,50 +751,40 @@ class CDiagram(CBaseObject):
         elements = tuple(self.GetSelectedElements())
         if len(elements)<2: return
 
-        maxhight = 0
+        # find maximum size
+        maxheight = 0
         maxwidth = 0
         size = 0
         for e in elements:
-            if size < e.GetSize(canvas)[0] + e.GetSize(canvas)[1]:
-                size = e.GetSize(canvas)[0] + e.GetSize(canvas)[1]
-                maxhight = e.GetSize(canvas)[0]
-                maxwidth = e.GetSize(canvas)[1]
-                
+            if size < e.GetSize()[0] + e.GetSize()[1]:
+                size = e.GetSize()[0] + e.GetSize()[1]
+                maxheight = e.GetSize()[0]
+                maxwidth = e.GetSize()[1]
+
+        # apply maximum size to all elements
         for e in elements:
-            esize = list(e.GetSizeRelative())
-            actualElementMinimalSize = e.GetMinimalSize(canvas)
-            esize[0] = maxhight - actualElementMinimalSize[0]
-            esize[1] = maxwidth - actualElementMinimalSize[1]
-            e.SetSizeRelative(esize)
-            
+            e.SetSize((maxheight, maxwidth))
+
     def ResizeByMinimalElement(self, canvas):
         """
         Resize all elements based on the size of the minimal element
         """
         elements = tuple(self.GetSelectedElements())
         if len(elements)<2: return
-        
-        minhight = 99999
+
+        # find minimum size
+        minheight = 99999
         minwidth = 99999
-        size = minhight + minwidth
+        size = minheight + minwidth
         for e in elements:
-            if size > e.GetSize(canvas)[0] + e.GetSize(canvas)[1]:
-                size = e.GetSize(canvas)[0] + e.GetSize(canvas)[1]
-                minhight = e.GetSize(canvas)[0]
-                minwidth = e.GetSize(canvas)[1]
+            if size > e.GetSize()[0] + e.GetSize()[1]:
+                size = e.GetSize()[0] + e.GetSize()[1]
+                minheight = e.GetSize()[0]
+                minwidth = e.GetSize()[1]
                 
+        # apply minimum size to all elements
         for e in elements:
-            esize = list(e.GetSizeRelative())
-            actualElementMinimalSize = e.GetMinimalSize(canvas)
-            if minhight < actualElementMinimalSize[0]:
-                esize[0] = 0
-            if minhight >= actualElementMinimalSize[0]:
-                esize[0] = minhight - actualElementMinimalSize[0]
-            if minwidth < actualElementMinimalSize[1]:
-                esize[0] = 0
-            if minwidth >= actualElementMinimalSize[1]:
-                esize[1] = minwidth - actualElementMinimalSize[1]
-            e.SetSizeRelative(esize)
+            e.SetSize((minheight, minwidth))
             
     def SnapElementsOnGrid(self, canvas):
         """
