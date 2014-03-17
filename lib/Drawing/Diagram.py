@@ -724,25 +724,11 @@ class CDiagram(CBaseObject):
             selectedElementSize = selectedElement.GetSize()
         elements = tuple(self.GetSelectedElements())
         if len(elements)<2: return
-        minSelElSize = selectedElement.GetMinimalSize(canvas)
         
         for e in elements:
-            esize = list(e.GetSizeRelative())
-            actualElementMinimalSize = e.GetMinimalSize(canvas)               
-            if actualElementMinimalSize[xy] <= selectedElementSize[xy]:
-                if selectedElementSize[xy] < e.GetSize(canvas)[xy]:
-                    esize[xy] = selectedElementSize[xy] - minSelElSize[xy]
-                    e.SetSizeRelative(esize)                    
-                if selectedElementSize[xy] > e.GetSize(canvas)[xy]:
-                    esize[xy] = selectedElementSize[xy] - actualElementMinimalSize[xy]
-                    e.SetSizeRelative(esize)
-            if actualElementMinimalSize[xy] > selectedElementSize[xy]:
-                if selectedElementSize[xy] < e.GetSize(canvas)[xy]:
-                    esize[xy] = 0                
-                    e.SetSizeRelative(esize)
-                if selectedElementSize[xy] > e.GetSize(canvas)[xy]:
-                    esize[xy] = selectedElementSize[xy] - actualElementMinimalSize[xy]
-                    e.SetSizeRelative(esize)
+            size = list(e.GetSize())
+            size[xy] = selectedElementSize[xy]
+            e.SetSize(size)
     
     def ResizeByMaximalElement(self, canvas):
         """
