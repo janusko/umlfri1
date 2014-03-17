@@ -374,7 +374,7 @@ class CConnection(CCacheableObject, CSelectableObject):
         '''
         return self.WhatPartOfYouIsAtPosition(point) is not None
 
-    def MoveAll(self, delta, canvas):
+    def MoveAll(self, delta):
         '''Move all points and labels of connection
         
         @param delta: (dx, dy) distance to move
@@ -385,7 +385,7 @@ class CConnection(CCacheableObject, CSelectableObject):
             self.points)
         for idx, point in enumerate(self.points):
             if point[0] < 0 or point[1] < 0:
-                self.MovePoint(canvas, point, idx+1)
+                self.MovePoint(point, idx+1)
             
         
     def MovePoint(self, pos, index):
