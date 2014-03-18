@@ -24,6 +24,8 @@ class CfrmProperties(object):
     
     def __ClearFormular(self,type):
         for id in type.IterAttributeIDs():
+            if type.GetAttribute(id)['hidden']:
+                continue
             if type.GetAttribute(id)['type']=='str' or type.GetAttribute(id)['type']=='int' or type.GetAttribute(id)['type']=='float':
                 if isinstance(self.attributes[type.GetName()][id],CEditableComboBox):
                     self.attributes[type.GetName()][id].SetActiveItemText(str(type.GetDefaultValue(id)))
@@ -74,6 +76,8 @@ class CfrmProperties(object):
         
         model=[]
         for key in type.IterAttributeIDs():
+            if type.GetAttribute(key)['hidden']:
+                continue
             model.append(type.GetAttribute(key)['name'])
         table=CTable(model,btnDelete,btnSave,btnNew, btnUp, btnDown)
         
@@ -106,6 +110,8 @@ class CfrmProperties(object):
             for att in atts:
                 tmp=[]
                 for key in type.IterAttributeIDs():
+                    if type.GetAttribute(key)['hidden']:
+                        continue
                     if type.GetAttribute(key)['type']=='list':
                         tmp.append(self.__ObjectsToString(att.GetValue(key)))
                     else:
@@ -134,6 +140,8 @@ class CfrmProperties(object):
                 self.table_values.pop(key)
         if len(type.GetName().split('.'))>2 and len(type.GetName().split('.'))%2==1:
             for id in type.IterAttributeIDs():
+                if type.GetAttribute(id)['hidden']:
+                    continue
                 if type.GetAttribute(id)['type']=='list':
                     self.tables[type.GetName()+'.'+id]['ref'].Clear()
     
@@ -145,6 +153,8 @@ class CfrmProperties(object):
                 domainobject=table.GetRowObject(table.GetSelectedRowIndex())
                 idx=0
                 for id in type.IterAttributeIDs():
+                    if type.GetAttribute(id)['hidden']:
+                        continue
                     if type.GetAttribute(id)['type'] in ('str', 'int', 'float'):
                         if isinstance(self.attributes[type.GetName()][id],CEditableComboBox):
                             val=self.attributes[type.GetName()][id].GetActiveItemText()
@@ -184,6 +194,8 @@ class CfrmProperties(object):
                     self.table_values.setdefault(type.GetName(),[]).append(item)
                 tmp=[]
                 for id in type.IterAttributeIDs():
+                    if type.GetAttribute(id)['hidden']:
+                        continue
                     if type.GetAttribute(id)['type'] in ('str', 'int', 'float'):
                         if isinstance(self.attributes[type.GetName()][id],CEditableComboBox):
                             val=self.attributes[type.GetName()][id].GetActiveItemText()
@@ -290,6 +302,8 @@ class CfrmProperties(object):
             dialog.GrabTable()
             item=table.GetRowObject(table.GetSelectedRowIndex())
             for id in type.IterAttributeIDs():
+                if type.GetAttribute(id)['hidden']:
+                    continue
                 val=str(item.GetValue(id))
                 if type.GetAttribute(id)['type']=='str' or type.GetAttribute(id)['type']=='int' or type.GetAttribute(id)['type']=='float':
                     if isinstance(self.attributes[type.GetName()][id],CEditableComboBox):
@@ -364,6 +378,8 @@ class CfrmProperties(object):
         attributes_order={}
         for id in type.IterAttributeIDs():
             att=type.GetAttribute(id)
+            if att['hidden']:
+                continue
             if att['type']!='list':
                 attributes_order.setdefault('General',[]).append(id)
             else:
@@ -525,6 +541,8 @@ class CfrmProperties(object):
         is_list=False
         for key in atts_order:
             att=type.GetAttribute(key)
+            if att['hidden']:
+                continue
             if att['type']=='str':
                 dialog.AppendItemToTab(tabname,self.__CreateStr(type,att,key),att['name'])
             elif att['type']=='enum':
@@ -538,6 +556,8 @@ class CfrmProperties(object):
                 type=type.GetFactory().GetDomain(att['list']['type'])
                 for key in type.IterAttributeIDs():
                     att=type.GetAttribute(key)
+                    if att['hidden']:
+                        continue
                     if att['type']=='str':
                         dialog.AppendItemToTab(tabname,self.__CreateStr(type,att,key),att['name'])
                     elif att['type']=='enum':
@@ -560,6 +580,8 @@ class CfrmProperties(object):
             dialog.AppendItemToTab(tabname,self.__CreateTable(type,dialog),att['name'])
         else:
             for id in type.IterAttributeIDs():
+                if type.GetAttribute(id)['hidden']:
+                    continue
                 val=str(self.domain_object.GetValue(id))
                 if type.GetAttribute(id)['type']=='str':
                     if isinstance(self.attributes[type.GetName()][id],CEditableComboBox):
@@ -634,6 +656,8 @@ class CfrmProperties(object):
     def __CheckValues(self,type):
         try:
             for id in type.IterAttributeIDs():
+                if type.GetAttribute(id)['hidden']:
+                    continue
                 if type.GetAttribute(id)['type'] in ('str', 'int', 'float'):
                     if isinstance(self.attributes[type.GetName()][id],CEditableComboBox):
                         val=self.attributes[type.GetName()][id].GetActiveItemText()
@@ -667,6 +691,8 @@ class CfrmProperties(object):
     
     def __SaveFunction(self,type):
         for id in type.IterAttributeIDs():
+            if type.GetAttribute(id)['hidden']:
+                continue
             if type.GetAttribute(id)['type'] in ('str', 'int', 'float'):
                 if isinstance(self.attributes[type.GetName()][id],CEditableComboBox):
                     val=self.attributes[type.GetName()][id].GetActiveItemText()
