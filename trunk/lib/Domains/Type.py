@@ -258,7 +258,8 @@ class CDomainType(CBaseObject):
     def IterAttributeIDs(self):
         '''
         Iterator over ID of items
-        
+        It will skip hidden attributes
+
         @rtype: str
         '''
         for id in self.attributeorder:
