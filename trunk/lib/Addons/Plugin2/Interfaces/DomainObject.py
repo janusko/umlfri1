@@ -25,7 +25,7 @@ class IDomainObject(object):
     @params(str, None)
     def SetValue(self, path, value):
         cmd = CSetPropertyValuesCommand(self.__object, {path: value})
-        self.__plugin.GetPluginManager().Execute(cmd)
+        self.__plugin.GetTransaction().Execute(cmd)
     
     def GetAllValues(self):
         def encode(prefix, value):
@@ -47,9 +47,9 @@ class IDomainObject(object):
     @params(str)
     def AppendItem(self, path):
         cmd = CAppendPropertyItemCommand(self.__object, path)
-        self.__plugin.GetPluginManager().Execute(cmd)
+        self.__plugin.GetTransaction().Execute(cmd)
     
     @params(str)
     def RemoveItem(self, path):
         cmd = CRemovePropertyItemCommand(self.__object, path)
-        self.__plugin.GetPluginManager().Execute(cmd)
+        self.__plugin.GetTransaction().Execute(cmd)

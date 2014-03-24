@@ -1,12 +1,15 @@
 class params:
     def __init__(self, *types):
-        pass
+        self.__types = types
     
     def __call__(self, fnc):
-        pass
+        fnc.method_param_types = self.__types
+        return fnc
 
 def mainthread(fnc):
-    pass
+    fnc.method_in_mainthread = True
+    return fnc
 
 def polymorphic(fnc):
-    pass
+    fnc.method_polymorfic = True
+    return fnc

@@ -20,6 +20,10 @@ class IElementObject(IDomainObject):
         self.__plugin = plugin
         self.__element = element
     
+    @property
+    def uid(self):
+        return self.__element.GetUID()
+    
     def GetName(self):
         return self.__element.GetName()
     

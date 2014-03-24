@@ -5,6 +5,10 @@ class IGuiManager(object):
         self.__plugin = plugin
         self.__manager = guiManager
     
+    @property
+    def uid(self):
+        return self.__manager.GetUID()
+    
     def GetMainMenu(self):
         return self.__manager.GetMainMenu()
         

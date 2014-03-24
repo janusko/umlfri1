@@ -12,6 +12,10 @@ class IAdapter(object):
         self.__plugin = plugin
         self.__adapter = adapter
     
+    @property
+    def uid(self):
+        return self.__adapter.GetUID()
+    
     def GetProject(self):
         adapter = self.__adapter.GetProject()
         if adapter is None:

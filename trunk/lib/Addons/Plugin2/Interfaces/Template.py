@@ -5,6 +5,10 @@ class ITemplate(object):
         self.__plugin = plugin
         self.__template = template
     
+    @property
+    def uid(self):
+        return self.__template.GetUID()
+    
     def GetName(self):
         return self.__template.GetName()
     

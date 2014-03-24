@@ -4,6 +4,10 @@ class IFileType(object):
     def __init__(self, fileType):
         self.__fileType = fileType
     
+    @property
+    def uid(self):
+        return self.__fileType.GetUID()
+    
     def GetDescription(self):
         return self.__fileType.GetDescription()
     

@@ -9,8 +9,6 @@ from .DomainObject import IDomainObject
 from . import ConnectionAlias
 from . import ConnectionType
 from . import ConnectionVisual
-from . import ElementObject
-from . import Diagram
 
 class IConnectionObject(IDomainObject):
     def __init__(self, plugin, connection):
@@ -20,11 +18,17 @@ class IConnectionObject(IDomainObject):
         self.__plugin = plugin
     
     @property
+    def uid(self):
+        return self.__connection.GetUID()
+    
+    @property
     def _connection(self):
         return self.__connection
     
     @params(object)
     def GetConnectedObject(self, obj):
+        from . import ElementObject
+        
         return ElementObject.IElementObject(self.__plugin, self.__connection.GetConnectedObject(obj._element))
     
     @polymorphic
@@ -36,12 +40,18 @@ class IConnectionObject(IDomainObject):
             return ConnectionType.IConnectionAlias(type)
 
     def GetDestination(self):
+        from . import ElementObject
+        
         return ElementObject.IElementObject(self.__plugin, self.__connection.GetDestination())
     
     def GetSource(self):
+        from . import ElementObject
+        
         return ElementObject.IElementObject(self.__plugin, self.__connection.GetSource())
     
     def GetAppears(self):
+        from . import Diagram
+        
         for diagram in self.__connection.GetAppears():
             yield Diagram.IDiagram(self.__plugin, diagram)
 

@@ -7,6 +7,10 @@ class IElementType(object):
         self.__elementType = elementType
     
     @property
+    def uid(self):
+        return self.__elementType.GetUID()
+    
+    @property
     def _elementType(self):
         return self.__elementType
     

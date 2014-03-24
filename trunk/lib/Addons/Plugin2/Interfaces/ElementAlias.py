@@ -8,5 +8,9 @@ class IElementAlias(IElementType):
         
         self.__elementAlias = elementAlias
     
+    @property
+    def uid(self):
+        return self.__elementAlias.GetUID()
+    
     def GetAlias(self):
         return self.__elementAlias.GetAlias()

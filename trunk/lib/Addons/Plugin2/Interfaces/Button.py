@@ -7,6 +7,10 @@ class IButton(IWidget):
         IWidget.__init__(self, button)
         
         self.__button = button
+    
+    @property
+    def uid(self):
+        return self.__button.GetUID()
 
     def GetLabel(self):
         return self.__button.GetLabel()
