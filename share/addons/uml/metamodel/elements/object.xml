@@ -6,6 +6,7 @@
         <Item value="Note Link" with="Note"/>
         <Item value="Association"/>
         <Item value="Generalization" with="Object" allowrecursive="0"/>
+        <Item value="Dependency"/>
     </Connections>
     <Appearance>
         <Shadow padding="3" color="#cfg.Styles.Element.ShadowColor">
