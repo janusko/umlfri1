@@ -5,9 +5,16 @@ from . import DiagramType
 from . import DomainType
 from . import ElementType
 
+from lib.Exceptions import ParamValueError
+
+
 class IMetamodel(object):
     def __init__(self, metamodel):
         self.__metamodel = metamodel
+    
+    @property
+    def uid(self):
+        return self.__metamodel.GetUID()
     
     def GetUri(self):
         return self.__metamodel.GetUri()

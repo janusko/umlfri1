@@ -7,6 +7,10 @@ class ICheckMenuItem(IMenuItem):
         IMenuItem.__init__(self, plugin, menuItem)
         
         self.__menuItem = menuItem
+    
+    @property
+    def uid(self):
+        return self.__menuItem.GetUID()
 
     def GetActive(self):
         return self.__menuItem.GetActive()

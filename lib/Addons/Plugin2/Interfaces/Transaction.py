@@ -4,6 +4,10 @@ class ITransaction(object):
     def __init__(self, transaction):
         self.__transaction = transaction
     
+    @property
+    def uid(self):
+        return self.__transaction.GetUID()
+    
     def GetAutocommit(self):
         return self.__transaction.GetState() == 'autocommit'
     

@@ -11,6 +11,10 @@ class IMenu(object):
         self.__plugin = plugin
         self.__menu = menu
     
+    @property
+    def uid(self):
+        return self.__menu.GetUID()
+    
     def __castItem(self, item):
         if isinstance(item, CCheckMenuItem):
             return CheckMenuItem.IMenuItem(self.__plugin, item)

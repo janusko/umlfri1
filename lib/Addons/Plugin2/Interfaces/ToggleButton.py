@@ -8,6 +8,10 @@ class IToggleButton(IButton):
         
         self.__button = button
     
+    @property
+    def uid(self):
+        return self.__button.GetUID()
+    
     def GetActive(self): 
         return self.__button.GetActive()
     

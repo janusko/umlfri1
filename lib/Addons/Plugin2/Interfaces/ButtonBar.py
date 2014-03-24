@@ -11,6 +11,10 @@ class IButtonBar(object):
         self.__plugin = plugin
         self.__buttonBar = buttonBar
     
+    @property
+    def uid(self):
+        return self.__buttonBar.GetUID()
+    
     def __castItem(self, item):
         if isinstance(item, CSeparator):
             return Separator.ISeparator(item)
@@ -35,7 +39,7 @@ class IButtonBar(object):
         if imageFileName is not None:
             imageFileName = self.__plugin.RelativePath2Absolute(imageFileName)
         
-        button = self.__buttonBar.AddButton(guiId, callback, position, label, imageFileName, toggleButton, self.__plugin)
+        button = self.__buttonBar.AddButton(guiId, callback, position, label, imageFileName, False, self.__plugin)
         return Button.IButton(button)
     
     @mainthread

@@ -9,6 +9,10 @@ class IMenuItem(IWidget):
         self.__plugin = plugin
         self.__menuItem = menuItem
     
+    @property
+    def uid(self):
+        return self.__menuItem.GetUID()
+    
     def GetSubmenu(self):
         return self.__menuItem.GetSubmenu()
         

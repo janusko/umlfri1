@@ -9,6 +9,10 @@ class IImageMenuItem(IMenuItem):
         self.__plugin = plugin
         self.__menuItem = menuItem
     
+    @property
+    def uid(self):
+        return self.__menuItem.GetUID()
+    
     @mainthread
     @params(str)
     def SetImageFromFile(self, filename):

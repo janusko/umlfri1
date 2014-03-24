@@ -9,6 +9,10 @@ class IProject(object):
         self.__plugin = plugin
         self.__project = project
     
+    @property
+    def uid(self):
+        return self.__project.GetUID()
+    
     def GetFileName(self):
         return self.__project.GetFileName()
     
@@ -19,7 +23,7 @@ class IProject(object):
         return Diagram.IDiagram(self.__plugin, self.__project.GetDefaultDiagrams())
     
     def GetMetamodel(self):
-        return Metamodel.IMetamodel(self.__plugin.GetMetamodel())
+        return Metamodel.IMetamodel(self.__project.GetMetamodel())
     
     def Save(self):
         self.__project.SaveProject()

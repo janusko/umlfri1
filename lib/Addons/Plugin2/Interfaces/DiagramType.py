@@ -9,6 +9,10 @@ class IDiagramType(object):
         self.__diagramType = diagramType
     
     @property
+    def uid(self):
+        return self.__diagramType.GetUID()
+    
+    @property
     def _diagramType(self):
         return self.__diagramType
     
@@ -23,7 +27,7 @@ class IDiagramType(object):
     def GetElements(self):
         ef = self.__diagramType.GetMetamodel().GetElementFactory()
         for element in self.__diagramType.GetElements():
-            yield ElementType.IElementType(ef.GetElement(i))
+            yield ElementType.IElementType(ef.GetElement(element))
    
     def GetDomain(self):
         return DomainType.IDomainType(self.__diagramType.GetDomain())

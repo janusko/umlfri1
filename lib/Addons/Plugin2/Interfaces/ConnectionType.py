@@ -5,6 +5,10 @@ class IConnectionType(object):
         self.__connectionType = connectionType
     
     @property
+    def uid(self):
+        return self.__connectionType.GetUID()
+    
+    @property
     def _connectionType(self):
         return self.__connectionType
     

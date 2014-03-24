@@ -11,13 +11,16 @@ from . import ConnectionVisual
 from . import DiagramType
 from . import ConnectionLabel
 
-
 class IDiagram(IDomainObject):
     def __init__(self, plugin, diagram):
         IDomainObject.__init__(self, plugin, diagram)
         
         self.__plugin = plugin
         self.__diagram = diagram
+    
+    @property
+    def uid(self):
+        return self.__diagram.GetUID()
     
     @property
     def _diagram(self):

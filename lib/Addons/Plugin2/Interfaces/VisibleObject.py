@@ -1,7 +1,5 @@
 from .Decorators import params, mainthread, polymorphic
 
-from . import Diagram
-
 class IVisibleObject(object):
     def __init__(self, plugin, object):
         self.__plugin = plugin
@@ -31,4 +29,6 @@ class IVisibleObject(object):
         return self.__object.AreYouInRange(topLeft, bottomRight, includeAll)
     
     def GetDiagram(self):
+        from . import Diagram
+        
         return Diagram.IDiagram(self.__plugin, self.__object.GetDiagram())

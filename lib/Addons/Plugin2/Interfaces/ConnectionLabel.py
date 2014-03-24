@@ -11,5 +11,9 @@ class IConnectionLabel(IVisibleObject):
         self.__plugin = plugin
         self.__label = label
     
+    @property
+    def uid(self):
+        return self.__label.GetUID()
+    
     def GetObject(self):
         return ConnectionObject.IConnectionObject(self.__plugin, self.__label.GetObject())
