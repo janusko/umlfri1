@@ -78,7 +78,21 @@
         
         <return type="boolean" />
     </method>
-    
+
+    <method name="Move">
+        <documentation>
+            Move object to specified position
+        </documentation>
+
+        <parameter name="pos" type="xy">
+            <documentation>
+                New position.
+            </documentation>
+        </parameter>
+
+        <return type="boolean" />
+    </method>
+
     <method name="areYouInRange">
         <documentation>
             Determines, whether the connection label is located in given
