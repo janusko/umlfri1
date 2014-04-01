@@ -39,7 +39,8 @@ class IElementObject(IDomainObject):
         cmd = CCreateConnectionObjectCommand(him, other, connectionType)
         command.Execute(cmd)
         return cmd.GetConnectionObject()
-    
+
+
     @destructive
     def CreateDiagram(him, command, diagramType):
         cmd = CCreateDiagramCommand(diagramType, him.GetNode())

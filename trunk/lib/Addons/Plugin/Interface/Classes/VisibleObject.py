@@ -22,7 +22,7 @@ class IVisibleObject(IBase):
         
     def AreYouAtPosition(him, pos):
         return him.AreYouAtPosition(pos)
-    
+
     def AreYouInRange(him, topLeft, bottomRight, includeAll = True):
         return him.AreYouInRange(topLeft, bottomRight, includeAll)
     
