@@ -220,7 +220,7 @@ class CfrmProperties(object):
                 table.AppendRow(tmp,item)
                 val=self.__ObjectsToString(table.GetAllRowObjects())
                 id=type.GetName()[type.GetName().rfind('.')+1:]
-                if self.attributes[type.GetName()[:type.GetName().rfind('.')]].has_key(id):
+                if self.attributes.has_key(type.GetName()[:type.GetName().rfind('.')]) and self.attributes[type.GetName()[:type.GetName().rfind('.')]].has_key(id):
                     self.attributes[type.GetName()[:type.GetName().rfind('.')]][id].SetText(val)
             self.__ClearFormular(type)
             self.tables[type.GetName()]['save'].SetSensitive(False)
