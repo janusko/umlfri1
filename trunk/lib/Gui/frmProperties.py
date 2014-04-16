@@ -179,7 +179,7 @@ class CfrmProperties(object):
                     idx+=1
                 val=self.__ObjectsToString(table.GetAllRowObjects())
                 id=type.GetName()[type.GetName().rfind('.')+1:]
-                if self.attributes[type.GetName()[:type.GetName().rfind('.')]].has_key(id):
+                if self.attributes.has_key(type.GetName()[:type.GetName().rfind('.')]) and self.attributes[type.GetName()[:type.GetName().rfind('.')]].has_key(id):
                     self.attributes[type.GetName()[:type.GetName().rfind('.')]][id].SetText(val)
                 if len(type.GetName().split('.'))<3:
                     self.element_changed=True
@@ -252,7 +252,7 @@ class CfrmProperties(object):
                     self.table_values.pop(key)
             val=self.__ObjectsToString(table.GetAllRowObjects())
             id=type.GetName()[type.GetName().rfind('.')+1:]
-            if self.attributes[type.GetName()[:type.GetName().rfind('.')]].has_key(id):
+            if self.attributes.has_key(type.GetName()[:type.GetName().rfind('.')]) and self.attributes[type.GetName()[:type.GetName().rfind('.')]].has_key(id):
                 self.attributes[type.GetName()[:type.GetName().rfind('.')]][id].SetText(val)
             self.__ClearFormular(type)
             self.tables[type.GetName()]['save'].SetSensitive(False)
