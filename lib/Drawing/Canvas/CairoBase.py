@@ -49,7 +49,6 @@ class CCairoBaseCanvas(CAbstractCanvas):
         self.scale = 1.0
         self.storage = storage
         self.cr = pangocairo.CairoContext(self.cairo_context)
-        self.pango_layout = self.cr.create_layout()
         self.fonts = {}
         
         self.baseX = 0
@@ -78,6 +77,7 @@ class CCairoBaseCanvas(CAbstractCanvas):
             self.alpha = alpha
 
     def __SetFont(self, font, returndesc = False):
+        pango_layout = self.cr.create_layout()
         underline = 'underline' in font.GetStyle()
         strikeout = 'strike' in font.GetStyle()
         desc = [font.GetFamily()]
@@ -98,7 +98,7 @@ class CCairoBaseCanvas(CAbstractCanvas):
 
         if returndesc:
             return fontobj
-        self.pango_layout.set_font_description(fontobj)
+        pango_layout.set_font_description(fontobj)
 
         atlist = pango.AttrList()
         if underline:
@@ -106,7 +106,9 @@ class CCairoBaseCanvas(CAbstractCanvas):
         if strikeout:
             atlist.insert(pango.AttrStrikethrough(True, 0, 10000))
 
-        self.pango_layout.set_attributes(atlist)
+        pango_layout.set_attributes(atlist)
+        
+        return pango_layout
 
     def DrawArc(self, pos, size, arc = (0, 360), fg = None, bg = None, line_width = None, line_style = None):
         self.cr.save()
@@ -239,19 +241,19 @@ class CCairoBaseCanvas(CAbstractCanvas):
     def DrawText(self, pos, text, font, fg):
         self.cr.save()
         self.cr.scale(self.scale, self.scale)
-        self.__SetFont(font)
+        pango_layout = self.__SetFont(font)
         self.cr.move_to (int(pos[0] - self.baseX), int(pos[1] - self.baseY))
-        self.pango_layout.set_text(text)
+        pango_layout.set_text(text)
         font_color = HexToRGB(fg)
         self.cr.set_source_rgb(font_color[0], font_color[1], font_color[2])
-        self.cr.show_layout(self.pango_layout)
+        self.cr.show_layout(pango_layout)
         self.cr.stroke ()
         self.cr.restore()
 
     def GetTextSize(self, text, font):
-        self.__SetFont(font)
-        self.pango_layout.set_text(text)
-        return int(self.pango_layout.get_size()[0]/float(pango.SCALE)), int(self.pango_layout.get_size()[1]/float(pango.SCALE))
+        pango_layout = self.__SetFont(font)
+        pango_layout.set_text(text)
+        return int(pango_layout.get_size()[0]/float(pango.SCALE)), int(pango_layout.get_size()[1]/float(pango.SCALE))
 
     #obsolete, gets font base line, used by CSvgCanvas class to export to svg
     def GetFontBaseLine(self, font):
