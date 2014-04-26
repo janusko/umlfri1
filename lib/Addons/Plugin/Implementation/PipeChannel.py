@@ -17,3 +17,7 @@ class CPipeChannel(CFileChannel):
     
     def GetWriterFD(self):
         return self.__writeOthers
+    
+    def CloseOthers(self):
+        os.close(self.__readOthers)
+        os.close(self.__writeOthers)
