@@ -14,7 +14,7 @@ ADDONS_PATH =    path(ROOT, "share", "addons")
 LOCALES_PATH =   path(ROOT, "share", "locale")
 SCHEMA_PATH =    path(ROOT, "share", "schema")
 
-USERDIR_PATH =   path(USER, ".uml_fri")
+USERDIR_PATH =   path(USER, ".uml_fri_p2") # TODO: reset to .uml_fri before merging into trunk
 
 SVN_REVISION =   svnrev(ROOT)
 SVN_BRANCH =     svnbranch(ROOT)
