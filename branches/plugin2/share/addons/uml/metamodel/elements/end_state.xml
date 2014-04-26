@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ElementType id="EndState" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Icon path="icons/final.png" />
+    <Domain id="state" identity="name" />
+    <Connections>
+        <Item value="StateTransition" with="State,VerticalSynchronization,HorizontalSynchronization"/>
+        <Item value="Control Flow" with="Activity,Decision,Merge,VerticalSynchronization,HorizontalSynchronization"/>
+    </Connections>
+    <Appearance>
+        <HBox expand="0">
+            <Proportional ratio="1:1" align="center center" size="minimal">
+                <Ellipse fill="#cfg.Styles.Element.FillColor" border="#cfg.Styles.Element.LineColor">
+                    <Padding padding="10">
+                        <Ellipse fill="#cfg.Styles.Element.Fill3Color">
+                            <Sizer width="15" height="15"/>
+                        </Ellipse>
+                    </Padding>
+                </Ellipse>
+            </Proportional>
+            <HBox>
+                <Condition condition="#self.stereotype">
+                    <Align align="center">
+                        <VBox>
+                            <TextBox text="&#171;" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                            <TextBox text="#self.stereotype" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                            <TextBox text="&#187;" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                        </VBox>
+                    </Align>
+                </Condition>
+                <Align align="center">
+                    <TextBox text="#self.name" font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/>
+                </Align>
+            </HBox>
+        </HBox>
+    </Appearance>
+    <Options>
+    </Options>
+</ElementType>
