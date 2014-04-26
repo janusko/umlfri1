@@ -224,10 +224,8 @@ class CAddonManager(object):
                 codes.append((info.get("os", "all"), info.attrib["language"], info.attrib["path"]))
             elif info.tag == ADDON_NAMESPACE+'Patch':
                 patches.append(info.attrib["module"])
-            elif info.tag == ADDON_NAMESPACE+'Metamodel':
-                requiredMetamodels.append(info.attrib["required"])
         
-        return CPluginAddonComponent(codes, patches, requiredMetamodels, self.__patchParams)
+        return CPluginAddonComponent(codes, patches, self.__patchParams)
     
     def __LoadCompositeAddonComponent(self, node):
         components = {}

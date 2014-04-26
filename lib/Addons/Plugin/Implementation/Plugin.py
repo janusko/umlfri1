@@ -126,3 +126,6 @@ class CPlugin(object):
     
     def GetAdapter(self):
         return self.__adapter
+    
+    def SendStop(self):
+        pass # TODO: send stop to plugin
