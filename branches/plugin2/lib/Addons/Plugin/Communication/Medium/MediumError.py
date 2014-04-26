@@ -1,2 +1,0 @@
-class MediumError(Exception): pass
-    

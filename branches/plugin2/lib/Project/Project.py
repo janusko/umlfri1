@@ -510,4 +510,4 @@ class CProject(CBaseObject):
                     elif self.GetMetamodel().GetDiagramFactory().HasType(item.get('id')):
                         self.GetMetamodel().GetDiagramFactory().GetDiagram(item.get('id')).SetCounter(int(item.get('value')))
         
-        self.__addonManager.GetPluginManager().GetPluginAdapter().gui_project_opened(self)
+        self.__addonManager.GetPluginAdapter().gui_project_opened(self)

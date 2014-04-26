@@ -14,7 +14,6 @@ class CPluginAdapter(CBaseObject, CGuiObject):
     def __init__(self, app):
         CGuiObject.__init__(self, app)
         self.guiManager = CGuiManager(app)
-        self.manager = None
         self.GetUID()
         self.notifications = {}
     
@@ -43,12 +42,6 @@ class CPluginAdapter(CBaseObject, CGuiObject):
         
     def _GenerateUID(self):
         return 'adapter'
-        
-    def _SetPluginManager(self, pluginManager):
-        self.manager = pluginManager
-    
-    def GetPluginManager(self):
-        return self.manager
         
     def GetGuiManager(self):
         return self.guiManager

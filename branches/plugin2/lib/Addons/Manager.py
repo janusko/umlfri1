@@ -15,7 +15,6 @@ from lib.datatypes import CVersion
 from Composite.AddonComponent import CCompositeAddonComponent
 from Metamodel.AddonComponent import CMetamodelAddonComponent
 from Plugin.AddonComponent import CPluginAddonComponent
-from Plugin.Manager import CPluginManager
 from lib.consts import ADDON_NAMESPACE, ADDON_LIST_NAMESPACE
 from lib.Distconfig import SCHEMA_PATH, USERDIR_PATH, ADDONS_PATH
 from lib.config import config
@@ -38,8 +37,11 @@ class CAddonManager(object):
         self.__enabledAddons = self.__LoadEnabledAddons(os.path.join(USERDIR_PATH, 'addons.xml'))
         self.__addons = self.__LoadAllAddons(open_storage(ADDONS_PATH), False)
         self.__addons.update(self.__LoadAllAddons(open_storage(os.path.join(USERDIR_PATH, 'addons')), True))
-        self.__pluginManager = CPluginManager(pluginAdapter)
         self.__updateManager = CUpdateManager()
+        self.__pluginAdapter = pluginAdapter
+    
+    def GetPluginAdapter(self):
+        return self.__pluginAdapter
     
     def __LoadEnabledAddons(self, path):
         ret = {}
@@ -263,9 +265,6 @@ class CAddonManager(object):
                 del self.__enabledAddons[uri]
             del self.__addons[uri]
     
-    def GetPluginManager(self):
-        return self.__pluginManager
-    
     def GetAddon(self, uri):
         if uri in self.__addons:
             return self.__addons[uri]
@@ -312,7 +311,6 @@ class CAddonManager(object):
         for addon in self.__addons.itervalues():
             if addon.IsRunning():
                 addon.Stop()
-        self.__pluginManager.Stop()
     
     def CheckAddonUpdates(self):
         """

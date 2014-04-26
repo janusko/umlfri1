@@ -1,6 +1,6 @@
 from .Decorators import params, mainthread, polymorphic
 
-from lib.Addons.Plugin2.Interfaces import FileType
+from lib.Addons.Plugin.Interfaces import FileType
 
 class IFileTypeManager(object):
     def __init__(self, manager):
