@@ -31,8 +31,9 @@ class CFileChannel(object):
         while True:
             try:
                 ret = self.__input.readline()
-                if ret:
-                    return self.__decoder.decode(ret.rstrip('\r\n').decode('utf8'))
+                if not ret:
+                    break
+                return self.__decoder.decode(ret.rstrip('\r\n').decode('utf8'))
             except:
                 traceback.print_exc()
         
