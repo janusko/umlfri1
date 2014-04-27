@@ -1,7 +1,7 @@
 from lib.Depend.gtk2 import gtk
 
 import common
-from lib.GenericGui import CFileType
+from lib.FileTypes import CFileType
 
 from win32 import COpenSaveDialog
 

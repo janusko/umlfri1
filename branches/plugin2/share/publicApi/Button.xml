@@ -15,4 +15,10 @@
         </documentation>
         <value type="string" readable="true" writable="true" />
     </property>
+    
+    <event name="clicked" type="org.umlfri.api.gui.BasicEventHandler">
+        <documentation>
+            Event is fired when the button is clicked.
+        </documentation>
+    </event>
 </interface>

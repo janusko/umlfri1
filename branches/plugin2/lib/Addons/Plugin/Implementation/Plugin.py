@@ -1,19 +1,21 @@
-import threading
-import traceback
-import types
 from ..Interfaces.Adapter import IAdapter
 
+import os.path
+import threading
+import traceback
+
 class CPlugin(object):
-    def __init__(self, channel, adapter):
+    def __init__(self, channel, path, adapter):
         self.__channel = channel
         self.__adapter = adapter
+        self.__path = path
         adapterInterface = IAdapter(self, adapter)
         self.__objects = { # TODO: replace with weakref.WeakValueDictionary
             adapterInterface.uid: adapterInterface
         }
         
         threading.Thread(target = self.__main).start()
-    
+
     def __main(self):
         while True:
             data = self.__channel.ReadData()
@@ -24,14 +26,14 @@ class CPlugin(object):
     def __execute(self, data):
         session = data.get('session')
         try:
-            obj = self.__objects[data['target']]
+            target = self.__objects[data['target']]
             selector = data['selector']
-            args = data.get('args')
+            arguments = data.get('arguments', {})
             
-            method = getattr(obj, selector)
+            method = getattr(target, selector)
             
-            args = self.__decodeParams(method, args)
-            ret = method(**args)
+            arguments = self.__decodeParams(method, arguments)
+            ret = method(**arguments)
             
             if session is not None:
                 self.__channel.WriteData(
@@ -118,11 +120,20 @@ class CPlugin(object):
     def __encodeException(self, ex):
         return {'type': ex.__class__.__name__}
     
+    def FireEvent(self, target, selector, **arguments):
+        self.__channel.WriteData(
+            {
+                'target': target.uid,
+                'selector': selector,
+                'arguments': arguments
+            }
+        )
+    
     def GetTransaction(self):
         pass
     
     def RelativePath2Absolute(self, path):
-        pass
+        return os.path.relpath(self.__path, path)
     
     def GetAdapter(self):
         return self.__adapter

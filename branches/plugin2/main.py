@@ -19,7 +19,7 @@ from lib.Project import CRecentFiles
 from lib.Project.Templates import CTemplateManager
 from lib.Addons import CAddonManager
 
-from lib.GenericGui import CFileTypeManager
+from lib.FileTypes import CFileTypeManager
 
 import lib.Gui
 from lib.Gui import CBus, CPluginAdapter

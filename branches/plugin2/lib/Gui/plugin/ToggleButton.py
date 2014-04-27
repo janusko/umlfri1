@@ -1,8 +1,6 @@
-import lib.GenericGui
-from lib.Depend.gtk2 import gtk
 from Button import CButton
 
-class CToggleButton(lib.GenericGui.CToggleButton, CButton):
+class CToggleButton(CButton):
     
     def GetActive(self): 
         return self.obj.get_active()

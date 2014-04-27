@@ -1,8 +1,6 @@
-import lib.GenericGui
-from lib.Depend.gtk2 import gtk
+from lib.Exceptions import PluginAccessDenied
 
-class CWidget(lib.GenericGui.CWidget):
-    
+class CWidget:
     def __init__(self, obj, manager, guiId, owner):
         self.obj = obj
         self.manager = manager
@@ -46,4 +44,3 @@ class CWidget(lib.GenericGui.CWidget):
     def Show(self):
         if self.obj is not None:
             self.obj.show()
-    

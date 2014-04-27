@@ -1,10 +1,9 @@
-import lib.GenericGui
 from lib.Depend.gtk2 import gtk
 from Container import CContainer
 
-class CButtonBar(CContainer, lib.GenericGui.CButtonBar):
+class CButtonBar(CContainer):
     
-    def _addButton(self, guiId, callback, position, stock, label, imagefilename, tooglebutton, _addr):
+    def _addButton(self, guiId, position, stock, label, imagefilename, tooglebutton, _addr):
         stock = self.RenameStock(stock)
         self.TestAccess(_addr)
         if tooglebutton:
@@ -21,7 +20,7 @@ class CButtonBar(CContainer, lib.GenericGui.CButtonBar):
             image.show()
             item.set_icon_widget(image)
             
-        self.AddItem(guiId, callback, position, item)
+        self.AddItem(guiId, position, item)
         
         return self.manager.GetItem(item, _addr)
     

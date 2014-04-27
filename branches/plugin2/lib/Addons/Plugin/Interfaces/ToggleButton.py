@@ -3,8 +3,8 @@ from .Decorators import params, mainthread, polymorphic
 from .Button import IButton
 
 class IToggleButton(IButton):
-    def __init__(self, button):
-        IButton.__init__(button)
+    def __init__(self, plugin, button):
+        IButton.__init__(plugin, button)
         
         self.__button = button
     

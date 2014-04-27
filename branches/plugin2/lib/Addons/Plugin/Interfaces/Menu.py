@@ -24,14 +24,14 @@ class IMenu(object):
             return Separator.ISeparator(item)
     
     @mainthread
-    def AddMenuItem(self, guiId, callback, position, label, underline, imageFileName):
+    def AddMenuItem(self, guiId, position, label, underline, imageFileName):
         if imageFileName is not None:
             imageFileName = self.__plugin.RelativePath2Absolute(imageFileName)
-        return MenuItem.IMenuItem(self.__plugin, self.__menu.AddMenuItem(guiId, callback, position, label, underline, imageFileName, self.__plugin))
+        return MenuItem.IMenuItem(self.__plugin, self.__menu.AddMenuItem(guiId, position, label, underline, imageFileName, self.__plugin))
     
     @mainthread
-    def AddCheckMenuItem(self, guiId, callback, position, label, underline):
-        return CheckMenuItem.IMenuItem(self.__plugin, self.__menu.AddCheckMenuItem(guiId, callback, position, label, underline, self.__plugin))
+    def AddCheckMenuItem(self, guiId, position, label, underline):
+        return CheckMenuItem.IMenuItem(self.__plugin, self.__menu.AddCheckMenuItem(guiId, position, label, underline, self.__plugin))
     
     @mainthread
     def AddSeparator(self, guiId, position):
