@@ -1,5 +1,9 @@
 from .Decorators import params, mainthread, polymorphic
 
+from . import ButtonBar
+from . import Menu
+
+
 class IGuiManager(object):
     def __init__(self, plugin, guiManager):
         self.__plugin = plugin
@@ -10,19 +14,19 @@ class IGuiManager(object):
         return self.__manager.GetUID()
     
     def GetMainMenu(self):
-        return self.__manager.GetMainMenu()
+        return Menu.IMenu(self.__plugin, self.__manager.GetMainMenu())
         
     def GetTabMenu(self):
-        return self.__manager.GetTabMenu()
+        return Menu.IMenu(self.__plugin, self.__manager.GetTabMenu())
         
     def GetTreeMenu(self):
-        return self.__manager.GetTreeMenu()
+        return Menu.IMenu(self.__plugin, self.__manager.GetTreeMenu())
     
     def GetDrawMenu(self):
-        return self.__manager.GetDrawMenu()
+        return Menu.IMenu(self.__plugin, self.__manager.GetDrawMenu())
     
     def GetButtonBar(self):
-        return self.__manager.GetButtonBar()
+        return ButtonBar.IButtonBar(self.__plugin, self.__manager.GetButtonBar())
     
     def DisplayWarning(self, text):
         self.__manager.DisplayWarning(text)

@@ -1,7 +1,5 @@
 from .Decorators import params, mainthread, polymorphic
 
-from lib.GenericGui import CCheckMenuItem, CMenuItem, CSeparator
-
 from . import MenuItem
 from . import CheckMenuItem
 from . import Separator
@@ -16,11 +14,11 @@ class IMenu(object):
         return self.__menu.GetUID()
     
     def __castItem(self, item):
-        if isinstance(item, CCheckMenuItem):
+        if item.type == "toggle":
             return CheckMenuItem.IMenuItem(self.__plugin, item)
-        elif isinstance(item, CMenuItem):
+        elif item.type == "normal":
             return MenuItem.IMenuItem(self.__plugin, item)
-        elif isinstance(item, CSeparator):
+        elif item.type == "separator":
             return Separator.ISeparator(item)
     
     @mainthread

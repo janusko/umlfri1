@@ -24,15 +24,14 @@ class CButtonBar(CContainer):
         
         return self.manager.GetItem(item, _addr)
     
-    def AddButton(self, guiId, callback, position, label, imagefilename, tooglebutton, _addr):
-        return self._addButton(guiId, callback, position, None, label, imagefilename, tooglebutton, _addr)
+    def AddButton(self, guiId, position, label, imagefilename, tooglebutton, _addr):
+        return self._addButton(guiId, position, None, label, imagefilename, tooglebutton, _addr)
         
     def AddStockButton(self, guiId, callback, position, stock, label, tooglebutton, _addr):
-        return self._addButton(guiId, callback, position, stock, label, None, tooglebutton, _addr)
+        return self._addButton(guiId, position, stock, label, None, tooglebutton, _addr)
         
     def AddSeparator(self, guiId, position, _addr):
         self.TestAccess(_addr)
         item = gtk.SeparatorToolItem()
         self.AddItem(guiId, None, position, item)
         return self.manager.GetItem(item, _addr)
-    

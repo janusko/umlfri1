@@ -1,6 +1,7 @@
 from MenuItem import CMenuItem
 
 class CCheckMenuItem(CMenuItem):
+    type = "toggle"
     
     def GetActive(self):
         return self.obj.get_active()

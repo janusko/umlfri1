@@ -1,7 +1,5 @@
 from .Decorators import params, mainthread, polymorphic
 
-from lib.GenericGui import CSeparator, CToggleButton, CButton
-
 from . import Separator
 from . import Button
 from . import ToggleButton
@@ -16,11 +14,11 @@ class IButtonBar(object):
         return self.__buttonBar.GetUID()
     
     def __castItem(self, item):
-        if isinstance(item, CSeparator):
+        if item.type == "separator":
             return Separator.ISeparator(item)
-        elif isinstance(item, CButton):
+        elif item.type == "normal":
             return Button.IButton(item)
-        elif isinstance(item, CToggleButton):
+        elif item.type == "toggle":
             return ToggleButton.IToggleButton(item)
         
     @polymorphic

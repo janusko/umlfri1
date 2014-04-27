@@ -2,6 +2,7 @@ from lib.Depend.gtk2 import gtk
 from MenuItem import CMenuItem
 
 class CImageMenuItem(CMenuItem):
+    type = "image"
     
     def _setImage(self, filename):
         if filename:
