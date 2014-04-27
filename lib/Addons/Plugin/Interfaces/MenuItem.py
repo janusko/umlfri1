@@ -34,5 +34,5 @@ class IMenuItem(IWidget):
     def DetachClicked(self):
         self.__menuItem.DisconnectClicked(self.__clickedHandler)
     
-    def __clickedHandler(self):
+    def __clickedHandler(self, *args):
         self.__plugin.FireEvent(self, 'Clicked')

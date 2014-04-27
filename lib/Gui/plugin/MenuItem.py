@@ -3,6 +3,7 @@ from Widget import CWidget
 from lib.Exceptions import *
 
 class CMenuItem(CWidget):
+    type = "normal"
     
     def GetLabel(self):
         return self.obj.get_property('label')

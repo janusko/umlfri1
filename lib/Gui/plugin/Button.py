@@ -1,6 +1,7 @@
 from Widget import CWidget
 
 class CButton(CWidget):
+    type = "normal"
     
     def GetLabel(self):
         return self.obj.get_label()

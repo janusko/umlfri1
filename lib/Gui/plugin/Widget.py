@@ -1,6 +1,7 @@
+from lib.Base import CBaseObject
 from lib.Exceptions import PluginAccessDenied
 
-class CWidget:
+class CWidget(CBaseObject):
     def __init__(self, obj, manager, guiId, owner):
         self.obj = obj
         self.manager = manager
