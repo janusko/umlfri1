@@ -139,4 +139,9 @@ class CPlugin(object):
         return self.__adapter
     
     def SendStop(self):
-        pass # TODO: send stop to plugin
+        self.__channel.WriteData(
+            {
+                'target': 'system',
+                'selector': 'stop'
+            }
+        )
