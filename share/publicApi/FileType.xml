@@ -55,27 +55,15 @@
         </parameter>
     </method>
     
-    <method name="registerImportHandler">
+    <event name="importHandler" type="org.umlfri.api.fileTypes.ImportExportHandler">
         <documentation>
-            Registers the handler for importing files of this type.
+            Handler for importing files of this type.
         </documentation>
-        
-        <parameter name="handler" type="org.umlfri.api.fileTypes.ImportExportHandler">
-            <documentation>
-                The import handler.
-            </documentation>
-        </parameter>
-    </method>
+    </event>
     
-    <method name="registerExportHandler">
+    <event name="exportHandler" type="org.umlfri.api.fileTypes.ImportExportHandler">
         <documentation>
-            Registers the handler for export files of this type.
+            Handler for export files of this type.
         </documentation>
-        
-        <parameter name="handler" type="org.umlfri.api.fileTypes.ImportExportHandler">
-            <documentation>
-                The export handler.
-            </documentation>
-        </parameter>
-    </method>
+    </event>
 </interface>

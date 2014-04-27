@@ -1,7 +1,8 @@
 from .Decorators import params, mainthread, polymorphic
 
 class IFileType(object):
-    def __init__(self, fileType):
+    def __init__(self, plugin, fileType):
+        self.__plugin = plugin
         self.__fileType = fileType
     
     @property
@@ -38,10 +39,20 @@ class IFileType(object):
     def AddExtension(self, extension):
         self.__fileType.AddExtension(extension)
     
-    @params(callable)
-    def RegisterExportHandler(self, handler):
-        self.__fileType.RegisterExportHandler(handler)
+    def AttachExportHandler(self):
+        self.__fileType.RegisterExportHandler(self.__exportHandler)
     
-    @params(callable)
-    def RegisterImportHandler(self, handler):
-        self.__fileType.RegisterImportHandler(handler)
+    def DetachExportHandler(self):
+        self.__fileType.RegisterExportHandler(self.__exportHandler)
+    
+    def AttachImportHandler(self):
+        self.__fileType.RegisterExportHandler(self.__importHandler)
+    
+    def DetachImportHandler(self):
+        self.__fileType.RegisterExportHandler(self.__importHandler)
+    
+    def __exportHandler(self, fileName, fileType):
+        self.__plugin.FireEvent(self, 'ExportHandler', fileName = fileName, fileType = fileType)
+    
+    def __importHandler(self, fileName, fileType):
+        self.__plugin.FireEvent(self, 'ImportHandler', fileName = fileName, fileType = fileType)

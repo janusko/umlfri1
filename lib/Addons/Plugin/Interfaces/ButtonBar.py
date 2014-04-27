@@ -34,22 +34,22 @@ class IButtonBar(object):
         return self.__castItem(item)
     
     @mainthread
-    @params(str, callable, int, str, str)
-    def AddButton(self, guiId, callback, position, label, imageFileName):
+    @params(str, int, str, str)
+    def AddButton(self, guiId, position, label, imageFileName):
         if imageFileName is not None:
             imageFileName = self.__plugin.RelativePath2Absolute(imageFileName)
         
-        button = self.__buttonBar.AddButton(guiId, callback, position, label, imageFileName, False, self.__plugin)
-        return Button.IButton(button)
+        button = self.__buttonBar.AddButton(guiId, position, label, imageFileName, False, self.__plugin)
+        return Button.IButton(self.__plugin, button)
     
     @mainthread
-    @params(str, callable, int, str, str)
-    def AddToggleButton(self, guiId, callback, position, label, imageFileName):
+    @params(str, int, str, str)
+    def AddToggleButton(self, guiId, position, label, imageFileName):
         if imageFileName is not None:
             imageFileName = self.__plugin.RelativePath2Absolute(imageFileName)
         
-        button = self.AddButton(guiId, callback, position, label, imageFileName, True, self.__plugin)
-        return ToggleButton.IToggleButton(button)
+        button = self.AddButton(guiId, position, label, imageFileName, True, self.__plugin)
+        return ToggleButton.IToggleButton(self.__plugin, button)
     
     @mainthread
     @params(str, int)

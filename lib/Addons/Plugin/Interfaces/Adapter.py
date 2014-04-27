@@ -34,17 +34,7 @@ class IAdapter(object):
             value = value._diagram
         self.__adapter.SelectDiagramTab(value)
     
-    @params(str, callable)
-    def AddNotification(self, event, callback):
-        self.__adapter.AddNotification(event, callback)
-    
-    @params(str, callable)
-    def RemoveNotification(self, event, callback):
-        self.__adapter.RemoveNotification(event, callback)
-    
-    @params(str, dict)
-    def Notify(self, event, kwds):
-        return self.__adapter.Notify(event, **kwds)
+    # TODO: new system for notifications (notification bus)
     
     def GetGuiManager(self):
         return GuiManager.IGuiManager(self.__plugin, self.__adapter.GetGuiManager())
@@ -61,4 +51,10 @@ class IAdapter(object):
             yield Template.ITemplate(template)
     
     def GetFileTypeManager(self):
-        return FileTypeManager.IFileTypeManager(self.__adapter.GetFileTypeManager())
+        return FileTypeManager.IFileTypeManager(self.__plugin, self.__adapter.GetFileTypeManager())
+    
+    def AttachProjectOpened(self):
+        pass # TODO: add support for projectOpened event
+    
+    def DetachProjectOpened(self):
+        pass

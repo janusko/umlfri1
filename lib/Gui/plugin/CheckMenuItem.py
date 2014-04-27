@@ -1,8 +1,6 @@
-import lib.GenericGui
-from lib.Depend.gtk2 import gtk
 from MenuItem import CMenuItem
 
-class CCheckMenuItem(lib.GenericGui.CCheckMenuItem, CMenuItem):
+class CCheckMenuItem(CMenuItem):
     
     def GetActive(self):
         return self.obj.get_active()

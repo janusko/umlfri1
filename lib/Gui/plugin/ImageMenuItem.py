@@ -1,8 +1,7 @@
-import lib.GenericGui
 from lib.Depend.gtk2 import gtk
 from MenuItem import CMenuItem
 
-class CImageMenuItem(lib.GenericGui.CImageMenuItem, CMenuItem):
+class CImageMenuItem(CMenuItem):
     
     def _setImage(self, filename):
         if filename:

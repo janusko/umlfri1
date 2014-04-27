@@ -31,57 +31,6 @@
         <setter transactional="false" />
     </property>
     
-    <method name="addNotification" mutator="true" transactional="false">
-        <documentation>
-            Adds the notification.
-        </documentation>
-        
-        <parameter name="event" type="string">
-            <documentation>
-                Event name.
-            </documentation>
-        </parameter>
-        <parameter name="callback" type="org.umlfri.api.base.NotificationEventHandler">
-            <documentation>
-                Callback function delegate.
-            </documentation>
-        </parameter>
-    </method>
-    
-    <method name="removeNotification" mutator="true" transactional="false">
-        <documentation>
-            Removes the notification.
-        </documentation>
-        
-        <parameter name="event" type="string">
-            <documentation>
-                Event name.
-            </documentation>
-        </parameter>
-        <parameter name="callback" type="org.umlfri.api.base.NotificationEventHandler">
-            <documentation>
-                Callback function delegate.
-            </documentation>
-        </parameter>
-    </method>
-    
-    <method name="notify">
-        <documentation>
-            Triggers the notification.
-        </documentation>
-        
-        <parameter name="event" type="string">
-            <documentation>
-                Event name.
-            </documentation>
-        </parameter>
-        <parameterDictionary name="args">
-            <documentation>
-                Notification parameters.
-            </documentation>
-        </parameterDictionary>
-    </method>
-    
     <property name="guiManager">
         <documentation>
             Gets a gui manager instance.

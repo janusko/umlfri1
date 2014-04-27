@@ -1,9 +1,8 @@
-import lib.GenericGui
 from lib.Depend.gtk2 import gtk
 from Widget import CWidget
 from lib.Exceptions import *
 
-class CMenuItem(lib.GenericGui.CMenuItem, CWidget):
+class CMenuItem(CWidget):
     
     def GetLabel(self):
         return self.obj.get_property('label')
@@ -21,4 +20,9 @@ class CMenuItem(lib.GenericGui.CMenuItem, CWidget):
         menu = gtk.Menu()
         self.obj.set_submenu(menu)
         return self.manager.GetItem(menu, _addr)
-        
+    
+    def ConnectClicked(self, callback):
+        self.obj.connect('activate', callback)
+    
+    def DisconnectClicked(self, callback):
+        self.obj.disconnect('activate', callback)

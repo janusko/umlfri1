@@ -44,7 +44,7 @@ class CPluginAddonComponent(object):
         path, starter = self.__GetStarter()
         if path is not None:
             channel = starter.Start()
-            self.__plugin = CPlugin(channel, self.__addon.GetManager().GetPluginAdapter())
+            self.__plugin = CPlugin(channel, self.__path, self.__addon.GetManager().GetPluginAdapter())
     
     def Stop(self):
         if self.__patches is not None:

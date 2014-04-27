@@ -1,14 +1,8 @@
-from lib.Depend.gtk2 import gtk
 from Widget import CWidget
 
 class CContainer(CWidget):
     
-    def AddItem(self, guiId, callback, position, item):
-        if callback:
-            if isinstance(item, gtk.MenuItem) and not isinstance(item, gtk.SeparatorMenuItem):
-                item.connect('activate', callback)
-            elif isinstance(item, gtk.ToolButton):
-                item.connect('clicked', callback)
+    def AddItem(self, guiId, position, item):
         item.set_name(guiId)
         item.show()
         if position < 0:

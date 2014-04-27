@@ -27,3 +27,12 @@ class IMenuItem(IWidget):
     @mainthread
     def AddSubmenu(self):
         return self.__menuItem.AddSubmenu(self.__plugin)
+    
+    def AttachClicked(self):
+        self.__menuItem.ConnectClicked(self.__clickedHandler)
+    
+    def DetachClicked(self):
+        self.__menuItem.DisconnectClicked(self.__clickedHandler)
+    
+    def __clickedHandler(self):
+        self.__plugin.FireEvent(self, 'Clicked')

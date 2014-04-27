@@ -17,11 +17,6 @@
                 Button unique ID.
             </documentation>
         </parameter>
-        <parameter name="callback" type="org.umlfri.api.gui.BasicEventHandler">
-            <documentation>
-                Callback function delegate.
-            </documentation>
-        </parameter>
         <parameter name="position" type="int32">
             <documentation>
                 Button position.
@@ -49,11 +44,6 @@
         <parameter name="guiId" type="string">
             <documentation>
                 Button unique ID.
-            </documentation>
-        </parameter>
-        <parameter name="callback" type="org.umlfri.api.gui.BasicEventHandler">
-            <documentation>
-                Callback function delegate.
             </documentation>
         </parameter>
         <parameter name="position" type="int32">

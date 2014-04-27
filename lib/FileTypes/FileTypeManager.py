@@ -1,5 +1,5 @@
 from lib.Base import CBaseObject
-from FileType import CFileType
+from lib.FileTypes.FileType import CFileType
 
 class CFileTypeManager(CBaseObject):
     _persistent = True
