@@ -1,4 +1,4 @@
-from .Implementation.PipeChannel import CPipeChannel
+from ..Implementation.PipeChannel import CPipeChannel
 
 from multiprocessing.forking import duplicate
 
@@ -14,8 +14,6 @@ except ImportError:
         """
         Never occuring exception. WindowsError replacement for non-windows system.
         """
-
-STARTERS = {}
 
 class CBaseProgramStarter:
     program = ()
