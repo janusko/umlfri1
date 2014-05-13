@@ -5,6 +5,8 @@ from lib.Depend.gtk2 import cairo
 from lib.Exceptions.UserException import *
 from Abstract import CAbstractCanvas
 
+from ..PangoLayoutConfiguration import ConfigurePangoLayout
+
 #  dash sequence for line styles used in self.cr.set_dash(dash_sequence, offset), where
 #  dash_sequence - an array specifying alternate lengths of on and off stroke portions
 #  offset - an offset into the dash pattern at which the stroke should start
@@ -76,37 +78,10 @@ class CCairoBaseCanvas(CAbstractCanvas):
         if alpha >= 0.0 and alpha <= 1.0:
             self.alpha = alpha
 
-    def __SetFont(self, font, returndesc = False):
+    def __SetFont(self, font):
         pango_layout = self.cr.create_layout()
-        underline = 'underline' in font.GetStyle()
-        strikeout = 'strike' in font.GetStyle()
-        desc = [font.GetFamily()]
-        # some (supported) font styles, append order is important
-        if 'bold' in font.GetStyle():
-            desc.append('Bold')
 
-        if 'italic' in font.GetStyle():
-            desc.append('Italic')
-
-        desc.append('%dpx'%font.GetSize())
-        desc = ' '.join(desc)
-
-        if desc in self.fonts:
-            fontobj = self.fonts[desc]
-        else:
-            self.fonts[desc] = fontobj = pango.FontDescription(desc)
-
-        if returndesc:
-            return fontobj
-        pango_layout.set_font_description(fontobj)
-
-        atlist = pango.AttrList()
-        if underline:
-            atlist.insert(pango.AttrUnderline(pango.UNDERLINE_SINGLE, 0, 10000))
-        if strikeout:
-            atlist.insert(pango.AttrStrikethrough(True, 0, 10000))
-
-        pango_layout.set_attributes(atlist)
+        ConfigurePangoLayout(pango_layout, font)
         
         return pango_layout
 
@@ -283,8 +258,7 @@ class CCairoBaseCanvas(CAbstractCanvas):
         Draws contents of buffer onto canvas.
 
         @param buffer: BufferCanvas containig pattern/image...
-        @type buffer: L{CBufferCanvas
-        <lib.Drawing.Canvas.BufferCanvas.CBufferCanvas>}
+        @type buffer: L{CBufferCanvas <lib.Drawing.Canvas.BufferCanvas.CBufferCanvas>}
 
         @param origin: coordinate at which the surface origin should appear
         @type: tuple
