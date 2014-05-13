@@ -31,7 +31,7 @@ class CTextBox(CVisualObject):
 
         return self.textSizeMeasurer.MeasureSize(txt, font)
 
-    def Paint(self, context):
+    def Paint(self, context, canvas):
         txt, color, font = self.GetVariables(context, 'text', 'color', 'font')
         txt = unicode(txt)
         shadowcolor = context.GetShadowColor()
@@ -47,4 +47,4 @@ class CTextBox(CVisualObject):
             if font is None:
                 font = self.defaultFont
 
-        context.GetCanvas().DrawText(context.GetPos(), txt, font, color)
+        canvas.DrawText(context.GetPos(), txt, font, color)

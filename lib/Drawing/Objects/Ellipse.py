@@ -17,7 +17,7 @@ class CEllipse(CSimpleContainer):
     def GetResizable(self, context):
         return True, True
 
-    def Paint(self, context):
+    def Paint(self, context, canvas):
         size = context.ComputeSize(self)
         shadowcolor = context.GetShadowColor()
         if shadowcolor is None:
@@ -25,10 +25,10 @@ class CEllipse(CSimpleContainer):
         else:
             border, fill = None, shadowcolor
         
-        context.GetCanvas().DrawArc(context.GetPos(), context.GetSize(), (0, 360), border, fill)
+        canvas.DrawArc(context.GetPos(), context.GetSize(), (0, 360), border, fill)
         
         if shadowcolor:
             return
         
         for i in self.childs:
-            i.Paint(context)
+            i.Paint(context, canvas)

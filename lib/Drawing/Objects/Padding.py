@@ -26,12 +26,12 @@ class CPadding(CSimpleContainer):
         w, h = CSimpleContainer.ComputeSize(self, context)
         return (w + self.left + self.right, h + self.top + self.bottom)
 
-    def Paint(self, context):
+    def Paint(self, context, canvas):
         size = context.ComputeSize(self)
         pos = context.GetPos()
         
         context.Push()
         context.Move((pos[0]+self.left, pos[1]+self.top))
         context.Resize((size[0] - self.left - self.right, size[1] - self.top - self.bottom))
-        CSimpleContainer.Paint(self, context)
+        CSimpleContainer.Paint(self, context, canvas)
         context.Pop()

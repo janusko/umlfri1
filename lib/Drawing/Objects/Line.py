@@ -32,7 +32,7 @@ class CLine(CVisualObject):
         tp = self.__ComputeType()
         return tp == 'horizontal', tp == 'vertical'
 
-    def Paint(self, context):
+    def Paint(self, context, canvas):
         size = context.ComputeSize(self)
         tp = self.__ComputeType()
         pos = context.GetPos()
@@ -42,6 +42,6 @@ class CLine(CVisualObject):
             color, = self.GetVariables(context, 'color')
         
         if tp == 'horizontal' and pos[0] is not None:
-            context.GetCanvas().DrawLine(pos, (pos[0]+size[0], pos[1]), color)
+            canvas.DrawLine(pos, (pos[0]+size[0], pos[1]), color)
         elif tp == 'vertical' and pos[1] is not None:
-            context.GetCanvas().DrawLine(pos, (pos[0], pos[1]+size[1]), color)
+            canvas.DrawLine(pos, (pos[0], pos[1]+size[1]), color)

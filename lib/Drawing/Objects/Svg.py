@@ -61,7 +61,7 @@ class CSvg(CVisualObject):
     def ComputeSize(self, context):
         return self.width * self.scale, self.height * self.scale
     
-    def Paint(self, context):
+    def Paint(self, context, canvas):
         trans = TransformMatrix.mk_translation(context.GetPos())
         shadowcolor = context.GetShadowColor()
         
@@ -78,4 +78,4 @@ class CSvg(CVisualObject):
                     bgcolor = CColor(path['style']['fill'])
                 else:
                     bgcolor = None
-            context.GetCanvas().DrawPath(trans*path['path'], color, bgcolor, int(float(path['style'].get('stroke-width', '1').rstrip('px'))+0.5))
+            canvas.DrawPath(trans*path['path'], color, bgcolor, int(float(path['style'].get('stroke-width', '1').rstrip('px'))+0.5))

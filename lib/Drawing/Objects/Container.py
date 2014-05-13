@@ -34,10 +34,10 @@ class CContainer(CVisualObject):
             h = max(h, hc)
         return (w, h)
 
-    def Paint(self, context):
+    def Paint(self, context, canvas):
         size = context.ComputeSize(self)
         for i in self.childs:
-            i.Paint(context)
+            i.Paint(context, canvas)
 
     def RemoveChild(self, child):
         self.childs.remove(child)

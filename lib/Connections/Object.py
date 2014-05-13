@@ -278,14 +278,14 @@ class CConnectionObject(CBaseObject):
             self.GetSource().RemoveConnection(self)
             self.GetDestination().RemoveConnection(self)            
     
-    def Paint(self, context):
+    def Paint(self, context, canvas):
         """
         Paint self on canvas
         
         @param context: context in which is connection being drawn
         @type  context: L{CDrawingContext<lib.Drawing.Context.DrawingContext.CDrawingContext>}
         """
-        self.type.Paint(context)
+        self.type.Paint(context, canvas)
     
     def GetDomainName(self, key=''):
         return self.domainobject.GetDomainName(key)

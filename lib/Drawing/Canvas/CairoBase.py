@@ -274,6 +274,7 @@ class CCairoBaseCanvas(CAbstractCanvas):
         self.cr.fill()
         self.cr.restore()
 
+    # extract to separate class/function
     def GetIconSize(self, filename):
         if self.storage is None:
             raise DrawingError('storage')
