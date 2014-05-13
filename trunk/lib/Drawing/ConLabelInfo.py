@@ -335,4 +335,4 @@ class CConLabelInfo(CCacheableObject):
         self.actualSize = self.logicalLabel.GetSize(context)
         context.SetPosition(self.GetPosition())
 
-        self.logicalLabel.Paint(context)
+        self.logicalLabel.Paint(context, canvas)

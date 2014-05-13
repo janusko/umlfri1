@@ -12,7 +12,7 @@ class CShadow(CSimpleContainer):
         self.padding = padding
         self.color = color
 
-    def Paint(self, context):
+    def Paint(self, context, canvas):
         if context.GetShadowColor() is not None:
             raise DrawingError("ShadowInShadow")
         size = context.ComputeSize(self)
@@ -22,7 +22,7 @@ class CShadow(CSimpleContainer):
         context.Push()
         context.SetShadowColor(color)
         context.Move((pos[0] + self.padding, pos[1] + self.padding))
-        CSimpleContainer.Paint(self, context)
+        CSimpleContainer.Paint(self, context, canvas)
         context.Pop()
         
-        CSimpleContainer.Paint(self, context)
+        CSimpleContainer.Paint(self, context, canvas)

@@ -81,7 +81,7 @@ class CElement(CVisibleObject):
             self.SetSize((w, h))
         
         context.Resize((w, h))
-        self.object.Paint(context)
+        self.object.Paint(context, canvas)
         if self.selected:
             
             self.squares = []
@@ -120,7 +120,7 @@ class CElement(CVisibleObject):
             sqey = sqby + sq[2][1]
             if (x >= sqbx and x <= sqex and y >= sqby and y <= sqey):
                 return sq[0]
-    
+
     def Resize(self, delta, selSquareIdx):
         '''
         Updates actual size according to delta size and if necessary changes position

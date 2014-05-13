@@ -21,7 +21,7 @@ class CCondition(CSimpleContainer):
             return CSimpleContainer.ComputeSize(self, context)
         return (0, 0)
 
-    def Paint(self, context):
+    def Paint(self, context, canvas):
         condition, = self.GetVariables(context, 'condition')
         if condition:
-            CSimpleContainer.Paint(self, context)
+            CSimpleContainer.Paint(self, context, canvas)

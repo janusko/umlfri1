@@ -434,7 +434,7 @@ class CConnection(CCacheableObject, CSelectableObject):
         '''
         
         self.ValidatePoints()
-        self.object.Paint(CDrawingContext(canvas, self, delta))
+        self.object.Paint(CDrawingContext(canvas, self, delta), canvas)
         
         for lbl in self.labels.values():
             lbl.Paint(canvas, delta)

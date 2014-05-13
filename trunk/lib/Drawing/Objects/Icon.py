@@ -13,7 +13,7 @@ class CIcon(CVisualObject):
         filename, = self.GetVariables(context, 'filename')
         return context.GetCanvas().GetIconSize(filename)
 
-    def Paint(self, context, shadow = False):
+    def Paint(self, context, canvas, shadow = False):
         filename, = self.GetVariables(context, 'filename')
         
-        context.GetCanvas().DrawIcon(context.GetPos(), filename)
+        canvas.DrawIcon(context.GetPos(), filename)

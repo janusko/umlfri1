@@ -159,8 +159,8 @@ class CElementObject(CBaseObject):
     def HasVisualAttribute(self, key):
         return self.domainobject.HasVisualAttribute(key)
 
-    def Paint(self, context):
-        self.type.Paint(context)
+    def Paint(self, context, canvas):
+        self.type.Paint(context, canvas)
 
     def Disconnect(self, connection):
         connection.Disconnect()
