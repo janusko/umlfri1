@@ -3,7 +3,7 @@
     <Icon path="icons/state.png" />
     <Domain id="state" identity="name" />
     <Connections>
-        <Item value="StateTransition"/>
+        <Item value="StateTransition" allowrecursive="1"/>
     </Connections>
     <Appearance>
         <Shadow padding="3" color="#cfg.Styles.Element.ShadowColor">
