@@ -1,4 +1,5 @@
 from VisualObject import CVisualObject
+from ..TextSizeMeasurer import TextSizeMeasurer
 import sys
 from lib.datatypes import CColor, CFont
 
@@ -17,6 +18,7 @@ class CTextBox(CVisualObject):
         self.text = text
         self.color = color
         self.font = font
+        self.textSizeMeasurer = TextSizeMeasurer()
 
     def ComputeSize(self, context):
         txt, font = self.GetVariables(context, 'text', 'font')
@@ -26,8 +28,8 @@ class CTextBox(CVisualObject):
             font = context.GetDefault('textfont')
             if font is None:
                 font = self.defaultFont
-        
-        return context.GetCanvas().GetTextSize(txt, font)
+
+        return self.textSizeMeasurer.MeasureSize(txt, font)
 
     def Paint(self, context):
         txt, color, font = self.GetVariables(context, 'text', 'color', 'font')
@@ -44,5 +46,5 @@ class CTextBox(CVisualObject):
             font = context.GetDefault('textfont')
             if font is None:
                 font = self.defaultFont
-        
+
         context.GetCanvas().DrawText(context.GetPos(), txt, font, color)
