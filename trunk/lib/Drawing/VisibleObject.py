@@ -53,7 +53,7 @@ class CVisibleObject(CCacheableObject, CSelectableObject):
     def GetSize(self):
         return self.actualSize
         
-    def GetMinimalSize(self, canvas):
+    def GetMinimalSize(self):
         w, h = self.object.GetSize(CDrawingContext(self, (0, 0)))
         return w, h
         

@@ -53,7 +53,7 @@ class CElement(CVisibleObject):
 
     def Paint(self, canvas, delta = (0, 0)):
         x, y = self.position
-        context = CDrawingContext(canvas, self, (x + delta[0], y + delta[1]))
+        context = CDrawingContext(self, (x + delta[0], y + delta[1]))
         
         rx, ry = self.object.GetType().GetResizable(context)
         
@@ -62,7 +62,7 @@ class CElement(CVisibleObject):
         #    self.deltaSize[1] if ry else 0,
         #)
 
-        minsize = self.GetMinimalSize(canvas)
+        minsize = self.GetMinimalSize()
 
         # calculate actual size from delta size, if loaded older version of project (1.1.0)
         if self.hasDeltaSize:
