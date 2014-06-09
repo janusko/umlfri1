@@ -42,7 +42,4 @@ class CAbstractCanvas(CBaseObject):
     
     def ToPhysical(self, pos):
         return pos
-    
-    def GetCachableGlobally(self):
-        return False
 
