@@ -126,24 +126,26 @@ class CElement(CVisibleObject):
         Updates actual size according to delta size and if necessary changes position
         '''
         resRect = self.GetResizedRect(delta, selSquareIdx)
+        minSize = self.GetMinimalSize()
         self.position = resRect[0]
-        self.actualSize = (max(0, resRect[1][0]), max(0, resRect[1][1]))
+        self.actualSize = (max(minSize[0], resRect[1][0]), max(minSize[1], resRect[1][1]))
 
     def GetResizedRect(self, delta, mult):
         # updates position and checks if delta size is not greater than actual size
         pos = list(self.GetPosition())
         size = list(self.actualSize)
+        minSize = self.GetMinimalSize()
         
         for i in (0, 1):
             if mult[i] < 0:
-                if delta[i] > size[i]:
-                    pos[i] += size[i]
-                    size[i] = 0
+                if delta[i] > size[i] - minSize[i]:
+                    pos[i] += size[i] - minSize[i]
+                    size[i] = minSize[i]
                 else:
                     pos[i] += delta[i]
                     size[i] -= delta[i]
             else:
-                size[i] = max(0, size[i] + mult[i] * delta[i])
+                size[i] = max(minSize[i], size[i] + mult[i] * delta[i])
 
         return pos, size
         
