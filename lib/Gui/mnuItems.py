@@ -1,7 +1,7 @@
 from lib.Depend.gtk2 import gtk
 from lib.Depend.gtk2 import gobject
 
-from lib.Drawing.Canvas.GtkPlus import PixmapFromPath
+from lib.Drawing.PixmapImageLoader import PixmapFromPath
 
 from common import CWidget, event
 from lib.Commands.Project import CCreateElementObjectCommand, CCreateDiagramCommand

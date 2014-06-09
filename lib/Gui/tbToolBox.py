@@ -3,7 +3,7 @@ from lib.Depend.gtk2 import gobject
 
 from common import CWidget, event
 
-from lib.Drawing.Canvas.GtkPlus import PixmapFromPath
+from lib.Drawing.PixmapImageLoader import PixmapFromPath
 
 from lib.Distconfig import IMAGES_PATH
 

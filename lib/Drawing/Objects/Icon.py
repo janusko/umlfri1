@@ -1,5 +1,6 @@
 from VisualObject import CVisualObject
-import sys
+from ..IconSizeMeasurer import GetIconSize
+# import sys
 
 class CIcon(CVisualObject):
     types = {
