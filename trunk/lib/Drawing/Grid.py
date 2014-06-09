@@ -307,7 +307,7 @@ class CGrid(CBaseObject):
             self.ver_spacing = config['/Grid/VerSpacing']
         
         w, h = element.GetSize()
-        minw, minh = element.GetMinimalSize(canvas)
+        minw, minh = element.GetMinimalSize()
         dw = -(w % self.hor_spacing)
         dh = -(h % self.ver_spacing)
         if minw > w + dw:
