@@ -14,7 +14,7 @@ from lib.Drawing import CDiagram, CElement, CConnection, CConLabelInfo
 from lib.Elements import CElementObject
 from lib.Connections import CConnectionObject
 from lib.Exceptions.UserException import *
-from lib.Drawing.Canvas import CGtkCanvas, CSvgCanvas, CCairoCanvas, CExportCanvas
+from lib.Drawing.Canvas import CCairoCanvas, CExportCanvas
 from lib.Drawing import Element
 
 import thread

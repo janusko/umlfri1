@@ -1,6 +1,6 @@
 from lib.Depend.gtk2 import gtk, pango
 
-from lib.Drawing.Canvas.GtkPlus import PixmapFromPath
+from lib.Drawing.PixmapImageLoader import PixmapFromPath
 
 import common
 from lib.consts import PROJECT_CLEARXML_EXTENSION

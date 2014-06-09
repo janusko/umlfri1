@@ -4,7 +4,7 @@ import os.path
 import webbrowser
 
 from lib.consts import CHECK_ADDON_INTERVAL
-from lib.Drawing.Canvas.GtkPlus import PixmapFromPath
+from lib.Drawing.PixmapImageLoader import PixmapFromPath
 
 from common import event, CWindow
 from dialogs import CQuestionDialog

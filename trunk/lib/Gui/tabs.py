@@ -4,7 +4,7 @@ from lib.Depend.gtk2 import gobject
 from common import CWidget
 from common import  event
 from lib.Drawing import CDiagram
-from lib.Drawing.Canvas.GtkPlus import PixmapFromPath
+from lib.Drawing.PixmapImageLoader import PixmapFromPath
 
 class CTabs(CWidget):
     name = 'nbTabs'

@@ -1,6 +1,6 @@
 from lib.Depend.gtk2 import gtk, gobject
 
-from lib.Drawing.Canvas.GtkPlus import PixmapFromPath
+from lib.Drawing.PixmapImageLoader import PixmapFromPath
 
 from common import event, CWindow
 from dialogs import CQuestionDialog

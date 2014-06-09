@@ -7,7 +7,7 @@ from lib.Project import CProject, CProjectNode
 from lib.Elements import CElementObject
 from lib.Drawing import CElement, CDiagram
 from lib.Exceptions.UserException import *
-from lib.Drawing.Canvas.GtkPlus import PixmapFromPath
+from lib.Drawing.PixmapImageLoader import PixmapFromPath
 
 from common import  event
 
