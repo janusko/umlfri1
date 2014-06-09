@@ -1,8 +1,7 @@
 from lib.Base import CBaseObject
 
 class CDrawingContext(CBaseObject):
-    def __init__(self, canvas, element, pos, size = (None, None)):
-        self.canvas = canvas
+    def __init__(self, element, pos, size = (None, None)):
         self.element = element
         self.pos = pos
         self.size = size
