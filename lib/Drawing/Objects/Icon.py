@@ -12,7 +12,7 @@ class CIcon(CVisualObject):
 
     def ComputeSize(self, context):
         filename, = self.GetVariables(context, 'filename')
-        return context.GetCanvas().GetIconSize(filename)
+        return GetIconSize(context.GetMetamodel().GetStorage(), filename)
 
     def Paint(self, context, canvas, shadow = False):
         filename, = self.GetVariables(context, 'filename')
