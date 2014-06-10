@@ -256,7 +256,7 @@ class CDiagram(CBaseObject):
             else delta
         for el in elements:
             x, y = el.GetPosition()
-            self.MoveElement(el, (x + deltax, y + deltay), canvas)
+            self.MoveElement(el, (x + deltax, y + deltay))
             if not isinstance(el, ConLabelInfo.CConLabelInfo):
                 for con in el.GetConnections():
                     if (con.GetSource() in elements) and (con.GetDestination() in elements):
@@ -478,7 +478,7 @@ class CDiagram(CBaseObject):
                 del self.elements[selectedIdx]
                 self.elements.insert(0, selectedElement)
 
-    def ShiftElementsForward(self, canvas):
+    def ShiftElementsForward(self):
         for selectedElement in self.GetSelectedElements():
             if not isinstance(selectedElement, ConLabelInfo.CConLabelInfo):
                 selectedIdx = self.elements.index(selectedElement)
@@ -496,7 +496,7 @@ class CDiagram(CBaseObject):
                         selectedShifted = True
                     otherElementIdx += 1
                 
-    def ShiftElementsBack(self, canvas):
+    def ShiftElementsBack(self):
         for selectedElement in self.GetSelectedElements():
             if not isinstance(selectedElement, ConLabelInfo.CConLabelInfo):
                 selectedIdx = self.elements.index(selectedElement)
@@ -606,9 +606,9 @@ class CDiagram(CBaseObject):
     def SnapPositionToGrid(self, pos):
         return self.grid.SnapPosition(pos)
 
-    def MoveElement(self, element, pos, canvas):
+    def MoveElement(self, element, pos):
         if not isinstance(element, ConLabelInfo.CConLabelInfo):
-            self.grid.SnapElement(element, pos, canvas)
+            self.grid.SnapElement(element, pos)
         else:
             element.SetPosition(pos)
     
@@ -616,7 +616,7 @@ class CDiagram(CBaseObject):
         self.grid.SnapConnection(conn, pos, idx)
 
     def AlignElementsXY(self, isHorizontal, isLowerBoundary,
-            canvas, defaultElement=None): 
+            defaultElement=None):
         """
         Aligns selected elements along specified axis and position.
         If position isn't set, elements will be aligned to their average
@@ -626,8 +626,6 @@ class CDiagram(CBaseObject):
         @type isHorizontal: bool
         @param isLowerBoundary: align to lower or higher boundary
         @type isLowerBoundary: bool
-        @param canvas: drawing canvas
-        @type canvas: L{CCairoCanvas<lib.Drawing.Canvas.Cairo.CCairoCanvas>}
         @param defaultElement: Element to align to
         @type defaultElement: L{CElement<lib.Drawing.Element.CElement>}
         """
@@ -648,9 +646,9 @@ class CDiagram(CBaseObject):
             pos = list(e.GetPosition())
             pos[xy] = most - \
                 ( 0 if isLowerBoundary else e.GetSize()[xy] )
-            self.MoveElement(e, pos, canvas)
+            self.MoveElement(e, pos)
     
-    def AlignElementCentersXY(self, isHorizontal, canvas, defaultElement=None):
+    def AlignElementCentersXY(self, isHorizontal, defaultElement=None):
         """
         Aligns centers of selected elements to defaultElements center 
         along x or y axis.
@@ -659,8 +657,6 @@ class CDiagram(CBaseObject):
         
         @param isHorizontal: align horizontaly or verticaly
         @type isHorizontal: bool
-        @param canvas: drawing canvas
-        @type canvas: L{CCairoCanvas<lib.Drawing.Canvas.Cairo.CCairoCanvas>}
         @param defaultElement: Element to align to
         @type defaultElement: L{CElement<lib.Drawing.Element.CElement>}
         """
@@ -670,23 +666,21 @@ class CDiagram(CBaseObject):
         if not defaultElement:
             avg = 0
             for e in elements:
-                avg += e.GetCenter(canvas)[xy]
+                avg += e.GetCenter()[xy]
             position = avg/len(elements)
         else:
-            position = defaultElement.GetCenter(canvas)[xy]
+            position = defaultElement.GetCenter()[xy]
         for e in elements:
             pos = list(e.GetPosition())
-            pos[xy] = position - e.GetSize(canvas)[xy]/2
-            self.MoveElement(e, pos, canvas)
+            pos[xy] = position - e.GetSize()[xy]/2
+            self.MoveElement(e, pos)
 
-    def SpaceElementsEvenlyXY(self, isHorizontal, canvas):
+    def SpaceElementsEvenlyXY(self, isHorizontal):
         """
         Spaces selected elements evenly along x or y axis. 
         
         @param isHorizontal: space horizontaly or verticaly
         @type isHorizontal: bool
-        @param canvas: drawing canvas
-        @type canvas: L{CCairoCanvas<lib.Drawing.Canvas.Cairo.CCairoCanvas>}
         """
         xy = 1-int(bool(isHorizontal))
         elements = list(self.GetSelectedElements())
@@ -702,18 +696,16 @@ class CDiagram(CBaseObject):
         pos[xy] = elements[0].GetPosition()[xy]
         for e in elements:
             pos[1-xy] = e.GetPosition()[1-xy]
-            self.MoveElement(e, pos, canvas)
+            self.MoveElement(e, pos)
             pos[xy] += e.GetSize()[xy] + spacing
 
-    def ResizeElementsEvenly(self, resizeByWidth, canvas, selectedElement=None):
+    def ResizeElementsEvenly(self, resizeByWidth, selectedElement=None):
         """
         Resize selected elements evenly to minimal or maximal size of selected
         elements or requested size.
         
         @param resizeByWidth: resize to maximum or minimum
         @type resizeByWidth: bool
-        @param canvas: drawing canvas
-        @type canvas: L{CCairoCanvas<lib.Drawing.Canvas.Cairo.CCairoCanvas>}
         @param selectedElement: element used as reference for resizing
         @type selectedElement: L{CElement<lib.Drawing.Element.CElement>}
         """    
@@ -730,7 +722,7 @@ class CDiagram(CBaseObject):
             size[xy] = selectedElementSize[xy]
             e.SetSize(size)
     
-    def ResizeByMaximalElement(self, canvas):
+    def ResizeByMaximalElement(self):
         """
         Resize all elements based on the size of the maximal element
         """
@@ -751,7 +743,7 @@ class CDiagram(CBaseObject):
         for e in elements:
             e.SetSize((maxheight, maxwidth))
 
-    def ResizeByMinimalElement(self, canvas):
+    def ResizeByMinimalElement(self):
         """
         Resize all elements based on the size of the minimal element
         """
@@ -772,7 +764,7 @@ class CDiagram(CBaseObject):
         for e in elements:
             e.SetSize((minheight, minwidth))
             
-    def SnapElementsOnGrid(self, canvas):
+    def SnapElementsOnGrid(self):
         """
         Snaps selected elements on grid. Grid doesn't have to be active.
         """
@@ -780,5 +772,5 @@ class CDiagram(CBaseObject):
         if len(elements)<1: return
         for e in elements:
             pos = e.GetPosition()
-            self.grid.SnapElement(e, pos, canvas, True)
+            self.grid.SnapElement(e, pos, True)
         

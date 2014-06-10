@@ -558,7 +558,7 @@ class CpicDrawingArea(CWidget):
             ElementObject = CElementObject(ElementType)
             newElement = CElement(self.Diagram, ElementObject)
             newElement.SetPosition(pos)
-            self.Diagram.MoveElement(newElement, pos, self.canvas)
+            self.Diagram.MoveElement(newElement, pos)
             self.AdjustScrollBars()
             self.emit('set-selected', None)
             #here, I get prent element of selected elements (if element is on (over) another element)
@@ -1006,9 +1006,9 @@ class CpicDrawingArea(CWidget):
     # Z-Order menu:  
     def Shift_activate(self, actionName):
         if (actionName == 'SendBack'):
-            self.Diagram.ShiftElementsBack(self.canvas)
+            self.Diagram.ShiftElementsBack()
         elif (actionName == 'BringForward'):
-            self.Diagram.ShiftElementsForward(self.canvas)
+            self.Diagram.ShiftElementsForward()
         elif (actionName == 'ToBottom'):
             self.Diagram.ShiftElementsToBottom()
         elif (actionName == 'ToTop'):
@@ -1084,50 +1084,50 @@ class CpicDrawingArea(CWidget):
     @event("mnuAlignDownwardsMost","activate", False, False, False)
     @event("mnuAlignDownwardsCurrent","activate", False, False, True)
     def on_mnuAlign_activate(self, menuItem, horiz, lower, defaultE):
-        self.Diagram.AlignElementsXY(horiz, lower, self.canvas, self.itemSel if defaultE else None)
+        self.Diagram.AlignElementsXY(horiz, lower, self.itemSel if defaultE else None)
         self.Paint()
     
     @event("mnuAlignCenterHor","activate", True, True)
     @event("mnuAlignCenterVer","activate", False, True)
     def on_mnuAlignCenter(self, widget, p1, p2):
-        self.Diagram.AlignElementCentersXY(p1, self.canvas, self.itemSel if p2 else None)
+        self.Diagram.AlignElementCentersXY(p1, self.itemSel if p2 else None)
         self.Paint()
     
     @event("mnuResizeHight","activate")
     def on_mnuResizeHight(self, menuItem):
-        self.Diagram.ResizeElementsEvenly(False,self.canvas,self.itemSel)
+        self.Diagram.ResizeElementsEvenly(False,self.itemSel)
         self.Paint()
         
     @event("mnuResizeWidth","activate")
     def on_mnuResizeWidth(self, menuItem):
-        self.Diagram.ResizeElementsEvenly(True,self.canvas,self.itemSel)
+        self.Diagram.ResizeElementsEvenly(True,self.itemSel)
         self.Paint()
     
     @event("mnuResizeHightAndWidth","activate")
     def on_mnuResizeWidthAndHight(self, menuItem):
-        self.Diagram.ResizeElementsEvenly(True,self.canvas,self.itemSel)
-        self.Diagram.ResizeElementsEvenly(False,self.canvas,self.itemSel)
+        self.Diagram.ResizeElementsEvenly(True,self.itemSel)
+        self.Diagram.ResizeElementsEvenly(False,self.itemSel)
         self.Paint()
     
     @event("mnuResizeByMaximalElement","activate")
     def on_mnuResizeByMaximalElement(self, menuItem):
-        self.Diagram.ResizeByMaximalElement(self.canvas)        
+        self.Diagram.ResizeByMaximalElement()
         self.Paint()
         
     @event("mnuResizeByMinimalElement","activate")
     def on_mnuResizeByMinimalElement(self, menuItem):
-        self.Diagram.ResizeByMinimalElement(self.canvas)        
+        self.Diagram.ResizeByMinimalElement()
         self.Paint()
     
     @event("mnuSpaceEvenlyHorizontally","activate", True)
     @event("mnuSpaceEvenlyVertically","activate", False)
     def on_mnuMakeSpacing(self, widget, p1):
-        self.Diagram.SpaceElementsEvenlyXY(p1, self.canvas)
+        self.Diagram.SpaceElementsEvenlyXY(p1)
         self.Paint()
     
     @event('mnuSnapSelectGrid', 'activate')
     def on_mnuSnapSelected(self, widget):
-        self.Diagram.SnapElementsOnGrid(self.canvas)
+        self.Diagram.SnapElementsOnGrid()
         self.Paint()
     
     def ChangeSourceTarget(self):

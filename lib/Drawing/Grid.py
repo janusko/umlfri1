@@ -222,7 +222,7 @@ class CGrid(CBaseObject):
         y = self.ver_spacing * round(pos[1]/(float(self.ver_spacing)))
         return int(x), int(y)
     
-    def SnapElement(self, element, pos, canvas, override=False):
+    def SnapElement(self, element, pos, override=False):
         """
         Snaps element position according to snap mode on the grid.
 
@@ -231,9 +231,6 @@ class CGrid(CBaseObject):
 
         @param pos: position where element is moved
         @type pos: tuple
-
-        @param canvas: drawing canvas
-        @type canvas: L{CCairoCanvas<CairoCanvas>}
 
         @param override: ignore grid beiing turned off
         @type override: bool
@@ -244,7 +241,7 @@ class CGrid(CBaseObject):
             self.snap_mode = config['/Grid/SnapMode']
         if self.active or override:
             if self.resize_elements:
-                self.ResizeElement(element, canvas)
+                self.ResizeElement(element)
             if self.snap_mode == 'TOP_LEFT':
                 pos = self.SnapPosition(pos)
             elif self.snap_mode == 'CENTER':
@@ -291,16 +288,13 @@ class CGrid(CBaseObject):
         pos = (int(pos[0]), int(pos[1]))
         element.SetPosition(pos)
     
-    def ResizeElement(self, element, canvas):
+    def ResizeElement(self, element):
         """
         Resizes element to match grid spacing.
         Each corner is moved outwards to nearest grid intersection.
 
         @param element: element to resize
         @type element: L{CElement<lib.Drawing.Element>}
-
-        @param canvas: drawing canvas
-        @type canvas: L{CCairoCanvas<CairoCanvas>}
         """
         if not self.local_settings:
             self.hor_spacing = config['/Grid/HorSpacing']
