@@ -1,6 +1,7 @@
 from lib.Depend.gtk2 import pango
 from lib.Depend.gtk2 import pangocairo
 from lib.Depend.gtk2 import cairo
+from lib.Depend.gtk2 import gtk
 
 from lib.Exceptions.UserException import *
 from Abstract import CAbstractCanvas
@@ -79,7 +80,9 @@ class CCairoBaseCanvas(CAbstractCanvas):
             self.alpha = alpha
 
     def __SetFont(self, font):
-        pango_layout = self.cr.create_layout()
+        #pango_layout = self.cr.create_layout()
+        pango_context = gtk.gdk.pango_context_get()
+        pango_layout = pango.Layout(pango_context)
 
         ConfigurePangoLayout(pango_layout, font)
         
