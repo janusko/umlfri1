@@ -1,4 +1,4 @@
-from lib.Depend.gtk2 import pango
+from lib.Depend.gtk2 import pango, gtk
 
 fonts = {}
 
@@ -12,6 +12,14 @@ def ConfigurePangoLayout(layout, font):
     @param font: Font, which should be used to configure Pango layout
     @type: font: L{CFont <lib.datatypes.CFont>}
     """
+    
+    resolution = gtk.gdk.screen_get_default().get_resolution()
+
+    if resolution > 0:
+        resolution_ratio = 96. / resolution
+    else:
+        resolution_ratio = 1
+    
     fontHash = str(font)
 
     if fontHash in fonts:
@@ -20,7 +28,7 @@ def ConfigurePangoLayout(layout, font):
         fonts[fontHash] = fontobj = pango.FontDescription()
 
         fontobj.set_family(font.GetFamily())
-        fontobj.set_size(font.GetSize() * pango.SCALE)
+        fontobj.set_size(int(font.GetSize() * pango.SCALE * resolution_ratio))
         if 'bold' in font.GetStyle():
             fontobj.set_weight(pango.WEIGHT_BOLD)
         if 'italic' in font.GetStyle():
