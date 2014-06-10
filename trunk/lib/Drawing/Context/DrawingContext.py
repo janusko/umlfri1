@@ -43,9 +43,6 @@ class CDrawingContext(CBaseObject):
     def GetPos(self):
         return self.pos
     
-    def GetCanvas(self):
-        return self.canvas
-    
     def GetShadowColor(self):
         return self.shadowcolor
     
