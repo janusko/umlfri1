@@ -36,16 +36,13 @@ class CDrawingArea(CGuiObject):
         finally:
             self.paintlock.release()
 
-    def Paint(self, canvas):
+    def Paint(self, canvas, changed = True):
         '''
         Paints diagram at canvas
 
         @param canvas: Canvas on which its being drawn
         @type  canvas: L{CCairoCanvas<lib.Drawing.Canvas.CairoCanvas.CCairoCanvas>}
         '''
-
-
-    def Paint(self, changed = True):
 
         if self.disablePaint:
             return
@@ -59,37 +56,52 @@ class CDrawingArea(CGuiObject):
 
         self.diagram.Paint(self.canvas)
 
+    def DeleteSelectedObjects(self):
+        for sel in self.diagram.GetSelected():
+            if isinstance(sel, CConnection):
+                index = sel.GetSelectedPoint()
+                if index is not None and (sel.GetSource() != sel.GetDestination() or len(tuple(sel.GetMiddlePoints())) > 2):
+                    sel.RemovePoint(index)
+                    self.diagram.DeselectAll()
+                    self.Paint()
+                    return
+        for sel in self.diagram.GetSelected():
+            self.diagram.DeleteItem(sel)
+        self.diagram.DeselectAll()
+        self.emit('selected-item', list(self.diagram.GetSelected()),False)
+        self.Paint()
+
     def ShiftElements(self, actionName):
         if (actionName == 'SendBack'):
-            self.Diagram.ShiftElementsBack()
+            self.diagram.ShiftElementsBack()
         elif (actionName == 'BringForward'):
-            self.Diagram.ShiftElementsForward()
+            self.diagram.ShiftElementsForward()
         elif (actionName == 'ToBottom'):
-            self.Diagram.ShiftElementsToBottom()
+            self.diagram.ShiftElementsToBottom()
         elif (actionName == 'ToTop'):
-            self.Diagram.ShiftElementsToTop()
+            self.diagram.ShiftElementsToTop()
         self.Paint()
 
     def CopySelectedObjects(self):
-        self.Diagram.CopySelection(self.application.GetClipboard())
+        self.diagram.CopySelection(self.application.GetClipboard())
 
     def CutSelectedObjects(self):
-        self.Diagram.CutSelection(self.application.GetClipboard())
+        self.diagram.CutSelection(self.application.GetClipboard())
         self.Paint()
-        self.emit('selected-item', list(self.Diagram.GetSelected()),False)
+        self.emit('selected-item', list(self.diagram.GetSelected()),False)
 
     def PasteObjects(self):
-        self.Diagram.PasteSelection(self.application.GetClipboard())
+        self.diagram.PasteSelection(self.application.GetClipboard())
         self.Paint()
-        self.emit('selected-item', list(self.Diagram.GetSelected()),False)
+        self.emit('selected-item', list(self.diagram.GetSelected()),False)
 
     def DuplicateSelectedObjects(self):
-        cmd  = CDuplicateElementsCommand(tuple(self.Diagram.GetSelectedElements()), self.Diagram)
+        cmd  = CDuplicateElementsCommand(tuple(self.diagram.GetSelectedElements()), self.diagram)
         self.application.GetCommands().Execute(cmd)
         self.Paint()
 
     def ShiftDeleteSelectedObjects(self):
-        for sel in self.Diagram.GetSelected():
+        for sel in self.diagram.GetSelected():
             if isinstance(sel, CElement):
                 self.emit('delete-element-from-all',sel.GetObject())
             elif isinstance(sel, CConLabelInfo):
@@ -147,7 +159,7 @@ class CDrawingArea(CGuiObject):
         self.Paint()
 
     def MakeSpacing(self, isHorizontal):
-        self.Diagram.SpaceElementsEvenlyXY(isHorizontal)
+        self.diagram.SpaceElementsEvenlyXY(isHorizontal)
         self.Paint()
 
     def PaintSelected(self, canvas):

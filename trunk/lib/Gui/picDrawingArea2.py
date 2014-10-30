@@ -407,19 +407,7 @@ class CpicDrawingArea(CWidget):
     
     @event("mnuCtxDelete","activate")
     def DeleteElements(self, widget = None):
-        for sel in self.Diagram.GetSelected():
-            if isinstance(sel, CConnection):
-                index = sel.GetSelectedPoint()
-                if index is not None and (sel.GetSource() != sel.GetDestination() or len(tuple(sel.GetMiddlePoints())) > 2):
-                    sel.RemovePoint(index)
-                    self.Diagram.DeselectAll()
-                    self.Paint()
-                    return
-        for sel in self.Diagram.GetSelected():
-            self.Diagram.DeleteItem(sel)
-        self.Diagram.DeselectAll()
-        self.emit('selected-item', list(self.Diagram.GetSelected()),False)
-        self.Paint()
+        self.drawingArea.DeleteSelectedObjects()
     
     def UpdateMenuSensitivity(self, project, diagram, element, topElement, connection):
         self.pmShowInProjectView.set_sensitive(element)
@@ -450,9 +438,9 @@ class CpicDrawingArea(CWidget):
     @event('application.bus', 'many-position-change', False)
     def ElementPositionChange(self, widget, elements, plugin):
         if plugin:
-            self.ToPaint()
+            self.drawingArea.ToPaint()
         else:
-            self.Paint()
+            self.drawingArea.Paint()
     
     @event('application.bus', 'properties-editing-started')
     def on_properties_editing_started (self, widget):
