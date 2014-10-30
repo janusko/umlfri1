@@ -655,7 +655,7 @@ class CDiagram(CBaseObject):
         If defaultElement it's set, elements will be aligned to their average
         center position.
         
-        @param isHorizontal: align horizontaly or verticaly
+        @param isHorizontal: align horizontally or vertically
         @type isHorizontal: bool
         @param defaultElement: Element to align to
         @type defaultElement: L{CElement<lib.Drawing.Element.CElement>}
