@@ -97,10 +97,12 @@ class CpicDrawingArea(CWidget):
         self.pressedKeys = set()
         self.scale = 1.0
         self.buffer_size = ((0, 0), BUFFER_SIZE)
-        self.drawingArea = CDrawingArea()
+        self.diagrams = dict()
+        self.activeDiagram = None
+        self.activeDrawingArea = None
         self.picDrawingArea.realize()
         self.buffer = gtk.gdk.Pixmap(self.picDrawingArea.window, *self.buffer_size[1])
-        self.Diagram = CDiagram(None,_("Start page"))
+        self.__AddDiagram(CDiagram(None,_("Start page")))
         cmap = self.picDrawingArea.window.get_colormap()
         self.DragGC = self.picDrawingArea.window.new_gc(foreground = cmap.alloc_color(str(config['/Styles/Drag/RectangleColor'].Invert())),
             function = gtk.gdk.XOR, line_width = config['/Styles/Drag/RectangleWidth'])
@@ -262,6 +264,10 @@ class CpicDrawingArea(CWidget):
         return self.Diagram
 
     def SetDiagram(self, diagram):
+        drawingArea = self.__SetActiveDiagram(diagram)
+
+
+
         #set actual scrolling position before change diagram
         self.Diagram.SetVScrollingPos(int(self.picVBar.get_value()))
         self.Diagram.SetHScrollingPos(int(self.picHBar.get_value()))
@@ -793,7 +799,18 @@ class CpicDrawingArea(CWidget):
     def on_picDrawingArea_foucus_out_event(self, widget, event):
         self.emit('set-selected', None)
         self.ResetAction()
-        
+
+    def __AddDiagram(self, diagram):
+        drawing_area = CDrawingArea()
+        self.diagrams[diagram] = drawing_area
+        if self.activeDiagram is None:
+            self.__SetActiveDiagram(diagram)
+
+    def __SetActiveDiagram(self, diagram):
+        self.activeDiagram = diagram
+        self.activeDrawingArea = self.diagrams[diagram]
+        return self.activeDrawingArea
+
     #TODO FIX: fix vertical scrolling
     def __Scroll(self, scrollbar, direction):
         tmp = scrollbar.get_adjustment()
