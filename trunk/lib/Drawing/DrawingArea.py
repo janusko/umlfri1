@@ -44,6 +44,47 @@ class CDrawingArea(CGuiObject):
         '''
         return self.diagram
 
+    def GetAbsolutePos(self, (posx, posy)):
+        '''
+        Converts relative coordinates to absolute.
+
+        Coordinates are relative to view port position.
+
+        @return: Coordinates in absolute scale.
+        @rtype : tuple
+        '''
+        h, v = self.viewPort[1]
+        return (posx + h, posy + v)
+
+    def GetRelativePos(self, (posx, posy)):
+        '''
+        Converts absolute coordinates to relative.
+
+        Coordinates are relative to view port position.
+
+        @return: Coordinates in relative scale.
+        @rtype : tuple
+        '''
+        h, v = self.viewPort[1]
+        return (-h + posx, -v + posy)
+
+    def GetPos(self):
+        '''
+        Returns view port position.
+
+        @return: Position of the view port.
+        @rtype : tuple
+        '''
+        return self.viewPort[0]
+
+    def SetPos(self, pos = (0, 0)):
+        '''
+        Changes view port position.
+
+        @param pos: New view port position
+        '''
+        self.viewPort[0] = pos
+
     def ToPaint(self, changed = True):
         try:
             self.paintlock.acquire()
