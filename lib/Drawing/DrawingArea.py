@@ -12,10 +12,28 @@ class CDrawingArea(CGuiObject):
         CGuiObject.__init__(self, app)
 
         # CDiagram(None,_("Start page"))
+        self.viewPort = ((0, 0), (0, 0))
         self.diagram = diagram
         self.paintlock = thread.allocate()
         self.toBePainted = False
         self.paintChanged = False
+
+    def GetViewPort(self):
+        '''
+        Returns current view port.
+
+        @return: Rectangle representing current view port. Two tuples (x, y), (width, height).
+        @rtype : tuple
+        '''
+        return self.viewPort
+
+    def SetViewPort(self, viewPort):
+        """
+        Changes current view port.
+
+        @param viewPort: Rectangle representing new view port. Two tuples (x, y), (width, height).
+        """
+        self.viewPort = viewPort
 
     def GetDiagram(self):
         '''
