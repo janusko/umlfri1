@@ -1,10 +1,13 @@
-import thread
-import gobject
 from lib.Base import CBaseObject
 from lib.Commands.Diagrams.DuplicateElements import CDuplicateElementsCommand
-from lib.Drawing import CDiagram, CConnection, CElement, CConLabelInfo
-from lib.Gui.common import CGuiObject
 
+from lib.Drawing import CDiagram, CConnection, CElement, CConLabelInfo
+
+from lib.Gui.common import CGuiObject
+from lib.consts import BUFFER_SIZE
+
+import thread
+import gobject
 
 class CDrawingArea(CGuiObject):
 
@@ -13,6 +16,7 @@ class CDrawingArea(CGuiObject):
 
         # CDiagram(None,_("Start page"))
         self.viewPort = ((0, 0), (0, 0))
+        self.buffer_size = ((0, 0), BUFFER_SIZE)
         self.diagram = diagram
         self.paintlock = thread.allocate()
         self.toBePainted = False
@@ -23,7 +27,7 @@ class CDrawingArea(CGuiObject):
         Returns current view port.
 
         @return: Rectangle representing current view port. Two tuples (x, y), (width, height).
-        @rtype : tuple
+        @rtype: tuple
         '''
         return self.viewPort
 
@@ -32,8 +36,12 @@ class CDrawingArea(CGuiObject):
         Changes current view port.
 
         @param viewPort: Rectangle representing new view port. Two tuples (x, y), (width, height).
+        @rtype: bool
+        @return: True, if drawing area needs to be resized, False if not.
         """
         self.viewPort = viewPort
+
+        return self.__UpdateDrawingBuffer(viewPort)
 
     def GetDiagram(self):
         '''
@@ -223,3 +231,24 @@ class CDrawingArea(CGuiObject):
 
     def PaintSelected(self, canvas):
         self.diagram.PaintSelected(canvas)
+
+
+    def __UpdateDrawingBuffer(self, viewport):
+        posx, posy = self.GetPos
+        sizx, sizy = self.GetWindowSize()
+        ((bposx, bposy), (bsizx, bsizy)) = self.buffer_size
+
+        bufferResized = False
+
+        # resize buffer rectangle, if we get out of its bounds
+        if posx < bposx or bposx + bsizx < posx + sizx or \
+           posy < bposy or bposy + bsizy < posy + sizy:
+
+            bposx = posx + (sizx - bsizx)//2
+            bposy = posy + (sizy - bsizy)//2
+
+            self.buffer_size = ((bposx, bposy), (bsizx, bsizy))
+
+            bufferResized = True
+
+        return bufferResized

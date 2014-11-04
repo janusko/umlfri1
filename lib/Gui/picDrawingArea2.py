@@ -285,6 +285,10 @@ class CpicDrawingArea(CWidget):
     def ViewPortChanged(self):
         '''
         Called, when view port has changed. Informs DrawingArea of the new view port bounds.
+
+        @param viewPort: Rectangle representing new view port. Two tuples (x, y), (width, height).
+        @rtype: bool
+        @return: True, if drawing area needs to be resized, False if not.
         '''
         drawingArea = self.activeDrawingArea
         if drawingArea is None:
@@ -295,7 +299,7 @@ class CpicDrawingArea(CWidget):
 
         viewPort = self.canvas.ToLogical(x, y), self.canvas.ToLogical(w, h)
 
-        drawingArea.SetViewPort(viewPort)
+        return drawingArea.SetViewPort(viewPort)
 
     def GetDiagramSize(self):
         tmp = [int(max(i)) for i in zip(self.Diagram.GetSize(), self.picDrawingArea.window.get_size())]
@@ -331,23 +335,13 @@ class CpicDrawingArea(CWidget):
         
 
     def Paint(self, changed = True):
-
-        if self.disablePaint:
-            return
-        try:
-            self.paintlock.acquire()
-            self.tobePainted = False
-            changed = changed or self.paintChanged
-            self.paintChanged = False
-        finally:
-            self.paintlock.release()
         if not self.picDrawingArea.window or not self.canvas:
             if changed:
                 self.__invalidated = True # redraw completly on next configure event
             return
 
         posx, posy = int(self.picHBar.get_value()), int(self.picVBar.get_value())
-        sizx, sizy = self.GetWindowSize()    
+        sizx, sizy = self.GetWindowSize()
         ((bposx, bposy), (bsizx, bsizy)) = self.buffer_size
         (bposx, bposy) = self.canvas.ToPhysical((bposx, bposy))
 
@@ -785,13 +779,13 @@ class CpicDrawingArea(CWidget):
 
     @event("picVBar", "value-changed")
     def on_picVBar_value_changed(self, widget):
-        self.ViewPortChanged()
-        self.Paint(False)
+        changed = self.ViewPortChanged()
+        self.Paint(changed)
 
     @event("picHBar", "value-changed")
     def on_picHBar_value_changed(self, widget):
-        self.ViewPortChanged()
-        self.Paint(False)
+        changed = self.ViewPortChanged()
+        self.Paint(changed)
 
     @event("picEventBox", "scroll-event")
     def on_picEventBox_scroll_event(self, widget, event):
