@@ -139,7 +139,7 @@ class CTabs(CWidget):
             for chld in self.nbTabs.get_nth_page(self.__StartPage).get_children():
                 chld.show()
         else:
-            self.diagrams[page_num].DeselectAll()
+            self.diagrams[page_num].GetSelection().DeselectAll()
             page = self.nbTabs.get_nth_page(page_num)
             page.pack_start(self.tbDrawingArea)
             self.emit("change_current_page", self.diagrams[page_num])

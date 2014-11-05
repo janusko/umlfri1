@@ -28,25 +28,7 @@ class CElement(CVisibleObject):
                 elif i.GetDestination() is not self.object:
                     if self.diagram().HasElementObject(i.GetDestination()) is not None:
                         CConnection(self.diagram(),i,self,self.diagram().HasElementObject(i.GetDestination()))
-                    
-    def __AddSquare(self, index, x, y, posx, posy):
-        size = config['/Styles/Selection/PointsSize']
-        if posx == 0:
-            x = x - size // 2
-            x1 = x + size
-        else:
-            x1 = x + posx * size
-        if posy == 0:
-            y = y - size // 2
-            y1 = y + size
-        else:
-            y1 = y + posy * size
-        if x1 < x:
-            x1, x = x, x1
-        if y1 < y:
-            y1, y = y, y1
-        self.squares.append(((-posx, -posy), (x, y), (x1 - x, y1 - y)))
-    
+
     def Deselect(self):
         CVisibleObject.Deselect(self)
         self.squares = []
@@ -82,27 +64,6 @@ class CElement(CVisibleObject):
         
         context.Resize((w, h))
         self.object.Paint(context, canvas)
-        if self.selected:
-            
-            self.squares = []
-            
-            if rx and ry:
-                self.__AddSquare(0, x       , y       ,  1,  1)
-                self.__AddSquare(2, x + w   , y       , -1,  1)
-                self.__AddSquare(5, x       , y + h   ,  1, -1)
-                self.__AddSquare(7, x + w   , y + h   , -1, -1)
-            if ry:
-                self.__AddSquare(1, x + w//2, y       ,  0,  1)
-                self.__AddSquare(6, x + w//2, y + h   ,  0, -1)
-            if rx:
-                self.__AddSquare(3, x       , y + h//2,  1,  0)
-                self.__AddSquare(4, x + w   , y + h//2, -1,  0)
-            
-            dx, dy = delta
-            for i in self.squares:
-                canvas.DrawRectangle((i[1][0] + dx, i[1][1] + dy), i[2], None, config['/Styles/Selection/PointsColor'])
-            
-            canvas.DrawRectangle((x + dx, y + dy), (w, h), fg = config['/Styles/Selection/RectangleColor'], line_width = config['/Styles/Selection/RectangleWidth'])
 
     def GetConnections(self):
         for c1 in self.GetObject().GetConnections(): #ConnectionObject
@@ -155,3 +116,6 @@ class CElement(CVisibleObject):
     
     def GetObject(self):
         return self.object
+
+    def GetSquares(self):
+        return self.squares

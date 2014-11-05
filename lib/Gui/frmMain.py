@@ -1,3 +1,4 @@
+from select import select
 from lib.Depend.gtk2 import gtk
 from common import CWindow, event
 
@@ -678,7 +679,7 @@ class CfrmMain(CWindow):
 
     @event("twProjectView", "selected-item-tree")
     def on_twTreeView_selected_item(self, widget, selected):
-        self.picDrawingArea.Diagram.DeselectAll()
+        self.picDrawingArea.Diagram.GetSelection().DeselectAll()
         self.picDrawingArea.Paint()
         self.nbProperties.Fill(selected)
 
@@ -729,7 +730,7 @@ class CfrmMain(CWindow):
 
     @event("tbToolBox", "toggled")
     def on_tbToolBox_toggled(self, widget, ItemId, ItemType):
-        self.picDrawingArea.Diagram.DeselectAll()
+        self.picDrawingArea.Diagram.GetSelection().DeselectAll()
         self.picDrawingArea.ResetAction()
 
     @event("picDrawingArea","drop-from-treeview")
