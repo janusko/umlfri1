@@ -6,6 +6,8 @@ from lib.Depend.gtk2 import gtk
 from lib.Exceptions.UserException import *
 from Abstract import CAbstractCanvas
 
+from lib.Drawing.DrawingHelper import PositionToLogical, PositionToPhysical
+
 from ..PangoLayoutConfiguration import ConfigurePangoLayout
 
 #  dash sequence for line styles used in self.cr.set_dash(dash_sequence, offset), where
@@ -58,12 +60,10 @@ class CCairoBaseCanvas(CAbstractCanvas):
         self.baseY = 0
 
     def ToLogical(self, pos):
-        pos = (int((pos[0] - self.baseX)/self.scale),int((pos[1] - self.baseY)/self.scale))
-        return pos
+        return PositionToLogical(pos, self.scale, (self.baseX, self.baseY))
 
     def ToPhysical(self, pos):
-        pos = (int(pos[0]*self.scale + self.baseX),int(pos[1]*self.scale + self.baseY))
-        return pos
+        return PositionToPhysical(pos, self.scale, (self.baseX, self.baseY))
 
     def SetScale(self, scale):
         self.scale = scale
