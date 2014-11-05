@@ -283,13 +283,12 @@ class CpicDrawingArea(CWidget):
         return (x, y)
 
     def ViewPortChanged(self):
-        '''
+        """
         Called, when view port has changed. Informs DrawingArea of the new view port bounds.
 
-        @param viewPort: Rectangle representing new view port. Two tuples (x, y), (width, height).
         @rtype: bool
         @return: True, if drawing area needs to be resized, False if not.
-        '''
+        """
         drawingArea = self.activeDrawingArea
         if drawingArea is None:
             return
