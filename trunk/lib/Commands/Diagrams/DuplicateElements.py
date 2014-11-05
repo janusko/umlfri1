@@ -13,7 +13,7 @@ class CDuplicateElementsCommand(CCommand):
         self.__elementNodes = []
 
     def _Do(self):
-        self.__diagram.DeselectAll()
+        self.__diagram.GetSelection().DeselectAll()
         # create element objects
         newElementObjects = []
         for element in self.__originalElements:
@@ -41,7 +41,7 @@ class CDuplicateElementsCommand(CCommand):
         try:
             for elobj in mapping.values():
                 newElement = Element.CElement(self.__diagram, elobj)
-                self.__diagram.AddToSelection(newElement)
+                self.__diagram.GetSelection().AddToSelection(newElement)
                 element = backward_mapping[elobj]
                 newElement.CopyFromElement(element)
                 #shift element +(5, 5) units
@@ -59,12 +59,12 @@ class CDuplicateElementsCommand(CCommand):
         del self.__originalElements
 
     def _Redo(self):
-        self.__diagram.DeselectAll()
+        self.__diagram.GetSelection().DeselectAll()
         new_duplicates = []
         for element in self.__duplicatedElements:
             new_element = Element.CElement(self.__diagram, element.GetObject())
             new_element.CopyFromElement(element)
-            self.__diagram.AddToSelection(new_element)
+            self.__diagram.GetSelection().AddToSelection(new_element)
             elementNode = CProjectNode(self.__parentNode, new_element.GetObject())
             self.__parentNode.AddChild(elementNode)
             self.__elementNodes.append(elementNode)
@@ -72,7 +72,7 @@ class CDuplicateElementsCommand(CCommand):
         self.__duplicatedElements = new_duplicates
 
     def _Undo(self):
-        self.__diagram.DeselectAll()
+        self.__diagram.GetSelection().DeselectAll()
         for element in self.__duplicatedElements:
             self.__diagram.DeleteElement(element)
         for elementNode in self.__elementNodes:

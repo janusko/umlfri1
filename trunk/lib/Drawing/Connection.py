@@ -438,15 +438,6 @@ class CConnection(CCacheableObject, CSelectableObject):
         
         for lbl in self.labels.values():
             lbl.Paint(canvas, delta)
-        
-        if self.selected is True:
-            size = config['/Styles/Selection/PointsSize']
-            color = config['/Styles/Selection/PointsColor']
-            dx, dy = delta
-            for index, i in enumerate(self.GetPoints()):
-                canvas.DrawRectangle((i[0] + dx - size//2, i[1] + dy - size//2), (size, size), color)
-            for label in self.labels.values():
-                canvas.DrawRectangle(label.GetPosition(), label.GetSize(), color)
 
     def RemovePoint(self, index, runValidation = True):
         '''

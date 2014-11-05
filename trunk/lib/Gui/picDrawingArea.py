@@ -207,7 +207,7 @@ class CpicDrawingArea(CWidget):
         positionH = 0.0
         positionW = 0.0
         shift = 180
-        elements = tuple(self.Diagram.GetSelectedElements())
+        elements = tuple(self.Diagram.GetSelection().GetSelectedElements())
         if (len(elements)>0):
             avgH = 0
             avgW = 0
@@ -385,7 +385,7 @@ class CpicDrawingArea(CWidget):
         self.picVBar.set_adjustment(tmp)
 
     def Export(self, filename, export_type, zoom, padding, background=None):
-        self.Diagram.DeselectAll()
+        self.Diagram.GetSelection().DeselectAll()
         
         (x1, y1), (x2, y2) = self.Diagram.GetSizeSquare()
         sizeX = x2 - x1
@@ -405,18 +405,18 @@ class CpicDrawingArea(CWidget):
     
     @event("mnuCtxDelete","activate")
     def DeleteElements(self, widget = None):
-        for sel in self.Diagram.GetSelected():
+        for sel in self.Diagram.GetSelection().GetSelected():
             if isinstance(sel, CConnection):
                 index = sel.GetSelectedPoint()
                 if index is not None and (sel.GetSource() != sel.GetDestination() or len(tuple(sel.GetMiddlePoints())) > 2):
                     sel.RemovePoint(index)
-                    self.Diagram.DeselectAll()
+                    self.Diagram.GetSelection().DeselectAll()
                     self.Paint()
                     return
-        for sel in self.Diagram.GetSelected():
+        for sel in self.Diagram.GetSelection().GetSelected():
             self.Diagram.DeleteItem(sel)
-        self.Diagram.DeselectAll()
-        self.emit('selected-item', list(self.Diagram.GetSelected()),False)
+        self.Diagram.GetSelection().DeselectAll()
+        self.emit('selected-item', list(self.Diagram.GetSelection().GetSelected()),False)
         self.Paint()
     
     def UpdateMenuSensitivity(self, project, diagram, element, topElement, connection):
@@ -428,8 +428,8 @@ class CpicDrawingArea(CWidget):
             diagram and not self.application.GetClipboard().IsEmpty()
             and not bool(set(i.GetObject() for i in self.Diagram.GetElements()).intersection(set(i.GetObject() for i in self.application.GetClipboard().GetContent())))
         )
-        
-        selection = list(self.Diagram.GetSelected())
+
+        selection = list(self.Diagram.GetSelection().GetSelected())
         self.pmOpenSpecification.set_sensitive(len(selection) <= 1)
         self.mnuChangeSourceTarget.set_sensitive(connection and len(selection) == 1)
         self.mnuAlign.set_sensitive(element)
@@ -465,12 +465,12 @@ class CpicDrawingArea(CWidget):
         self.picDrawingArea.grab_focus() 
         pos = self.GetAbsolutePos((event.x, event.y))
         if event.button == 1 and event.type == gtk.gdk._2BUTTON_PRESS:
-            if len(tuple(self.Diagram.GetSelected())) == 1:
-                for Element in self.Diagram.GetSelected():
+            if len(tuple(self.Diagram.GetSelection().GetSelected())) == 1:
+                for Element in self.Diagram.GetSelection().GetSelected():
                     if isinstance(Element, (CElement,CConnection)):
                         self.__OpenSpecification(Element)
                         return True
-            elif len(tuple(self.Diagram.GetSelected())) == 0:
+            elif len(tuple(self.Diagram.GetSelection().GetSelected())) == 0:
                 self.__OpenSpecification(self.Diagram)
         
         if event.button == 1:
@@ -484,11 +484,11 @@ class CpicDrawingArea(CWidget):
             
             itemSel = self.Diagram.GetElementAtPosition(pos)
             if itemSel is not None: #something is hit:
-                if itemSel in self.Diagram.GetSelected(): # deselecting:
+                if itemSel in self.Diagram.GetSelection().GetSelected(): # deselecting:
                     if (event.state & gtk.gdk.CONTROL_MASK) or (event.state & gtk.gdk.SHIFT_MASK):
-                        self.Diagram.RemoveFromSelection(itemSel)
+                        self.Diagram.GetSelection().RemoveFromSelection(itemSel)
                         #self.Paint()
-                        self.emit('selected-item', list(self.Diagram.GetSelected()),False)
+                        self.emit('selected-item', list(self.Diagram.GetSelection().GetSelected()),False)
                     elif isinstance(itemSel, CConnection): #Connection is selected
                         i = itemSel.GetPointAtPosition(pos)
                         if i is not None:
@@ -499,12 +499,12 @@ class CpicDrawingArea(CWidget):
                             i = itemSel.WhatPartOfYouIsAtPosition(pos)
                             self.__BeginDragLine(event, itemSel, i)
                         #self.Paint()
-                        self.emit('selected-item', list(self.Diagram.GetSelected()),False)
+                        self.emit('selected-item', list(self.Diagram.GetSelection().GetSelected()),False)
                     else: #elements are selected
                         self.__BeginDragRect(event)
                 elif not (event.state & gtk.gdk.CONTROL_MASK) and not (event.state & gtk.gdk.SHIFT_MASK):
-                    self.Diagram.DeselectAll()
-                    self.Diagram.AddToSelection(itemSel)
+                    self.Diagram.GetSelection().DeselectAll()
+                    self.Diagram.GetSelection().AddToSelection(itemSel)
                     if isinstance(itemSel, CConnection):
                         i = itemSel.GetPointAtPosition(pos)
                         if i is not None:
@@ -515,23 +515,23 @@ class CpicDrawingArea(CWidget):
                             i = itemSel.WhatPartOfYouIsAtPosition(pos)
                             self.__BeginDragLine(event, itemSel, i)
                     else:
-                        selElements = list(self.Diagram.GetSelectedElements())
+                        selElements = list(self.Diagram.GetSelection().GetSelectedElements())
                         self.selElem = selElements[0]
                         if len(selElements) == 1:
                             self.selSq = self.selElem.GetSquareAtPosition(pos)
                         self.__BeginDragRect(event)
                     #self.Paint()
-                    self.emit('selected-item', list(self.Diagram.GetSelected()),False)
+                    self.emit('selected-item', list(self.Diagram.GetSelection().GetSelected()),False)
                 else:
-                    self.Diagram.AddToSelection(itemSel)
+                    self.Diagram.GetSelection().AddToSelection(itemSel)
                     #self.Paint()
-                    self.emit('selected-item', list(self.Diagram.GetSelected()),False)
+                    self.emit('selected-item', list(self.Diagram.GetSelection().GetSelected()),False)
             else: # nothing under pointer
-                if self.Diagram.SelectedCount() > 0:
+                if self.Diagram.GetSelection().SelectedCount() > 0:
                     if not (event.state & gtk.gdk.CONTROL_MASK):
-                        self.Diagram.DeselectAll()
+                        self.Diagram.GetSelection().DeselectAll()
                         #self.Paint()
-                        self.emit('selected-item', list(self.Diagram.GetSelected()),False)
+                        self.emit('selected-item', list(self.Diagram.GetSelection().GetSelected()),False)
                 self.__BeginDragSel(event)
 
         elif event.button == 2:
@@ -539,12 +539,12 @@ class CpicDrawingArea(CWidget):
 
         elif event.button == 3:
             itemSel = self.Diagram.GetElementAtPosition(pos)
-            if itemSel not in frozenset(self.Diagram.GetSelected()):
-                self.Diagram.DeselectAll()
+            if itemSel not in frozenset(self.Diagram.GetSelection().GetSelected()):
+                self.Diagram.GetSelection().DeselectAll()
             if itemSel is not None:
-                self.Diagram.AddToSelection(itemSel)
+                self.Diagram.GetSelection().AddToSelection(itemSel)
             self.Paint()
-            self.emit('selected-item', list(self.Diagram.GetSelected()),False)
+            self.emit('selected-item', list(self.Diagram.GetSelection().GetSelected()),False)
             #if something is selected:
             #self.UpdateMenuSensitivity(bool(self.application.GetProject()), bool(self.Diagram), int(len(list(self.Diagram.GetSelected())) > 0))
             self.itemSel = itemSel
@@ -564,7 +564,7 @@ class CpicDrawingArea(CWidget):
             #here, I get prent element of selected elements (if element is on (over) another element)
             minzorder = 9999999
             parentElement = None
-            for el in self.Diagram.GetSelectedElements(True):
+            for el in self.Diagram.GetSelection().GetSelectedElements(True):
                 pos1, pos2 = el.GetSquare()
                 zorder = self.Diagram.GetElementZOrder(el)
                 if newElement.AreYouInRange(pos1, pos2, True):
@@ -572,11 +572,11 @@ class CpicDrawingArea(CWidget):
                         if self.Diagram.GetElementZOrder(el2) < minzorder:        #get element with minimal zorder
                             minzorder = self.Diagram.GetElementZOrder(el2)
                             parentElement = el2.GetObject()
-                    
-            self.Diagram.DeselectAll()
+
+            self.Diagram.GetSelection().DeselectAll()
             self.application.GetBus().emit('add-element', ElementObject, self.Diagram, parentElement)
-            self.Diagram.AddToSelection(newElement)
-            self.emit('selected-item', list(self.Diagram.GetSelected()),True)
+            self.Diagram.GetSelection().AddToSelection(newElement)
+            self.emit('selected-item', list(self.Diagram.GetSelection().GetSelected()),True)
             self.Paint()
 
         elif toolBtnSel[0] == 'Connection':
@@ -635,7 +635,7 @@ class CpicDrawingArea(CWidget):
                     y2, y1 = y1, y2
                 self.Diagram.AddRangeToSelection((x1, y1), (x2, y2))
                 self.dnd = None
-                self.emit('selected-item', list(self.Diagram.GetSelected()),False)
+                self.emit('selected-item', list(self.Diagram.GetSelection().GetSelected()),False)
             elif self.__NewConnection is not None:
                 pos = self.GetAbsolutePos((event.x, event.y))
                 itemSel = self.Diagram.GetElementAtPosition(pos)
@@ -647,8 +647,8 @@ class CpicDrawingArea(CWidget):
                     obj = CConnectionObject(type, source.GetObject(), destination.GetObject())
                     x = CConnection(self.Diagram, obj, source, destination, points[1:])
                     self.emit('set-selected', None)
-                    self.Diagram.AddToSelection(x)
-                    self.emit('selected-item', list(self.Diagram.GetSelected()),True)
+                    self.Diagram.GetSelection().AddToSelection(x)
+                    self.emit('selected-item', list(self.Diagram.GetSelection().GetSelected()),True)
                     self.__NewConnection = None
                 else:
                     pass
@@ -668,22 +668,22 @@ class CpicDrawingArea(CWidget):
             return True
         self.pressedKeys.add(event.keyval)
         if event.keyval==gtk.keysyms.a and event.state == gtk.gdk.CONTROL_MASK:
-            self.Diagram.SelectAll()
-            self.emit('selected-item', list(self.Diagram.GetSelected()),False)
+            self.Diagram.GetSelection().SelectAll()
+            self.emit('selected-item', list(self.Diagram.GetSelection().GetSelected()),False)
             self.Paint()
         elif event.keyval == gtk.keysyms.Delete:
             if self.dnd:
                 return
             if event.state == gtk.gdk.SHIFT_MASK:
-                for sel in self.Diagram.GetSelected():
+                for sel in self.Diagram.GetSelection().GetSelected():
                     if isinstance(sel, Element.CElement):
                         self.emit('delete-element-from-all',sel.GetObject())
                     else:
                         self.Diagram.ShiftDeleteConnection(sel)
             else:
-                for sel in self.Diagram.GetSelected():
+                for sel in self.Diagram.GetSelection().GetSelected():
                     self.Diagram.DeleteItem(sel)
-                    self.emit('selected-item', list(self.Diagram.GetSelected()),False)
+                    self.emit('selected-item', list(self.Diagram.GetSelection().GetSelected()),False)
             self.Paint()
         elif event.keyval == gtk.keysyms.Escape:
             self.ResetAction()
@@ -692,7 +692,7 @@ class CpicDrawingArea(CWidget):
             self.__SetCursor('grab')
         
         elif event.keyval in (gtk.keysyms.Right, gtk.keysyms.Left, gtk.keysyms.Up, gtk.keysyms.Down):
-            selected = list(self.Diagram.GetSelectedElements())
+            selected = list(self.Diagram.GetSelection().GetSelectedElements())
             if selected:
                 if self.dnd is None:
                     self.keydragPosition = list(selected[0].GetCenter())
@@ -823,7 +823,7 @@ class CpicDrawingArea(CWidget):
         self.dnd = 'selection'
 
     def __BeginDragRect(self, event):
-        selElements = list(self.Diagram.GetSelectedElements())
+        selElements = list(self.Diagram.GetSelection().GetSelectedElements())
         self.selElem = selElements[0]
         self.DragStartPos = self.GetAbsolutePos((event.x, event.y))
         if len(selElements) == 1:
@@ -989,18 +989,18 @@ class CpicDrawingArea(CWidget):
    
     @event("pmShowInProjectView","activate")
     def on_mnuShowInProjectView_click(self, menuItem):
-        if len(tuple(self.Diagram.GetSelected())) == 1:
-            for Element in self.Diagram.GetSelected():
+        if len(tuple(self.Diagram.GetSelection().GetSelected())) == 1:
+            for Element in self.Diagram.GetSelection().GetSelected():
                 if isinstance(Element, CElement):
                     self.emit('show-element-in-treeView',Element)
                     
     @event("pmOpenSpecification","activate")
     def on_mnuOpenSpecification_click(self, menuItem):
-        if len(tuple(self.Diagram.GetSelected())) == 1:
-            for Element in self.Diagram.GetSelected():
+        if len(tuple(self.Diagram.GetSelection().GetSelected())) == 1:
+            for Element in self.Diagram.GetSelection().GetSelected():
                 if isinstance(Element, CElement) or isinstance(Element, CConnection):
                     self.__OpenSpecification(Element)
-        elif len(tuple(self.Diagram.GetSelected())) == 0:
+        elif len(tuple(self.Diagram.GetSelection().GetSelected())) == 0:
             self.__OpenSpecification(self.Diagram)
         
     # Z-Order menu:  
@@ -1039,29 +1039,29 @@ class CpicDrawingArea(CWidget):
     def ActionCut(self, widget = None):
         self.Diagram.CutSelection(self.application.GetClipboard())
         self.Paint()
-        self.emit('selected-item', list(self.Diagram.GetSelected()),False)
+        self.emit('selected-item', list(self.Diagram.GetSelection().GetSelected()),False)
     
     @event("mnuCtxPaste","activate")
     def ActionPaste(self, widget = None):
         self.Diagram.PasteSelection(self.application.GetClipboard())
         self.Paint()
-        self.emit('selected-item', list(self.Diagram.GetSelected()),False)
+        self.emit('selected-item', list(self.Diagram.GetSelection().GetSelected()),False)
     
     @event("mnuCtxDuplicate", "activate")
     def ActionDuplicate(self, widget=None):
 #        duplicates = self.Diagram.DuplicateSelectedElements()
-#        self.Diagram.DeselectAll()
+#        self.Diagram.GetSelection().DeselectAll()
 #        for element in duplicates:
 #            self.emit('add-element', element.GetObject(), self.Diagram, None)
-#            self.Diagram.AddToSelection(element)
+#            self.Diagram.GetSelection().AddToSelection(element)
 #        self.emit('selected-item', list(self.Diagram.GetSelected()),True)
-        cmd  = CDuplicateElementsCommand(tuple(self.Diagram.GetSelectedElements()), self.Diagram)
+        cmd  = CDuplicateElementsCommand(tuple(self.Diagram.GetSelection().GetSelectedElements()), self.Diagram)
         self.application.GetCommands().Execute(cmd)
         self.Paint()
 
     @event("mnuCtxShiftDelete","activate")
     def onMnuCtxShiftDelteActivate(self, menuItem):
-        for sel in self.Diagram.GetSelected():
+        for sel in self.Diagram.GetSelection().GetSelected():
             if isinstance(sel, Element.CElement):
                 self.emit('delete-element-from-all',sel.GetObject())
             elif isinstance(sel, CConLabelInfo):
@@ -1131,7 +1131,7 @@ class CpicDrawingArea(CWidget):
         self.Paint()
     
     def ChangeSourceTarget(self):
-        for sel in self.Diagram.GetSelected():
+        for sel in self.Diagram.GetSelection().GetSelected():
             if isinstance(sel, CConnection):
                 sel.GetObject().ChangeConnection()
             project = self.application.GetProject()
@@ -1156,9 +1156,9 @@ class CpicDrawingArea(CWidget):
         return canvas.Finish()
     
     def SelectObject(self, object):
-        self.Diagram.AddToSelection(self.Diagram.GetElement(object))                
-        y=self.canvas.ToPhysical(self.Diagram.GetSelected().next().position)[1]-self.GetAbsolutePos(self.GetWindowSize())[1]/2
-        x=self.canvas.ToPhysical(self.Diagram.GetSelected().next().position)[0]-self.GetAbsolutePos(self.GetWindowSize())[0]/2
+        self.Diagram.GetSelection().AddToSelection(self.Diagram.GetElement(object))
+        y=self.canvas.ToPhysical(self.Diagram.GetSelection().GetSelected().next().position)[1]-self.GetAbsolutePos(self.GetWindowSize())[1]/2
+        x=self.canvas.ToPhysical(self.Diagram.GetSelection().GetSelected().next().position)[0]-self.GetAbsolutePos(self.GetWindowSize())[0]/2
         self.SetPos((x, y))
         self.Paint()
     
