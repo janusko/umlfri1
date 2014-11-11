@@ -30,7 +30,6 @@ class CElement(CVisibleObject):
                         CConnection(self.diagram(),i,self,self.diagram().HasElementObject(i.GetDestination()))
 
     def Deselect(self):
-        CVisibleObject.Deselect(self)
         self.squares = []
 
     def Paint(self, canvas, delta = (0, 0)):

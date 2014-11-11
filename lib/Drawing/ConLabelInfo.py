@@ -307,25 +307,7 @@ class CConLabelInfo(CCacheableObject):
                 (.5 - self.pos) > 0 else 1
             x, y = self.GetAbsolutePosition()
             self.RecalculatePosition((x, y + multi * offset * 15))
-    
-    def Select(self):
-        '''
-        directs call to self.connection
-        '''
-        return self.connection().Select()
-    
-    def Deselect(self):
-        '''
-        directs call to self.connection
-        '''
-        return self.connection().Deselect()
-    
-    def GetSelected(self):
-        '''
-        directs call to self.connection
-        '''
-        return self.connection().GetSelected()
-    
+
     def Paint(self, canvas, delta = (0, 0)):
         if self.position:
             self.SetToDefaultPosition(self.position)

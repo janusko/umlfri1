@@ -33,6 +33,13 @@ class CSelection:
             if i in self.selected:
                 yield i
 
+    def GetSelectedSet(self):
+        '''
+        Return set of selected objects.
+        @return: set of selected objects
+        '''
+        return self.selected;
+
     def GetSelectedElements(self, nolabels = False):
         for i in self.selected:
             if nolabels:
@@ -52,25 +59,19 @@ class CSelection:
 
     def AddToSelection(self, element):
         self.selected.add(element)
-        element.Select()
 
     def RemoveFromSelection(self, element):
         self.selected.remove(element)
-        element.Deselect()
 
     def DeselectAll(self):
-        for e in self.selected:
-            e.Deselect()
         self.selected = set()
 
     def SelectAll(self):
         for e in self.elements:
             self.selected.add(e)
-            e.Select()
 
         for c in self.connections:
             self.selected.add(c)
-            c.Select()
 
     def IsSelected(self, selObj):
         '''
@@ -89,7 +90,7 @@ class CSelection:
         Draws selection for selObj, if selObj is located in self.selected.
 
         @param canvas:
-        @param selObj: CSelectableObject
+        @param selObj: instance of CEelement or CConnection
         @param delta:
         '''
         if self.IsSelected(selObj):
