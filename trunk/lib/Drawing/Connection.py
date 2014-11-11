@@ -4,13 +4,12 @@ from lib.Connections.Object import CConnectionObject
 from lib.Math2D import CPoint, CLine, CPolyLine, CRectangle
 from math import sqrt, atan2, pi
 from CacheableObject import CCacheableObject
-from SelectableObject import CSelectableObject
 from ConLabelInfo import CConLabelInfo
 from lib.consts import LABELS_CLICKABLE
 from Context import CDrawingContext
 import weakref
 
-class CConnection(CCacheableObject, CSelectableObject):
+class CConnection(CCacheableObject):
     '''Graphical representation of connection
     
     In the program you have to distinguish between logical connection and its
@@ -79,12 +78,11 @@ class CConnection(CCacheableObject, CSelectableObject):
         self.selpoint = None
         self.object.AddAppears(diagram)
         CCacheableObject.__init__(self)
-        CSelectableObject.__init__(self)
-    
+
     def ChangeConnection(self):
         sour = self.GetSource()
         dest = self.GetDestination()
-        self.SetSource(dest) 
+        self.SetSource(dest)
         self.SetDestination(sour)
         self.points.reverse()
 
@@ -92,7 +90,6 @@ class CConnection(CCacheableObject, CSelectableObject):
         '''Execute L{CSelectableObject.Deselect<CSelectableObject.Deselect>} 
         and L{self.DeselectPoint<self.DeselectPoint>}
         '''
-        CSelectableObject.Deselect(self)
         self.DeselectPoint()
         
     def SelectPoint(self, index):
@@ -423,8 +420,7 @@ class CConnection(CCacheableObject, CSelectableObject):
         Paint connection including labels at canvas
         
         In fact L{CConnectionObject.Paint<CConnectionObject.Paint>} is used to 
-        paint polyline itself. This method is afterwards responsible for
-        drawing rectangles if the connection is selected.
+        paint polyline itself.
         
         @param canvas: Canvas on which its being drawn
         @type  canvas: L{CCairoCanvas<lib.Drawing.Canvas.CairoCanvas.CCairoCanvas>}

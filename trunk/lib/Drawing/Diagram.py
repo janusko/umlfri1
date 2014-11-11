@@ -168,15 +168,13 @@ class CDiagram(CBaseObject):
 
     def AddRangeToSelection(self, topleft, rightbottom):
         for el in self.GetElementsInRange(topleft, rightbottom, False):
-            self.GetSelection().AddToSelection(el)
-            #self.GetSelection().GetSelected().add(el)
-            #el.Select()
+            self.selection.AddToSelection(el)
 
     def GetSelectSquare(self, includeConnections = False):
         x1, y1 = self.GetSize()
         x2, y2 = 0, 0
         
-        for el in self.GetSelection().GetSelectedElements():
+        for el in self.selection.GetSelectedElements():
             x, y = el.GetPosition()
             w, h = el.GetSize()
             if x < x1:
@@ -188,7 +186,7 @@ class CDiagram(CBaseObject):
             if y + h > y2:
                 y2 = y + h
         if includeConnections:
-            for connection in self.GetSelection().GetSelectedConnections():
+            for connection in self.selection.GetSelectedConnections():
                 for x, y in connection.GetMiddlePoints():
                     x1 = min(x, x1)
                     x2 = max(x, x2)
@@ -198,12 +196,12 @@ class CDiagram(CBaseObject):
 
     def MoveSelection(self, delta, canvas = None):
         self.size = None
-        deltax = max(delta[0], -min(el.GetSquare()[0][0] for el in self.GetSelection().GetSelectedElements()))
-        deltay = max(delta[1], -min(el.GetSquare()[0][1] for el in self.GetSelection().GetSelectedElements()))
+        deltax = max(delta[0], -min(el.GetSquare()[0][0] for el in self.selection.GetSelectedElements()))
+        deltay = max(delta[1], -min(el.GetSquare()[0][1] for el in self.selection.GetSelectedElements()))
         movedCon = set()
         elements = set()
         if canvas is not None:
-            for el in self.GetSelection().GetSelectedElements():
+            for el in self.selection.GetSelectedElements():
                 if not isinstance(el, ConLabelInfo.CConLabelInfo):
                     pos1, pos2 = el.GetSquare()
                     zorder = self.elements.index(el)
@@ -211,7 +209,7 @@ class CDiagram(CBaseObject):
                         if not isinstance(el2, ConLabelInfo.CConLabelInfo):
                             if self.elements.index(el2) > zorder:
                                 elements.add(el2)
-        elements |= set(self.GetSelection().GetSelectedElements())
+        elements |= set(self.selection.GetSelectedElements())
         condelta = self.grid.SnapPosition(delta) if self.grid.IsActive() \
             else delta
         for el in elements:
@@ -255,7 +253,7 @@ class CDiagram(CBaseObject):
             deleted = []
             self.elements.remove(element)
             if element in self.selection.GetSelected():
-                self.selection.GetSelected().remove(element)
+                self.selection.RemoveFromSelection(element)
             for con in self.connections:
                 if (con.GetSource() is element) or \
                     (con.GetDestination() is element):
@@ -269,20 +267,20 @@ class CDiagram(CBaseObject):
         self.size = None
         self.DeleteConnection(conlabel.GetConnection())
         if conlabel in self.selection.GetSelected():
-            self.selection.GetSelected().remove(conlabel)
+            self.selection.RemoveFromSelection(conlabel)
 
     def ShiftDeleteConLabel(self,conlabel):
         self.size = None
         self.ShiftDeleteConnection(conlabel.GetConnection())
         if conlabel in self.selection.GetSelected():
-            self.selection.GetSelected().remove(conlabel)
-    
+            self.selection.RemoveFromSelection(conlabel)
+
     def DeleteConnection(self, connection):
         self.size = None
         if connection in self.connections:
             self.connections.remove(connection)
             if connection in self.selection.GetSelected():
-                self.selection.GetSelected().remove(connection)
+                self.selection.RemoveFromSelection(connection)
         else:
             raise DrawingError("ConnectionDoesNotExists")
     
@@ -399,7 +397,7 @@ class CDiagram(CBaseObject):
         as if they were deselected. Used for pixbuf copying.
         """
         canvas.Clear()
-        old_selected =  self.selection.GetSelected()
+        old_selected = self.selection.GetSelectedSet();
         self.selection.DeselectAll()
         setElements = set(e for e in old_selected if isinstance(e, Element.CElement))
         setConnections = set(e for e in old_selected if isinstance(e, Element.CConnection))
@@ -479,13 +477,13 @@ class CDiagram(CBaseObject):
     def CutSelection(self, clipboard):
         if self.selection.GetSelected():
             clipboard.SetContent((el for el in self.selection.GetSelected() if isinstance(el, Element.CElement)))
-            for el in list(self.selection.GetSelected()):
+            for el in list(self.selection.GetSelectedSet()):
                 if isinstance(el, Element.CElement):
                     self.DeleteElement(el)
     
     def CopySelection(self, clipboard):
         if self.selection.GetSelected():
-            clipboard.SetContent((el for el in self.selection.GetSelected() if isinstance(el, Element.CElement)))
+            clipboard.SetContent((el for el in self.selection.GetSelectedSet() if isinstance(el, Element.CElement)))
     
     def PasteSelection(self, clipboard):
         pasted = set()
