@@ -116,14 +116,7 @@ class CpicDrawingArea(CWidget):
 
         self.picEventBox.drag_dest_set(gtk.DEST_DEFAULT_ALL, self.TARGETS, gtk.gdk.ACTION_COPY)
         self.AdjustScrollBars()
-        self.cursors = {None: None}
-        for name, img in (('grab', 'grab.png'), ('grabbing', 'grabbing.png')):
-            self.cursors[name] = gtk.gdk.Cursor(
-                gtk.gdk.display_get_default(),
-                gtk.gdk.pixbuf_new_from_file(os.path.join(IMAGES_PATH, img)),
-                0,
-                0
-            )
+        self.cursorImages = {None: None}
         self.__invalidated = False
     
     def __OpenSpecification(self, obj):
@@ -131,8 +124,31 @@ class CpicDrawingArea(CWidget):
         frmProps.SetParent(self.application.GetWindow('frmMain'))
         frmProps.ShowPropertiesWindow(obj, self.application)
 
-    def __SetCursor(self, cursor = None):
-        self.picDrawingArea.window.set_cursor(self.cursors[cursor])
+    def __UpdateCursor(self):
+        """
+        Updates current cursor from active L{CDrawingArea<lib.Drawing.DrawingArea>}. Loads cursor image, if necessary.
+        """
+        cursorFile = self.activeDrawingArea.GetCursorFile()
+        cursorImage = self.cursorImages.get(cursorFile)
+        if cursorImage is None:
+            cursorImage = gtk.gdk.Cursor(
+                    gtk.gdk.display_get_default(),
+                    gtk.gdk.pixbuf_new_from_file(os.path.join(IMAGES_PATH, img)),
+                    0,
+                    0
+                )
+            self.cursors[cursorFile] = cursorImage
+
+        self.__SetCursor(cursorImage)
+
+    def __SetCursor(self, cursorImage = None):
+        """
+        Sets cursor to specified image
+
+        @param cursorImage: Cursor image to set cursor to.
+        @type cursorImage: L{Cursor<gtk.gdk.Cursor>}
+        """
+        self.picDrawingArea.window.set_cursor(cursorImage)
     
     def BestFitScale(self):
         winSizeX, winSizeY = self.GetWindowSize()
