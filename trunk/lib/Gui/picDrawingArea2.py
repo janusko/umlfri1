@@ -713,21 +713,9 @@ class CpicDrawingArea(CWidget):
 
     @event("picEventBox", "motion-notify-event")
     def on_motion_notify_event(self, widget, event):
-        if self.dnd == 'resize':
-            self.__DrawResRect((event.x, event.y), True, True)    
-        elif self.dnd == 'rect' and self.keydragPosition is None:
-            self.__DrawDragRect((event.x, event.y))
-        elif self.dnd == 'point':
-            self.__DrawDragPoint((event.x, event.y))
-        elif self.dnd == 'line':
-            self.__DrawDragLine(event.x, event.y)
-        elif self.dnd == 'move':
-            self.__DrawDragMove((event.x, event.y))
-        elif self.dnd == 'selection':
-            self.__DrawDragSel((event.x, event.y))
-        elif self.__NewConnection is not None:
-            self.__DrawNewConnection((event.x, event.y))
-
+        pos = (event.x, event.y)
+        self.activeDrawingArea.OnMouseMove(pos)
+        self.Paint()
     
     @event("picEventBox","drag-data-received")
     def on_drag_data_received(self, widget, drag_context, x, y, selection, targettype, timestamp):
