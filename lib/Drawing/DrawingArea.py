@@ -2,9 +2,10 @@ from lib.Base import CBaseObject
 from lib.Commands.Diagrams.DuplicateElements import CDuplicateElementsCommand
 
 from lib.Drawing import CDiagram, CConnection, CElement, CConLabelInfo
+from lib.Drawing.DrawingHelper import PositionToPhysical, PositionToLogical
 
 from lib.Gui.common import CGuiObject
-from lib.consts import BUFFER_SIZE
+from lib.consts import BUFFER_SIZE, SCALE_MIN, SCALE_MAX, SCALE_INCREASE
 
 import thread
 import gobject
@@ -17,6 +18,7 @@ class CDrawingArea(CGuiObject):
         # CDiagram(None,_("Start page"))
         self.viewPort = ((0, 0), (0, 0))
         self.buffer_size = ((0, 0), BUFFER_SIZE)
+        self.scale = 1.0
         self.diagram = diagram
         self.paintlock = thread.allocate()
         self.toBePainted = False
@@ -36,6 +38,8 @@ class CDrawingArea(CGuiObject):
         Changes current view port.
 
         @param viewPort: Rectangle representing new view port. Two tuples (x, y), (width, height).
+        @type viewPort: tuple
+
         @rtype: bool
         @return: True, if drawing area needs to be resized, False if not.
         """
@@ -58,11 +62,18 @@ class CDrawingArea(CGuiObject):
 
         Coordinates are relative to view port position.
 
+        @param posx: X coordinate of position.
+        @type posx: int
+
+        @param posx: Y coordinate of position.
+        @type posx: int
+
         @return: Coordinates in absolute scale.
         @rtype : tuple
         """
+        x, y = PositionToLogical((posx, posy), self.scale, self.GetViewPortPos())
         h, v = self.viewPort[1]
-        return (posx + h, posy + v)
+        return (x + h, y + v)
 
     def GetRelativePos(self, (posx, posy)):
         """
@@ -70,13 +81,20 @@ class CDrawingArea(CGuiObject):
 
         Coordinates are relative to view port position.
 
+        @param posx: X coordinate of position.
+        @type posx: int
+
+        @param posx: Y coordinate of position.
+        @type posx: int
+
         @return: Coordinates in relative scale.
         @rtype : tuple
         """
+        x, y = PositionToPhysical((posx, posy), self.scale, self.GetViewPortPos())
         h, v = self.viewPort[1]
-        return (-h + posx, -v + posy)
+        return (-h + x, -v + y)
 
-    def GetPos(self):
+    def GetViewPortPos(self):
         """
         Returns view port position.
 
@@ -85,13 +103,52 @@ class CDrawingArea(CGuiObject):
         """
         return self.viewPort[0]
 
-    def SetPos(self, pos = (0, 0)):
+    def SetViewPortPos(self, pos = (0, 0)):
         """
         Changes view port position.
 
         @param pos: New view port position
+        @type pos: tuple
         """
         self.viewPort[0] = pos
+
+    def GetScale(self):
+        """
+        Returns drawing area scale (zoom).
+
+        @return: Scale of drawing area.
+        @rtype : float
+        """
+        return self.scale
+
+    def SetScale(self, scale):
+        """
+        Changes scale of drawing area (zoom).
+
+        @param scale: New scale of drawing area.
+        @type scale: float
+        """
+        if (scale >= SCALE_MIN) and (scale <= SCALE_MAX):
+            self.scale = scale
+            # self.AdjustScrollBars()
+            self.Paint()
+
+    def IncScale(self, scale):
+        """
+        Increases or decreases scale (zoom) based on @scale.
+
+        @param scale: Specifies, whether the scale is increased or decreased.
+        @type scale: float
+        """
+        tmp_scale = (SCALE_INCREASE*((self.scale+0.00001)//SCALE_INCREASE))+scale
+        if (tmp_scale+0.00001 >= SCALE_MIN) and (tmp_scale-0.00001 <= SCALE_MAX):
+            self.scale = tmp_scale
+            self.disablePaint = True
+            self.CenterZoom(scale)
+            self.canvas.SetScale(self.scale)
+            # self.AdjustScrollBars()
+            self.disablePaint = False
+            self.Paint()
 
     def ToPaint(self, changed = True):
         try:
@@ -121,7 +178,10 @@ class CDrawingArea(CGuiObject):
         finally:
             self.paintlock.release()
 
-        self.diagram.Paint(self.canvas)
+        if changed:
+            self.canvas.SetScale(self.scale)
+
+            self.diagram.Paint(self.canvas)
 
     def DeleteSelectedObjects(self):
         for sel in self.diagram.GetSelected():
@@ -234,7 +294,7 @@ class CDrawingArea(CGuiObject):
 
 
     def __UpdateDrawingBuffer(self, viewport):
-        posx, posy = self.GetPos
+        posx, posy = self.GetViewPortPos()
         sizx, sizy = self.GetWindowSize()
         ((bposx, bposy), (bsizx, bsizy)) = self.buffer_size
 

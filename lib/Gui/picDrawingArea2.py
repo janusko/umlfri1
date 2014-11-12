@@ -153,23 +153,8 @@ class CpicDrawingArea(CWidget):
         self.picHBar.set_value(diaSizeMinX)
         self.picVBar.set_value(diaSizeMinY)
 
-    def SetScale(self, scale):
-        if (scale >= SCALE_MIN) and (scale <= SCALE_MAX):
-            self.scale = scale
-            self.canvas.SetScale(self.scale)
-            self.AdjustScrollBars()
-            self.Paint()
-
     def IncScale(self, scale):
-        tmp_scale = (SCALE_INCREASE*((self.scale+0.00001)//SCALE_INCREASE))+scale
-        if (tmp_scale+0.00001 >= SCALE_MIN) and (tmp_scale-0.00001 <= SCALE_MAX):
-            self.scale = tmp_scale
-            self.disablePaint = True
-            self.CenterZoom(scale)
-            self.canvas.SetScale(self.scale)
-            self.AdjustScrollBars()
-            self.disablePaint = False
-            self.Paint()
+        self.activeDrawingArea.IncScale(scale)
 
     def ShiftScrollbars(self, direction):
         posx,posy = self.GetPos()
