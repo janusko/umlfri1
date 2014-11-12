@@ -281,7 +281,7 @@ class CpicDrawingArea(CWidget):
         x, y = int(self.picHBar.get_value()), int(self.picVBar.get_value())
         w, h = self.GetWindowSize()
 
-        viewPort = self.canvas.ToLogical(x, y), self.canvas.ToLogical(w, h)
+        viewPort = (x, y), (w, h)
 
         return drawingArea.SetViewPort(viewPort)
 
@@ -324,26 +324,8 @@ class CpicDrawingArea(CWidget):
                 self.__invalidated = True # redraw completly on next configure event
             return
 
-        posx, posy = int(self.picHBar.get_value()), int(self.picVBar.get_value())
-        sizx, sizy = self.GetWindowSize()
-        ((bposx, bposy), (bsizx, bsizy)) = self.buffer_size
-        (bposx, bposy) = self.canvas.ToPhysical((bposx, bposy))
+        self.activeDrawingArea.Paint(changed)
 
-
-        # resize buffer rectangle, if we get out of its bounds
-        if posx < bposx or bposx + bsizx < posx + sizx or \
-           posy < bposy or bposy + bsizy < posy + sizy:
-       
-            bposx = posx + (sizx - bsizx)//2
-            bposy = posy + (sizy - bsizy)//2
-                      
-            (bposx, bposy) = self.canvas.ToLogical((bposx, bposy))
-            self.buffer_size = ((bposx, bposy), (bsizx, bsizy))
-            changed = True
-        if changed:
-            self.Diagram.SetViewPort(self.buffer_size)
-            self.Diagram.Paint(self.canvas)
-            
         self.AdjustScrollBars()
         wgt = self.picDrawingArea.window
         gc = wgt.new_gc()
@@ -394,7 +376,7 @@ class CpicDrawingArea(CWidget):
         sizeY = y2 - y1
         x = x1
         y = y1
-        
+
         sizeX = (sizeX + padding*2) * zoom
         sizeY = (sizeY + padding*2) * zoom
         canvas = CExportCanvas(self.application.GetProject().GetMetamodel().GetStorage(), export_type,

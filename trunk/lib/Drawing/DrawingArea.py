@@ -47,6 +47,33 @@ class CDrawingArea(CGuiObject):
 
         return self.__UpdateDrawingBuffer(viewPort)
 
+    def GetViewPortPos(self):
+        """
+        Returns view port position.
+
+        @return: Position of the view port.
+        @rtype : tuple
+        """
+        return self.viewPort[0]
+
+    def SetViewPortPos(self, pos = (0, 0)):
+        """
+        Changes view port position.
+
+        @param pos: New view port position
+        @type pos: tuple
+        """
+        self.viewPort = pos, self.GetViewPortSize()
+
+    def GetViewPortSize(self):
+        """
+        Returns view port size
+
+        @return: Size of the view port
+        @rtype : tuple
+        """
+        return self.viewPort[1]
+
     def GetDiagram(self):
         """
         Returns associated diagram.
@@ -71,9 +98,7 @@ class CDrawingArea(CGuiObject):
         @return: Coordinates in absolute scale.
         @rtype : tuple
         """
-        x, y = PositionToLogical((posx, posy), self.scale, self.GetViewPortPos())
-        h, v = self.viewPort[1]
-        return (x + h, y + v)
+        return PositionToLogical((posx, posy), self.scale, self.GetViewPortPos())
 
     def GetRelativePos(self, (posx, posy)):
         """
@@ -90,27 +115,7 @@ class CDrawingArea(CGuiObject):
         @return: Coordinates in relative scale.
         @rtype : tuple
         """
-        x, y = PositionToPhysical((posx, posy), self.scale, self.GetViewPortPos())
-        h, v = self.viewPort[1]
-        return (-h + x, -v + y)
-
-    def GetViewPortPos(self):
-        """
-        Returns view port position.
-
-        @return: Position of the view port.
-        @rtype : tuple
-        """
-        return self.viewPort[0]
-
-    def SetViewPortPos(self, pos = (0, 0)):
-        """
-        Changes view port position.
-
-        @param pos: New view port position
-        @type pos: tuple
-        """
-        self.viewPort[0] = pos
+        return PositionToPhysical((posx, posy), self.scale, self.GetViewPortPos())
 
     def GetScale(self):
         """
@@ -294,8 +299,8 @@ class CDrawingArea(CGuiObject):
 
 
     def __UpdateDrawingBuffer(self, viewport):
-        posx, posy = self.GetViewPortPos()
-        sizx, sizy = self.GetWindowSize()
+        posx, posy = viewport[0]
+        sizx, sizy = viewport[1]
         ((bposx, bposy), (bsizx, bsizy)) = self.buffer_size
 
         bufferResized = False
