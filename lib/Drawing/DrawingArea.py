@@ -5,6 +5,8 @@ from lib.Drawing import CDiagram, CConnection, CElement, CConLabelInfo
 from lib.Drawing.DrawingHelper import PositionToPhysical, PositionToLogical
 
 from lib.Gui.common import CGuiObject
+
+from lib.config import config
 from lib.consts import BUFFER_SIZE, SCALE_MIN, SCALE_MAX, SCALE_INCREASE
 
 import thread
@@ -23,6 +25,9 @@ class CDrawingArea(CGuiObject):
         self.paintlock = thread.allocate()
         self.toBePainted = False
         self.paintChanged = False
+
+        self.dragForegroundColor = config['/Styles/Drag/RectangleColor'].Invert()
+        self.dragLineWidth = config['/Styles/Drag/RectangleWidth']
 
     def GetViewPort(self):
         """
@@ -153,7 +158,6 @@ class CDrawingArea(CGuiObject):
             self.canvas.SetScale(self.scale)
             # self.AdjustScrollBars()
             self.disablePaint = False
-            self.Paint()
 
     def ToPaint(self, changed = True):
         try:
@@ -186,7 +190,22 @@ class CDrawingArea(CGuiObject):
         if changed:
             self.canvas.SetScale(self.scale)
 
-            self.diagram.Paint(self.canvas)
+            self.diagram.Paint(canvas)
+
+        if self.dnd == 'resize':
+            self.__DrawResRect(None, True, True)
+        elif self.dnd == 'rect' and self.keydragPosition is None:
+            self.__DrawDragRect(pos)
+        elif self.dnd == 'point':
+            self.__DrawDragPoint(pos)
+        elif self.dnd == 'line':
+            self.__DrawDragLine(pos)
+        elif self.dnd == 'move':
+            self.__DrawDragMove(pos)
+        elif self.dnd == 'selection':
+            self.__DrawDragSel(pos)
+        elif self.__NewConnection is not None:
+            self.__DrawNewConnection(pos)
 
     def DeleteSelectedObjects(self):
         for sel in self.diagram.GetSelected():
@@ -297,7 +316,6 @@ class CDrawingArea(CGuiObject):
     def PaintSelected(self, canvas):
         self.diagram.PaintSelected(canvas)
 
-
     def __UpdateDrawingBuffer(self, viewport):
         posx, posy = viewport[0]
         sizx, sizy = viewport[1]
@@ -317,3 +335,49 @@ class CDrawingArea(CGuiObject):
             bufferResized = True
 
         return bufferResized
+
+    def OnMouseMove(self, pos):
+        """
+        Callback for mouse move event (motion-notify-event)
+
+        @param pos: Current mouse position.
+        @type pos: tuple
+        """
+        if self.dnd == 'resize':
+            self.__DrawResRect(pos, True, True)
+        elif self.dnd == 'rect' and self.keydragPosition is None:
+            self.__DrawDragRect(pos)
+        elif self.dnd == 'point':
+            self.__DrawDragPoint(pos)
+        elif self.dnd == 'line':
+            self.__DrawDragLine(pos)
+        elif self.dnd == 'move':
+            self.__DrawDragMove(pos)
+        elif self.dnd == 'selection':
+            self.__DrawDragSel(pos)
+        elif self.__NewConnection is not None:
+            self.__DrawNewConnection(pos)
+
+    def __GetDelta(self, pos, follow = False):
+        if pos == (None, None):
+            return 0, 0
+        tmpx, tmpy = self.GetAbsolutePos(pos)
+        dx, dy = tmpx - self.DragStartPos[0], tmpy - self.DragStartPos[1]
+        posx, posy = self.DragPoint
+        tmpx, tmpy = max(0, posx + dx), max(0, posy + dy)
+        return int(tmpx - posx), int(tmpy - posy)
+
+    def __UpdateDragSel(self, pos):
+        x1, y1 = self.DragSel
+        x2, y2 = self.GetAbsolutePos(pos)
+        if x1 > x2:
+            x1, x2 = x2, x1
+        if y1 > y2:
+            y1, y2 = y2, y1
+        tmpx, tmpy = self.GetRelativePos((x1, y1))
+        w, h = (x2 - x1), (y2 - y1)
+        if self.selSq is None:
+            self.__oldsel = tmpx, tmpy, w, h
+
+    def __DrawDragSel(self, canvas):
+        canvas.DrawRectangle(self.__oldsel[0], self.__oldsel[1], self.dragForegroundColor, None, self.dragLineWidth)
