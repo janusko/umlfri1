@@ -29,6 +29,31 @@ class CDrawingArea(CGuiObject):
         self.dragForegroundColor = config['/Styles/Drag/RectangleColor'].Invert()
         self.dragLineWidth = config['/Styles/Drag/RectangleWidth']
 
+        self.cursor = None
+        self.cursors = {
+            None: None,
+            'grab': 'grab.png',
+            'grabbing': 'grabbing.png'
+        }
+
+    def GetCursor(self):
+        """
+        Returns current cursor.
+
+        @return: Type of current cursor.
+        @rtype: str
+        """
+        return self.cursor
+
+    def GetCursorFile(self):
+        """
+        Returns filename of image for current cursor.
+
+        @return: Filename of cursor image.
+        @rtype: str
+        """
+        return self.cursors[self.GetCursor()]
+
     def GetViewPort(self):
         """
         Returns current view port.
