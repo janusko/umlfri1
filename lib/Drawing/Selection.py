@@ -133,8 +133,11 @@ class CSelection:
                     self.__AddSquare(4, x + w   , y + h//2, -1,  0, selObj)
 
                 dx, dy = delta
-                for i in selObj.GetSquares():
-                    canvas.DrawRectangle((i[1][0] + dx, i[1][1] + dy), i[2], None, config['/Styles/Selection/PointsColor'])
+                
+                # squares are painted, if exactly one element is selected
+                if len(list(self.GetSelectedElements())) == 1:
+                    for i in selObj.GetSquares():
+                        canvas.DrawRectangle((i[1][0] + dx, i[1][1] + dy), i[2], None, config['/Styles/Selection/PointsColor'])
 
                 canvas.DrawRectangle((x + dx, y + dy), (w, h), fg = config['/Styles/Selection/RectangleColor'], line_width = config['/Styles/Selection/RectangleWidth'])
             elif isinstance(selObj, Connection.CConnection):
