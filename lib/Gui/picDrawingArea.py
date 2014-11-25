@@ -518,7 +518,7 @@ class CpicDrawingArea(CWidget):
                         selElements = list(self.Diagram.GetSelection().GetSelectedElements())
                         self.selElem = selElements[0]
                         if len(selElements) == 1:
-                            self.selSq = self.selElem.GetSquareAtPosition(pos)
+                            self.selSq = self.Diagram.GetSelection().GetSquareAtPosition(pos)
                         self.__BeginDragRect(event)
                     #self.Paint()
                     self.emit('selected-item', list(self.Diagram.GetSelection().GetSelected()),False)
@@ -827,7 +827,7 @@ class CpicDrawingArea(CWidget):
         self.selElem = selElements[0]
         self.DragStartPos = self.GetAbsolutePos((event.x, event.y))
         if len(selElements) == 1:
-            self.selSq = self.selElem.GetSquareAtPosition(self.DragStartPos)
+            self.selSq = self.Diagram.GetSelection().GetSquareAtPosition(self.DragStartPos)
             if(self.setResize == False):
                 self.selSq = None
                 self.setResize = True

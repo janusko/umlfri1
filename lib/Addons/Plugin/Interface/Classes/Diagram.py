@@ -21,16 +21,16 @@ class IDiagram(IDomainObject):
         return him.GetConnection(obj)
     
     def GetSelected(him):
-        return list(him.GetSelected())
+        return list(him.GetSelection().GetSelected())
     
     def GetSelectedElements(him):
-        return list(him.GetSelectedElements(True))
+        return list(him.GetSelection().GetSelectedElements(True))
         
     def GetSelectedConnectionLabels(him):
-        return [item for item in him.GetSelectedElements(False) if isinstance(item, CConLabelInfo)]
+        return [item for item in him.GetSelection().GetSelectedElements(False) if isinstance(item, CConLabelInfo)]
     
     def GetSelectedConnections(him): 
-        return list(him.GetSelectedConnections())
+        return list(him.GetSelection().GetSelectedConnections())
         
     def GetSelectSquare(him):
         return him.GetSelectSquare()

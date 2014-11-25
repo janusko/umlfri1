@@ -10,7 +10,6 @@ class CElement(CVisibleObject):
         self.isLoad = isLoad
         self.hasDeltaSize = hasDeltaSize
         self.object = obj
-        self.squares = []
         self.diagram = weakref.ref(diagram)
         self.diagram().AddElement(self)
         self.object.AddAppears(diagram)
@@ -28,9 +27,6 @@ class CElement(CVisibleObject):
                 elif i.GetDestination() is not self.object:
                     if self.diagram().HasElementObject(i.GetDestination()) is not None:
                         CConnection(self.diagram(),i,self,self.diagram().HasElementObject(i.GetDestination()))
-
-    def Deselect(self):
-        self.squares = []
 
     def Paint(self, canvas, delta = (0, 0)):
         x, y = self.position
@@ -70,17 +66,6 @@ class CElement(CVisibleObject):
                 if c2.GetObject() is c1:
                     yield c2
 
-    
-    def GetSquareAtPosition(self, pos):
-        x, y = pos
-        for sq in self.squares:
-            sqbx = sq[1][0]
-            sqby = sq[1][1]
-            sqex = sqbx + sq[2][0]
-            sqey = sqby + sq[2][1]
-            if (x >= sqbx and x <= sqex and y >= sqby and y <= sqey):
-                return sq[0]
-
     def Resize(self, delta, selSquareIdx):
         '''
         Updates actual size according to delta size and if necessary changes position
@@ -115,6 +100,3 @@ class CElement(CVisibleObject):
     
     def GetObject(self):
         return self.object
-
-    def GetSquares(self):
-        return self.squares

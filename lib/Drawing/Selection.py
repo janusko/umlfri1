@@ -1,15 +1,17 @@
-import sqlite3
 import Connection, Element, ConLabelInfo
 from lib.config import config
 from lib.Drawing.Context import CDrawingContext
 
 
 class CSelection:
-    '''Set of selected elements and connections'''
+
     def __init__(self):
         self.selected = set()
+        '''Set of selected elements, connections or conlabelinfos'''
+        self.elementSquares = []
+        '''Squares of currently selected element'''
 
-    def __AddSquare(self, index, x, y, posx, posy, element):
+    def __AddSquare(self, x, y, posx, posy):
         size = config['/Styles/Selection/PointsSize']
         if posx == 0:
             x = x - size // 2
@@ -25,7 +27,8 @@ class CSelection:
             x1, x = x, x1
         if y1 < y:
             y1, y = y, y1
-        element.GetSquares().append(((-posx, -posy), (x, y), (x1 - x, y1 - y)))
+
+        self.elementSquares.append(((-posx, -posy), (x, y), (x1 - x, y1 - y)))
         
     def GetSelected(self):
         selected = tuple(self.selected)
@@ -38,7 +41,7 @@ class CSelection:
         Return set of selected objects.
         @return: set of selected objects
         '''
-        return self.selected;
+        return self.selected
 
     def GetSelectedElements(self, nolabels = False):
         for i in self.selected:
@@ -54,11 +57,27 @@ class CSelection:
             if isinstance(i, Connection.CConnection):
                 yield i
 
+    def GetElementSquares(self):
+        return self.elementSquares
+
+    def GetSquareAtPosition(self, pos):
+        x, y = pos
+        for sq in self.elementSquares:
+            sqbx = sq[1][0]
+            sqby = sq[1][1]
+            sqex = sqbx + sq[2][0]
+            sqey = sqby + sq[2][1]
+            if (x >= sqbx and x <= sqex and y >= sqby and y <= sqey):
+                return sq[0]
+
     def SelectedCount(self):
         return len(self.selected)
 
     def AddToSelection(self, element):
         self.selected.add(element)
+
+        if isinstance(element, ConLabelInfo.CConLabelInfo):
+            self.selected.add(element.GetConnection())
 
     def RemoveFromSelection(self, element):
         self.selected.remove(element)
@@ -90,7 +109,7 @@ class CSelection:
         Draws selection for selObj, if selObj is located in self.selected.
 
         @param canvas:
-        @param selObj: instance of CEelement or CConnection
+        @param selObj: instance of CEelement, CConnection or CConLabelInfo
         @param delta:
         '''
         if self.IsSelected(selObj):
@@ -118,25 +137,25 @@ class CSelection:
                 if wasSmall:
                     selObj.SetSize((w, h))
 
-                selObj.squares = []
+                self.elementSquares = []
 
                 if rx and ry:
-                    self.__AddSquare(0, x       , y       ,  1,  1, selObj)
-                    self.__AddSquare(2, x + w   , y       , -1,  1, selObj)
-                    self.__AddSquare(5, x       , y + h   ,  1, -1, selObj)
-                    self.__AddSquare(7, x + w   , y + h   , -1, -1, selObj)
+                    self.__AddSquare(x       , y       ,  1,  1)
+                    self.__AddSquare(x + w   , y       , -1,  1)
+                    self.__AddSquare(x       , y + h   ,  1, -1)
+                    self.__AddSquare(x + w   , y + h   , -1, -1)
                 if ry:
-                    self.__AddSquare(1, x + w//2, y       ,  0,  1, selObj)
-                    self.__AddSquare(6, x + w//2, y + h   ,  0, -1, selObj)
+                    self.__AddSquare(x + w//2, y       ,  0,  1)
+                    self.__AddSquare(x + w//2, y + h   ,  0, -1)
                 if rx:
-                    self.__AddSquare(3, x       , y + h//2,  1,  0, selObj)
-                    self.__AddSquare(4, x + w   , y + h//2, -1,  0, selObj)
+                    self.__AddSquare( x      , y + h//2,  1,  0)
+                    self.__AddSquare(x + w   , y + h//2, -1,  0)
 
                 dx, dy = delta
                 
                 # squares are painted, if exactly one element is selected
                 if len(list(self.GetSelectedElements())) == 1:
-                    for i in selObj.GetSquares():
+                    for i in self.elementSquares:
                         canvas.DrawRectangle((i[1][0] + dx, i[1][1] + dy), i[2], None, config['/Styles/Selection/PointsColor'])
 
                 canvas.DrawRectangle((x + dx, y + dy), (w, h), fg = config['/Styles/Selection/RectangleColor'], line_width = config['/Styles/Selection/RectangleWidth'])
