@@ -226,8 +226,8 @@ class CDrawingArea(CGuiObject):
             self.__DrawDragRect(canvas)
         elif self.dnd == 'point':
             self.__DrawDragPoint(canvas)
-        # elif self.dnd == 'line':
-        #     self.__DrawDragLine(pos)
+        elif self.dnd == 'line':
+            self.__DrawDragLine(canvas)
         # elif self.dnd == 'move':
         #     self.__DrawDragMove(pos)
         # elif self.dnd == 'selection':
@@ -383,8 +383,8 @@ class CDrawingArea(CGuiObject):
             self.__UpdateDragRect(pos)
         elif self.dnd == 'point':
             self.__UpdateDragPoint(pos)
-        # elif self.dnd == 'line':
-        #     self.__DrawDragLine(pos)
+        elif self.dnd == 'line':
+            self.__UpdateDragLine(pos)
         # elif self.dnd == 'move':
         #     self.__DrawDragMove(pos)
         # elif self.dnd == 'selection':
@@ -430,7 +430,7 @@ class CDrawingArea(CGuiObject):
                          else:
                              itemSel.DeselectPoint()
                              i = itemSel.WhatPartOfYouIsAtPosition(pos)
-                             # self.__BeginDragLine(pos, itemSel, i)
+                             self.__BeginDragLine(pos, itemSel, i)
                          self.application.GetBus().emit('selected-items', list(self.diagram.GetSelection().GetSelected()))
                     else: #elements are selected
                         self.__BeginDragRect(pos)
@@ -481,6 +481,11 @@ class CDrawingArea(CGuiObject):
             elif self.dnd == 'point':
                 connection, index = self.DragPoint
                 self.diagram.MoveConnectionPoint(connection, pos, index)
+                self.dnd = None
+            elif self.dnd == 'line':
+                connection, index = self.DragPoint
+                if connection.InsertPoint(pos, index):
+                    self.diagram.MoveConnectionPoint(connection, pos, index+1)
                 self.dnd = None
             elif self.__NewConnection is not None:
                 itemSel = self.diagram.GetElementAtPosition(pos)
@@ -634,6 +639,26 @@ class CDrawingArea(CGuiObject):
     def __DrawNewConnection(self, canvas):
         canvas.DrawLines(self.__oldNewConnection, self.dragForegroundColor, line_width=self.dragLineWidth)
 
+
+    def __BeginDragLine(self, pos, connection, point):
+        self.DragStartPos = pos
+        self.DragPoint = (connection, point)
+        self.__UpdateDragLine(pos)
+        self.dnd = 'line'
+
+    def __UpdateDragLine(self, (x, y)):
+        if x is None:
+            x, y = self.__oldPoints2
+        x, y = max(x, 0), max(y, 0)
+        connection, index = self.DragPoint
+        all = tuple(connection.GetPoints())
+        prev, next = all[index], all[index + 1]
+        points = [prev, (int(x), int(y)), next]
+        self.__oldPoints = points
+        self.__oldPoints2 = (x, y)
+
+    def __DrawDragLine(self, canvas):
+        canvas.DrawLines(self.__oldPoints, self.dragForegroundColor, line_width=self.dragLineWidth)
 
     def __BeginDragPoint(self, pos, connection, point):
         self.DragStartPos = pos
