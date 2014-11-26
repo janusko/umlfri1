@@ -22,9 +22,6 @@ class CDrawingArea(CGuiObject):
         self.buffer_size = ((0, 0), BUFFER_SIZE)
         self.scale = 1.0
         self.diagram = diagram
-        self.paintlock = thread.allocate()
-        self.toBePainted = False
-        self.paintChanged = False
 
         self.dragForegroundColor = config['/Styles/Drag/RectangleColor'].Invert()
         self.dragLineWidth = config['/Styles/Drag/RectangleWidth']
@@ -104,6 +101,16 @@ class CDrawingArea(CGuiObject):
         """
         return self.viewPort[1]
 
+    def SetViewPortSize(self, size):
+        """
+        Changes view port size.
+
+        @param size: New size of the view port
+        @type size: tuple
+        """
+        viewPort = (self.GetViewPortPos(), size)
+        self.SetViewPort(viewPort)
+
     def GetDiagram(self):
         """
         Returns associated diagram.
@@ -180,19 +187,9 @@ class CDrawingArea(CGuiObject):
             self.scale = tmp_scale
             self.disablePaint = True
             self.CenterZoom(scale)
-            self.canvas.SetScale(self.scale)
             # self.AdjustScrollBars()
             self.disablePaint = False
-
-    def ToPaint(self, changed = True):
-        try:
-            self.paintlock.acquire()
-            self.paintChanged = self.paintChanged or changed
-            if not self.toBePainted:
-                self.toBePainted = True
-                gobject.timeout_add(15, self.Paint)
-        finally:
-            self.paintlock.release()
+            self.Paint()
 
     def Paint(self, canvas, changed = True):
         """
@@ -202,35 +199,25 @@ class CDrawingArea(CGuiObject):
         @type  canvas: L{CCairoCanvas<lib.Drawing.Canvas.CairoCanvas.CCairoCanvas>}
         """
 
-        if self.disablePaint:
-            return
-        try:
-            self.paintlock.acquire()
-            self.toBePainted = False
-            changed = changed or self.paintChanged
-            self.paintChanged = False
-        finally:
-            self.paintlock.release()
+        canvas.SetScale(self.scale)
 
         if changed:
-            self.canvas.SetScale(self.scale)
+            self.diagram.Paint(canvas, self.buffer_size)
 
-            self.diagram.Paint(canvas)
-
-        if self.dnd == 'resize':
-            self.__DrawResRect(None, True, True)
-        elif self.dnd == 'rect' and self.keydragPosition is None:
-            self.__DrawDragRect(pos)
-        elif self.dnd == 'point':
-            self.__DrawDragPoint(pos)
-        elif self.dnd == 'line':
-            self.__DrawDragLine(pos)
-        elif self.dnd == 'move':
-            self.__DrawDragMove(pos)
-        elif self.dnd == 'selection':
-            self.__DrawDragSel(pos)
-        elif self.__NewConnection is not None:
-            self.__DrawNewConnection(pos)
+        # if self.dnd == 'resize':
+        #     self.__DrawResRect(None, True, True)
+        # elif self.dnd == 'rect' and self.keydragPosition is None:
+        #     self.__DrawDragRect(pos)
+        # elif self.dnd == 'point':
+        #     self.__DrawDragPoint(pos)
+        # elif self.dnd == 'line':
+        #     self.__DrawDragLine(pos)
+        # elif self.dnd == 'move':
+        #     self.__DrawDragMove(pos)
+        # elif self.dnd == 'selection':
+        #     self.__DrawDragSel(pos)
+        # elif self.__NewConnection is not None:
+        #     self.__DrawNewConnection(pos)
 
     def DeleteSelectedObjects(self):
         for sel in self.diagram.GetSelected():
@@ -344,7 +331,9 @@ class CDrawingArea(CGuiObject):
     def __UpdateDrawingBuffer(self, viewport):
         posx, posy = viewport[0]
         sizx, sizy = viewport[1]
+
         ((bposx, bposy), (bsizx, bsizy)) = self.buffer_size
+        (bposx, bposy) = PositionToPhysical((bposx, bposy))
 
         bufferResized = False
 
@@ -354,6 +343,8 @@ class CDrawingArea(CGuiObject):
 
             bposx = posx + (sizx - bsizx)//2
             bposy = posy + (sizy - bsizy)//2
+
+            (bposx, bposy) = PositionToLogical((bposx, bposy))
 
             self.buffer_size = ((bposx, bposy), (bsizx, bsizy))
 
@@ -368,20 +359,40 @@ class CDrawingArea(CGuiObject):
         @param pos: Current mouse position.
         @type pos: tuple
         """
-        if self.dnd == 'resize':
-            self.__DrawResRect(pos, True, True)
-        elif self.dnd == 'rect' and self.keydragPosition is None:
-            self.__DrawDragRect(pos)
-        elif self.dnd == 'point':
-            self.__DrawDragPoint(pos)
-        elif self.dnd == 'line':
-            self.__DrawDragLine(pos)
-        elif self.dnd == 'move':
-            self.__DrawDragMove(pos)
-        elif self.dnd == 'selection':
-            self.__DrawDragSel(pos)
-        elif self.__NewConnection is not None:
-            self.__DrawNewConnection(pos)
+        # if self.dnd == 'resize':
+        #     self.__DrawResRect(pos, True, True)
+        # elif self.dnd == 'rect' and self.keydragPosition is None:
+        #     self.__DrawDragRect(pos)
+        # elif self.dnd == 'point':
+        #     self.__DrawDragPoint(pos)
+        # elif self.dnd == 'line':
+        #     self.__DrawDragLine(pos)
+        # elif self.dnd == 'move':
+        #     self.__DrawDragMove(pos)
+        # elif self.dnd == 'selection':
+        #     self.__DrawDragSel(pos)
+        # elif self.__NewConnection is not None:
+        #     self.__DrawNewConnection(pos)
+        pass
+
+    def OnMouseClick(self, args):
+        """
+        Callback for mouse click event.
+
+        @param args: L{DrawingAreaMouseClickEventArgs<lib.Drawing.DrawingAreaMouseClickEventArgs>}
+        """
+        if args.button == 1 and args.isDoubleClick == True:
+            if len(tuple(self.diagram.GetSelection().GetSelected())) == 1:
+                for Element in self.diagram.GetSelected():
+                    if isinstance(Element, (CElement,CConnection)):
+                        self.__OpenSpecification(Element)
+                        return True
+            elif len(tuple(self.diagram.GetSelection().GetSelected())) == 0:
+                self.__OpenSpecification(self.diagram)
+
+
+    def __OpenSpecification(self, obj):
+        self.application.GetBus().emit('open-specification', obj)
 
     def __GetDelta(self, pos, follow = False):
         if pos == (None, None):
@@ -391,6 +402,9 @@ class CDrawingArea(CGuiObject):
         posx, posy = self.DragPoint
         tmpx, tmpy = max(0, posx + dx), max(0, posy + dy)
         return int(tmpx - posx), int(tmpy - posy)
+
+    def __DrawNewConnection(self, canvas):
+        pass
 
     def __UpdateDragSel(self, pos):
         x1, y1 = self.DragSel

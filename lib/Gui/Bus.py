@@ -56,6 +56,8 @@ class CBus(gobject.GObject):
             [gobject.TYPE_PYOBJECT]),
         'open-diagram': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
             [gobject.TYPE_PYOBJECT]),
+        'open-specification': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE,
+            [gobject.TYPE_PYOBJECT]),
     }
     
     __actionMap = {

@@ -14,7 +14,7 @@ from tbToolBox import CtbToolBox
 from twProjectView import CtwProjectView
 from twWarnings import CtwWarnings
 from mnuItems import CmnuItems
-from picDrawingArea import CpicDrawingArea
+from picDrawingArea2 import CpicDrawingArea
 from nbProperties import CnbProperties
 from tabs import CTabs
 from tabStartPage import CtabStartPage
@@ -679,7 +679,7 @@ class CfrmMain(CWindow):
 
     @event("twProjectView", "selected-item-tree")
     def on_twTreeView_selected_item(self, widget, selected):
-        self.picDrawingArea.Diagram.GetSelection().DeselectAll()
+        self.picDrawingArea.DeselectAll()
         self.picDrawingArea.Paint()
         self.nbProperties.Fill(selected)
 
@@ -698,7 +698,13 @@ class CfrmMain(CWindow):
     def on_open_diagram(self, widget, diagrams):
         for diagram in diagrams:
             self.on_select_diagram_and_element(widget, diagram, None)
-    
+
+    @event("application.bus", "open-specification")
+    def on_open_specification(self, widget, obj):
+        frmProps = self.application.GetWindow('frmProperties')
+        frmProps.SetParent(self)
+        frmProps.ShowPropertiesWindow(obj, self.application)
+
     @event('application.bus', 'properties-editing-started')
     def on_nbProperties_editing_started (self, widget):
         for menuitem in self.mnuMenubar:
@@ -730,7 +736,7 @@ class CfrmMain(CWindow):
 
     @event("tbToolBox", "toggled")
     def on_tbToolBox_toggled(self, widget, ItemId, ItemType):
-        self.picDrawingArea.Diagram.GetSelection().DeselectAll()
+        self.picDrawingArea.GetDiagram().GetSelection().DeselectAll()
         self.picDrawingArea.ResetAction()
 
     @event("picDrawingArea","drop-from-treeview")

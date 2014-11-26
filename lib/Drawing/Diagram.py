@@ -342,21 +342,22 @@ class CDiagram(CBaseObject):
             if e.AreYouInRange(topleft, bottomright, includeall):
                 yield e
 
-    def SetViewPort(self, view):
-        self.viewport = view
-        
-    def GetViewPort(self):
-        return self.viewport
-
     #view = ((x, y), (w, h)
-    def Paint(self, canvas):
+    def Paint(self, canvas, viewport):
+        """
+        Paints diagram onto canvas. Paints only elements and connection, which fall into specified view port.
+
+        @param canvas:
+        @param viewport:
+        """
+
         # TODO
         # optimize: multiple call for one update event:
         #   double calling on click-to-select-element
 
-        ((x, y), (w, h)) = self.viewport
+        ((x, y), (w, h)) = viewport
         canvas.Clear()
-        self.grid.Paint(canvas, self.viewport)
+        self.grid.Paint(canvas, viewport)
         var = set([])
         for e in self.elements:#here is created a set of layer values
             var.add(int(e.GetObject().GetType().GetOptions().get('Layer', 0)))

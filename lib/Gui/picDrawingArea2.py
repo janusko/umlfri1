@@ -11,6 +11,7 @@ from lib.Distconfig import IMAGES_PATH
 
 from common import CWidget, event
 from lib.Drawing import CDiagram, CElement, CConnection, CConLabelInfo
+from lib.Drawing.DrawingAreaMouseClickEventArgs import DrawingAreaMouseClickEventArgs
 
 from lib.Elements import CElementObject
 from lib.Connections import CConnectionObject
@@ -102,7 +103,7 @@ class CpicDrawingArea(CWidget):
         self.activeDrawingArea = None
         self.picDrawingArea.realize()
         self.buffer = gtk.gdk.Pixmap(self.picDrawingArea.window, *self.buffer_size[1])
-        self.__AddDiagram(CDiagram(None,_("Start page")))
+        self.SetDiagram(CDiagram(None,_("Start page")))
         cmap = self.picDrawingArea.window.get_colormap()
         self.DragGC = self.picDrawingArea.window.new_gc(foreground = cmap.alloc_color(str(config['/Styles/Drag/RectangleColor'].Invert())),
             function = gtk.gdk.XOR, line_width = config['/Styles/Drag/RectangleWidth'])
@@ -133,7 +134,7 @@ class CpicDrawingArea(CWidget):
         if cursorImage is None:
             cursorImage = gtk.gdk.Cursor(
                     gtk.gdk.display_get_default(),
-                    gtk.gdk.pixbuf_new_from_file(os.path.join(IMAGES_PATH, img)),
+                    gtk.gdk.pixbuf_new_from_file(os.path.join(IMAGES_PATH, cursorFile)),
                     0,
                     0
                 )
@@ -257,31 +258,38 @@ class CpicDrawingArea(CWidget):
         self.picVBar.set_value(0)
         self.SetScale(1.0)
             
-    def Redraw(self):        
+    def Redraw(self):
         self.canvas = CCairoCanvas(self.picDrawingArea, self.buffer, self.application.GetProject().GetMetamodel().GetStorage())
         self.canvas.SetScale(self.scale)
 
     def GetDiagram(self):
-        return self.Diagram
+        return self.activeDiagram
 
     def SetDiagram(self, diagram):
-        drawingArea = self.__SetActiveDiagram(diagram)
+        self.__SetActiveDiagram(diagram)
 
-
-
-        #set actual scrolling position before change diagram
-        self.Diagram.SetVScrollingPos(int(self.picVBar.get_value()))
-        self.Diagram.SetHScrollingPos(int(self.picHBar.get_value()))
-        #change diagram
-        self.Diagram = diagram
-        #load srolling position of new diagram
-        self.picHBar.set_value(self.Diagram.GetHScrollingPos())
-        self.picVBar.set_value(self.Diagram.GetVScrollingPos())
+        self.__UpdateViewPortForDrawingArea(self.activeDrawingArea)
         self.Paint()
 
     def GetWindowSize(self):
-        x, y =  self.picDrawingArea.window.get_size()
+        window = self.picDrawingArea.window
+        if window is None:
+            return (None, None)
+        x, y =  window.get_size()
         return (x, y)
+
+    def __UpdateViewPortForDrawingArea(self, drawingArea):
+        """
+        Updates drawing area's view port size, if the window size is available
+
+        @param drawingArea: L{CDrawingArea<lib.Drawing.CDrawingArea>}
+        @return:
+        """
+        windowSize = self.GetWindowSize()
+        if windowSize == (None, None):
+            return
+
+        drawingArea.SetViewPortSize(windowSize)
 
     def ViewPortChanged(self):
         """
@@ -294,15 +302,30 @@ class CpicDrawingArea(CWidget):
         if drawingArea is None:
             return
 
-        x, y = int(self.picHBar.get_value()), int(self.picVBar.get_value())
-        w, h = self.GetWindowSize()
-
-        viewPort = (x, y), (w, h)
+        viewPort = self.GetCurrentViewPort()
+        if viewPort is None:
+            return
 
         return drawingArea.SetViewPort(viewPort)
 
+    def GetCurrentViewPort(self):
+        """
+        Returns current visible view port.
+
+        @rtype: tuple
+        @return: Current view port (tuple: (x, y), (w, h))
+        """
+        x, y = int(self.picHBar.get_value()), int(self.picVBar.get_value())
+        size = self.GetWindowSize()
+        if size == (None, None):
+            return None
+
+        viewPort = (x, y), size
+
+        return viewPort
+
     def GetDiagramSize(self):
-        tmp = [int(max(i)) for i in zip(self.Diagram.GetSize(), self.picDrawingArea.window.get_size())]
+        tmp = [int(max(i)) for i in zip(self.activeDiagram.GetSize(), self.picDrawingArea.window.get_size())]
         return tuple(tmp)
     
     def GetPos(self):
@@ -340,31 +363,50 @@ class CpicDrawingArea(CWidget):
                 self.__invalidated = True # redraw completly on next configure event
             return
 
-        self.activeDrawingArea.Paint(changed)
+        try:
+            self.paintlock.acquire()
+            self.toBePainted = False
+            changed = changed or self.paintChanged
+            self.paintChanged = False
+        finally:
+            self.paintlock.release()
+
+
+        # After the first time drawing area is shown, it reports wrong size
+        # We need to check, if it has changed and update drawing area's view port size, if necessary
+
+        if self.activeDrawingArea.GetViewPortSize() != self.GetWindowSize():
+            self.__UpdateViewPortForDrawingArea(self.activeDrawingArea)
+
+        self.activeDrawingArea.Paint(self.canvas, changed)
 
         self.AdjustScrollBars()
         wgt = self.picDrawingArea.window
         gc = wgt.new_gc()
-        #def draw_drawable(gc, src, xsrc, ysrc, xdest, ydest, width, height)
-        
-        wgt.draw_drawable(gc, self.buffer, posx - bposx, posy - bposy, 0, 0, sizx, sizy)
 
-        if(self.adjScrollbars != ""):
-            self.ShiftScrollbars(self.adjScrollbars)
-            self.adjScrollbars = ""
+        pos = self.activeDrawingArea.GetViewPortPos()
+        size = self.activeDrawingArea.GetViewPortSize()
 
-        if self.dnd == 'resize':
-            self.__DrawResRect((None, None), True, False)  
-        elif self.dnd == 'rect':
-            self.__DrawDragRect((None, None), True, False)
-        elif self.dnd == 'point':
-            self.__DrawDragPoint((None, None), True, False)
-        elif self.dnd == 'selection':
-            self.__DrawDragSel((None, None), True, False)
-        if self.__NewConnection is not None:
-            self.__DrawNewConnection((None, None), False)
+        # print(pos, size)
+        print(self.GetWindowSize())
 
+        # wgt.draw_drawable(gc, self.buffer, posx - bposx, posy - bposy, 0, 0, sizx, sizy)
+        wgt.draw_drawable(gc, self.buffer, pos[0], pos[1], 0, 0, size[0], size[1])
 
+        # if(self.adjScrollbars != ""):
+        #     self.ShiftScrollbars(self.adjScrollbars)
+        #     self.adjScrollbars = ""
+        #
+        # if self.dnd == 'resize':
+        #     self.__DrawResRect((None, None), True, False)
+        # elif self.dnd == 'rect':
+        #     self.__DrawDragRect((None, None), True, False)
+        # elif self.dnd == 'point':
+        #     self.__DrawDragPoint((None, None), True, False)
+        # elif self.dnd == 'selection':
+        #     self.__DrawDragSel((None, None), True, False)
+        # if self.__NewConnection is not None:
+        #     self.__DrawNewConnection((None, None), False)
 
     def AdjustScrollBars(self):
         if self.canvas is None:
@@ -417,7 +459,7 @@ class CpicDrawingArea(CWidget):
             and not bool(set(i.GetObject() for i in self.Diagram.GetElements()).intersection(set(i.GetObject() for i in self.application.GetClipboard().GetContent())))
         )
         
-        selection = list(self.Diagram.GetSelected())
+        selection = list(self.activeDiagram.GetSelection().GetSelectedSet())
         self.pmOpenSpecification.set_sensitive(len(selection) <= 1)
         self.mnuChangeSourceTarget.set_sensitive(connection and len(selection) == 1)
         self.mnuAlign.set_sensitive(element)
@@ -451,16 +493,17 @@ class CpicDrawingArea(CWidget):
     @event("picEventBox", "button-press-event")
     def on_picEventBox_button_press_event(self, widget, event):
         self.picDrawingArea.grab_focus() 
-        pos = self.GetAbsolutePos((event.x, event.y))
-        if event.button == 1 and event.type == gtk.gdk._2BUTTON_PRESS:
-            if len(tuple(self.Diagram.GetSelected())) == 1:
-                for Element in self.Diagram.GetSelected():
-                    if isinstance(Element, (CElement,CConnection)):
-                        self.__OpenSpecification(Element)
-                        return True
-            elif len(tuple(self.Diagram.GetSelected())) == 0:
-                self.__OpenSpecification(self.Diagram)
-        
+        pos = (event.x, event.y)
+
+        isDoubleClick = event.type == gtk.gdk._2BUTTON_PRESS
+        wasSpacePressed = gtk.keysyms.space in self.pressedKeys
+
+        eventArgs = DrawingAreaMouseClickEventArgs(pos, event.button, isDoubleClick, wasSpacePressed, event.state)
+
+        self.activeDrawingArea.OnMouseClick(eventArgs)
+
+        return
+
         if event.button == 1:
             if gtk.keysyms.space in self.pressedKeys:
                 self.__BeginDragMove(event)
@@ -750,11 +793,13 @@ class CpicDrawingArea(CWidget):
     @event("picVBar", "value-changed")
     def on_picVBar_value_changed(self, widget):
         changed = self.ViewPortChanged()
+        print "Vbar value changed, view port: ", self.activeDrawingArea.GetViewPort()
         self.Paint(changed)
 
     @event("picHBar", "value-changed")
     def on_picHBar_value_changed(self, widget):
         changed = self.ViewPortChanged()
+        print "Hbar value changed, view port: ", self.activeDrawingArea.GetViewPort()
         self.Paint(changed)
 
     @event("picEventBox", "scroll-event")
@@ -783,12 +828,12 @@ class CpicDrawingArea(CWidget):
         self.ResetAction()
 
     def __AddDiagram(self, diagram):
-        drawing_area = CDrawingArea()
+        drawing_area = CDrawingArea(self.application, diagram)
         self.diagrams[diagram] = drawing_area
-        if self.activeDiagram is None:
-            self.__SetActiveDiagram(diagram)
 
     def __SetActiveDiagram(self, diagram):
+        if self.diagrams.has_key(diagram) == False:
+            self.__AddDiagram(diagram)
         self.activeDiagram = diagram
         self.activeDrawingArea = self.diagrams[diagram]
         return self.activeDrawingArea
@@ -877,6 +922,7 @@ class CpicDrawingArea(CWidget):
             w, h = self.canvas.ToPhysical((x2 - x1, y2 - y1))
             if self.selSq is None:
                 self.__oldsel = tmpx, tmpy, w, h
+                self.canvas.GetScale
                 self.picDrawingArea.window.draw_rectangle(self.DragGC, False, *self.__oldsel)
 
   
@@ -1087,6 +1133,9 @@ class CpicDrawingArea(CWidget):
         x=self.canvas.ToPhysical(self.Diagram.GetSelected().next().position)[0]-self.GetAbsolutePos(self.GetWindowSize())[0]/2
         self.SetPos((x, y))
         self.Paint()
+
+    def DeselectAll(self):
+        self.activeDiagram.GetSelection().DeselectAll()
     
     @event('application.bus', 'connection-changed')
     @event('application.bus', 'element-changed')
