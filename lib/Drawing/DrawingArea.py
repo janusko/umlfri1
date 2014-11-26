@@ -35,6 +35,8 @@ class CDrawingArea(CGuiObject):
         self.selElem = None
         self.selSq = None
 
+        self.__NewConnection = None
+
         self.__toolboxItem = (None, None)
 
         self.dragForegroundColor = config['/Styles/Drag/RectangleColor']
@@ -230,8 +232,8 @@ class CDrawingArea(CGuiObject):
         #     self.__DrawDragMove(pos)
         # elif self.dnd == 'selection':
         #     self.__DrawDragSel(pos)
-        # elif self.__NewConnection is not None:
-        #     self.__DrawNewConnection(pos)
+        elif self.__NewConnection is not None:
+            self.__DrawNewConnection(canvas)
 
     def DeleteSelectedObjects(self):
         for sel in self.diagram.GetSelected():
@@ -385,8 +387,8 @@ class CDrawingArea(CGuiObject):
         #     self.__DrawDragMove(pos)
         # elif self.dnd == 'selection':
         #     self.__DrawDragSel(pos)
-        # elif self.__NewConnection is not None:
-        #     self.__DrawNewConnection(pos)
+        elif self.__NewConnection is not None:
+            self.__UpdateNewConnection(pos)
         pass
 
     def OnMouseDown(self, args):
@@ -430,7 +432,7 @@ class CDrawingArea(CGuiObject):
                          #     self.__BeginDragLine(event, itemSel, i)
                          # self.application.GetBus().emit('selected-items', list(self.diagram.GetSelected()))
                     else: #elements are selected
-                            self.__BeginDragRect(pos)
+                        self.__BeginDragRect(pos)
                 elif not args.IsControlPressed() and not args.IsShiftPressed():
                     self.diagram.GetSelection().DeselectAll()
                     self.diagram.GetSelection().AddToSelection(itemSel)
@@ -473,6 +475,21 @@ class CDrawingArea(CGuiObject):
                 delta = self.__GetDelta(pos)
                 self.diagram.MoveSelection(delta)
                 self.dnd = None
+            elif self.__NewConnection is not None:
+                pos = self.GetAbsolutePos(pos)
+                itemSel = self.diagram.GetElementAtPosition(pos)
+                if itemSel is None or isinstance(itemSel, (CConnection, CConLabelInfo)):
+                    self.__NewConnection[1].append(pos)
+                elif itemSel is not self.__NewConnection[2] or len(self.__NewConnection[1]) > 2:
+                    (type, points, source), destination = self.__NewConnection, itemSel
+                    obj = CConnectionObject(type, source.GetObject(), destination.GetObject())
+                    x = CConnection(self.diagram, obj, source, destination, points[1:])
+                    self.application.GetBus().emit('set-selected-toolbox-item', None)
+                    self.diagram.GetSelection().AddToSelection(x)
+                    self.application.GetBus().emit('selected-items', list(self.diagram.GetSelection().GetSelected()))
+                    self.__NewConnection = None
+                else:
+                    pass
 
         except ConnectionRestrictionError:
             pass
@@ -531,8 +548,8 @@ class CDrawingArea(CGuiObject):
                 ConnectionType = self.application.GetProject().GetMetamodel().GetConnectionFactory().GetConnection(itemId)
                 center = itemSel.GetCenter()
                 relcenter = self.GetRelativePos(center)
-                # self.__NewConnection = (ConnectionType, [center], itemSel)
-                # self.__DrawNewConnection(relcenter, False)
+                self.__NewConnection = (ConnectionType, [center], itemSel)
+                self.__UpdateNewConnection(relcenter)
             else:
                 pass
 
@@ -612,3 +629,12 @@ class CDrawingArea(CGuiObject):
 
     def __DrawDragSel(self, canvas):
         canvas.DrawRectangle(self.__oldsel[0], self.__oldsel[1], self.dragForegroundColor, None, self.dragLineWidth)
+
+    def __UpdateNewConnection(self, (x, y)):
+        points = self.__NewConnection[1][:]
+        points.append((int(x), int(y)))
+
+        self.__oldNewConnection = points
+
+    def __DrawNewConnection(self, canvas):
+        canvas.DrawLines(self.__oldNewConnection, self.dragForegroundColor, line_width=self.dragLineWidth)
