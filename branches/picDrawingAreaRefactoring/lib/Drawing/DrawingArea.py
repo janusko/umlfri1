@@ -390,6 +390,9 @@ class CDrawingArea(CGuiObject):
             elif len(tuple(self.diagram.GetSelection().GetSelected())) == 0:
                 self.__OpenSpecification(self.diagram)
 
+    def OnToolBoxItemSelected(self, item):
+        # set dnd to 'add_obj' ??
+        pass
 
     def __OpenSpecification(self, obj):
         self.application.GetBus().emit('open-specification', obj)
