@@ -501,7 +501,7 @@ class CpicDrawingArea(CWidget):
 
         eventArgs = DrawingAreaMouseClickEventArgs(pos, event.button, isDoubleClick, wasSpacePressed, event.state)
 
-        self.activeDrawingArea.OnMouseClick(eventArgs)
+        self.activeDrawingArea.OnMouseDown(eventArgs)
 
         return
 
@@ -630,6 +630,7 @@ class CpicDrawingArea(CWidget):
 
     @event("picEventBox", "button-release-event")
     def on_button_release_event(self, widget, event):
+        self.activeDrawingArea.On
         try:
             if self.dnd == 'resize':
                 delta = self.__GetDelta((event.x, event.y), True)

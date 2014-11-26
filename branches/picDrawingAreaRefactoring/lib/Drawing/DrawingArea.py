@@ -383,7 +383,7 @@ class CDrawingArea(CGuiObject):
         #     self.__DrawNewConnection(pos)
         pass
 
-    def OnMouseClick(self, args):
+    def OnMouseDown(self, args):
         """
         Callback for mouse click event.
 
