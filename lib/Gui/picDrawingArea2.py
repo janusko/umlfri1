@@ -796,13 +796,11 @@ class CpicDrawingArea(CWidget):
     @event("picVBar", "value-changed")
     def on_picVBar_value_changed(self, widget):
         changed = self.ViewPortChanged()
-        print "Vbar value changed, view port: ", self.activeDrawingArea.GetViewPort()
         self.Paint(changed)
 
     @event("picHBar", "value-changed")
     def on_picHBar_value_changed(self, widget):
         changed = self.ViewPortChanged()
-        print "Hbar value changed, view port: ", self.activeDrawingArea.GetViewPort()
         self.Paint(changed)
 
     @event("picEventBox", "scroll-event")
