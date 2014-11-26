@@ -447,7 +447,7 @@ class CDrawingArea(CGuiObject):
                     selElements = list(self.diagram.GetSelection().GetSelectedElements())
                     self.selElem = selElements[0]
                     if len(selElements) == 1:
-                        self.selSq = self.selElem.GetSquareAtPosition(pos)
+                        self.selSq = self.diagram.GetSelection().GetSquareAtPosition(pos)
                     self.__BeginDragRect(pos)
 
         elif args.button == 2:
@@ -556,7 +556,7 @@ class CDrawingArea(CGuiObject):
         self.selElem = selElements[0]
         self.DragStartPos = self.GetAbsolutePos(pos)
         if len(selElements) == 1:
-            self.selSq = self.selElem.GetSquareAtPosition(self.DragStartPos)
+            self.selSq = self.diagram.GetSelection().GetSquareAtPosition(self.DragStartPos)
             if(self.setResize == False):
                 self.selSq = None
                 self.setResize = True
