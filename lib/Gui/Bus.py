@@ -64,6 +64,8 @@ class CBus(gobject.GObject):
             [gobject.TYPE_PYOBJECT]),
         'selected-toolbox-item-changed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE,
             [gobject.TYPE_PYOBJECT]),
+        'selected-items': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE,
+            [gobject.TYPE_PYOBJECT]),
     }
     
     __actionMap = {
