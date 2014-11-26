@@ -6,6 +6,8 @@ from lib.Drawing.DrawingHelper import PositionToPhysical, PositionToLogical
 
 from lib.Gui.common import CGuiObject
 
+from lib.Exceptions.UserException import *
+
 from lib.config import config
 from lib.consts import BUFFER_SIZE, SCALE_MIN, SCALE_MAX, SCALE_INCREASE
 
@@ -445,6 +447,15 @@ class CDrawingArea(CGuiObject):
         elif args.button == 2:
             pass
         elif args.button == 3:
+            pass
+
+    def OnMouseUp(self, pos):
+        try:
+            if self.dnd == 'rect':
+                delta = self.__GetDelta(pos)
+                self.diagram.MoveSelection(delta)
+                self.dnd = None
+        except ConnectionRestrictionError:
             pass
 
     def OnToolBoxItemSelected(self, item):
