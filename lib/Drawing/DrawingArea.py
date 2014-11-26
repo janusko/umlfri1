@@ -417,7 +417,7 @@ class CDrawingArea(CGuiObject):
                     if args.IsControlPressed() or args.IsShiftPressed():
                         self.diagram.GetSelection().RemoveFromSelection(itemSel)
 
-                        self.application.emit('selected-items', list(self.diagram.GetSelected()), False)
+                        self.application.GetBus().emit('selected-items', list(self.diagram.GetSelected()))
                     elif isinstance(itemSel, CConnection): #Connection is selected
                         pass
                          # i = itemSel.GetPointAtPosition(pos)
@@ -428,7 +428,7 @@ class CDrawingArea(CGuiObject):
                          #     itemSel.DeselectPoint()
                          #     i = itemSel.WhatPartOfYouIsAtPosition(pos)
                          #     self.__BeginDragLine(event, itemSel, i)
-                         # self.emit('selected-item', list(self.diagram.GetSelected()),False)
+                         # self.application.GetBus().emit('selected-items', list(self.diagram.GetSelected()))
                     else: #elements are selected
                             self.__BeginDragRect(pos)
                 elif not args.IsControlPressed() and not args.IsShiftPressed():
@@ -449,6 +449,12 @@ class CDrawingArea(CGuiObject):
                     if len(selElements) == 1:
                         self.selSq = self.diagram.GetSelection().GetSquareAtPosition(pos)
                     self.__BeginDragRect(pos)
+            else: # nothing under pointer
+                if self.diagram.GetSelection().SelectedCount() > 0:
+                    if not args.IsControlPressed():
+                        self.diagram.GetSelection().DeselectAll()
+                        self.application.GetBus().emit('selected-items', list(self.diagram.GetSelection().GetSelected()))
+                # self.__BeginDragSel(pos)
 
         elif args.button == 2:
             pass
