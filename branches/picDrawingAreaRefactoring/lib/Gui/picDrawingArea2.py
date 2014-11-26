@@ -387,9 +387,6 @@ class CpicDrawingArea(CWidget):
         pos = self.activeDrawingArea.GetViewPortPos()
         size = self.activeDrawingArea.GetViewPortSize()
 
-        # print(pos, size)
-        print(self.GetWindowSize())
-
         # wgt.draw_drawable(gc, self.buffer, posx - bposx, posy - bposy, 0, 0, sizx, sizy)
         wgt.draw_drawable(gc, self.buffer, pos[0], pos[1], 0, 0, size[0], size[1])
 
@@ -926,7 +923,6 @@ class CpicDrawingArea(CWidget):
             w, h = self.canvas.ToPhysical((x2 - x1, y2 - y1))
             if self.selSq is None:
                 self.__oldsel = tmpx, tmpy, w, h
-                self.canvas.GetScale
                 self.picDrawingArea.window.draw_rectangle(self.DragGC, False, *self.__oldsel)
 
   
