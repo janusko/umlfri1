@@ -631,6 +631,7 @@ class CpicDrawingArea(CWidget):
     @event("picEventBox", "button-release-event")
     def on_button_release_event(self, widget, event):
         self.activeDrawingArea.OnMouseUp((event.x, event.y))
+        self.Paint()
         return
         try:
             if self.dnd == 'resize':
