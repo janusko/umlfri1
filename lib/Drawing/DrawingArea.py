@@ -37,6 +37,8 @@ class CDrawingArea(CGuiObject):
 
         self.__NewConnection = None
 
+        self.__oldsel = None
+
         self.__toolboxItem = (None, None)
 
         self.dragForegroundColor = config['/Styles/Drag/RectangleColor']
@@ -230,8 +232,8 @@ class CDrawingArea(CGuiObject):
             self.__DrawDragLine(canvas)
         # elif self.dnd == 'move':
         #     self.__DrawDragMove(pos)
-        # elif self.dnd == 'selection':
-        #     self.__DrawDragSel(pos)
+        elif self.dnd == 'selection':
+            self.__DrawDragSel(canvas)
         elif self.__NewConnection is not None:
             self.__DrawNewConnection(canvas)
 
@@ -387,8 +389,8 @@ class CDrawingArea(CGuiObject):
             self.__UpdateDragLine(pos)
         # elif self.dnd == 'move':
         #     self.__DrawDragMove(pos)
-        # elif self.dnd == 'selection':
-        #     self.__DrawDragSel(pos)
+        elif self.dnd == 'selection':
+            self.__UpdateDragSel(pos)
         elif self.__NewConnection is not None:
             self.__UpdateNewConnection(pos)
         pass
@@ -445,7 +447,7 @@ class CDrawingArea(CGuiObject):
                         else:
                             itemSel.DeselectPoint()
                             i = itemSel.WhatPartOfYouIsAtPosition(pos)
-                            # self.__BeginDragLine(pos, itemSel, i)
+                            self.__BeginDragLine(pos, itemSel, i)
                     else:
                         selElements = list(self.diagram.GetSelection().GetSelectedElements())
                         self.selElem = selElements[0]
@@ -457,7 +459,7 @@ class CDrawingArea(CGuiObject):
                     if not args.IsControlPressed():
                         self.diagram.GetSelection().DeselectAll()
                         self.application.GetBus().emit('selected-items', list(self.diagram.GetSelection().GetSelected()))
-                # self.__BeginDragSel(pos)
+                self.__BeginDragSel(pos)
 
         elif args.button == 2:
             pass
@@ -487,6 +489,16 @@ class CDrawingArea(CGuiObject):
                 if connection.InsertPoint(pos, index):
                     self.diagram.MoveConnectionPoint(connection, pos, index+1)
                 self.dnd = None
+            elif self.dnd == 'selection':
+                x1, y1 = self.DragSel
+                x2, y2 = pos
+                if x2 < x1:
+                    x2, x1 = x1, x2
+                if y2 < y1:
+                    y2, y1 = y1, y2
+                self.diagram.AddRangeToSelection((x1, y1), (x2, y2))
+                self.dnd = None
+                self.application.GetBus().emit('selected-items', list(self.diagram.GetSelection().GetSelected()))
             elif self.__NewConnection is not None:
                 itemSel = self.diagram.GetElementAtPosition(pos)
                 if itemSel is None or isinstance(itemSel, (CConnection, CConLabelInfo)):
@@ -591,10 +603,6 @@ class CDrawingArea(CGuiObject):
                     self.DragPoint[i] += self.DragRect[1][i]
             self.dnd = 'resize'
 
-    def __DrawDragRect(self, canvas):
-        if self.selSq is None:
-            canvas.DrawRectangle(self.__oldpos, self.DragRect[1], self.dragForegroundColor, None, self.dragLineWidth)
-
     def __UpdateDragRect(self, pos):
         tmpx, tmpy = self.DragRect[0]
         dx, dy = self.__GetDelta(pos)
@@ -603,21 +611,30 @@ class CDrawingArea(CGuiObject):
             y = dy + tmpy
             self.__oldpos = x, y
 
+    def __DrawDragRect(self, canvas):
+        if self.selSq is None:
+            canvas.DrawRectangle(self.__oldpos, self.DragRect[1], self.dragForegroundColor, None, self.dragLineWidth)
 
-    def __DrawDragSel(self, canvas):
-        canvas.DrawRectangle(self.__oldsel[0], self.__oldsel[1], self.dragForegroundColor, None, self.dragLineWidth)
+
+    def __BeginDragSel(self, pos):
+        self.DragSel = pos
+        self.__UpdateDragSel(pos)
+        self.dnd = 'selection'
 
     def __UpdateDragSel(self, pos):
         x1, y1 = self.DragSel
-        x2, y2 = self.GetAbsolutePos(pos)
+        x2, y2 = pos
         if x1 > x2:
             x1, x2 = x2, x1
         if y1 > y2:
             y1, y2 = y2, y1
-        tmpx, tmpy = self.GetRelativePos((x1, y1))
         w, h = (x2 - x1), (y2 - y1)
         if self.selSq is None:
-            self.__oldsel = tmpx, tmpy, w, h
+            self.__oldsel = (x1, y1), (w, h)
+
+    def __DrawDragSel(self, canvas):
+        pos, size = self.__oldsel
+        canvas.DrawRectangle(pos, size, self.dragForegroundColor, None, self.dragLineWidth)
 
 
     def __DrawResRect(self, canvas):
