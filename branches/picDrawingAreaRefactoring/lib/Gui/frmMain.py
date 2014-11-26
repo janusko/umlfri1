@@ -661,8 +661,8 @@ class CfrmMain(CWindow):
     def on_picDrawingArea_set_selected(self, widget, selected):
         self.tbToolBox.SetSelected(selected)
 
-    @event("picDrawingArea", "selected-item")
-    def on_picDrawingArea_selected_item(self, widget, selected, new = False):
+    @event("application.bus", "selected-items")
+    def on_picDrawingArea_selected_item(self, widget, selected):
         self.UpdateMenuSensitivity(
             element = any(isinstance(x, CElement) for x in selected),
             topElement = any((isinstance(x, CElement) and x.GetObject().GetNode().GetParent() is None) for x in selected),

@@ -1,6 +1,8 @@
 from lib.Base import CBaseObject
 from lib.Commands.Diagrams.DuplicateElements import CDuplicateElementsCommand
 
+from lib.Elements import CElementObject
+from lib.Connections import CConnectionObject
 from lib.Drawing import CDiagram, CConnection, CElement, CConLabelInfo
 from lib.Drawing.DrawingHelper import PositionToPhysical, PositionToLogical
 
@@ -32,6 +34,8 @@ class CDrawingArea(CGuiObject):
         self.dnd = None
         self.selElem = None
         self.selSq = None
+
+        self.__toolboxItem = (None, None)
 
         self.dragForegroundColor = config['/Styles/Drag/RectangleColor']
         self.dragLineWidth = config['/Styles/Drag/RectangleWidth']
@@ -393,7 +397,7 @@ class CDrawingArea(CGuiObject):
         """
         if args.button == 1 and args.isDoubleClick == True:
             if len(tuple(self.diagram.GetSelection().GetSelected())) == 1:
-                for Element in self.diagram.GetSelected():
+                for Element in self.diagram.GetSelection().GetSelected():
                     if isinstance(Element, (CElement,CConnection)):
                         self.__OpenSpecification(Element)
                         return True
@@ -403,7 +407,9 @@ class CDrawingArea(CGuiObject):
         pos = args.position
 
         if args.button == 1:
-            # TODO: toolbar button selection
+            if self.__toolboxItem != (None, None):
+                self.__AddItem(self.__toolboxItem, pos)
+                return
 
             itemSel = self.diagram.GetElementAtPosition(pos)
             if itemSel is not None: #something is hit:
@@ -467,10 +473,62 @@ class CDrawingArea(CGuiObject):
 
     def OnToolBoxItemSelected(self, item):
         # set dnd to 'add_obj' ??
+        self.__toolboxItem = item
         pass
 
     def __OpenSpecification(self, obj):
         self.application.GetBus().emit('open-specification', obj)
+
+
+    def __AddItem(self, toolBtnSel, pos):
+        # TODO: seems like all methods using position from events convert it to absolute
+        # move it to the event handlers
+        pos = self.GetAbsolutePos(pos)
+
+        (itemId, itemType) = toolBtnSel
+
+        if itemType == 'Element':
+            ElementType = self.application.GetProject().GetMetamodel().GetElementFactory().GetElement(itemId)
+            ElementObject = CElementObject(ElementType)
+            newElement = CElement(self.diagram, ElementObject)
+            newElement.SetPosition(pos)
+            self.diagram.MoveElement(newElement, pos)
+            # self.AdjustScrollBars()
+            self.application.GetBus().emit('set-selected-toolbox-item', None)
+            #here, I get prent element of selected elements (if element is on (over) another element)
+            minzorder = 9999999
+            parentElement = None
+            for el in self.diagram.GetSelection().GetSelectedElements(True):
+                pos1, pos2 = el.GetSquare()
+                zorder = self.diagram.GetElementZOrder(el)
+                if newElement.AreYouInRange(pos1, pos2, True):
+                    for el2 in self.diagram.GetElementsInRange(pos1, pos2, True):
+                        if self.diagram.GetElementZOrder(el2) < minzorder:        #get element with minimal zorder
+                            minzorder = self.diagram.GetElementZOrder(el2)
+                            parentElement = el2.GetObject()
+
+            self.diagram.GetSelection().DeselectAll()
+            self.application.GetBus().emit('add-element', ElementObject, self.diagram, parentElement)
+            self.diagram.GetSelection().AddToSelection(newElement)
+            self.application.GetBus().emit('selected-items', list(self.diagram.GetSelection().GetSelected()))
+            # self.Paint()
+
+        elif itemType == 'Connection':
+            itemSel = self.diagram.GetElementAtPosition(pos)
+
+            if itemSel is None:
+                if self.__NewConnection is not None:
+                    pass
+            elif isinstance(itemSel, (CConnection, CConLabelInfo)):
+                return
+            elif self.__NewConnection is None:
+                ConnectionType = self.application.GetProject().GetMetamodel().GetConnectionFactory().GetConnection(itemId)
+                center = itemSel.GetCenter()
+                relcenter = self.GetRelativePos(center)
+                # self.__NewConnection = (ConnectionType, [center], itemSel)
+                # self.__DrawNewConnection(relcenter, False)
+            else:
+                pass
 
     def __GetDelta(self, pos, follow = False):
         if pos == (None, None):

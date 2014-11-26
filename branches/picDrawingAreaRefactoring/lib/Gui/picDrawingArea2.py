@@ -68,8 +68,6 @@ class CpicDrawingArea(CWidget):
             ()),
         'set-selected':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE,
             (gobject.TYPE_PYOBJECT, )),
-        'selected-item':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE,
-            (gobject.TYPE_PYOBJECT, gobject.TYPE_BOOLEAN, )),
         'run-dialog':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_PYOBJECT,
             (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT, )), #type, message
         'delete-element-from-all':(gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
@@ -502,6 +500,8 @@ class CpicDrawingArea(CWidget):
         eventArgs = DrawingAreaMouseClickEventArgs(pos, event.button, isDoubleClick, wasSpacePressed, event.state)
 
         self.activeDrawingArea.OnMouseDown(eventArgs)
+
+        self.Paint()
 
         return
 
