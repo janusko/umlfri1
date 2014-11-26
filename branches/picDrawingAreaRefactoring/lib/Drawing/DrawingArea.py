@@ -375,6 +375,8 @@ class CDrawingArea(CGuiObject):
         @param pos: Current mouse position.
         @type pos: tuple
         """
+        pos = self.GetAbsolutePos(pos)
+
         if self.dnd == 'resize':
             self.__UpdateResRect(pos)
         elif self.dnd == 'rect' and self.keydragPosition is None:
@@ -406,7 +408,7 @@ class CDrawingArea(CGuiObject):
             elif len(tuple(self.diagram.GetSelection().GetSelected())) == 0:
                 self.__OpenSpecification(self.diagram)
 
-        pos = args.position
+        pos = self.GetAbsolutePos(args.position)
 
         if args.button == 1:
             if self.__toolboxItem != (None, None):
@@ -464,6 +466,8 @@ class CDrawingArea(CGuiObject):
             pass
 
     def OnMouseUp(self, pos):
+        pos = self.GetAbsolutePos(pos)
+
         try:
             if self.dnd == 'resize':
                 delta = self.__GetDelta(pos, True)
@@ -476,7 +480,6 @@ class CDrawingArea(CGuiObject):
                 self.diagram.MoveSelection(delta)
                 self.dnd = None
             elif self.__NewConnection is not None:
-                pos = self.GetAbsolutePos(pos)
                 itemSel = self.diagram.GetElementAtPosition(pos)
                 if itemSel is None or isinstance(itemSel, (CConnection, CConLabelInfo)):
                     self.__NewConnection[1].append(pos)
@@ -504,10 +507,6 @@ class CDrawingArea(CGuiObject):
 
 
     def __AddItem(self, toolBtnSel, pos):
-        # TODO: seems like all methods using position from events convert it to absolute
-        # move it to the event handlers
-        pos = self.GetAbsolutePos(pos)
-
         (itemId, itemType) = toolBtnSel
 
         if itemType == 'Element':
@@ -534,7 +533,6 @@ class CDrawingArea(CGuiObject):
             self.application.GetBus().emit('add-element', ElementObject, self.diagram, parentElement)
             self.diagram.GetSelection().AddToSelection(newElement)
             self.application.GetBus().emit('selected-items', list(self.diagram.GetSelection().GetSelected()))
-            # self.Paint()
 
         elif itemType == 'Connection':
             itemSel = self.diagram.GetElementAtPosition(pos)
@@ -547,9 +545,8 @@ class CDrawingArea(CGuiObject):
             elif self.__NewConnection is None:
                 ConnectionType = self.application.GetProject().GetMetamodel().GetConnectionFactory().GetConnection(itemId)
                 center = itemSel.GetCenter()
-                relcenter = self.GetRelativePos(center)
                 self.__NewConnection = (ConnectionType, [center], itemSel)
-                self.__UpdateNewConnection(relcenter)
+                self.__UpdateNewConnection(center)
             else:
                 pass
 
@@ -562,22 +559,10 @@ class CDrawingArea(CGuiObject):
         tmpx, tmpy = max(0, posx + dx), max(0, posy + dy)
         return int(tmpx - posx), int(tmpy - posy)
 
-    def __DrawDragRect(self, canvas):
-        if self.selSq is None:
-            canvas.DrawRectangle(self.__oldpos, self.DragRect[1], self.dragForegroundColor, None, self.dragLineWidth)
-
-    def __DrawResRect(self, canvas):
-        # seems like x1,x2 should be fixed at starting drag position
-        # should be recalculated according to the view port
-        canvas.DrawRectangle(self.DragRect[0], self.DragRect[1], self.dragForegroundColor, None, self.dragLineWidth)
-
-    def __DrawNewConnection(self, canvas):
-        pass
-
     def __BeginDragRect(self, pos):
         selElements = list(self.diagram.GetSelection().GetSelectedElements())
         self.selElem = selElements[0]
-        self.DragStartPos = self.GetAbsolutePos(pos)
+        self.DragStartPos = pos
         if len(selElements) == 1:
             self.selSq = self.diagram.GetSelection().GetSquareAtPosition(self.DragStartPos)
             if(self.setResize == False):
@@ -598,15 +583,21 @@ class CDrawingArea(CGuiObject):
                     self.DragPoint[i] += self.DragRect[1][i]
             self.dnd = 'resize'
 
+    def __DrawDragRect(self, canvas):
+        if self.selSq is None:
+            canvas.DrawRectangle(self.__oldpos, self.DragRect[1], self.dragForegroundColor, None, self.dragLineWidth)
+
     def __UpdateDragRect(self, pos):
         tmpx, tmpy = self.DragRect[0]
-        pos = self.GetAbsolutePos(pos)
         dx, dy = self.__GetDelta(pos)
         if self.selSq is None:
             x = dx + tmpx
             y = dy + tmpy
             self.__oldpos = x, y
 
+
+    def __DrawDragSel(self, canvas):
+        canvas.DrawRectangle(self.__oldsel[0], self.__oldsel[1], self.dragForegroundColor, None, self.dragLineWidth)
 
     def __UpdateDragSel(self, pos):
         x1, y1 = self.DragSel
@@ -621,14 +612,15 @@ class CDrawingArea(CGuiObject):
             self.__oldsel = tmpx, tmpy, w, h
 
 
+    def __DrawResRect(self, canvas):
+        # seems like x1,x2 should be fixed at starting drag position
+        # should be recalculated according to the view port
+        canvas.DrawRectangle(self.DragRect[0], self.DragRect[1], self.dragForegroundColor, None, self.dragLineWidth)
+
     def __UpdateResRect(self, pos):
-        pos = self.GetAbsolutePos(pos)
         delta = self.__GetDelta(pos, True)
         rect = self.selElem.GetResizedRect(delta, self.selSq)
         self.DragRect = rect
-
-    def __DrawDragSel(self, canvas):
-        canvas.DrawRectangle(self.__oldsel[0], self.__oldsel[1], self.dragForegroundColor, None, self.dragLineWidth)
 
     def __UpdateNewConnection(self, (x, y)):
         points = self.__NewConnection[1][:]
