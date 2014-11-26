@@ -736,8 +736,17 @@ class CfrmMain(CWindow):
 
     @event("tbToolBox", "toggled")
     def on_tbToolBox_toggled(self, widget, ItemId, ItemType):
-        self.picDrawingArea.GetDiagram().GetSelection().DeselectAll()
-        self.picDrawingArea.ResetAction()
+        # self.picDrawingArea.GetDiagram().GetSelection().DeselectAll()
+        # self.picDrawingArea.ResetAction()
+        self.application.GetBus().emit('selected-toolbox-item-changed', (ItemId, ItemType))
+
+    @event('application.bus', 'get-selected-toolbox-item')
+    def on_get_selected_toolbox_item(self, widget):
+        return self.tbToolBox.GetSelected()
+
+    @event('application.bus', 'set-selected-toolbox-item')
+    def on_get_selected_toolbox_item(self, widget, item):
+        self.tbToolBox.SetSelected(item)
 
     @event("picDrawingArea","drop-from-treeview")
     def on_drop_from_treeview(self, widget, position):

@@ -481,7 +481,11 @@ class CpicDrawingArea(CWidget):
             self.drawingArea.ToPaint()
         else:
             self.drawingArea.Paint()
-    
+
+    @event('application.bus', 'selected-toolbox-item-changed')
+    def on_toolbox_item_selected(self, widget, item):
+        self.activeDrawingArea.OnToolBoxItemSelected(item)
+
     @event('application.bus', 'properties-editing-started')
     def on_properties_editing_started (self, widget):
         self.pMenuShift.set_sensitive (False)
