@@ -200,15 +200,14 @@ class CDiagram(CBaseObject):
         deltay = max(delta[1], -min(el.GetSquare()[0][1] for el in self.selection.GetSelectedElements()))
         movedCon = set()
         elements = set()
-        if canvas is not None:
-            for el in self.selection.GetSelectedElements():
-                if not isinstance(el, ConLabelInfo.CConLabelInfo):
-                    pos1, pos2 = el.GetSquare()
-                    zorder = self.elements.index(el)
-                    for el2 in self.GetElementsInRange(pos1, pos2):
-                        if not isinstance(el2, ConLabelInfo.CConLabelInfo):
-                            if self.elements.index(el2) > zorder:
-                                elements.add(el2)
+        for el in self.selection.GetSelectedElements():
+            if not isinstance(el, ConLabelInfo.CConLabelInfo):
+                pos1, pos2 = el.GetSquare()
+                zorder = self.elements.index(el)
+                for el2 in self.GetElementsInRange(pos1, pos2):
+                    if not isinstance(el2, ConLabelInfo.CConLabelInfo):
+                        if self.elements.index(el2) > zorder:
+                            elements.add(el2)
         elements |= set(self.selection.GetSelectedElements())
         condelta = self.grid.SnapPosition(delta) if self.grid.IsActive() \
             else delta
@@ -221,9 +220,8 @@ class CDiagram(CBaseObject):
                         if con not in movedCon:
                             con.MoveAll(condelta)
                             movedCon.add(con)
-        if canvas is not None:
-            for conn in self.connections:
-                conn.ValidatePoints()
+        for conn in self.connections:
+            conn.ValidatePoints()
 
     def DeleteObject(self, object):
         self.size = None
