@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=UML.FRI
+GenericName=UML Case Tool
+GenericName[cs]=UML Case Nastroj
+GenericName[sk]=UML Case Nastroj
+Exec=/usr/bin/umlfri
+Terminal=false
+Type=Application
+StartupNotify=true
+Icon=/usr/share/doc/umlfri/Logo/64.png
+Categories=GNOME;GTK;Development;
+

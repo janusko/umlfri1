@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<exception
+    xmlns="http://umlfri.org/xmlschema/publicApi.xsd"
+    name="org.umlfri.api.exceptions.TransactionPendingError"
+    number="409">
+    
+    <documentation>
+        Transaction is already opened.
+    </documentation>
+</exception>

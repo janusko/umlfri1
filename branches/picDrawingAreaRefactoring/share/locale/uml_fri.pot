@@ -1,0 +1,883 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: UML .FRI 1.0-rc4\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-04-12 10:20+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#, python-format
+msgid "%s added to the project"
+msgstr ""
+
+msgid "<b>project e-mail address</b>"
+msgstr ""
+
+msgid "About"
+msgstr ""
+
+#, python-format
+msgid "Academic year %s:"
+msgstr ""
+
+msgid "Action from plugin"
+msgstr ""
+
+#, python-format
+msgid "Action from plugin %s"
+msgstr ""
+
+msgid "Active"
+msgstr ""
+
+msgid "Add _element"
+msgstr ""
+
+msgid "Add diagram"
+msgstr ""
+
+msgid "Add element"
+msgstr ""
+
+msgid "Addon could not be installed"
+msgstr ""
+
+msgid "Addons"
+msgstr ""
+
+msgid "Align"
+msgstr ""
+
+msgid "An error during printing has occured."
+msgstr ""
+
+msgid "An exception has occured"
+msgstr ""
+
+msgid "An exception has occured:"
+msgstr ""
+
+msgid "Architecture"
+msgstr ""
+
+msgid "Arrow color"
+msgstr ""
+
+msgid "Arrow fill color"
+msgstr ""
+
+msgid "Author:"
+msgstr ""
+
+msgid "Basic information about your system"
+msgstr ""
+
+msgid "Bring Forward"
+msgstr ""
+
+msgid "Bring To Top"
+msgstr ""
+
+msgid "By Selected Element"
+msgstr ""
+
+msgid "C_ontribute"
+msgstr ""
+
+msgid "C_redits"
+msgstr ""
+
+msgid "Change source and target"
+msgstr ""
+
+#, python-format
+msgid "Changed properties of the %s"
+msgstr ""
+
+#, python-format
+msgid "Changed property %s of the %s"
+msgstr ""
+
+msgid "Check for Updates"
+msgstr ""
+
+msgid "Close all diagram"
+msgstr ""
+
+msgid "Close diagram"
+msgstr ""
+
+msgid "Connection"
+msgstr ""
+
+#, python-format
+msgid "Connection between %s and %s is shown on diagram %s"
+msgstr ""
+
+#, python-format
+msgid "Connection created between objects %s and %s"
+msgstr ""
+
+#, python-format
+msgid "Connection created between objects %s and %s on the diagram %s"
+msgstr ""
+
+msgid "Connections"
+msgstr ""
+
+msgid "Copy as image"
+msgstr ""
+
+msgid "Copy without background (transparent)"
+msgstr ""
+
+msgid "Create New Project"
+msgstr ""
+
+msgid "Current Center horizontaly"
+msgstr ""
+
+msgid "Current center verticaly"
+msgstr ""
+
+msgid "Current downwards"
+msgstr ""
+
+msgid "Current left"
+msgstr ""
+
+msgid "Current right"
+msgstr ""
+
+msgid "Current upwards"
+msgstr ""
+
+msgid "Date/Time"
+msgstr ""
+
+msgid "Delete from Project"
+msgstr ""
+
+msgid "Description:"
+msgstr ""
+
+#, python-format
+msgid "Diagram %s moved in project tree"
+msgstr ""
+
+msgid "Diagram Export"
+msgstr ""
+
+msgid "Diagram name"
+msgstr ""
+
+msgid "Diagram type"
+msgstr ""
+
+msgid "Disable"
+msgstr ""
+
+msgid ""
+"Do you really want to install this addon?\n"
+"<i>This operation could be potencionaly dangerous, so do it only if you know "
+"what are you doing.</i>"
+msgstr ""
+
+#, python-format
+msgid ""
+"Do you really want to uninstall addon '%(name)s %(version)s'?\n"
+"This is pernament."
+msgstr ""
+
+msgid "Do you want to"
+msgstr ""
+
+msgid "Do you want to save project?"
+msgstr ""
+
+msgid "Downwards most"
+msgstr ""
+
+msgid "Drag"
+msgstr ""
+
+msgid "Duplicate selected elements."
+msgstr ""
+
+#, python-format
+msgid "Duplicated %d elements in diagram %s"
+msgstr ""
+
+msgid "Element"
+msgstr ""
+
+#, python-format
+msgid "Element %s created in diagram %s"
+msgstr ""
+
+#, python-format
+msgid "Element %s created in the project"
+msgstr ""
+
+#, python-format
+msgid "Element %s is shown on diagram %s"
+msgstr ""
+
+#, python-format
+msgid "Element %s moved in project tree"
+msgstr ""
+
+msgid "Element is already in this diagram"
+msgstr ""
+
+msgid "Elements"
+msgstr ""
+
+msgid "Enable"
+msgstr ""
+
+msgid "Error"
+msgstr ""
+
+msgid "Error name"
+msgstr ""
+
+msgid "Error opening file"
+msgstr ""
+
+msgid "Error text"
+msgstr ""
+
+msgid "Evenly Horizontally"
+msgstr ""
+
+msgid "Evenly Vertically"
+msgstr ""
+
+msgid "Exception"
+msgstr ""
+
+msgid "Exception handler"
+msgstr ""
+
+msgid "Exception traceback (most recent call last)"
+msgstr ""
+
+msgid "Export diagram"
+msgstr ""
+
+msgid "Export file format"
+msgstr ""
+
+msgid "Fakulty of Management Science and Informatics"
+msgstr ""
+
+msgid ""
+"File successfully send...\n"
+"\n"
+"Thank you for helping improving UML .FRI"
+msgstr ""
+
+msgid "Fill color"
+msgstr ""
+
+msgid "Fill color 2"
+msgstr ""
+
+msgid "Fill color 3"
+msgstr ""
+
+msgid "Find in diagrams"
+msgstr ""
+
+msgid "Find in diagrams ..."
+msgstr ""
+
+msgid "Free python-based CASE tool."
+msgstr ""
+
+msgid "GTK+ version"
+msgstr ""
+
+msgid "Grid"
+msgstr ""
+
+msgid "Grid is visible."
+msgstr ""
+
+msgid "Grid will align diagram components."
+msgstr ""
+
+msgid "Homepage"
+msgstr ""
+
+msgid "Homepage:"
+msgstr ""
+
+msgid "Horizontal Spacing"
+msgstr ""
+
+msgid "I_nclude project"
+msgstr ""
+
+msgid "Informations about the warning"
+msgstr ""
+
+msgid "Install"
+msgstr ""
+
+msgid "Install addon from file"
+msgstr ""
+
+msgid "Install metamodel from current project"
+msgstr ""
+
+msgid "Invalid connection"
+msgstr ""
+
+msgid "Left most"
+msgstr ""
+
+msgid "License:"
+msgstr ""
+
+msgid "Line Color 1"
+msgstr ""
+
+msgid "Line Color 2"
+msgstr ""
+
+msgid "Line Style"
+msgstr ""
+
+msgid "Line Width"
+msgstr ""
+
+msgid "Line color"
+msgstr ""
+
+msgid "Machine"
+msgstr ""
+
+msgid "Metamodels"
+msgstr ""
+
+msgid "Most Down"
+msgstr ""
+
+msgid "Most Left"
+msgstr ""
+
+msgid "Most Right"
+msgstr ""
+
+msgid "Most Up"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Name Text Font"
+msgstr ""
+
+msgid "Name text color"
+msgstr ""
+
+msgid "Name text font"
+msgstr ""
+
+msgid "New"
+msgstr ""
+
+msgid "Notes"
+msgstr ""
+
+msgid "Open Existing Project"
+msgstr ""
+
+msgid "Open Project"
+msgstr ""
+
+msgid "Open _Recent"
+msgstr ""
+
+msgid "Open as _copy"
+msgstr ""
+
+msgid "Open specification ..."
+msgstr ""
+
+msgid "P_NG"
+msgstr ""
+
+msgid "P_S"
+msgstr ""
+
+msgid "Padding:"
+msgstr ""
+
+msgid "Pages"
+msgstr ""
+
+msgid "Platform"
+msgstr ""
+
+msgid "Please help us improve the UML .FRI application by sending us this log."
+msgstr ""
+
+msgid "Plugins"
+msgstr ""
+
+msgid "Points color"
+msgstr ""
+
+msgid "Points size"
+msgstr ""
+
+msgid "Preferences"
+msgstr ""
+
+msgid "Programmed by:"
+msgstr ""
+
+msgid "Programmed for:"
+msgstr ""
+
+msgid "Properties"
+msgstr ""
+
+msgid "PyGTK version"
+msgstr ""
+
+msgid "Python version"
+msgstr ""
+
+msgid "Question"
+msgstr ""
+
+msgid "Rectagle width"
+msgstr ""
+
+msgid "Rectangle color"
+msgstr ""
+
+msgid "Rectangle width"
+msgstr ""
+
+msgid "Resize By Max"
+msgstr ""
+
+msgid "Resize By Min"
+msgstr ""
+
+msgid "Resize Height"
+msgstr ""
+
+msgid "Resize Hight and Width"
+msgstr ""
+
+msgid "Resize Width"
+msgstr ""
+
+msgid "Resize by Maximal Element"
+msgstr ""
+
+msgid "Resize by Minimal Element"
+msgstr ""
+
+msgid "Resize elements"
+msgstr ""
+
+msgid "Right most"
+msgstr ""
+
+msgid "S_VG"
+msgstr ""
+
+msgid "Save Project As"
+msgstr ""
+
+msgid "Select Addon"
+msgstr ""
+
+msgid "Select a directory"
+msgstr ""
+
+msgid "Select addon source"
+msgstr ""
+
+msgid "Select export directory & file name"
+msgstr ""
+
+msgid "Selection"
+msgstr ""
+
+msgid "Send Back"
+msgstr ""
+
+msgid "Send To Bottom"
+msgstr ""
+
+msgid "Set as default"
+msgstr ""
+
+msgid "Shadow color"
+msgstr ""
+
+msgid "Show in project view"
+msgstr ""
+
+msgid "Sizing"
+msgstr ""
+
+msgid "Snap breakpoints"
+msgstr ""
+
+msgid "Snap centers"
+msgstr ""
+
+msgid "Snap connection breakpoints."
+msgstr ""
+
+msgid "Snap corners"
+msgstr ""
+
+msgid "Snap mode:"
+msgstr ""
+
+msgid "Snap position"
+msgstr ""
+
+msgid "Snap selected elements on grid."
+msgstr ""
+
+msgid "Snap selected to grid"
+msgstr ""
+
+msgid "Snap to element centers."
+msgstr ""
+
+msgid ""
+"Snap to element corners \n"
+"(the one that is closest to the grid)"
+msgstr ""
+
+msgid "Snap top left corner of elements to grid."
+msgstr ""
+
+msgid "Space Evenly Horizontally"
+msgstr ""
+
+msgid "Space Evenly Vertically"
+msgstr ""
+
+msgid "Spacing"
+msgstr ""
+
+msgid "Start"
+msgstr ""
+
+msgid "Start page"
+msgstr ""
+
+msgid "Stop"
+msgstr ""
+
+msgid "Styles"
+msgstr ""
+
+msgid "Supervised by:"
+msgstr ""
+
+msgid "System _info"
+msgstr ""
+
+msgid "Terminate"
+msgstr ""
+
+msgid "Text Font"
+msgstr ""
+
+msgid "Text color"
+msgstr ""
+
+msgid "Text font"
+msgstr ""
+
+msgid ""
+"The addon is not responding for the stop request. Do you want me to "
+"terminate the addon?"
+msgstr ""
+
+msgid ""
+"This is just a test for the Exception handler window.\n"
+"You will see this window if something really bad happens.\n"
+"See the Help tab for more info."
+msgstr ""
+
+msgid "Type:"
+msgstr ""
+
+msgid "UML .FRI"
+msgstr ""
+
+msgid "UML .FRI Addon"
+msgstr ""
+
+msgid "UML .FRI Addons"
+msgstr ""
+
+msgid "UML .FRI Clear XML Project templates"
+msgstr ""
+
+msgid "UML .FRI Clear XML Projects"
+msgstr ""
+
+msgid "UML .FRI Project with embedded metamodels"
+msgstr ""
+
+msgid "UML .FRI Projects"
+msgstr ""
+
+msgid "UML .FRI Projects templates"
+msgstr ""
+
+msgid "UML .FRI designer"
+msgstr ""
+
+#, python-format
+msgid "UML .FRI designer [%s]"
+msgstr ""
+
+msgid ""
+"UML .FRI is free software; you can redistribute it and/or modify it under "
+"the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2 of the License, or (at your option) "
+"any later version.\n"
+"\n"
+"UML .FRI is distributed in the hope that it will be useful, but WITHOUT ANY "
+"WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
+"FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
+"details.\n"
+"\n"
+"You should have received a copy of the GNU General Public License along with "
+"UML .FRI; if not, write to the Free Software Foundation, Inc., 51 Franklin "
+"Street, Fifth Floor, Boston, MA 02110-1301, USA."
+msgstr ""
+
+msgid "UML.fri"
+msgstr ""
+
+msgid "Unable to insert element"
+msgstr ""
+
+msgid "Uninstall"
+msgstr ""
+
+msgid "University of Žilina"
+msgstr ""
+
+msgid "Unset default diagram"
+msgstr ""
+
+msgid "Updates"
+msgstr ""
+
+msgid "Upwards most"
+msgstr ""
+
+msgid ""
+"Use the <i>Send</i> button to send this error information directly on our "
+"server. If the <i>Include project</i> option is checked your current project "
+"will be send to the server as well. You can also write some basic "
+"information about what were you doing when this exception occured in the "
+"<i>User comments</i> tab to help us recreate it. Or you can use the <i>Home</"
+"i> button to post this error directly on our websites bugreport. In case of "
+"problems, feel free to write us an email on :"
+msgstr ""
+
+msgid ""
+"Use the <i>Send</i> button to send this warning information directly on our "
+"server. If the <i>Include project</i> option is checked your current project "
+"will be send to the server as well. You can also write some basic "
+"information about what were you doing when this warning occured in the "
+"<i>User comments</i> tab to help us recreate it. In case of problems, feel "
+"free to write us an email on :"
+msgstr ""
+
+msgid "Uups! An error during sending occured:\n"
+msgstr ""
+
+msgid ""
+"Uups! Sending was not successfull.\n"
+"Server response:\n"
+" "
+msgstr ""
+
+msgid "Value"
+msgstr ""
+
+msgid "Version"
+msgstr ""
+
+#, python-format
+msgid "Version: %s"
+msgstr ""
+
+msgid "Vertical Spacing"
+msgstr ""
+
+msgid "Visible"
+msgstr ""
+
+msgid "Wait"
+msgstr ""
+
+msgid "Warning"
+msgstr ""
+
+msgid "Warning info"
+msgstr ""
+
+msgid ""
+"We are looking for people willing to help us improve our\n"
+"application. You too can contribute in many ways:\n"
+"\n"
+"* Report us your wishes or desired features.\n"
+"* Join our development team.\n"
+"* Contribute art work, like new icons, logos.\n"
+"* Help us with localization to other languages.\n"
+"\n"
+"<i>Visit our web page for more information. </i>"
+msgstr ""
+
+msgid "What were you doing when this exception occured ?"
+msgstr ""
+
+msgid "Wrong element: "
+msgstr ""
+
+msgid "Z-Order"
+msgstr ""
+
+msgid "Zoom:"
+msgstr ""
+
+msgid "_Add diagram"
+msgstr ""
+
+msgid "_Align and Distribute"
+msgstr ""
+
+msgid "_Commandbar"
+msgstr ""
+
+msgid "_Diagram"
+msgstr ""
+
+msgid "_Duplicate"
+msgstr ""
+
+msgid "_Edit"
+msgstr ""
+
+msgid "_Element"
+msgstr ""
+
+msgid "_Error Test"
+msgstr ""
+
+msgid "_Error log"
+msgstr ""
+
+msgid "_Export"
+msgstr ""
+
+msgid "_Export diagram"
+msgstr ""
+
+msgid "_File"
+msgstr ""
+
+msgid "_Fullscreen"
+msgstr ""
+
+msgid "_Help"
+msgstr ""
+
+msgid "_Install"
+msgstr ""
+
+msgid "_License"
+msgstr ""
+
+msgid "_PDF"
+msgstr ""
+
+msgid "_Project"
+msgstr ""
+
+msgid "_Send"
+msgstr ""
+
+msgid "_Toolbox"
+msgstr ""
+
+msgid "_UML .FRI Homepage"
+msgstr ""
+
+msgid "_User comments"
+msgstr ""
+
+msgid "_View"
+msgstr ""
+
+msgid "_Warning info"
+msgstr ""
+
+msgid "_Warnings"
+msgstr ""
+
+msgid "_Z-Order"
+msgstr ""
+
+msgid "current"
+msgstr ""
+
+msgid "default file name"
+msgstr ""
+
+msgid "etree version"
+msgstr ""
+
+msgid "metamodel"
+msgstr ""
+
+msgid "metamodel+plugin"
+msgstr ""
+
+msgid "most"
+msgstr ""
+
+msgid "none"
+msgstr ""
+
+msgid "plugin"
+msgstr ""
+
+msgid "project web"
+msgstr ""
+
+msgid "use background"
+msgstr ""

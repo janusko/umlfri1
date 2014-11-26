@@ -1,0 +1,27 @@
+#import paths
+<html>
+    <head>
+        <title>All types</title>
+        <style>
+            .FrameTitleFont   { font-size: 100%; font-family: Helvetica, Arial, sans-serif; color:#000000 }
+            .FrameHeadingFont { font-size:  90%; font-family: Helvetica, Arial, sans-serif; color:#000000 }
+            .FrameItemFont    { font-size:  90%; font-family: Helvetica, Arial, sans-serif; color:#000000 }
+            ul { list-style-type: none; }
+        </style>
+    </head>
+    <body>
+        <font size="+1" class="FrameHeadingFont"><b>All types</b></font><br />
+        
+        <ul>
+            #for $element in $sorted($root.descendantsOfType('Interface', 'Exception', 'Delegate')):
+                <li>
+                    #if $element.typeName != 'Interface'
+                        <i><a href="$paths.getPath(element)" target="documentation">$element.name</a></i>
+                    #else
+                        <a href="$paths.getPath(element)" target="documentation">$element.name</a>
+                    #end if
+                </li>
+            #end for
+        </ul>
+    </body>
+</html>
