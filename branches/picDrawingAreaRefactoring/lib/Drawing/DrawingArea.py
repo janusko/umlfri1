@@ -224,8 +224,8 @@ class CDrawingArea(CGuiObject):
             self.__DrawResRect(canvas)
         if self.dnd == 'rect' and self.keydragPosition is None:
             self.__DrawDragRect(canvas)
-        # elif self.dnd == 'point':
-        #     self.__DrawDragPoint(pos)
+        elif self.dnd == 'point':
+            self.__DrawDragPoint(canvas)
         # elif self.dnd == 'line':
         #     self.__DrawDragLine(pos)
         # elif self.dnd == 'move':
@@ -381,8 +381,8 @@ class CDrawingArea(CGuiObject):
             self.__UpdateResRect(pos)
         elif self.dnd == 'rect' and self.keydragPosition is None:
             self.__UpdateDragRect(pos)
-        # elif self.dnd == 'point':
-        #     self.__DrawDragPoint(pos)
+        elif self.dnd == 'point':
+            self.__UpdateDragPoint(pos)
         # elif self.dnd == 'line':
         #     self.__DrawDragLine(pos)
         # elif self.dnd == 'move':
@@ -421,38 +421,37 @@ class CDrawingArea(CGuiObject):
                     if args.IsControlPressed() or args.IsShiftPressed():
                         self.diagram.GetSelection().RemoveFromSelection(itemSel)
 
-                        self.application.GetBus().emit('selected-items', list(self.diagram.GetSelected()))
+                        self.application.GetBus().emit('selected-items', list(self.diagram.GetSelection().GetSelected()))
                     elif isinstance(itemSel, CConnection): #Connection is selected
-                        pass
-                         # i = itemSel.GetPointAtPosition(pos)
-                         # if i is not None:
-                         #     itemSel.SelectPoint(i)
-                         #     self.__BeginDragPoint(event, itemSel, i)
-                         # else:
-                         #     itemSel.DeselectPoint()
-                         #     i = itemSel.WhatPartOfYouIsAtPosition(pos)
-                         #     self.__BeginDragLine(event, itemSel, i)
-                         # self.application.GetBus().emit('selected-items', list(self.diagram.GetSelected()))
+                         i = itemSel.GetPointAtPosition(pos)
+                         if i is not None:
+                             itemSel.SelectPoint(i)
+                             self.__BeginDragPoint(pos, itemSel, i)
+                         else:
+                             itemSel.DeselectPoint()
+                             i = itemSel.WhatPartOfYouIsAtPosition(pos)
+                             # self.__BeginDragLine(pos, itemSel, i)
+                         self.application.GetBus().emit('selected-items', list(self.diagram.GetSelection().GetSelected()))
                     else: #elements are selected
                         self.__BeginDragRect(pos)
                 elif not args.IsControlPressed() and not args.IsShiftPressed():
                     self.diagram.GetSelection().DeselectAll()
                     self.diagram.GetSelection().AddToSelection(itemSel)
-                    # if isinstance(itemSel, CConnection):
-                    #     i = itemSel.GetPointAtPosition(pos)
-                    #     if i is not None:
-                    #         itemSel.SelectPoint(i)
-                    #         self.__BeginDragPoint(pos, itemSel, i)
-                    #     else:
-                    #         itemSel.DeselectPoint()
-                    #         i = itemSel.WhatPartOfYouIsAtPosition(pos)
-                    #         self.__BeginDragLine(pos, itemSel, i)
-                    # else:
-                    selElements = list(self.diagram.GetSelection().GetSelectedElements())
-                    self.selElem = selElements[0]
-                    if len(selElements) == 1:
-                        self.selSq = self.diagram.GetSelection().GetSquareAtPosition(pos)
-                    self.__BeginDragRect(pos)
+                    if isinstance(itemSel, CConnection):
+                        i = itemSel.GetPointAtPosition(pos)
+                        if i is not None:
+                            itemSel.SelectPoint(i)
+                            self.__BeginDragPoint(pos, itemSel, i)
+                        else:
+                            itemSel.DeselectPoint()
+                            i = itemSel.WhatPartOfYouIsAtPosition(pos)
+                            # self.__BeginDragLine(pos, itemSel, i)
+                    else:
+                        selElements = list(self.diagram.GetSelection().GetSelectedElements())
+                        self.selElem = selElements[0]
+                        if len(selElements) == 1:
+                            self.selSq = self.diagram.GetSelection().GetSquareAtPosition(pos)
+                        self.__BeginDragRect(pos)
             else: # nothing under pointer
                 if self.diagram.GetSelection().SelectedCount() > 0:
                     if not args.IsControlPressed():
@@ -478,6 +477,10 @@ class CDrawingArea(CGuiObject):
             elif self.dnd == 'rect':
                 delta = self.__GetDelta(pos)
                 self.diagram.MoveSelection(delta)
+                self.dnd = None
+            elif self.dnd == 'point':
+                connection, index = self.DragPoint
+                self.diagram.MoveConnectionPoint(connection, pos, index)
                 self.dnd = None
             elif self.__NewConnection is not None:
                 itemSel = self.diagram.GetElementAtPosition(pos)
@@ -630,3 +633,23 @@ class CDrawingArea(CGuiObject):
 
     def __DrawNewConnection(self, canvas):
         canvas.DrawLines(self.__oldNewConnection, self.dragForegroundColor, line_width=self.dragLineWidth)
+
+
+    def __BeginDragPoint(self, pos, connection, point):
+        self.DragStartPos = pos
+        self.DragPoint = (connection, point)
+        self.__UpdateDragPoint(pos)
+        self.dnd = 'point'
+
+    def __UpdateDragPoint(self, (x, y)):
+        if x is None:
+            x, y = self.__oldPoints2
+        connection, index = self.DragPoint
+        prev, next = connection.GetNeighbours(index)
+        x, y = max(x, 0), max(y, 0)
+        points = [prev, (int(x), int(y)), next]
+        self.__oldPoints = points
+        self.__oldPoints2 = (x, y)
+
+    def __DrawDragPoint(self, canvas):
+        canvas.DrawLines(self.__oldPoints, self.dragForegroundColor, line_width=self.dragLineWidth)
