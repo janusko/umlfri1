@@ -76,9 +76,6 @@ class CSelection:
     def AddToSelection(self, element):
         self.selected.add(element)
 
-        if isinstance(element, ConLabelInfo.CConLabelInfo):
-            self.selected.add(element.GetConnection())
-
     def RemoveFromSelection(self, element):
         self.selected.remove(element)
 
@@ -100,6 +97,8 @@ class CSelection:
         '''
         for i in self.selected:
             if i is selObj:
+                return True
+            if isinstance(i, ConLabelInfo.CConLabelInfo) and i.GetConnection() is selObj:
                 return True
 
         return False
@@ -162,8 +161,12 @@ class CSelection:
             elif isinstance(selObj, Connection.CConnection):
                 size = config['/Styles/Selection/PointsSize']
                 color = config['/Styles/Selection/PointsColor']
+                selColor = config['/Styles/Selection/RectangleColor']
                 dx, dy = delta
                 for index, i in enumerate(selObj.GetPoints()):
                     canvas.DrawRectangle((i[0] + dx - size//2, i[1] + dy - size//2), (size, size), color)
                 for label in selObj.labels.values():
-                    canvas.DrawRectangle(label.GetPosition(), label.GetSize(), color)
+                    if self.IsSelected(label):
+                        canvas.DrawRectangle(label.GetPosition(), label.GetSize(), selColor)
+                    else:
+                        canvas.DrawRectangle(label.GetPosition(), label.GetSize(), color)
