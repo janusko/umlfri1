@@ -766,7 +766,6 @@ class CfrmMain(CWindow):
 
 
     @event('application.bus', 'run-dialog')
-    @event("picDrawingArea", "run-dialog")
     def on_run_dialog(self, widget, type, message):
         if type == 'warning':
             return CWarningDialog(self.form, message).run()
