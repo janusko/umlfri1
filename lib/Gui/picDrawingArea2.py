@@ -2,6 +2,7 @@ from lib.Commands.Diagrams.DuplicateElements import CDuplicateElementsCommand
 from lib.Depend.gtk2 import gtk
 from lib.Depend.gtk2 import gobject
 from lib.Drawing.DrawingArea import CDrawingArea
+from lib.Drawing.DrawingAreaMouseUpEventArgs import DrawingAreaMouseUpEventArgs
 
 from lib.Project import CProject, CProjectNode
 
@@ -11,7 +12,7 @@ from lib.Distconfig import IMAGES_PATH
 
 from common import CWidget, event
 from lib.Drawing import CDiagram, CElement, CConnection, CConLabelInfo
-from lib.Drawing.DrawingAreaMouseClickEventArgs import DrawingAreaMouseClickEventArgs
+from lib.Drawing.DrawingAreaMouseDownEventArgs import DrawingAreaMouseDownEventArgs
 
 from lib.Elements import CElementObject
 from lib.Connections import CConnectionObject
@@ -68,8 +69,6 @@ class CpicDrawingArea(CWidget):
             ()),
         'set-selected':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE,
             (gobject.TYPE_PYOBJECT, )),
-        'run-dialog':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_PYOBJECT,
-            (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT, )), #type, message
         'delete-element-from-all':(gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
             (gobject.TYPE_PYOBJECT, )),
         'drop-from-treeview': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
@@ -178,13 +177,13 @@ class CpicDrawingArea(CWidget):
         else:
             move = 5
         if(direction == "right"):
-            self.SetPos((posx + move, posy))
+            self.SetScrollBarsPosition((posx + move, posy))
         if(direction == "left"):
-            self.SetPos((posx - move, posy))
+            self.SetScrollBarsPosition((posx - move, posy))
         if(direction == "up"):
-            self.SetPos((posx, posy+move))
+            self.SetScrollBarsPosition((posx, posy+move))
         if(direction == "down"):
-            self.SetPos((posx, posy-move))
+            self.SetScrollBarsPosition((posx, posy-move))
         self.setResize = False
         self.getPlusMove = 0
 
@@ -234,7 +233,7 @@ class CpicDrawingArea(CWidget):
                     pos2 += positionW
                 else:
                     pos2 = 0
-                self.SetPos((pos2,pos1))
+                self.SetScrollBarsPosition((pos2,pos1))
             else: #OUTZOOM
                 pos1 = self.GetPos()[1]
                 pos2 = self.GetPos()[0]
@@ -246,7 +245,7 @@ class CpicDrawingArea(CWidget):
                     pos2 -= positionW
                 else:
                     pos2 = 0
-                self.SetPos((pos2,pos1))
+                self.SetScrollBarsPosition((pos2,pos1))
             
     def GetScale(self):
         return self.canvas.GetScale()
@@ -329,9 +328,9 @@ class CpicDrawingArea(CWidget):
     def GetPos(self):
         return int(self.picHBar.get_value()), int(self.picVBar.get_value())
         
-    def SetPos(self, pos = (0, 0)):        
+    def SetScrollBarsPosition(self, pos = (0, 0)):
         self.picHBar.set_value(pos[0])        
-        self.picVBar.set_value(pos[1])       
+        self.picVBar.set_value(pos[1])
 
     def GetAbsolutePos(self, (posx, posy)):
         #((bposx, bposy), (bsizx, bsizy)) = self.buffer_size
@@ -497,7 +496,7 @@ class CpicDrawingArea(CWidget):
         isDoubleClick = event.type == gtk.gdk._2BUTTON_PRESS
         wasSpacePressed = gtk.keysyms.space in self.pressedKeys
 
-        eventArgs = DrawingAreaMouseClickEventArgs(pos, event.button, isDoubleClick, wasSpacePressed, event.state)
+        eventArgs = DrawingAreaMouseDownEventArgs(pos, event.button, isDoubleClick, wasSpacePressed, event.state)
 
         self.activeDrawingArea.OnMouseDown(eventArgs)
 
@@ -630,71 +629,15 @@ class CpicDrawingArea(CWidget):
 
     @event("picEventBox", "button-release-event")
     def on_button_release_event(self, widget, event):
-        self.activeDrawingArea.OnMouseUp((event.x, event.y))
+        pos = (event.x, event.y)
+
+        wasSpacePressed = gtk.keysyms.space in self.pressedKeys
+
+        eventArgs = DrawingAreaMouseUpEventArgs(pos, event.button, wasSpacePressed, event.state)
+
+        self.activeDrawingArea.OnMouseUp(eventArgs)
+        self.AdjustScrollBars()
         self.Paint()
-        return
-        try:
-            if self.dnd == 'resize':
-                delta = self.__GetDelta((event.x, event.y), True)
-                self.selElem.Resize(delta, self.selSq)
-                self.selElem = None
-                self.selSq = None
-                self.dnd = None 
-            elif self.dnd == 'rect':
-                delta = self.__GetDelta((event.x, event.y))
-                self.Diagram.MoveSelection(delta, self.canvas)
-                self.dnd = None
-            elif self.dnd == 'point':
-                point = self.GetAbsolutePos((event.x, event.y))
-                connection, index = self.DragPoint
-                self.Diagram.MoveConnectionPoint(connection, point, index)
-                self.dnd = None
-            elif self.dnd == 'line':
-                point = self.GetAbsolutePos((event.x, event.y))
-                connection, index = self.DragPoint
-                if connection.InsertPoint(point, index):
-                    self.Diagram.MoveConnectionPoint(connection, point, index+1)
-                self.dnd = None
-            elif self.dnd == 'move':
-                if gtk.keysyms.space in self.pressedKeys:
-                    self.__SetCursor('grab')
-                else:
-                    self.__SetCursor(None)
-                self.dnd = None
-            elif self.dnd == 'selection':
-                x1, y1 = self.DragSel
-                x2, y2 = self.GetAbsolutePos((event.x, event.y))
-                if x2 < x1:
-                    x2, x1 = x1, x2
-                if y2 < y1:
-                    y2, y1 = y1, y2
-                self.Diagram.AddRangeToSelection((x1, y1), (x2, y2))
-                self.dnd = None
-                self.emit('selected-item', list(self.Diagram.GetSelected()),False)
-            elif self.__NewConnection is not None:
-                pos = self.GetAbsolutePos((event.x, event.y))
-                itemSel = self.Diagram.GetElementAtPosition(pos)
-                if itemSel is None or isinstance(itemSel, (CConnection, CConLabelInfo)):
-                    self.__NewConnection[1].append(pos)
-                    self.__DrawNewConnection((None, None))
-                elif itemSel is not self.__NewConnection[2] or len(self.__NewConnection[1]) > 2:
-                    (type, points, source), destination = self.__NewConnection, itemSel
-                    obj = CConnectionObject(type, source.GetObject(), destination.GetObject())
-                    x = CConnection(self.Diagram, obj, source, destination, points[1:])
-                    self.emit('set-selected', None)
-                    self.Diagram.AddToSelection(x)
-                    self.emit('selected-item', list(self.Diagram.GetSelected()),True)
-                    self.__NewConnection = None
-                else:
-                    pass
-            else:
-                return
-            self.AdjustScrollBars()
-            self.Paint()
-        except ConnectionRestrictionError:
-            self.ResetAction()
-            self.emit('set-selected', None)
-            self.emit('run-dialog', 'warning', _('Invalid connection'))
     
     @event("picEventBox", "key-press-event")
     def on_key_press_event(self, widget, event):
@@ -778,6 +721,7 @@ class CpicDrawingArea(CWidget):
     def on_motion_notify_event(self, widget, event):
         pos = (event.x, event.y)
         self.activeDrawingArea.OnMouseMove(pos)
+        self.__UpdateScrollBarsPosition()
         self.Paint()
     
     @event("picEventBox","drag-data-received")
@@ -982,7 +926,7 @@ class CpicDrawingArea(CWidget):
         posx, posy = self.Diagram.GetHScrollingPos(), self.Diagram.GetVScrollingPos()
         x1, y1 = pos
         x2, y2 = self.DragStartPos
-        self.SetPos((posx - x1 + x2, posy - y1 + y2))
+        self.SetScrollBarsPosition((posx - x1 + x2, posy - y1 + y2))
         self.Paint(False)
         
 
@@ -1118,8 +1062,11 @@ class CpicDrawingArea(CWidget):
         self.Diagram.AddToSelection(self.Diagram.GetElement(object))                
         y=self.canvas.ToPhysical(self.Diagram.GetSelected().next().position)[1]-self.GetAbsolutePos(self.GetWindowSize())[1]/2
         x=self.canvas.ToPhysical(self.Diagram.GetSelected().next().position)[0]-self.GetAbsolutePos(self.GetWindowSize())[0]/2
-        self.SetPos((x, y))
+        self.SetScrollBarsPosition((x, y))
         self.Paint()
+
+    def __UpdateScrollBarsPosition(self):
+        self.SetScrollBarsPosition(self.activeDrawingArea.GetViewPortPos())
 
     def DeselectAll(self):
         self.activeDiagram.GetSelection().DeselectAll()

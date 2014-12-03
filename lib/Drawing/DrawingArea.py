@@ -101,14 +101,22 @@ class CDrawingArea(CGuiObject):
         """
         return self.viewPort[0]
 
-    def SetViewPortPos(self, pos = (0, 0)):
+    def SetViewPortPos(self, (x, y) = (0, 0)):
         """
         Changes view port position.
 
         @param pos: New view port position
         @type pos: tuple
         """
-        self.viewPort = pos, self.GetViewPortSize()
+        size = (w, h) = self.GetViewPortSize()
+        (dw, dh) = self.GetDiagramSize()
+
+        # don't allow scrolling outside of view port or diagram size
+        (x, y) = min(dw - w, x), min(dh - h, y)
+
+        # don't allow scrolling  beyond 0, 0 position
+        pos = max(0, x), max(0, y)
+        self.viewPort = pos, size
 
     def GetViewPortSize(self):
         """
@@ -137,6 +145,10 @@ class CDrawingArea(CGuiObject):
         @rtype:  L{Diagram<Diagram>}
         """
         return self.diagram
+
+    def GetDiagramSize(self):
+        tmp = [int(max(i)) for i in zip(self.diagram.GetSize(), self.GetViewPortSize())]
+        return tuple(tmp)
 
     def GetAbsolutePos(self, (posx, posy)):
         """
@@ -230,8 +242,6 @@ class CDrawingArea(CGuiObject):
             self.__DrawDragPoint(canvas)
         elif self.dnd == 'line':
             self.__DrawDragLine(canvas)
-        # elif self.dnd == 'move':
-        #     self.__DrawDragMove(pos)
         elif self.dnd == 'selection':
             self.__DrawDragSel(canvas)
         elif self.__NewConnection is not None:
@@ -387,8 +397,8 @@ class CDrawingArea(CGuiObject):
             self.__UpdateDragPoint(pos)
         elif self.dnd == 'line':
             self.__UpdateDragLine(pos)
-        # elif self.dnd == 'move':
-        #     self.__DrawDragMove(pos)
+        elif self.dnd == 'move':
+            self.__UpdateDragMove(pos)
         elif self.dnd == 'selection':
             self.__UpdateDragSel(pos)
         elif self.__NewConnection is not None:
@@ -413,6 +423,10 @@ class CDrawingArea(CGuiObject):
         pos = self.GetAbsolutePos(args.position)
 
         if args.button == 1:
+            if args.wasSpacePressed:
+                self.__BeginDragMove(pos)
+                return True
+
             if self.__toolboxItem != (None, None):
                 self.__AddItem(self.__toolboxItem, pos)
                 return
@@ -462,11 +476,14 @@ class CDrawingArea(CGuiObject):
                 self.__BeginDragSel(pos)
 
         elif args.button == 2:
-            pass
+            self.__BeginDragMove(pos)
+
         elif args.button == 3:
             pass
 
-    def OnMouseUp(self, pos):
+    def OnMouseUp(self, args):
+        pos = args.position
+
         pos = self.GetAbsolutePos(pos)
 
         try:
@@ -488,6 +505,12 @@ class CDrawingArea(CGuiObject):
                 connection, index = self.DragPoint
                 if connection.InsertPoint(pos, index):
                     self.diagram.MoveConnectionPoint(connection, pos, index+1)
+                self.dnd = None
+            elif self.dnd == 'move':
+                if args.wasSpacePressed:
+                    self.cursor = 'grab'
+                else:
+                    self.cursor = None
                 self.dnd = None
             elif self.dnd == 'selection':
                 x1, y1 = self.DragSel
@@ -515,7 +538,9 @@ class CDrawingArea(CGuiObject):
                     pass
 
         except ConnectionRestrictionError:
-            pass
+            self.__ResetAction()
+            self.application.GetBus().emit('set-selected-toolbox-item', None)
+            self.application.GetBus().emit('run-dialog', 'warning', _('Invalid connection'))
 
     def OnToolBoxItemSelected(self, item):
         # set dnd to 'add_obj' ??
@@ -578,6 +603,17 @@ class CDrawingArea(CGuiObject):
         posx, posy = self.DragPoint
         tmpx, tmpy = max(0, posx + dx), max(0, posy + dy)
         return int(tmpx - posx), int(tmpy - posy)
+
+    def __BeginDragMove(self, pos):
+        self.cursor = 'grabbing'
+        self.DragStartPos = pos
+        self.dnd = 'move'
+
+    def __UpdateDragMove(self, pos):
+        posx, posy = self.GetViewPortPos()
+        x1, y1 = pos
+        x2, y2 = self.DragStartPos
+        self.SetViewPortPos((posx - x1 + x2, posy - y1 + y2))
 
     def __BeginDragRect(self, pos):
         selElements = list(self.diagram.GetSelection().GetSelectedElements())
@@ -695,3 +731,8 @@ class CDrawingArea(CGuiObject):
 
     def __DrawDragPoint(self, canvas):
         canvas.DrawLines(self.__oldPoints, self.dragForegroundColor, line_width=self.dragLineWidth)
+
+    def __ResetAction(self):
+        self.dnd = None
+        if self.__NewConnection is not None:
+            self.__NewConnection = None
