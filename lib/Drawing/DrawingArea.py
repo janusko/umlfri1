@@ -479,7 +479,13 @@ class CDrawingArea(CGuiObject):
             self.__BeginDragMove(pos)
 
         elif args.button == 3:
-            pass
+            itemSel = self.diagram.GetElementAtPosition(pos)
+            if itemSel not in frozenset(self.diagram.GetSelection().GetSelected()):
+                self.diagram.GetSelection().DeselectAll()
+            if itemSel is not None:
+                self.diagram.GetSelection().AddToSelection(itemSel)
+            self.__OnSelectionUpdated()
+            self.itemSel = itemSel
 
     def OnMouseUp(self, args):
         pos = args.position
