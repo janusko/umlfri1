@@ -128,14 +128,14 @@ class CpicDrawingArea(CWidget):
         """
         cursorFile = self.activeDrawingArea.GetCursorFile()
         cursorImage = self.cursorImages.get(cursorFile)
-        if cursorImage is None:
+        if cursorImage is None and cursorFile is not None:
             cursorImage = gtk.gdk.Cursor(
                     gtk.gdk.display_get_default(),
                     gtk.gdk.pixbuf_new_from_file(os.path.join(IMAGES_PATH, cursorFile)),
                     0,
                     0
                 )
-            self.cursors[cursorFile] = cursorImage
+            self.cursorImages[cursorFile] = cursorImage
 
         self.__SetCursor(cursorImage)
 
@@ -499,6 +499,7 @@ class CpicDrawingArea(CWidget):
         eventArgs = DrawingAreaMouseDownEventArgs(pos, event.button, isDoubleClick, wasSpacePressed, event.state)
 
         self.activeDrawingArea.OnMouseDown(eventArgs)
+        self.__UpdateCursor()
 
         self.Paint()
 
@@ -636,6 +637,7 @@ class CpicDrawingArea(CWidget):
         eventArgs = DrawingAreaMouseUpEventArgs(pos, event.button, wasSpacePressed, event.state)
 
         self.activeDrawingArea.OnMouseUp(eventArgs)
+        self.__UpdateCursor()
         self.AdjustScrollBars()
         self.Paint()
     
