@@ -319,39 +319,31 @@ class CDrawingArea(CGuiObject):
     def Align(self, isHorizontal, isLowerBoundary,
             alignToSelectedElement=True):
         self.diagram.AlignElementsXY(isHorizontal, alignToSelectedElement, self.itemSel if alignToSelectedElement else None)
-        self.Paint()
 
     def AlignCenter(self, isHorizontal, alignToSelectedElement = True):
         self.diagram.AlignElementCentersXY(isHorizontal, self.itemSel if alignToSelectedElement else None)
-        self.Paint()
 
     def ResizeHeight(self):
         self.diagram.ResizeElementsEvenly(False, self.itemSel)
-        self.Paint()
 
     def ResizeWidth(self):
         self.diagram.ResizeElementsEvenly(True, self.itemSel)
-        self.Paint()
 
     def ResizeWidthAndHeight(self):
         self.diagram.ResizeElementsEvenly(True, self.itemSel)
         self.diagram.ResizeElementsEvenly(False, self.itemSel)
-        self.Paint()
 
     def ResizeByMaximalElement(self):
         self.diagram.ResizeByMaximalElement()
 
     def ResizeByMinimalElement(self):
         self.diagram.ResizeByMinimalElement()
-        self.Paint()
 
     def SnapSelected(self):
         self.diagram.SnapElementsOnGrid()
-        self.Paint()
 
     def MakeSpacing(self, isHorizontal):
         self.diagram.SpaceElementsEvenlyXY(isHorizontal)
-        self.Paint()
 
     def PaintSelected(self, canvas):
         self.diagram.PaintSelected(canvas)

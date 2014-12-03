@@ -937,42 +937,51 @@ class CpicDrawingArea(CWidget):
     @event("mnuAlignDownwardsMost","activate", False, False, False)
     @event("mnuAlignDownwardsCurrent","activate", False, False, True)
     def on_mnuAlign_activate(self, menuItem, horiz, lower, defaultE):
-        self.drawingArea.Align(horiz, lower, self.itemSel if defaultE else None)
+        self.activeDrawingArea.Align(horiz, lower, defaultE)
+        self.Paint()
     
     @event("mnuAlignCenterHor","activate", True, True)
     @event("mnuAlignCenterVer","activate", False, True)
     def on_mnuAlignCenter(self, widget, isHorizontal, alignToSelectedElement):
-        self.drawingArea.AlignCenter(isHorizontal, alignToSelectedElement)
+        self.activeDrawingArea.AlignCenter(isHorizontal, alignToSelectedElement)
+        self.Paint()
     
     @event("mnuResizeHight","activate")
     def on_mnuResizeHight(self, menuItem):
-        self.drawingArea.ResizeHeight()
+        self.activeDrawingArea.ResizeHeight()
+        self.Paint()
         
     @event("mnuResizeWidth","activate")
     def on_mnuResizeWidth(self, menuItem):
-        self.drawingArea.ResizeWidth()
+        self.activeDrawingArea.ResizeWidth()
+        self.Paint()
     
     @event("mnuResizeHightAndWidth","activate")
     def on_mnuResizeWidthAndHight(self, menuItem):
-        self.drawingArea.ResizeWidthAndHeight()
+        self.activeDrawingArea.ResizeWidthAndHeight()
+        self.Paint()
     
     @event("mnuResizeByMaximalElement","activate")
     def on_mnuResizeByMaximalElement(self, menuItem):
-        self.drawingArea.ResizeByMaximalElement()
+        self.activeDrawingArea.ResizeByMaximalElement()
+        self.Paint()
         
     @event("mnuResizeByMinimalElement","activate")
     def on_mnuResizeByMinimalElement(self, menuItem):
-        self.drawingArea.ResizeByMinimalElement()
+        self.activeDrawingArea.ResizeByMinimalElement()
+        self.Paint()
     
     @event("mnuSpaceEvenlyHorizontally","activate", True)
     @event("mnuSpaceEvenlyVertically","activate", False)
     def on_mnuMakeSpacing(self, widget, isHorizontal):
-        self.drawingArea.MakeSpacing(isHorizontal)
+        self.activeDrawingArea.MakeSpacing(isHorizontal)
+        self.Paint()
     
     @event('mnuSnapSelectGrid', 'activate')
     def on_mnuSnapSelected(self, widget):
-        self.drawingArea.SnapSelected()
-                
+        self.activeDrawingArea.SnapSelected()
+        self.Paint()
+    
     def HasFocus(self):
         return self.picDrawingArea.is_focus()
 
