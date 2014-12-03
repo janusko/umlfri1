@@ -503,83 +503,9 @@ class CpicDrawingArea(CWidget):
 
         self.Paint()
 
-        return
-
-        if event.button == 1:
-            if gtk.keysyms.space in self.pressedKeys:
-                self.__BeginDragMove(event)
-                return True
-            toolBtnSel = self.emit('get-selected')
-            if toolBtnSel is not None:
-                self.__AddItem(toolBtnSel, event)
-                return True
-            
-            itemSel = self.Diagram.GetElementAtPosition(pos)
-            if itemSel is not None: #something is hit:
-                if itemSel in self.Diagram.GetSelected(): # deselecting:
-                    if (event.state & gtk.gdk.CONTROL_MASK) or (event.state & gtk.gdk.SHIFT_MASK):
-                        self.Diagram.RemoveFromSelection(itemSel)
-                        #self.Paint()
-                        self.emit('selected-item', list(self.Diagram.GetSelected()),False)
-                    elif isinstance(itemSel, CConnection): #Connection is selected
-                        i = itemSel.GetPointAtPosition(pos)
-                        if i is not None:
-                            itemSel.SelectPoint(i)
-                            self.__BeginDragPoint(event, itemSel, i)
-                        else:
-                            itemSel.DeselectPoint()
-                            i = itemSel.WhatPartOfYouIsAtPosition(pos)
-                            self.__BeginDragLine(event, itemSel, i)
-                        #self.Paint()
-                        self.emit('selected-item', list(self.Diagram.GetSelected()),False)
-                    else: #elements are selected
-                        self.__BeginDragRect(event)
-                elif not (event.state & gtk.gdk.CONTROL_MASK) and not (event.state & gtk.gdk.SHIFT_MASK):
-                    self.Diagram.DeselectAll()
-                    self.Diagram.AddToSelection(itemSel)
-                    if isinstance(itemSel, CConnection):
-                        i = itemSel.GetPointAtPosition(pos)
-                        if i is not None:
-                            itemSel.SelectPoint(i)
-                            self.__BeginDragPoint(event, itemSel, i)
-                        else:
-                            itemSel.DeselectPoint()
-                            i = itemSel.WhatPartOfYouIsAtPosition(pos)
-                            self.__BeginDragLine(event, itemSel, i)
-                    else:
-                        selElements = list(self.Diagram.GetSelectedElements())
-                        self.selElem = selElements[0]
-                        if len(selElements) == 1:
-                            self.selSq = self.selElem.GetSquareAtPosition(pos)
-                        self.__BeginDragRect(event)
-                    #self.Paint()
-                    self.emit('selected-item', list(self.Diagram.GetSelected()),False)
-                else:
-                    self.Diagram.AddToSelection(itemSel)
-                    #self.Paint()
-                    self.emit('selected-item', list(self.Diagram.GetSelected()),False)
-            else: # nothing under pointer
-                if self.Diagram.SelectedCount() > 0:
-                    if not (event.state & gtk.gdk.CONTROL_MASK):
-                        self.Diagram.DeselectAll()
-                        #self.Paint()
-                        self.emit('selected-item', list(self.Diagram.GetSelected()),False)
-                self.__BeginDragSel(event)
-
-        elif event.button == 2:
-            self.__BeginDragMove(event)
-
-        elif event.button == 3:
-            itemSel = self.Diagram.GetElementAtPosition(pos)
-            if itemSel not in frozenset(self.Diagram.GetSelected()):
-                self.Diagram.DeselectAll()
-            if itemSel is not None:
-                self.Diagram.AddToSelection(itemSel)
-            self.Paint()
-            self.emit('selected-item', list(self.Diagram.GetSelected()),False)
+        if event.button == 3:
             #if something is selected:
             #self.UpdateMenuSensitivity(bool(self.application.GetProject()), bool(self.Diagram), int(len(list(self.Diagram.GetSelected())) > 0))
-            self.itemSel = itemSel
             self.pMenuShift.popup(None,None,None,event.button,event.time)
             return True
 
