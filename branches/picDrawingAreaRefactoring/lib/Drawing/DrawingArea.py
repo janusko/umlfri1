@@ -437,7 +437,7 @@ class CDrawingArea(CGuiObject):
                     if args.IsControlPressed() or args.IsShiftPressed():
                         self.diagram.GetSelection().RemoveFromSelection(itemSel)
 
-                        self.application.GetBus().emit('selected-items', list(self.diagram.GetSelection().GetSelected()))
+                        self.__OnSelectionUpdated()
                     elif isinstance(itemSel, CConnection): #Connection is selected
                          i = itemSel.GetPointAtPosition(pos)
                          if i is not None:
@@ -447,7 +447,7 @@ class CDrawingArea(CGuiObject):
                              itemSel.DeselectPoint()
                              i = itemSel.WhatPartOfYouIsAtPosition(pos)
                              self.__BeginDragLine(pos, itemSel, i)
-                         self.application.GetBus().emit('selected-items', list(self.diagram.GetSelection().GetSelected()))
+                         self.__OnSelectionUpdated()
                     else: #elements are selected
                         self.__BeginDragRect(pos)
                 elif not args.IsControlPressed() and not args.IsShiftPressed():
@@ -472,7 +472,7 @@ class CDrawingArea(CGuiObject):
                 if self.diagram.GetSelection().SelectedCount() > 0:
                     if not args.IsControlPressed():
                         self.diagram.GetSelection().DeselectAll()
-                        self.application.GetBus().emit('selected-items', list(self.diagram.GetSelection().GetSelected()))
+                        self.__OnSelectionUpdated()
                 self.__BeginDragSel(pos)
 
         elif args.button == 2:
@@ -521,7 +521,7 @@ class CDrawingArea(CGuiObject):
                     y2, y1 = y1, y2
                 self.diagram.AddRangeToSelection((x1, y1), (x2, y2))
                 self.dnd = None
-                self.application.GetBus().emit('selected-items', list(self.diagram.GetSelection().GetSelected()))
+                self.__OnSelectionUpdated()
             elif self.__NewConnection is not None:
                 itemSel = self.diagram.GetElementAtPosition(pos)
                 if itemSel is None or isinstance(itemSel, (CConnection, CConLabelInfo)):
@@ -532,7 +532,7 @@ class CDrawingArea(CGuiObject):
                     x = CConnection(self.diagram, obj, source, destination, points[1:])
                     self.application.GetBus().emit('set-selected-toolbox-item', None)
                     self.diagram.GetSelection().AddToSelection(x)
-                    self.application.GetBus().emit('selected-items', list(self.diagram.GetSelection().GetSelected()))
+                    self.__OnSelectionUpdated()
                     self.__NewConnection = None
                 else:
                     pass
@@ -577,7 +577,7 @@ class CDrawingArea(CGuiObject):
             self.diagram.GetSelection().DeselectAll()
             self.application.GetBus().emit('add-element', ElementObject, self.diagram, parentElement)
             self.diagram.GetSelection().AddToSelection(newElement)
-            self.application.GetBus().emit('selected-items', list(self.diagram.GetSelection().GetSelected()))
+            self.__OnSelectionUpdated()
 
         elif itemType == 'Connection':
             itemSel = self.diagram.GetElementAtPosition(pos)
@@ -736,3 +736,6 @@ class CDrawingArea(CGuiObject):
         self.dnd = None
         if self.__NewConnection is not None:
             self.__NewConnection = None
+
+    def __OnSelectionUpdated(self):
+        self.application.GetBus().emit('selected-items', list(self.diagram.GetSelection().GetSelected()))
