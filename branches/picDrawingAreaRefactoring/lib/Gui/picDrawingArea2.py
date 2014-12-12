@@ -2,7 +2,6 @@ from lib.Commands.Diagrams.DuplicateElements import CDuplicateElementsCommand
 from lib.Depend.gtk2 import gtk
 from lib.Depend.gtk2 import gobject
 from lib.Drawing.DrawingArea import CDrawingArea
-from lib.Drawing.DrawingAreaMouseUpEventArgs import DrawingAreaMouseUpEventArgs
 
 from lib.Project import CProject, CProjectNode
 
@@ -12,8 +11,9 @@ from lib.Distconfig import IMAGES_PATH
 
 from common import CWidget, event
 from lib.Drawing import CDiagram, CElement, CConnection, CConLabelInfo
-from lib.Drawing.DrawingAreaMouseDownEventArgs import DrawingAreaMouseDownEventArgs
-from lib.Drawing.DrawingAreaKeyPressEventArgs import DrawingAreaKeyPressEventArgs
+from lib.Drawing.DrawingAreaMouseDownEventArgs import CDrawingAreaMouseDownEventArgs
+from lib.Drawing.DrawingAreaKeyPressEventArgs import CDrawingAreaKeyPressEventArgs
+from lib.Drawing.DrawingAreaMouseUpEventArgs import CDrawingAreaMouseUpEventArgs
 
 from lib.Elements import CElementObject
 from lib.Connections import CConnectionObject
@@ -456,7 +456,7 @@ class CpicDrawingArea(CWidget):
         isDoubleClick = event.type == gtk.gdk._2BUTTON_PRESS
         wasSpacePressed = gtk.keysyms.space in self.pressedKeys
 
-        eventArgs = DrawingAreaMouseDownEventArgs(pos, event.button, isDoubleClick, wasSpacePressed, event.state)
+        eventArgs = CDrawingAreaMouseDownEventArgs(pos, event.button, isDoubleClick, wasSpacePressed, event.state)
 
         self.activeDrawingArea.OnMouseDown(eventArgs)
         self.__UpdateCursor()
@@ -520,7 +520,7 @@ class CpicDrawingArea(CWidget):
 
         wasSpacePressed = gtk.keysyms.space in self.pressedKeys
 
-        eventArgs = DrawingAreaMouseUpEventArgs(pos, event.button, wasSpacePressed, event.state)
+        eventArgs = CDrawingAreaMouseUpEventArgs(pos, event.button, wasSpacePressed, event.state)
 
         self.activeDrawingArea.OnMouseUp(eventArgs)
         self.__UpdateCursor()
@@ -535,7 +535,7 @@ class CpicDrawingArea(CWidget):
 
         self.pressedKeys.add(event.keyval)
 
-        eventArgs = DrawingAreaKeyPressEventArgs(self.pressedKeys, event.state)
+        eventArgs = CDrawingAreaKeyPressEventArgs(self.pressedKeys, event.state)
 
         self.activeDrawingArea.OnKeyPress(eventArgs)
 

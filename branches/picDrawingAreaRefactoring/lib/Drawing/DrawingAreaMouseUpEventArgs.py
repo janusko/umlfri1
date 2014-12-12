@@ -1,7 +1,7 @@
 from gtk.gdk import CONTROL_MASK, SHIFT_MASK
 
 
-class DrawingAreaMouseUpEventArgs():
+class CDrawingAreaMouseUpEventArgs():
 
     def __init__(self, position, button, wasSpacePressed = False, modifiers = 0):
         self.position = position

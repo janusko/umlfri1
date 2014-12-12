@@ -10,7 +10,7 @@ KEY_DELETE = gtk.keysyms.Delete
 KEY_SPACE = gtk.keysyms.space
 KEY_ESCAPE = gtk.keysyms.Escape
 
-class DrawingAreaKeyPressEventArgs():
+class CDrawingAreaKeyPressEventArgs():
 
     def __init__(self, pressedKeys, modifiers = 0):
         self.pressedkeys = pressedKeys
