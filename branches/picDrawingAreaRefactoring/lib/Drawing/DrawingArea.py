@@ -544,7 +544,7 @@ class CDrawingArea(CGuiObject):
 
         except ConnectionRestrictionError:
             self.__ResetAction()
-            self.application.GetBus().emit('set-selected-toolbox-item', None)
+            self.__ClearSelectedToolBoxItem()
             self.application.GetBus().emit('run-dialog', 'warning', _('Invalid connection'))
 
     def OnKeyPress(self, args):
@@ -575,6 +575,9 @@ class CDrawingArea(CGuiObject):
         # set dnd to 'add_obj' ??
         self.__toolboxItem = item
         pass
+
+    def __ClearSelectedToolBoxItem(self):
+        self.application.GetBus().emit('set-selected-toolbox-item', None)
 
     def __OpenSpecification(self, obj):
         self.application.GetBus().emit('open-specification', obj)
