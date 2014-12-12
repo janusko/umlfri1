@@ -399,7 +399,7 @@ class CDrawingArea(CGuiObject):
         """
         Callback for mouse click event.
 
-        @param args: L{DrawingAreaMouseClickEventArgs<lib.Drawing.DrawingAreaMouseClickEventArgs>}
+        @param args: L{DrawingAreaMouseDownEventArgs<lib.Drawing.DrawingAreaMouseDownEventArgs>}
         """
         if args.button == 1 and args.isDoubleClick == True:
             if len(tuple(self.diagram.GetSelection().GetSelected())) == 1:
@@ -478,6 +478,11 @@ class CDrawingArea(CGuiObject):
             self.itemSel = itemSel
 
     def OnMouseUp(self, args):
+        """
+        Callback for mouse release event.
+
+        @param args: L{DrawingAreaMouseUpEventArgs<lib.Drawing.DrawingAreaMouseUpEventArgs>}
+        """
         pos = args.position
 
         pos = self.GetAbsolutePos(pos)
