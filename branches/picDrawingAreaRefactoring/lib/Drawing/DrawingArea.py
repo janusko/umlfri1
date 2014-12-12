@@ -165,7 +165,9 @@ class CDrawingArea(CGuiObject):
         @return: Coordinates in absolute scale.
         @rtype : tuple
         """
-        return PositionToLogical((posx, posy), self.scale, self.GetViewPortPos())
+        (x, y) = PositionToLogical((posx, posy), self.scale)
+        (dx, dy) = PositionToLogical(self.GetViewPortPos(), self.scale)
+        return (x + dx, y + dy)
 
     def GetRelativePos(self, (posx, posy)):
         """
@@ -182,7 +184,9 @@ class CDrawingArea(CGuiObject):
         @return: Coordinates in relative scale.
         @rtype : tuple
         """
-        return PositionToPhysical((posx, posy), self.scale, self.GetViewPortPos())
+        (x, y) = PositionToPhysical((posx, posy), self.scale)
+        (dx, dy) = PositionToPhysical(self.GetViewPortPos(), self.scale)
+        return (x - dx, y - dy)
 
     def GetScale(self):
         """
@@ -202,8 +206,6 @@ class CDrawingArea(CGuiObject):
         """
         if (scale >= SCALE_MIN) and (scale <= SCALE_MAX):
             self.scale = scale
-            # self.AdjustScrollBars()
-            self.Paint()
 
     def IncScale(self, scale):
         """
@@ -215,11 +217,7 @@ class CDrawingArea(CGuiObject):
         tmp_scale = (SCALE_INCREASE*((self.scale+0.00001)//SCALE_INCREASE))+scale
         if (tmp_scale+0.00001 >= SCALE_MIN) and (tmp_scale-0.00001 <= SCALE_MAX):
             self.scale = tmp_scale
-            self.disablePaint = True
-            self.CenterZoom(scale)
-            # self.AdjustScrollBars()
-            self.disablePaint = False
-            self.Paint()
+            self.__CenterZoom(scale)
 
     def Paint(self, canvas, changed = True):
         """
@@ -737,3 +735,41 @@ class CDrawingArea(CGuiObject):
 
     def __OnSelectionUpdated(self):
         self.application.GetBus().emit('selected-items', list(self.diagram.GetSelection().GetSelected()))
+
+    def __CenterZoom(self, scale):
+        positionH = 0.0
+        positionW = 0.0
+        shift = 180
+        elements = tuple(self.diagram.GetSelection().GetSelectedElements())
+        if (len(elements)>0):
+            avgH = 0
+            avgW = 0
+            for e in elements:
+                avgW += e.GetCenter()[0]
+                avgH += e.GetCenter()[1]
+            avgH = avgH/len(elements)
+            avgW = avgW/len(elements)
+            positionH = avgH/5.0
+            positionW = avgW/5.0
+
+            x, y = self.GetViewPortPos()
+            if(scale > 0): #INZOOM
+                if(avgH>shift):
+                    y += positionH
+                else:
+                    y = 0
+                if(avgW>shift):
+                    x += positionW
+                else:
+                    x = 0
+            else: #OUTZOOM
+                if(avgH>shift):
+                    y -= positionH
+                else:
+                    y = 0
+                if(avgW>shift):
+                    x -= positionW
+                else:
+                    x = 0
+
+            self.SetViewPortPos((x, y))

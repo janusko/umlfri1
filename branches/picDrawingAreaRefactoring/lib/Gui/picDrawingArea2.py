@@ -169,6 +169,8 @@ class CpicDrawingArea(CWidget):
 
     def IncScale(self, scale):
         self.activeDrawingArea.IncScale(scale)
+        self.__UpdateScrollBarsPosition()
+        self.Paint()
 
     def ShiftScrollbars(self, direction):
         posx,posy = self.GetPos()
@@ -205,47 +207,6 @@ class CpicDrawingArea(CWidget):
             if((horVer == "ver") & (ver_spacing >= 10)):
                 plusmove = (ver_spacing - 10)
         return plusmove
-
-    def CenterZoom(self, scale):
-        positionH = 0.0
-        positionW = 0.0
-        shift = 180
-        elements = tuple(self.Diagram.GetSelectedElements())
-        if (len(elements)>0):
-            avgH = 0
-            avgW = 0
-            for e in elements:
-                avgW += e.GetCenter()[0]
-                avgH += e.GetCenter()[1]
-            avgH = avgH/len(elements)
-            avgW = avgW/len(elements)
-            positionH = avgH/5.0
-            positionW = avgW/5.0
-
-            if(scale > 0): #INZOOM
-                pos1 = self.GetPos()[1]
-                pos2 = self.GetPos()[0]
-                if(avgH>shift):
-                    pos1 += positionH
-                else:
-                    pos1 = 0
-                if(avgW>shift):
-                    pos2 += positionW
-                else:
-                    pos2 = 0
-                self.SetScrollBarsPosition((pos2,pos1))
-            else: #OUTZOOM
-                pos1 = self.GetPos()[1]
-                pos2 = self.GetPos()[0]
-                if(avgH>shift):
-                    pos1 -= positionH
-                else:
-                    pos1 = 0
-                if(avgW>shift):
-                    pos2 -= positionW
-                else:
-                    pos2 = 0
-                self.SetScrollBarsPosition((pos2,pos1))
             
     def GetScale(self):
         return self.canvas.GetScale()
@@ -724,7 +685,7 @@ class CpicDrawingArea(CWidget):
         elif direction == gtk.gdk.SCROLL_RIGHT:
             tmp.value = min(tmp.upper - tmp.page_size, tmp.value + 20)
         scrollbar.set_adjustment(tmp)
-    
+
     def __BeginDragSel(self, event):
         self.DragSel = self.GetAbsolutePos((event.x, event.y))
         self.__DrawDragSel((event.x, event.y), False)
