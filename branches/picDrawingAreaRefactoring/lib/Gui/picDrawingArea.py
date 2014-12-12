@@ -668,7 +668,7 @@ class CpicDrawingArea(CWidget):
             return True
         self.pressedKeys.add(event.keyval)
         if event.keyval==gtk.keysyms.a and event.state == gtk.gdk.CONTROL_MASK:
-            self.Diagram.GetSelection().SelectAll()
+            self.Diagram.GetSelection().SelectAll(self.Diagram.GetElements(), self.Diagram.GetConnections())
             self.emit('selected-item', list(self.Diagram.GetSelection().GetSelected()),False)
             self.Paint()
         elif event.keyval == gtk.keysyms.Delete:
