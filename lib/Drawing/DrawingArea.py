@@ -576,6 +576,17 @@ class CDrawingArea(CGuiObject):
         elif args.IsKeyPressed(KEY_SPACE):
             self.cursor = 'grab'
 
+    def OnKeyUp(self, args):
+        """
+        Callback for key release event.
+
+        @param args: L{CDrawingAreaKeyUpEventArgs<lib.Drawing.CDrawingAreaKeyUpEventArgs>}
+        """
+        if args.IsKeyPressed(KEY_SPACE) == False:
+            if self.dnd != 'move':
+                self.cursor = None
+
+
     def OnToolBoxItemSelected(self, item):
         # set dnd to 'add_obj' ??
         self.__toolboxItem = item

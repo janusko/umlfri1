@@ -12,8 +12,9 @@ from lib.Distconfig import IMAGES_PATH
 from common import CWidget, event
 from lib.Drawing import CDiagram, CElement, CConnection, CConLabelInfo
 from lib.Drawing.DrawingAreaMouseDownEventArgs import CDrawingAreaMouseDownEventArgs
-from lib.Drawing.DrawingAreaKeyPressEventArgs import CDrawingAreaKeyPressEventArgs
 from lib.Drawing.DrawingAreaMouseUpEventArgs import CDrawingAreaMouseUpEventArgs
+from lib.Drawing.DrawingAreaKeyPressEventArgs import CDrawingAreaKeyPressEventArgs
+from lib.Drawing.DrawingAreaKeyUpEventArgs import CDrawingAreaKeyUpEventArgs
 
 from lib.Elements import CElementObject
 from lib.Connections import CConnectionObject
@@ -600,11 +601,21 @@ class CpicDrawingArea(CWidget):
     
     @event("picEventBox", "key-release-event")
     def on_key_release_event(self, widget, event):
+
+        self.pressedKeys.discard(event.keyval)
+
+        eventArgs = CDrawingAreaKeyUpEventArgs(self.pressedKeys, event.state)
+
+        self.activeDrawingArea.OnKeyUp(eventArgs)
+
+        self.__UpdateCursor()
+        self.Paint()
+
+        return
+
         if gtk.keysyms.space in self.pressedKeys:
             if self.dnd != 'move':
                 self.__SetCursor(None)
-        
-        self.pressedKeys.discard(event.keyval)
         
         if (event.keyval in (gtk.keysyms.Right, gtk.keysyms.Left, gtk.keysyms.Up, gtk.keysyms.Down) 
             and set() == self.pressedKeys.intersection(set([gtk.keysyms.Right, gtk.keysyms.Left, gtk.keysyms.Up, gtk.keysyms.Down]))
