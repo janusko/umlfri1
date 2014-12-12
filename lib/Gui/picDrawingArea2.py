@@ -13,6 +13,7 @@ from lib.Distconfig import IMAGES_PATH
 from common import CWidget, event
 from lib.Drawing import CDiagram, CElement, CConnection, CConLabelInfo
 from lib.Drawing.DrawingAreaMouseDownEventArgs import DrawingAreaMouseDownEventArgs
+from lib.Drawing.DrawingAreaKeyPressEventArgs import DrawingAreaKeyPressEventArgs
 
 from lib.Elements import CElementObject
 from lib.Connections import CConnectionObject
@@ -68,8 +69,6 @@ class CpicDrawingArea(CWidget):
         'get-selected':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_PYOBJECT,
             ()),
         'set-selected':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE,
-            (gobject.TYPE_PYOBJECT, )),
-        'delete-element-from-all':(gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
             (gobject.TYPE_PYOBJECT, )),
         'drop-from-treeview': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
         'show-element-in-treeView': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
@@ -533,7 +532,18 @@ class CpicDrawingArea(CWidget):
         if (event.keyval in self.pressedKeys and
             event.keyval not in (gtk.keysyms.Right, gtk.keysyms.Left, gtk.keysyms.Up, gtk.keysyms.Down)):
             return True
+
         self.pressedKeys.add(event.keyval)
+
+        eventArgs = DrawingAreaKeyPressEventArgs(self.pressedKeys, event.state)
+
+        self.activeDrawingArea.OnKeyPress(eventArgs)
+
+        self.__UpdateCursor()
+        self.Paint()
+
+        return
+
         if event.keyval==gtk.keysyms.a and event.state == gtk.gdk.CONTROL_MASK:
             self.Diagram.SelectAll()
             self.emit('selected-item', list(self.Diagram.GetSelected()),False)

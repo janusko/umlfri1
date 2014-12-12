@@ -673,7 +673,7 @@ class CfrmMain(CWindow):
         else:
             self.nbProperties.Fill(None)
 
-    @event("picDrawingArea","delete-element-from-all")
+    @event("application.bus","delete-element-from-all")
     def on_picDrawingArea_delete_selected_item(self, widget, selected):
         self.twProjectView.DeleteElement(selected)
 
