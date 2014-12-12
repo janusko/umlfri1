@@ -1,5 +1,6 @@
 from lib.Base import CBaseObject
 from lib.Commands.Diagrams.DuplicateElements import CDuplicateElementsCommand
+from lib.Drawing.DrawingAreaKeyPressEventArgs import KEY_A, KEY_DELETE
 
 from lib.Elements import CElementObject
 from lib.Connections import CConnectionObject
@@ -244,6 +245,9 @@ class CDrawingArea(CGuiObject):
             self.__DrawDragSel(canvas)
         elif self.__NewConnection is not None:
             self.__DrawNewConnection(canvas)
+
+    def SelectAll(self):
+        self.diagram.GetSelection().SelectAll(self.diagram.GetElements(), self.diagram.GetConnections())
 
     def DeleteSelectedObjects(self):
         for sel in self.diagram.GetSelected():
@@ -542,6 +546,30 @@ class CDrawingArea(CGuiObject):
             self.__ResetAction()
             self.application.GetBus().emit('set-selected-toolbox-item', None)
             self.application.GetBus().emit('run-dialog', 'warning', _('Invalid connection'))
+
+    def OnKeyPress(self, args):
+        """
+        Callback for key press event.
+
+        @param args: L{DrawingAreaKeyPressEventArgs<lib.Drawing.DrawingAreaKeyPressEventArgs>}
+        """
+        if args.IsControlPressed() and args.IsKeyPressed(KEY_A):
+            self.SelectAll()
+            self.__OnSelectionUpdated()
+        elif args.IsKeyPressed(KEY_DELETE):
+            if self.dnd is not None:
+                return
+            if args.IsShiftPressed():
+                for sel in self.diagram.GetSelection().GetSelected():
+                    if isinstance(sel, CElement):
+                        self.application.GetBus().emit('delete-element-from-all', sel.GetObject())
+                    else:
+                        self.diagram.ShiftDeleteConnection(sel)
+            else:
+                for sel in self.diagram.GetSelection().GetSelected():
+                    self.diagram.DeleteItem(sel)
+
+                self.__OnSelectionUpdated()
 
     def OnToolBoxItemSelected(self, item):
         # set dnd to 'add_obj' ??

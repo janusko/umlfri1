@@ -52,6 +52,8 @@ class CBus(gobject.GObject):
             [gobject.TYPE_STRING]),
         'add-element':(gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE,
             (gobject.TYPE_PYOBJECT,gobject.TYPE_PYOBJECT,gobject.TYPE_PYOBJECT,)),
+        'delete-element-from-all':(gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE,
+            (gobject.TYPE_PYOBJECT, )),
         'project-expand-node': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
             [gobject.TYPE_PYOBJECT]),
         'open-diagram': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
