@@ -60,10 +60,12 @@ class CCairoBaseCanvas(CAbstractCanvas):
         self.baseY = 0
 
     def ToLogical(self, pos):
-        return PositionToLogical(pos, self.scale, (self.baseX, self.baseY))
+        pos = (int((pos[0] - self.baseX)/self.scale),int((pos[1] - self.baseY)/self.scale))
+        return pos
 
     def ToPhysical(self, pos):
-        return PositionToPhysical(pos, self.scale, (self.baseX, self.baseY))
+        pos = (int(pos[0]*self.scale + self.baseX),int(pos[1]*self.scale + self.baseY))
+        return pos
 
     def SetScale(self, scale):
         self.scale = scale
