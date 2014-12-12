@@ -1,6 +1,6 @@
 from lib.Base import CBaseObject
 from lib.Commands.Diagrams.DuplicateElements import CDuplicateElementsCommand
-from lib.Drawing.DrawingAreaKeyPressEventArgs import KEY_A, KEY_DELETE
+from lib.Drawing.DrawingAreaKeyPressEventArgs import KEY_A, KEY_DELETE, KEY_ESCAPE
 
 from lib.Elements import CElementObject
 from lib.Connections import CConnectionObject
@@ -570,6 +570,9 @@ class CDrawingArea(CGuiObject):
                     self.diagram.DeleteItem(sel)
 
                 self.__OnSelectionUpdated()
+        elif args.IsKeyPressed(KEY_ESCAPE):
+            self.__ResetAction()
+            self.__ClearSelectedToolBoxItem()
 
     def OnToolBoxItemSelected(self, item):
         # set dnd to 'add_obj' ??
