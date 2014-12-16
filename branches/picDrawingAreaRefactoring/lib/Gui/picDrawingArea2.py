@@ -589,7 +589,8 @@ class CpicDrawingArea(CWidget):
         
     @event("mnuChangeSourceTarget","activate")
     def on_mnuChangeSourceTarget_click(self,widget):
-        self.activeDrawingArea.ChangeSourceTarget()
+        self.activeDrawingArea.ChangeConnectionSourceTarget()
+        self.Paint()
     
     @event("mnuAlignLeftMost","activate", True, True, False)
     @event("mnuAlignLeftCurrent","activate", True, True, True)
