@@ -470,6 +470,7 @@ class CDrawingArea(CGuiObject):
                         if len(selElements) == 1:
                             self.selSq = self.diagram.GetSelection().GetSquareAtPosition(pos)
                         self.__BeginDragRect(pos)
+                    self.__OnSelectionUpdated()
             else: # nothing under pointer
                 if self.diagram.GetSelection().SelectedCount() > 0:
                     if not args.IsControlPressed():
