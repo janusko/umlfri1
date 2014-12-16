@@ -343,7 +343,7 @@ class CpicDrawingArea(CWidget):
     
     @event("mnuCtxDelete","activate")
     def DeleteElements(self, widget = None):
-        self.drawingArea.DeleteSelectedObjects()
+        self.activeDrawingArea.DeleteSelectedObjects()
     
     def UpdateMenuSensitivity(self, project, diagram, element, topElement, connection):
         self.pmShowInProjectView.set_sensitive(element)
@@ -374,9 +374,9 @@ class CpicDrawingArea(CWidget):
     @event('application.bus', 'many-position-change', False)
     def ElementPositionChange(self, widget, elements, plugin):
         if plugin:
-            self.drawingArea.ToPaint()
+            self.activeDrawingArea.ToPaint()
         else:
-            self.drawingArea.Paint()
+            self.activeDrawingArea.Paint()
 
     @event('application.bus', 'selected-toolbox-item-changed')
     def on_toolbox_item_selected(self, widget, item):
@@ -565,31 +565,31 @@ class CpicDrawingArea(CWidget):
     @event("pmShift_ToBottom","activate","ToBottom")
     @event("pmShift_ToTop","activate", "ToTop")
     def on_pmShift_SendBack_activate(self, menuItem, actionName):
-        self.drawingArea.ShiftElements(actionName)
+        self.activeDrawingArea.ShiftElements(actionName)
     
     @event("mnuCtxCopy","activate")
     def ActionCopy(self, widget = None):
-        self.drawingArea.CopySelectedObjects()
+        self.activeDrawingArea.CopySelectedObjects()
     
     @event("mnuCtxCut", "activate")
     def ActionCut(self, widget = None):
-        self.drawingArea.CutSelectedObjects()
+        self.activeDrawingArea.CutSelectedObjects()
     
     @event("mnuCtxPaste","activate")
     def ActionPaste(self, widget = None):
-        self.drawingArea.PasteObjects()
+        self.activeDrawingArea.PasteObjects()
     
     @event("mnuCtxDuplicate", "activate")
     def ActionDuplicate(self, widget=None):
-        self.drawingArea.DuplicateSelectedObjects()
+        self.activeDrawingArea.DuplicateSelectedObjects()
 
     @event("mnuCtxShiftDelete","activate")
     def onMnuCtxShiftDelteActivate(self, menuItem):
-        self.drawingArea.ShiftDeleteSelectedObjects()
+        self.activeDrawingArea.ShiftDeleteSelectedObjects()
         
     @event("mnuChangeSourceTarget","activate")
     def on_mnuChangeSourceTarget_click(self,widget):
-        self.drawingArea.ChangeSourceTarget()
+        self.activeDrawingArea.ChangeSourceTarget()
     
     @event("mnuAlignLeftMost","activate", True, True, False)
     @event("mnuAlignLeftCurrent","activate", True, True, True)
