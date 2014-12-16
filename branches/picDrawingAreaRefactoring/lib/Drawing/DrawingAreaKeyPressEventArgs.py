@@ -13,7 +13,7 @@ KEY_ESCAPE = gtk.keysyms.Escape
 class CDrawingAreaKeyPressEventArgs():
 
     def __init__(self, pressedKeys, modifiers = 0):
-        self.pressedkeys = pressedKeys
+        self.pressedKeys = pressedKeys
         self.modifiers = modifiers
 
     def IsControlPressed(self):
@@ -23,7 +23,7 @@ class CDrawingAreaKeyPressEventArgs():
         return self.modifiers & SHIFT_MASK
 
     def IsArrowKeyPressed(self):
-        return self.pressedkeys in (KEY_LEFT, KEY_UP, KEY_RIGHT, KEY_DOWN)
+        return len(self.pressedKeys.intersection([KEY_LEFT, KEY_UP, KEY_RIGHT, KEY_DOWN])) > 0
 
     def IsKeyPressed(self, key):
-        return key in self.pressedkeys
+        return key in self.pressedKeys

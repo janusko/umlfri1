@@ -1,6 +1,7 @@
 from lib.Base import CBaseObject
 from lib.Commands.Diagrams.DuplicateElements import CDuplicateElementsCommand
-from lib.Drawing.DrawingAreaKeyPressEventArgs import KEY_A, KEY_DELETE, KEY_ESCAPE, KEY_SPACE
+from lib.Drawing.DrawingAreaKeyPressEventArgs import KEY_A, KEY_DELETE, KEY_ESCAPE, KEY_SPACE, KEY_RIGHT, KEY_LEFT, \
+    KEY_UP, KEY_DOWN
 
 from lib.Elements import CElementObject
 from lib.Connections import CConnectionObject
@@ -35,6 +36,9 @@ class CDrawingArea(CGuiObject):
         self.dnd = None
         self.selElem = None
         self.selSq = None
+
+        self.__viewPortShiftDirection = ""
+        self.__viewPortPlusMove = 0
 
         self.__NewConnection = None
 
@@ -235,7 +239,7 @@ class CDrawingArea(CGuiObject):
 
         if self.dnd == 'resize':
             self.__DrawResRect(canvas)
-        if self.dnd == 'rect' and self.keydragPosition is None:
+        if self.dnd == 'rect':
             self.__DrawDragRect(canvas)
         elif self.dnd == 'point':
             self.__DrawDragPoint(canvas)
@@ -575,6 +579,37 @@ class CDrawingArea(CGuiObject):
             self.__ClearSelectedToolBoxItem()
         elif args.IsKeyPressed(KEY_SPACE):
             self.cursor = 'grab'
+        elif args.IsArrowKeyPressed():
+            selected = list(self.diagram.GetSelection().GetSelectedElements())
+            if selected:
+                if self.dnd is None:
+                    self.keydragPosition = list(selected[0].GetCenter())
+
+                    self.__BeginDragRect(self.keydragPosition[:])
+                if self.dnd == 'rect':
+                    if self.keydragPosition is None:
+                        self.keydragPosition = list(selected[0].GetCenter())
+                    if args.IsKeyPressed(KEY_RIGHT):
+                        diff = 10 + self.__GetPlusMove("hor")
+                        self.keydragPosition[0] += diff
+                        self.__SetDelayedViewPortShift("right")
+                        self.__SetViewPortPlusMove(diff)
+                    if args.IsKeyPressed(KEY_LEFT):
+                        diff = 10 + self.__GetPlusMove("hor")
+                        self.keydragPosition[0] -= diff
+                        self.__SetDelayedViewPortShift("left")
+                        self.__SetViewPortPlusMove(diff)
+                    if args.IsKeyPressed(KEY_UP):
+                        diff = 10 + self.__GetPlusMove("ver")
+                        self.keydragPosition[1] -= diff
+                        self.__SetDelayedViewPortShift("up")
+                        self.__SetViewPortPlusMove(diff)
+                    if args.IsKeyPressed(KEY_DOWN):
+                        diff = 10 + self.__GetPlusMove("ver")
+                        self.keydragPosition[1] += diff
+                        self.__SetDelayedViewPortShift("down")
+                        self.__SetViewPortPlusMove(diff)
+                    self.__UpdateDragRect(self.keydragPosition)
 
     def OnKeyUp(self, args):
         """
@@ -585,6 +620,12 @@ class CDrawingArea(CGuiObject):
         if args.IsKeyPressed(KEY_SPACE) == False:
             if self.dnd != 'move':
                 self.cursor = None
+
+        if args.WasArrowKeyPressed() and self.dnd == 'rect':
+            delta = self.__GetDelta(self.keydragPosition)
+            self.keydragPosition = None
+            self.diagram.MoveSelection(delta)
+            self.dnd = None
 
 
     def OnToolBoxItemSelected(self, item):
@@ -825,3 +866,40 @@ class CDrawingArea(CGuiObject):
                     x = 0
 
             self.SetViewPortPos((x, y))
+
+    def __GetPlusMove(self, horVer):
+        active = config['/Grid/Active']
+        hor_spacing = config['/Grid/HorSpacing']
+        ver_spacing = config['/Grid/VerSpacing']
+
+        plusmove = 0
+        if(active == "true"):
+            if((horVer == "hor") & (hor_spacing >= 10)):
+                plusmove = (hor_spacing - 10)
+            if((horVer == "ver") & (ver_spacing >= 10)):
+                plusmove = (ver_spacing - 10)
+        return plusmove
+
+    def __SetViewPortPlusMove(self, plusMove):
+        self.__viewPortPlusMove = plusMove
+
+    def __SetDelayedViewPortShift(self, direction):
+        self.__viewPortShiftDirection = direction
+
+    def __ShiftViewPort(self, direction):
+        posx, posy = self.GetViewPortPos()
+        if(self.__viewPortPlusMove > 0):
+            move = int(self.__viewPortPlusMove / 2)
+        else:
+            move = 5
+        if(direction == "right"):
+            posx += move
+        if(direction == "left"):
+            posx -= move
+        if(direction == "up"):
+            posy += move
+        if(direction == "down"):
+            posy -= move
+        self.SetViewPortPos((posx, posy))
+        self.setResize = False
+        self.__viewPortPlusMove = 0
