@@ -311,9 +311,6 @@ class CDrawingArea(CGuiObject):
                 self.diagram.ShiftDeleteConnection(sel)
         self.Paint()
 
-    def ChangeSourceTarget(self):
-        self.Paint()
-
     def ChangeConnectionSourceTarget(self):
         for sel in self.diagram.GetSelection().GetSelected():
             if isinstance(sel, CConnection):
@@ -324,7 +321,6 @@ class CDrawingArea(CGuiObject):
                 for c in d.GetConnections():
                     if c.GetObject() == sel.GetObject():
                         c.ChangeConnection()
-                        self.Paint()
 
     def Align(self, isHorizontal, isLowerBoundary,
             alignToSelectedElement=True):
