@@ -325,7 +325,7 @@ class CDrawingArea(CGuiObject):
         """
         "Shift" deletes selected objects, i.e. removes them from project, not just from current diagram.
         """
-        for sel in self.diagram.GetSelected():
+        for sel in self.diagram.GetSelection().GetSelected():
             if isinstance(sel, CElement):
                 self.emit('delete-element-from-all',sel.GetObject())
             elif isinstance(sel, CConLabelInfo):
