@@ -901,9 +901,9 @@ class CDrawingArea(CGuiObject):
         if(direction == "left"):
             posx -= move
         if(direction == "up"):
-            posy += move
-        if(direction == "down"):
             posy -= move
+        if(direction == "down"):
+            posy += move
         self.SetViewPortPos((posx, posy))
         self.setResize = False
         self.__viewPortPlusMove = 0
