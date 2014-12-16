@@ -255,9 +255,16 @@ class CDrawingArea(CGuiObject):
             self.__DrawNewConnection(canvas)
 
     def SelectAll(self):
+        """
+        Selects all elements and connections in the diagram.
+
+        """
         self.diagram.GetSelection().SelectAll(self.diagram.GetElements(), self.diagram.GetConnections())
 
     def DeleteSelectedObjects(self):
+        """
+        Deletes all currently selected objects.
+        """
         for sel in self.diagram.GetSelection().GetSelected():
             if isinstance(sel, CConnection):
                 index = sel.GetSelectedPoint()
@@ -273,6 +280,12 @@ class CDrawingArea(CGuiObject):
         self.Paint()
 
     def ShiftElements(self, actionName):
+        """
+        Shifts selected elements' z-order based on argument.
+
+        @param actionName: target position, where the element should be shifted.
+        @type actionName: str
+        """
         if (actionName == 'SendBack'):
             self.diagram.ShiftElementsBack()
         elif (actionName == 'BringForward'):
@@ -284,21 +297,36 @@ class CDrawingArea(CGuiObject):
         self.Paint()
 
     def CopySelectedObjects(self):
+        """
+        Copies selected objects to clipboard.
+        """
         self.diagram.CopySelection(self.application.GetClipboard())
 
     def CutSelectedObjects(self):
+        """
+        Cuts selected objects from diagram into clipboard.
+        """
         self.diagram.CutSelection(self.application.GetClipboard())
         self.__OnSelectionUpdated()
 
     def PasteObjects(self):
+        """
+        Pastes objects from clipboard into diagram.
+        """
         self.diagram.PasteSelection(self.application.GetClipboard())
         self.__OnSelectionUpdated()
 
     def DuplicateSelectedObjects(self):
+        """
+        Duplicates selected objects.
+        """
         cmd  = CDuplicateElementsCommand(tuple(self.diagram.GetSelection().GetSelectedElements()), self.diagram)
         self.application.GetCommands().Execute(cmd)
 
     def ShiftDeleteSelectedObjects(self):
+        """
+        "Shift" deletes selected objects, i.e. removes them from project, not just from current diagram.
+        """
         for sel in self.diagram.GetSelected():
             if isinstance(sel, CElement):
                 self.emit('delete-element-from-all',sel.GetObject())
@@ -308,6 +336,10 @@ class CDrawingArea(CGuiObject):
                 self.diagram.ShiftDeleteConnection(sel)
 
     def ChangeConnectionSourceTarget(self):
+        """
+        Switches source and target of selected connections (L{CConectionObject<lib.Connections.CConectionObject>}).
+        This also switches L{CConection<lib.Drawing.CConnection> in all diagrams, that contain given connection.
+        """
         for sel in self.diagram.GetSelection().GetSelected():
             if isinstance(sel, CConnection):
                 sel.GetObject().ChangeConnection()
@@ -318,27 +350,67 @@ class CDrawingArea(CGuiObject):
                     if c.GetObject() == sel.GetObject():
                         c.ChangeConnection()
 
-    def Align(self, isHorizontal, isLowerBoundary,
-            alignToSelectedElement=True):
+    def Align(self, isHorizontal, isLowerBoundary, alignToSelectedElement=True):
+        """
+        Aligns selected elements along specified axis and position.
+        If position isn't set, elements will be aligned to their average
+        position.
+
+        @param isHorizontal: align horizontally or vertically
+        @type isHorizontal: bool
+        @param isLowerBoundary: align to lower or higher boundary
+        @type isLowerBoundary: bool
+        @param alignToSelectedElement: If True, aligning is done to selected element, False otherwise.
+        @type alignToSelectedElement: bool
+        """
         self.diagram.AlignElementsXY(isHorizontal, alignToSelectedElement, self.itemSel if alignToSelectedElement else None)
 
     def AlignCenter(self, isHorizontal, alignToSelectedElement = True):
+        """
+        Aligns centers of selected elements to defaultElements center
+        along x or y axis.
+        If defaultElement it's set, elements will be aligned to their average
+        center position.
+
+        @param isHorizontal: align horizontally or vertically
+        @type isHorizontal: bool
+        @param alignToSelectedElement: If True, aligning is done to selected element, False otherwise.
+        @type alignToSelectedElement: bool
+        """
         self.diagram.AlignElementCentersXY(isHorizontal, self.itemSel if alignToSelectedElement else None)
 
     def ResizeHeight(self):
+        """
+        Resize selected elements evenly to minimal or maximal height of selected
+        elements or requested height.
+        """
         self.diagram.ResizeElementsEvenly(False, self.itemSel)
 
     def ResizeWidth(self):
+        """
+        Resize selected elements evenly to minimal or maximal width of selected
+        elements or requested width.
+        """
         self.diagram.ResizeElementsEvenly(True, self.itemSel)
 
     def ResizeWidthAndHeight(self):
+        """
+        Resize selected elements evenly to minimal or maximal size of selected
+        elements or requested size.
+        """
         self.diagram.ResizeElementsEvenly(True, self.itemSel)
         self.diagram.ResizeElementsEvenly(False, self.itemSel)
 
     def ResizeByMaximalElement(self):
+        """
+        Resize all elements based on the size of the maximal element
+        """
         self.diagram.ResizeByMaximalElement()
 
     def ResizeByMinimalElement(self):
+        """
+        Resize all elements based on the size of the minimal element
+        """
         self.diagram.ResizeByMinimalElement()
 
     def SnapSelected(self):
@@ -628,11 +700,17 @@ class CDrawingArea(CGuiObject):
             self.dnd = None
 
     def OnToolBoxItemSelected(self, item):
+        """
+        Callback for selected-toolbox-item-changed event (i.e. when item is selected in toolbox on the left).
+        """
         # set dnd to 'add_obj' ??
         self.__toolboxItem = item
         pass
 
     def OnLostFocus(self):
+        """
+        Callback for focus out event.
+        """
         self.__ClearSelectedToolBoxItem()
         self.__ResetAction()
 

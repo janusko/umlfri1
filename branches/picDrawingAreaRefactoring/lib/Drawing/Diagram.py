@@ -581,7 +581,7 @@ class CDiagram(CBaseObject):
         If position isn't set, elements will be aligned to their average
         position.
     
-        @param isHorizontal: align horizontaly or verticaly
+        @param isHorizontal: align horizontally or vertically
         @type isHorizontal: bool
         @param isLowerBoundary: align to lower or higher boundary
         @type isLowerBoundary: bool
