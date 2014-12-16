@@ -82,8 +82,6 @@ class CpicDrawingArea(CWidget):
         self.canvas = None
         CWidget.__init__(self, app, wTree)
         self.__invalidated = False
-        self.__NewConnection = None
-        self.dnd = None
         self.pressedKeys = set()
         self.scale = 1.0
         self.buffer_size = ((0, 0), BUFFER_SIZE)
@@ -534,12 +532,6 @@ class CpicDrawingArea(CWidget):
         elif direction == gtk.gdk.SCROLL_RIGHT:
             tmp.value = min(tmp.upper - tmp.page_size, tmp.value + 20)
         scrollbar.set_adjustment(tmp)
-
-    def ResetAction(self):
-        self.dnd = None
-        if self.__NewConnection is not None:
-            self.__NewConnection = None
-        self.Paint()
     
     def SetFocus(self):
         self.picDrawingArea.grab_focus()
