@@ -76,22 +76,14 @@ class CpicDrawingArea(CWidget):
     }
 
     def __init__(self, app, wTree):
-        self.setResize = True
-        self.adjScrollbars = ""
-        self.getPlusMove = 0
-        self.disablePaint = False
         self.paintlock = thread.allocate()
         self.tobePainted = False
         self.paintChanged = False
         self.canvas = None
         CWidget.__init__(self, app, wTree)
-        self.keydragPosition = None
         self.__invalidated = False
         self.__NewConnection = None
         self.dnd = None
-        self.selecting = None
-        self.selElem = None
-        self.selSq = None
         self.pressedKeys = set()
         self.scale = 1.0
         self.buffer_size = ((0, 0), BUFFER_SIZE)
@@ -172,42 +164,6 @@ class CpicDrawingArea(CWidget):
         self.__UpdateScrollBarsPosition()
         self.Paint()
 
-    def ShiftScrollbars(self, direction):
-        posx,posy = self.GetPos()
-        if(self.getPlusMove > 0):
-            move = int(self.getPlusMove / 2)
-        else:
-            move = 5
-        if(direction == "right"):
-            self.SetScrollBarsPosition((posx + move, posy))
-        if(direction == "left"):
-            self.SetScrollBarsPosition((posx - move, posy))
-        if(direction == "up"):
-            self.SetScrollBarsPosition((posx, posy+move))
-        if(direction == "down"):
-            self.SetScrollBarsPosition((posx, posy-move))
-        self.setResize = False
-        self.getPlusMove = 0
-
-    def GetDirection(self, direction):
-        self.adjScrollbars = direction
-
-    def GetPlusMove(self, plusmove):
-        self.getPlusMove = plusmove
-
-    def PlusMove(self, horVer):
-        active = config['/Grid/Active']
-        hor_spacing = config['/Grid/HorSpacing']
-        ver_spacing = config['/Grid/VerSpacing']
-
-        plusmove = 0
-        if(active == "true"):
-            if((horVer == "hor") & (hor_spacing >= 10)):
-                plusmove = (hor_spacing - 10)
-            if((horVer == "ver") & (ver_spacing >= 10)):
-                plusmove = (ver_spacing - 10)
-        return plusmove
-            
     def GetScale(self):
         return self.canvas.GetScale()
     
@@ -348,21 +304,6 @@ class CpicDrawingArea(CWidget):
         # wgt.draw_drawable(gc, self.buffer, posx - bposx, posy - bposy, 0, 0, sizx, sizy)
         wgt.draw_drawable(gc, self.buffer, pos[0], pos[1], 0, 0, size[0], size[1])
 
-        # if(self.adjScrollbars != ""):
-        #     self.ShiftScrollbars(self.adjScrollbars)
-        #     self.adjScrollbars = ""
-        #
-        # if self.dnd == 'resize':
-        #     self.__DrawResRect((None, None), True, False)
-        # elif self.dnd == 'rect':
-        #     self.__DrawDragRect((None, None), True, False)
-        # elif self.dnd == 'point':
-        #     self.__DrawDragPoint((None, None), True, False)
-        # elif self.dnd == 'selection':
-        #     self.__DrawDragSel((None, None), True, False)
-        # if self.__NewConnection is not None:
-        #     self.__DrawNewConnection((None, None), False)
-
     def AdjustScrollBars(self):
         if self.canvas is None:
             dasx, dasy = self.GetDiagramSize()
@@ -469,51 +410,6 @@ class CpicDrawingArea(CWidget):
             #self.UpdateMenuSensitivity(bool(self.application.GetProject()), bool(self.Diagram), int(len(list(self.Diagram.GetSelected())) > 0))
             self.pMenuShift.popup(None,None,None,event.button,event.time)
             return True
-
-    def __AddItem(self, toolBtnSel, event):
-        pos = self.GetAbsolutePos((event.x, event.y))
-        if toolBtnSel[0] == 'Element':
-            ElementType = self.application.GetProject().GetMetamodel().GetElementFactory().GetElement(toolBtnSel[1])
-            ElementObject = CElementObject(ElementType)
-            newElement = CElement(self.Diagram, ElementObject)
-            newElement.SetPosition(pos)
-            self.Diagram.MoveElement(newElement, pos)
-            self.AdjustScrollBars()
-            self.emit('set-selected', None)
-            #here, I get prent element of selected elements (if element is on (over) another element)
-            minzorder = 9999999
-            parentElement = None
-            for el in self.Diagram.GetSelectedElements(True):
-                pos1, pos2 = el.GetSquare()
-                zorder = self.Diagram.GetElementZOrder(el)
-                if newElement.AreYouInRange(pos1, pos2, True):
-                    for el2 in self.Diagram.GetElementsInRange(pos1, pos2, True):
-                        if self.Diagram.GetElementZOrder(el2) < minzorder:        #get element with minimal zorder
-                            minzorder = self.Diagram.GetElementZOrder(el2)
-                            parentElement = el2.GetObject()
-                    
-            self.Diagram.DeselectAll()
-            self.application.GetBus().emit('add-element', ElementObject, self.Diagram, parentElement)
-            self.Diagram.AddToSelection(newElement)
-            self.emit('selected-item', list(self.Diagram.GetSelected()),True)
-            self.Paint()
-
-        elif toolBtnSel[0] == 'Connection':
-            itemSel = self.Diagram.GetElementAtPosition(pos)
-
-            if itemSel is None:
-                if self.__NewConnection is not None:
-                    pass
-            elif isinstance(itemSel, (CConnection, CConLabelInfo)):
-                return
-            elif self.__NewConnection is None:
-                ConnectionType = self.application.GetProject().GetMetamodel().GetConnectionFactory().GetConnection(toolBtnSel[1])
-                center = itemSel.GetCenter()
-                relcenter = self.GetRelativePos(center)
-                self.__NewConnection = (ConnectionType, [center], itemSel)
-                self.__DrawNewConnection(relcenter, False)
-            else:
-                pass
 
     @event("picEventBox", "button-release-event")
     def on_button_release_event(self, widget, event):
@@ -638,153 +534,6 @@ class CpicDrawingArea(CWidget):
         elif direction == gtk.gdk.SCROLL_RIGHT:
             tmp.value = min(tmp.upper - tmp.page_size, tmp.value + 20)
         scrollbar.set_adjustment(tmp)
-
-    def __BeginDragSel(self, event):
-        self.DragSel = self.GetAbsolutePos((event.x, event.y))
-        self.__DrawDragSel((event.x, event.y), False)
-        self.dnd = 'selection'
-
-    def __BeginDragRect(self, event):
-        selElements = list(self.Diagram.GetSelectedElements())
-        self.selElem = selElements[0]
-        self.DragStartPos = self.GetAbsolutePos((event.x, event.y))
-        if len(selElements) == 1:
-            self.selSq = self.selElem.GetSquareAtPosition(self.DragStartPos)
-            if(self.setResize == False):
-                self.selSq = None
-                self.setResize = True
-        else:
-            self.selSq = None
-        
-        self.DragRect = (self.Diagram.GetSelectSquare())
-        self.DragPoint = list(self.DragRect[0])
-        if (self.selSq is None): # Neresizujem
-            self.__DrawDragRect((event.x, event.y), False)
-            self.dnd = 'rect'
-        else:
-            self.__DrawResRect((event.x, event.y), False, True)
-            for i in (0, 1):
-                if self.selSq[i] > 0:
-                    self.DragPoint[i] += self.DragRect[1][i]
-            self.dnd = 'resize'
-
-    def __BeginDragPoint(self, event, connection, point):
-        self.DragStartPos = self.GetAbsolutePos((event.x, event.y))
-        self.DragPoint = (connection, point)
-        self.__DrawDragPoint((event.x, event.y), False)
-        self.dnd = 'point'
-
-    def __BeginDragLine(self, event, connection, point):
-        self.DragStartPos = self.GetAbsolutePos((event.x, event.y))
-        self.DragPoint = (connection, point)
-        self.__DrawDragLine(event.x, event.y, False)
-        self.dnd = 'line'
-        
-    def __BeginDragMove(self, event):
-        self.__SetCursor('grabbing')
-        self.DragStartPos = (event.x, event.y)
-        self.Diagram.SetHScrollingPos(self.GetPos()[0])
-        self.Diagram.SetVScrollingPos(self.GetPos()[1])
-        self.dnd = 'move'
-        
-    def __GetDelta(self, pos, follow = False):
-        if pos == (None, None):
-            return 0, 0
-        tmpx, tmpy = self.GetAbsolutePos(pos)
-        dx, dy = tmpx - self.DragStartPos[0], tmpy - self.DragStartPos[1]
-        posx, posy = self.DragPoint
-        tmpx, tmpy = max(0, posx + dx), max(0, posy + dy)
-        return int(tmpx - posx), int(tmpy - posy)
-
-    def __DrawDragSel(self, pos, erase = True, draw = True):
-        if erase:
-            self.picDrawingArea.window.draw_rectangle(self.DragGC, False, *self.__oldsel)
-        if draw:
-            x1, y1 = self.DragSel
-            x2, y2 = self.GetAbsolutePos(pos)
-            if x1 > x2:
-                x1, x2 = x2, x1
-            if y1 > y2:
-                y1, y2 = y2, y1
-            tmpx, tmpy = self.GetRelativePos((x1, y1))
-            w, h = self.canvas.ToPhysical((x2 - x1, y2 - y1))
-            if self.selSq is None:
-                self.__oldsel = tmpx, tmpy, w, h
-                self.picDrawingArea.window.draw_rectangle(self.DragGC, False, *self.__oldsel)
-
-  
-    def __DrawDragRect(self, pos, erase = True, draw = True):
-        if erase:
-            x1 = self.__oldpos[0]
-            y1 = self.__oldpos[1]
-            x2,y2 = self.canvas.ToPhysical(self.DragRect[1])
-            self.picDrawingArea.window.draw_rectangle(self.DragGC, False, x1, y1, x2, y2)
-        
-        if draw:
-            tmpx, tmpy = self.GetRelativePos(self.DragRect[0])
-            dx, dy = self.__GetDelta(pos)
-            if self.selSq is None:
-                x1,y1 = self.canvas.ToPhysical((dx,dy))
-                x1 = x1+ tmpx
-                y1 = y1 + tmpy
-                x2,y2 = self.canvas.ToPhysical(self.DragRect[1])
-                self.picDrawingArea.window.draw_rectangle(self.DragGC, False, x1, y1, x2, y2)
-                self.__oldpos = x1, y1
-
-    def __DrawDragPoint(self, (x, y), erase = True, draw = True):
-        if x is None:
-            x, y = self.__oldPoints2
-        connection, index = self.DragPoint
-        prev, next = connection.GetNeighbours(index)
-        abspos = self.GetAbsolutePos((x, y))
-        x, y = max(abspos[0], 0), max(abspos[1], 0)
-        x, y = self.GetRelativePos((x, y))
-        points = [self.GetRelativePos(prev), (int(x), int(y)), self.GetRelativePos(next)]
-        if erase:
-            self.picDrawingArea.window.draw_lines(self.DragGC, self.__oldPoints)
-        if draw:
-            self.__oldPoints = points
-            self.__oldPoints2 = self.GetAbsolutePos((x, y))
-            self.picDrawingArea.window.draw_lines(self.DragGC, self.__oldPoints)
-
-    def __DrawDragLine(self, x, y, erase = True, draw = True):
-        if x is None:
-            x, y = self.__oldPoints2
-        abspos = self.GetAbsolutePos((x, y))
-        x, y = max(abspos[0], 0), max(abspos[1], 0)
-        x, y = self.GetRelativePos((x, y))
-        connection, index = self.DragPoint
-        all = tuple(connection.GetPoints())
-        prev, next = all[index], all[index + 1]
-        points = [self.GetRelativePos(prev), (int(x), int(y)), self.GetRelativePos(next)]
-        if erase:
-            self.picDrawingArea.window.draw_lines(self.DragGC, self.__oldPoints)
-        if draw:
-            self.__oldPoints = points
-            self.__oldPoints2 = self.GetAbsolutePos((x, y))
-            self.picDrawingArea.window.draw_lines(self.DragGC, self.__oldPoints)
-
-    def __DrawDragMove(self, pos):
-        posx, posy = self.Diagram.GetHScrollingPos(), self.Diagram.GetVScrollingPos()
-        x1, y1 = pos
-        x2, y2 = self.DragStartPos
-        self.SetScrollBarsPosition((posx - x1 + x2, posy - y1 + y2))
-        self.Paint(False)
-        
-
-    def __DrawNewConnection(self, (x, y), erase = True, draw = True):
-        if x is None:
-            points = self.__NewConnection[1][:]
-        else:
-            points = self.__NewConnection[1]
-        points = [self.GetRelativePos(point) for point in points]
-        if x is not None:
-            points.append((int(x), int(y)))
-        if erase:
-            self.picDrawingArea.window.draw_lines(self.DragGC, self.__oldNewConnection)
-        if draw:
-            self.__oldNewConnection = points
-            self.picDrawingArea.window.draw_lines(self.DragGC, self.__oldNewConnection)
 
     def ResetAction(self):
         self.dnd = None
