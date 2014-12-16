@@ -258,7 +258,7 @@ class CDrawingArea(CGuiObject):
         self.diagram.GetSelection().SelectAll(self.diagram.GetElements(), self.diagram.GetConnections())
 
     def DeleteSelectedObjects(self):
-        for sel in self.diagram.GetSelected():
+        for sel in self.diagram.GetSelection().GetSelected():
             if isinstance(sel, CConnection):
                 index = sel.GetSelectedPoint()
                 if index is not None and (sel.GetSource() != sel.GetDestination() or len(tuple(sel.GetMiddlePoints())) > 2):
@@ -266,10 +266,10 @@ class CDrawingArea(CGuiObject):
                     self.diagram.DeselectAll()
                     self.Paint()
                     return
-        for sel in self.diagram.GetSelected():
+        for sel in self.diagram.GetSelection().GetSelected():
             self.diagram.DeleteItem(sel)
         self.diagram.DeselectAll()
-        self.emit('selected-item', list(self.diagram.GetSelected()),False)
+        self.emit('selected-item', list(self.diagram.GetSelection().GetSelected()),False)
         self.Paint()
 
     def ShiftElements(self, actionName):
@@ -289,15 +289,15 @@ class CDrawingArea(CGuiObject):
     def CutSelectedObjects(self):
         self.diagram.CutSelection(self.application.GetClipboard())
         self.Paint()
-        self.emit('selected-item', list(self.diagram.GetSelected()),False)
+        self.emit('selected-item', list(self.diagram.GetSelection().GetSelected()),False)
 
     def PasteObjects(self):
         self.diagram.PasteSelection(self.application.GetClipboard())
         self.Paint()
-        self.emit('selected-item', list(self.diagram.GetSelected()),False)
+        self.emit('selected-item', list(self.diagram.GetSelection().GetSelected()),False)
 
     def DuplicateSelectedObjects(self):
-        cmd  = CDuplicateElementsCommand(tuple(self.diagram.GetSelectedElements()), self.diagram)
+        cmd  = CDuplicateElementsCommand(tuple(self.diagram.GetSelection().GetSelectedElements()), self.diagram)
         self.application.GetCommands().Execute(cmd)
         self.Paint()
 
@@ -315,7 +315,7 @@ class CDrawingArea(CGuiObject):
         self.Paint()
 
     def ChangeConnectionSourceTarget(self):
-        for sel in self.diagram.GetSelected():
+        for sel in self.diagram.GetSelection().GetSelected():
             if isinstance(sel, CConnection):
                 sel.GetObject().ChangeConnection()
             project = self.application.GetProject()
