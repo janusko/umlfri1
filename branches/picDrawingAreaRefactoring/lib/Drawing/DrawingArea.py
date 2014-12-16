@@ -270,14 +270,12 @@ class CDrawingArea(CGuiObject):
                 index = sel.GetSelectedPoint()
                 if index is not None and (sel.GetSource() != sel.GetDestination() or len(tuple(sel.GetMiddlePoints())) > 2):
                     sel.RemovePoint(index)
-                    self.diagram.DeselectAll()
-                    self.Paint()
+                    self.diagram.GetSelection().DeselectAll()
                     return
         for sel in self.diagram.GetSelection().GetSelected():
             self.diagram.DeleteItem(sel)
-        self.diagram.DeselectAll()
-        self.emit('selected-item', list(self.diagram.GetSelection().GetSelected()),False)
-        self.Paint()
+        self.diagram.GetSelection().DeselectAll()
+        self.__OnSelectionUpdated()
 
     def ShiftElements(self, actionName):
         """

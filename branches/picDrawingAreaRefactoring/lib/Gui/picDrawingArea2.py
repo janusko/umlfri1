@@ -344,6 +344,7 @@ class CpicDrawingArea(CWidget):
     @event("mnuCtxDelete","activate")
     def DeleteElements(self, widget = None):
         self.activeDrawingArea.DeleteSelectedObjects()
+        self.Paint()
     
     def UpdateMenuSensitivity(self, project, diagram, element, topElement, connection):
         self.pmShowInProjectView.set_sensitive(element)
