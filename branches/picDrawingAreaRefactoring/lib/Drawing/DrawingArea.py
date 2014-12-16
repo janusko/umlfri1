@@ -627,11 +627,14 @@ class CDrawingArea(CGuiObject):
             self.diagram.MoveSelection(delta)
             self.dnd = None
 
-
     def OnToolBoxItemSelected(self, item):
         # set dnd to 'add_obj' ??
         self.__toolboxItem = item
         pass
+
+    def OnLostFocus(self):
+        self.__ClearSelectedToolBoxItem()
+        self.__ResetAction()
 
     def __ClearSelectedToolBoxItem(self):
         self.application.GetBus().emit('set-selected-toolbox-item', None)
