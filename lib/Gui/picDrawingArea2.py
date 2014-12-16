@@ -545,60 +545,6 @@ class CpicDrawingArea(CWidget):
         self.Paint()
 
         return True
-
-        if event.keyval==gtk.keysyms.a and event.state == gtk.gdk.CONTROL_MASK:
-            self.Diagram.SelectAll()
-            self.emit('selected-item', list(self.Diagram.GetSelected()),False)
-            self.Paint()
-        elif event.keyval == gtk.keysyms.Delete:
-            if self.dnd:
-                return
-            if event.state == gtk.gdk.SHIFT_MASK:
-                for sel in self.Diagram.GetSelected():
-                    if isinstance(sel, Element.CElement):
-                        self.emit('delete-element-from-all',sel.GetObject())
-                    else:
-                        self.Diagram.ShiftDeleteConnection(sel)
-            else:
-                for sel in self.Diagram.GetSelected():
-                    self.Diagram.DeleteItem(sel)
-                    self.emit('selected-item', list(self.Diagram.GetSelected()),False)
-            self.Paint()
-        elif event.keyval == gtk.keysyms.Escape:
-            self.ResetAction()
-            self.emit('set-selected', None)
-        elif event.keyval == gtk.keysyms.space:
-            self.__SetCursor('grab')
-        
-        elif event.keyval in (gtk.keysyms.Right, gtk.keysyms.Left, gtk.keysyms.Up, gtk.keysyms.Down):
-            selected = list(self.Diagram.GetSelectedElements())
-            if selected:
-                if self.dnd is None:
-                    self.keydragPosition = list(selected[0].GetCenter())
-                    e = Record()
-                    e.x, e.y = self.keydragPosition
-                    self.__BeginDragRect(e)
-                if self.dnd == 'rect':
-                    if self.keydragPosition is None:
-                        self.keydragPosition = list(selected[0].GetCenter())
-                    if gtk.keysyms.Right in self.pressedKeys:
-                        self.keydragPosition[0] += 10 + self.PlusMove("hor")
-                        self.GetDirection("right")
-                        self.GetPlusMove((10 + self.PlusMove("hor")))
-                    if gtk.keysyms.Left in self.pressedKeys:
-                        self.keydragPosition[0] -= 10 + self.PlusMove("hor")
-                        self.GetDirection("left")
-                        self.GetPlusMove((10 + self.PlusMove("hor")))
-                    if gtk.keysyms.Up in self.pressedKeys:
-                        self.keydragPosition[1] -= 10 + self.PlusMove("ver")
-                        self.GetDirection("down")
-                        self.GetPlusMove((10 + self.PlusMove("ver")))
-                    if gtk.keysyms.Down in self.pressedKeys:
-                        self.keydragPosition[1] += 10 + self.PlusMove("ver")
-                        self.GetDirection("up")
-                        self.GetPlusMove((10 + self.PlusMove("ver")))
-                    self.__DrawDragRect(self.keydragPosition)
-        return True
     
     @event("picEventBox", "key-release-event")
     def on_key_release_event(self, widget, event):
