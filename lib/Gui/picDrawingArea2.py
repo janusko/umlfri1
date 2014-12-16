@@ -352,7 +352,7 @@ class CpicDrawingArea(CWidget):
             
         self.mnuCtxPaste.set_sensitive(
             diagram and not self.application.GetClipboard().IsEmpty()
-            and not bool(set(i.GetObject() for i in self.Diagram.GetElements()).intersection(set(i.GetObject() for i in self.application.GetClipboard().GetContent())))
+            and not bool(set(i.GetObject() for i in self.activeDiagram.GetElements()).intersection(set(i.GetObject() for i in self.application.GetClipboard().GetContent())))
         )
         
         selection = list(self.activeDiagram.GetSelection().GetSelectedSet())
@@ -570,22 +570,27 @@ class CpicDrawingArea(CWidget):
     @event("mnuCtxCopy","activate")
     def ActionCopy(self, widget = None):
         self.activeDrawingArea.CopySelectedObjects()
+        self.Paint()
     
     @event("mnuCtxCut", "activate")
     def ActionCut(self, widget = None):
         self.activeDrawingArea.CutSelectedObjects()
+        self.Paint()
     
     @event("mnuCtxPaste","activate")
     def ActionPaste(self, widget = None):
         self.activeDrawingArea.PasteObjects()
+        self.Paint()
     
     @event("mnuCtxDuplicate", "activate")
     def ActionDuplicate(self, widget=None):
         self.activeDrawingArea.DuplicateSelectedObjects()
+        self.Paint()
 
     @event("mnuCtxShiftDelete","activate")
     def onMnuCtxShiftDelteActivate(self, menuItem):
         self.activeDrawingArea.ShiftDeleteSelectedObjects()
+        self.Paint()
         
     @event("mnuChangeSourceTarget","activate")
     def on_mnuChangeSourceTarget_click(self,widget):

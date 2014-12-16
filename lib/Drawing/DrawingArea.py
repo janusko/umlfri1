@@ -288,18 +288,15 @@ class CDrawingArea(CGuiObject):
 
     def CutSelectedObjects(self):
         self.diagram.CutSelection(self.application.GetClipboard())
-        self.Paint()
-        self.emit('selected-item', list(self.diagram.GetSelection().GetSelected()),False)
+        self.__OnSelectionUpdated()
 
     def PasteObjects(self):
         self.diagram.PasteSelection(self.application.GetClipboard())
-        self.Paint()
-        self.emit('selected-item', list(self.diagram.GetSelection().GetSelected()),False)
+        self.__OnSelectionUpdated()
 
     def DuplicateSelectedObjects(self):
         cmd  = CDuplicateElementsCommand(tuple(self.diagram.GetSelection().GetSelectedElements()), self.diagram)
         self.application.GetCommands().Execute(cmd)
-        self.Paint()
 
     def ShiftDeleteSelectedObjects(self):
         for sel in self.diagram.GetSelected():
@@ -309,7 +306,6 @@ class CDrawingArea(CGuiObject):
                 self.diagram.ShiftDeleteConLabel(sel)
             else:
                 self.diagram.ShiftDeleteConnection(sel)
-        self.Paint()
 
     def ChangeConnectionSourceTarget(self):
         for sel in self.diagram.GetSelection().GetSelected():
