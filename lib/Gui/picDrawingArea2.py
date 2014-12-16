@@ -559,22 +559,6 @@ class CpicDrawingArea(CWidget):
         self.__UpdateScrollBarsPosition()
         self.Paint()
 
-        return
-
-        if gtk.keysyms.space in self.pressedKeys:
-            if self.dnd != 'move':
-                self.__SetCursor(None)
-        
-        if (event.keyval in (gtk.keysyms.Right, gtk.keysyms.Left, gtk.keysyms.Up, gtk.keysyms.Down) 
-            and set() == self.pressedKeys.intersection(set([gtk.keysyms.Right, gtk.keysyms.Left, gtk.keysyms.Up, gtk.keysyms.Down]))
-            and self.dnd == 'rect'):
-            
-            delta = self.__GetDelta(self.keydragPosition)
-            self.keydragPosition = None
-            self.Diagram.MoveSelection(delta)
-            self.dnd = None
-            self.Paint()
-
     @event("picEventBox", "motion-notify-event")
     def on_motion_notify_event(self, widget, event):
         pos = (event.x, event.y)
