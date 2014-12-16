@@ -507,7 +507,7 @@ class CpicDrawingArea(CWidget):
         self.Paint(False)
 
     @event("picDrawingArea", "focus-out-event")
-    def on_picDrawingArea_foucus_out_event(self, widget, event):
+    def on_picDrawingArea_focus_out_event(self, widget, event):
         self.activeDrawingArea.OnLostFocus()
 
     def __AddDiagram(self, diagram):
