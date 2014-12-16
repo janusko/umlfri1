@@ -335,8 +335,8 @@ class CDrawingArea(CGuiObject):
 
     def ChangeConnectionSourceTarget(self):
         """
-        Switches source and target of selected connections (L{CConectionObject<lib.Connections.CConectionObject>}).
-        This also switches L{CConection<lib.Drawing.CConnection> in all diagrams, that contain given connection.
+        Switches source and target of selected connections (L{CConnectionObject<lib.Connections.CConnectionObject>}).
+        This also switches L{CConnection<lib.Drawing.CConnection> in all diagrams, that contain given connection.
         """
         for sel in self.diagram.GetSelection().GetSelected():
             if isinstance(sel, CConnection):
