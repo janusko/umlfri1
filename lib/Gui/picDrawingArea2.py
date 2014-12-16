@@ -541,9 +541,10 @@ class CpicDrawingArea(CWidget):
         self.activeDrawingArea.OnKeyPress(eventArgs)
 
         self.__UpdateCursor()
+        self.__UpdateScrollBarsPosition()
         self.Paint()
 
-        return
+        return True
 
         if event.keyval==gtk.keysyms.a and event.state == gtk.gdk.CONTROL_MASK:
             self.Diagram.SelectAll()
@@ -604,11 +605,12 @@ class CpicDrawingArea(CWidget):
 
         self.pressedKeys.discard(event.keyval)
 
-        eventArgs = CDrawingAreaKeyUpEventArgs(self.pressedKeys, event.state)
+        eventArgs = CDrawingAreaKeyUpEventArgs(self.pressedKeys, event.keyval, event.state)
 
         self.activeDrawingArea.OnKeyUp(eventArgs)
 
         self.__UpdateCursor()
+        self.__UpdateScrollBarsPosition()
         self.Paint()
 
         return
