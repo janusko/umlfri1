@@ -237,6 +237,10 @@ class CDrawingArea(CGuiObject):
         if changed:
             self.diagram.Paint(canvas, self.buffer_size)
 
+        if self.__viewPortShiftDirection != "":
+            self.__ShiftViewPort(self.__viewPortShiftDirection)
+            self.__viewPortShiftDirection = ""
+
         if self.dnd == 'resize':
             self.__DrawResRect(canvas)
         if self.dnd == 'rect':
