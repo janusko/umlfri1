@@ -224,6 +224,25 @@ class CDrawingArea(CGuiObject):
             self.scale = tmp_scale
             self.__CenterZoom(scale)
 
+    def BestFitScale(self):
+        viewPortSizeX, viewPortSizeY = self.GetViewPortSize()
+        (diaSizeMinX, diaSizeMinY), (diaSizeMaxX, diaSizeMaxY) = self.diagram.GetSizeSquare()
+        scaleX = float(viewPortSizeX) / float(diaSizeMaxX-diaSizeMinX)
+        scaleY = float(viewPortSizeY) / float(diaSizeMaxY-diaSizeMinY)
+        if scaleX > scaleY:
+            scale = scaleY
+        else:
+            scale = scaleX
+
+        if scale < SCALE_MIN:
+            scale = SCALE_MIN
+        elif scale > SCALE_MAX:
+            scale = SCALE_MAX
+
+        self.SetScale(scale)
+        viewPortPos = (diaSizeMinX, diaSizeMinY)
+        self.SetViewPortPos(viewPortPos)
+
     def Paint(self, canvas, changed = True):
         """
         Paints diagram at canvas
