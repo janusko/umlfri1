@@ -137,25 +137,11 @@ class CpicDrawingArea(CWidget):
         @type cursorImage: L{Cursor<gtk.gdk.Cursor>}
         """
         self.picDrawingArea.window.set_cursor(cursorImage)
-    
-    def BestFitScale(self):
-        winSizeX, winSizeY = self.GetWindowSize()
-        (diaSizeMinX, diaSizeMinY), (diaSizeMaxX, diaSizeMaxY) = self.Diagram.GetSizeSquare()
-        scaleX = float(winSizeX) / float(diaSizeMaxX-diaSizeMinX)
-        scaleY = float(winSizeY) / float(diaSizeMaxY-diaSizeMinY)
-        if scaleX > scaleY :
-            scale = scaleY
-        else : scale = scaleX
-        
-        if scale < SCALE_MIN:
-            scale = SCALE_MIN
-        elif scale > SCALE_MAX:
-            scale = SCALE_MAX
 
-        self.SetScale(scale)
-        diaSizeMinX, diaSizeMinY = self.canvas.ToPhysical((diaSizeMinX, diaSizeMinY))
-        self.picHBar.set_value(diaSizeMinX)
-        self.picVBar.set_value(diaSizeMinY)
+    def BestFitScale(self):
+        self.activeDrawingArea.BestFitScale()
+        self.__UpdateScrollBarsPosition()
+        self.Paint()
 
     def IncScale(self, scale):
         self.activeDrawingArea.IncScale(scale)
@@ -166,9 +152,9 @@ class CpicDrawingArea(CWidget):
         return self.canvas.GetScale()
     
     def SetNormalScale(self):
-        self.picHBar.set_value(0)
-        self.picVBar.set_value(0)
-        self.SetScale(1.0)
+        self.activeDrawingArea.SetScale(1.0)
+        self.__UpdateScrollBarsPosition()
+        self.Paint()
             
     def Redraw(self):
         self.canvas = CCairoCanvas(self.picDrawingArea, self.buffer, self.application.GetProject().GetMetamodel().GetStorage())
