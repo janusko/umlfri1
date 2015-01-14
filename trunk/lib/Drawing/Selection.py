@@ -37,29 +37,26 @@ class CSelection:
 
     def __GetSquares(self, selElement):
         '''
-        Create squares and return it as list.
+        Create squares for selElement and return it as list.
         :param selElement:
         :return:
         '''
         x, y = selElement.GetPosition()
-        context = CDrawingContext(selElement, (x + 0, y + 0))
+        context = CDrawingContext(selElement, (x, y))
         rx, ry = selElement.GetObject().GetType().GetResizable(context)
         w, h = selElement.GetSize()
-        squares = []
 
         if rx and ry:
-            squares.append(self.__CreateSquare(x       , y       ,  1,  1))
-            squares.append(self.__CreateSquare(x + w   , y       , -1,  1))
-            squares.append(self.__CreateSquare(x       , y + h   ,  1, -1))
-            squares.append(self.__CreateSquare(x + w   , y + h   , -1, -1))
+            yield self.__CreateSquare(x       , y       ,  1,  1)
+            yield self.__CreateSquare(x + w   , y       , -1,  1)
+            yield self.__CreateSquare(x       , y + h   ,  1, -1)
+            yield self.__CreateSquare(x + w   , y + h   , -1, -1)
         if ry:
-            squares.append(self.__CreateSquare(x + w//2, y       ,  0,  1))
-            squares.append(self.__CreateSquare(x + w//2, y + h   ,  0, -1))
+            yield self.__CreateSquare(x + w//2, y       ,  0,  1)
+            yield self.__CreateSquare(x + w//2, y + h   ,  0, -1)
         if rx:
-            squares.append(self.__CreateSquare( x      , y + h//2,  1,  0))
-            squares.append(self.__CreateSquare(x + w   , y + h//2, -1,  0))
-
-        return squares
+            yield self.__CreateSquare( x      , y + h//2,  1,  0)
+            yield self.__CreateSquare(x + w   , y + h//2, -1,  0)
 
     def __CreateSquare(self, x, y, posx, posy):
         '''
@@ -154,9 +151,6 @@ class CSelection:
 
             if isinstance(selObj, Element.CElement):
                 x, y = selObj.GetPosition()
-                context = CDrawingContext(selObj, (x + delta[0], y + delta[1]))
-                rx, ry = selObj.GetObject().GetType().GetResizable(context)
-
                 minsize = selObj.GetMinimalSize()
 
                 # calculate actual size from delta size, if loaded older version of project (1.1.0)
