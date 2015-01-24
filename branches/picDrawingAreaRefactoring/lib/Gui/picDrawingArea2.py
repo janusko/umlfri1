@@ -312,9 +312,9 @@ class CpicDrawingArea(CWidget):
         self.picVBar.set_adjustment(tmp)
 
     def Export(self, filename, export_type, zoom, padding, background=None):
-        self.Diagram.DeselectAll()
+        self.activeDiagram.GetSelection().DeselectAll()
         
-        (x1, y1), (x2, y2) = self.Diagram.GetSizeSquare()
+        (x1, y1), (x2, y2) = self.activeDiagram.GetSizeSquare()
         sizeX = x2 - x1
         sizeY = y2 - y1
         x = x1
@@ -326,7 +326,7 @@ class CpicDrawingArea(CWidget):
             filename, sizeX, sizeY, background = background)
         canvas.SetScale(zoom)
         canvas.MoveBase(x - padding, y - padding)
-        self.Diagram.PaintFull(canvas)
+        self.activeDiagram.PaintFull(canvas)
         canvas.Finish()
         self.Paint()
     
@@ -397,7 +397,7 @@ class CpicDrawingArea(CWidget):
 
         if event.button == 3:
             #if something is selected:
-            #self.UpdateMenuSensitivity(bool(self.application.GetProject()), bool(self.Diagram), int(len(list(self.Diagram.GetSelected())) > 0))
+            #self.UpdateMenuSensitivity(bool(self.application.GetProject()), bool(self.activeDiagram), int(len(list(self.activeDiagram.GetSelection().GetSelected())) > 0))
             self.pMenuShift.popup(None,None,None,event.button,event.time)
             return True
 
@@ -529,19 +529,23 @@ class CpicDrawingArea(CWidget):
    
     @event("pmShowInProjectView","activate")
     def on_mnuShowInProjectView_click(self, menuItem):
-        if len(tuple(self.Diagram.GetSelected())) == 1:
-            for Element in self.Diagram.GetSelected():
-                if isinstance(Element, CElement):
-                    self.emit('show-element-in-treeView',Element)
+        selection = tuple(self.activeDiagram.GetSelection().GetSelected())
+        if len(selection) != 1:
+            return
+
+        element = selection[0]
+        if isinstance(element, CElement):
+            self.emit('show-element-in-treeView',element)
                     
     @event("pmOpenSpecification","activate")
     def on_mnuOpenSpecification_click(self, menuItem):
-        if len(tuple(self.Diagram.GetSelected())) == 1:
-            for Element in self.Diagram.GetSelected():
-                if isinstance(Element, CElement) or isinstance(Element, CConnection):
-                    self.__OpenSpecification(Element)
-        elif len(tuple(self.Diagram.GetSelected())) == 0:
-            self.__OpenSpecification(self.Diagram)
+        selection = tuple(self.activeDiagram.GetSelection().GetSelected())
+        if len(selection) == 1:
+            element = selection[0]
+            if isinstance(element, CElement) or isinstance(element, CConnection):
+                self.__OpenSpecification(element)
+        elif len(selection) == 0:
+            self.__OpenSpecification(self.activeDiagram)
     
     @event("pmShift_SendBack","activate","SendBack")
     @event("pmShift_BringForward","activate","BringForward")
@@ -638,19 +642,19 @@ class CpicDrawingArea(CWidget):
         return self.picDrawingArea.is_focus()
 
     def GetSelectionPixbuf(self, zoom, padding, bg):
-        (x, y), (sizeX, sizeY) = self.Diagram.GetSelectSquare(True)
+        (x, y), (sizeX, sizeY) = self.activeDiagram.GetSelectSquare(True)
         sizeX = (sizeX + padding*2) * zoom
         sizeY = (sizeY + padding*2) * zoom
         canvas = CExportCanvas(self.application.GetProject().GetMetamodel().GetStorage(), 'pixbuf', None, sizeX, sizeY, background = bg)
         canvas.SetScale(zoom)
         canvas.MoveBase(x - padding, y - padding)
-        self.Diagram.PaintSelected(canvas)
+        self.activeDiagram.PaintSelected(canvas)
         return canvas.Finish()
     
     def SelectObject(self, object):
-        self.Diagram.AddToSelection(self.Diagram.GetElement(object))                
-        y=self.canvas.ToPhysical(self.Diagram.GetSelected().next().position)[1]-self.GetAbsolutePos(self.GetWindowSize())[1]/2
-        x=self.canvas.ToPhysical(self.Diagram.GetSelected().next().position)[0]-self.GetAbsolutePos(self.GetWindowSize())[0]/2
+        self.activeDiagram.GetSelection().AddToSelection(self.activeDiagram.GetElement(object))
+        y=self.canvas.ToPhysical(self.activeDiagram.GetSelection().GetSelected().next().position)[1]-self.GetAbsolutePos(self.GetWindowSize())[1]/2
+        x=self.canvas.ToPhysical(self.activeDiagram.GetSelection().GetSelected().next().position)[0]-self.GetAbsolutePos(self.GetWindowSize())[0]/2
         self.SetScrollBarsPosition((x, y))
         self.Paint()
 
