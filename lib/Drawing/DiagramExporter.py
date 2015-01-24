@@ -59,8 +59,12 @@ class CDiagramExporter():
         Creates and configures export canvas.
 
         @param export_type: Type of exported format.
+        @type  export_type: str
         @param filename: Filename of exported file.
+        @type filename : str
         @param offset: Offset of the canvas.
+        @type offset : tuple
+
         @rtype : L{CCairoBaseCanvas<Canvas.CairoBase.CCairoBaseCanvas>}
         @return: Configured canvas.
         """
