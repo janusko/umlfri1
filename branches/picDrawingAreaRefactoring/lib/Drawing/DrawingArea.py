@@ -145,7 +145,7 @@ class CDrawingArea(CGuiObject):
         pos, size = self.logicalViewPort
 
         pos = self.TupleToPhysical(pos)
-        size = self.TupleToLogical(size)
+        size = self.TupleToPhysical(size)
 
         return (pos, size)
 
@@ -294,8 +294,8 @@ class CDrawingArea(CGuiObject):
         @return: Coordinates in absolute scale.
         @rtype : tuple
         """
-        (x, y) = PositionToLogical((posx, posy), self.scale)
-        (dx, dy) = PositionToLogical(self.GetLogicalViewPortPos(), self.scale)
+        (x, y) = self.TupleToLogical((posx, posy))
+        (dx, dy) = self.GetLogicalViewPortPos()
         return (x + dx, y + dy)
 
     def GetRelativePos(self, (posx, posy)):
@@ -313,8 +313,8 @@ class CDrawingArea(CGuiObject):
         @return: Coordinates in relative scale.
         @rtype : tuple
         """
-        (x, y) = PositionToPhysical((posx, posy), self.scale)
-        (dx, dy) = PositionToPhysical(self.GetLogicalViewPortPos(), self.scale)
+        (x, y) = self.TupleToPhysical((posx, posy))
+        (dx, dy) = self.GetPhysicalViewPortPos()
         return (x - dx, y - dy)
 
     def GetScale(self):
@@ -384,8 +384,8 @@ class CDrawingArea(CGuiObject):
 
             # We need to calculate logical bounds of the virtual area.
 
-            virtual_area_offset = PositionToLogical(self.virtual_area_bounds[0], self.scale)
-            virtual_area_size = PositionToLogical(self.virtual_area_bounds[1], self.scale)
+            virtual_area_offset = self.TupleToLogical(self.virtual_area_bounds[0])
+            virtual_area_size = self.TupleToLogical(self.virtual_area_bounds[1])
 
             logical_virtual_area_bounds = (virtual_area_offset, virtual_area_size)
 
