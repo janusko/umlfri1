@@ -25,7 +25,7 @@ class CDrawingArea(CGuiObject):
 
         # CDiagram(None,_("Start page"))
         self.physicalViewPort = ((0, 0), (0, 0))
-        self.virtual_area_bounds = ((0, 0), BUFFER_SIZE)
+        self.virtualAreaBounds = ((0, 0), BUFFER_SIZE)
         self.scale = 1.0
         self.diagram = diagram
 
@@ -94,7 +94,7 @@ class CDrawingArea(CGuiObject):
         @return: Rectangle representing bounds of virtual drawing area. Two tuples (x, y), (width, height).
         @rtype : tuple
         """
-        return self.virtual_area_bounds
+        return self.virtualAreaBounds
 
     def GetLogicalViewPort(self):
         """
@@ -127,21 +127,6 @@ class CDrawingArea(CGuiObject):
         size = self.TupleToPhysical(size)
 
         return self.SetPhysicalViewPort((pos, size))
-
-        #
-        # (x, y), (w, h) = viewPort
-        #
-        # (dw, dh) = self.GetDiagramSize()
-        #
-        # # don't allow scrolling outside of view port or diagram size
-        # (x, y) = min(dw - w, x), min(dh - h, y)
-        #
-        # # don't allow scrolling  beyond 0, 0 position
-        # (x, y) = max(0, x), max(0, y)
-        #
-        # self.physicalViewPort = ((x, y), (w, h))
-
-        # return self.__UpdateDrawingBuffer(self.GetPhysicalViewPort())
 
     def GetPhysicalViewPort(self):
         """
@@ -294,7 +279,7 @@ class CDrawingArea(CGuiObject):
         @rtype : tuple
         @return: Position offset on virtual drawing area.
         """
-        virtualAreaPos = self.virtual_area_bounds[0]
+        virtualAreaPos = self.virtualAreaBounds[0]
         return pos[0] - virtualAreaPos[0], pos[1] - virtualAreaPos[1]
 
     def GetAbsolutePos(self, (posx, posy)):
@@ -402,8 +387,8 @@ class CDrawingArea(CGuiObject):
 
             # We need to calculate logical bounds of the virtual area.
 
-            virtual_area_offset = self.TupleToLogical(self.virtual_area_bounds[0])
-            virtual_area_size = self.TupleToLogical(self.virtual_area_bounds[1])
+            virtual_area_offset = self.TupleToLogical(self.virtualAreaBounds[0])
+            virtual_area_size = self.TupleToLogical(self.virtualAreaBounds[1])
 
             logical_virtual_area_bounds = (virtual_area_offset, virtual_area_size)
 
@@ -596,8 +581,7 @@ class CDrawingArea(CGuiObject):
         posx, posy = viewport[0]
         sizx, sizy = viewport[1]
 
-        ((bposx, bposy), (bsizx, bsizy)) = self.virtual_area_bounds
-        # (bposx, bposy) = PositionToPhysical((bposx, bposy))
+        ((bposx, bposy), (bsizx, bsizy)) = self.virtualAreaBounds
 
         bufferResized = False
 
@@ -611,9 +595,7 @@ class CDrawingArea(CGuiObject):
             bposx = max(bposx, 0)
             bposy = max(bposy, 0)
 
-            # (bposx, bposy) = PositionToLogical((bposx, bposy))
-
-            self.virtual_area_bounds = ((bposx, bposy), (bsizx, bsizy))
+            self.virtualAreaBounds = ((bposx, bposy), (bsizx, bsizy))
 
             bufferResized = True
 
