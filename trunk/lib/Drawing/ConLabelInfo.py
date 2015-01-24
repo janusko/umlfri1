@@ -315,6 +315,10 @@ class CConLabelInfo(CCacheableObject):
 
         context = CDrawingContext(self.connection(), (0,0))
         self.actualSize = self.logicalLabel.GetSize(context)
-        context.SetPosition(self.GetPosition())
+
+        (x, y) = self.GetPosition()
+        (x, y) = (x + delta[0], y + delta[1])
+
+        context.SetPosition((x, y))
 
         self.logicalLabel.Paint(context, canvas)
