@@ -974,7 +974,7 @@ class CDrawingArea(CGuiObject):
 
     def __DrawDragRect(self, canvas):
         if self.selSq is None:
-            canvas.DrawRectangle(self.__oldpos, self.DragRect[1], self.dragForegroundColor, None, self.dragLineWidth)
+            self.__DrawRectangle(canvas, (self.__oldpos, self.DragRect[1]), self.dragForegroundColor, None, self.dragLineWidth)
 
 
     def __BeginDragSel(self, pos):
@@ -995,13 +995,14 @@ class CDrawingArea(CGuiObject):
 
     def __DrawDragSel(self, canvas):
         pos, size = self.__oldsel
-        canvas.DrawRectangle(pos, size, self.dragForegroundColor, None, self.dragLineWidth)
+        self.__DrawRectangle(canvas, (pos, size), self.dragForegroundColor, None, self.dragLineWidth)
 
 
     def __DrawResRect(self, canvas):
         # seems like x1,x2 should be fixed at starting drag position
         # should be recalculated according to the view port
-        canvas.DrawRectangle(self.DragRect[0], self.DragRect[1], self.dragForegroundColor, None, self.dragLineWidth)
+        rectangle = (self.DragRect[0], self.DragRect[1])
+        self.__DrawRectangle(canvas, rectangle, self.dragForegroundColor, None, self.dragLineWidth)
 
     def __UpdateResRect(self, pos):
         delta = self.__GetDelta(pos, True)
@@ -1015,7 +1016,7 @@ class CDrawingArea(CGuiObject):
         self.__oldNewConnection = points
 
     def __DrawNewConnection(self, canvas):
-        canvas.DrawLines(self.__oldNewConnection, self.dragForegroundColor, line_width=self.dragLineWidth)
+        self.__DrawLines(canvas, self.__oldNewConnection, self.dragForegroundColor, self.dragLineWidth)
 
 
     def __BeginDragLine(self, pos, connection, point):
@@ -1036,7 +1037,7 @@ class CDrawingArea(CGuiObject):
         self.__oldPoints2 = (x, y)
 
     def __DrawDragLine(self, canvas):
-        canvas.DrawLines(self.__oldPoints, self.dragForegroundColor, line_width=self.dragLineWidth)
+        self.__DrawLines(canvas, self.__oldPoints, self.dragForegroundColor, self.dragLineWidth)
 
     def __BeginDragPoint(self, pos, connection, point):
         self.DragStartPos = pos
@@ -1055,7 +1056,19 @@ class CDrawingArea(CGuiObject):
         self.__oldPoints2 = (x, y)
 
     def __DrawDragPoint(self, canvas):
-        canvas.DrawLines(self.__oldPoints, self.dragForegroundColor, line_width=self.dragLineWidth)
+        self.__DrawLines(canvas, self.__oldPoints, self.dragForegroundColor, self.dragLineWidth)
+
+    def __DrawRectangle(self, canvas, (pos, size), foregroundColor, backgroundColor, lineWidth):
+        offsetPos = self.__OffsetLogicalPointOnVirtualArea(pos)
+        canvas.DrawRectangle(offsetPos, size, foregroundColor, backgroundColor, lineWidth)
+
+    def __DrawLines(self, canvas, points, foregroundColor, line_width):
+        offsetPoints = (self.__OffsetLogicalPointOnVirtualArea(p) for p in points)
+        canvas.DrawLines(offsetPoints, foregroundColor, line_width)
+
+    def __OffsetLogicalPointOnVirtualArea(self, (x, y)):
+        (bX, bY) = self.TupleToLogical(self.virtualAreaBounds[0])
+        return (x - bX, y - bY)
 
     def __ResetAction(self):
         self.dnd = None
