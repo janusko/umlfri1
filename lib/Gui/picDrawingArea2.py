@@ -306,11 +306,7 @@ class CpicDrawingArea(CWidget):
         wgt.draw_drawable(gc, self.buffer, pos[0] - pos_offset[0], pos[1] - pos_offset[1], 0, 0, size[0], size[1])
 
     def AdjustScrollBars(self):
-        if self.canvas is None:
-            dasx, dasy = self.GetDiagramSize()
-        else : 
-            #dasx, dasy = self.GetDiagramSize()
-            dasx, dasy = self.canvas.ToPhysical(self.GetDiagramSize())
+        dasx, dasy = self.activeDrawingArea.GetDiagramPhysicalSize()
                 
         wisx, wisy = self.GetWindowSize()
         tmp = self.picHBar.get_adjustment()
