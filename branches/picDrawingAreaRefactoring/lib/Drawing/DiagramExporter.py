@@ -30,17 +30,12 @@ class CDiagramExporter():
         diagram.GetSelection().DeselectAll()
 
         (x1, y1), (x2, y2) = diagram.GetSizeSquare()
-        sizeX = x2 - x1
-        sizeY = y2 - y1
-        x = x1
-        y = y1
+        size = (x2 - x1, y2 - y1)
+        offset = (x1, y1)
 
-        sizeX = (sizeX + self.padding * 2) * self.zoom
-        sizeY = (sizeY + self.padding * 2) * self.zoom
-        canvas = CExportCanvas(self.storage, self.export_type,
-                               filename, sizeX, sizeY, background = self.background)
-        canvas.SetScale(self.zoom)
-        canvas.MoveBase(x - self.padding, y - self.padding)
+        size = self.__CalculateDiagramPhysicalSize(size)
+
+        canvas = self.__CreateCanvas(self.export_type, filename, size, offset)
         diagram.PaintFull(canvas)
         canvas.Finish()
 
@@ -53,9 +48,9 @@ class CDiagramExporter():
 
         @return: Pixbuf containing exported diagram with selected elements and connections.
         """
-        pos, (sizeX, sizeY) = diagram.GetSelectSquare(True)
-        (sizeX, sizeY) = self.__CalculateDiagramPhysicalSize((sizeX, sizeY))
-        canvas = self.__CreateCanvas('pixbuf', None, (sizeX, sizeY), pos)
+        pos, size = diagram.GetSelectSquare(True)
+        size = self.__CalculateDiagramPhysicalSize(size)
+        canvas = self.__CreateCanvas('pixbuf', None, size, pos)
         diagram.PaintSelected(canvas)
         return canvas.Finish()
 
@@ -69,8 +64,8 @@ class CDiagramExporter():
         @rtype : L{CCairoBaseCanvas<Canvas.CairoBase.CCairoBaseCanvas>}
         @return: Configured canvas.
         """
-        canvas = CExportCanvas(self.storage, 'pixbuf',
-                               None, sizeX, sizeY, background = self.background)
+        canvas = CExportCanvas(self.storage, export_type,
+                               filename, sizeX, sizeY, background = self.background)
         canvas.SetScale(self.zoom)
         self.__SetCanvasOffset(canvas, offset)
         return canvas
