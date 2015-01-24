@@ -153,24 +153,8 @@ class CSelection:
 
             if isinstance(selObj, Element.CElement):
                 x, y = selObj.GetPosition()
-                minsize = selObj.GetMinimalSize()
-
-                # calculate actual size from delta size, if loaded older version of project (1.1.0)
-                if selObj.hasDeltaSize:
-                    selObj.hasDeltaSize = False
-                    selObj.actualSize = ( minsize[0] + selObj.actualSize[0], minsize[1] + selObj.actualSize[1] )
-
                 w, h = selObj.GetSize()
-                wasSmall = False
-                if w < minsize[0]:
-                    w = minsize[0]
-                    wasSmall = True
-                if h < minsize[1]:
-                    h = minsize[1]
-                    wasSmall = True
-                if wasSmall:
-                    selObj.SetSize((w, h))
-                
+
                 # squares are painted, if exactly one element is selected
                 if len(list(self.GetSelectedElements())) == 1:
                     self.__DrawElementSquares(canvas, dx, dy, list(self.GetSelectedElements())[0])
