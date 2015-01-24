@@ -263,7 +263,18 @@ class CDrawingArea(CGuiObject):
         canvas.SetScale(self.scale)
 
         if changed:
-            self.diagram.Paint(canvas, self.virtual_area_bounds)
+
+            # When drawing area is zoomed in, the virtual area is shrank (and vice versa)
+            # the reason is that the canvas has always the same size.
+
+            # We need to calculate logical bounds of the virtual area.
+
+            virtual_area_offset = PositionToLogical(self.virtual_area_bounds[0], self.scale)
+            virtual_area_size = PositionToLogical(self.virtual_area_bounds[1], self.scale)
+
+            logical_virtual_area_bounds = (virtual_area_offset, virtual_area_size)
+
+            self.diagram.Paint(canvas, logical_virtual_area_bounds)
 
         if self.__viewPortShiftDirection != "":
             self.__ShiftViewPort(self.__viewPortShiftDirection)
@@ -453,7 +464,7 @@ class CDrawingArea(CGuiObject):
         sizx, sizy = viewport[1]
 
         ((bposx, bposy), (bsizx, bsizy)) = self.virtual_area_bounds
-        (bposx, bposy) = PositionToPhysical((bposx, bposy))
+        # (bposx, bposy) = PositionToPhysical((bposx, bposy))
 
         bufferResized = False
 
@@ -467,7 +478,7 @@ class CDrawingArea(CGuiObject):
             bposx = max(bposx, 0)
             bposy = max(bposy, 0)
 
-            (bposx, bposy) = PositionToLogical((bposx, bposy))
+            # (bposx, bposy) = PositionToLogical((bposx, bposy))
 
             self.virtual_area_bounds = ((bposx, bposy), (bsizx, bsizy))
 
