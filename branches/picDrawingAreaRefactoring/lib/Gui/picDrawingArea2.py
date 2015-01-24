@@ -187,7 +187,7 @@ class CpicDrawingArea(CWidget):
         if windowSize == (None, None):
             return
 
-        drawingArea.SetViewPortSize(windowSize)
+        drawingArea.SetPhysicalViewPortSize(windowSize)
 
     def ViewPortChanged(self):
         """
@@ -204,7 +204,7 @@ class CpicDrawingArea(CWidget):
         if viewPort is None:
             return
 
-        return drawingArea.SetViewPort(viewPort)
+        return drawingArea.SetPhysicalViewPort(viewPort)
 
     def GetCurrentViewPort(self):
         """
@@ -273,17 +273,25 @@ class CpicDrawingArea(CWidget):
         # After the first time drawing area is shown, it reports wrong size
         # We need to check, if it has changed and update drawing area's view port size, if necessary
 
-        if self.activeDrawingArea.GetViewPortSize() != self.GetWindowSize():
+        windowSize = self.GetWindowSize()
+        physicalViewPortSize = self.activeDrawingArea.GetPhysicalViewPortSize()
+        sizeDiff = abs(windowSize[0] - physicalViewPortSize[0]), abs(windowSize[1] - physicalViewPortSize[1])
+
+        if sizeDiff[0] >= 100 or sizeDiff[1] >= 100:
             self.__UpdateViewPortForDrawingArea(self.activeDrawingArea)
+
+        # if self.activeDrawingArea.GetPhysicalViewPortSize() != self.GetWindowSize():
+        #     self.__UpdateViewPortForDrawingArea(self.activeDrawingArea)
 
         self.activeDrawingArea.Paint(self.canvas, changed)
 
-        self.AdjustScrollBars()
+        # self.AdjustScrollBars()
+
         wgt = self.picDrawingArea.window
         gc = wgt.new_gc()
 
-        pos = self.activeDrawingArea.GetViewPortPos()
-        size = self.activeDrawingArea.GetViewPortSize()
+        pos = self.activeDrawingArea.GetPhysicalViewPortPos()
+        size = self.activeDrawingArea.GetPhysicalViewPortSize()
 
         virtual_area_bounds = self.activeDrawingArea.GetVirtualAreaBounds()
         pos_offset = virtual_area_bounds[0]
@@ -659,7 +667,7 @@ class CpicDrawingArea(CWidget):
         self.Paint()
 
     def __UpdateScrollBarsPosition(self):
-        self.SetScrollBarsPosition(self.activeDrawingArea.GetViewPortPos())
+        self.SetScrollBarsPosition(self.activeDrawingArea.GetPhysicalViewPortPos())
 
     def DeselectAll(self):
         self.activeDiagram.GetSelection().DeselectAll()

@@ -24,7 +24,7 @@ class CDrawingArea(CGuiObject):
         CGuiObject.__init__(self, app)
 
         # CDiagram(None,_("Start page"))
-        self.viewPort = ((0, 0), (0, 0))
+        self.logicalViewPort = ((0, 0), (0, 0))
         self.virtual_area_bounds = ((0, 0), BUFFER_SIZE)
         self.scale = 1.0
         self.diagram = diagram
@@ -74,83 +74,6 @@ class CDrawingArea(CGuiObject):
         """
         return self.cursors[self.GetCursor()]
 
-    def GetVirtualAreaBounds(self):
-        """
-        Returns bounds of virtual drawing area.
-
-        @return: Rectangle representing bounds of virtual drawing area. Two tuples (x, y), (width, height).
-        @rtype : tuple
-        """
-        return self.virtual_area_bounds
-
-    def GetViewPort(self):
-        """
-        Returns current view port.
-
-        @return: Rectangle representing current view port. Two tuples (x, y), (width, height).
-        @rtype: tuple
-        """
-        return self.viewPort
-
-    def SetViewPort(self, viewPort):
-        """
-        Changes current view port.
-
-        @param viewPort: Rectangle representing new view port. Two tuples (x, y), (width, height).
-        @type viewPort: tuple
-
-        @rtype: bool
-        @return: True, if drawing area needs to be resized, False if not.
-        """
-        self.viewPort = viewPort
-
-        return self.__UpdateDrawingBuffer(viewPort)
-
-    def GetViewPortPos(self):
-        """
-        Returns view port position.
-
-        @return: Position of the view port.
-        @rtype : tuple
-        """
-        return self.viewPort[0]
-
-    def SetViewPortPos(self, (x, y) = (0, 0)):
-        """
-        Changes view port position.
-
-        @param pos: New view port position
-        @type pos: tuple
-        """
-        size = (w, h) = self.GetViewPortSize()
-        (dw, dh) = self.GetDiagramSize()
-
-        # don't allow scrolling outside of view port or diagram size
-        (x, y) = min(dw - w, x), min(dh - h, y)
-
-        # don't allow scrolling  beyond 0, 0 position
-        pos = max(0, x), max(0, y)
-        self.viewPort = pos, size
-
-    def GetViewPortSize(self):
-        """
-        Returns view port size
-
-        @return: Size of the view port
-        @rtype : tuple
-        """
-        return self.viewPort[1]
-
-    def SetViewPortSize(self, size):
-        """
-        Changes view port size.
-
-        @param size: New size of the view port
-        @type size: tuple
-        """
-        viewPort = (self.GetViewPortPos(), size)
-        self.SetViewPort(viewPort)
-
     def GetDiagram(self):
         """
         Returns associated diagram.
@@ -161,8 +84,200 @@ class CDrawingArea(CGuiObject):
         return self.diagram
 
     def GetDiagramSize(self):
-        tmp = [int(max(i)) for i in zip(self.diagram.GetSize(), self.GetViewPortSize())]
+        tmp = [int(max(i)) for i in zip(self.diagram.GetSize(), self.GetLogicalViewPortSize())]
         return tuple(tmp)
+
+    def GetVirtualAreaBounds(self):
+        """
+        Returns bounds of virtual drawing area.
+
+        @return: Rectangle representing bounds of virtual drawing area. Two tuples (x, y), (width, height).
+        @rtype : tuple
+        """
+        return self.virtual_area_bounds
+
+    def GetLogicalViewPort(self):
+        """
+        Returns current logical view port.
+
+        Takes scale into account.
+
+        @return: Rectangle representing current logical view port. Two tuples (x, y), (width, height).
+        @rtype: tuple
+        """
+        return self.logicalViewPort
+
+    def SetLogicalViewPort(self, viewPort):
+        """
+        Changes current view port.
+
+        @param viewPort: Rectangle representing new view port. Two tuples (x, y), (width, height).
+        @type viewPort: tuple
+
+        @rtype: bool
+        @return: True, if drawing area needs to be resized, False if not.
+        """
+
+        (x, y), (w, h) = viewPort
+
+        (dw, dh) = self.GetDiagramSize()
+
+        # don't allow scrolling outside of view port or diagram size
+        (x, y) = min(dw - w, x), min(dh - h, y)
+
+        # don't allow scrolling  beyond 0, 0 position
+        (x, y) = max(0, x), max(0, y)
+
+        self.logicalViewPort = ((x, y), (w, h))
+
+        return self.__UpdateDrawingBuffer(self.GetPhysicalViewPort())
+
+    def GetPhysicalViewPort(self):
+        """
+        Returns current physical view port.
+
+        Converts logical view port to physical units.
+
+        @return: Rectangle representing current physical view port. Two tuples (x, y), (width, height).
+        @rtype: tuple
+        """
+
+        pos, size = self.logicalViewPort
+
+        pos = self.TupleToPhysical(pos)
+        size = self.TupleToLogical(size)
+
+        return (pos, size)
+
+    def SetPhysicalViewPort(self, viewPort):
+        """
+        Changes current physical view port. Value is converted to logical units.
+
+        @param viewPort: Rectangle representing new physical view port. Two tuples (x, y), (width, height).
+        @type viewPort: tuple
+
+        @rtype: bool
+        @return: True, if drawing area needs to be resized, False if not.
+        """
+
+        pos, size = viewPort
+
+        logicalPosition = self.TupleToLogical(pos)
+        logicalSize = self.TupleToLogical(size)
+
+        logicalViewPort = (logicalPosition, logicalSize)
+
+        return self.SetLogicalViewPort(logicalViewPort)
+
+    def GetLogicalViewPortPos(self):
+        """
+        Returns logical view port position.
+
+        @return: Position of the view port.
+        @rtype : tuple
+        """
+        return self.logicalViewPort[0]
+
+    def SetLogicalViewPortPos(self, pos):
+        """
+        Changes logical view port position.
+
+        @param pos: New logical view port position
+        @type pos: tuple
+        """
+        size = self.GetLogicalViewPortSize()
+        self.SetLogicalViewPort((pos, size))
+
+    def GetPhysicalViewPortPos(self):
+        """
+        Returns physical view port position.
+
+        Converts logical view port size to physical units.
+
+        @return: Position of the physical view port.
+        @rtype : tuple
+        """
+        pos = self.GetLogicalViewPortPos()
+        return self.TupleToPhysical(pos)
+
+    def SetPhysicalViewPortPos(self, pos):
+        """
+        Changes physical view port position.
+
+        Coordinates are converted to logical units.
+
+        @param pos: New physical view port position
+        @type pos: tuple
+        """
+        pos = self.TupleToLogical(pos)
+        self.SetLogicalViewPortPos(pos)
+
+    def GetLogicalViewPortSize(self):
+        """
+        Returns logical view port size.
+
+        @return: Size of the logical view port
+        @rtype : tuple
+        """
+        return self.logicalViewPort[1]
+
+    def SetLogicalViewPortSize(self, size):
+        """
+        Changes logical view port size.
+
+        @param size: New logical size of the view port
+        @type size: tuple
+        """
+        pos = self.GetLogicalViewPortPos()
+        self.SetLogicalViewPort((pos, size))
+
+    def GetPhysicalViewPortSize(self):
+        """
+        Returns physical view port size.
+
+        Converts logical view port size to physical units.
+
+        @return: Size of the physical view port
+        @rtype : tuple
+        """
+        size = self.GetLogicalViewPortSize()
+        return self.TupleToPhysical(size)
+
+    def SetPhysicalViewPortSize(self, size):
+        """
+        Changes physical view port size.
+
+        Size is converted to logical units.
+
+        @param size: New physical size of the view port
+        @type size: tuple
+        """
+        size = self.TupleToLogical(size)
+        self.SetLogicalViewPortSize(size)
+
+    def TupleToPhysical(self, pos):
+        """
+        Converts logical coordinates to physical.
+
+        @param pos: Coordinates to convert.
+        @type pos: tuple
+
+        @return: Coordinates in physical units.
+        @rtype : tuple
+        """
+        return PositionToPhysical(pos, self.scale)
+
+    def TupleToLogical(self, pos):
+        """
+        Converts physical coordinates to logical.
+
+        @param pos: Coordinates to convert.
+        @type pos: tuple
+
+        @return: Coordinates in logical units.
+        @rtype : tuple
+        """
+        return PositionToLogical(pos, self.scale)
 
     def GetAbsolutePos(self, (posx, posy)):
         """
@@ -180,7 +295,7 @@ class CDrawingArea(CGuiObject):
         @rtype : tuple
         """
         (x, y) = PositionToLogical((posx, posy), self.scale)
-        (dx, dy) = PositionToLogical(self.GetViewPortPos(), self.scale)
+        (dx, dy) = PositionToLogical(self.GetLogicalViewPortPos(), self.scale)
         return (x + dx, y + dy)
 
     def GetRelativePos(self, (posx, posy)):
@@ -199,7 +314,7 @@ class CDrawingArea(CGuiObject):
         @rtype : tuple
         """
         (x, y) = PositionToPhysical((posx, posy), self.scale)
-        (dx, dy) = PositionToPhysical(self.GetViewPortPos(), self.scale)
+        (dx, dy) = PositionToPhysical(self.GetLogicalViewPortPos(), self.scale)
         return (x - dx, y - dy)
 
     def GetScale(self):
@@ -234,7 +349,7 @@ class CDrawingArea(CGuiObject):
             self.__CenterZoom(scale)
 
     def BestFitScale(self):
-        viewPortSizeX, viewPortSizeY = self.GetViewPortSize()
+        viewPortSizeX, viewPortSizeY = self.GetLogicalViewPortSize()
         (diaSizeMinX, diaSizeMinY), (diaSizeMaxX, diaSizeMaxY) = self.diagram.GetSizeSquare()
         scaleX = float(viewPortSizeX) / float(diaSizeMaxX-diaSizeMinX)
         scaleY = float(viewPortSizeY) / float(diaSizeMaxY-diaSizeMinY)
@@ -250,7 +365,7 @@ class CDrawingArea(CGuiObject):
 
         self.SetScale(scale)
         viewPortPos = (diaSizeMinX, diaSizeMinY)
-        self.SetViewPortPos(viewPortPos)
+        self.SetLogicalViewPortPos(viewPortPos)
 
     def Paint(self, canvas, changed = True):
         """
@@ -820,10 +935,10 @@ class CDrawingArea(CGuiObject):
         self.dnd = 'move'
 
     def __UpdateDragMove(self, pos):
-        posx, posy = self.GetViewPortPos()
+        posx, posy = self.GetLogicalViewPortPos()
         x1, y1 = pos
         x2, y2 = self.DragStartPos
-        self.SetViewPortPos((posx - x1 + x2, posy - y1 + y2))
+        self.SetLogicalViewPortPos((posx - x1 + x2, posy - y1 + y2))
 
     def __BeginDragRect(self, pos):
         selElements = list(self.diagram.GetSelection().GetSelectedElements())
@@ -953,7 +1068,7 @@ class CDrawingArea(CGuiObject):
     def __CenterZoom(self, scale):
         positionH = 0.0
         positionW = 0.0
-        shift = 180
+        shift = 0
         elements = tuple(self.diagram.GetSelection().GetSelectedElements())
         if (len(elements)>0):
             avgH = 0
@@ -966,7 +1081,7 @@ class CDrawingArea(CGuiObject):
             positionH = avgH/5.0
             positionW = avgW/5.0
 
-            x, y = self.GetViewPortPos()
+            x, y = self.GetLogicalViewPortPos()
             if(scale > 0): #INZOOM
                 if(avgH>shift):
                     y += positionH
@@ -986,7 +1101,7 @@ class CDrawingArea(CGuiObject):
                 else:
                     x = 0
 
-            self.SetViewPortPos((x, y))
+            self.SetLogicalViewPortPos((int(x), int(y)))
 
     def __GetPlusMove(self, horVer):
         active = config['/Grid/Active']
@@ -1008,7 +1123,7 @@ class CDrawingArea(CGuiObject):
         self.__viewPortShiftDirection = direction
 
     def __ShiftViewPort(self, direction):
-        posx, posy = self.GetViewPortPos()
+        posx, posy = self.GetLogicalViewPortPos()
         if(self.__viewPortPlusMove > 0):
             move = int(self.__viewPortPlusMove / 2)
         else:
@@ -1021,6 +1136,6 @@ class CDrawingArea(CGuiObject):
             posy -= move
         if(direction == "down"):
             posy += move
-        self.SetViewPortPos((posx, posy))
+        self.SetLogicalViewPortPos((posx, posy))
         self.setResize = False
         self.__viewPortPlusMove = 0
