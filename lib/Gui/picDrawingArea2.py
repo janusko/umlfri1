@@ -230,6 +230,7 @@ class CpicDrawingArea(CWidget):
         return int(self.picHBar.get_value()), int(self.picVBar.get_value())
         
     def SetScrollBarsPosition(self, pos = (0, 0)):
+        self.AdjustScrollBars()
         self.picHBar.set_value(pos[0])        
         self.picVBar.set_value(pos[1])
 
@@ -278,7 +279,7 @@ class CpicDrawingArea(CWidget):
 
         self.activeDrawingArea.Paint(self.canvas, changed)
 
-        # self.AdjustScrollBars()
+        self.AdjustScrollBars()
 
         wgt = self.picDrawingArea.window
         gc = wgt.new_gc()
