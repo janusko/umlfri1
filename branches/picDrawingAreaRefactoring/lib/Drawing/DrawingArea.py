@@ -83,8 +83,8 @@ class CDrawingArea(CGuiObject):
         """
         return self.diagram
 
-    def GetDiagramSize(self):
-        tmp = [int(max(i)) for i in zip(self.diagram.GetSize(), self.GetLogicalViewPortSize())]
+    def GetDiagramPhysicalSize(self):
+        tmp = [int(max(i)) for i in zip(self.TupleToPhysical(self.diagram.GetSize()), self.GetPhysicalViewPortSize())]
         return tuple(tmp)
 
     def GetVirtualAreaBounds(self):
@@ -165,7 +165,7 @@ class CDrawingArea(CGuiObject):
 
         (x, y), (w, h) = viewPort
 
-        (dw, dh) = self.TupleToPhysical(self.GetDiagramSize())
+        (dw, dh) = self.GetDiagramPhysicalSize()
 
         # don't allow scrolling outside of view port or diagram size
         (x, y) = min(dw - w, x), min(dh - h, y)
