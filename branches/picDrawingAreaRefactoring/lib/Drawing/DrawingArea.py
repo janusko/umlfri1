@@ -108,8 +108,8 @@ class CDrawingArea(CGuiObject):
 
         pos, size = self.GetPhysicalViewPort()
 
-        pos = self.TupleToPhysical(pos)
-        size = self.TupleToPhysical(size)
+        pos = self.TupleToLogical(pos)
+        size = self.TupleToLogical(size)
         return (pos, size)
 
     def SetLogicalViewPort(self, viewPort):
