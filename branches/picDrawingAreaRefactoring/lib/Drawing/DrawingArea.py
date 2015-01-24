@@ -284,6 +284,19 @@ class CDrawingArea(CGuiObject):
         """
         return PositionToLogical(pos, self.scale)
 
+    def OffsetOnVirtualArea(self, pos):
+        """
+        Offsets specified position inside virtual drawing area.
+
+        @param pos: Position to offset
+        @type pos : tuple
+
+        @rtype : tuple
+        @return: Position offset on virtual drawing area.
+        """
+        virtualAreaPos = self.virtual_area_bounds[0]
+        return pos[0] - virtualAreaPos[0], pos[1] - virtualAreaPos[1]
+
     def GetAbsolutePos(self, (posx, posy)):
         """
         Converts relative coordinates to absolute.
