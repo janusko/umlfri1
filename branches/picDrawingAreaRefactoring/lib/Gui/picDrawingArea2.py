@@ -631,15 +631,13 @@ class CpicDrawingArea(CWidget):
         exporter.ExportDiagram(self.activeDiagram, filename)
         self.Paint()
 
-    def GetSelectionPixbuf(self, zoom, padding, bg):
-        (x, y), (sizeX, sizeY) = self.activeDiagram.GetSelectSquare(True)
-        sizeX = (sizeX + padding*2) * zoom
-        sizeY = (sizeY + padding*2) * zoom
-        canvas = CExportCanvas(self.application.GetProject().GetMetamodel().GetStorage(), 'pixbuf', None, sizeX, sizeY, background = bg)
-        canvas.SetScale(zoom)
-        canvas.MoveBase(x - padding, y - padding)
-        self.activeDiagram.PaintSelected(canvas)
-        return canvas.Finish()
+    def GetSelectionPixbuf(self, zoom, padding, background):
+        exporter = CDiagramExporter(self.application.GetProject().GetMetamodel().GetStorage(), 'pixbuf')
+        exporter.SetZoom(zoom)
+        exporter.SetPadding(padding)
+        exporter.SetBackground(background)
+
+        return exporter.GetSelectionPixbuf(self.activeDiagram)
     
     def SelectObject(self, object):
         self.activeDiagram.GetSelection().AddToSelection(self.activeDiagram.GetElement(object))

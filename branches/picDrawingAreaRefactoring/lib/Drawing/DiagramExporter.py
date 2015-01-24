@@ -44,6 +44,61 @@ class CDiagramExporter():
         diagram.PaintFull(canvas)
         canvas.Finish()
 
+    def GetSelectionPixbuf(self, diagram):
+        """
+        Creates pixbuf, which contains exported diagram with only selected elements and connections.
+
+        @param diagram: Diagram to export
+        @type diagram : L{CDiagram<Diagram.CDiagram>}
+
+        @return: Pixbuf containing exported diagram with selected elements and connections.
+        """
+        pos, (sizeX, sizeY) = diagram.GetSelectSquare(True)
+        (sizeX, sizeY) = self.__CalculateDiagramPhysicalSize((sizeX, sizeY))
+        canvas = self.__CreateCanvas('pixbuf', None, (sizeX, sizeY), pos)
+        diagram.PaintSelected(canvas)
+        return canvas.Finish()
+
+    def __CreateCanvas(self, export_type, filename, (sizeX, sizeY), offset):
+        """
+        Creates and configures export canvas.
+
+        @param export_type: Type of exported format.
+        @param filename: Filename of exported file.
+        @param offset: Offset of the canvas.
+        @rtype : L{CCairoBaseCanvas<Canvas.CairoBase.CCairoBaseCanvas>}
+        @return: Configured canvas.
+        """
+        canvas = CExportCanvas(self.storage, 'pixbuf',
+                               None, sizeX, sizeY, background = self.background)
+        canvas.SetScale(self.zoom)
+        self.__SetCanvasOffset(canvas, offset)
+        return canvas
+
+    def __CalculateDiagramPhysicalSize(self, logicalSize):
+        """
+        Calculates diagram's physical size from its logical size. Applies zoom and padding.
+
+        @param logicalSize: Logical size of diagram.
+        @type logicalSize : tuple
+
+        @rtype : tuple
+        @return: Diagram's physical size with applied zoom and padding.
+        """
+        (sizeX, sizeY) = logicalSize
+        sizeX = (sizeX + self.padding * 2) * self.zoom
+        sizeY = (sizeY + self.padding * 2) * self.zoom
+        return (sizeX, sizeY)
+
+    def __SetCanvasOffset(self, canvas, (x, y)):
+        """
+        Adjust offset of an canvas with specified position and padding.
+
+        @param canvas: Canvas, which offset should be set.
+        @type  canvas: L{CCairoBaseCanvas<Canvas.CairoBase.CCairoBaseCanvas>}
+        """
+        canvas.MoveBase(x - self.padding, y - self.padding)
+
     def GetBackground(self):
         """
         Returns background color of exported diagram.
