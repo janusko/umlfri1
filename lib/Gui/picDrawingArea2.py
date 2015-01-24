@@ -311,14 +311,6 @@ class CpicDrawingArea(CWidget):
         tmp.upper = dasy
         tmp.page_size = wisy
         self.picVBar.set_adjustment(tmp)
-
-    def Export(self, filename, export_type, zoom, padding, background=None):
-        exporter = CDiagramExporter(self.application.GetProject().GetMetamodel().GetStorage(), export_type)
-        exporter.SetZoom(zoom)
-        exporter.SetPadding(padding)
-        exporter.SetBackground(background)
-        exporter.Export(self.activeDiagram, filename)
-        self.Paint()
     
     @event("mnuCtxDelete","activate")
     def DeleteElements(self, widget = None):
@@ -630,6 +622,14 @@ class CpicDrawingArea(CWidget):
     
     def HasFocus(self):
         return self.picDrawingArea.is_focus()
+
+    def Export(self, filename, export_type, zoom, padding, background=None):
+        exporter = CDiagramExporter(self.application.GetProject().GetMetamodel().GetStorage(), export_type)
+        exporter.SetZoom(zoom)
+        exporter.SetPadding(padding)
+        exporter.SetBackground(background)
+        exporter.ExportDiagram(self.activeDiagram, filename)
+        self.Paint()
 
     def GetSelectionPixbuf(self, zoom, padding, bg):
         (x, y), (sizeX, sizeY) = self.activeDiagram.GetSelectSquare(True)

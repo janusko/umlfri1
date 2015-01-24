@@ -17,7 +17,7 @@ class CDiagramExporter():
         self.padding = 0
         self.background = None
 
-    def Export(self, diagram, filename):
+    def ExportDiagram(self, diagram, filename):
         """
         Exports specified diagram to file.
 
