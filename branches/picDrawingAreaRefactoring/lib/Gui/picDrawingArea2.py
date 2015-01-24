@@ -1,6 +1,7 @@
 from lib.Commands.Diagrams.DuplicateElements import CDuplicateElementsCommand
 from lib.Depend.gtk2 import gtk
 from lib.Depend.gtk2 import gobject
+from lib.Drawing.DiagramExporter import CDiagramExporter
 from lib.Drawing.DrawingArea import CDrawingArea
 
 from lib.Project import CProject, CProjectNode
@@ -19,7 +20,7 @@ from lib.Drawing.DrawingAreaKeyUpEventArgs import CDrawingAreaKeyUpEventArgs
 from lib.Elements import CElementObject
 from lib.Connections import CConnectionObject
 from lib.Exceptions.UserException import *
-from lib.Drawing.Canvas import CCairoCanvas, CExportCanvas
+from lib.Drawing.Canvas import CCairoCanvas
 from lib.Drawing import Element
 
 import thread
@@ -312,22 +313,11 @@ class CpicDrawingArea(CWidget):
         self.picVBar.set_adjustment(tmp)
 
     def Export(self, filename, export_type, zoom, padding, background=None):
-        self.activeDiagram.GetSelection().DeselectAll()
-        
-        (x1, y1), (x2, y2) = self.activeDiagram.GetSizeSquare()
-        sizeX = x2 - x1
-        sizeY = y2 - y1
-        x = x1
-        y = y1
-
-        sizeX = (sizeX + padding*2) * zoom
-        sizeY = (sizeY + padding*2) * zoom
-        canvas = CExportCanvas(self.application.GetProject().GetMetamodel().GetStorage(), export_type,
-            filename, sizeX, sizeY, background = background)
-        canvas.SetScale(zoom)
-        canvas.MoveBase(x - padding, y - padding)
-        self.activeDiagram.PaintFull(canvas)
-        canvas.Finish()
+        exporter = CDiagramExporter(self.application.GetProject().GetMetamodel().GetStorage(), export_type)
+        exporter.SetZoom(zoom)
+        exporter.SetPadding(padding)
+        exporter.SetBackground(background)
+        exporter.Export(self.activeDiagram, filename)
         self.Paint()
     
     @event("mnuCtxDelete","activate")
