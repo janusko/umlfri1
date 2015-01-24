@@ -273,15 +273,8 @@ class CpicDrawingArea(CWidget):
         # After the first time drawing area is shown, it reports wrong size
         # We need to check, if it has changed and update drawing area's view port size, if necessary
 
-        windowSize = self.GetWindowSize()
-        physicalViewPortSize = self.activeDrawingArea.GetPhysicalViewPortSize()
-        sizeDiff = abs(windowSize[0] - physicalViewPortSize[0]), abs(windowSize[1] - physicalViewPortSize[1])
-
-        if sizeDiff[0] >= 100 or sizeDiff[1] >= 100:
+        if self.activeDrawingArea.GetPhysicalViewPortSize() != self.GetWindowSize():
             self.__UpdateViewPortForDrawingArea(self.activeDrawingArea)
-
-        # if self.activeDrawingArea.GetPhysicalViewPortSize() != self.GetWindowSize():
-        #     self.__UpdateViewPortForDrawingArea(self.activeDrawingArea)
 
         self.activeDrawingArea.Paint(self.canvas, changed)
 
