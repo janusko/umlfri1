@@ -147,6 +147,8 @@ class CSelection:
         @param selObj: instance of CEelement, CConnection or CConLabelInfo
         @param delta:
         '''
+        dx, dy = delta
+
         if self.__IsSelected(selObj):
 
             if isinstance(selObj, Element.CElement):
@@ -168,8 +170,6 @@ class CSelection:
                     wasSmall = True
                 if wasSmall:
                     selObj.SetSize((w, h))
-
-                dx, dy = delta
                 
                 # squares are painted, if exactly one element is selected
                 if len(list(self.GetSelectedElements())) == 1:
@@ -180,14 +180,15 @@ class CSelection:
                 size = config['/Styles/Selection/PointsSize']
                 color = config['/Styles/Selection/PointsColor']
                 selColor = config['/Styles/Selection/RectangleColor']
-                dx, dy = delta
                 for index, i in enumerate(selObj.GetPoints()):
                     canvas.DrawRectangle((i[0] + dx - size//2, i[1] + dy - size//2), (size, size), color)
                 for label in selObj.labels.values():
+                    (x, y) = label.GetPosition()
+                    pos = (x + dx, y + dy)
                     if self.__IsSelected(label):
-                        canvas.DrawRectangle(label.GetPosition(), label.GetSize(), selColor)
+                        canvas.DrawRectangle(pos, label.GetSize(), selColor)
                     else:
-                        canvas.DrawRectangle(label.GetPosition(), label.GetSize(), color)
+                        canvas.DrawRectangle(pos, label.GetSize(), color)
 
     def __DrawElementSquares(self, canvas, dx, dy, selElement):
         for i in self.__GetSquares(selElement):
