@@ -25,7 +25,7 @@ class CDrawingArea(CGuiObject):
 
         # CDiagram(None,_("Start page"))
         self.viewPort = ((0, 0), (0, 0))
-        self.buffer_size = ((0, 0), BUFFER_SIZE)
+        self.virtual_area_bounds = ((0, 0), BUFFER_SIZE)
         self.scale = 1.0
         self.diagram = diagram
 
@@ -73,6 +73,15 @@ class CDrawingArea(CGuiObject):
         @rtype: str
         """
         return self.cursors[self.GetCursor()]
+
+    def GetVirtualAreaBounds(self):
+        """
+        Returns bounds of virtual drawing area.
+
+        @return: Rectangle representing bounds of virtual drawing area. Two tuples (x, y), (width, height).
+        @rtype : tuple
+        """
+        return self.virtual_area_bounds
 
     def GetViewPort(self):
         """
@@ -254,7 +263,7 @@ class CDrawingArea(CGuiObject):
         canvas.SetScale(self.scale)
 
         if changed:
-            self.diagram.Paint(canvas, self.buffer_size)
+            self.diagram.Paint(canvas, self.virtual_area_bounds)
 
         if self.__viewPortShiftDirection != "":
             self.__ShiftViewPort(self.__viewPortShiftDirection)
@@ -443,7 +452,7 @@ class CDrawingArea(CGuiObject):
         posx, posy = viewport[0]
         sizx, sizy = viewport[1]
 
-        ((bposx, bposy), (bsizx, bsizy)) = self.buffer_size
+        ((bposx, bposy), (bsizx, bsizy)) = self.virtual_area_bounds
         (bposx, bposy) = PositionToPhysical((bposx, bposy))
 
         bufferResized = False
@@ -455,9 +464,12 @@ class CDrawingArea(CGuiObject):
             bposx = posx + (sizx - bsizx)//2
             bposy = posy + (sizy - bsizy)//2
 
+            bposx = max(bposx, 0)
+            bposy = max(bposy, 0)
+
             (bposx, bposy) = PositionToLogical((bposx, bposy))
 
-            self.buffer_size = ((bposx, bposy), (bsizx, bsizy))
+            self.virtual_area_bounds = ((bposx, bposy), (bsizx, bsizy))
 
             bufferResized = True
 

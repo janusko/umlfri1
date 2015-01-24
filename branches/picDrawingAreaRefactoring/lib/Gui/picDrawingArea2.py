@@ -285,8 +285,17 @@ class CpicDrawingArea(CWidget):
         pos = self.activeDrawingArea.GetViewPortPos()
         size = self.activeDrawingArea.GetViewPortSize()
 
-        # wgt.draw_drawable(gc, self.buffer, posx - bposx, posy - bposy, 0, 0, sizx, sizy)
-        wgt.draw_drawable(gc, self.buffer, pos[0], pos[1], 0, 0, size[0], size[1])
+        virtual_area_bounds = self.activeDrawingArea.GetVirtualAreaBounds()
+        pos_offset = virtual_area_bounds[0]
+
+        # when virtual drawing area is repositioned (due to view port getting out of the area's bounds)
+        # the "drawing origin" (0, 0) is moved and we can't simply draw buffer on position offseted by view port position
+
+        # it's because draw_drawable() second and third arguments are offsets within source drawable
+        # but after the drawing origin is moved, diagram's elements are offseted (using delta parameter)
+        # and when we offset the buffer, the elements are moved even further (in opposite direction of the scrolling)
+
+        wgt.draw_drawable(gc, self.buffer, pos[0] - pos_offset[0], pos[1] - pos_offset[1], 0, 0, size[0], size[1])
 
     def AdjustScrollBars(self):
         if self.canvas is None:
