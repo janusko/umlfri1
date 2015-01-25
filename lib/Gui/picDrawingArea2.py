@@ -60,10 +60,6 @@ class CpicDrawingArea(CWidget):
                 'mnuResizeHightAndWidth',)
 
     __gsignals__ = {
-        'get-selected':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_PYOBJECT,
-            ()),
-        'set-selected':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE,
-            (gobject.TYPE_PYOBJECT, )),
         'drop-from-treeview': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
     }
 
