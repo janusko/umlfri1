@@ -2,7 +2,7 @@ from select import select
 from lib.Depend.gtk2 import gtk
 from common import CWindow, event
 
-from lib.consts import SCALE_MIN, SCALE_MAX, SCALE_INCREASE, WEB, UNDO_BUTTONS_VISIBLE, SHOW_UNDO_REDO_ITEMS
+from lib.consts import SCALE_MIN, SCALE_MAX, WEB, UNDO_BUTTONS_VISIBLE, SHOW_UNDO_REDO_ITEMS
 from lib.Exceptions import *
 
 import gobject
@@ -528,13 +528,13 @@ class CfrmMain(CWindow):
     @event("cmdZoomOut", "clicked")
     @event("mnuZoomOut","activate")
     def on_mnuZoomOut_click(self, widget):
-        self.picDrawingArea.IncScale(-SCALE_INCREASE)
+        self.picDrawingArea.IncreaseScale()
         self.UpdateMenuSensitivity()
 
     @event("cmdZoomIn", "clicked")
     @event("mnuZoomIn","activate")
     def on_mnuZoomIn_click(self, widget):
-        self.picDrawingArea.IncScale(SCALE_INCREASE)
+        self.picDrawingArea.DecreaseScale()
         self.UpdateMenuSensitivity()
 
     @event("cmdCut", "clicked")

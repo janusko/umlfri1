@@ -129,11 +129,17 @@ class CpicDrawingArea(CWidget):
 
     def BestFitScale(self):
         self.activeDrawingArea.BestFitScale()
-        self.__UpdateScrollBarsPosition()
-        self.Paint()
+        self.__OnScaleChanged()
 
-    def IncScale(self, scale):
-        self.activeDrawingArea.IncScale(scale)
+    def IncreaseScale(self):
+        self.activeDrawingArea.IncreaseScale()
+        self.__OnScaleChanged()
+
+    def DecreaseScale(self):
+        self.activeDrawingArea.DecreaseScale()
+        self.__OnScaleChanged()
+
+    def __OnScaleChanged(self):
         self.__UpdateScrollBarsPosition()
         self.Paint()
 
