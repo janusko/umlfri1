@@ -613,10 +613,8 @@ class CpicDrawingArea(CWidget):
         self.activeDrawingArea.GetSelectionPixbuf(zoom, padding, background)
     
     def SelectObject(self, object):
-        self.activeDiagram.GetSelection().AddToSelection(self.activeDiagram.GetElement(object))
-        y=self.canvas.ToPhysical(self.activeDiagram.GetSelection().GetSelected().next().position)[1]-self.GetAbsolutePos(self.GetWindowSize())[1]/2
-        x=self.canvas.ToPhysical(self.activeDiagram.GetSelection().GetSelected().next().position)[0]-self.GetAbsolutePos(self.GetWindowSize())[0]/2
-        self.SetScrollBarsPosition((x, y))
+        self.activeDrawingArea.SelectObject(object)
+        self.AdjustScrollBars()
         self.Paint()
 
     def __UpdateScrollBarsPosition(self):
