@@ -473,13 +473,7 @@ class CpicDrawingArea(CWidget):
 
     @event("pmShowInProjectView","activate")
     def on_mnuShowInProjectView_click(self, menuItem):
-        selection = tuple(self.activeDiagram.GetSelection().GetSelected())
-        if len(selection) != 1:
-            return
-
-        element = selection[0]
-        if isinstance(element, CElement):
-            self.application.GetBus().emit('show-element-in-treeView',element)
+        self.activeDrawingArea.ShowSelectedObjectInProjectView()
 
     @event("pmOpenSpecification","activate")
     def on_mnuOpenSpecification_click(self, menuItem):
