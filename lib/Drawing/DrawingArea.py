@@ -593,6 +593,14 @@ class CDrawingArea(CGuiObject):
 
         return exporter.GetSelectionPixbuf(self.activeDiagram)
 
+    def SelectObject(self, object):
+        drawingObject = self.diagram.GetElement(object)
+        self.diagram.GetSelection().AddToSelection(drawingObject)
+        (x, y) = drawingObject.GetPosition()
+        (w, h) = self.GetLogicalViewPortSize()
+        (x, y) = (x - w / 2, y - h / 2)
+        self.SetLogicalViewPortPos((x, y))
+
     def __UpdateDrawingBuffer(self, viewport):
         posx, posy = viewport[0]
         sizx, sizy = viewport[1]
