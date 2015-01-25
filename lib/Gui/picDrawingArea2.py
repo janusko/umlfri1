@@ -219,13 +219,6 @@ class CpicDrawingArea(CWidget):
         viewPort = (x, y), size
 
         return viewPort
-
-    def GetDiagramSize(self):
-        tmp = [int(max(i)) for i in zip(self.activeDiagram.GetSize(), self.picDrawingArea.window.get_size())]
-        return tuple(tmp)
-    
-    def GetPos(self):
-        return int(self.picHBar.get_value()), int(self.picVBar.get_value())
         
     def SetScrollBarsPosition(self, pos = (0, 0)):
         self.AdjustScrollBars()
@@ -237,11 +230,6 @@ class CpicDrawingArea(CWidget):
         x,y = self.canvas.ToLogical((posx,posy))
         h,v = self.canvas.ToLogical((self.picHBar.get_value(),self.picVBar.get_value()))
         return int(x+h), int(y+v)
-
-    def GetRelativePos(self, (posx, posy)):
-        x,y = self.canvas.ToPhysical((posx,posy))
-        h,v = (self.picHBar.get_value(),self.picVBar.get_value())
-        return int(-h+x), int(-v+y)
 
     def ToPaint(self, changed = True):
         try:
