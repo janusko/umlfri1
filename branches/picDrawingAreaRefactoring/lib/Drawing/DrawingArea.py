@@ -468,7 +468,6 @@ class CDrawingArea(CGuiObject):
             self.diagram.ShiftElementsToBottom()
         elif (actionName == 'ToTop'):
             self.diagram.ShiftElementsToTop()
-        self.Paint()
 
     def CopySelectedObjects(self):
         """
