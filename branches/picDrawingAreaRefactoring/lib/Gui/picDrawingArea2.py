@@ -1,27 +1,19 @@
-from lib.Commands.Diagrams.DuplicateElements import CDuplicateElementsCommand
 from lib.Depend.gtk2 import gtk
 from lib.Depend.gtk2 import gobject
 from lib.Drawing.DrawingArea import CDrawingArea
 
-from lib.Project import CProject, CProjectNode
-
-from lib.consts import BUFFER_SIZE, SCALE_MIN, SCALE_MAX, SCALE_INCREASE
-from lib.config import config
+from lib.consts import BUFFER_SIZE
 from lib.Distconfig import IMAGES_PATH
 
 from common import CWidget, event
-from lib.Drawing import CDiagram, CElement, CConnection, CConLabelInfo
+from lib.Drawing import CDiagram, CElement, CConnection
 from lib.Drawing.DrawingAreaMouseDownEventArgs import CDrawingAreaMouseDownEventArgs
 from lib.Drawing.DrawingAreaMouseUpEventArgs import CDrawingAreaMouseUpEventArgs
 from lib.Drawing.DrawingAreaKeyPressEventArgs import CDrawingAreaKeyPressEventArgs
 from lib.Drawing.DrawingAreaKeyUpEventArgs import CDrawingAreaKeyUpEventArgs
 from lib.Drawing.DrawingAreaScrollEventArgs import CDrawingAreaScrollEventArgs
 
-from lib.Elements import CElementObject
-from lib.Connections import CConnectionObject
-from lib.Exceptions.UserException import *
 from lib.Drawing.Canvas import CCairoCanvas
-from lib.Drawing import Element
 
 import thread
 import os.path
@@ -470,19 +462,6 @@ class CpicDrawingArea(CWidget):
         self.activeDiagram = diagram
         self.activeDrawingArea = self.diagrams[diagram]
         return self.activeDrawingArea
-
-    #TODO FIX: fix vertical scrolling
-    def __Scroll(self, scrollbar, direction):
-        tmp = scrollbar.get_adjustment()
-        if direction == gtk.gdk.SCROLL_UP:
-            tmp.value = max(tmp.lower, tmp.value - 20)
-        elif direction == gtk.gdk.SCROLL_DOWN:
-            tmp.value = min(tmp.upper - tmp.page_size, tmp.value + 20)
-        elif direction == gtk.gdk.SCROLL_LEFT:
-            tmp.value = max(tmp.lower, tmp.value - 20)
-        elif direction == gtk.gdk.SCROLL_RIGHT:
-            tmp.value = min(tmp.upper - tmp.page_size, tmp.value + 20)
-        scrollbar.set_adjustment(tmp)
 
     def SetFocus(self):
         self.picDrawingArea.grab_focus()
