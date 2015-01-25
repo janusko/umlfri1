@@ -561,3 +561,7 @@ class CtwProjectView(CWidget):
             
             
             self.twProjectView.expand_to_path(iterPath)
+
+    @event('application.bus','show-element-in-treeView')
+    def on_show_element_in_treeView(self, widget, Element):
+        self.ShowElement(Element)

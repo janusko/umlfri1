@@ -65,7 +65,6 @@ class CpicDrawingArea(CWidget):
         'set-selected':  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE,
             (gobject.TYPE_PYOBJECT, )),
         'drop-from-treeview': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
-        'show-element-in-treeView': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
     }
 
     def __init__(self, app, wTree):
@@ -480,7 +479,7 @@ class CpicDrawingArea(CWidget):
 
         element = selection[0]
         if isinstance(element, CElement):
-            self.emit('show-element-in-treeView',element)
+            self.application.GetBus().emit('show-element-in-treeView',element)
 
     @event("pmOpenSpecification","activate")
     def on_mnuOpenSpecification_click(self, menuItem):
