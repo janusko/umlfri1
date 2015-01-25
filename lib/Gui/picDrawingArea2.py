@@ -148,7 +148,7 @@ class CpicDrawingArea(CWidget):
         self.Paint()
 
     def GetScale(self):
-        return self.canvas.GetScale()
+        return self.activeDrawingArea.GetScale()
     
     def SetNormalScale(self):
         self.activeDrawingArea.SetScale(1.0)
