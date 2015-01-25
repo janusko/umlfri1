@@ -935,6 +935,15 @@ class CDrawingArea(CGuiObject):
         # of diagram will be drawn now
         return self.SetPhysicalViewPortPos((x, y))
 
+    def OpenSpecificationForSelectedObject(self):
+        selection = tuple(self.diagram.GetSelection().GetSelected())
+        if len(selection) == 1:
+            element = selection[0]
+            if isinstance(element, CElement) or isinstance(element, CConnection):
+                self.__OpenSpecification(element)
+        elif len(selection) == 0:
+            self.__OpenSpecification(self.diagram)
+
     def OnToolBoxItemSelected(self, item):
         """
         Callback for selected-toolbox-item-changed event (i.e. when item is selected in toolbox on the left).
