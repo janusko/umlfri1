@@ -90,9 +90,6 @@ class CpicDrawingArea(CWidget):
         self.picDrawingArea.realize()
         self.buffer = gtk.gdk.Pixmap(self.picDrawingArea.window, *self.buffer_size[1])
         self.SetDiagram(CDiagram(None,_("Start page")))
-        cmap = self.picDrawingArea.window.get_colormap()
-        self.DragGC = self.picDrawingArea.window.new_gc(foreground = cmap.alloc_color(str(config['/Styles/Drag/RectangleColor'].Invert())),
-            function = gtk.gdk.XOR, line_width = config['/Styles/Drag/RectangleWidth'])
 
         self.TARGETS = [
         ('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_WIDGET, 0),
