@@ -481,6 +481,7 @@ class CpicDrawingArea(CWidget):
     @event("pmShift_ToTop","activate", "ToTop")
     def on_pmShift_SendBack_activate(self, menuItem, actionName):
         self.activeDrawingArea.ShiftElements(actionName)
+        self.Paint()
 
     @event("mnuCtxCopy","activate")
     def ActionCopy(self, widget = None):
