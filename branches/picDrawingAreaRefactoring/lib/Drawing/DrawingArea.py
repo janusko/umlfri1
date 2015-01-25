@@ -944,6 +944,15 @@ class CDrawingArea(CGuiObject):
         elif len(selection) == 0:
             self.__OpenSpecification(self.diagram)
 
+    def ShowSelectedObjectInProjectView(self):
+        selection = tuple(self.diagram.GetSelection().GetSelected())
+        if len(selection) != 1:
+            return
+
+        element = selection[0]
+        if isinstance(element, CElement):
+            self.application.GetBus().emit('show-element-in-treeView',element)
+
     def OnToolBoxItemSelected(self, item):
         """
         Callback for selected-toolbox-item-changed event (i.e. when item is selected in toolbox on the left).
