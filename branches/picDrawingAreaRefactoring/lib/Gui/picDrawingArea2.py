@@ -456,25 +456,6 @@ class CpicDrawingArea(CWidget):
         self.__UpdateScrollBarsPosition()
         self.Paint(changed)
 
-
-        if (event.state & gtk.gdk.CONTROL_MASK):
-            if event.direction == gtk.gdk.SCROLL_UP:
-                self.IncScale(SCALE_INCREASE)
-                return
-            elif event.direction == gtk.gdk.SCROLL_DOWN:
-                self.IncScale(-SCALE_INCREASE)
-                return
-
-        if  event.state & gtk.gdk.SHIFT_MASK :
-            self.__Scroll(self.picHBar, event.direction)
-        elif event.direction == gtk.gdk.SCROLL_LEFT:
-            self.__Scroll(self.picHBar, event.direction)
-        elif event.direction == gtk.gdk.SCROLL_RIGHT:
-            self.__Scroll(self.picHBar, event.direction)
-        else:
-            self.__Scroll(self.picVBar, event.direction)
-        self.Paint(False)
-
     @event("picDrawingArea", "focus-out-event")
     def on_picDrawingArea_focus_out_event(self, widget, event):
         self.activeDrawingArea.OnLostFocus()
