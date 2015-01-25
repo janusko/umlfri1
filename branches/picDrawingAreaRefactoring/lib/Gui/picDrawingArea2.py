@@ -83,7 +83,6 @@ class CpicDrawingArea(CWidget):
         CWidget.__init__(self, app, wTree)
         self.__invalidated = False
         self.pressedKeys = set()
-        self.scale = 1.0
         self.buffer_size = ((0, 0), BUFFER_SIZE)
         self.diagrams = dict()
         self.activeDiagram = None
@@ -158,7 +157,6 @@ class CpicDrawingArea(CWidget):
             
     def Redraw(self):
         self.canvas = CCairoCanvas(self.picDrawingArea, self.buffer, self.application.GetProject().GetMetamodel().GetStorage())
-        self.canvas.SetScale(self.scale)
 
     def GetDiagram(self):
         return self.activeDiagram
