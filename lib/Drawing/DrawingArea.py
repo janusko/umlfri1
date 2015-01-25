@@ -6,6 +6,7 @@ from lib.Drawing.DrawingAreaKeyPressEventArgs import KEY_A, KEY_DELETE, KEY_ESCA
 from lib.Elements import CElementObject
 from lib.Connections import CConnectionObject
 from lib.Drawing import CDiagram, CConnection, CElement, CConLabelInfo
+from lib.Drawing.DiagramExporter import CDiagramExporter
 from lib.Drawing.DrawingHelper import PositionToPhysical, PositionToLogical
 
 from lib.Gui.common import CGuiObject
@@ -576,6 +577,13 @@ class CDrawingArea(CGuiObject):
 
     def PaintSelected(self, canvas):
         self.diagram.PaintSelected(canvas)
+
+    def Export(self, filename, export_type, zoom, padding, background=None):
+        exporter = CDiagramExporter(self.application.GetProject().GetMetamodel().GetStorage(), export_type)
+        exporter.SetZoom(zoom)
+        exporter.SetPadding(padding)
+        exporter.SetBackground(background)
+        exporter.ExportDiagram(self.diagram, filename)
 
     def __UpdateDrawingBuffer(self, viewport):
         posx, posy = viewport[0]
