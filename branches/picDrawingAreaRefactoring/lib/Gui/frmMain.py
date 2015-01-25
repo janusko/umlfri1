@@ -635,10 +635,6 @@ class CfrmMain(CWindow):
         self.mnuImport.set_sensitive(toImport)
         self.mnuExportToFile.set_sensitive(toExport)
 
-    @event("picDrawingArea", "get-selected")
-    def on_picDrawingArea_get_selected(self, widget):
-        return self.tbToolBox.GetSelected()
-
     @event("twProjectView", "close-diagram")
     def on_remove_diagram(self, widget, diagram):
         self.nbTabs.CloseTab(diagram)
@@ -656,10 +652,6 @@ class CfrmMain(CWindow):
     @event("nbTabs","show-diagram-in-project")
     def on_show_diagram_in_project(self, widget, diagram):
         self.twProjectView.ShowDiagram(diagram)
-
-    @event("picDrawingArea", "set-selected")
-    def on_picDrawingArea_set_selected(self, widget, selected):
-        self.tbToolBox.SetSelected(selected)
 
     @event("application.bus", "selected-items")
     def on_picDrawingArea_selected_item(self, widget, selected):
