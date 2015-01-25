@@ -2,6 +2,7 @@ from lib.Base import CBaseObject
 from lib.Commands.Diagrams.DuplicateElements import CDuplicateElementsCommand
 from lib.Drawing.DrawingAreaKeyPressEventArgs import KEY_A, KEY_DELETE, KEY_ESCAPE, KEY_SPACE, KEY_RIGHT, KEY_LEFT, \
     KEY_UP, KEY_DOWN
+from lib.Drawing.DrawingAreaScrollEventArgs import SCROLL_LEFT, SCROLL_UP, SCROLL_RIGHT, SCROLL_DOWN
 
 from lib.Elements import CElementObject
 from lib.Connections import CConnectionObject
@@ -882,7 +883,39 @@ class CDrawingArea(CGuiObject):
             self.dnd = None
 
     def OnScroll(self, args):
-        pass
+        if args.IsControlPressed():
+            if args.IsScrollingUp():
+                self.IncScale(SCALE_INCREASE)
+                return True
+            elif args.IsScrollingDown():
+                self.IncScale(-SCALE_INCREASE)
+                return True
+
+        direction = args.direction
+        inverted = args.IsShiftPressed()
+        if inverted:
+            if direction == SCROLL_DOWN:
+                direction = SCROLL_RIGHT
+            elif direction == SCROLL_UP:
+                direction = SCROLL_LEFT
+                
+        self.__Scroll(direction)
+
+        return False
+
+    def __Scroll(self, direction):
+        (x, y) = self.GetPhysicalViewPortPos()
+
+        if direction == SCROLL_LEFT:
+            x -= 10
+        elif direction == SCROLL_UP:
+            y -= 10
+        elif direction == SCROLL_RIGHT:
+            x += 10
+        elif direction == SCROLL_DOWN:
+            y += 10
+
+        self.SetPhysicalViewPortPos((x, y))
 
     def OnToolBoxItemSelected(self, item):
         """
