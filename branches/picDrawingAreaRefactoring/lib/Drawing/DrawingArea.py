@@ -596,7 +596,10 @@ class CDrawingArea(CGuiObject):
     def SelectObject(self, object):
         drawingObject = self.diagram.GetElement(object)
         self.diagram.GetSelection().AddToSelection(drawingObject)
-        (x, y) = drawingObject.GetPosition()
+        self.CenterOnObject(drawingObject)
+
+    def CenterOnObject(self, object):
+        (x, y) = object.GetPosition()
         (w, h) = self.GetLogicalViewPortSize()
         (x, y) = (x - w / 2, y - h / 2)
         self.SetLogicalViewPortPos((x, y))
