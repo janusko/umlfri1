@@ -881,6 +881,9 @@ class CDrawingArea(CGuiObject):
             self.diagram.MoveSelection(delta)
             self.dnd = None
 
+    def OnScroll(self, args):
+        pass
+
     def OnToolBoxItemSelected(self, item):
         """
         Callback for selected-toolbox-item-changed event (i.e. when item is selected in toolbox on the left).
