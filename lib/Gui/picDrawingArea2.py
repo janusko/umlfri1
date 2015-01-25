@@ -15,6 +15,7 @@ from lib.Drawing.DrawingAreaMouseDownEventArgs import CDrawingAreaMouseDownEvent
 from lib.Drawing.DrawingAreaMouseUpEventArgs import CDrawingAreaMouseUpEventArgs
 from lib.Drawing.DrawingAreaKeyPressEventArgs import CDrawingAreaKeyPressEventArgs
 from lib.Drawing.DrawingAreaKeyUpEventArgs import CDrawingAreaKeyUpEventArgs
+from lib.Drawing.DrawingAreaScrollEventArgs import CDrawingAreaScrollEventArgs
 
 from lib.Elements import CElementObject
 from lib.Connections import CConnectionObject
@@ -33,7 +34,7 @@ class Record(object): pass
 class CpicDrawingArea(CWidget):
     name = 'picDrawingArea'
     widgets = ('picDrawingArea', 'picEventBox', 'picVBar', 'picHBar',
-            'pMenuShift', 
+            'pMenuShift',
                 'mnuCtxCut',
                 'mnuCtxCopy',
                 'mnuCtxPaste',
@@ -42,7 +43,7 @@ class CpicDrawingArea(CWidget):
                 'mnuCtxShiftDelete',
                 'pmShowInProjectView',
                 'mnuChangeSourceTarget',
-                    
+
                     'pmShift_SendBack',
                     'pmShift_BringForward',
                     'pmShift_ToBottom',
@@ -102,7 +103,7 @@ class CpicDrawingArea(CWidget):
         self.AdjustScrollBars()
         self.cursorImages = {None: None}
         self.__invalidated = False
-    
+
     def __OpenSpecification(self, obj):
         frmProps = self.application.GetWindow('frmProperties')
         frmProps.SetParent(self.application.GetWindow('frmMain'))
@@ -146,12 +147,12 @@ class CpicDrawingArea(CWidget):
 
     def GetScale(self):
         return self.activeDrawingArea.GetScale()
-    
+
     def SetNormalScale(self):
         self.activeDrawingArea.SetScale(1.0)
         self.__UpdateScrollBarsPosition()
         self.Paint()
-            
+
     def Redraw(self):
         self.canvas = CCairoCanvas(self.picDrawingArea, self.buffer, self.application.GetProject().GetMetamodel().GetStorage())
 
@@ -216,11 +217,18 @@ class CpicDrawingArea(CWidget):
         viewPort = (x, y), size
 
         return viewPort
-        
+
     def SetScrollBarsPosition(self, pos = (0, 0)):
         self.AdjustScrollBars()
-        self.picHBar.set_value(pos[0])        
+
+        # setting scrollbars' positions need to be done atomically
+
+        self.picVBar.handler_block_by_func(self.on_picVBar_value_changed)
+        self.picHBar.handler_block_by_func(self.on_picHBar_value_changed)
+        self.picHBar.set_value(pos[0])
         self.picVBar.set_value(pos[1])
+        self.picVBar.handler_unblock_by_func(self.on_picVBar_value_changed)
+        self.picHBar.handler_unblock_by_func(self.on_picHBar_value_changed)
 
     def GetAbsolutePos(self, (posx, posy)):
         #((bposx, bposy), (bsizx, bsizy)) = self.buffer_size
@@ -237,7 +245,7 @@ class CpicDrawingArea(CWidget):
                 gobject.timeout_add(15, self.Paint)
         finally:
             self.paintlock.release()
-        
+
 
     def Paint(self, changed = True):
         if not self.picDrawingArea.window or not self.canvas:
@@ -282,7 +290,7 @@ class CpicDrawingArea(CWidget):
 
     def AdjustScrollBars(self):
         dasx, dasy = self.activeDrawingArea.GetDiagramPhysicalSize()
-                
+
         wisx, wisy = self.GetWindowSize()
         tmp = self.picHBar.get_adjustment()
         tmp.upper = dasx
@@ -293,22 +301,22 @@ class CpicDrawingArea(CWidget):
         tmp.upper = dasy
         tmp.page_size = wisy
         self.picVBar.set_adjustment(tmp)
-    
+
     @event("mnuCtxDelete","activate")
     def DeleteElements(self, widget = None):
         self.activeDrawingArea.DeleteSelectedObjects()
         self.Paint()
-    
+
     def UpdateMenuSensitivity(self, project, diagram, element, topElement, connection):
         self.pmShowInProjectView.set_sensitive(element)
         for item in self.pMenuShift.get_children():
             item.set_sensitive(element)
-            
+
         self.mnuCtxPaste.set_sensitive(
             diagram and not self.application.GetClipboard().IsEmpty()
             and not bool(set(i.GetObject() for i in self.activeDiagram.GetElements()).intersection(set(i.GetObject() for i in self.application.GetClipboard().GetContent())))
         )
-        
+
         selection = list(self.activeDiagram.GetSelection().GetSelectedSet())
         self.pmOpenSpecification.set_sensitive(len(selection) <= 1)
         self.mnuChangeSourceTarget.set_sensitive(connection and len(selection) == 1)
@@ -320,9 +328,9 @@ class CpicDrawingArea(CWidget):
         self.mnuCtxCut.set_sensitive(element)
         self.mnuCtxDuplicate.set_sensitive(element)
         self.mnuCtxDelete.set_sensitive(connection or element)
-                
+
         self.mnuCtxShiftDelete.set_sensitive((connection or element) and not topElement)
-                
+
     @event('application.bus', 'position-change', False)
     @event('application.bus', 'position-change-from-plugin', True)
     @event('application.bus', 'many-position-change', False)
@@ -346,7 +354,7 @@ class CpicDrawingArea(CWidget):
 
     @event("picEventBox", "button-press-event")
     def on_picEventBox_button_press_event(self, widget, event):
-        self.picDrawingArea.grab_focus() 
+        self.picDrawingArea.grab_focus()
         pos = (event.x, event.y)
 
         isDoubleClick = event.type == gtk.gdk._2BUTTON_PRESS
@@ -377,7 +385,7 @@ class CpicDrawingArea(CWidget):
         self.__UpdateCursor()
         self.AdjustScrollBars()
         self.Paint()
-    
+
     @event("picEventBox", "key-press-event")
     def on_key_press_event(self, widget, event):
         if (event.keyval in self.pressedKeys and
@@ -395,7 +403,7 @@ class CpicDrawingArea(CWidget):
         self.Paint()
 
         return True
-    
+
     @event("picEventBox", "key-release-event")
     def on_key_release_event(self, widget, event):
 
@@ -415,7 +423,7 @@ class CpicDrawingArea(CWidget):
         self.activeDrawingArea.OnMouseMove(pos)
         self.__UpdateScrollBarsPosition()
         self.Paint()
-    
+
     @event("picEventBox","drag-data-received")
     def on_drag_data_received(self, widget, drag_context, x, y, selection, targettype, timestamp):
         position = self.GetAbsolutePos((x, y))
@@ -442,13 +450,20 @@ class CpicDrawingArea(CWidget):
 
     @event("picEventBox", "scroll-event")
     def on_picEventBox_scroll_event(self, widget, event):
+        eventArgs = CDrawingAreaScrollEventArgs(event.direction, event.state)
+
+        changed = self.activeDrawingArea.OnScroll(eventArgs)
+        self.__UpdateScrollBarsPosition()
+        self.Paint(changed)
+
+
         if (event.state & gtk.gdk.CONTROL_MASK):
             if event.direction == gtk.gdk.SCROLL_UP:
                 self.IncScale(SCALE_INCREASE)
                 return
             elif event.direction == gtk.gdk.SCROLL_DOWN:
                 self.IncScale(-SCALE_INCREASE)
-                return           
+                return
 
         if  event.state & gtk.gdk.SHIFT_MASK :
             self.__Scroll(self.picHBar, event.direction)
@@ -487,10 +502,10 @@ class CpicDrawingArea(CWidget):
         elif direction == gtk.gdk.SCROLL_RIGHT:
             tmp.value = min(tmp.upper - tmp.page_size, tmp.value + 20)
         scrollbar.set_adjustment(tmp)
-    
+
     def SetFocus(self):
         self.picDrawingArea.grab_focus()
-   
+
     @event("pmShowInProjectView","activate")
     def on_mnuShowInProjectView_click(self, menuItem):
         selection = tuple(self.activeDiagram.GetSelection().GetSelected())
@@ -500,7 +515,7 @@ class CpicDrawingArea(CWidget):
         element = selection[0]
         if isinstance(element, CElement):
             self.emit('show-element-in-treeView',element)
-                    
+
     @event("pmOpenSpecification","activate")
     def on_mnuOpenSpecification_click(self, menuItem):
         selection = tuple(self.activeDiagram.GetSelection().GetSelected())
@@ -510,29 +525,29 @@ class CpicDrawingArea(CWidget):
                 self.__OpenSpecification(element)
         elif len(selection) == 0:
             self.__OpenSpecification(self.activeDiagram)
-    
+
     @event("pmShift_SendBack","activate","SendBack")
     @event("pmShift_BringForward","activate","BringForward")
     @event("pmShift_ToBottom","activate","ToBottom")
     @event("pmShift_ToTop","activate", "ToTop")
     def on_pmShift_SendBack_activate(self, menuItem, actionName):
         self.activeDrawingArea.ShiftElements(actionName)
-    
+
     @event("mnuCtxCopy","activate")
     def ActionCopy(self, widget = None):
         self.activeDrawingArea.CopySelectedObjects()
         self.Paint()
-    
+
     @event("mnuCtxCut", "activate")
     def ActionCut(self, widget = None):
         self.activeDrawingArea.CutSelectedObjects()
         self.Paint()
-    
+
     @event("mnuCtxPaste","activate")
     def ActionPaste(self, widget = None):
         self.activeDrawingArea.PasteObjects()
         self.Paint()
-    
+
     @event("mnuCtxDuplicate", "activate")
     def ActionDuplicate(self, widget=None):
         self.activeDrawingArea.DuplicateSelectedObjects()
@@ -542,12 +557,12 @@ class CpicDrawingArea(CWidget):
     def onMnuCtxShiftDelteActivate(self, menuItem):
         self.activeDrawingArea.ShiftDeleteSelectedObjects()
         self.Paint()
-        
+
     @event("mnuChangeSourceTarget","activate")
     def on_mnuChangeSourceTarget_click(self,widget):
         self.activeDrawingArea.ChangeConnectionSourceTarget()
         self.Paint()
-    
+
     @event("mnuAlignLeftMost","activate", True, True, False)
     @event("mnuAlignLeftCurrent","activate", True, True, True)
     @event("mnuAlignRightMost","activate", True, False, False)
@@ -559,49 +574,49 @@ class CpicDrawingArea(CWidget):
     def on_mnuAlign_activate(self, menuItem, horiz, lower, defaultE):
         self.activeDrawingArea.Align(horiz, lower, defaultE)
         self.Paint()
-    
+
     @event("mnuAlignCenterHor","activate", True, True)
     @event("mnuAlignCenterVer","activate", False, True)
     def on_mnuAlignCenter(self, widget, isHorizontal, alignToSelectedElement):
         self.activeDrawingArea.AlignCenter(isHorizontal, alignToSelectedElement)
         self.Paint()
-    
+
     @event("mnuResizeHight","activate")
     def on_mnuResizeHight(self, menuItem):
         self.activeDrawingArea.ResizeHeight()
         self.Paint()
-        
+
     @event("mnuResizeWidth","activate")
     def on_mnuResizeWidth(self, menuItem):
         self.activeDrawingArea.ResizeWidth()
         self.Paint()
-    
+
     @event("mnuResizeHightAndWidth","activate")
     def on_mnuResizeWidthAndHight(self, menuItem):
         self.activeDrawingArea.ResizeWidthAndHeight()
         self.Paint()
-    
+
     @event("mnuResizeByMaximalElement","activate")
     def on_mnuResizeByMaximalElement(self, menuItem):
         self.activeDrawingArea.ResizeByMaximalElement()
         self.Paint()
-        
+
     @event("mnuResizeByMinimalElement","activate")
     def on_mnuResizeByMinimalElement(self, menuItem):
         self.activeDrawingArea.ResizeByMinimalElement()
         self.Paint()
-    
+
     @event("mnuSpaceEvenlyHorizontally","activate", True)
     @event("mnuSpaceEvenlyVertically","activate", False)
     def on_mnuMakeSpacing(self, widget, isHorizontal):
         self.activeDrawingArea.MakeSpacing(isHorizontal)
         self.Paint()
-    
+
     @event('mnuSnapSelectGrid', 'activate')
     def on_mnuSnapSelected(self, widget):
         self.activeDrawingArea.SnapSelected()
         self.Paint()
-    
+
     def HasFocus(self):
         return self.picDrawingArea.is_focus()
 
@@ -611,7 +626,7 @@ class CpicDrawingArea(CWidget):
 
     def GetSelectionPixbuf(self, zoom, padding, background):
         self.activeDrawingArea.GetSelectionPixbuf(zoom, padding, background)
-    
+
     def SelectObject(self, object):
         self.activeDrawingArea.SelectObject(object)
         self.AdjustScrollBars()
@@ -622,7 +637,7 @@ class CpicDrawingArea(CWidget):
 
     def DeselectAll(self):
         self.activeDiagram.GetSelection().DeselectAll()
-    
+
     @event('application.bus', 'connection-changed')
     @event('application.bus', 'element-changed')
     def ObjectChanged(self, bus, params):
