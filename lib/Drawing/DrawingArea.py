@@ -107,7 +107,6 @@ class CDrawingArea(CGuiObject):
         @return: Rectangle representing current logical view port. Two tuples (x, y), (width, height).
         @rtype: tuple
         """
-
         pos, size = self.GetPhysicalViewPort()
 
         pos = self.TupleToLogical(pos)
@@ -122,7 +121,7 @@ class CDrawingArea(CGuiObject):
         @type viewPort: tuple
 
         @rtype: bool
-        @return: True, if drawing area needs to be resized, False if not.
+        @return: True, if virtual drawing area bounds were changed, False if not.
         """
         (pos, size) = viewPort
         pos = self.TupleToPhysical(pos)
@@ -147,7 +146,7 @@ class CDrawingArea(CGuiObject):
         @type viewPort: tuple
 
         @rtype: bool
-        @return: True, if drawing area needs to be resized, False if not.
+        @return: True, if virtual drawing area bounds were changed, False if not.
         """
 
         (x, y), (w, h) = viewPort
@@ -181,9 +180,12 @@ class CDrawingArea(CGuiObject):
 
         @param pos: New logical view port position
         @type pos: tuple
+
+        @rtype: bool
+        @return: True, if virtual drawing area bounds were changed, False if not.
         """
         size = self.GetLogicalViewPortSize()
-        self.SetLogicalViewPort((pos, size))
+        return self.SetLogicalViewPort((pos, size))
 
     def GetPhysicalViewPortPos(self):
         """
@@ -202,9 +204,12 @@ class CDrawingArea(CGuiObject):
 
         @param pos: New physical view port position
         @type pos: tuple
+
+        @rtype: bool
+        @return: True, if virtual drawing area bounds were changed, False if not.
         """
         size = self.GetPhysicalViewPortSize()
-        self.SetPhysicalViewPort((pos, size))
+        return self.SetPhysicalViewPort((pos, size))
 
     def GetLogicalViewPortSize(self):
         """
@@ -899,9 +904,7 @@ class CDrawingArea(CGuiObject):
             elif direction == SCROLL_UP:
                 direction = SCROLL_LEFT
                 
-        self.__Scroll(direction)
-
-        return False
+        return self.__Scroll(direction)
 
     def __Scroll(self, direction):
         (x, y) = self.GetPhysicalViewPortPos()
@@ -915,7 +918,10 @@ class CDrawingArea(CGuiObject):
         elif direction == SCROLL_DOWN:
             y += 10
 
-        self.SetPhysicalViewPortPos((x, y))
+        # when moving view port around, virtual drawing area bounds might be changed
+        # that's when the whole diagram has to be redrawn, because a different part
+        # of diagram will be drawn now
+        return self.SetPhysicalViewPortPos((x, y))
 
     def OnToolBoxItemSelected(self, item):
         """
