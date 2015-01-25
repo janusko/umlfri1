@@ -484,13 +484,7 @@ class CpicDrawingArea(CWidget):
 
     @event("pmOpenSpecification","activate")
     def on_mnuOpenSpecification_click(self, menuItem):
-        selection = tuple(self.activeDiagram.GetSelection().GetSelected())
-        if len(selection) == 1:
-            element = selection[0]
-            if isinstance(element, CElement) or isinstance(element, CConnection):
-                self.__OpenSpecification(element)
-        elif len(selection) == 0:
-            self.__OpenSpecification(self.activeDiagram)
+        self.activeDrawingArea.OpenSpecificationForSelectedObject()
 
     @event("pmShift_SendBack","activate","SendBack")
     @event("pmShift_BringForward","activate","BringForward")
