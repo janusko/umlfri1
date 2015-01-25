@@ -585,6 +585,14 @@ class CDrawingArea(CGuiObject):
         exporter.SetBackground(background)
         exporter.ExportDiagram(self.diagram, filename)
 
+    def GetSelectionPixbuf(self, zoom, padding, background):
+        exporter = CDiagramExporter(self.application.GetProject().GetMetamodel().GetStorage(), 'pixbuf')
+        exporter.SetZoom(zoom)
+        exporter.SetPadding(padding)
+        exporter.SetBackground(background)
+
+        return exporter.GetSelectionPixbuf(self.activeDiagram)
+
     def __UpdateDrawingBuffer(self, viewport):
         posx, posy = viewport[0]
         sizx, sizy = viewport[1]
