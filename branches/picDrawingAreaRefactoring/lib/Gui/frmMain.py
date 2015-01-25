@@ -772,10 +772,6 @@ class CfrmMain(CWindow):
         else:
             pass
 
-    @event("picDrawingArea","show-element-in-treeView")
-    def on_show_element_in_treeView(self, widget, Element):
-        self.twProjectView.ShowElement(Element)
-
     #Z-Order
     # 'mmShift_SendBack', 'mmShift_BringForward', 'mmShift_ToBottom', 'mmShift_ToTop'
     @event("mmShift_SendBack", "activate")
