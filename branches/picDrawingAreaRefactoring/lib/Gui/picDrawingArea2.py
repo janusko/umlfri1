@@ -1,7 +1,6 @@
 from lib.Commands.Diagrams.DuplicateElements import CDuplicateElementsCommand
 from lib.Depend.gtk2 import gtk
 from lib.Depend.gtk2 import gobject
-from lib.Drawing.DiagramExporter import CDiagramExporter
 from lib.Drawing.DrawingArea import CDrawingArea
 
 from lib.Project import CProject, CProjectNode
@@ -624,11 +623,7 @@ class CpicDrawingArea(CWidget):
         return self.picDrawingArea.is_focus()
 
     def Export(self, filename, export_type, zoom, padding, background=None):
-        exporter = CDiagramExporter(self.application.GetProject().GetMetamodel().GetStorage(), export_type)
-        exporter.SetZoom(zoom)
-        exporter.SetPadding(padding)
-        exporter.SetBackground(background)
-        exporter.ExportDiagram(self.activeDiagram, filename)
+        self.activeDrawingArea.Export(filename, export_type, zoom, padding, background)
         self.Paint()
 
     def GetSelectionPixbuf(self, zoom, padding, background):
