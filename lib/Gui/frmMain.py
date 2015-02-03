@@ -197,21 +197,15 @@ class CfrmMain(CWindow):
             else:
                 self.application.GetProject().LoadProject(filenameOrTemplate, copy)
         except ProjectError as e:
-            CErrorDialog(self.form, str(e)).run()
+            self.__ClearApplication(filenameOrTemplate, copy)
+            return CErrorDialog(self.form, str(e)).run()
         except Exception, ex:
-            if copy is not None:
-                self.application.GetRecentFiles().RemoveFile(filenameOrTemplate)
-            self.application.ProjectDelete()
-            self.nbTabs.CloseAll()
-            self.twProjectView.ClearProjectView()
-            self.ReloadTitle()
-            self.nbProperties.Fill(None)
-            self.UpdateMenuSensitivity(project = False)
-
+            self.__ClearApplication(filenameOrTemplate, copy)
+            '''
             if __debug__:
                 raise
-
-            return CWarningDialog(self.form, _('Error opening file') + '\n' + _(str(ex))).run()
+            '''
+            return CErrorDialog(self.form, _('Error opening file') + '\n' + _(str(ex))).run()
 
         self.ReloadTitle()
         self.twProjectView.Redraw(True)
@@ -226,6 +220,23 @@ class CfrmMain(CWindow):
         self.twProjectView.twProjectView.grab_focus()
         self.application.GetCommands().Clear()
         self.on_undo_redo_action(None, 'start')
+
+    def __ClearApplication(self, filenameOrTemplate, copy = None):
+        """
+        It sets main application for clear using (for loading new project). It's closing last loaded project, closing all tabs...
+        It can be called, when exceptions were threw during loading project.
+        :param filenameOrTemplate:
+        :param copy:
+        :return:
+        """
+        if copy is not None:
+            self.application.GetRecentFiles().RemoveFile(filenameOrTemplate)
+        self.application.ProjectDelete()
+        self.nbTabs.CloseAll()
+        self.twProjectView.ClearProjectView()
+        self.ReloadTitle()
+        self.nbProperties.Fill(None)
+        self.UpdateMenuSensitivity(project = False)
 
     def PaintAll(self):
         if not self.nbTabs.IsStartPageActive():
