@@ -141,6 +141,12 @@ class CpicDrawingArea(CWidget):
     def GetScale(self):
         return self.activeDrawingArea.GetScale()
 
+    def CanIncreaseScale(self):
+        return self.activeDrawingArea.CanIncreaseScale()
+
+    def CanDecreaseScale(self):
+        return self.activeDrawingArea.CanDecreaseScale()
+
     def SetNormalScale(self):
         self.activeDrawingArea.SetScale(1.0)
         self.__UpdateScrollBarsPosition()
