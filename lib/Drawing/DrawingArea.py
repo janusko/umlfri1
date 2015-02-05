@@ -358,6 +358,24 @@ class CDrawingArea(CGuiObject):
         """
         self.IncScale(-SCALE_INCREASE)
 
+    def CanIncreaseScale(self):
+        """
+        Determines, if scale can be increased using default value.
+
+        @rtype : bool
+        @return: True, if the scale can be increased using default value, False otherwise.
+        """
+        return self.scale + 0.00001 < SCALE_MAX
+
+    def CanDecreaseScale(self):
+        """
+        Determines, if scale can be decreased using default value.
+
+        @rtype : bool
+        @return: True, if the scale can be decreased using default value, False otherwise.
+        """
+        return self.scale - 0.00001 > SCALE_MIN
+
     def IncScale(self, scale):
         """
         Increases or decreases scale (zoom) based on @scale.

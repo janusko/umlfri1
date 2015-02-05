@@ -2,7 +2,7 @@ from select import select
 from lib.Depend.gtk2 import gtk
 from common import CWindow, event
 
-from lib.consts import SCALE_MIN, SCALE_MAX, WEB, UNDO_BUTTONS_VISIBLE, SHOW_UNDO_REDO_ITEMS
+from lib.consts import WEB, UNDO_BUTTONS_VISIBLE, SHOW_UNDO_REDO_ITEMS
 from lib.Exceptions import *
 
 import gobject
@@ -143,8 +143,8 @@ class CfrmMain(CWindow):
         if not self.application.GetClipboard().IsEmpty():
              changes += 1
 
-        zoomin = diagram and (self.picDrawingArea.GetScale()+0.00001) < SCALE_MAX
-        zoomout = diagram and (self.picDrawingArea.GetScale()-0.00001) > SCALE_MIN
+        zoomin = diagram and self.picDrawingArea.CanIncreaseScale()
+        zoomout = diagram and self.picDrawingArea.CanDecreaseScale()
 
         changes += zoomin != self.__sensitivity_project[3]
         changes += zoomout != self.__sensitivity_project[4]
