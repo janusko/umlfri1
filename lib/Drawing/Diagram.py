@@ -345,7 +345,8 @@ class CDiagram(CBaseObject):
         """
         Paints diagram onto canvas. Paints only elements and connection, which fall into specified view port.
 
-        @param canvas:
+        @param canvas: Canvas on which its being drawn
+        @type  canvas: L{CCairoCanvas<lib.Drawing.Canvas.CairoCanvas.CCairoCanvas>}
         @param viewport:
         """
 
@@ -373,13 +374,13 @@ class CDiagram(CBaseObject):
         for e in self.elements:
             ((ex1, ey1), (ex2, ey2)) = e.GetSquare()
             if not (ex2 < x or x + w < ex1 or ey2 < y or y + h < ey1):
-                e.Paint(canvas, delta = (-x, -y))
-                self.selection.PaintSelection(canvas, e, delta = (-x, -y))
+                e.Paint(canvas)
+                self.selection.PaintSelection(canvas, e)
         for c in self.connections:
             ((ex1, ey1), (ex2, ey2)) = c.GetSquare()
             if not (ex2 < x or x + w < ex1 or ey2 < y or y + h < ey1):
-                c.Paint(canvas, delta = (-x, -y))
-                self.selection.PaintSelection(canvas, c, delta = (-x, -y))
+                c.Paint(canvas)
+                self.selection.PaintSelection(canvas, c)
             
     def PaintFull(self, canvas):
         """Paints the whole diagram. Used

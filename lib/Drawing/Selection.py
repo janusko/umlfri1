@@ -139,41 +139,38 @@ class CSelection:
 
         return False
 
-    def PaintSelection(self, canvas, selObj, delta = (0, 0)):
+    def PaintSelection(self, canvas, selObj):
         '''
         Draws selection for selObj, if selObj is located in self.selected.
 
-        @param canvas:
+        @param canvas: Canvas on which its being drawn
+        @type  canvas: L{CCairoCanvas<lib.Drawing.Canvas.CairoCanvas.CCairoCanvas>}
         @param selObj: instance of CEelement, CConnection or CConLabelInfo
-        @param delta:
         '''
-        dx, dy = delta
-
         if self.__IsSelected(selObj):
 
             if isinstance(selObj, Element.CElement):
-                x, y = selObj.GetPosition()
-                w, h = selObj.GetSize()
+                pos = selObj.GetPosition()
+                size = selObj.GetSize()
 
                 # squares are painted, if exactly one element is selected
                 if len(list(self.GetSelectedElements())) == 1:
-                    self.__DrawElementSquares(canvas, dx, dy, list(self.GetSelectedElements())[0])
+                    self.__DrawElementSquares(canvas, list(self.GetSelectedElements())[0])
 
-                canvas.DrawRectangle((x + dx, y + dy), (w, h), fg = config['/Styles/Selection/RectangleColor'], line_width = config['/Styles/Selection/RectangleWidth'])
+                canvas.DrawRectangle(pos, size, fg = config['/Styles/Selection/RectangleColor'], line_width = config['/Styles/Selection/RectangleWidth'])
             elif isinstance(selObj, Connection.CConnection):
                 size = config['/Styles/Selection/PointsSize']
                 color = config['/Styles/Selection/PointsColor']
                 selColor = config['/Styles/Selection/RectangleColor']
                 for index, i in enumerate(selObj.GetPoints()):
-                    canvas.DrawRectangle((i[0] + dx - size//2, i[1] + dy - size//2), (size, size), color)
+                    canvas.DrawRectangle((i[0] - size//2, i[1] - size//2), (size, size), color)
                 for label in selObj.labels.values():
-                    (x, y) = label.GetPosition()
-                    pos = (x + dx, y + dy)
+                    pos = label.GetPosition()
                     if self.__IsSelected(label):
                         canvas.DrawRectangle(pos, label.GetSize(), selColor)
                     else:
                         canvas.DrawRectangle(pos, label.GetSize(), color)
 
-    def __DrawElementSquares(self, canvas, dx, dy, selElement):
+    def __DrawElementSquares(self, canvas, selElement):
         for i in self.__GetSquares(selElement):
-            canvas.DrawRectangle((i[1][0] + dx, i[1][1] + dy), i[2], None, config['/Styles/Selection/PointsColor'])
+            canvas.DrawRectangle((i[1][0], i[1][1]), i[2], None, config['/Styles/Selection/PointsColor'])

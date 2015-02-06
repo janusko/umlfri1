@@ -416,6 +416,8 @@ class CDrawingArea(CGuiObject):
         """
 
         canvas.SetScale(self.scale)
+        (dx, dy) = self.virtualAreaBounds[0]
+        canvas.MoveBase(-dx, dy)
 
         if changed:
 
@@ -1175,12 +1177,12 @@ class CDrawingArea(CGuiObject):
         self.__DrawLines(canvas, self.__oldPoints, self.dragForegroundColor, self.dragLineWidth)
 
     def __DrawRectangle(self, canvas, (pos, size), foregroundColor, backgroundColor, lineWidth):
-        offsetPos = self.__OffsetLogicalPointOnVirtualArea(pos)
-        canvas.DrawRectangle(offsetPos, size, foregroundColor, backgroundColor, lineWidth)
+        # offsetPos = self.__OffsetLogicalPointOnVirtualArea(pos)
+        canvas.DrawRectangle(pos, size, foregroundColor, backgroundColor, lineWidth)
 
     def __DrawLines(self, canvas, points, foregroundColor, line_width):
-        offsetPoints = (self.__OffsetLogicalPointOnVirtualArea(p) for p in points)
-        canvas.DrawLines(offsetPoints, foregroundColor, line_width)
+        # offsetPoints = (self.__OffsetLogicalPointOnVirtualArea(p) for p in points)
+        canvas.DrawLines(points, foregroundColor, line_width)
 
     def __OffsetLogicalPointOnVirtualArea(self, (x, y)):
         (bX, bY) = self.TupleToLogical(self.virtualAreaBounds[0])
