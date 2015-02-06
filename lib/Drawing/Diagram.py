@@ -372,12 +372,12 @@ class CDiagram(CBaseObject):
                         num+=1
         for e in self.elements:
             ((ex1, ey1), (ex2, ey2)) = e.GetSquare()
-            if not (ex2 < x or x + w < ex1 or ey2 < y or y + w < ey1):
+            if not (ex2 < x or x + w < ex1 or ey2 < y or y + h < ey1):
                 e.Paint(canvas, delta = (-x, -y))
                 self.selection.PaintSelection(canvas, e, delta = (-x, -y))
         for c in self.connections:
             ((ex1, ey1), (ex2, ey2)) = c.GetSquare()
-            if not (ex2 < x or x + w < ex1 or ey2 < y or y + w < ey1):
+            if not (ex2 < x or x + w < ex1 or ey2 < y or y + h < ey1):
                 c.Paint(canvas, delta = (-x, -y))
                 self.selection.PaintSelection(canvas, c, delta = (-x, -y))
             
