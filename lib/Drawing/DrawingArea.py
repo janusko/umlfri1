@@ -1177,11 +1177,9 @@ class CDrawingArea(CGuiObject):
         self.__DrawLines(canvas, self.__oldPoints, self.dragForegroundColor, self.dragLineWidth)
 
     def __DrawRectangle(self, canvas, (pos, size), foregroundColor, backgroundColor, lineWidth):
-        # offsetPos = self.__OffsetLogicalPointOnVirtualArea(pos)
         canvas.DrawRectangle(pos, size, foregroundColor, backgroundColor, lineWidth)
 
     def __DrawLines(self, canvas, points, foregroundColor, line_width):
-        # offsetPoints = (self.__OffsetLogicalPointOnVirtualArea(p) for p in points)
         canvas.DrawLines(points, foregroundColor, line_width)
 
     def __OffsetLogicalPointOnVirtualArea(self, (x, y)):
