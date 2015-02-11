@@ -528,13 +528,13 @@ class CfrmMain(CWindow):
     @event("cmdZoomOut", "clicked")
     @event("mnuZoomOut","activate")
     def on_mnuZoomOut_click(self, widget):
-        self.picDrawingArea.IncreaseScale()
+        self.picDrawingArea.DecreaseScale()
         self.UpdateMenuSensitivity()
 
     @event("cmdZoomIn", "clicked")
     @event("mnuZoomIn","activate")
     def on_mnuZoomIn_click(self, widget):
-        self.picDrawingArea.DecreaseScale()
+        self.picDrawingArea.IncreaseScale()
         self.UpdateMenuSensitivity()
 
     @event("cmdCut", "clicked")
