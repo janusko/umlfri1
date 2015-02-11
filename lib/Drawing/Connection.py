@@ -146,7 +146,7 @@ class CConnection(CCacheableObject):
         '''
         left, top, right, bottom = 1000000, 1000000, -1000000, -1000000
         for x, y in self.GetPoints():
-            left, top, right, bottom = min(left, x), min(top, y), max(right, x), max(bottom, x)
+            left, top, right, bottom = min(left, x), min(top, y), max(right, x), max(bottom, y)
         if includeLabels:
             for label in self.labels.values():
                 (x1, y1), (x2, y2) = label.GetSquare()
