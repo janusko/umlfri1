@@ -416,8 +416,11 @@ class CDrawingArea(CGuiObject):
         """
 
         canvas.SetScale(self.scale)
-        (dx, dy) = self.virtualAreaBounds[0]
-        canvas.MoveBase(-dx, dy)
+
+        # we need to convert virtual area bounds from physical units to logical
+        # since canvas scales base coordinates too.
+        (dx, dy) = self.TupleToLogical(self.virtualAreaBounds[0])
+        canvas.MoveBase(dx, dy)
 
         if changed:
 
