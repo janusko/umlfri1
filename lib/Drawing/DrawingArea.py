@@ -1198,9 +1198,6 @@ class CDrawingArea(CGuiObject):
         self.application.GetBus().emit('selected-items', list(self.diagram.GetSelection().GetSelected()))
 
     def __CenterZoom(self, scale):
-        positionH = 0.0
-        positionW = 0.0
-        shift = 0
         elements = tuple(self.diagram.GetSelection().GetSelectedElements())
         if (len(elements)>0):
             avgH = 0
@@ -1208,30 +1205,14 @@ class CDrawingArea(CGuiObject):
             for e in elements:
                 avgW += e.GetCenter()[0]
                 avgH += e.GetCenter()[1]
-            avgH = avgH/len(elements)
-            avgW = avgW/len(elements)
-            positionH = avgH/5.0
-            positionW = avgW/5.0
+            avgH /= len(elements)
+            avgW /= len(elements)
+            positionH = avgH
+            positionW = avgW
 
-            x, y = self.GetLogicalViewPortPos()
-            if(scale > 0): #INZOOM
-                if(avgH>shift):
-                    y += positionH
-                else:
-                    y = 0
-                if(avgW>shift):
-                    x += positionW
-                else:
-                    x = 0
-            else: #OUTZOOM
-                if(avgH>shift):
-                    y -= positionH
-                else:
-                    y = 0
-                if(avgW>shift):
-                    x -= positionW
-                else:
-                    x = 0
+            (w, h) = self.GetLogicalViewPortSize()
+            y = positionH - h / 2
+            x = positionW - w / 2
 
             self.SetLogicalViewPortPos((int(x), int(y)))
 
