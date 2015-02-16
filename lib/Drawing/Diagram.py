@@ -341,22 +341,24 @@ class CDiagram(CBaseObject):
                 yield e
 
     #view = ((x, y), (w, h)
-    def Paint(self, canvas, viewport):
+    def Paint(self, canvas, virtualAreaBounds):
         """
         Paints diagram onto canvas. Paints only elements and connection, which fall into specified view port.
 
         @param canvas: Canvas on which its being drawn
         @type  canvas: L{CCairoCanvas<lib.Drawing.Canvas.CairoCanvas.CCairoCanvas>}
-        @param viewport:
+
+        @param virtualAreaBounds: Bounds of virtual drawing area
+        @type virtualAreaBounds : tuple, (x, y), (width, height)
         """
 
         # TODO
         # optimize: multiple call for one update event:
         #   double calling on click-to-select-element
 
-        ((x, y), (w, h)) = viewport
+        ((x, y), (w, h)) = virtualAreaBounds
         canvas.Clear()
-        self.grid.Paint(canvas, viewport)
+        self.grid.Paint(canvas, virtualAreaBounds)
         var = set([])
         for e in self.elements:#here is created a set of layer values
             var.add(int(e.GetObject().GetType().GetOptions().get('Layer', 0)))
