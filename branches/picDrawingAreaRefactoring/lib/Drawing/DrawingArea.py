@@ -530,7 +530,7 @@ class CDrawingArea(CGuiObject):
         """
         for sel in self.diagram.GetSelection().GetSelected():
             if isinstance(sel, CElement):
-                self.emit('delete-element-from-all',sel.GetObject())
+                self.application.GetBus().emit('delete-element-from-all', sel.GetObject())
             elif isinstance(sel, CConLabelInfo):
                 self.diagram.ShiftDeleteConLabel(sel)
             else:
@@ -863,11 +863,7 @@ class CDrawingArea(CGuiObject):
             if self.dnd is not None:
                 return
             if args.IsShiftPressed():
-                for sel in self.diagram.GetSelection().GetSelected():
-                    if isinstance(sel, CElement):
-                        self.application.GetBus().emit('delete-element-from-all', sel.GetObject())
-                    else:
-                        self.diagram.ShiftDeleteConnection(sel)
+                self.ShiftDeleteSelectedObjects()
             else:
                 for sel in self.diagram.GetSelection().GetSelected():
                     self.diagram.DeleteItem(sel)
