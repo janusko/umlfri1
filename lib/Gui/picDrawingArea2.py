@@ -581,7 +581,7 @@ class CpicDrawingArea(CWidget):
         self.Paint()
 
     def GetSelectionPixbuf(self, zoom, padding, background):
-        self.activeDrawingArea.GetSelectionPixbuf(zoom, padding, background)
+        return self.activeDrawingArea.GetSelectionPixbuf(zoom, padding, background)
 
     def SelectObject(self, object):
         self.activeDrawingArea.SelectObject(object)

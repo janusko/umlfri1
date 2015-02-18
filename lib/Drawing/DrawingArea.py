@@ -631,7 +631,7 @@ class CDrawingArea(CGuiObject):
         exporter.SetPadding(padding)
         exporter.SetBackground(background)
 
-        return exporter.GetSelectionPixbuf(self.activeDiagram)
+        return exporter.GetSelectionPixbuf(self.diagram)
 
     def SelectObject(self, object):
         drawingObject = self.diagram.GetElement(object)
