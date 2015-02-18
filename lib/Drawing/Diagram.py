@@ -294,13 +294,13 @@ class CDiagram(CBaseObject):
             obj = connection.GetObject()
             for a in obj.GetAppears():
                 a.DeleteConnectionObject(obj)
-                
+
             obj.GetSource().RemoveConnection(obj)
             if obj.GetSource() is not obj.GetDestination():
                 obj.GetDestination().RemoveConnection(obj)
             #self.connections.remove(connection)
             if connection in self.selection.GetSelected():
-                self.selection.GetSelected().remove(connection)
+                self.selection.RemoveFromSelection(connection)
         else:
             raise DrawingError("ConnectionDoesNotExists")
     
