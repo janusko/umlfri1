@@ -592,7 +592,7 @@ class CpicDrawingArea(CWidget):
         self.SetScrollBarsPosition(self.activeDrawingArea.GetPhysicalViewPortPos())
 
     def DeselectAll(self):
-        self.activeDiagram.GetSelection().DeselectAll()
+        self.activeDrawingArea.DeselectAll()
 
     @event('application.bus', 'connection-changed')
     @event('application.bus', 'element-changed')

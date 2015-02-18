@@ -456,9 +456,14 @@ class CDrawingArea(CGuiObject):
     def SelectAll(self):
         """
         Selects all elements and connections in the diagram.
-
         """
         self.diagram.GetSelection().SelectAll(self.diagram.GetElements(), self.diagram.GetConnections())
+
+    def DeselectAll(self):
+        """
+        Deselects all elements and connections in the diagram.
+        """
+        self.diagram.GetSelection().DeselectAll()
 
     def DeleteSelectedObjects(self):
         """
