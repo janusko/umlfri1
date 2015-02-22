@@ -65,7 +65,7 @@ class CpicDrawingArea(CWidget):
 
     def __init__(self, app, wTree):
         self.paintlock = thread.allocate()
-        self.tobePainted = False
+        self.toBePainted = False
         self.paintChanged = False
         self.canvas = None
         CWidget.__init__(self, app, wTree)
@@ -239,8 +239,8 @@ class CpicDrawingArea(CWidget):
         try:
             self.paintlock.acquire()
             self.paintChanged = self.paintChanged or changed
-            if not self.tobePainted:
-                self.tobePainted = True
+            if not self.toBePainted:
+                self.toBePainted = True
                 gobject.timeout_add(15, self.Paint)
         finally:
             self.paintlock.release()
