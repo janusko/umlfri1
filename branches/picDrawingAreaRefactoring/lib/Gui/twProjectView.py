@@ -10,6 +10,8 @@ from lib.Exceptions.UserException import *
 from lib.Drawing.PixmapImageLoader import PixmapFromPath
 
 from common import  event
+from lib.consts import PROJECT_NODE_UID_SELECTION_TARGET
+
 
 class CtwProjectView(CWidget):
     name = 'twProjectView'
@@ -51,7 +53,7 @@ class CtwProjectView(CWidget):
         self.twProjectView.get_selection().set_mode(gtk.SELECTION_SINGLE)
         
         self.TARGETS = [
-        ('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_WIDGET, 0),
+        (PROJECT_NODE_UID_SELECTION_TARGET, 0, 0)
         ('text/plain', 0, 1),
         ('TEXT', 0, 2),
         ('STRING', 0, 3),
@@ -370,8 +372,12 @@ class CtwProjectView(CWidget):
     def on_drag_data_get(self, widget,drag_context, selection_data, info, time):
         treeselection = widget.get_selection()
         model, iter = treeselection.get_selected()
-        data = model.get_value(iter, 0)
-        selection_data.set(selection_data.target, 8, data)
+        if selection_data.target == PROJECT_NODE_UID_SELECTION_TARGET:
+            projectNode = model.get_value(iter, 3)
+            selection_data.set(PROJECT_NODE_UID_SELECTION_TARGET, 8, projectNode.GetUID())
+        else:
+            data = model.get_value(iter, 0)
+            selection_data.set(selection_data.target, 8, data)
     
     # Adopted from the discussion at http://www.daa.com.au/pipermail/pygtk/2003-November/006304.html
     def IterCopy(self, model, iter_to_copy, target_iter, pos):

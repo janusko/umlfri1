@@ -740,22 +740,6 @@ class CfrmMain(CWindow):
     def on_get_selected_toolbox_item(self, widget, item):
         self.tbToolBox.SetSelected(item)
 
-    @event("picDrawingArea","drop-from-treeview")
-    def on_drop_from_treeview(self, widget, position):
-        node = self.twProjectView.GetSelectedElement()
-        if node is not None:
-            diagram = self.picDrawingArea.GetDiagram()
-            try:
-                Element = CElement(diagram, node.GetObject()).SetPosition(position)
-                self.UpdateMenuSensitivity()
-            except UserException, e:
-                if e.GetName() == "ElementAlreadyExists":
-                    return CWarningDialog(self.form, _('Unable to insert element')).run()
-                elif e.GetName() == "DiagramHaveNotThisElement":
-                    return CWarningDialog(self.form, _('Wrong element: ') + node.GetObject().GetType().GetId()).run()
-                else:
-                    return CWarningDialog(e.GetName()).run()
-
 
     @event('application.bus', 'run-dialog')
     def on_run_dialog(self, widget, type, message):

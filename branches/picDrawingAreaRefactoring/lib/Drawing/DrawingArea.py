@@ -1,4 +1,5 @@
 from lib.Base import CBaseObject
+from lib.Base.Registrar import registrar
 from lib.Commands.Diagrams.DuplicateElements import CDuplicateElementsCommand
 from lib.Drawing.DrawingAreaKeyPressEventArgs import KEY_A, KEY_DELETE, KEY_ESCAPE, KEY_SPACE, KEY_RIGHT, KEY_LEFT, \
     KEY_UP, KEY_DOWN
@@ -13,6 +14,7 @@ from lib.Drawing.DrawingHelper import PositionToPhysical, PositionToLogical
 from lib.Gui.common import CGuiObject
 
 from lib.Exceptions.UserException import *
+from lib.Project import CProjectNode
 
 from lib.config import config
 from lib.consts import BUFFER_SIZE, SCALE_MIN, SCALE_MAX, SCALE_INCREASE
@@ -975,6 +977,27 @@ class CDrawingArea(CGuiObject):
         element = selection[0]
         if isinstance(element, CElement):
             self.application.GetBus().emit('show-element-in-treeView',element)
+
+    def DropElementFromProjectTree(self, projectNodeUid, position):
+        projectNode = registrar.GetObject(projectNodeUid)
+        if projectNode is None or not isinstance(projectNode, CProjectNode):
+            return
+
+        element = projectNode.GetObject()
+        if not isinstance(element, CElementObject):
+            return
+
+        position = self.TupleToLogical(position)
+
+        try:
+            Element = CElement(self.diagram, element).SetPosition(position)
+        except UserException, e:
+            if e.GetName() == "ElementAlreadyExists":
+                self.application.GetBus().emit('run-dialog', 'warning', _('Unable to insert element'))
+            elif e.GetName() == "DiagramHaveNotThisElement":
+                self.application.GetBus().emit('run-dialog', 'warning', _('Wrong element: ') + element.GetType().GetId())
+            else:
+                self.application.GetBus().emit('run-dialog', 'warning', e.GetName())
 
     def OnToolBoxItemSelected(self, item):
         """
