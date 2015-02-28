@@ -15,7 +15,7 @@ class CtbToolBox(CWidget):
     
     __gsignals__ = {
         "toggled":  (gobject.SIGNAL_RUN_LAST, gobject.TYPE_PYOBJECT, 
-            (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT, )), 
+            (gobject.TYPE_PYOBJECT, gobject.TYPE_PYOBJECT, )),
     }
     __visible = True
     
@@ -87,6 +87,7 @@ class CtbToolBox(CWidget):
             
     def on_tbArrowBtn_toggled(self, widget):
         self.Selected = None
+        self.emit("toggled", None, None)
         
     def on_tbButton_toggled(self, widget, ItemId, ItemType):
         self.Selected = (ItemType, ItemId)

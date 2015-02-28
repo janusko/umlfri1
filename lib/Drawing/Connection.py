@@ -146,7 +146,7 @@ class CConnection(CCacheableObject):
         '''
         left, top, right, bottom = 1000000, 1000000, -1000000, -1000000
         for x, y in self.GetPoints():
-            left, top, right, bottom = min(left, x), min(top, y), max(right, x), max(bottom, x)
+            left, top, right, bottom = min(left, x), min(top, y), max(right, x), max(bottom, y)
         if includeLabels:
             for label in self.labels.values():
                 (x1, y1), (x2, y2) = label.GetSquare()
@@ -415,7 +415,7 @@ class CConnection(CCacheableObject):
         else:
             self.RemovePoint(index)
 
-    def Paint(self, canvas, delta = (0, 0)):
+    def Paint(self, canvas):
         '''
         Paint connection including labels at canvas
         
@@ -424,16 +424,13 @@ class CConnection(CCacheableObject):
         
         @param canvas: Canvas on which its being drawn
         @type  canvas: L{CCairoCanvas<lib.Drawing.Canvas.CairoCanvas.CCairoCanvas>}
-        
-        @param delta: (x, y) translation of point (0, 0)
-        @type  delta: tuple
         '''
         
         self.ValidatePoints()
-        self.object.Paint(CDrawingContext(self, delta), canvas)
+        self.object.Paint(CDrawingContext(self, (0, 0)), canvas)
         
         for lbl in self.labels.values():
-            lbl.Paint(canvas, delta)
+            lbl.Paint(canvas)
 
     def RemovePoint(self, index, runValidation = True):
         '''

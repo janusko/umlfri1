@@ -28,16 +28,11 @@ class CElement(CVisibleObject):
                     if self.diagram().HasElementObject(i.GetDestination()) is not None:
                         CConnection(self.diagram(),i,self,self.diagram().HasElementObject(i.GetDestination()))
 
-    def Paint(self, canvas, delta = (0, 0)):
+    def Paint(self, canvas):
         x, y = self.position
-        context = CDrawingContext(self, (x + delta[0], y + delta[1]))
+        context = CDrawingContext(self, (x, y))
         
         rx, ry = self.object.GetType().GetResizable(context)
-        
-        #self.deltaSize = (
-        #    self.deltaSize[0] if rx else 0,
-        #    self.deltaSize[1] if ry else 0,
-        #)
 
         minsize = self.GetMinimalSize()
 

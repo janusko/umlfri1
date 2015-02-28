@@ -308,7 +308,7 @@ class CConLabelInfo(CCacheableObject):
             x, y = self.GetAbsolutePosition()
             self.RecalculatePosition((x, y + multi * offset * 15))
 
-    def Paint(self, canvas, delta = (0, 0)):
+    def Paint(self, canvas):
         if self.position:
             self.SetToDefaultPosition(self.position)
             self.position = None
@@ -317,7 +317,6 @@ class CConLabelInfo(CCacheableObject):
         self.actualSize = self.logicalLabel.GetSize(context)
 
         (x, y) = self.GetPosition()
-        (x, y) = (x + delta[0], y + delta[1])
 
         context.SetPosition((x, y))
 
