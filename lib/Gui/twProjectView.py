@@ -53,7 +53,7 @@ class CtwProjectView(CWidget):
         self.twProjectView.get_selection().set_mode(gtk.SELECTION_SINGLE)
         
         self.TARGETS = [
-        (PROJECT_NODE_UID_SELECTION_TARGET, 0, 0)
+        (PROJECT_NODE_UID_SELECTION_TARGET, 0, 0),
         ('text/plain', 0, 1),
         ('TEXT', 0, 2),
         ('STRING', 0, 3),
