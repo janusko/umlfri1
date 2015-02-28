@@ -978,8 +978,8 @@ class CDrawingArea(CGuiObject):
         if isinstance(element, CElement):
             self.application.GetBus().emit('show-element-in-treeView',element)
 
-    def DropElementFromProjectTree(self, projectNodeUid, position):
-        projectNode = registrar.GetObject(projectNodeUid)
+    def DropElementFromProjectTree(self, uid, position):
+        projectNode = registrar.GetObject(uid)
         if projectNode is None or not isinstance(projectNode, CProjectNode):
             return
 
@@ -990,7 +990,8 @@ class CDrawingArea(CGuiObject):
         position = self.TupleToLogical(position)
 
         try:
-            Element = CElement(self.diagram, element).SetPosition(position)
+            Element = CElement(self.diagram, element)
+            Element.SetPosition(position)
         except UserException, e:
             if e.GetName() == "ElementAlreadyExists":
                 self.application.GetBus().emit('run-dialog', 'warning', _('Unable to insert element'))
