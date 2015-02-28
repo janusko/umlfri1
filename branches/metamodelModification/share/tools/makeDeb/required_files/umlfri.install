@@ -1,0 +1,9 @@
+etc/ usr/share/umlfri/
+gui/ usr/share/umlfri/
+lib/ usr/share/umlfri/
+share/ usr/share/umlfri/
+img/ usr/share/umlfri/
+main.py usr/share/umlfri/
+ABOUT usr/share/umlfri/
+umlfri usr/bin/
+umlfri.desktop usr/share/applications/

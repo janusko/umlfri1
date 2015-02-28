@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ElementType id="State" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Icon path="icons/state.png" />
+    <Domain id="state" identity="name" />
+    <Connections>
+        <Item value="StateTransition" allowrecursive="1"/>
+    </Connections>
+    <Appearance>
+        <Shadow padding="3" color="#cfg.Styles.Element.ShadowColor">
+            <Rectangle fill="#cfg.Styles.Element.FillColor" border="#cfg.Styles.Element.LineColor" righttop="10 rounded_corner" rightbottom="10 rounded_corner" lefttop="10 rounded_corner" leftbottom="10 rounded_corner">
+                <Sizer minheight="50">
+                    <HBox>
+                        <Padding padding="5">
+                        <HBox>
+                            <Condition condition="#self.stereotype">
+                                <Align align="center">
+                                    <VBox>
+                                        <TextBox text="&#171;" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                                        <TextBox text="#self.stereotype" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                                        <TextBox text="&#187;" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                                    </VBox>
+                                </Align>
+                            </Condition>
+                            <Align align="center">
+                                <TextBox text="#self.name" font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/>
+                            </Align>
+                        </HBox>
+                        </Padding>
+                        <Line type="horizontal" color="#cfg.Styles.Element.LineColor"/>
+                    </HBox>
+                </Sizer>
+            </Rectangle>
+        </Shadow>
+    </Appearance>
+    <Options>
+    </Options>
+</ElementType>

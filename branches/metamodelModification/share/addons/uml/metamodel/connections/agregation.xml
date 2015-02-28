@@ -1,0 +1,102 @@
+ <ConnectionType xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" id="Agregation">
+    <Icon path="icons/agregate.png"/>
+    <Domain id="association" identity="name"/>
+    
+    <Appearance>
+        <ConnectionLine style="solid" color="#cfg.Styles.Connection.LineColor"/>
+        <ConnectionArrow index="-1" style="diamond_arrow" fill="#cfg.Styles.Connection.ArrowFillColor" color="#cfg.Styles.Connection.ArrowColor"/>
+        
+        <Label position="center">
+            <HBox>
+                <Condition condition="#self.stereotype">
+                    <Align align="center">
+                        <Rectangle fill="#cfg.Styles.Connection.TextFill">
+                            <VBox>
+                                <TextBox text="&#171;" font="#cfg.Styles.Connection.TextFont" color="#cfg.Styles.Connection.TextColor"/>
+                                <TextBox text="#self.stereotype" font="#cfg.Styles.Connection.TextFont" color="#cfg.Styles.Connection.TextColor"/>
+                                <TextBox text="&#187;" font="#cfg.Styles.Connection.TextFont" color="#cfg.Styles.Connection.TextColor"/>
+                            </VBox>
+                        </Rectangle>
+                    </Align>
+                </Condition>
+                <Condition condition="#self.name">
+                    <Align align="center">
+                        <Rectangle fill="#cfg.Styles.Connection.TextFill">
+                            <TextBox text="#self.name" font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>
+                        </Rectangle>
+                    </Align>
+                </Condition>
+            </HBox>
+        </Label>
+        <Label position="source">
+            <Condition condition="#self.SCardinality">
+                <Rectangle fill="#cfg.Styles.Connection.TextFill">
+                    <TextBox text="#self.SCardinality" font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>
+                </Rectangle>
+            </Condition>
+        </Label>
+        <Label position="destination">
+            <Condition condition="#self.DCardinality">
+                <Rectangle fill="#cfg.Styles.Connection.TextFill">
+                    <TextBox text="#self.DCardinality" font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>
+                </Rectangle>
+            </Condition>
+        </Label>
+        <Label position="source+1">
+	        <HBox>
+		        <Condition condition="#self.SRole">
+                    <Rectangle fill="#cfg.Styles.Connection.TextFill">
+			            <VBox>
+				            <Switch value="#self.SRoleVisibility">
+                                <Case condition="Private">
+                                    <TextBox text=" - " font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>
+                                </Case>
+                                <Case condition="Protected">
+                                    <TextBox text=" # " font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>
+                                </Case>
+                                <Case condition="Public">
+                                    <TextBox text=" + " font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>
+                                </Case>
+						        <Case condition="Unspecified">
+                                    <TextBox text="  " font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>
+                                </Case>
+                            </Switch>
+                    		<TextBox text="#self.SRole" font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>
+                	    </VBox>
+			        </Rectangle>
+                </Condition>
+	        </HBox>
+        </Label>
+
+
+        <Label position="destination+1">
+	        <HBox>
+		        <Condition condition="#self.DRole">
+                    <Rectangle fill="#cfg.Styles.Connection.TextFill">
+			            <VBox>
+				            <Switch value="#self.DRoleVisibility">
+                                <Case condition="Private">
+                                    <TextBox text=" - " font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>
+                                </Case>
+                                <Case condition="Protected">
+                                    <TextBox text=" # " font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>
+                                </Case>
+                                <Case condition="Public">
+                                    <TextBox text=" + " font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>
+                                </Case>
+						        <Case condition="Unspecified">
+                                    <TextBox text="  " font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>
+                                </Case>
+                            </Switch>
+                            <TextBox text="#self.DRole" font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>
+                	    </VBox>
+			        </Rectangle>
+            	</Condition>
+	        </HBox>
+        </Label>
+
+
+
+
+    </Appearance>
+</ConnectionType>

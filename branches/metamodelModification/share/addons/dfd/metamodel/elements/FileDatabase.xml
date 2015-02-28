@@ -1,0 +1,25 @@
+<ElementType id="FileDatabase" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Icon path="icons/FileDatabase.png"/>
+    <Domain id="FileDatabase" identity="filedbname"/>
+    <Connections>
+        <Item value="NoteLink" with="Note"/>
+        <Item value="FlowLine"/>
+    </Connections>
+    <Appearance>
+        <HBox expand="1">
+            <Line />
+            <Rectangle fill="#cfg.Styles.Element.FillColor">
+                <Sizer minheight="50" minwidth="100">
+                    <Padding padding="5">             
+                        <Align align="center center">
+                            <TextBox text="#self.filedbname" font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/>  
+                        </Align>         
+                    </Padding>    
+                </Sizer>
+            </Rectangle>
+            <Line />
+        </HBox> 
+    </Appearance>
+    <Options>
+    </Options>
+</ElementType>

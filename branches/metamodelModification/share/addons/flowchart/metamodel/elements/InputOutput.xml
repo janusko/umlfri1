@@ -1,0 +1,33 @@
+<ElementType id="Input Output" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Icon path="icons/InputOutput.png"/>
+    <Domain id="InputOutput" identity="name"/>
+    <Connections>
+        <Item value="Note Link" with="Note"/>
+        <Item value="Flow Line"/>
+    </Connections>
+    <Appearance>
+        <Shadow padding="3" color="#cfg.Styles.Element.ShadowColor">
+            <Rectangle fill="#cfg.Styles.Element.FillColor" border="#cfg.Styles.Element.LineColor" right="10 sidelong_side" left="10 sidelong_side">
+                <Sizer minheight="50" minwidth="100"> 
+                    <Padding padding="10">             
+                        <Align align="center center">
+                            <VBox> 
+                                <Switch value="#self.type">
+                                    <Case condition="Input">
+                                        <TextBox text="Read " font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.TextColor"/>
+                                    </Case>
+                                    <Case condition="Output">
+                                        <TextBox text="Write " font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.TextColor"/>
+                                    </Case>                                                   
+                                </Switch>    
+                                <TextBox text="#self.variables" font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/> 
+                            </VBox>
+                        </Align>         
+                    </Padding>    
+                </Sizer>
+            </Rectangle>
+        </Shadow>
+    </Appearance>
+    <Options>
+    </Options>
+</ElementType>
