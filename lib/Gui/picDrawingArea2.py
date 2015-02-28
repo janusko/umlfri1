@@ -2,7 +2,7 @@ from lib.Depend.gtk2 import gtk
 from lib.Depend.gtk2 import gobject
 from lib.Drawing.DrawingArea import CDrawingArea
 
-from lib.consts import BUFFER_SIZE
+from lib.consts import BUFFER_SIZE, PROJECT_NODE_UID_SELECTION_TARGET
 from lib.Distconfig import IMAGES_PATH
 
 from common import CWidget, event
@@ -60,7 +60,6 @@ class CpicDrawingArea(CWidget):
                 'mnuResizeHightAndWidth',)
 
     __gsignals__ = {
-        'drop-from-treeview': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
     }
 
     def __init__(self, app, wTree):
@@ -80,7 +79,7 @@ class CpicDrawingArea(CWidget):
         self.SetDiagram(CDiagram(None,_("Start page")))
 
         self.TARGETS = [
-        ('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_WIDGET, 0),
+        (PROJECT_NODE_UID_SELECTION_TARGET, 0, 0),
         ('text/plain', 0, 1),
         ('TEXT', 0, 2),
         ('STRING', 0, 3),
@@ -425,8 +424,8 @@ class CpicDrawingArea(CWidget):
 
     @event("picEventBox","drag-data-received")
     def on_drag_data_received(self, widget, drag_context, x, y, selection, targettype, timestamp):
-        position = self.GetAbsolutePos((x, y))
-        self.emit('drop-from-treeview',position)
+        element_uid = selection.data
+        self.activeDrawingArea.DropElementFromProjectTree(element_uid, (x, y))
         self.Paint()
 
     @event("picDrawingArea", "configure-event")
