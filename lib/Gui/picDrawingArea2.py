@@ -424,8 +424,8 @@ class CpicDrawingArea(CWidget):
 
     @event("picEventBox","drag-data-received")
     def on_drag_data_received(self, widget, drag_context, x, y, selection, targettype, timestamp):
-        element_uid = selection.data
-        self.activeDrawingArea.DropElementFromProjectTree(element_uid, (x, y))
+        uid = selection.data
+        self.activeDrawingArea.DropElementFromProjectTree(uid, (x, y))
         self.Paint()
 
     @event("picDrawingArea", "configure-event")
