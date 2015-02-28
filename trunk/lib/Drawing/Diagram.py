@@ -200,15 +200,14 @@ class CDiagram(CBaseObject):
         deltay = max(delta[1], -min(el.GetSquare()[0][1] for el in self.selection.GetSelectedElements()))
         movedCon = set()
         elements = set()
-        if canvas is not None:
-            for el in self.selection.GetSelectedElements():
-                if not isinstance(el, ConLabelInfo.CConLabelInfo):
-                    pos1, pos2 = el.GetSquare()
-                    zorder = self.elements.index(el)
-                    for el2 in self.GetElementsInRange(pos1, pos2):
-                        if not isinstance(el2, ConLabelInfo.CConLabelInfo):
-                            if self.elements.index(el2) > zorder:
-                                elements.add(el2)
+        for el in self.selection.GetSelectedElements():
+            if not isinstance(el, ConLabelInfo.CConLabelInfo):
+                pos1, pos2 = el.GetSquare()
+                zorder = self.elements.index(el)
+                for el2 in self.GetElementsInRange(pos1, pos2):
+                    if not isinstance(el2, ConLabelInfo.CConLabelInfo):
+                        if self.elements.index(el2) > zorder:
+                            elements.add(el2)
         elements |= set(self.selection.GetSelectedElements())
         condelta = self.grid.SnapPosition(delta) if self.grid.IsActive() \
             else delta
@@ -221,9 +220,8 @@ class CDiagram(CBaseObject):
                         if con not in movedCon:
                             con.MoveAll(condelta)
                             movedCon.add(con)
-        if canvas is not None:
-            for conn in self.connections:
-                conn.ValidatePoints()
+        for conn in self.connections:
+            conn.ValidatePoints()
 
     def DeleteObject(self, object):
         self.size = None
@@ -296,13 +294,13 @@ class CDiagram(CBaseObject):
             obj = connection.GetObject()
             for a in obj.GetAppears():
                 a.DeleteConnectionObject(obj)
-                
+
             obj.GetSource().RemoveConnection(obj)
             if obj.GetSource() is not obj.GetDestination():
                 obj.GetDestination().RemoveConnection(obj)
             #self.connections.remove(connection)
             if connection in self.selection.GetSelected():
-                self.selection.GetSelected().remove(connection)
+                self.selection.RemoveFromSelection(connection)
         else:
             raise DrawingError("ConnectionDoesNotExists")
     
@@ -342,21 +340,25 @@ class CDiagram(CBaseObject):
             if e.AreYouInRange(topleft, bottomright, includeall):
                 yield e
 
-    def SetViewPort(self, view):
-        self.viewport = view
-        
-    def GetViewPort(self):
-        return self.viewport
-
     #view = ((x, y), (w, h)
-    def Paint(self, canvas):
+    def Paint(self, canvas, virtualAreaBounds):
+        """
+        Paints diagram onto canvas. Paints only elements and connection, which fall into specified view port.
+
+        @param canvas: Canvas on which its being drawn
+        @type  canvas: L{CCairoCanvas<lib.Drawing.Canvas.CairoCanvas.CCairoCanvas>}
+
+        @param virtualAreaBounds: Bounds of virtual drawing area
+        @type virtualAreaBounds : tuple, (x, y), (width, height)
+        """
+
         # TODO
         # optimize: multiple call for one update event:
         #   double calling on click-to-select-element
 
-        ((x, y), (w, h)) = self.viewport
+        ((x, y), (w, h)) = virtualAreaBounds
         canvas.Clear()
-        self.grid.Paint(canvas, self.viewport)
+        self.grid.Paint(canvas, virtualAreaBounds)
         var = set([])
         for e in self.elements:#here is created a set of layer values
             var.add(int(e.GetObject().GetType().GetOptions().get('Layer', 0)))
@@ -373,14 +375,14 @@ class CDiagram(CBaseObject):
                         num+=1
         for e in self.elements:
             ((ex1, ey1), (ex2, ey2)) = e.GetSquare()
-            if not (ex2 < x or x + w < ex1 or ey2 < y or y + w < ey1):
-                e.Paint(canvas, delta = (-x, -y))
-                self.selection.PaintSelection(canvas, e, delta = (-x, -y))
+            if not (ex2 < x or x + w < ex1 or ey2 < y or y + h < ey1):
+                e.Paint(canvas)
+                self.selection.PaintSelection(canvas, e)
         for c in self.connections:
             ((ex1, ey1), (ex2, ey2)) = c.GetSquare()
-            if not (ex2 < x or x + w < ex1 or ey2 < y or y + w < ey1):
-                c.Paint(canvas, delta = (-x, -y))
-                self.selection.PaintSelection(canvas, c, delta = (-x, -y))
+            if not (ex2 < x or x + w < ex1 or ey2 < y or y + h < ey1):
+                c.Paint(canvas)
+                self.selection.PaintSelection(canvas, c)
             
     def PaintFull(self, canvas):
         """Paints the whole diagram. Used
@@ -582,7 +584,7 @@ class CDiagram(CBaseObject):
         If position isn't set, elements will be aligned to their average
         position.
     
-        @param isHorizontal: align horizontaly or verticaly
+        @param isHorizontal: align horizontally or vertically
         @type isHorizontal: bool
         @param isLowerBoundary: align to lower or higher boundary
         @type isLowerBoundary: bool

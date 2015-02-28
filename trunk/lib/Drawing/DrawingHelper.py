@@ -14,7 +14,7 @@ def PositionToLogical(pos, scale = 1.0, offset = (0, 0)):
     @rtype: tuple
     @return: Logical position.
     """
-    pos = (pos[0] - offset[0]) / scale, (pos[1] - offset[0]) / scale
+    pos = (pos[0] + offset[0]) / scale, (pos[1] - offset[0]) / scale
     return int(pos[0]), int(pos[1])
 
 def PositionToPhysical(pos, scale = 1.0, offset = (0, 0)):
@@ -33,5 +33,5 @@ def PositionToPhysical(pos, scale = 1.0, offset = (0, 0)):
     @rtype: tuple
     @return: Physical position.
     """
-    pos = (pos[0] * scale + offset[0]), (pos[1] * scale + offset[1])
+    pos = (pos[0] * scale - offset[0]), (pos[1] * scale + offset[1])
     return int(pos[0]), int(pos[1])

@@ -84,14 +84,15 @@ class CGrid(CBaseObject):
         line_style2 = config['/Grid/LineStyle2']
 
         # region where grid will be drawn
+        (x1, y1), (w, h) = viewport
         scale = canvas.GetScale()
         canvas.SetScale(1.0)
         hspace = self.hor_spacing * scale
         vspace = self.ver_spacing * scale
-        x1 = -round(viewport[0][0] * scale % hspace) + .5
-        y1 = -round(viewport[0][1] * scale % vspace) + .5
-        x2 = x1 + viewport[1][0]
-        y2 = y1 + viewport[1][1]
+        x1 -= x1 * scale % hspace + .5
+        y1 -= y1 * scale % vspace + .5
+        x2 = x1 + w * scale
+        y2 = y1 + h * scale
 
         #draw line_style1
         if not line_style1 == 'none':
