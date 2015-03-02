@@ -14,7 +14,7 @@ from tbToolBox import CtbToolBox
 from twProjectView import CtwProjectView
 from twWarnings import CtwWarnings
 from mnuItems import CmnuItems
-from picDrawingArea2 import CpicDrawingArea
+from picDrawingArea import CpicDrawingArea
 from nbProperties import CnbProperties
 from tabs import CTabs
 from tabStartPage import CtabStartPage
