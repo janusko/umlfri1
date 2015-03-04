@@ -3,5 +3,5 @@ from DomainAttributeModification import CDomainAttributeModification
 
 class CDeleteAttributeModification(CDomainAttributeModification):
 
-    def ApplyToAttribute(self, attribute):
-        return None
+    def ApplyToAttributes(self, attributes):
+        return attributes
