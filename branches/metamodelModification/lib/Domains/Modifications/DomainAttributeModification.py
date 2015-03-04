@@ -7,6 +7,5 @@ class CDomainAttributeModification(CBaseObject):
         self.attributeID = attributeID
         self.type =  type
 
-    def ApplyToAttribute(self, attribute):
-        name, properties = attribute
-        return properties
+    def ApplyToAttributes(self, attributes):
+        return attributes
