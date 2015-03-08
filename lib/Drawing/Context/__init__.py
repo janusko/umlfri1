@@ -1,2 +1,3 @@
 from DrawingContext import CDrawingContext
-from ParamEval import CParamEval, BuildParam
+from ParamEval import BuildParam
+from NodeEvalWrapper import CDrawingContextNodeEvalWrapper
