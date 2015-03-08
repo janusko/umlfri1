@@ -1,5 +1,5 @@
 from lib.config import config
-from lib.Drawing.Context import CParamEval
+from lib.Drawing.Context.ParamEval import CDrawingContextParamEval
 import weakref
 from lib.Base import CBaseObject
 
@@ -16,7 +16,7 @@ class CVisualObject(CBaseObject):
     def GetVariables(self, context, *names):
         for name in names:
             value = getattr(self, name)
-            if isinstance(value, CParamEval):
+            if isinstance(value, CDrawingContextParamEval):
                 yield value(context)
             else:
                 yield value
