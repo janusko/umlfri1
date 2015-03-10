@@ -22,8 +22,6 @@ class CDiagram(CBaseObject):
         else:
             self.domainobject = CDomainObject(CDomainFactory.startPageDomain)
         self.size = None
-        self.viewport = ((0, 0), (0, 0))
-        self.scrollingPos = [0, 0]                  #position on diagram (needed for scrollBars)
         if name is None:
             self.SetName(self.type.GenerateName())
         else:
@@ -98,19 +96,7 @@ class CDiagram(CBaseObject):
             self.domainobject.SetValue(self.type.GetIdentity() or DEFAULT_IDENTITY if self.type else DEFAULT_IDENTITY, value)
         else:
             self.name = value
-    
-    def GetHScrollingPos(self):
-        return self.scrollingPos[0]
-    
-    def GetVScrollingPos(self):
-        return self.scrollingPos[1]
-    
-    def SetHScrollingPos(self, value):
-        self.scrollingPos[0] = value
-    
-    def SetVScrollingPos(self, value):
-        self.scrollingPos[1] = value
-        
+
     def HasElementObject(self, object):
         for i in self.elements:
             if i.GetObject() is object:
