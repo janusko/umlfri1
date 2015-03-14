@@ -90,11 +90,6 @@ class CpicDrawingArea(CWidget):
         self.cursorImages = {None: None}
         self.__invalidated = False
 
-    def __OpenSpecification(self, obj):
-        frmProps = self.application.GetWindow('frmProperties')
-        frmProps.SetParent(self.application.GetWindow('frmMain'))
-        frmProps.ShowPropertiesWindow(obj, self.application)
-
     def __UpdateCursor(self):
         """
         Updates current cursor from active L{CDrawingArea<lib.Drawing.DrawingArea>}. Loads cursor image, if necessary.
