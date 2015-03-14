@@ -22,10 +22,10 @@ from lib.consts import BUFFER_SIZE, SCALE_MIN, SCALE_MAX, SCALE_INCREASE
 import thread
 import gobject
 
-class CDrawingArea(CGuiObject):
+class CDrawingArea(CBaseObject):
 
     def __init__(self, app, diagram):
-        CGuiObject.__init__(self, app)
+        self.application = app
 
         # CDiagram(None,_("Start page"))
         self.physicalViewPort = ((0, 0), (0, 0))
