@@ -381,9 +381,9 @@ class CDomainType(CBaseObject):
         @type id: str
         '''
         
-        if id not in self.attributes:
+        if not self.HasAttribute(id):
             raise DomainTypeError('Unknown identifier "%s"'%(id, ))
-        return self.attributes[id]['hidden']
+        return self.GetAttribute(id)['hidden']
     
     def CheckValue(self, value, id = None, domain = None):
         '''
