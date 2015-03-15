@@ -305,7 +305,7 @@ class CDomainType(CBaseObject):
         '''
         
         if id is not None:
-            if self.HasAttribute(id):
+            if not self.HasAttribute(id):
                 raise DomainTypeError('Unknown identifier %s'%(id, ))
             attribute = self.GetAttribute(id)
             type = attribute['type']
