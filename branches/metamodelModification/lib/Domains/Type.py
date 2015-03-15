@@ -317,6 +317,10 @@ class CDomainType(CBaseObject):
                 'id = "%s" domain = "%s"'%(id, domain))
         
         if self.IsAtomic(domain=type):
+            if id is None:
+                raise DomainTypeError('Domain is atomic, but identifier of attribute was not provided\n'
+                    'domain = "%s"'%(domain))
+
             if type == 'int': 
                 return self.attributes[id]['default'] or 0
             elif type == 'float':
