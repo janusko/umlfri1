@@ -602,3 +602,6 @@ class CDomainType(CBaseObject):
     
     def GetAttributesCount(self):
         return len(self.attributeorder)
+
+    def _GetAttributes(self):
+        return self.attributes

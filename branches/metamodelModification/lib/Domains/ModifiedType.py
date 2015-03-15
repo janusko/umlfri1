@@ -13,10 +13,17 @@ class CModifiedDomainType(CDomainType):
         CDomainType.AppendAttribute(id, name, type, default, hidden)
 
     def HasAttribute(self, id):
-        return CDomainType.HasAttribute(self)
+        return id in self._GetAttributes()
 
     def GetAttribute(self, id):
-        return CDomainType.GetAttribute(id)
+        return self._GetAttributes()[id]
 
     def IterAttributeIDs(self):
         return CDomainType.IterAttributeIDs(self)
+
+    def _GetAttributes(self):
+        attributes = self.parentType()._GetAttributes()[:]
+        for m in self.modifications:
+            m.ApplyToAttributes(attributes)
+
+        return attributes
