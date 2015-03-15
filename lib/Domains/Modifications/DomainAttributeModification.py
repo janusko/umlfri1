@@ -8,4 +8,4 @@ class CDomainAttributeModification(CBaseObject):
         self.type =  type
 
     def ApplyToAttributes(self, attributes):
-        return attributes
+        pass
