@@ -456,9 +456,10 @@ class CDomainType(CBaseObject):
         '''
         
         if domain is None:
-            if not id in self.attributes:
+            if not self.HasAttribute(id):
                 raise DomainTypeError('Unknown identifier %s'%(id, ))
-            type = self.attributes[id]['type']
+            attribute = self.GetAttribute(id)
+            type = attribute['type']
         else:
             type = domain
         
@@ -473,14 +474,14 @@ class CDomainType(CBaseObject):
                 return self.__GetBool(value)
             elif type == 'enum':
                 try:
-                    return self.__GetEnum(value, self.attributes[id]['enum'])
+                    return self.__GetEnum(value, attribute['enum'])
                 except KeyError:
                     raise DomainTypeError(
                         'In domain "%s" is attribute "%s" of type "enum", '
                         'but has no defined values'%(self.name, id))
             elif type == 'list':
                 try:
-                    return self.__GetList(value, **self.attributes[id]['list'])
+                    return self.__GetList(value, **attribute['list'])
                 except KeyError:
                     raise DomainTypeError(
                         'In domain "%s" is attribute "%s" of type "list", '
