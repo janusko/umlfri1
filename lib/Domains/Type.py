@@ -401,31 +401,32 @@ class CDomainType(CBaseObject):
         '''
         
         if domain is None:
-            if not id in self.attributes:
+            if not self.HasAttribute(id):
                 raise DomainTypeError('Unknown identifier %s'%(id, ))
-            type = self.attributes[id]['type']
+            attribute = self.GetAttribute(id)
+            type = attribute['type']
         else:
             type = domain
-        
+
         if type in self.ATOMIC:
             if type == 'int':
-                min = self.attributes[id]['min'] if self.attributes[id].has_key('min') else None
-                max = self.attributes[id]['max'] if self.attributes[id].has_key('max') else None
+                min = attribute['min'] if attribute.has_key('min') else None
+                max = attribute['max'] if attribute.has_key('max') else None
                 val = self.__GetInt(value)
                 if (min!=None and min>val) or (max!=None and max<val):
                     raise DomainTypeError('Value of attribute %s is out of bounds.'%(id))
                 else:
                     return val
             elif type == 'float':
-                min = self.attributes[id]['min'] if self.attributes[id].has_key('min') else None
-                max = self.attributes[id]['max'] if self.attributes[id].has_key('max') else None
+                min = attribute['min'] if attribute.has_key('min') else None
+                max = attribute['max'] if attribute.has_key('max') else None
                 val = self.__GetFloat(value)
                 if (min!=None and min>val) or (max!=None and max<val):
                     raise DomainTypeError('Value of attribute %s is out of bounds.'%(id))
                 else:
                     return val
             elif type in ('str', 'text'):
-                restriction=self.attributes[id]['restricted'] if self.attributes[id].has_key('restricted') else None
+                restriction=attribute['restricted'] if attribute.has_key('restricted') else None
                 val = self.__GetStr(value)
                 if restriction!=None:
                     strings=restriction.split('|')
