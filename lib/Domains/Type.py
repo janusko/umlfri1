@@ -305,9 +305,10 @@ class CDomainType(CBaseObject):
         '''
         
         if id is not None:
-            if not id in self.attributes:
+            if self.HasAttribute(id):
                 raise DomainTypeError('Unknown identifier %s'%(id, ))
-            type = self.attributes[id]['type']
+            attribute = self.GetAttribute(id)
+            type = attribute['type']
         
         elif domain is not None and (self.IsAtomic(domain=domain) or self.GetFactory().HasDomain(domain)):
             type = domain
@@ -322,21 +323,21 @@ class CDomainType(CBaseObject):
                     'domain = "%s"'%(domain))
 
             if type == 'int': 
-                return self.attributes[id]['default'] or 0
+                return attribute['default'] or 0
             elif type == 'float':
-                return self.attributes[id]['default'] or 0.0
+                return attribute['default'] or 0.0
             elif type == 'bool':
-                return self.attributes[id]['default'] or False
+                return attribute['default'] or False
             elif type in ('str', 'text'):
-                return self.attributes[id]['default'] or ''
+                return attribute['default'] or ''
             elif type == 'list':
                 return []
             elif type == 'color':
-                return self.attributes[id]['default'] or CColor("#000000")
+                return attribute['default'] or CColor("#000000")
             elif type == 'font':
-                return self.attributes[id]['default'] or CFont("Arial 10")
+                return attribute['default'] or CFont("Arial 10")
             elif type == 'enum':
-                return self.attributes[id]['default'] or self.attributes[id]['enum'][0]
+                return attribute['default'] or attribute['enum'][0]
         else:
             return CDomainObject(self.GetFactory().GetDomain(type))
     
