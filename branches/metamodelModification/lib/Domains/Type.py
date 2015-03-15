@@ -594,13 +594,15 @@ class CDomainType(CBaseObject):
         '''
         '''
         
-        if not id in self.attributes:
+        if not self.HasAttribute(id):
             raise DomainTypeError('Unknown identifier %s'%(id, ))
-        
+
+        attribute = self.GetAttribute(id)
+
         if self.IsAtomic(id = id):
-            if self.attributes[id]['type'] == 'list':
+            if attribute['type'] == 'list':
                 return [(unicode(item)
-                    if self.IsAtomic(domain = self.attributes[id]['list']['type'])
+                    if self.IsAtomic(domain = attribute['list']['type'])
                     else item.GetSaveInfo()) for item in value]
             else:
                 return unicode(value)
