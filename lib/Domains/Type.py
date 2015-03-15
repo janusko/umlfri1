@@ -236,9 +236,9 @@ class CDomainType(CBaseObject):
         '''
         Search through self.attributes for validity of default values
         ''' 
-        for name in self.attributes.iterkeys():
-            if self.attributes[name]['default'] is not None:
-                self.TransformValue(self.attributes[name]['default'], name)
+        for id, attribute in self._GetAttributes().items():
+            if attribute['default'] is not None:
+                self.TransformValue(attribute['default'], id)
         
     def GetAttribute(self, id):
         '''
