@@ -8,4 +8,4 @@ class CReplaceAttributeModification(CDomainAttributeModification):
         self.attributeProperties = attributeProperties
 
     def ApplyToAttributes(self, attributes):
-        return self.attributes
+        attributes[self.attributeID] = self.attributeProperties
