@@ -360,9 +360,9 @@ class CDomainType(CBaseObject):
         @raise DomainTypeError: if id is not valid item identifier
         '''
         if id is not None:
-            if not id in self.attributes:
+            if not self.HasAttribute(id):
                 raise DomainTypeError('Unknown identifier "%s"'%(id, ))
-            return self.IsAtomic(domain = self.attributes[id]['type'])
+            return self.IsAtomic(domain = self.GetAttribute(id)['type'])
         elif domain is not None:
             return domain in self.ATOMIC
         else:
