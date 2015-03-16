@@ -218,7 +218,7 @@ class CDomainType(CBaseObject):
             - enum part of attributes with "enum" domain
             - list part of attributes with "list" domain and all its 
         '''
-        for id, info in self.attributes.iteritems():
+        for id, info in self._GetAttributes().iteritems():
             if info['type'] == 'enum' and len(info.get('enum',[])) == 0:
                 raise DomainTypeError('In domain "&s" is attribute "&s" of enum '
                     'domain, but has no "enum" values defined'&(self.name, id))
