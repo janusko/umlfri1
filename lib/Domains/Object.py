@@ -186,7 +186,7 @@ class CDomainObject(CBaseObject):
             elif action == 'getvalue':
                 if not self.type.HasAttribute(path[0]):
                     raise DomainObjectError('Invalid attribute %s in domain %s' % (path[0], self.type.GetName()))
-                return self.values[path[0]]
+                return self.values.setdefault(path[0], self.type.GetDefaultValue(path[0]))
             elif action == 'gettype':
                 if path[0] == '':
                     return self.type
