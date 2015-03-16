@@ -125,9 +125,9 @@ class CDomainType(CBaseObject):
         @type value: str
         '''
         
-        if not id in self.attributes:
+        if not self.HasAttribute(id):
             raise DomainTypeError('Unknown identifier %s'%(id, ))
-        self.attributes[id].setdefault(res,value)
+        self.GetAttribute(id).setdefault(res,value)
     
     def SetList(self, id, type=None, parser=None):
         '''
