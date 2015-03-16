@@ -199,19 +199,19 @@ class CDomainType(CBaseObject):
         @return: list of attributes with type set to None
         @rtype: list
         '''
-        return [name for name in self.attributes.iterkeys() 
-                if self.attributes[name]['type'] is None
-                    or (self.attributes[name]['type'] == 'list' 
-                        and ('list' not in self.attributes[name]
-                            or self.attributes[name]['list']['type'] is None))]
-    
+        return [name for name, attrib in self._GetAttributes().iteritems()
+                if attrib['type'] is None
+                    or (attrib['type'] == 'list'
+                        and ('list' not in attrib
+                            or attrib['list']['type'] is None))]
+
     def UndefinedImports(self):
         '''
         @return: list of the domain names that are imported but not recognized
         @rtype: list
         '''
         return ([name for name in self.imports if not self.GetFactory().HasDomain(name)])
-    
+
     def CheckMissingInfo(self):
         '''
         Search trough self.attributes for missing information such as:
