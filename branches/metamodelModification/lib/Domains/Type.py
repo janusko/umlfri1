@@ -143,9 +143,9 @@ class CDomainType(CBaseObject):
         separated from each other when in list in string representation
         @type separator: str
         '''
-        if not id in self.attributes:
+        if not self.HasAttribute(id):
             raise DomainTypeError('Unknown identifier %s'%(id, ))
-        list = self.attributes[id].setdefault('list',{'type':None})
+        list = self.GetAttribute(id).setdefault('list',{'type':None})
         if type is not None:
             if type not in self.ATOMIC and type not in self.imports:
                 raise DomainTypeError('Used type "%s" is not imported '
