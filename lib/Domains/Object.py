@@ -234,11 +234,11 @@ class CDomainObject(CBaseObject):
             if action == 'getvalue':
                 # special treatment for getting the @length property of the list
                 if self.type.GetAttribute(path[0])['type'] == 'list' and path[2] == LENGTH_PROPERTY:
-                    return len(self.values[path[0]])
+                    return len(self.__GetAttributeValue(path[0]))
             if self.type.IsAtomic(id = path[0]): #atomic element doesn't have items
                 raise DomainObjectError('Attribute %s of domain %s is atomic'%\
                     (path[0], self.type.GetName()))
-            return self.values[path[0]]._TracePath(path[2], action, value)
+            return self.__GetAttributeValue(path[0])._TracePath(path[2], action, value)
         
         elif path[1] == '[': #index of list
             
