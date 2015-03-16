@@ -315,3 +315,6 @@ class CDomainObject(CBaseObject):
     def __iter__(self):
         for id in self.type.IterAttributeIDs():
             yield id, self.values[id]
+
+    def __GetAttributeValue(self, id):
+        return self.values.setdefault(id, self.type.GetDefaultValue(id))
