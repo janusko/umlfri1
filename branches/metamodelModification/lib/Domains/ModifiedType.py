@@ -1,5 +1,6 @@
 import weakref
 from Type import CDomainType
+from lib.Domains.Modifications import CReplaceAttributeModification
 
 
 class CModifiedDomainType(CDomainType):
@@ -10,7 +11,9 @@ class CModifiedDomainType(CDomainType):
         self.modifications = modifications
 
     def AppendAttribute(self, id, name, type = None, default = None, hidden=False):
-        CDomainType.AppendAttribute(id, name, type, default, hidden)
+        properties = {'name': name, 'type': type, 'default': default, 'hidden': (hidden in ('true', '1'))}
+        modification = CReplaceAttributeModification(id, properties)
+        self.modifications.append(modification)
 
     def HasAttribute(self, id):
         return id in self._GetAttributes()
