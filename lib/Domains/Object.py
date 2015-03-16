@@ -186,7 +186,7 @@ class CDomainObject(CBaseObject):
             elif action == 'getvalue':
                 if not self.type.HasAttribute(path[0]):
                     raise DomainObjectError('Invalid attribute %s in domain %s' % (path[0], self.type.GetName()))
-                return self.values.setdefault(path[0], self.type.GetDefaultValue(path[0]))
+                return self.__GetAttributeValue(path[0])
             elif action == 'gettype':
                 if path[0] == '':
                     return self.type
@@ -207,7 +207,7 @@ class CDomainObject(CBaseObject):
                 if self.type.GetAttribute(path[0])['type'] == 'list':
                     if value is None:
                         value = self.type.GetDefaultValue(domain = self.type.GetAttribute(path[0])['list']['type'])
-                    self.values.setdefault(path[0], self.type.GetDefaultValue(path[0])).append(value)
+                    self.__GetAttributeValue(path[0]).append(value)
                     return value
                 else:
                     raise DomainObjectError('Attribute %s of domain %s is not of type "list"'%\
