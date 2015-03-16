@@ -103,13 +103,14 @@ class CDomainType(CBaseObject):
         @type value: str
         '''
         
-        if not id in self.attributes:
+        if not self.HasAttribute(id):
             raise DomainTypeError('Unknown identifier %s'%(id, ))
+        attribute = self.GetAttribute(id)
             
-        if value in self.attributes.get('enum',[]):
+        if value in attribute.get('enum',[]):
             raise DomainTypeError('the same enum value already defined')
         
-        self.attributes[id].setdefault('enum',[]).append(value)
+        attribute.setdefault('enum',[]).append(value)
     
     def AppendRestriction(self,id,res,value):
         '''
