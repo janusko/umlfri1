@@ -241,8 +241,8 @@ class CDomainObject(CBaseObject):
             return self.__GetAttributeValue(path[0])._TracePath(path[2], action, value)
         
         elif path[1] == '[': #index of list
-            
-            if path[0] not in self.values:
+
+            if not self.type.HasAttribute(path[0]):
                 raise DomainObjectError('Invalid attribute %s in domain %s' % (path[0], self.type.GetName()))
             
             if self.type.GetAttribute(path[0])['type'] <> 'list':
