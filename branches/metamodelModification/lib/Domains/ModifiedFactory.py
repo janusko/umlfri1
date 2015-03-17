@@ -2,9 +2,9 @@ from lib.Exceptions import DomainFactoryError
 
 class CModifiedDomainFactory():
 
-    def __init__(self, parentFactory, domains):
+    def __init__(self, parentFactory, domains = None):
         self.parentFactory = parentFactory
-        self.domains = domains
+        self.domains = domains or {}
 
     def AddDomain(self, domain):
         self.domains[domain.GetName()] = domain
