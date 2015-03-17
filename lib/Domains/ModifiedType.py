@@ -5,8 +5,8 @@ from lib.Domains.Modifications import CReplaceAttributeModification
 
 class CModifiedDomainType(CDomainType):
 
-    def __init__(self, parentType, modifications):
-        CDomainType.__init__(parentType.GetName(), parentType.GetFactory())
+    def __init__(self, parentType, factory, modifications):
+        CDomainType.__init__(parentType.GetName(), factory)
         self.parentType = weakref.ref(parentType)
         self.modifications = modifications
 
