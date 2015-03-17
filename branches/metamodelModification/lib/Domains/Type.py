@@ -615,3 +615,6 @@ class CDomainType(CBaseObject):
 
     def _GetAttributes(self):
         return self.attributes
+
+    def _GetAttributesOrder(self):
+        return self.attributeorder
