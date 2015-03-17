@@ -1,6 +1,11 @@
 from lib.Exceptions import DomainFactoryError
 
 class CModifiedDomainFactory():
+
+    def __init__(self, parentFactory, modifiedTypes):
+        self.parentFactory = parentFactory
+        self.modifiedTypes = modifiedTypes
+
     def GetDomain(self, id):
         """
         @return: Domain type by name
@@ -10,7 +15,7 @@ class CModifiedDomainFactory():
         @type  id: string
         """
         if id is None:
-            return self.startPageDomain
+            raise DomainFactoryError('domain name cannot be None')
 
         if not id in self.domains:
             raise DomainFactoryError('unrecognized domain name "%s"' % id)
