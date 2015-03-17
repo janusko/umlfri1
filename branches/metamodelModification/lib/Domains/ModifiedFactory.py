@@ -2,9 +2,9 @@ from lib.Exceptions import DomainFactoryError
 
 class CModifiedDomainFactory():
 
-    def __init__(self, parentFactory, modifiedTypes):
+    def __init__(self, parentFactory, domains):
         self.parentFactory = parentFactory
-        self.modifiedTypes = modifiedTypes
+        self.domains = domains
 
     def GetDomain(self, id):
         """
@@ -17,8 +17,8 @@ class CModifiedDomainFactory():
         if id is None:
             raise DomainFactoryError('domain name cannot be None')
 
-        if id in self.modifiedTypes:
-            return self.modifiedTypes[id]
+        if id in self.domains:
+            return self.domains[id]
 
         if id in self.parentFactory.HasDomain(id):
             return self.parentFactory.GetDomain(id)
@@ -32,8 +32,8 @@ class CModifiedDomainFactory():
         @rtype: L{CDomainType<CDomainType>}
         '''
         for id, type in self.parentFactory.iteritems():
-            if id in self.modifiedTypes:
-                yield self.modifiedTypes[id]
+            if id in self.domains:
+                yield self.domains[id]
             else:
                 yield type
 
@@ -45,4 +45,4 @@ class CModifiedDomainFactory():
         @param id: Element type name
         @type  id: string
         '''
-        return id in self.modifiedTypes or self.parentFactory.HasDomain(id)
+        return id in self.domains or self.parentFactory.HasDomain(id)
