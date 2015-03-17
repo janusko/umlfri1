@@ -6,6 +6,9 @@ class CModifiedDomainFactory():
         self.parentFactory = parentFactory
         self.domains = domains
 
+    def AddDomain(self, domain):
+        self.domains[domain.GetName()] = domain
+
     def GetDomain(self, id):
         """
         @return: Domain type by name
