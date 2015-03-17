@@ -17,10 +17,13 @@ class CModifiedDomainFactory():
         if id is None:
             raise DomainFactoryError('domain name cannot be None')
 
-        if not id in self.domains:
-            raise DomainFactoryError('unrecognized domain name "%s"' % id)
+        if id in self.modifiedTypes:
+            return self.modifiedTypes[id]
 
-        return self.domains[id]
+        if id in self.parentFactory.HasDomain(id):
+            return self.parentFactory.GetDomain(id)
+
+        raise DomainFactoryError('unrecognized domain name "%s"' % id)
 
     def IterTypes(self):
         '''
@@ -28,8 +31,11 @@ class CModifiedDomainFactory():
 
         @rtype: L{CDomainType<CDomainType>}
         '''
-        for type in self.domains.itervalues():
-            yield type
+        for id, type in self.parentFactory.iteritems():
+            if id in self.modifiedTypes:
+                yield self.modifiedTypes[id]
+            else:
+                yield type
 
     def HasDomain(self, id):
         '''
@@ -39,4 +45,4 @@ class CModifiedDomainFactory():
         @param id: Element type name
         @type  id: string
         '''
-        return id in self.domains
+        return id in self.modifiedTypes or self.parentFactory.HasDomain(id)
