@@ -34,11 +34,15 @@ class CModifiedDomainFactory():
 
         @rtype: L{CDomainType<CDomainType>}
         '''
-        for id, type in self.parentFactory.iteritems():
+        for id in self.parentFactory.IterTypes():
             if id in self.domains:
                 yield self.domains[id]
             else:
                 yield type
+
+        for id in self.domains.iterkeys():
+            if not self.parentFactory.HasDomain(id):
+                yield self.domains[id]
 
     def HasDomain(self, id):
         '''
