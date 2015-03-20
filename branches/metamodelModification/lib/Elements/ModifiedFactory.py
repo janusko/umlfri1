@@ -7,6 +7,9 @@ class CModifiedElementFactory:
         self.parentFactory = parentFactory
         self.types = types or {}
 
+    def AddElement(self, element):
+        self.types[element.GetId()] = element
+
     def GetElement(self, type):
         """
         Get element type by name
