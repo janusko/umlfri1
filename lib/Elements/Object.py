@@ -127,7 +127,10 @@ class CElementObject(CBaseObject):
         
     def GetType(self):
         return self.type
-    
+
+    def SetType(self, type):
+        self.type = type
+
     def GetSize(self, context):
         return self.type.GetSize(context)
     
