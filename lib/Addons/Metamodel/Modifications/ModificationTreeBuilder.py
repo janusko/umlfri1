@@ -1,37 +1,40 @@
 from lib.Domains.ModifiedFactory import CModifiedDomainFactory
 from lib.Domains.ModifiedType import CModifiedDomainType
 from lib.Elements import CElementObject
+from lib.Elements.ModifiedFactory import CModifiedElementFactory
 from lib.Elements.ModifiedType import CModifiedElementType
+from lib.Exceptions.DevException import MetamodelModification, MetamodelModificationError
+
 
 class CModificationTreeBuilder:
 
-    def __init__(self, projectRoot, elementModifications):
+    def __init__(self, metamodel, projectRoot, elementModifications):
+        self.metamodel = metamodel
         self.projectRoot = projectRoot
         self.elementModifications = elementModifications
 
     def BuildTree(self):
 
-        # TODO: create element types from top to bottom of the project tree
-
-        # TODO: create modifications only for specified element types (i.e. when applied to package, with modifications
-        # to class attributes, don't create modified type for package element)
-
-        elementTypes = {}
+        # start with original element types from original metamodel
+        elementTypes = {id: self.metamodel.GetElementFactory().GetElement(id)
+                        for id in self.metamodel.GetElementFactory().IterTypes()}
 
         elementTypeMappings = {}
 
-        # OUT of DATE:
-        # assuming that iterating element modifications dictionary is from the project node with lowest depth to highest
+        # algorithm overview:
+        #  - traverse project tree and create mappings between element object and its type
+        #  - when given project node has modifications, stop and process modifications
+        #     - create modified element type for all modifications that this project node has defined
+        #     - for this project and its descendants, mappings will be created with this modified types
 
-        # now using project root to start the tree building process
 
-        nodesToProcess = [(self.projectRoot, {})]
+        nodesToProcess = [(self.projectRoot, elementTypes)]
         while len(nodesToProcess) > 0:
             elementNode, elementTypes = nodesToProcess.pop(0)
             element = elementNode.GetObject()
             if element is CElementObject:
                 if elementNode in self.elementModifications:
-                    modifications = self.elementModifications[elementNode]
+                    modifications = self.elementModifications[elementNode].GetElementTypeModifications()
                     modifiedElementType = self.__BuildTypeFromNode(elementTypes, elementNode, modifications)
                     elementTypes = elementTypes[:]
                     elementTypes[modifiedElementType.GetId()] = modifiedElementType
@@ -40,64 +43,43 @@ class CModificationTreeBuilder:
                 else:
                     elementType = element.GetType()
                     if elementType.GetId() in elementTypes:
-                        elementTypeMappings[element] =  elementTypes[elementType.GetId()]
+                        elementTypeMappings[element] = elementTypes[elementType.GetId()]
 
-            children = tuple((c, elementTypes) for c in elementNode.GetChilds())
+            children = tuple((c, elementTypes) for c in self.__GetChildElements(elementNode))
             nodesToProcess.extend(children)
 
         return elementTypeMappings
 
-    #     while len(self.elementModifications) > 0:
-    #         elementNode, modifications = self.elementModifications.popitem()
-    #         modifiedElementType = self.__BuildTypeFromNode(elementTypes, elementNode, modifications)
-    #
-    #         # store in nodesToProcess item also elementTypes, create new when building type from node
-    #         nodesToProcess.extend(self.__GetChildElements(elementNode))
-    #
-    #         while len(nodesToProcess) > 0:
-    #             elementNode = nodesToProcess.pop(0)
-    #
-    #             # stop traversing tree, if we find project node, that has modifications
-    #             if elementNode in self.elementModifications:
-    #                 break
-    #
-    #             # only creating mapping if the type name matches
-    #             element = elementNode.GetObject()
-    #             if element.GetType().GetName() == modifiedElementType.GetName():
-    #                 objectTypeMappings[element] = modifiedElementType
-    #
-    #             nodesToProcess.extend()
-    #
-    # def __GetChildElements(self, node):
-    #     for c in node.GetChilds():
-    #         if c.GetObject() is CElementObject:
-    #             yield c
+    @staticmethod
+    def __GetChildElements(node):
+        for c in node.GetChilds():
+            if c.GetObject() is CElementObject:
+                yield c
 
 
-    def __BuildTypeFromNode(self, elementTypes, elementNode, elementModifications):
-        modifications = elementModifications[elementNode]
-        element = elementNode.GetObject()
-        elementType = element.GetType()
+    def __BuildTypeFromNode(self, elementTypes, elementNode, elementTypeModifications):
+        factory = self.__BuildTypeFromNode(elementTypes, elementNode, elementTypeModifications)
 
-        if elementTypes.has_key(elementType.GetName()):
-            elementType = elementTypes[elementType.GetName()]
+        return factory.GetElement(elementNode.GetObject().GetType().GetId())
 
-        factory = CModifiedDomainFactory(elementType.GetFactory())
-        self.__CreateModifiedDomainTypes(factory, element, modifications)
-        modifiedElementType = CModifiedElementType(elementType)
-        modifiedElementType.SetDomain(factory.GetDomain(elementType.GetDomain().GetName()))
-        return modifiedElementType
+    def __BuildFactoryFromNode(self, elementTypes, elementNode, elementTypeModifications):
+        modifiedElementFactory = CModifiedElementFactory(elementNode.GetObject().GetFactory())
 
+        for type, modifications in elementTypeModifications.iteritems():
+            if not elementTypes.has_key(type):
+                raise MetamodelModificationError('Creating new element types is not currently supported.')
 
-    def __CreateElementTypeAssignments(self, elementNode, elementType):
-            nodes = [elementNode]
-            while len(nodes) > 0:
-                elementNode = nodes.pop()
+            elementType = elementTypes[type]
 
-                # yield elementNode.GetObject(),
-                # elementTypes[element] = modifiedElementType
+            factory = CModifiedDomainFactory(elementType.GetDomain().GetFactory())
+            self.__CreateModifiedDomainTypes(factory, elementType, modifications)
+            modifiedElementType = CModifiedElementType(elementType, modifiedElementFactory)
+            modifiedElementType.SetDomain(factory.GetDomain(elementType.GetDomain().GetName()))
+            modifiedElementFactory.AddElement(modifiedElementType)
 
-    def __CreateModifiedDomainTypes(self, factory, element, domainModifications):
+        return modifiedElementFactory
+
+    def __CreateModifiedDomainTypes(self, factory, domainModifications):
         for name, modifications in domainModifications:
-            domain = CModifiedDomainType(element.GetType(), factory, modifications)
+            domain = CModifiedDomainType(factory.GetDomain(name), factory, modifications)
             factory.AddDomain(domain)
