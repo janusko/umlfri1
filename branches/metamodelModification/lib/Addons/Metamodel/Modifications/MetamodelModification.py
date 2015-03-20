@@ -1,7 +1,8 @@
 class CMetamodelModification:
 
-    def __init__(self, elementModifications):
-        self.elementModifications = elementModifications
+    def __init__(self, objectTypeMappings):
+        self.objectTypeMappings = objectTypeMappings
 
     def Apply(self):
-        pass
+        for type, element in self.objectTypeMappings:
+            element.SetType(type)
