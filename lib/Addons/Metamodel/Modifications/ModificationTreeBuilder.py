@@ -58,7 +58,7 @@ class CModificationTreeBuilder:
 
 
     def __BuildTypeFromNode(self, elementTypes, elementNode, elementTypeModifications):
-        factory = self.__BuildTypeFromNode(elementTypes, elementNode, elementTypeModifications)
+        factory = self.__BuildFactoryFromNode(elementTypes, elementNode, elementTypeModifications)
 
         return factory.GetElement(elementNode.GetObject().GetType().GetId())
 
