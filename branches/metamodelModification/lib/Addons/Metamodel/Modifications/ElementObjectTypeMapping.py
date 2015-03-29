@@ -12,6 +12,7 @@ class CElementObjectTypeMapping(object):
         factory = domainType.GetFactory()
 
         # change type, watchout of missing attributes?
+        domainObject.SetType(domainType)
 
         for id in domainType.IterAttributeIDs():
             attrib = domainType.GetAttribute(id)
