@@ -23,7 +23,10 @@ class CElementType(CBaseObject):
         self.counter = 0
         self.options = {}
         self.identity = None
-        self.factory = weakref.ref(factory)
+        if factory is None:
+            self.factory = lambda:None
+        else:
+            self.factory = weakref.ref(factory)
     
     def SetDomain(self, domain):
         '''
