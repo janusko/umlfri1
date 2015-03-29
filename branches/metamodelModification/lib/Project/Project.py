@@ -512,6 +512,11 @@ class CProject(CBaseObject):
         
         self.__addonManager.GetPluginManager().GetPluginAdapter().gui_project_opened(self)
 
+        from lib.Project import ModificationTester
+
+        ModificationTester.CreateModifications(self)
+
+
     def CreateModification(self):
         from lib.Addons.Metamodel.Modifications.MetamodelModificationBuilder import CMetamodelModificationBuilder
 
