@@ -169,6 +169,9 @@ class CElementType(CBaseObject):
         @rtype: bool
         '''
         return self.GetDomain().GetAttribute(name)['type'] != 'text'
-    
+
+    def GetFactory(self):
+        return self.factory()
+
     def GetMetamodel(self):
-        return self.factory().GetMetamodel()
+        return self.GetFactory().GetMetamodel()
