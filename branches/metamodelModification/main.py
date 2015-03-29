@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import lib
+from lib.Drawing.OpenedDrawingAreas import COpenedDrawingAreas
 
 import lib.Warnings.List
 lib.Warnings.List.WarningList.handle()
@@ -60,6 +61,7 @@ class Application(CApplication):
     project = None
     
     def __init__(self):
+        self.openedDrawingAreas = COpenedDrawingAreas(self)
         self.warnings = lib.Warnings.List.WarningList()
         self.recentFiles = CRecentFiles()
         self.clipboard = CClipboard()
