@@ -17,7 +17,7 @@ class CElementObjectTypeMapping(object):
         for id in domainType.IterAttributeIDs():
             attrib = domainType.GetAttribute(id)
 
-            if domainType.IsAtomic(id):
+            if domainType.IsAtomic(id) and attrib['type'] != 'list':
                 continue
 
             value = domainObject.GetValue(id)
