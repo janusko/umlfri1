@@ -1,19 +1,7 @@
-import os
-import os.path
 import weakref
 
 from lib.Exceptions.DevException import *
-from Type import CElementType
-from Alias import CElementAlias
-from lib.Distconfig import SCHEMA_PATH
-from lib.consts import METAMODEL_NAMESPACE
-from lib.Drawing.Objects import ALL
-from lib.Drawing.Context import BuildParam
-from lib.Depend.libxml import etree
 from lib.Base import CBaseObject
-
-xmlschema_doc = etree.parse(os.path.join(SCHEMA_PATH, "metamodel.xsd"))
-xmlschema = etree.XMLSchema(xmlschema_doc)
 
 
 class CElementFactory(CBaseObject):
