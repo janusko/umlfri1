@@ -10,5 +10,5 @@ class CMetamodelModification:
         return self.objectTypeMappings[object]
 
     def Apply(self):
-        for object, type in self.objectTypeMappings.iteritems():
-            object.SetType(type)
+        for mapping in self.objectTypeMappings.itervalues():
+            mapping.Apply()
