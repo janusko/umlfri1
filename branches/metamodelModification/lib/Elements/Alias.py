@@ -84,6 +84,9 @@ class CElementAlias(CBaseObject):
         set relative path to the icon
         '''
         self.icon = pixbuf
-    
+
+    def GetFactory(self):
+        return self.factory()
+
     def GetMetamodel(self):
-        return self.factory().GetMetamodel()
+        return self.GetFactory().GetMetamodel()
