@@ -16,8 +16,8 @@ class CModificationTreeBuilder:
     def BuildTree(self):
 
         # start with original element types from original metamodel
-        elementTypes = {id: self.metamodel.GetElementFactory().GetElement(id)
-                        for id in self.metamodel.GetElementFactory().IterTypes()}
+        elementTypes = {type.GetId(): type
+                        for type in self.metamodel.GetElementFactory().IterTypes()}
 
         elementTypeMappings = {}
 
