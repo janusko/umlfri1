@@ -91,7 +91,7 @@ class CDomainObject(CBaseObject):
         '''
         if self.GetType().GetName()==domainobject.GetType().GetName():
             for id in self.type.IterAttributeIDs():
-                self.values[id] = self.type.GetDefaultValue(id)
+                self.__SetAttributeValue(id, self.type.GetDefaultValue(id))
             for id in self.GetType().IterAttributeIDs():
                 if self.GetType().GetAttribute(id)['type']!='list':
                     self.SetValue(id,domainobject.GetValue(id))
@@ -184,11 +184,11 @@ class CDomainObject(CBaseObject):
         if len(path) == 1: #work with current attribute
             if action == 'setvalue':
                 if path[0] == DEFAULT_IDENTITY:
-                    self.values[path[0]] = str(value)
+                    self.__SetAttributeValue(path[0], str(value))
                 else:
                     if not self.type.HasAttribute(path[0]):
                         raise DomainObjectError('Invalid attribute %s in domain %s' % (path[0], self.type.GetName()))
-                    self.values[path[0]] = self.type.TransformValue(value, id = path[0])
+                    self.__SetAttributeValue(path[0], self.type.TransformValue(value, id = path[0]))
                 return
             elif action == 'getvalue':
                 if not self.type.HasAttribute(path[0]):
@@ -223,10 +223,15 @@ class CDomainObject(CBaseObject):
                 if not self.type.HasAttribute(path[0]):
                     raise DomainObjectError('Invalid attribute %s in domain %s' % (path[0], self.type.GetName()))
                 if self.type.GetAttribute(path[0])['type'] == 'list':
-                    lenght = len(self.values[path[0]])
+                    leftIndex = value[0]
+                    rightIndex = value[1]
+
                     if (min(value) >= 0 and max(value)<len):
-                        self.values[path[0]][value[0]], self.values[path[0]][value[1]] = \
-                            self.values[path[0]][value[1]], self.values[path[0]][value[0]]
+                        list = self.__GetAttributeValue(id)
+                        left = list[leftIndex]
+                        right = list[rightIndex]
+                        self.__SetAttributeValue(id, right, leftIndex)
+                        self.__SetAttributeValue(id, left, rightIndex)
                     else:
                         raise DomainObjectError('Trying to swap values out of index: %s' % value)
                 else:
@@ -268,7 +273,8 @@ class CDomainObject(CBaseObject):
                     if idx < 0 or idx >= len(list):
                         raise DomainObjectError('Index out of bounds in attribute %s of domain %s'%\
                             (path[0], self.type.GetName()))
-                    self.values[path[0]][idx] = self.type.TransformValue(value, domain = self.type.GetAttribute(path[0])['list']['type'])
+                    value = self.type.TransformValue(value, domain = self.type.GetAttribute(path[0])['list']['type'])
+                    self.__SetAttributeValue(path[0], value, index=idx)
                     return
                 elif action == 'getvalue':
                     if idx < 0 or idx >= len(list):
@@ -327,3 +333,8 @@ class CDomainObject(CBaseObject):
 
     def __GetAttributeValue(self, id):
         return self.values.setdefault(id, self.type.GetDefaultValue(id))
+
+    def __SetAttributeValue(self, id, value, index = None):
+        if index is not None:
+            self.__GetAttributeValue(id)[index] = value
+        self.values[id] = value
