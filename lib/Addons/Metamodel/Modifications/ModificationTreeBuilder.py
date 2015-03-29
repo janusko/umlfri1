@@ -1,3 +1,4 @@
+from lib.Addons.Metamodel.Modifications.ElementObjectTypeMapping import CElementObjectTypeMapping
 from lib.Domains.ModifiedFactory import CModifiedDomainFactory
 from lib.Domains.ModifiedType import CModifiedDomainType
 from lib.Elements import CElementObject, CElementFactory, CElementAlias
@@ -42,7 +43,7 @@ class CModificationTreeBuilder:
                     elementTypeMappings[element] = modifiedElementType
                 else:
                     elementType = element.GetType()
-                    elementTypeMappings[element] = elementTypes[elementType.GetId()]
+                    elementTypeMappings[element] = CElementObjectTypeMapping(element, elementTypes[elementType.GetId()])
 
             children = tuple((c, elementTypes) for c in self.__GetChildElements(elementNode))
             nodesToProcess.extend(children)
