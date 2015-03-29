@@ -3,6 +3,7 @@ from lib.Elements.Factory import CElementFactory
 from lib.Diagrams.Factory import CDiagramFactory
 from lib.Connections.Factory import CConnectionFactory
 from PathFactory import CPathFactory
+from lib.Elements.FactoryLoader import CElementFactoryLoader
 from lib.Exceptions import MetamodelValidationError
 from lib.Elements import CElementType
 from lib.Base import CBaseObject
@@ -13,7 +14,7 @@ class CMetamodel(CBaseObject):
         self.__Storage = storage
         self.__PathFactory = CPathFactory(self.__Storage, 'paths.xml')
         self.__DomainFactory = CDomainFactory(self.__Storage, 'domains')
-        self.__ElementFactory = CElementFactory(self, self.__Storage, 'elements', self.__DomainFactory)
+        self.__ElementFactory = CElementFactoryLoader().LoadElementFactory(self, self.__Storage, 'elements', self.__DomainFactory)
         self.__DiagramFactory = CDiagramFactory(self, self.__Storage, 'diagrams', self.__DomainFactory)
         self.__ConnectionFactory = CConnectionFactory(self, self.__Storage, 'connections', self.__DomainFactory)
         self.__MetamodelUri = uri

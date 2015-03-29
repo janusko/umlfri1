@@ -20,29 +20,24 @@ class CElementFactory(CBaseObject):
     """
     Factory, that creates element type objects
     """
-    def __init__(self, metamodel, storage, path, domainfactory):
+    def __init__(self, metamodel, types = None):
         """
         Create the element factory
-        
-        @param storage: Storage in which is file located
-        @type  storage: L{CAbstractStorage<lib.Storages.AbstractStorage.CAbstractStorage>}
-        
-        @param path: Path to directory with connection metamodel XMLs
-        @type path: string
-        
-        @param domainfactory: factory that has already loaded all the domains
-        from current metamodel
-        @type domainfactory: L{CDomainFactory<lib.Domains.Factory.CDomainFactory>}
+
+        @param metamodel: Parent metamodel.
+        @type metamodel: L{CMetamodel<lib.Addons.Metamodel.Metamodel.CMetamodel>}
+        @param types: Initial element types.
+        @type types: dict of string and CElementType
         """
         self.metamodel = weakref.ref(metamodel)
-        self.types = {}
-        self.path = path
-        self.domainfactory = domainfactory
-        
-        self.storage = storage
-        for file in storage.listdir(self.path):
-            if file.endswith('.xml'):
-                self.__Load(os.path.join(self.path, file))
+        self.types = types or {}
+
+    def AddTypes(self, types):
+        for type in types:
+            if type.GetFactory() != self:
+                raise FactoryError('type "%s" has invalid factory', type.GetId())
+
+            self.types[type.GetId()] = type
 
     def GetElement(self, type):
         """
@@ -67,107 +62,5 @@ class CElementFactory(CBaseObject):
     def HasType(self, id):
         return id in self.types
 
-    def __Load(self, file_path):
-        """
-        Load an XMLs from given path
-        
-        @param file_path: Path to connections metamodel (within storage)
-        @type  file_path: string
-        """
-        root = etree.XML(self.storage.read_file(file_path))
-        #xml (version) file is validate with xsd schema (metamodel.xsd)
-        if not xmlschema.validate(root):
-            raise FactoryError("XMLError", xmlschema.error_log.last_error)
-
-        if root.tag == METAMODEL_NAMESPACE + 'ElementType':
-            self.__LoadType(root)
-        elif root.tag == METAMODEL_NAMESPACE + 'ElementAlias':
-            self.__LoadAlias(root)
-    
-    def __LoadAlias(self, root):
-        obj = CElementAlias(self, root.get('id'), root.get('alias'))
-        
-        for element in root:
-            if element.tag == METAMODEL_NAMESPACE + 'Icon':
-                obj.SetIcon(element.get('path'))
-            
-            elif element.tag == METAMODEL_NAMESPACE + 'DefaultValues':
-                for item in element:
-                    obj.SetDefaultValue(item.get('path'), item.get('value'))
-            
-            elif element.tag == METAMODEL_NAMESPACE + 'Options':
-                for item in element:
-                    name = item.tag.split('}')[1]
-                    value = item.text
-                    if name == 'DirectAdd':
-                        value = value.lower() == 'true'
-                    obj.AppendOptions(name, value)
-        
-        self.types[root.get('id')] = obj
-    
-    def __LoadType(self, root):
-        obj = CElementType(self, root.get('id'))
-        
-        for element in root:
-            if element.tag == METAMODEL_NAMESPACE + 'Icon':
-                obj.SetIcon(element.get('path'))
-            
-            elif element.tag == METAMODEL_NAMESPACE + 'Domain':
-                obj.SetDomain(self.domainfactory.GetDomain(element.get('id')))
-                obj.SetIdentity(element.get('identity'))
-            
-            elif element.tag == METAMODEL_NAMESPACE+'Connections':
-                self.__LoadConnections(obj, element)
-                
-            elif element.tag == METAMODEL_NAMESPACE+'Appearance':
-                tmp = None
-                for j in element:
-                    tmp = j
-                obj.SetAppearance(self.__LoadAppearance(tmp))
-            elif element.tag == METAMODEL_NAMESPACE+'Options':
-                for item in element:
-                    name = item.tag.split('}')[1]
-                    value = item.text
-                    if name == 'DirectAdd':
-                        value = value.lower() == 'true'
-                    obj.AppendOptions(name, value)
-        
-        self.types[root.get('id')] = obj
-    
-    def __LoadAppearance(self, root):
-        """
-        Loads an appearance section of an XML file
-        
-        @param root: Appearance element
-        @type  root: L{Element<lxml.etree.Element>}
-        
-        @return: Visual object representing this section
-        @rtype:  L{CVisualObject<lib.Drawing.Objects.VisualObject.CVisualObject>}
-        """
-        if root.tag.split("}")[1] not in ALL:
-            raise FactoryError("XMLError", root.tag)
-        cls = ALL[root.tag.split("}")[1]]
-        params = {}
-        for attr in root.attrib.items():    #return e.g. attr == ('id', '1') => attr[0] == 'id', attr[1] == '1'
-            params[attr[0]] = BuildParam(attr[1], cls.types.get(attr[0], None))
-        obj = cls(**params)
-        if hasattr(obj, "LoadXml"):
-            obj.LoadXml(root)
-        else:
-            for child in root:
-                obj.AppendChild(self.__LoadAppearance(child))
-        return obj
-    
-    def __LoadConnections(self, obj, root):
-        for item in root:
-            value = item.get('value')
-            with_what = None
-            allow_recursive = False
-            if item.get('with') != None:
-                with_what = item.get('with').split(',')
-            if item.get('allowrecursive') != None:
-                allow_recursive = item.get('allowrecursive').lower() in ('1', 'true', 'yes')
-            obj.AppendConnection(value, with_what, allow_recursive)
-    
     def GetMetamodel(self):
         return self.metamodel()
