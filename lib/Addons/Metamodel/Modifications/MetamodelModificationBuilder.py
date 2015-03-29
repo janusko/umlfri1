@@ -1,6 +1,6 @@
-from lib.Addons.Metamodel.Modifications import CElementModificationBuilder
-from lib.Addons.Metamodel.Modifications import CModificationTreeBuilder
+from lib.Addons.Metamodel.Modifications.ElementModificationBuilder import CElementModificationBuilder
 from lib.Addons.Metamodel.Modifications.MetamodelModification import CMetamodelModification
+from lib.Addons.Metamodel.Modifications.ModificationTreeBuilder import CModificationTreeBuilder
 
 
 class CMetamodelModificationBuilder:

@@ -1,4 +1,3 @@
-from lib.Addons.Metamodel.Modifications import ModificationTreeBuilder
 from lib.Domains.Modifications import CReplaceAttributeModification
 from lib.Domains.Modifications.DeleteAttributeModification import CDeleteAttributeModification
 

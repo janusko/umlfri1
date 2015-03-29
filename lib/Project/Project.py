@@ -1,4 +1,3 @@
-from lib.Addons.Metamodel.Modifications.MetamodelModificationBuilder import CMetamodelModificationBuilder
 from lib.Depend.libxml import etree
 
 from lib.lib import XMLEncode, Indent
@@ -514,4 +513,6 @@ class CProject(CBaseObject):
         self.__addonManager.GetPluginManager().GetPluginAdapter().gui_project_opened(self)
 
     def CreateModification(self):
+        from lib.Addons.Metamodel.Modifications.MetamodelModificationBuilder import CMetamodelModificationBuilder
+
         return CMetamodelModificationBuilder(self.__metamodel, self.root)
