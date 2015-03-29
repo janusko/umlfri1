@@ -32,7 +32,7 @@ class CModificationTreeBuilder:
         while len(nodesToProcess) > 0:
             elementNode, elementTypes = nodesToProcess.pop(0)
             element = elementNode.GetObject()
-            if element is CElementObject:
+            if isinstance(element, CElementObject):
                 if elementNode in self.elementModifications:
                     modifications = self.elementModifications[elementNode].GetElementTypeModifications()
                     modifiedElementType = self.__BuildTypeFromNode(elementTypes, elementNode, modifications)
