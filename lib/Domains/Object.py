@@ -361,4 +361,5 @@ class CDomainObject(CBaseObject):
 
         if index is not None:
             self.__GetAttributeValue(id)[index] = value
-        self.values[id] = value
+        else:
+            self.values[id] = value
