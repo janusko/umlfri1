@@ -22,10 +22,13 @@ class CElementFactory(CBaseObject):
 
     def AddTypes(self, types):
         for type in types:
-            if type.GetFactory() != self:
-                raise FactoryError('type "%s" has invalid factory', type.GetId())
+            self.AddType(type)
 
-            self.types[type.GetId()] = type
+    def AddType(self, type):
+        if type.GetFactory() != self:
+            raise FactoryError('type "%s" has invalid factory', type.GetId())
+
+        self.types[type.GetId()] = type
 
     def GetElement(self, type):
         """
@@ -52,3 +55,4 @@ class CElementFactory(CBaseObject):
 
     def GetMetamodel(self):
         return self.metamodel()
+
