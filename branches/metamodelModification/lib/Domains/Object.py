@@ -30,7 +30,16 @@ class CDomainObject(CBaseObject):
         self.values = {}
         for id in self.type.IterAttributeIDs():
             self.values[id] = self.type.GetDefaultValue(id)
-    
+
+    def SetType(self, type):
+        """
+        Changes domain type of this domain object.
+
+        @param type: Domain type to set.
+        @type type: L{CDomainType<lib.Domains.Type.CDomainType>}
+        """
+        self.type = type
+
     def GetType(self, id=''):
         '''
         @return: DomainType of attribute
