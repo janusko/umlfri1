@@ -22,10 +22,11 @@ class CModifiedDomainType(CDomainType):
         return self._GetAttributes()[id]
 
     def IterAttributeIDs(self):
-        return CDomainType.IterAttributeIDs(self)
+        for id in self._GetAttributes().iterkeys():
+            yield id
 
     def _GetAttributes(self):
-        attributes = self.parentType()._GetAttributes()[:]
+        attributes = dict(self.parentType()._GetAttributes())
         for m in self.modifications:
             m.ApplyToAttributes(attributes)
 
