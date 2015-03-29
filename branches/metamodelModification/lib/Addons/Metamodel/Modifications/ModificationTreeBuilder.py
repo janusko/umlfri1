@@ -40,7 +40,7 @@ class CModificationTreeBuilder:
                     modifiedElementType = self.__BuildTypeFromNode(elementTypes, elementNode, modifications)
                     elementTypes = dict(elementTypes)
 
-                    elementTypeMappings[element] = modifiedElementType
+                    elementTypeMappings[element] = CElementObjectTypeMapping(element, modifiedElementType)
                 else:
                     elementType = element.GetType()
                     elementTypeMappings[element] = CElementObjectTypeMapping(element, elementTypes[elementType.GetId()])
