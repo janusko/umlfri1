@@ -23,7 +23,7 @@ class CModifiedDomainFactory():
         if id in self.domains:
             return self.domains[id]
 
-        if id in self.parentFactory.HasDomain(id):
+        if self.parentFactory.HasDomain(id):
             return self.parentFactory.GetDomain(id)
 
         raise DomainFactoryError('unrecognized domain name "%s"' % id)
