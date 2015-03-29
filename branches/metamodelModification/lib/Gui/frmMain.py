@@ -191,21 +191,21 @@ class CfrmMain(CWindow):
         self.nbTabs.CloseAll()
         self.application.ProjectDelete()
         self.application.ProjectInit()
-        try:
-            if copy is None:
-                self.application.GetProject().CreateProject(filenameOrTemplate)
-            else:
-                self.application.GetProject().LoadProject(filenameOrTemplate, copy)
-        except ProjectError as e:
-            self.__ClearApplication(filenameOrTemplate, copy)
-            return CErrorDialog(self.form, str(e)).run()
-        except Exception, ex:
-            self.__ClearApplication(filenameOrTemplate, copy)
-            '''
-            if __debug__:
-                raise
-            '''
-            return CErrorDialog(self.form, _('Error opening file') + '\n' + _(str(ex))).run()
+        # try:
+        if copy is None:
+            self.application.GetProject().CreateProject(filenameOrTemplate)
+        else:
+            self.application.GetProject().LoadProject(filenameOrTemplate, copy)
+        # except ProjectError as e:
+        #     self.__ClearApplication(filenameOrTemplate, copy)
+        #     return CErrorDialog(self.form, str(e)).run()
+        # except Exception, ex:
+        #     self.__ClearApplication(filenameOrTemplate, copy)
+        #     '''
+        #     if __debug__:
+        #         raise
+        #     '''
+        #     return CErrorDialog(self.form, _('Error opening file') + '\n' + _(str(ex))).run()
 
         self.ReloadTitle()
         self.twProjectView.Redraw(True)
