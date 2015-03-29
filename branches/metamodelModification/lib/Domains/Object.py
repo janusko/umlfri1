@@ -28,9 +28,7 @@ class CDomainObject(CBaseObject):
             raise DomainObjectError('string cannot be used as domain reference')
         self.type = type
         self.values = {}
-        for id in self.type.IterAttributeIDs():
-            self.values[id] = self.type.GetDefaultValue(id)
-
+        
     def SetType(self, type):
         """
         Changes domain type of this domain object.
