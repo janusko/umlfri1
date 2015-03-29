@@ -5,14 +5,17 @@ from lib.Addons.Metamodel.Modifications.MetamodelModification import CMetamodelM
 
 class CMetamodelModificationBuilder:
 
-    def __init__(self):
+    def __init__(self, metamodel, projectRoot):
         self.elementModifications = {}
+        self.metamodel = metamodel
+        self.projectRoot = projectRoot
 
     def CreateElementModifications(self, elementNode):
         return self.__GetElementModifications(elementNode)
 
     def Build(self):
-        objectTypeMapping = CModificationTreeBuilder(self.elementNode, self.elementModifications).BuildTree()
+        objectTypeMapping = CModificationTreeBuilder(self.metamodel, self.projectRoot,
+                                                     self.elementModifications).BuildTree()
 
         return CMetamodelModification(objectTypeMapping)
 
