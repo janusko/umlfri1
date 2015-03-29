@@ -1,4 +1,0 @@
-from MetamodelModification import CMetamodelModification
-from MetamodelModificationBuilder import CMetamodelModificationBuilder
-from ElementModificationBuilder import CElementModificationBuilder
-from ModificationTreeBuilder import CModificationTreeBuilder

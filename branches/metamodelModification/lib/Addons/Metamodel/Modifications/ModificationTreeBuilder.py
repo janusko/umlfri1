@@ -3,7 +3,7 @@ from lib.Domains.ModifiedType import CModifiedDomainType
 from lib.Elements import CElementObject
 from lib.Elements.ModifiedFactory import CModifiedElementFactory
 from lib.Elements.ModifiedType import CModifiedElementType
-from lib.Exceptions.DevException import MetamodelModification, MetamodelModificationError
+from lib.Exceptions.DevException import MetamodelModificationError
 
 
 class CModificationTreeBuilder:
