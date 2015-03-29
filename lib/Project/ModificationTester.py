@@ -7,7 +7,9 @@ def CreateModifications(project):
     emBuilder.AddDomainAttribute('Class', 'class', 'docstring',
                                  dict(
                                      name='Documentation string',
-                                     type='text'))
+                                     type='text',
+                                     hidden=False,
+                                     default=None))
 
     modification = mmBuilder.Build()
     modification.Apply()
