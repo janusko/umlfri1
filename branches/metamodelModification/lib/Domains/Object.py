@@ -235,6 +235,7 @@ class CDomainObject(CBaseObject):
                 if self.type.GetAttribute(path[0])['type'] == 'list':
                     if value is None:
                         value = self.type.GetDefaultValue(domain = self.type.GetAttribute(path[0])['list']['type'])
+                    self.__SetParentForValue(value)
                     self.__GetAttributeValue(path[0]).append(value)
                     return value
                 else:
@@ -312,6 +313,7 @@ class CDomainObject(CBaseObject):
                             (path[0], self.type.GetName()))
                     if value is None:
                         value = self.type.GetDefaultValue(domain = self.type.GetAttribute(path[0])['list']['type'])
+                    self.__SetParentForValue(value)
                     list.insert(idx, value)
                     return value
                 elif action == 'remove':
@@ -356,10 +358,13 @@ class CDomainObject(CBaseObject):
         return self.values.setdefault(id, self.type.GetDefaultValue(id))
 
     def __SetAttributeValue(self, id, value, index = None):
-        if isinstance(value, CDomainObject):
-            value.SetParent(self)
+        self.__SetParentForValue(value)
 
         if index is not None:
             self.__GetAttributeValue(id)[index] = value
         else:
             self.values[id] = value
+
+    def __SetParentForValue(self, value):
+        if isinstance(value, CDomainObject):
+            value.SetParent(self)
