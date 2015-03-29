@@ -1,3 +1,4 @@
+import weakref
 from lib.Exceptions import DomainObjectError
 import re
 from lib.consts import DEFAULT_IDENTITY, LENGTH_PROPERTY
@@ -28,7 +29,27 @@ class CDomainObject(CBaseObject):
             raise DomainObjectError('string cannot be used as domain reference')
         self.type = type
         self.values = {}
-        
+        self.parent = lambda: None
+
+    def GetParent(self):
+        """
+        Return parent of this domain object.
+
+        @return: Parent L{CDomainObject<lib.Domains.Object.CDomainObject>}
+        @rtype : CDomainObject or None
+        """
+        return self.parent()
+
+    def SetParent(self, parent):
+        """
+        Sets new parent of this domain object. Parent can only be an instance of
+        L{CDomainObject<lib.Domains.Object.CDomainObject>}.
+
+        @param parent: New parent domain object of this object.
+        @type parent : L{CDomainObject<lib.Domains.Object.CDomainObject>}
+        """
+        self.parent = weakref.ref(parent)
+
     def SetType(self, type):
         """
         Changes domain type of this domain object.
@@ -335,6 +356,9 @@ class CDomainObject(CBaseObject):
         return self.values.setdefault(id, self.type.GetDefaultValue(id))
 
     def __SetAttributeValue(self, id, value, index = None):
+        if isinstance(value, CDomainObject):
+            value.SetParent(self)
+
         if index is not None:
             self.__GetAttributeValue(id)[index] = value
         self.values[id] = value
