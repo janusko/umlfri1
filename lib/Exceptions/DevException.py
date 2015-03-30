@@ -26,6 +26,9 @@ class DomainObjectError(DevException):
 class DomainParserError(DevException):
     pass
 
+class CreateElementError(DevException):
+    pass
+
 class MetamodelModificationError(DevException):
     pass
 
