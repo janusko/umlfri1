@@ -1,12 +1,12 @@
 import weakref
 from lib.Addons.Metamodel.Metamodel import CMetamodel
-from lib.Elements import CElementFactory
+from lib.Elements.ModifiedFactory import CModifiedElementFactory
 
 
 class CModifiedMetamodel(CMetamodel):
     def __init__(self, parentMetamodel):
         self.parentMetamodel = weakref.ref(parentMetamodel)
-        self.elementFactory = CElementFactory(self)
+        self.elementFactory = CModifiedElementFactory(parentMetamodel.GetElementFactory(), self)
 
     def GetElementFactory(self):
         return self.elementFactory
