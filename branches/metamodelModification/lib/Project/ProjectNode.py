@@ -131,3 +131,9 @@ class CProjectNode(CBaseObject):
     
     def GetDiagramCount(self):
         return len(self.diagrams)
+
+    def GetMetamodel(self):
+        if self.object is None:
+            return None
+        else:
+            return self.object.GetType().GetFactory().GetMetamodel()
