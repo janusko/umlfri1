@@ -1,4 +1,5 @@
 from select import select
+from lib.Commands.Project.CreateElementObject import CCreateElementObjectCommand
 from lib.Depend.gtk2 import gtk
 from common import CWindow, event
 
@@ -624,12 +625,13 @@ class CfrmMain(CWindow):
         if self.twProjectView.GetSelectedElement()!=None:
             parentElement = self.twProjectView.GetSelectedElement()
         elif self.twProjectView.GetSelectedDiagram()!=None:
-            parentElement = self.twProjectView.GetSelectedDiagram()
+            parentElement = self.twProjectView.GetSelectedDiagram().GetNode()
         else:
             parentElement = self.twProjectView.GetRootNode()
-        ElementType = self.application.GetProject().GetMetamodel().GetElementFactory().GetElement(element)
-        ElementObject = CElementObject(ElementType)
-        self.twProjectView.AddElement(ElementObject, None, parentElement)
+
+        elementType = parentElement.GetMetamodel().GetElementFactory().GetElement(element)
+        cmd = CCreateElementObjectCommand(elementType, parentElement)
+        self.application.GetCommands().Execute(cmd)
 
     @event("mItemFile", "activate")
     def on_mItemFile_activate (self, widget):
