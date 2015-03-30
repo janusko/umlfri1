@@ -1,5 +1,6 @@
 from lib.Base import CBaseObject
 from lib.Base.Registrar import registrar
+from lib.Commands.Diagrams.CreateElement import CCreateElementCommand
 from lib.Commands.Diagrams.DuplicateElements import CDuplicateElementsCommand
 from lib.Drawing.DrawingAreaKeyPressEventArgs import KEY_A, KEY_DELETE, KEY_ESCAPE, KEY_SPACE, KEY_RIGHT, KEY_LEFT, \
     KEY_UP, KEY_DOWN
@@ -1026,27 +1027,16 @@ class CDrawingArea(CBaseObject):
         (itemId, itemType) = toolBtnSel
 
         if itemType == 'Element':
-            ElementType = self.application.GetProject().GetMetamodel().GetElementFactory().GetElement(itemId)
-            ElementObject = CElementObject(ElementType)
-            newElement = CElement(self.diagram, ElementObject)
-            newElement.SetPosition(pos)
+            elementType = self.diagram.GetNode().GetMetamodel().GetElementFactory().GetElement(itemId)
+            cmd = CCreateElementCommand(elementType, self.diagram)
+            self.application.GetCommands().Execute(cmd)
+
+            newElement = cmd.GetElementVisual()
             self.diagram.MoveElement(newElement, pos)
-            # self.AdjustScrollBars()
+
             self.application.GetBus().emit('set-selected-toolbox-item', None)
-            #here, I get prent element of selected elements (if element is on (over) another element)
-            minzorder = 9999999
-            parentElement = None
-            for el in self.diagram.GetSelection().GetSelectedElements(True):
-                pos1, pos2 = el.GetSquare()
-                zorder = self.diagram.GetElementZOrder(el)
-                if newElement.AreYouInRange(pos1, pos2, True):
-                    for el2 in self.diagram.GetElementsInRange(pos1, pos2, True):
-                        if self.diagram.GetElementZOrder(el2) < minzorder:        #get element with minimal zorder
-                            minzorder = self.diagram.GetElementZOrder(el2)
-                            parentElement = el2.GetObject()
 
             self.diagram.GetSelection().DeselectAll()
-            self.application.GetBus().emit('add-element', ElementObject, self.diagram, parentElement)
             self.diagram.GetSelection().AddToSelection(newElement)
             self.__OnSelectionUpdated()
 
