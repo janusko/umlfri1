@@ -263,7 +263,7 @@ class CtwProjectView(CWidget):
     
     def on_mnuAddElement_activate(self, widget, element):
         node = self.GetSelectedNode()
-        type = self.application.GetProject().GetMetamodel().GetElementFactory().GetElement(element)
+        type = node.GetMetamodel().GetElementFactory().GetElement(element)
         cmd = CCreateElementObjectCommand(type, node)
         self.application.GetCommands().Execute(cmd)
     
