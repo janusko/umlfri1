@@ -1,5 +1,6 @@
 from ..Base.Command import CCommand
 from lib.Elements import CElementObject
+from lib.Elements.TypeValidator import CElementTypeValidator
 from lib.Project import CProjectNode
 
 class CCreateElementObjectCommand(CCommand):
@@ -10,6 +11,8 @@ class CCreateElementObjectCommand(CCommand):
         self.__parentNode = parentNode
         self.__elementObject = None
         self.__elementNode = None
+
+        CElementTypeValidator().CanCreateElementAsChild(elementType, parentNode)
     
     def _Do(self):
         self.__elementObject = CElementObject(self.__elementType)
