@@ -6,6 +6,7 @@ class CModifiedElementFactory(CElementFactory):
     def __init__(self, parentFactory, metamodel):
         self.parentFactory = weakref.ref(parentFactory)
         self.metamodel = lambda: metamodel
+        self.types = {}
 
     def __getattribute__(self, item):
         if object.__getattribute__(self, '__dict__').has_key(item):
