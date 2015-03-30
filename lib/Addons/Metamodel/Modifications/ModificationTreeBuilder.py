@@ -1,4 +1,5 @@
 from lib.Addons.Metamodel.Modifications.ElementObjectTypeMapping import CElementObjectTypeMapping
+from lib.Addons.Metamodel.ModifiedMetamodel import CModifiedMetamodel
 from lib.Domains.ModifiedFactory import CModifiedDomainFactory
 from lib.Domains.ModifiedType import CModifiedDomainType
 from lib.Elements import CElementObject, CElementFactory, CElementAlias
@@ -62,7 +63,9 @@ class CModificationTreeBuilder:
         return factory.GetElement(elementNode.GetObject().GetType().GetId())
 
     def __BuildFactoryFromNode(self, elementTypes, elementNode, elementTypeModifications):
-        modifiedElementFactory = CElementFactory(elementNode.GetObject().GetType().GetMetamodel())
+        modifiedMetamodel = CModifiedMetamodel(elementNode.GetObject().GetType().GetMetamodel())
+
+        modifiedElementFactory = modifiedMetamodel.GetElementFactory()
 
         # TODO: check if there are modifications for unknown types
         # for type, modifications in elementTypeModifications.iteritems():
