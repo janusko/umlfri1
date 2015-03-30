@@ -631,10 +631,6 @@ class CfrmMain(CWindow):
         ElementObject = CElementObject(ElementType)
         self.twProjectView.AddElement(ElementObject, None, parentElement)
 
-    @event("application.bus", "add-element")
-    def on_add_element(self, widget, Element, diagram, parentElement):
-        self.twProjectView.AddElement(Element, diagram, parentElement)
-
     @event("mItemFile", "activate")
     def on_mItemFile_activate (self, widget):
         toImport = False
