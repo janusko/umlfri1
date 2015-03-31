@@ -19,7 +19,6 @@ class CDialog(CAbstractDialog):
         self.dialog.vbox.pack_start(self.dialog_tabs,True,True)
         self.dialog_tabs.show()
         self.dialog_tab={}
-        self.dialog_tab_items_count={}
         self.dialog.connect('key-press-event',self.__CtrlTab_handler)
     
     def SetWidget(self,dialog):
@@ -50,55 +49,18 @@ class CDialog(CAbstractDialog):
         self.dialog.action_area.pack_start(button.GetWidget(),False,False,1)
     
     def AppendTab(self,title):
-        tab=gtk.Frame()
-        self.dialog_tab[title]=tab
-        self.dialog_tab_items_count[title]=0
-        self.dialog_tabs.prepend_page(tab,gtk.Label(title))
-        vbox=gtk.VBox(False)
-        tab.add(vbox)
-        table=gtk.Table(0,2)
-        table.set_col_spacings(5)
-        table.set_row_spacings(1)
-        vbox.pack_start(table,False,False,0)
-        vpaned = gtk.VPaned()
-        vbox.pack_start(vpaned)
-        tab.show_all()
+        from lib.Gui.frmPropertiesWidgets.Abstract.DialogTab import CDialogTab
+        tab = CDialogTab()
+        self.dialog_tab[title] = tab
+        self.dialog_tabs.prepend_page(tab.GetFrame(),gtk.Label(title))
         
     
     def SetCurrentTab(self,idx):
         self.dialog_tabs.set_current_page(idx)
     
     def AppendItemToTab(self,tabname,item,itemname):
-        table=self.dialog_tab[tabname].get_child().get_children()[0]
-        rows=self.dialog_tab_items_count[tabname]
-        self.dialog_tab_items_count[tabname]=rows+1
-        if isinstance(item,CComboBox) or isinstance(item,CEditableComboBox) or isinstance(item,CEditBox) or isinstance(item,CEditBoxWithButton):
-            table.resize(rows+1,2)
-            lbl=gtk.Label(itemname)
-            lbl.show()
-            algn=gtk.Alignment(0,0.5)
-            algn.set_padding(0,0,5,0)
-            algn.show()
-            algn.add(lbl)
-            table.attach(algn,0,1,rows,rows+1,)
-            table.attach((item.GetWidget()),1,2,rows,rows+1)
-        elif isinstance(item,CTextArea):
-            vpaned = self.dialog_tab[tabname].get_child().get_children()[1]
-            if len(vpaned.get_children()) < 1:
-                vpaned.add1(item.GetWidget())
-            elif  len(vpaned.get_children()) < 2:
-                vpaned.add2(item.GetWidget())
-            else:
-                self.dialog_tab[tabname].get_child().pack_start(item.GetWidget(),True,True)
-            item.GetWidget().set_label(itemname)
-        elif isinstance(item,CTable):
-            vpaned = self.dialog_tab[tabname].get_child().get_children()[1]
-            if len(vpaned.get_children()) < 1:
-                vpaned.add1(item.GetWidget())
-            elif  len(vpaned.get_children()) < 2:
-                vpaned.add2(item.GetWidget())
-            else:
-                self.dialog_tab[tabname].get_child().pack_start(item.GetWidget(),True,True)
+        tab=self.dialog_tab[tabname]
+        tab.AppendItem(item, itemname)
     
     def SetHandler(self,event,func,data):
         if event=='close':
