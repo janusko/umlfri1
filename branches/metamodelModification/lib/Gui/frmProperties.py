@@ -622,6 +622,11 @@ class CfrmProperties(object):
                 if type.GetAttribute(id)['type']=='text':
                     self.attributes[type.GetName()][id].SetText(val)
             self.apply_button.SetSensitive(False)
+
+        # if tabname == 'General':
+        #     item = dialog.dialog_tab['General'].items['name']
+        #     dialog.dialog_tab['General']._CDialogTab__RemoveTableRowItem(item)
+        #     dialog.dialog_tab['General']._CDialogTab__InsertTableRowItem(2, item)
     
     #metoda vytvori novy poddialog dialogu
     def __onShowChildDialogButtonClick(self,type,parent):
