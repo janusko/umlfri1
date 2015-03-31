@@ -5,7 +5,7 @@ from lib.Gui.frmPropertiesWidgets import CEditableComboBox, CEditBoxWithButton, 
 class CDialogTab(object):
     def __init__(self):
         self.frame = gtk.Frame()
-        self.itemCount = 0
+        self.items = {}
 
         self.__vbox = gtk.VBox(False)
         self.frame.add(self.__vbox)
@@ -24,11 +24,14 @@ class CDialogTab(object):
         return self.frame
 
     def GetItemCount(self):
-        return self.itemCount
+        return len(self.items)
 
-    def AppendItem(self, item, itemname):
+    def AppendItem(self, itemid, item, itemname):
+        if itemid in self.items:
+            raise KeyError("Item with id {0} already exists".format(itemid))
+
         rows = self.GetItemCount()
-        self.itemCount += 1
+        self.items[itemid] = item
         if isinstance(item, CComboBox) or isinstance(item, CEditableComboBox) or \
                 isinstance(item, CEditBox) or isinstance(item, CEditBoxWithButton):
             self.__table.resize(rows + 1, 2)

@@ -58,9 +58,9 @@ class CDialog(CAbstractDialog):
     def SetCurrentTab(self,idx):
         self.dialog_tabs.set_current_page(idx)
     
-    def AppendItemToTab(self,tabname,item,itemname):
+    def AppendItemToTab(self,tabname,itemid, item,itemname):
         tab=self.dialog_tab[tabname]
-        tab.AppendItem(item, itemname)
+        tab.AppendItem(itemid, item, itemname)
     
     def SetHandler(self,event,func,data):
         if event=='close':
