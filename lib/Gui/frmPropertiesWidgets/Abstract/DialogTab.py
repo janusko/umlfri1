@@ -6,6 +6,7 @@ class CDialogTab(object):
     def __init__(self):
         self.frame = gtk.Frame()
         self.items = {}
+        self.table_items_order = []
 
         self.__vbox = gtk.VBox(False)
         self.frame.add(self.__vbox)
@@ -40,13 +41,12 @@ class CDialogTab(object):
         if itemid in self.items:
             raise KeyError("Item with id {0} already exists".format(itemid))
 
-        # rows = self.GetItemCount()
+        rows = self.GetItemCount()
         self.items[itemid] = item
         if isinstance(item, CComboBox) or isinstance(item, CEditableComboBox) or \
                 isinstance(item, CEditBox) or isinstance(item, CEditBoxWithButton):
-            row_item =  CDialogTab.CTableRowItem(item, itemname)
-            self.items[itemid] = row_item
-            row_item.Append(self.__table)
+            row_item =  CDialogTab.CTableRowItem(itemid, item, itemname)
+            self.__InsertTableRowItem(rows, row_item)
         elif isinstance(item, CTextArea):
             if len(self.__vpaned.get_children()) < 1:
                 self.__vpaned.add1(item.GetWidget())
@@ -63,8 +63,37 @@ class CDialogTab(object):
             else:
                 self.__vbox.pack_start(item.GetWidget(), True, True)
 
+    def __RemoveTableRowItem(self, row_item):
+        for i, itemid in enumerate(self.table_items_order):
+            if itemid == row_item.GetItemId():
+                row = i
+                break
+        else:
+            row = None
+
+        row_item.Remove(self.__table)
+
+        del self.items[itemid]
+        self.table_items_order.remove(itemid)
+
+        self.__ReorderItemsInTable(row)
+
+        rows = len(self.table_items_order)
+        self.__table.resize(rows, 2)
+
+    def __InsertTableRowItem(self, row, row_item):
+        self.items[row_item.GetItemId()] = row_item
+        self.table_items_order.insert(row, row_item.GetItemId())
+        self.__ReorderItemsInTable(row)
+
+    def __ReorderItemsInTable(self, row):
+        for i, itemid in enumerate(self.table_items_order[row:], row):
+            row_item = self.items[itemid]
+            row_item.Move(i, self.__table)
+
     class CTableRowItem(object):
-        def __init__(self, item, itemname):
+        def __init__(self, itemid, item, itemname):
+            self.itemid = itemid
             self.item = item
             lbl = gtk.Label(itemname)
             lbl.show()
@@ -72,6 +101,9 @@ class CDialogTab(object):
             self.__align.set_padding(0, 0, 5, 0)
             self.__align.show()
             self.__align.add(lbl)
+
+        def GetItemId(self):
+            return self.itemid
 
         def Move(self, row, table):
             self.Remove(table)
