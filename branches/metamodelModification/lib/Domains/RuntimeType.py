@@ -1,5 +1,6 @@
 import weakref
 from lib.Domains import CDomainType
+from lib.Domains.AttributeConditions import CAttributeEvaluationContext
 
 
 class CRuntimeDomainType(CDomainType):
@@ -25,7 +26,12 @@ class CRuntimeDomainType(CDomainType):
                 yield id
 
     def __EvaluateAttributeCondition(self, attribute):
-        return True
+        if 'condition' in attribute:
+            condition = attribute['condition']
+            context = CAttributeEvaluationContext(self.object)
+            return condition(context)
+        else:
+            return True
 
 
     def __getattribute__(self, item):
