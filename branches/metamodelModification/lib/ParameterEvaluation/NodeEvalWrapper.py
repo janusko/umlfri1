@@ -4,7 +4,7 @@ from lib.Base import CBaseObject
 class CNodeEvalWrapper(CBaseObject):
 
     def __init__(self, object, node):
-        self.__object = object
+        self._object = object
         self._node = node
 
     def _CreateNodeEvalWrapper(self, object, node):
@@ -19,14 +19,14 @@ class CNodeEvalWrapper(CBaseObject):
             return val
     
     def __getattr__(self, name):
-        return self.__convert(self.__object.GetValue(name))
+        return self.__convert(self._object.GetValue(name))
     
     def __getitem__(self, name):
-        return self.__convert(self.__object[name])
+        return self.__convert(self._object[name])
     
     def __iter__(self):
-        if isinstance(self.__object, CDomainObject):
-            for name, val in self.__object:
+        if isinstance(self._object, CDomainObject):
+            for name, val in self._object:
                 yield name, self.__convert(val)   
             if self._node is not None:
                 yield '_Children', self._Children
@@ -36,11 +36,11 @@ class CNodeEvalWrapper(CBaseObject):
                 for attrib in customAttributes:
                     yield attrib
         else:
-            for val in self.__object:
+            for val in self._object:
                 yield self.__convert(val)
     
     def __len__(self):
-        return len(self.__object)
+        return len(self._object)
 
     def _CreateCustomAttributes(self):
         return None
