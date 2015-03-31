@@ -59,7 +59,7 @@ class CDomainObjectComparator(object):
         self.__first = first
         self.__second = second
         
-        if first.GetType() is not second.GetType():
+        if first.GetType().GetName() != second.GetType().GetName():
             raise Exception("Both domain objects has to be the same type")
     
     def __iter__(self):
