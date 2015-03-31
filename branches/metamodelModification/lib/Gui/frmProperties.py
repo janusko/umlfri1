@@ -537,20 +537,28 @@ class CfrmProperties(object):
     
     #tato metoda pridava na dialog jednotlive vlastnosti podla ich typu
     def __ProcessDomainType(self,type,tabname,atts_order,dialog,main_dialog=False):
+
         dialog.AppendTab(tabname)
         is_list=False
         for key in atts_order:
             att=type.GetAttribute(key)
             if att['hidden']:
                 continue
+
+            def append_item(item):
+                dialog.AppendItemToTab(tabname, item, att['name'])
+
+            def append_item_using_factory(item_factory):
+                append_item(item_factory(type, att, key))
+
             if att['type']=='str':
-                dialog.AppendItemToTab(tabname,self.__CreateStr(type,att,key),att['name'])
+                append_item_using_factory(self.__CreateStr)
             elif att['type']=='enum':
-                dialog.AppendItemToTab(tabname,self.__CreateEnum(type,att,key),att['name'])
+                append_item_using_factory(self.__CreateEnum)
             elif att['type']=='bool':
-                dialog.AppendItemToTab(tabname,self.__CreateBool(type,att,key),att['name'])
+                append_item_using_factory(self.__CreateBool)
             elif att['type']=='text':
-                dialog.AppendItemToTab(tabname,self.__CreateText(type,att,key),att['name'])
+                append_item_using_factory(self.__CreateText)
             elif att['type']=='list':
                 is_list=True
                 type=type.GetFactory().GetDomain(att['list']['type'])
@@ -558,24 +566,31 @@ class CfrmProperties(object):
                     att=type.GetAttribute(key)
                     if att['hidden']:
                         continue
+
+                    def append_item(item):
+                        dialog.AppendItemToTab(tabname, item, att['name'])
+
+                    def append_item_using_factory(item_factory):
+                        append_item(item_factory(type, att, key))
+
                     if att['type']=='str':
-                        dialog.AppendItemToTab(tabname,self.__CreateStr(type,att,key),att['name'])
+                        append_item_using_factory(self.__CreateStr)
                     elif att['type']=='enum':
-                        dialog.AppendItemToTab(tabname,self.__CreateEnum(type,att,key),att['name'])
+                        append_item_using_factory(self.__CreateEnum)
                     elif att['type']=='bool':
-                        dialog.AppendItemToTab(tabname,self.__CreateBool(type,att,key),att['name'])
+                        append_item_using_factory(self.__CreateBool)
                     elif att['type']=='text':
-                        dialog.AppendItemToTab(tabname,self.__CreateText(type,att,key),att['name'])
+                        append_item_using_factory(self.__CreateText)
                     elif att['type']=='list':
-                        dialog.AppendItemToTab(tabname,self.__CreateEditBoxWithButton(type,att,key,dialog),att['name'])
+                        append_item(self.__CreateEditBoxWithButton(type,att,key,dialog))
                     elif att['type']=='int':
-                        dialog.AppendItemToTab(tabname,self.__CreateInt(type,att,key),att['name'])
+                        append_item_using_factory(self.__CreateInt)
                     elif att['type']=='float':
-                        dialog.AppendItemToTab(tabname,self.__CreateFloat(type,att,key),att['name'])
+                        append_item_using_factory(self.__CreateFloat)
             elif att['type']=='int':
-                dialog.AppendItemToTab(tabname,self.__CreateInt(type,att,key),att['name'])
+                append_item_using_factory(self.__CreateInt)
             elif att['type']=='float':
-                dialog.AppendItemToTab(tabname,self.__CreateFloat(type,att,key),att['name'])
+                append_item_using_factory(self.__CreateFloat)
         if not main_dialog or is_list:
             dialog.AppendItemToTab(tabname,self.__CreateTable(type,dialog),att['name'])
         else:
