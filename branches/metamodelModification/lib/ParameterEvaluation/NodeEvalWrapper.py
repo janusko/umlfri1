@@ -3,18 +3,17 @@ from lib.Base import CBaseObject
 
 class CNodeEvalWrapper(CBaseObject):
 
-    def __init__(self, object, node):
+    def __init__(self, object):
         self._object = object
-        self._node = node
 
-    def _CreateNodeEvalWrapper(self, object, node):
-        return CNodeEvalWrapper(object, node)
+    def _CreateNodeEvalWrapper(self, object):
+        return CNodeEvalWrapper(object)
     
     def __convert(self, val):
         if isinstance(val, CDomainObject):
-            return self._CreateNodeEvalWrapper(val, None)
+            return self._CreateNodeEvalWrapper(val)
         elif isinstance(val, list):
-            return self._CreateNodeEvalWrapper(val, None)
+            return self._CreateNodeEvalWrapper(val)
         else:
             return val
     
@@ -27,9 +26,7 @@ class CNodeEvalWrapper(CBaseObject):
     def __iter__(self):
         if isinstance(self._object, CDomainObject):
             for name, val in self._object:
-                yield name, self.__convert(val)   
-            if self._node is not None:
-                yield '_Children', self._Children
+                yield name, self.__convert(val)
 
             customAttributes = self._CreateCustomAttributes()
             if customAttributes is not None:
@@ -44,9 +41,3 @@ class CNodeEvalWrapper(CBaseObject):
 
     def _CreateCustomAttributes(self):
         return None
-    
-    @property
-    def _Children(self):
-        if self._node:
-            for child in self._node.GetChilds():
-                yield self._CreateNodeEvalWrapper(child.GetObject().GetDomainObject(), child)
