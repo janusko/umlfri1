@@ -58,7 +58,10 @@ class CDomainObject(CBaseObject):
         @type type: L{CDomainType<lib.Domains.Type.CDomainType>}
         """
         from lib.Domains.RuntimeType import CRuntimeDomainType
-        self.type = CRuntimeDomainType(type, self)
+        if isinstance(type, CRuntimeDomainType):
+            self.type = CRuntimeDomainType(type.GetParentType(), self)
+        else:
+            self.type = CRuntimeDomainType(type, self)
 
     def GetType(self, id=''):
         '''
