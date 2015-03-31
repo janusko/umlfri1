@@ -569,10 +569,10 @@ class CfrmProperties(object):
                     if att['hidden']:
                         continue
 
-                    attribute_name += '.' + key
+                    list_item_attribute_name = attribute_name + '.' + key
 
                     def append_item(item):
-                        dialog.AppendItemToTab(tabname, attribute_name, item, att['name'])
+                        dialog.AppendItemToTab(tabname, list_item_attribute_name, item, att['name'])
 
                     def append_item_using_factory(item_factory):
                         append_item(item_factory(type, att, key))
