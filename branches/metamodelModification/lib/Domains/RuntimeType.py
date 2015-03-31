@@ -12,20 +12,21 @@ class CRuntimeDomainType(CDomainType):
 
     def GetAttribute(self, id):
         attribute = self.__GetParentProxyMethod(CDomainType.GetAttribute)(id)
-        return self.__EvaluateAttribute(attribute)
+        if not self.__EvaluateAttributeCondition(attribute):
+            raise KeyError("Invalid attribute ID: {0}".format(id))
+
+        return attribute
 
     def IterAttributeIDs(self):
         attributes = self.__GetParentProxyMethod(CDomainType.IterAttributeIDs)()
         for id in attributes:
             attribute = self.__GetParentProxyMethod(CDomainType.GetAttribute)(id)
-            if attribute is not None:
+            if self.__EvaluateAttributeCondition(attribute):
                 yield id
 
-    def __EvaluateAttribute(self, attribute):
-        if not isinstance(attribute, list):
-            return attribute
+    def __EvaluateAttributeCondition(self, attribute):
+        return True
 
-        return attribute[0]
 
     def __getattribute__(self, item):
         # special cases, don't know how to address these properly
