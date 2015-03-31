@@ -7,9 +7,7 @@ class CParamEval(CBaseObject):
         self.__type = type
     
     def __call__(self, context):
-        locals = dict(
-            self = self._CreateNodeEvalWrapper(context.GetDomainObject(), context.GetProjectNode())
-        )
+        locals = dict()
 
         self._UpdateLocals(context, locals)
         
@@ -18,8 +16,8 @@ class CParamEval(CBaseObject):
             value = self.__type(value)
         return value
 
-    def _CreateNodeEvalWrapper(self, object, node):
-        return CNodeEvalWrapper(object, node)
+    def _CreateNodeEvalWrapper(self, object):
+        return CNodeEvalWrapper(object)
 
     def _UpdateLocals(self, context, locals):
         pass

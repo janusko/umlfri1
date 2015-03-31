@@ -7,6 +7,7 @@ class CDrawingContextParamEval(CParamEval):
     def _UpdateLocals(self, context, locals):
         locals['_line'] = context.GetLine()
         locals['cfg'] = CConfigEvalWrapper()
+        locals['self'] = CDrawingContextNodeEvalWrapper(context.GetDomainObject(), context.GetProjectNode())
 
         locals.update(context.GetVariables())
 
