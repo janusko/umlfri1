@@ -7,7 +7,7 @@ def CreateModifications(project):
 
     modificationRoot = list(project.GetRoot().GetChilds())[2]
 
-    mmBuilder = project.CreateModification()
+    mmBuilder = modificationRoot.CreateModification()
     emBuilder = mmBuilder.CreateElementModifications(modificationRoot)
     emBuilder.AddDomainAttribute('Class', 'class', 'docstring',
                                  dict(

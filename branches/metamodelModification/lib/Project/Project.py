@@ -515,9 +515,3 @@ class CProject(CBaseObject):
         from lib.Project import ModificationTester
 
         ModificationTester.CreateModifications(self)
-
-
-    def CreateModification(self):
-        from lib.Addons.Metamodel.Modifications.MetamodelModificationBuilder import CMetamodelModificationBuilder
-
-        return CMetamodelModificationBuilder(self.__metamodel, self.root)
