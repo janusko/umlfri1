@@ -27,7 +27,7 @@ class CDomainObject(CBaseObject):
         
         if isinstance(type, (str, unicode)):
             raise DomainObjectError('string cannot be used as domain reference')
-        self.type = type
+        self.SetType(type)
         self.values = {}
         self.parent = lambda: None
 
@@ -57,7 +57,8 @@ class CDomainObject(CBaseObject):
         @param type: Domain type to set.
         @type type: L{CDomainType<lib.Domains.Type.CDomainType>}
         """
-        self.type = type
+        from lib.Domains.RuntimeType import CRuntimeDomainType
+        self.type = CRuntimeDomainType(type, self)
 
     def GetType(self, id=''):
         '''
