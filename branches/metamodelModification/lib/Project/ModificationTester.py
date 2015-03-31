@@ -15,7 +15,14 @@ def CreateModifications(project):
                                      type='text',
                                      hidden=False,
                                      default=None,
-                                     condition=BuildParam('#self.stereotype == "interface"')
+                                     condition=BuildParam('#self.sealed')
+                                 ))
+    emBuilder.AddDomainAttribute('Class', 'class', 'sealed',
+                                 dict(
+                                     name='Sealed',
+                                     type='bool',
+                                     hidden=False,
+                                     default=False
                                  ))
 
     modification = mmBuilder.Build()
