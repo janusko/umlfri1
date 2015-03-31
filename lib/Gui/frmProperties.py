@@ -545,8 +545,10 @@ class CfrmProperties(object):
             if att['hidden']:
                 continue
 
+            attribute_name = key
+
             def append_item(item):
-                dialog.AppendItemToTab(tabname, item, att['name'])
+                dialog.AppendItemToTab(tabname, attribute_name, item, att['name'])
 
             def append_item_using_factory(item_factory):
                 append_item(item_factory(type, att, key))
@@ -567,8 +569,10 @@ class CfrmProperties(object):
                     if att['hidden']:
                         continue
 
+                    attribute_name += '.' + key
+
                     def append_item(item):
-                        dialog.AppendItemToTab(tabname, item, att['name'])
+                        dialog.AppendItemToTab(tabname, attribute_name, item, att['name'])
 
                     def append_item_using_factory(item_factory):
                         append_item(item_factory(type, att, key))
@@ -592,7 +596,7 @@ class CfrmProperties(object):
             elif att['type']=='float':
                 append_item_using_factory(self.__CreateFloat)
         if not main_dialog or is_list:
-            dialog.AppendItemToTab(tabname,self.__CreateTable(type,dialog),att['name'])
+            dialog.AppendItemToTab(tabname,'table',self.__CreateTable(type,dialog),att['name'])
         else:
             for id in type.IterAttributeIDs():
                 if type.GetAttribute(id)['hidden']:
