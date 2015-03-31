@@ -12,6 +12,16 @@ class CRuntimeDomainType(CDomainType):
 
     def GetAttribute(self, id):
         attribute = self.__GetParentProxyMethod(CDomainType.GetAttribute)(id)
+        return self.__EvaluateAttribute(attribute)
+
+    def IterAttributeIDs(self):
+        attributes = self.__GetParentProxyMethod(CDomainType.IterAttributeIDs)()
+        for id in attributes:
+            attribute = self.__GetParentProxyMethod(CDomainType.GetAttribute)(id)
+            if attribute is not None:
+                yield id
+
+    def __EvaluateAttribute(self, attribute):
         if not isinstance(attribute, list):
             return attribute
 
