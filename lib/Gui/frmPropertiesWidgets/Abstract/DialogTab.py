@@ -52,6 +52,9 @@ class CDialogTab(object):
             if isinstance(item, CTextArea):
                 item.GetWidget().set_label(itemname)
 
+    def __HasVBoxOtherItems(self):
+        return len(self.__vbox.get_children()) > 2
+
     def __InsertOtherItem(self, item):
         vpaned_count = len(self.__vpaned.get_children())
         if vpaned_count == 0:
@@ -60,6 +63,27 @@ class CDialogTab(object):
             self.__vpaned.add2(item.GetWidget())
         else:
             self.__vbox.pack_start(item.GetWidget())
+
+    def __RemoveOtherItem(self, item):
+        if self.__vpaned.get_child1() == item.GetWidget():
+            self.__vpaned.remove(item.GetWidget())
+            child2 = self.__vpaned.get_child2()
+            if child2 is not None:
+                self.__vpaned.remove(child2)
+                self.__vpaned.add1(child2)
+                self.__MoveFirstOtherItemToVPaned()
+        elif self.__vpaned.get_child2() == item.GetWidget():
+            self.__vpaned.remove(item.GetWidget())
+            self.__MoveFirstOtherItemToVPaned()
+
+    def __MoveFirstOtherItemToVPaned(self):
+        if not self.__HasVBoxOtherItems():
+            return
+        if self.__vpaned.get_child2() is not None:
+            raise StandardError("VPaned contains second child, cannot move first child from VBox there.")
+
+        first = self.__vbox.get_children()[0]
+        self.__vpaned.add2(first)
 
     def __RemoveTableRowItem(self, row_item):
         for i, itemid in enumerate(self.table_items_order):
