@@ -57,7 +57,7 @@ class CDialogTab(object):
             self.__InsertOtherItem(other_item)
 
     def __InsertOtherItem(self, item):
-        self.__other_item_manager.AddItem(item)
+        self.__other_item_manager.AppendItem(item)
 
     def __RemoveOtherItem(self, itemid):
         item = self.items[itemid]
@@ -120,7 +120,7 @@ class CDialogTab(object):
         def __HasVBoxOtherItems(self):
             return len(self.__vbox.get_children()) > self.__fixed_items_count
 
-        def AddItem(self, item):
+        def AppendItem(self, item):
             widget = item.GetItem().GetWidget()
 
             self.__items[item.GetItemId()] = item
