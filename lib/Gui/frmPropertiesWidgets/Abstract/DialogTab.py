@@ -41,12 +41,11 @@ class CDialogTab(object):
         if itemid in self.items:
             raise KeyError("Item with id {0} already exists".format(itemid))
 
-        rows = self.GetItemCount()
         self.items[itemid] = item
         if isinstance(item, CComboBox) or isinstance(item, CEditableComboBox) or \
                 isinstance(item, CEditBox) or isinstance(item, CEditBoxWithButton):
             row_item =  CDialogTab.CTableRowItem(itemid, item, itemname)
-            self.__InsertTableRowItem(rows, row_item)
+            self.__InsertTableRowItem(len(self.table_items_order), row_item)
         elif isinstance(item, (CTable, CTextArea)):
             self.__InsertOtherItem(item)
             if isinstance(item, CTextArea):
@@ -104,6 +103,9 @@ class CDialogTab(object):
         self.__table.resize(rows, 2)
 
     def __InsertTableRowItem(self, row, row_item):
+        rows = len(self.table_items_order)
+        self.__table.resize(rows + 1, 2)
+
         self.items[row_item.GetItemId()] = row_item
         self.table_items_order.insert(row, row_item.GetItemId())
         self.__ReorderItemsInTable(row)
