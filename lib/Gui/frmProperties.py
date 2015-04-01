@@ -625,8 +625,8 @@ class CfrmProperties(object):
 
         # if tabname == 'General':
         #     item = dialog.dialog_tab['General'].items['name']
-        #     dialog.dialog_tab['General']._CDialogTab__RemoveTableRowItem(item)
-        #     dialog.dialog_tab['General']._CDialogTab__InsertTableRowItem(2, item)
+        #     dialog.dialog_tab['General']._CDialogTab__table_item_manager.RemoveItem(item)
+        #     dialog.dialog_tab['General']._CDialogTab__table_item_manager.AppendItem(item)
         # if tabname == 'General':
         #     dialog.AppendItemToTab(tabname,'text1',self.__CreateText(type,att,key),'text1')
         #     dialog.AppendItemToTab(tabname,'text2',self.__CreateText(type,att,key),'text2')
