@@ -133,6 +133,47 @@ class CDialogTab(object):
             else:
                 self.__vbox.pack_start(widget)
 
+        def InsertItem(self, index, item):
+            if index < 0 or index > len(self.__items):
+                raise IndexError("Invalid index {0}, cannot insert item".format(index))
+
+            self.__items[item.GetItemId()] = item
+
+            widget = item.GetItem().GetWidget()
+
+            if index == 0:
+                child1 = self.__vpaned.get_child1()
+                if child1 is not None:
+                    self.__MoveFromFirstToSecondVPaned()
+
+                self.__vpaned.add1(widget)
+            elif index == 1:
+                child2 = self.__vpaned.get_child2()
+                if child2 is not None:
+                    self.__MoveFromSecondVPanedToVBox()
+
+                self.__vpaned.add2(widget)
+            else:
+                self.__vbox.pack_start(widget)
+                index_in_vbox = index - 2 + self.__fixed_items_count
+                self.__vbox.reorder_child(widget, index_in_vbox)
+
+        def __MoveFromFirstToSecondVPaned(self):
+            child1 = self.__vpaned.get_child1()
+            child2 = self.__vpaned.get_child2()
+            if child2 is not None:
+                self.__MoveFromSecondVPanedToVBox()
+
+            self.__vpaned.remove(child1)
+            self.__vpaned.add2(child1)
+
+        def __MoveFromSecondVPanedToVBox(self):
+            widget = self.__vpaned.get_child2()
+            self.__vpaned.remove(widget)
+            self.__vbox.pack_start(widget)
+            self.__vbox.reorder_child(widget, self.__fixed_items_count)
+
+
         def RemoveItem(self, item):
             widget = item.GetItem().GetWidget()
 
