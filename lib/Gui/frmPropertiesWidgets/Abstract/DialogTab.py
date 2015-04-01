@@ -47,21 +47,19 @@ class CDialogTab(object):
                 isinstance(item, CEditBox) or isinstance(item, CEditBoxWithButton):
             row_item =  CDialogTab.CTableRowItem(itemid, item, itemname)
             self.__InsertTableRowItem(rows, row_item)
-        elif isinstance(item, CTextArea):
-            if len(self.__vpaned.get_children()) < 1:
-                self.__vpaned.add1(item.GetWidget())
-            elif len(self.__vpaned.get_children()) < 2:
-                self.__vpaned.add2(item.GetWidget())
-            else:
-                self.__vbox.pack_start(item.GetWidget(), True, True)
-            item.GetWidget().set_label(itemname)
-        elif isinstance(item, CTable):
-            if len(self.__vpaned.get_children()) < 1:
-                self.__vpaned.add1(item.GetWidget())
-            elif len(self.__vpaned.get_children()) < 2:
-                self.__vpaned.add2(item.GetWidget())
-            else:
-                self.__vbox.pack_start(item.GetWidget(), True, True)
+        elif isinstance(item, (CTable, CTextArea)):
+            self.__InsertOtherItem(item)
+            if isinstance(item, CTextArea):
+                item.GetWidget().set_label(itemname)
+
+    def __InsertOtherItem(self, item):
+        vpaned_count = len(self.__vpaned.get_children())
+        if vpaned_count == 0:
+            self.__vpaned.add1(item.GetWidget())
+        elif vpaned_count == 1:
+            self.__vpaned.add2(item.GetWidget())
+        else:
+            self.__vbox.pack_start(item.GetWidget())
 
     def __RemoveTableRowItem(self, row_item):
         for i, itemid in enumerate(self.table_items_order):
