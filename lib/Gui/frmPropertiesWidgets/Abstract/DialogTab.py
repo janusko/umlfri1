@@ -188,9 +188,6 @@ class CDialogTab(object):
             self.__align.show()
             self.__align.add(lbl)
 
-        def GetItemId(self):
-            return self.itemid
-
         def Move(self, row, table):
             self.Remove(table)
             table.attach(self.__align, 0, 1, row, row + 1, )
