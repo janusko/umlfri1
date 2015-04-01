@@ -35,6 +35,9 @@ class CDialogTab(object):
 
         if isinstance(item, CDialogTab.CTableRowItem):
             self.__RemoveTableRowItem(item)
+        elif isinstance(item, (CTable, CTextArea)):
+            self.__RemoveOtherItem(itemid)
+
 
     def AppendItem(self, itemid, item, itemname):
         if itemid in self.items:
