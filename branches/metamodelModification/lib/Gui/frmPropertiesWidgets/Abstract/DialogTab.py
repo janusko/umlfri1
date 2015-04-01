@@ -33,8 +33,7 @@ class CDialogTab(object):
 
         item = self.items[itemid]
 
-        if isinstance(item, CComboBox) or isinstance(item, CEditableComboBox) or \
-                isinstance(item, CEditBox) or isinstance(item, CEditBoxWithButton):
+        if isinstance(item, CDialogTab.CTableRowItem):
             self.__RemoveTableRowItem(item)
 
     def AppendItem(self, itemid, item, itemname):
