@@ -634,9 +634,11 @@ class CfrmProperties(object):
         # if tabname == 'General':
         #     dialog.AppendItemToTab(tabname,'text1',self.__CreateText(type,att,key),'text1')
         #     dialog.AppendItemToTab(tabname,'text2',self.__CreateText(type,att,key),'text2')
+        #     dialog.AppendItemToTab(tabname,'text3',self.__CreateText(type,att,key),'text3')
+        #     dialog.AppendItemToTab(tabname,'text4',self.__CreateText(type,att,key),'text4')
         #     item = dialog.dialog_tab['General'].items['note']
         #     dialog.dialog_tab['General']._CDialogTab__other_item_manager.RemoveItem(item)
-        #     dialog.dialog_tab['General']._CDialogTab__other_item_manager.InsertItem(1, item)
+        #     dialog.dialog_tab['General']._CDialogTab__other_item_manager.InsertItem(3, item)
 
     #metoda vytvori novy poddialog dialogu
     def __onShowChildDialogButtonClick(self,type,parent):
