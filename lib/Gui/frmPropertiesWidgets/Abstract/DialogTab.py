@@ -6,7 +6,6 @@ class CDialogTab(object):
     def __init__(self):
         self.frame = gtk.Frame()
         self.items = {}
-        self.table_items_order = []
 
         self.__vbox = gtk.VBox(False)
         self.frame.add(self.__vbox)
@@ -21,6 +20,7 @@ class CDialogTab(object):
 
         self.frame.show_all()
 
+        self.__table_item_manager = CDialogTab.CTableItemManager(self.__table)
         self.__other_item_manager = CDialogTab.COtherItemManager(self.__vbox, self.__vpaned)
 
     def GetFrame(self):
@@ -31,26 +31,28 @@ class CDialogTab(object):
 
     def RemoveItem(self, itemid):
         if itemid not in self.items:
-            raise KeyError("Item with id {0} already exists".format(itemid))
+            raise KeyError("Item with id {0} doesn't exist in CDialogTab.".format(itemid))
 
         item = self.items[itemid]
 
         if isinstance(item, CDialogTab.CTableRowItem):
-            self.__RemoveTableRowItem(item)
+            self.__table_item_manager.RemoveItem(item)
         elif isinstance(item, (CTable, CTextArea)):
-            self.__RemoveOtherItem(itemid)
+            del self.items[itemid]
+            self.__other_item_manager.RemoveItem(item)
 
 
     def AppendItem(self, itemid, item, itemname):
         if itemid in self.items:
             raise KeyError("Item with id {0} already exists".format(itemid))
 
-        self.items[itemid] = item
         if isinstance(item, CComboBox) or isinstance(item, CEditableComboBox) or \
                 isinstance(item, CEditBox) or isinstance(item, CEditBoxWithButton):
             row_item =  CDialogTab.CTableRowItem(itemid, item, itemname)
-            self.__InsertTableRowItem(len(self.table_items_order), row_item)
+            self.items[itemid] = row_item
+            self.__table_item_manager.AppendItem(row_item)
         elif isinstance(item, (CTable, CTextArea)):
+            self.items[itemid] = item
             self.__InsertOtherItem(item)
             if isinstance(item, CTextArea):
                 item.GetWidget().set_label(itemname)
@@ -64,36 +66,50 @@ class CDialogTab(object):
 
         self.__other_item_manager.RemoveItem(item)
 
-    def __RemoveTableRowItem(self, row_item):
-        for i, itemid in enumerate(self.table_items_order):
-            if itemid == row_item.GetItemId():
-                row = i
-                break
-        else:
-            row = None
+    class CTableItemManager(object):
+        def __init__(self, table):
+            self.__table = table
+            self.__items = {}
+            self.__items_order = []
 
-        row_item.Remove(self.__table)
+        def GetItemCount(self):
+            return len(self.__items)
 
-        del self.items[itemid]
-        self.table_items_order.remove(itemid)
+        def RemoveItem(self, row_item):
+            for i, itemid in enumerate(self.__items_order):
+                if itemid == row_item.GetItemId():
+                    row = i
+                    break
+            else:
+                row = None
 
-        self.__ReorderItemsInTable(row)
+            row_item.Remove(self.__table)
 
-        rows = len(self.table_items_order)
-        self.__table.resize(rows, 2)
+            del self.__items[itemid]
+            self.__items_order.remove(itemid)
 
-    def __InsertTableRowItem(self, row, row_item):
-        rows = len(self.table_items_order)
-        self.__table.resize(rows + 1, 2)
+            self.__ReorderItemsInTable(row)
 
-        self.items[row_item.GetItemId()] = row_item
-        self.table_items_order.insert(row, row_item.GetItemId())
-        self.__ReorderItemsInTable(row)
+            rows = len(self.__items_order)
+            self.__table.resize(rows, 2)
 
-    def __ReorderItemsInTable(self, row):
-        for i, itemid in enumerate(self.table_items_order[row:], row):
-            row_item = self.items[itemid]
-            row_item.Move(i, self.__table)
+        def AppendItem(self, row_item):
+            self.InsertItem(self.GetItemCount(), row_item)
+
+        def InsertItem(self, row, row_item):
+            rows = len(self.__items_order)
+            self.__table.resize(rows + 1, 2)
+
+            self.__items[row_item.GetItemId()] = row_item
+
+            self.__items[row_item.GetItemId()] = row_item
+            self.__items_order.insert(row, row_item.GetItemId())
+            self.__ReorderItemsInTable(row)
+
+        def __ReorderItemsInTable(self, row):
+            for i, itemid in enumerate(self.__items_order[row:], row):
+                row_item = self.__items[itemid]
+                row_item.Move(i, self.__table)
 
     class COtherItemManager(object):
         def __init__(self, vbox, vpaned):
