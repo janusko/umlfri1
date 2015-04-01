@@ -114,7 +114,7 @@ class CDialogTab(object):
         def __init__(self, vbox, vpaned):
             self.__vbox = vbox
             self.__vpaned = vpaned
-            self.__fixed_items_count = len(self.__vpaned.get_children())
+            self.__fixed_items_count = len(self.__vbox.get_children())
             self.__items = {}
 
         def __HasVBoxOtherItems(self):
