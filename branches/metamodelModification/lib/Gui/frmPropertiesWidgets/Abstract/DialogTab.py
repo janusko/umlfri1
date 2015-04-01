@@ -156,12 +156,10 @@ class CDialogTab(object):
             self.__vbox.remove(first)
             self.__vpaned.add2(first)
 
-    class COtherItem(object):
+    class CDialogTabItem(object):
         def __init__(self, itemid, item, itemname):
             self.itemid = itemid
             self.item = item
-            if isinstance(item, CTextArea):
-                item.GetWidget().set_label(itemname)
 
         def GetItemId(self):
             return self.itemid
@@ -169,10 +167,15 @@ class CDialogTab(object):
         def GetItem(self):
             return self.item
 
-    class CTableRowItem(object):
+    class COtherItem(CDialogTabItem):
         def __init__(self, itemid, item, itemname):
-            self.itemid = itemid
-            self.item = item
+            CDialogTab.CDialogTabItem.__init__(self, itemid, item, itemname)
+            if isinstance(item, CTextArea):
+                item.GetWidget().set_label(itemname)
+
+    class CTableRowItem(CDialogTabItem):
+        def __init__(self, itemid, item, itemname):
+            CDialogTab.CDialogTabItem.__init__(self, itemid, item, itemname)
             lbl = gtk.Label(itemname)
             lbl.show()
             self.__align = gtk.Alignment(0, 0.5)
