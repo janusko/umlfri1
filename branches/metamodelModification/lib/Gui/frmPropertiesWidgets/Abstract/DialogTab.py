@@ -79,6 +79,8 @@ class CDialogTab(object):
         elif self.__vpaned.get_child2() == item.GetWidget():
             self.__vpaned.remove(item.GetWidget())
             self.__MoveFirstOtherItemToVPaned()
+        else:
+            self.__vbox.remove(item.GetWidget())
 
     def __MoveFirstOtherItemToVPaned(self):
         if not self.__HasVBoxOtherItems():
