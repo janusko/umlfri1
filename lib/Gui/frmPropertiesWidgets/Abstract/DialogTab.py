@@ -37,7 +37,7 @@ class CDialogTab(object):
 
         if isinstance(item, CDialogTab.CTableRowItem):
             self.__table_item_manager.RemoveItem(item)
-        elif isinstance(item, (CTable, CTextArea)):
+        elif isinstance(item, CDialogTab.COtherItem):
             del self.items[itemid]
             self.__other_item_manager.RemoveItem(item)
 
@@ -52,10 +52,9 @@ class CDialogTab(object):
             self.items[itemid] = row_item
             self.__table_item_manager.AppendItem(row_item)
         elif isinstance(item, (CTable, CTextArea)):
-            self.items[itemid] = item
-            self.__InsertOtherItem(item)
-            if isinstance(item, CTextArea):
-                item.GetWidget().set_label(itemname)
+            other_item = CDialogTab.COtherItem(itemid, item, itemname)
+            self.items[itemid] = other_item
+            self.__InsertOtherItem(other_item)
 
     def __InsertOtherItem(self, item):
         self.__other_item_manager.AddItem(item)
@@ -121,27 +120,31 @@ class CDialogTab(object):
             return len(self.__vbox.get_children()) > self.__fixed_items_count
 
         def AddItem(self, item):
+            widget = item.GetItem().GetWidget()
+
             vpaned_count = len(self.__vpaned.get_children())
             if vpaned_count == 0:
-                self.__vpaned.add1(item.GetWidget())
+                self.__vpaned.add1(widget)
             elif vpaned_count == 1:
-                self.__vpaned.add2(item.GetWidget())
+                self.__vpaned.add2(widget)
             else:
-                self.__vbox.pack_start(item.GetWidget())
+                self.__vbox.pack_start(widget)
 
         def RemoveItem(self, item):
-            if self.__vpaned.get_child1() == item.GetWidget():
-                self.__vpaned.remove(item.GetWidget())
+            widget = item.GetItem().GetWidget()
+
+            if self.__vpaned.get_child1() == widget:
+                self.__vpaned.remove(widget)
                 child2 = self.__vpaned.get_child2()
                 if child2 is not None:
                     self.__vpaned.remove(child2)
                     self.__vpaned.add1(child2)
                     self.__MoveFirstOtherItemToVPaned()
-            elif self.__vpaned.get_child2() == item.GetWidget():
-                self.__vpaned.remove(item.GetWidget())
+            elif self.__vpaned.get_child2() == widget:
+                self.__vpaned.remove(widget)
                 self.__MoveFirstOtherItemToVPaned()
             else:
-                self.__vbox.remove(item.GetWidget())
+                self.__vbox.remove(widget)
 
         def __MoveFirstOtherItemToVPaned(self):
             if not self.__HasVBoxOtherItems():
@@ -152,6 +155,19 @@ class CDialogTab(object):
             first = self.__vbox.get_children()[2]
             self.__vbox.remove(first)
             self.__vpaned.add2(first)
+
+    class COtherItem(object):
+        def __init__(self, itemid, item, itemname):
+            self.itemid = itemid
+            self.item = item
+            if isinstance(item, CTextArea):
+                item.GetWidget().set_label(itemname)
+
+        def GetItemId(self):
+            return self.itemid
+
+        def GetItem(self):
+            return self.item
 
     class CTableRowItem(object):
         def __init__(self, itemid, item, itemname):
