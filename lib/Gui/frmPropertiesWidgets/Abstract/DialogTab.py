@@ -29,6 +29,11 @@ class CDialogTab(object):
     def GetItemCount(self):
         return len(self.items)
 
+    def Clear(self):
+        self.items.clear()
+        self.__table_item_manager.Clear()
+        self.__other_item_manager.Clear()
+
     def RemoveItem(self, itemid):
         if itemid not in self.items:
             raise KeyError("Item with id {0} doesn't exist in CDialogTab.".format(itemid))
@@ -40,7 +45,6 @@ class CDialogTab(object):
         elif isinstance(item, CDialogTab.COtherItem):
             del self.items[itemid]
             self.__other_item_manager.RemoveItem(item)
-
 
     def AppendItem(self, itemid, item, itemname):
         if itemid in self.items:
@@ -73,6 +77,14 @@ class CDialogTab(object):
 
         def GetItemCount(self):
             return len(self.__items)
+
+        def Clear(self):
+            for row_item in self.__items.values():
+                row_item.Remove(self.__table)
+
+            self.__items.clear()
+            del self.__items_order[:]
+            self.__table.resize(0, 2)
 
         def RemoveItem(self, row_item):
             for i, itemid in enumerate(self.__items_order):
@@ -117,8 +129,16 @@ class CDialogTab(object):
             self.__fixed_items_count = len(self.__vbox.get_children())
             self.__items = {}
 
-        def __HasVBoxOtherItems(self):
-            return len(self.__vbox.get_children()) > self.__fixed_items_count
+        def Clear(self):
+            self.__RemoveFromVPaned(self.__vpaned.get_child1())
+            self.__RemoveFromVPaned(self.__vpaned.get_child2())
+
+            while len(self.__vbox.get_children()) > self.__fixed_items_count:
+                self.__vbox.remove(self.__vbox.get_children()[self.__fixed_items_count])
+
+        def __RemoveFromVPaned(self, child):
+            if child is not None:
+                self.__vpaned.remove(child)
 
         def AppendItem(self, item):
             widget = item.GetItem().GetWidget()
@@ -191,6 +211,9 @@ class CDialogTab(object):
                 self.__MoveFirstOtherItemToVPaned()
             else:
                 self.__vbox.remove(widget)
+
+        def __HasVBoxOtherItems(self):
+            return len(self.__vbox.get_children()) > self.__fixed_items_count
 
         def __MoveFirstOtherItemToVPaned(self):
             if not self.__HasVBoxOtherItems():
