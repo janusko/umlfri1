@@ -157,7 +157,7 @@ class CDialogTab(object):
             if self.__vpaned.get_child2() is not None:
                 raise StandardError("VPaned contains second child, cannot move first child from VBox there.")
 
-            first = self.__vbox.get_children()[2]
+            first = self.__vbox.get_children()[self.__fixed_items_count]
             self.__vbox.remove(first)
             self.__vpaned.add2(first)
 
