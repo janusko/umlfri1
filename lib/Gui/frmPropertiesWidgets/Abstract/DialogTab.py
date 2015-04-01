@@ -115,12 +115,15 @@ class CDialogTab(object):
             self.__vbox = vbox
             self.__vpaned = vpaned
             self.__fixed_items_count = len(self.__vpaned.get_children())
+            self.__items = {}
 
         def __HasVBoxOtherItems(self):
             return len(self.__vbox.get_children()) > self.__fixed_items_count
 
         def AddItem(self, item):
             widget = item.GetItem().GetWidget()
+
+            self.__items[item.GetItemId()] = item
 
             vpaned_count = len(self.__vpaned.get_children())
             if vpaned_count == 0:
@@ -132,6 +135,8 @@ class CDialogTab(object):
 
         def RemoveItem(self, item):
             widget = item.GetItem().GetWidget()
+
+            del self.__items[item.GetItemId()]
 
             if self.__vpaned.get_child1() == widget:
                 self.__vpaned.remove(widget)
