@@ -134,11 +134,6 @@ class CDialogTab(object):
             table.attach(self.__align, 0, 1, row, row + 1, )
             table.attach((self.item.GetWidget()), 1, 2, row, row + 1)
 
-        def Append(self, table):
-            rows = len(table.get_children())
-            table.resize(rows + 1, 2)
-            self.Move(rows, table)
-
         def Remove(self, table):
             table.remove(self.__align)
             table.remove(self.item.GetWidget())
