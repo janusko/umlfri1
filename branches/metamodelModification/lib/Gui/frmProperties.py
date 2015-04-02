@@ -12,6 +12,7 @@ class CfrmProperties(object):
         self.element_changed=False
         self.element_change_ignored=False
         self.attributes={}
+        self.attributes_by_tab={}
         self.tables={}
         self.table_values={}
         self.dialog_sizes={}
@@ -531,6 +532,8 @@ class CfrmProperties(object):
 
         for tabname, attributes in attributes_order.iteritems():
             self.__ProcessAttributesTab(type,tabname,attributes,dialog,main_dialog)
+
+        self.attributes_by_tab[type.GetName()] = attributes_order
 
     def __GroupAttributesByTab(self, type):
         attributes_order={}
