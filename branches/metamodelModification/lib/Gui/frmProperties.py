@@ -764,8 +764,45 @@ class CfrmProperties(object):
             self.application.GetCommands().Execute(cmd)
 
     def __UpdateControls(self, dialog, type, main_dialog):
-        dialog.ClearTabs()
-        self.__ProcessDomainType(type,dialog,main_dialog)
+        new_attribute_order = self.__GroupAttributesByTab(type)
+        attribute_order = self.attributes_by_tab[type.GetName()]
+        # controlAttributes = self.attributes[type.GetName()].viewkeys()
+        # if typeAttributes != controlAttributes:
+        if set(new_attribute_order.iterkeys()) != set(attribute_order.iterkeys()):
+            # top level attributes have changed, recreate all tabs
+            dialog.ClearTabs()
+            self.__ProcessDomainType(type,dialog,main_dialog)
 
-        dialog.SetCurrentTab(0)
-        # TODO: optimize ^^ - recreate controls only if attributes (on any domain type) has changed
+            dialog.SetCurrentTab(0)
+            return
+
+        # top level attributes haven't changed - i.e. tabs will remain the same
+        # we'll just find which ones need updating and update them
+        for tabname, attributes in attribute_order.iteritems():
+            new_attributes = new_attribute_order[tabname]
+            if set(attributes) != set(new_attributes):
+                self.__RecreateTabAttributes(type, tabname, new_attributes, dialog, main_dialog)
+                return
+
+            # TODO: either assume there's only one attribute (list or other domain object)
+            # or figure out better way
+            name = attributes[0]
+            attribute = type.GetAttribute(name)
+            if attribute['type'] == 'list':
+                listType=type.GetFactory().GetDomain(attribute['list']['type'])
+                typeAttributes = set(listType.IterAttributeIDs())
+                controlAttributes = self.attributes[listType.GetName()]
+                if typeAttributes != set(controlAttributes.iterkeys()):
+                    self.__RecreateTabAttributes(type, tabname, new_attributes, dialog, main_dialog)
+
+            elif not type.IsAtomic(domain=attribute['type']):
+                objectType = type.GetFactory().GetDomain(attribute['type'])
+                typeAttributes = set(objectType.IterAttributeIDs())
+                controlAttributes = self.attributes[listType.GetName()]
+                if typeAttributes != set(controlAttributes.iterkeys()):
+                    self.__RecreateTabAttributes(type, tabname, new_attributes, dialog, main_dialog)
+
+    def __RecreateTabAttributes(self, type, tabname, atts_order, dialog, main_dialog = False):
+        dialog.ClearTab(tabname)
+        self.attributes_by_tab[type.GetName()][tabname] = atts_order
+        self.__ProcessAttributesTab(type, tabname, atts_order, dialog, main_dialog)
