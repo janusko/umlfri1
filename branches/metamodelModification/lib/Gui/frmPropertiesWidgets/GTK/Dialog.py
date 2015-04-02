@@ -62,6 +62,10 @@ class CDialog(CAbstractDialog):
         tab=self.dialog_tab[tabname]
         tab.AppendItem(itemid, item, itemname)
 
+    def ClearTab(self, tabname):
+        tab = self.dialog_tab[tabname]
+        tab.Clear()
+
     def ClearTabs(self):
         self.dialog_tab.clear()
         while self.dialog_tabs.get_n_pages() > 0:
