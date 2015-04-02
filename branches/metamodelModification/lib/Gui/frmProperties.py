@@ -531,6 +531,7 @@ class CfrmProperties(object):
         attributes_order = self.__GroupAttributesByTab(type)
 
         for tabname, attributes in attributes_order.iteritems():
+            dialog.AppendTab(tabname)
             self.__ProcessAttributesTab(type,tabname,attributes,dialog,main_dialog)
 
         self.attributes_by_tab[type.GetName()] = attributes_order
@@ -550,7 +551,6 @@ class CfrmProperties(object):
     #tato metoda pridava na dialog jednotlive vlastnosti podla ich typu
     def __ProcessAttributesTab(self,type,tabname,atts_order,dialog,main_dialog=False):
 
-        dialog.AppendTab(tabname)
         is_list=False
         for key in atts_order:
             att=type.GetAttribute(key)
