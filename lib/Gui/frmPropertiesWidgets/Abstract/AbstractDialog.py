@@ -35,7 +35,10 @@ class CAbstractDialog(object):
     def AppendItemToTab(self, tabname, itemid, item, itemname):
         pass
 
-    def ClearTabs(self, tabname):
+    def ClearTab(self, tabname):
+        pass
+
+    def ClearTabs(self):
         pass
 
     def SetHandler(self, event, func, data):
