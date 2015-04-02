@@ -372,20 +372,11 @@ class CfrmProperties(object):
             
             btnApply=CButton('_Apply')
             dialog.AppendButton(btnApply)
-            btnApply.SetHandler('clicked',self.__onMainDialogApplyButtonClick,(btnApply,dialog,type))
+            btnApply.SetHandler('clicked',self.__onMainDialogApplyButtonClick,(btnApply,dialog,type,main_dialog))
             self.apply_button=btnApply
-        
-        attributes_order={}
-        for id in type.IterAttributeIDs():
-            att=type.GetAttribute(id)
-            if att['hidden']:
-                continue
-            if att['type']!='list':
-                attributes_order.setdefault('General',[]).append(id)
-            else:
-                attributes_order.setdefault(att['name'],[]).append(id)
-        for key in attributes_order:
-            self.__ProcessDomainType(type,key,attributes_order[key],dialog,main_dialog)
+
+        self.__ProcessDomainType(type, dialog, main_dialog)
+
         dialog.SetCurrentTab(0)
         
         return dialog
@@ -534,9 +525,22 @@ class CfrmProperties(object):
                 entry.SetBackgroundColor('#FFFF66')
         else:
             self.tables[type.GetName()]['save'].SetSensitive(True)
-    
+
+    def __ProcessDomainType(self, type, dialog, main_dialog):
+        attributes_order={}
+        for id in type.IterAttributeIDs():
+            att=type.GetAttribute(id)
+            if att['hidden']:
+                continue
+            if att['type']!='list':
+                attributes_order.setdefault('General',[]).append(id)
+            else:
+                attributes_order.setdefault(att['name'],[]).append(id)
+        for tabname, attributes in attributes_order.iteritems():
+            self.__ProcessAttributesTab(type,tabname,attributes,dialog,main_dialog)
+
     #tato metoda pridava na dialog jednotlive vlastnosti podla ich typu
-    def __ProcessDomainType(self,type,tabname,atts_order,dialog,main_dialog=False):
+    def __ProcessAttributesTab(self,type,tabname,atts_order,dialog,main_dialog=False):
 
         dialog.AppendTab(tabname)
         is_list=False
@@ -663,9 +667,10 @@ class CfrmProperties(object):
             dialog.Close()
     
     #stlacenie apply button dialogu
-    def __onMainDialogApplyButtonClick(self,button,dialog,type):
+    def __onMainDialogApplyButtonClick(self,button,dialog,type,main_dialog):
         if self.__CheckValues(type):
             self.__SaveFunction(type)
+            self.__UpdateControls(dialog, type, main_dialog)
             self.element_changed=False
             button.SetSensitive(False)
         else:
@@ -749,3 +754,10 @@ class CfrmProperties(object):
             l = list(diff)
             cmd = CApplyPropertyPatchCommand(self.element, list(diff))
             self.application.GetCommands().Execute(cmd)
+
+    def __UpdateControls(self, dialog, type, main_dialog):
+        dialog.ClearTabs()
+        self.__ProcessDomainType(type,dialog,main_dialog)
+
+        dialog.SetCurrentTab(0)
+        # TODO: optimize ^^ - recreate controls only if attributes (on any domain type) has changed
