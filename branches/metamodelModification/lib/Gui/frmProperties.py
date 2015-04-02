@@ -527,6 +527,12 @@ class CfrmProperties(object):
             self.tables[type.GetName()]['save'].SetSensitive(True)
 
     def __ProcessDomainType(self, type, dialog, main_dialog):
+        attributes_order = self.__GroupAttributesByTab(type)
+
+        for tabname, attributes in attributes_order.iteritems():
+            self.__ProcessAttributesTab(type,tabname,attributes,dialog,main_dialog)
+
+    def __GroupAttributesByTab(self, type):
         attributes_order={}
         for id in type.IterAttributeIDs():
             att=type.GetAttribute(id)
@@ -536,8 +542,7 @@ class CfrmProperties(object):
                 attributes_order.setdefault('General',[]).append(id)
             else:
                 attributes_order.setdefault(att['name'],[]).append(id)
-        for tabname, attributes in attributes_order.iteritems():
-            self.__ProcessAttributesTab(type,tabname,attributes,dialog,main_dialog)
+        return attributes_order
 
     #tato metoda pridava na dialog jednotlive vlastnosti podla ich typu
     def __ProcessAttributesTab(self,type,tabname,atts_order,dialog,main_dialog=False):
