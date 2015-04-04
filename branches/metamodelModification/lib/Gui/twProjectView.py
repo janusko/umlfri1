@@ -349,6 +349,9 @@ class CtwProjectView(CWidget):
         self.twProjectView.get_selection().select_iter(iter)
         node = self.twProjectView.get_model().get(iter,3)[0]
         return node
+
+    def ExpandAll(self):
+        return self.twProjectView.expand_all()
         
     @event("twProjectView","drag-data-get")
     def on_drag_data_get(self, widget,drag_context, selection_data, info, time):
