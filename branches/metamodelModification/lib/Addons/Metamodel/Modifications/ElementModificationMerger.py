@@ -1,13 +1,13 @@
 class CElementModificationMerger(object):
     def MergeModifications(self, parentModifications, childModifications):
-        attributeModificationResolver = lambda parent, child: child
-        elementModificationsResolver = lambda parent, child: self.__MergeObjects(parent, child, attributeModificationResolver)
+        elementModificationsResolver = lambda parent, child: self.__MergeObjects(parent, child, self.__MergeAttributeModifications)
         return self.__MergeObjects(parentModifications, childModifications, elementModificationsResolver)
 
-    def __MergeObjects(self, parentObjects, childObjects, mergeResolver):
+    @staticmethod
+    def __MergeObjects(parentObjects, childObjects, mergeResolver):
         mergedObjects = dict(parentObjects)
 
-        for id, child in childObjects:
+        for id, child in childObjects.iteritems():
             if id not in parentObjects:
                 mergedObjects[id] = child
             else:
@@ -15,3 +15,11 @@ class CElementModificationMerger(object):
                 mergedObjects[id] = mergeResolver(parent, child)
 
         return mergedObjects
+
+    @staticmethod
+    def __MergeAttributeModifications(parentModifications, childModifications):
+        # TODO: optimize
+        parentDict = {m.GetAttributeID(): m for m in parentModifications}
+        childDict = {m.GetAttributeID(): m for m in childModifications}
+        merged = CElementModificationMerger.__MergeObjects(parentDict, childDict, lambda parent, child: child)
+        return merged.values()
