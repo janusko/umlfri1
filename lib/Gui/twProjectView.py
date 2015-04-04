@@ -157,25 +157,7 @@ class CtwProjectView(CWidget):
         iter = self.get_iter_from_node(diagram)
         self.twProjectView.expand_to_path(self.TreeStore.get_path(iter))
         self.twProjectView.get_selection().select_iter(iter)
-                    
-    
-    def AddElement(self, element, diagram, parentElement = None):
-        if parentElement is None:
-            parent = diagram.GetNode()
-        elif isinstance(parentElement, CProjectNode):
-            parent = parentElement
-        else:
-            parent = parentElement
 
-        node = CProjectNode(parent, element)
-        self.application.GetProject().AddNode(node, parent)
-        novy = self.TreeStore.append(self.get_iter_from_node(parent))
-        self.TreeStore.set(novy, 0, element.GetName() , 1, PixmapFromPath(self.application.GetProject().GetMetamodel().GetStorage(), element.GetType().GetIcon()), 2, element.GetType().GetId(),3,node)
-        self.twProjectView.get_selection().select_iter(novy)
-        self.emit('selected-item-tree',self.twProjectView.get_model().get(novy,3)[0])
-        self.twProjectView.scroll_to_cell(self.TreeStore.get_path(novy))        
-        
-        
     def AddDiagram(self, diagram):
         iter = self.twProjectView.get_selection().get_selected()[1]
         if iter is None:
