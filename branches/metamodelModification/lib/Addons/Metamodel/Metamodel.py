@@ -50,7 +50,10 @@ class CMetamodel(CBaseObject):
         # Valid diagrams in metamodel
         # not yet implemented
         
-    
+
+    def IsModified(self):
+        return False
+
     def GetStorage(self):
         return self.__Storage
     
