@@ -4,11 +4,15 @@ from lib.Elements import CElementFactory
 
 
 class CModifiedElementFactory(CElementFactory):
-    def __init__(self, parentFactory, metamodel, modificatons):
+    def __init__(self, parentFactory, metamodel, modificatons, ownedModifications):
         self.parentFactory = weakref.ref(parentFactory)
         self.metamodel = lambda: metamodel
         self.types = {}
         self.modifications = modificatons
+        self.ownedModifications = ownedModifications
+
+    def GetOwnedModifications(self):
+        return self.ownedModifications
 
     def GetModifications(self):
         return self.modifications
