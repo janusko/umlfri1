@@ -139,6 +139,6 @@ class CProjectNode(CBaseObject):
             return self.object.GetType().GetFactory().GetMetamodel()
 
     def CreateModification(self):
-        from lib.Addons.Metamodel.Modifications.MetamodelModificationBuilder import CMetamodelModificationBuilder
+        from lib.Addons.Metamodel.Modifications.ElementModificationBuilder import CElementModificationBuilder
 
-        return CMetamodelModificationBuilder(self.GetMetamodel(), self)
+        return CElementModificationBuilder(self)

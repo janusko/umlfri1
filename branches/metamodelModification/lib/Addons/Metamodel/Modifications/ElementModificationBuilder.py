@@ -1,10 +1,12 @@
+from lib.Addons.Metamodel.Modifications.MetamodelModification import CMetamodelModification
+from lib.Addons.Metamodel.Modifications.ModificationTreeBuilder import CModificationTreeBuilder
 from lib.Domains.Modifications import CReplaceAttributeModification
 from lib.Domains.Modifications.DeleteAttributeModification import CDeleteAttributeModification
 
 
 class CElementModificationBuilder:
-    def __init__(self, elementNode):
-        self.elementNode = elementNode
+    def __init__(self, projectNode):
+        self.projectNode = projectNode
         self.elementTypeModifications = {}
 
     def AddDomainAttribute(self, elementType, domain, attributeID, attributeProperties):
@@ -20,6 +22,12 @@ class CElementModificationBuilder:
 
     def GetElementTypeModifications(self):
         return self.elementTypeModifications
+
+    def Build(self):
+        objectTypeMapping = CModificationTreeBuilder(self.projectNode,
+                                                     self.elementTypeModifications).BuildTree()
+
+        return CMetamodelModification(objectTypeMapping)
 
     def __AppendDomainAttributeModification(self, elementType, domain, modification):
         modifications = self.__GetElementTypeModifications(elementType)

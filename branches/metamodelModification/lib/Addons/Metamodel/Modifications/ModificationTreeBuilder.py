@@ -9,28 +9,25 @@ from lib.Exceptions.DevException import MetamodelModificationError
 
 class CModificationTreeBuilder:
 
-    def __init__(self, metamodel, projectNode, elementModifications):
-        self.metamodel = metamodel
+    def __init__(self, projectNode, elementModifications):
         self.projectNode = projectNode
         self.elementModifications = elementModifications
 
     def BuildTree(self):
-        factory = self.metamodel.GetElementFactory()
-        elementModifications = list(builder.GetElementTypeModifications() for builder in self.elementModifications.itervalues())
-        for modification in elementModifications:
-            for name in modification.iterkeys():
-                if not factory.HasType(name):
-                    raise MetamodelModificationError('Creating new element types is not currently supported.')
+        factory = self.projectNode.GetMetamodel().GetElementFactory()
+        for name in self.elementModifications.iterkeys():
+            if not factory.HasType(name):
+                raise MetamodelModificationError('Creating new element types is not currently supported.')
 
-                type = factory.GetElement(name)
+            type = factory.GetElement(name)
 
-                if isinstance(type, CElementAlias):
-                    raise MetamodelModificationError('Cannot modify element alias "{0}"'.format(type))
+            if isinstance(type, CElementAlias):
+                raise MetamodelModificationError('Cannot modify element alias "{0}"'.format(type))
 
         # start with original element types from original metamodel
         # element aliases are skipped, since they are not supported
         elementTypes = {type.GetId(): type
-                        for type in self.metamodel.GetElementFactory().IterTypes()
+                        for type in factory.IterTypes()
                         if not isinstance(type, CElementAlias)}
 
         elementTypeMappings = {}
@@ -47,9 +44,8 @@ class CModificationTreeBuilder:
             elementNode, elementTypes = nodesToProcess.pop(0)
             element = elementNode.GetObject()
             if isinstance(element, CElementObject):
-                if elementNode in self.elementModifications:
-                    modifications = self.elementModifications[elementNode].GetElementTypeModifications()
-                    modifiedElementType = self.__BuildTypeFromNode(elementTypes, elementNode, modifications)
+                if elementNode == self.projectNode:
+                    modifiedElementType = self.__BuildTypeFromNode(elementTypes, elementNode, self.elementModifications)
                     elementTypes = dict(elementTypes)
 
                     elementTypeMappings[element] = CElementObjectTypeMapping(element, modifiedElementType)
