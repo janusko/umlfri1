@@ -26,4 +26,15 @@ def CreateModifications(project):
 
     modification = emBuilder.Build()
     modification.Apply()
+
+    modificationRoot = list(project.GetRoot().GetChilds())[3]
+    emBuilder = modificationRoot.CreateModification()
+    emBuilder.AddDomainAttribute('Class', 'class', 'final',
+                                 dict(
+                                     name='Final',
+                                     type='bool',
+                                     hidden=False,
+                                     default=None
+                                 ))
+    emBuilder.Build().Apply()
     pass
