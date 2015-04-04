@@ -15,6 +15,17 @@ class CModificationTreeBuilder:
         self.elementModifications = elementModifications
 
     def BuildTree(self):
+        factory = self.metamodel.GetElementFactory()
+        elementModifications = list(builder.GetElementTypeModifications() for builder in self.elementModifications.itervalues())
+        for modification in elementModifications:
+            for name in modification.iterkeys():
+                if not factory.HasType(name):
+                    raise MetamodelModificationError('Creating new element types is not currently supported.')
+
+                type = factory.GetElement(name)
+
+                if isinstance(type, CElementAlias):
+                    raise MetamodelModificationError('Cannot modify element alias "{0}"'.format(type))
 
         # start with original element types from original metamodel
         # element aliases are skipped, since they are not supported
@@ -66,16 +77,6 @@ class CModificationTreeBuilder:
         modifiedMetamodel = CModifiedMetamodel(elementNode.GetObject().GetType().GetMetamodel())
 
         modifiedElementFactory = modifiedMetamodel.GetElementFactory()
-
-        # TODO: check if there are modifications for unknown types
-        # for type, modifications in elementTypeModifications.iteritems():
-        #     if not elementTypes.has_key(type):
-        #         raise MetamodelModificationError('Creating new element types is not currently supported.')
-
-        # TODO: check if there are any modification for element aliases
-        # if isinstance(elementType, CElementAlias):
-        #     if elementTypeModifications.has_key()
-        #     raise MetamodelModificationError('Cannot modify element alias "%s"' % elementType.GetId())
 
         # similar algorithm as above for creating element object <-> type mappings
         # - encapsulate types from elementTypes with new element factory
