@@ -3,10 +3,14 @@ from lib.Elements import CElementFactory
 
 
 class CModifiedElementFactory(CElementFactory):
-    def __init__(self, parentFactory, metamodel):
+    def __init__(self, parentFactory, metamodel, modificatons):
         self.parentFactory = weakref.ref(parentFactory)
         self.metamodel = lambda: metamodel
         self.types = {}
+        self.modifications = modificatons
+
+    def GetModifications(self):
+        return self.modifications
 
     def __getattribute__(self, item):
         if object.__getattribute__(self, '__dict__').has_key(item):
