@@ -9,9 +9,9 @@ from lib.Exceptions.DevException import MetamodelModificationError
 
 class CModificationTreeBuilder:
 
-    def __init__(self, metamodel, projectRoot, elementModifications):
+    def __init__(self, metamodel, projectNode, elementModifications):
         self.metamodel = metamodel
-        self.projectRoot = projectRoot
+        self.projectNode = projectNode
         self.elementModifications = elementModifications
 
     def BuildTree(self):
@@ -42,7 +42,7 @@ class CModificationTreeBuilder:
         #     - for this project and its descendants, mappings will be created with this modified types
 
 
-        nodesToProcess = [(self.projectRoot, elementTypes)]
+        nodesToProcess = [(self.projectNode, elementTypes)]
         while len(nodesToProcess) > 0:
             elementNode, elementTypes = nodesToProcess.pop(0)
             element = elementNode.GetObject()
