@@ -219,6 +219,7 @@ class CfrmMain(CWindow):
             self.picDrawingArea.SetDiagram(diagram)
         self.twProjectView.GetRootNode()
         self.twProjectView.twProjectView.grab_focus()
+        self.twProjectView.ExpandAll()
         self.application.GetCommands().Clear()
         self.on_undo_redo_action(None, 'start')
 
