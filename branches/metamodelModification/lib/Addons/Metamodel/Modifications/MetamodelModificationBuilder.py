@@ -5,16 +5,16 @@ from lib.Addons.Metamodel.Modifications.ModificationTreeBuilder import CModifica
 
 class CMetamodelModificationBuilder:
 
-    def __init__(self, metamodel, projectRoot):
+    def __init__(self, metamodel, projectNode):
         self.elementModifications = {}
         self.metamodel = metamodel
-        self.projectRoot = projectRoot
+        self.projectNode = projectNode
 
     def CreateElementModifications(self, elementNode):
         return self.__GetElementModifications(elementNode)
 
     def Build(self):
-        objectTypeMapping = CModificationTreeBuilder(self.metamodel, self.projectRoot,
+        objectTypeMapping = CModificationTreeBuilder(self.metamodel, self.projectNode,
                                                      self.elementModifications).BuildTree()
 
         return CMetamodelModification(objectTypeMapping)
