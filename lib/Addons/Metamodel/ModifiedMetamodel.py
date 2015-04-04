@@ -12,6 +12,9 @@ class CModifiedMetamodel(CMetamodel):
     def GetRootNode(self):
         return self.rootNode
 
+    def IsModified(self):
+        return True
+
     def GetElementFactory(self):
         return self.elementFactory
 
