@@ -1,10 +1,12 @@
 from ..Base.Command import CCommand, CommandNotDone
+from lib.Addons.Metamodel.Modifications.MetamodelModificationMerger import CMetamodelModificationMerger
 from lib.Elements.TypeSetter import CElementTypeSetter
 
 
 class CMoveNodeCommand(CCommand):
 
     __elementTypeSetter = CElementTypeSetter()
+    __metamodelModificationMerger = CMetamodelModificationMerger()
 
     def __init__(self, node, newParent, newPosition):
         CCommand.__init__(self)
@@ -59,13 +61,12 @@ class CMoveNodeCommand(CCommand):
 
         while len(nodesToProcess) > 0:
             node, metamodel = nodesToProcess.pop(0)
-            parentMetamodel = GetParentMetamodel(node)
-            if parentMetamodel.IsModified() and node.IsModifiedMetamodelRoot():
-                # TODO: merge
-                pass
-            else:
-                self.__newTypes[node] = metamodel.GetElementFactory().GetElement(node.GetType())
-                self.__oldTypes[node] = node.GetObject().GetType()
+            # (metamodel.IsModified() or node.GetMetamodel().IsModified()) and
+            if node.IsModifiedMetamodelRoot():
+                metamodel = self.__metamodelModificationMerger.MergeMetamodels(metamodel, node.GetMetamodel())
+
+            self.__newTypes[node] = metamodel.GetElementFactory().GetElement(node.GetType())
+            self.__oldTypes[node] = node.GetObject().GetType()
 
             children = tuple((c, metamodel) for c in node.GetChilds())
             nodesToProcess.extend(children)
