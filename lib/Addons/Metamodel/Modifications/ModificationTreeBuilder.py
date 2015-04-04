@@ -74,7 +74,7 @@ class CModificationTreeBuilder:
         return factory.GetElement(elementNode.GetObject().GetType().GetId())
 
     def __BuildFactoryFromNode(self, elementTypes, elementNode, elementTypeModifications):
-        modifiedMetamodel = CModifiedMetamodel(elementNode.GetObject().GetType().GetMetamodel())
+        modifiedMetamodel = CModifiedMetamodel(elementNode.GetObject().GetType().GetMetamodel(), elementTypeModifications)
 
         modifiedElementFactory = modifiedMetamodel.GetElementFactory()
 

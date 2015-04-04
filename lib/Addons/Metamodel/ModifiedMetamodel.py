@@ -4,9 +4,9 @@ from lib.Elements.ModifiedFactory import CModifiedElementFactory
 
 
 class CModifiedMetamodel(CMetamodel):
-    def __init__(self, parentMetamodel):
+    def __init__(self, parentMetamodel, elementModifications):
         self.parentMetamodel = weakref.ref(parentMetamodel)
-        self.elementFactory = CModifiedElementFactory(parentMetamodel.GetElementFactory(), self)
+        self.elementFactory = CModifiedElementFactory(parentMetamodel.GetElementFactory(), self, elementModifications)
 
     def GetElementFactory(self):
         return self.elementFactory
