@@ -61,8 +61,8 @@ class CMoveNodeCommand(CCommand):
 
         while len(nodesToProcess) > 0:
             node, metamodel = nodesToProcess.pop(0)
-            # (metamodel.IsModified() or node.GetMetamodel().IsModified()) and
             if node.IsModifiedMetamodelRoot():
+                # TODO: optimize - when both metamodels have same root, no need to merge
                 metamodel = self.__metamodelModificationMerger.MergeMetamodels(metamodel, node.GetMetamodel())
 
             self.__newTypes[node] = metamodel.GetElementFactory().GetElement(node.GetType())
