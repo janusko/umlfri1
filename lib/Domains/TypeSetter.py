@@ -19,9 +19,9 @@ class CDomainTypeSetter(object):
                 for obj in value:
                     self.ApplyType(obj, itemType)
             else:
-                from lib.Domains import Cobject
+                from lib.Domains import CDomainObject
 
-                assert isinstance(value, Cobject)
+                assert isinstance(value, CDomainObject)
 
                 domaintype = factory.GetDomain(domaintype.GetName())
 
