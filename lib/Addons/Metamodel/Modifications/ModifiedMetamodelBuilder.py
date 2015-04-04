@@ -1,3 +1,4 @@
+from lib.Addons.Metamodel.Modifications.ElementModificationMerger import CElementModificationMerger
 from lib.Addons.Metamodel.ModifiedMetamodel import CModifiedMetamodel
 from lib.Domains.ModifiedFactory import CModifiedDomainFactory
 from lib.Domains.ModifiedType import CModifiedDomainType
@@ -6,9 +7,20 @@ from lib.Elements.ModifiedType import CModifiedElementType
 
 
 class CModifiedMetamodelBuilder(object):
-    def BuildMetamodel(self, elementNode, elementTypeModifications):
-        parentMetamodel = elementNode.GetObject().GetType().GetMetamodel()
-        modifiedMetamodel = CModifiedMetamodel(parentMetamodel, elementNode, elementTypeModifications)
+
+    __elementModificationMerger = CElementModificationMerger()
+
+    def BuildMetamodel(self, elementNode, elementTypeModifications, parentMetamodel = None):
+        if parentMetamodel is None:
+            parentMetamodel = elementNode.GetObject().GetType().GetMetamodel()
+
+        ownedElementTypeModifications = elementTypeModifications
+        if parentMetamodel.IsModified():
+            inheritedElementTypeModifications = parentMetamodel.GetElementFactory().GetModifications()
+
+            elementTypeModifications = self.__elementModificationMerger.MergeModifications(inheritedElementTypeModifications, ownedElementTypeModifications)
+
+        modifiedMetamodel = CModifiedMetamodel(parentMetamodel, elementNode, elementTypeModifications, ownedElementTypeModifications)
 
         modifiedElementFactory = modifiedMetamodel.GetElementFactory()
 

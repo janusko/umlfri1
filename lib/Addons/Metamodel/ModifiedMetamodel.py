@@ -4,10 +4,10 @@ from lib.Elements.ModifiedFactory import CModifiedElementFactory
 
 
 class CModifiedMetamodel(CMetamodel):
-    def __init__(self, parentMetamodel, rootNode, elementModifications):
+    def __init__(self, parentMetamodel, rootNode, elementModifications, ownedElementModifications):
         self.parentMetamodel = weakref.ref(parentMetamodel)
         self.rootNode = rootNode
-        self.elementFactory = CModifiedElementFactory(parentMetamodel.GetElementFactory(), self, elementModifications)
+        self.elementFactory = CModifiedElementFactory(parentMetamodel.GetElementFactory(), self, elementModifications, ownedElementModifications)
 
     def GetRootNode(self):
         return self.rootNode
