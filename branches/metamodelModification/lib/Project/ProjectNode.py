@@ -138,6 +138,14 @@ class CProjectNode(CBaseObject):
         else:
             return self.object.GetType().GetFactory().GetMetamodel()
 
+    def HasModifiedMetamodel(self):
+        from lib.Addons.Metamodel.ModifiedMetamodel import CModifiedMetamodel
+
+        return isinstance(self.GetMetamodel(), CModifiedMetamodel)
+
+    def IsModifiedMetamodelRoot(self):
+        return self.HasModifiedMetamodel() and self is self.GetMetamodel().GetRootNode()
+
     def CreateModification(self):
         from lib.Addons.Metamodel.Modifications.ElementModificationBuilder import CElementModificationBuilder
 
