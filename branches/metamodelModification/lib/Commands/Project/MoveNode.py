@@ -48,18 +48,19 @@ class CMoveNodeCommand(CCommand):
     def __CreateObjectTypeMappings(self):
         nodesToProcess = [(self.__node, self.__newParent.GetMetamodel())]
 
-        def HasParentModifiedMetamodel(node):
+        def GetParentMetamodel(node):
             parent = node.GetParent()
             if parent is self.__oldParent:
                 # when we ask for parent of node being moved, check metamodel of new parent
                 # since we're examining state _after_ the change is done
-                return self.__newParent.HasModifiedMetamodel()
+                return self.__newParent.GetMetamodel()
             else:
-                return self.__newTypes[parent].HasModifiedMetamodel()
+                return self.__newTypes[parent].GetMetamodel()
 
         while len(nodesToProcess) > 0:
             node, metamodel = nodesToProcess.pop(0)
-            if HasParentModifiedMetamodel(node) and node.IsModifiedMetamodelRoot():
+            parentMetamodel = GetParentMetamodel(node)
+            if parentMetamodel.IsModified() and node.IsModifiedMetamodelRoot():
                 # TODO: merge
                 pass
             else:
