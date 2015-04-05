@@ -1,4 +1,5 @@
 import Connection, Element, ConLabelInfo
+from lib.Drawing.ElementLabelInfo import CElementLabelInfo
 from lib.config import config
 from lib.Drawing.Context import CDrawingContext
 
@@ -136,6 +137,8 @@ class CSelection:
                 return True
             if isinstance(i, ConLabelInfo.CConLabelInfo) and i.GetConnection() is selObj:
                 return True
+            if isinstance(i, CElementLabelInfo) and i.GetElement() is selObj:
+                return True
 
         return False
 
@@ -149,6 +152,9 @@ class CSelection:
         '''
         if self.__IsSelected(selObj):
 
+            color = config['/Styles/Selection/PointsColor']
+            selColor = config['/Styles/Selection/RectangleColor']
+
             if isinstance(selObj, Element.CElement):
                 pos = selObj.GetPosition()
                 size = selObj.GetSize()
@@ -158,10 +164,16 @@ class CSelection:
                     self.__DrawElementSquares(canvas, list(self.GetSelectedElements())[0])
 
                 canvas.DrawRectangle(pos, size, fg = config['/Styles/Selection/RectangleColor'], line_width = config['/Styles/Selection/RectangleWidth'])
+
+                for label in selObj.GetLabels():
+                    pos = label.GetPosition()
+                    if self.__IsSelected(label):
+                        canvas.DrawRectangle(pos, label.GetSize(), selColor)
+                    else:
+                        canvas.DrawRectangle(pos, label.GetSize(), color)
+
             elif isinstance(selObj, Connection.CConnection):
                 size = config['/Styles/Selection/PointsSize']
-                color = config['/Styles/Selection/PointsColor']
-                selColor = config['/Styles/Selection/RectangleColor']
                 for index, i in enumerate(selObj.GetPoints()):
                     canvas.DrawRectangle((i[0] - size//2, i[1] - size//2), (size, size), color)
                 for label in selObj.labels.values():
