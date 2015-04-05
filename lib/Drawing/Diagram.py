@@ -318,7 +318,7 @@ class CDiagram(CBaseObject):
         for e in self.elements[::-1]:
             r = e.WhatPartOfYouIsAtPosition(pos)
             if r is not None:
-                return e
+                return r
             
         return None
 
