@@ -1,9 +1,10 @@
 from lib.Drawing.ElementLabelInfo import CElementLabelInfo
-from lib.config import config
+from lib.consts import LABELS_CLICKABLE
 from Connection import CConnection
 from Context import CDrawingContext
 from VisibleObject import CVisibleObject
 import weakref
+
 
 class CElement(CVisibleObject):
     def __init__(self, diagram, obj, isLoad = False, hasDeltaSize = False):
@@ -58,6 +59,9 @@ class CElement(CVisibleObject):
         context.Resize((w, h))
         self.object.Paint(context, canvas)
 
+        for label in self.labels.itervalues():
+            label.Paint(canvas)
+
     def GetConnections(self):
         for c1 in self.GetObject().GetConnections(): #ConnectionObject
             for c2 in self.diagram().GetConnections(): # Connection
@@ -72,6 +76,36 @@ class CElement(CVisibleObject):
         minSize = self.GetMinimalSize()
         self.position = resRect[0]
         self.actualSize = (max(minSize[0], resRect[1][0]), max(minSize[1], resRect[1][1]))
+
+    def WhatPartOfYouIsAtPosition(self, point):
+        '''
+        What is on the position defined by point
+
+            - L{CElementLabelInfo<CElementLabelInfo>} instance
+            - L{CElement<CElement>} instance
+            - None, if not hit
+
+        @rtype: L{CElementLabelInfo<CElementLabelInfo>} / L{CElement<CElement>} / NoneType
+        '''
+        if LABELS_CLICKABLE:
+            for label in self.labels.values():
+                if label.AreYouAtPosition(point):
+                    return label
+
+        if CVisibleObject.AreYouAtPosition(self, point):
+            return self
+        else:
+            return None
+
+    def AreYouAtPosition(self, point):
+        '''
+        Get state whether point hits a part of element, labels including
+
+        @return: True if L{WhatPartOfYouIsAtPosition
+        <self.WhatPartOfYouIsAtPosition>} returns something
+        @rtype: bool
+        '''
+        return self.WhatPartOfYouIsAtPosition(point) is not None
 
     def GetResizedRect(self, delta, mult):
         # updates position and checks if delta size is not greater than actual size
