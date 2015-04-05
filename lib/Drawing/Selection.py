@@ -1,5 +1,4 @@
-import Connection, Element, ConLabelInfo
-from lib.Drawing.ElementLabelInfo import CElementLabelInfo
+import Connection, Element, ConLabelInfo, ElementLabelInfo
 from lib.config import config
 from lib.Drawing.Context import CDrawingContext
 
@@ -137,7 +136,7 @@ class CSelection:
                 return True
             if isinstance(i, ConLabelInfo.CConLabelInfo) and i.GetConnection() is selObj:
                 return True
-            if isinstance(i, CElementLabelInfo) and i.GetElement() is selObj:
+            if isinstance(i, ElementLabelInfo.CElementLabelInfo) and i.GetElement() is selObj:
                 return True
 
         return False
