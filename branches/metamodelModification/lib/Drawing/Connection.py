@@ -221,6 +221,15 @@ class CConnection(CCacheableObject):
         @rtype: L{CConnectionObject<CConnectionObject>}
         '''
         return self.object
+
+    def GetLabels(self):
+        """
+        Yields all labels for this connection.
+
+        @rtype : iterator of L{CConLabelInfo<CConLabelInfo>}
+        """
+        for label in self.labels.itervalues():
+            yield label
     
     def GetLabelPosition(self, id):
         '''
