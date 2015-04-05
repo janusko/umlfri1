@@ -51,7 +51,21 @@
 					<xs:complexType>
 						<xs:sequence>
                             <xs:group ref="ObjectContainerContent" />
-							<xs:element name="Label" minOccurs="0" maxOccurs="unbounded" type="SimpleObjectContainer" />
+							<xs:element name="Label" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:complexContent>
+										<xs:extension base="SimpleObjectContainer">
+											<xs:attribute name="position" use="required">
+												<xs:simpleType>
+													<xs:restriction base="xs:string">
+														<xs:pattern value="(left|lefttop|top|righttop|left|leftbottom|bottom|rightbottom)([+\-][0-9]+)?"/>
+													</xs:restriction>
+												</xs:simpleType>
+											</xs:attribute>
+										</xs:extension>
+									</xs:complexContent>
+								</xs:complexType>
+							</xs:element>
                         </xs:sequence>
                     </xs:complexType>
 				</xs:element>
