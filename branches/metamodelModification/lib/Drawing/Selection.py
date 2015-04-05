@@ -27,7 +27,7 @@ class CSelection:
                 if isinstance(i, Element.CElement):
                     yield i
             else:
-                if isinstance(i, (Element.CElement, ConLabelInfo.CConLabelInfo)):
+                if isinstance(i, (Element.CElement, ConLabelInfo.CConLabelInfo, ElementLabelInfo.CElementLabelInfo)):
                     yield i
 
     def GetSelectedConnections(self):
