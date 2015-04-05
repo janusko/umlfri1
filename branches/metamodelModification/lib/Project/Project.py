@@ -20,7 +20,8 @@ from lib.Base import CBaseObject
 xmlschema_doc = [
     ((1,0,1), etree.parse(os.path.join(SCHEMA_PATH, "umlproject_1.0.1.xsd"))),
     ((1,1,0), etree.parse(os.path.join(SCHEMA_PATH, "umlproject_1.1.0.xsd"))),
-    ((1,2,0), etree.parse(os.path.join(SCHEMA_PATH, "umlproject_1.2.0.xsd")))
+    ((1,2,0), etree.parse(os.path.join(SCHEMA_PATH, "umlproject_1.2.0.xsd"))),
+    ((1,3,0), etree.parse(os.path.join(SCHEMA_PATH, "umlproject_1.3.0.xsd")))
 ]
 xmlschemas = []
 for version, doc in xmlschema_doc:
@@ -28,7 +29,7 @@ for version, doc in xmlschema_doc:
 
 
 class CProject(CBaseObject):
-    SaveVersion = (1, 2, 0) # save file format version
+    SaveVersion = (1, 3, 0) # save file format version
     def __init__(self, addonManager):
         self.root = None
         
@@ -194,6 +195,12 @@ class CProject(CBaseObject):
                         pos = e.GetPosition()
                         dw, dh = e.GetSize()
                         elementNode = etree.Element(UMLPROJECT_NAMESPACE+'element', id=unicode(e.GetObject().GetUID()), x=unicode(int(pos[0])), y=unicode(int(pos[1])), dw=unicode(int(dw)), dh=unicode(int(dh)))
+
+                        for num, info in enumerate(e.GetAllLabelPositions()):
+                            elementNode.append(etree.Element(UMLPROJECT_NAMESPACE+'label',
+                                dict(map(lambda x: (x[0], unicode(x[1])), info.iteritems())), #transform {key:value, ...} -> {key:unicode(value), ...}
+                                num=unicode(num)))
+
                         diagramNode.append(elementNode)
                         
                     for c in area.GetConnections():
@@ -333,6 +340,10 @@ class CProject(CBaseObject):
                                         dw = int(pic.get("dw"))
                                         dh = int(pic.get("dh"))
                                         element.SetSize((dw, dh))
+                                        for label in pic:
+                                            data = dict(label.items())
+                                            del data["num"]
+                                            element.RestoreLabelPosition(int(label.get("num")), data)
                                     else:
                                         # show warning
                                         pass
