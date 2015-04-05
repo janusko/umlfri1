@@ -176,7 +176,7 @@ class CSelection:
                 size = config['/Styles/Selection/PointsSize']
                 for index, i in enumerate(selObj.GetPoints()):
                     canvas.DrawRectangle((i[0] - size//2, i[1] - size//2), (size, size), color)
-                for label in selObj.labels.values():
+                for label in selObj.GetLabels():
                     pos = label.GetPosition()
                     if self.__IsSelected(label):
                         canvas.DrawRectangle(pos, label.GetSize(), selColor)
