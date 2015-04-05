@@ -2,7 +2,7 @@ from lib.Drawing.Selection import CSelection
 from lib.Exceptions.UserException import *
 from lib.Exceptions.UMLException import UMLException
 from lib.config import config
-import Connection, Element, ConLabelInfo
+import Connection, Element, ConLabelInfo, ElementLabelInfo
 from lib.Math2D import CRectangle
 from lib.Math2D import CPoint
 from lib.Domains import CDomainObject, CDomainFactory
@@ -10,7 +10,10 @@ from lib.consts import DEFAULT_IDENTITY
 from lib.Base import CBaseObject
 from lib.Drawing.Grid import CGrid
 import weakref
-    
+
+def IsLabel(obj):
+    return isinstance(obj, (ConLabelInfo.CConLabelInfo, ElementLabelInfo.CElementLabelInfo))
+
 class CDiagram(CBaseObject):
     def __init__(self, type, name = None): #  name = "untitled"
         self.elements = []
@@ -186,21 +189,21 @@ class CDiagram(CBaseObject):
         deltay = max(delta[1], -min(el.GetSquare()[0][1] for el in self.selection.GetSelectedElements()))
         movedCon = set()
         elements = set()
-        for el in self.selection.GetSelectedElements():
-            if not isinstance(el, ConLabelInfo.CConLabelInfo):
-                pos1, pos2 = el.GetSquare()
-                zorder = self.elements.index(el)
-                for el2 in self.GetElementsInRange(pos1, pos2):
-                    if not isinstance(el2, ConLabelInfo.CConLabelInfo):
-                        if self.elements.index(el2) > zorder:
-                            elements.add(el2)
-        elements |= set(self.selection.GetSelectedElements())
+        for el in self.selection.GetSelectedElements(True):
+            pos1, pos2 = el.GetSquare()
+            zorder = self.elements.index(el)
+            for el2 in self.GetElementsInRange(pos1, pos2):
+                if not IsLabel(el2):
+                    if self.elements.index(el2) > zorder:
+                        elements.add(el2)
+        selectLabels = len(elements) == 0
+        elements |= set(self.selection.GetSelectedElements(not selectLabels))
         condelta = self.grid.SnapPosition(delta) if self.grid.IsActive() \
             else delta
         for el in elements:
             x, y = el.GetPosition()
             self.MoveElement(el, (x + deltax, y + deltay))
-            if not isinstance(el, ConLabelInfo.CConLabelInfo):
+            if not IsLabel(el):
                 for con in el.GetConnections():
                     if (con.GetSource() in elements) and (con.GetDestination() in elements):
                         if con not in movedCon:
@@ -355,7 +358,7 @@ class CDiagram(CBaseObject):
         for k in var:
             for e in self.elements:#elements are ordered depending on their layer (if they have one or their layer is set to default value)
                 if int(e.GetObject().GetType().GetOptions().get('Layer',0))==k:
-                    if not isinstance(e, ConLabelInfo.CConLabelInfo):
+                    if not IsLabel(e):
                         selectedIdx = self.elements.index(e)
                         del self.elements[selectedIdx]
                         self.elements.insert(num, e)
@@ -414,54 +417,50 @@ class CDiagram(CBaseObject):
         return self.node()
     
     def ShiftElementsToTop(self):
-        for selectedElement in self.selection.GetSelectedElements():
-            if not isinstance(selectedElement, ConLabelInfo.CConLabelInfo):
-                selectedIdx = self.elements.index(selectedElement)
-                del self.elements[selectedIdx]
-                self.elements.append(selectedElement) 
+        for selectedElement in self.selection.GetSelectedElements(True):
+            selectedIdx = self.elements.index(selectedElement)
+            del self.elements[selectedIdx]
+            self.elements.append(selectedElement)
 
     def ShiftElementsToBottom(self):
-        for selectedElement in self.selection.GetSelectedElements():
-            if not isinstance(selectedElement, ConLabelInfo.CConLabelInfo):
-                selectedIdx = self.elements.index(selectedElement)
-                del self.elements[selectedIdx]
-                self.elements.insert(0, selectedElement)
+        for selectedElement in self.selection.GetSelectedElements(True):
+            selectedIdx = self.elements.index(selectedElement)
+            del self.elements[selectedIdx]
+            self.elements.insert(0, selectedElement)
 
     def ShiftElementsForward(self):
-        for selectedElement in self.selection.GetSelectedElements():
-            if not isinstance(selectedElement, ConLabelInfo.CConLabelInfo):
-                selectedIdx = self.elements.index(selectedElement)
-                selSq = selectedElement.GetSquare()
-                selRect = CRectangle(CPoint(selSq[0]), CPoint(selSq[1]))
-                selectedShifted = False
-                otherElementIdx = selectedIdx + 1
-                while otherElementIdx < len(self.elements) and selectedShifted == False:
-                    othSq = self.elements[otherElementIdx].GetSquare()
-                    othRect = CRectangle(CPoint(othSq[0]), CPoint(othSq[1]))
-                    prienik = selRect*othRect 
-                    if len(prienik) > 0:
-                        del self.elements[selectedIdx]
-                        self.elements.insert(otherElementIdx, selectedElement)
-                        selectedShifted = True
-                    otherElementIdx += 1
+        for selectedElement in self.selection.GetSelectedElements(True):
+            selectedIdx = self.elements.index(selectedElement)
+            selSq = selectedElement.GetSquare()
+            selRect = CRectangle(CPoint(selSq[0]), CPoint(selSq[1]))
+            selectedShifted = False
+            otherElementIdx = selectedIdx + 1
+            while otherElementIdx < len(self.elements) and selectedShifted == False:
+                othSq = self.elements[otherElementIdx].GetSquare()
+                othRect = CRectangle(CPoint(othSq[0]), CPoint(othSq[1]))
+                prienik = selRect*othRect
+                if len(prienik) > 0:
+                    del self.elements[selectedIdx]
+                    self.elements.insert(otherElementIdx, selectedElement)
+                    selectedShifted = True
+                otherElementIdx += 1
                 
     def ShiftElementsBack(self):
-        for selectedElement in self.selection.GetSelectedElements():
-            if not isinstance(selectedElement, ConLabelInfo.CConLabelInfo):
-                selectedIdx = self.elements.index(selectedElement)
-                selSq = selectedElement.GetSquare()
-                selRect = CRectangle(CPoint(selSq[0]), CPoint(selSq[1]))
-                selectedShifted = False
-                otherElementIdx = selectedIdx - 1
-                while otherElementIdx >= 0 and selectedShifted == False:
-                    othSq = self.elements[otherElementIdx].GetSquare()
-                    othRect = CRectangle(CPoint(othSq[0]), CPoint(othSq[1]))
-                    prienik = selRect*othRect
-                    if len(prienik) > 0:
-                        del self.elements[selectedIdx]
-                        self.elements.insert(otherElementIdx, selectedElement)
-                        selectedShifted = True
-                    otherElementIdx -= 1
+        for selectedElement in self.selection.GetSelectedElements(True):
+            selectedIdx = self.elements.index(selectedElement)
+            selSq = selectedElement.GetSquare()
+            selRect = CRectangle(CPoint(selSq[0]), CPoint(selSq[1]))
+            selectedShifted = False
+            otherElementIdx = selectedIdx - 1
+            while otherElementIdx >= 0 and selectedShifted == False:
+                othSq = self.elements[otherElementIdx].GetSquare()
+                othRect = CRectangle(CPoint(othSq[0]), CPoint(othSq[1]))
+                prienik = selRect*othRect
+                if len(prienik) > 0:
+                    del self.elements[selectedIdx]
+                    self.elements.insert(otherElementIdx, selectedElement)
+                    selectedShifted = True
+                otherElementIdx -= 1
     
     def CutSelection(self, clipboard):
         if self.selection.GetSelected():
@@ -556,10 +555,10 @@ class CDiagram(CBaseObject):
         return self.grid.SnapPosition(pos)
 
     def MoveElement(self, element, pos):
-        if not isinstance(element, ConLabelInfo.CConLabelInfo):
-            self.grid.SnapElement(element, pos)
-        else:
+        if IsLabel(element):
             element.SetPosition(pos)
+        else:
+            self.grid.SnapElement(element, pos)
     
     def MoveConnectionPoint(self, conn, pos, idx):
         self.grid.SnapConnection(conn, pos, idx)
@@ -722,4 +721,3 @@ class CDiagram(CBaseObject):
         for e in elements:
             pos = e.GetPosition()
             self.grid.SnapElement(e, pos, True)
-        
