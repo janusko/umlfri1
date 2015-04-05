@@ -72,6 +72,30 @@ class CElement(CVisibleObject):
                 if c2.GetObject() is c1:
                     yield c2
 
+    def GetAllLabelPositions(self):
+        '''Yield information about positions of all labels, generator
+
+        Used to gather information to be saved to .frip file
+
+        @return: yielding information stored in dictionary - responsibility for
+        contents is on L{CElementLabelInfo.GetSaveInfo<CElementLabelInfo.GetSaveInfo>}
+        @rtype: dict
+        '''
+        for label in  self.labels.values():
+            yield label.GetSaveInfo()
+
+    def RestoreLabelPosition(self, id, info):
+        '''Reset position of label, add new respectively using info
+
+        @param id: identification of label - how to recognize it
+        @type  id: int
+
+        @param info: dictionary with parameters to restore label position
+        @type  info: dict
+        '''
+        if id in self.labels:
+            self.labels[id].SetSaveInfo(**info)
+
     def Resize(self, delta, selSquareIdx):
         '''
         Updates actual size according to delta size and if necessary changes position
