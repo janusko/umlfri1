@@ -165,24 +165,22 @@ class CSelection:
 
                 canvas.DrawRectangle(pos, size, fg = config['/Styles/Selection/RectangleColor'], line_width = config['/Styles/Selection/RectangleWidth'])
 
-                for label in selObj.GetLabels():
-                    pos = label.GetPosition()
-                    if self.__IsSelected(label):
-                        canvas.DrawRectangle(pos, label.GetSize(), selColor)
-                    else:
-                        canvas.DrawRectangle(pos, label.GetSize(), color)
+                self.__DrawLabels(canvas, selObj, selColor, color)
 
             elif isinstance(selObj, Connection.CConnection):
                 size = config['/Styles/Selection/PointsSize']
                 for index, i in enumerate(selObj.GetPoints()):
                     canvas.DrawRectangle((i[0] - size//2, i[1] - size//2), (size, size), color)
-                for label in selObj.GetLabels():
-                    pos = label.GetPosition()
-                    if self.__IsSelected(label):
-                        canvas.DrawRectangle(pos, label.GetSize(), selColor)
-                    else:
-                        canvas.DrawRectangle(pos, label.GetSize(), color)
+                self.__DrawLabels(canvas, selObj, selColor, color)
 
     def __DrawElementSquares(self, canvas, selElement):
         for i in self.__GetSquares(selElement):
             canvas.DrawRectangle((i[1][0], i[1][1]), i[2], None, config['/Styles/Selection/PointsColor'])
+
+    def __DrawLabels(self, canvas, obj, selColor, color):
+        for label in obj.GetLabels():
+            pos = label.GetPosition()
+            if self.__IsSelected(label):
+                canvas.DrawRectangle(pos, label.GetSize(), selColor)
+            else:
+                canvas.DrawRectangle(pos, label.GetSize(), color)
