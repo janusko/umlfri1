@@ -62,6 +62,10 @@ class CElement(CVisibleObject):
         for label in self.labels.itervalues():
             label.Paint(canvas)
 
+    def GetLabels(self):
+        for label in self.labels.itervalues():
+            yield label
+
     def GetConnections(self):
         for c1 in self.GetObject().GetConnections(): #ConnectionObject
             for c2 in self.diagram().GetConnections(): # Connection
