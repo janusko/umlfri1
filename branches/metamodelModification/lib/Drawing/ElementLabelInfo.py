@@ -25,7 +25,6 @@ class CElementLabelInfo(CCacheableObject):
         
         CCacheableObject.__init__(self)
         self.dist = 0
-        self.pos = 0.5
         self.angle = pi/2
         self.actualSize = (0, 0)
         self.element = weakref.ref(element)
@@ -40,7 +39,6 @@ class CElementLabelInfo(CCacheableObject):
         @rtype: dict
         '''
         return {
-            'pos': self.pos,
             'dist': self.dist,
             'angle': self.angle}
     
@@ -53,7 +51,6 @@ class CElementLabelInfo(CCacheableObject):
         @rtype: dict
         '''
         self.dist = float(dist)
-        self.pos = float(pos)
         self.angle = float(angle)
     
     def GetDiagram(self):
