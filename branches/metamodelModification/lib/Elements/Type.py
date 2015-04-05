@@ -14,6 +14,7 @@ class CElementType(CBaseObject):
         '''
         self.icon = None
         self.id = id
+        self.labels = []
         self.attributes = {}
         self.connections = {}
         self.appearance = None
@@ -96,6 +97,39 @@ class CElementType(CBaseObject):
         add allowed connection as defined in metamodel
         '''
         self.connections[value] = (withobject, allowrecursive)
+
+    def AddLabel(self, label):
+        """
+        Add label to element type
+
+        @param label: visual object representing the label
+        @type  label: L{CVisualObject<lib.Drawing.Objects.VisualObject.CVisualObject>}
+        """
+        self.labels.append(label)
+
+    def RemoveLabel(self, label):
+        """
+        Remove label from element
+
+        @param label: visual object representing the label
+        @type  label: L{CVisualObject<lib.Drawing.Objects.VisualObject.CVisualObject>}
+        """
+        for id, i in enumerate(self.labels):
+            if i[1] is label:
+                del self.labels[id]
+                return
+        else:
+            raise ConnectionError("LabelNotExists")
+
+    def GetLabels(self):
+        """
+        Get list of all labels on this element type
+
+        @return: all labels
+        @rtype:  iterator over (string, L{CVisualObject<lib.Drawing.Objects.VisualObject.CVisualObject>}) pairs
+        """
+        for label in self.labels:
+            yield label
     
     def GetAppearance(self):
         '''
