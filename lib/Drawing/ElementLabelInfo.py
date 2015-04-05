@@ -1,8 +1,10 @@
-from lib.Math2D import CPoint, CPolyLine, CLine
-from math import pi, sqrt
+from math import pi
+import weakref
+
+from lib.Math2D import CLine
 from CacheableObject import CCacheableObject
 from Context import CDrawingContext
-import weakref
+
 
 class EElementLabelInfo(Exception): pass
 
@@ -37,7 +39,7 @@ class CElementLabelInfo(CCacheableObject):
         @return: dictionary containing essential information
         @rtype: dict
         '''
-        return {\
+        return {
             'pos': self.pos,
             'dist': self.dist,
             'angle': self.angle}
@@ -181,7 +183,7 @@ class CElementLabelInfo(CCacheableObject):
             
     def AreYouInRange(self, topleft, bottomright, all = False):
         '''
-        Check wheter label is withinin rectangular area
+        Check whether label is within rectangular area
         
         Can use two policy decision, depending on value of parameter all:
         
