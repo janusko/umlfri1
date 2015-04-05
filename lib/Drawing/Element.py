@@ -1,3 +1,4 @@
+from lib.Drawing.ElementLabelInfo import CElementLabelInfo
 from lib.config import config
 from Connection import CConnection
 from Context import CDrawingContext
@@ -12,12 +13,14 @@ class CElement(CVisibleObject):
         self.object = obj
         self.diagram = weakref.ref(diagram)
         self.diagram().AddElement(self)
+        self.labels = dict((id, CElementLabelInfo(self, logicalLabel))
+                           for id, logicalLabel in enumerate(self.object.GetType().GetLabels()))
         self.object.AddAppears(diagram)
         self.__AddExistingConnections()
-    
+
     def GetDiagram(self):
         return self.diagram()
-    
+
     def __AddExistingConnections(self):
         if not self.isLoad:
             for i in self.object.GetConnections():
@@ -31,7 +34,7 @@ class CElement(CVisibleObject):
     def Paint(self, canvas):
         x, y = self.position
         context = CDrawingContext(self, (x, y))
-        
+
         rx, ry = self.object.GetType().GetResizable(context)
 
         minsize = self.GetMinimalSize()
@@ -51,7 +54,7 @@ class CElement(CVisibleObject):
             wasSmall = True
         if wasSmall:
             self.SetSize((w, h))
-        
+
         context.Resize((w, h))
         self.object.Paint(context, canvas)
 
@@ -75,7 +78,7 @@ class CElement(CVisibleObject):
         pos = list(self.GetPosition())
         size = list(self.actualSize)
         minSize = self.GetMinimalSize()
-        
+
         for i in (0, 1):
             if mult[i] < 0:
                 if delta[i] > size[i] - minSize[i]:
@@ -88,10 +91,10 @@ class CElement(CVisibleObject):
                 size[i] = max(minSize[i], size[i] + mult[i] * delta[i])
 
         return pos, size
-        
+
     def CopyFromElement(self, element):
         self.actualSize = element.actualSize
         self.position = element.position
-    
+
     def GetObject(self):
         return self.object
