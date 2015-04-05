@@ -98,14 +98,17 @@ class CElementType(CBaseObject):
         '''
         self.connections[value] = (withobject, allowrecursive)
 
-    def AddLabel(self, label):
+    def AddLabel(self, position, label):
         """
         Add label to element type
+
+        @param position: initial position of label. See L{ElementLabelInfo<lib.Drawing.ElementLabelInfo>}.
+        @type  position: string
 
         @param label: visual object representing the label
         @type  label: L{CVisualObject<lib.Drawing.Objects.VisualObject.CVisualObject>}
         """
-        self.labels.append(label)
+        self.labels.append((position, label))
 
     def RemoveLabel(self, label):
         """

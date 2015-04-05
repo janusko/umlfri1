@@ -14,8 +14,8 @@ class CElement(CVisibleObject):
         self.object = obj
         self.diagram = weakref.ref(diagram)
         self.diagram().AddElement(self)
-        self.labels = dict((id, CElementLabelInfo(self, logicalLabel))
-                           for id, logicalLabel in enumerate(self.object.GetType().GetLabels()))
+        self.labels = dict((id, CElementLabelInfo(self, *values))
+                           for id, values in enumerate(self.object.GetType().GetLabels()))
         self.object.AddAppears(diagram)
         self.__AddExistingConnections()
 

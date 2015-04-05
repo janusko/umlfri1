@@ -97,7 +97,7 @@ class CElementFactoryLoader(CBaseObject):
                     tmp = None
                     for child in element:
                         if root and child.tag == METAMODEL_NAMESPACE+'Label':
-                            obj.AddLabel(self.__LoadLabelAppearance(child[0]))
+                            obj.AddLabel(child.get('position'), self.__LoadLabelAppearance(child[0]))
                         else:
                             tmp = child
                     obj.SetAppearance(self.__LoadAppearance(tmp))
