@@ -149,16 +149,6 @@ class CConLabelInfo(CCacheableObject):
         return ( (int(x - width / 2.), int(y - height / 2.) ),
                  (int(x + width / 2.), int(y + height / 2.) ) )
     
-    def GetSquareAtPosition(self, pos):
-        '''
-        Does nothing, only for interface compatibility with 
-        L{CElement<Element.CElement>}
-        
-        @return: None
-        @rtype: NoneType
-        '''
-        return None
-    
     def GetAbsolutePosition(self):
         '''
         Get center position of label
