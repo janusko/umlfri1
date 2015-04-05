@@ -122,16 +122,12 @@ class CConLabelInfo(CCacheableObject):
         '''
         return self.actualSize
     
-    def GetMinimalSize(self, canvas):
+    def GetMinimalSize(self):
         '''
-        The same as L{GetSize<self.GetSize>}. Canvas parameter is necessary, because this method also
-        exists on other classes.
+        The same as L{GetSize<self.GetSize>}.
         
         @return: size of label in 2-tuple (width, height)
         @rtype:  tuple
-
-        @param canvas:
-        @type canvas: L{CCairoCanvas<lib.Drawing.Canvas.CairoCanvas.CCairoCanvas>}
         '''
         return self.GetSize()
         
