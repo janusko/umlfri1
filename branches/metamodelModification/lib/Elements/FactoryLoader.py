@@ -95,8 +95,11 @@ class CElementFactoryLoader(CBaseObject):
 
                 elif element.tag == METAMODEL_NAMESPACE+'Appearance':
                     tmp = None
-                    for j in element:
-                        tmp = j
+                    for child in element:
+                        if root and child.tag == METAMODEL_NAMESPACE+'Label':
+                            obj.AddLabel(self.__LoadLabelAppearance(child[0]))
+                        else:
+                            tmp = child
                     obj.SetAppearance(self.__LoadAppearance(tmp))
                 elif element.tag == METAMODEL_NAMESPACE+'Options':
                     for item in element:
@@ -130,6 +133,32 @@ class CElementFactoryLoader(CBaseObject):
             else:
                 for child in root:
                     obj.AppendChild(self.__LoadAppearance(child))
+            return obj
+
+        def __LoadLabelAppearance(self, root):
+            """
+            Loads the label from an appearance section of an XML file
+
+            @param root: Label element child
+            @type  root: L{Element<lxml.etree.Element>}
+
+            @return: Visual object representing this section
+            @rtype:  L{CVisualObject<lib.Drawing.Objects.VisualObject.CVisualObject>}
+            """
+
+            if root.tag.split("}")[1] not in ALL:
+                raise FactoryError("XMLError", root.tag)
+
+            cls = ALL[root.tag.split("}")[1]]
+            params = {}
+            for attr in root.attrib.items():
+                params[attr[0]] = BuildParam(attr[1], cls.types.get(attr[0], None))
+            obj = cls(**params)
+            if hasattr(obj, "LoadXml"):
+                obj.LoadXml(root)
+            else:
+                for child in root:
+                    obj.AppendChild(self.__LoadLabelAppearance(child))
             return obj
 
         def __LoadConnections(self, obj, root):
