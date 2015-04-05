@@ -159,8 +159,9 @@ class CSelection:
                 size = selObj.GetSize()
 
                 # squares are painted, if exactly one element is selected
-                if len(list(self.GetSelectedElements())) == 1:
-                    self.__DrawElementSquares(canvas, list(self.GetSelectedElements())[0])
+                selectedElements = list(self.GetSelectedElements())
+                if len(selectedElements) == 1 and isinstance(selectedElements[0], Element.CElement):
+                    self.__DrawElementSquares(canvas, selectedElements[0])
 
                 canvas.DrawRectangle(pos, size, fg = config['/Styles/Selection/RectangleColor'], line_width = config['/Styles/Selection/RectangleWidth'])
 
