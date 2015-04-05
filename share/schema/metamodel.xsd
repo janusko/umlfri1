@@ -44,10 +44,16 @@
 					</xs:complexType>
 				</xs:element>
 				<!--<xs:element name="Attributes" type="AttributesType" minOccurs="0"/>-->
-				<xs:element name="Appearance" type="SimpleObjectContainer">
+				<xs:element name="Appearance">
 					<xs:annotation>
 						<xs:documentation>This block define appearance of element as line, icon, align, padding, ...</xs:documentation>
 					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+                            <xs:group ref="ObjectContainerContent" />
+							<xs:element name="Label" minOccurs="0" maxOccurs="unbounded" type="SimpleObjectContainer" />
+                        </xs:sequence>
+                    </xs:complexType>
 				</xs:element>
 				<xs:element name="Options" type="OptionType" minOccurs="0">
 					<xs:annotation>
