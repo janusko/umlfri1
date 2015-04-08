@@ -232,6 +232,7 @@ class CProject(CBaseObject):
         rootNode = etree.XML('<umlproject saveversion="%s" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/umlproject.xsd"></umlproject>'%('.'.join(str(i) for i in self.SaveVersion)))
         
         metamodelNode = etree.Element(UMLPROJECT_NAMESPACE+'metamodel')
+        domainNode = etree.Element(UMLPROJECT_NAMESPACE+'domain')
         objectsNode = etree.Element(UMLPROJECT_NAMESPACE+'objects')
         connectionsNode = etree.Element(UMLPROJECT_NAMESPACE+'connections')
         diagramsNode = etree.Element(UMLPROJECT_NAMESPACE+'diagrams')
@@ -247,6 +248,9 @@ class CProject(CBaseObject):
         metamodelNode.append(metamodelUriNode)
         metamodelNode.append(metamodelVersionNode)
         rootNode.append(metamodelNode)
+
+        domainNode.append(SaveDomainObjectInfo(self.__domainObject.GetSaveInfo()))
+        rootNode.append(domainNode)
         
         elements = list(elements)
         elements.sort(key = CBaseObject.GetUID)
@@ -479,7 +483,11 @@ class CProject(CBaseObject):
                     raise ProjectError("This metamodel is disabled")
 
                 self.__domainObject = CDomainObject(self.__metamodel.GetDomain())
-                
+
+            elif element.tag == UMLPROJECT_NAMESPACE+'domain':
+                data = CProject.__LoadDomainObjectInfo(element[0])
+                self.__domainObject.SetSaveInfo(data)
+
             elif element.tag == UMLPROJECT_NAMESPACE+'objects':
                 for subelem in element:
                     if subelem.tag == UMLPROJECT_NAMESPACE+'object':
