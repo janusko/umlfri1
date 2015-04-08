@@ -506,6 +506,7 @@
 					</xs:complexType>
 				</xs:element>
 			</xs:sequence>
+            <xs:attribute name="domain" type="xs:string" use="required"/>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="ConnectionType">
