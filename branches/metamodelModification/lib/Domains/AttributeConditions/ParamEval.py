@@ -6,9 +6,6 @@ class CAttributeConditionParamEval(CParamEval):
     def _UpdateLocals(self, context, locals):
         locals['self'] = CAttributeConditionEvalWrapper(context.GetDomainObject())
 
-    def _CreateNodeEvalWrapper(self, object, node):
-        return CAttributeConditionEvalWrapper(object, node)
-
 class CAttributeConditionParamBuilder(CParamBuilder):
     def _CreateParamEval(self, str, type):
         return CAttributeConditionParamEval(str, type)

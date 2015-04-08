@@ -11,9 +11,6 @@ class CDrawingContextParamEval(CParamEval):
 
         locals.update(context.GetVariables())
 
-    def _CreateNodeEvalWrapper(self, object, node):
-        return CDrawingContextNodeEvalWrapper(object, node)
-
 class CDrawingContextParamBuilder(CParamBuilder):
     def _CreateParamEval(self, str, type):
         return CDrawingContextParamEval(str, type)

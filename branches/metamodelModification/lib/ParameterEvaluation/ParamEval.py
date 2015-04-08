@@ -16,9 +16,6 @@ class CParamEval(CBaseObject):
             value = self.__type(value)
         return value
 
-    def _CreateNodeEvalWrapper(self, object):
-        return CNodeEvalWrapper(object)
-
     def _UpdateLocals(self, context, locals):
         pass
 
