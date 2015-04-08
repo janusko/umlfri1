@@ -32,9 +32,11 @@ class CMetamodelAddonComponent(object):
             #xml (version) file is validate with xsd schema (metamodel.xsd)
             if not xmlschema.validate(root):
                 raise FactoryError("XMLError", xmlschema.error_log.last_error)
-            
-            self.__metamodel = CMetamodel(storage, self.__addon.GetDefaultUri(), self.__addon.GetVersion())
-            
+
+            modelDomain = root.get('domain')
+
+            self.__metamodel = CMetamodel(storage, self.__addon.GetDefaultUri(), self.__addon.GetVersion(), modelDomain)
+
             #Iterate over the descendants of root element (only element with tag=Item)
             for element in root[0]:
                 diagName = element.get('value')
