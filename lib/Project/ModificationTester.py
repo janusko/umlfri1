@@ -1,3 +1,4 @@
+from lib.Commands.Project.ApplyModifiedMetamodel import CApplyModifiedMetamodelCommand
 from lib.Domains.AttributeConditions import BuildParam
 
 
@@ -24,8 +25,7 @@ def CreateModifications(project):
                                      default=False
                                  ))
 
-    modification = emBuilder.Build()
-    modification.Apply()
+    metamodel1 = emBuilder.BuildMetamodel()
 
     modificationRoot = list(project.GetRoot().GetChilds())[3]
     emBuilder = modificationRoot.CreateModification()
@@ -36,5 +36,8 @@ def CreateModifications(project):
                                      hidden=False,
                                      default=None
                                  ))
-    emBuilder.Build().Apply()
-    pass
+    metamodel2 = emBuilder.BuildMetamodel()
+
+    metamodels = [metamodel1, metamodel2]
+    for m in metamodels:
+        yield CApplyModifiedMetamodelCommand(m.GetRootNode(), m)

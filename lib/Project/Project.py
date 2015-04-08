@@ -537,7 +537,3 @@ class CProject(CBaseObject):
                         self.GetMetamodel().GetDiagramFactory().GetDiagram(item.get('id')).SetCounter(int(item.get('value')))
         
         self.__addonManager.GetPluginManager().GetPluginAdapter().gui_project_opened(self)
-
-        from lib.Project import ModificationTester
-
-        ModificationTester.CreateModifications(self)
