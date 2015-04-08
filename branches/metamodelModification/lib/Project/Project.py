@@ -1,4 +1,5 @@
 from lib.Depend.libxml import etree
+from lib.Domains import CDomainObject
 
 from lib.lib import XMLEncode, Indent
 from ProjectNode import CProjectNode
@@ -36,6 +37,7 @@ class CProject(CBaseObject):
         self.__addonManager = addonManager
         self.__metamodel = None
         self.__addon = None
+        self.__domainObject = None
         self.defaultDiagram = None
         
         self.filename = None
@@ -68,7 +70,10 @@ class CProject(CBaseObject):
     
     def GetMetamodel(self):
         return self.__metamodel
-    
+
+    def GetDomainObject(self):
+        return self.__domainObject
+
     def SetRoot(self, value):
         self.root = value
     
@@ -472,6 +477,8 @@ class CProject(CBaseObject):
                 self.__metamodel = addon.GetComponent().LoadMetamodel()
                 if self.__metamodel is None:
                     raise ProjectError("This metamodel is disabled")
+
+                self.__domainObject = CDomainObject(self.__metamodel.GetDomain())
                 
             elif element.tag == UMLPROJECT_NAMESPACE+'objects':
                 for subelem in element:
