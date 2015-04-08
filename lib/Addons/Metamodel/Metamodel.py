@@ -10,7 +10,7 @@ from lib.Base import CBaseObject
 import os
 
 class CMetamodel(CBaseObject):
-    def __init__(self, storage, uri, version):
+    def __init__(self, storage, uri, version, modelDomain):
         self.__Storage = storage
         self.__PathFactory = CPathFactory(self.__Storage, 'paths.xml')
         self.__DomainFactory = CDomainFactory(self.__Storage, 'domains')
@@ -49,7 +49,18 @@ class CMetamodel(CBaseObject):
         
         # Valid diagrams in metamodel
         # not yet implemented
-        
+
+
+        if not self.__DomainFactory.HasDomain(modelDomain):
+            raise MetamodelValidationError('Domain type of metamodel "%s" does not exist' % modelDomain)
+
+        self.__domain = self.__DomainFactory.GetDomain(modelDomain)
+
+    def SetDomain(self, domain):
+        self.__domain = domain
+
+    def GetDomain(self):
+        return self.__domain
 
     def IsModified(self):
         return False
