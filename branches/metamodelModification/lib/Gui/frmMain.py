@@ -208,6 +208,12 @@ class CfrmMain(CWindow):
         #     '''
         #     return CErrorDialog(self.form, _('Error opening file') + '\n' + _(str(ex))).run()
 
+        from lib.Project import ModificationTester
+
+        commands = ModificationTester.CreateModifications(self.application.GetProject())
+        for command in commands:
+            self.application.GetCommands().Execute(command)
+
         self.ReloadTitle()
         self.twProjectView.Redraw(True)
         self.mnuItems.Redraw()
