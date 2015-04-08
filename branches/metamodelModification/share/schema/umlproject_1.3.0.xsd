@@ -18,6 +18,16 @@
 						</xs:sequence>
 					</xs:complexType>
 				</xs:element>
+                <xs:element name="domain">
+                    <xs:annotation>
+                        <xs:documentation>Project's domain object.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="dict" type="dictType"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
 				<xs:element name="objects">
 					<xs:annotation>
 						<xs:documentation>In this block all object (element) are defined</xs:documentation>
