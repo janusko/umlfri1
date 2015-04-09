@@ -25,12 +25,15 @@ class CModifiedMetamodelBuilder(object):
 
         modifiedElementFactory = modifiedMetamodel.GetElementFactory()
 
-        # similar algorithm as above for creating element object <-> type mappings
-        # - encapsulate types from elementTypes with new element factory
+        # algorithm overview:
+        # - encapsulate element types from parent metamodel with new element type
         # - if there are modifications for given element type, stop and process them:
         #   - create modified domain factory
         #   - create modified domain types
-        # - replace types in elementTypes with the new, modified types
+        #
+        # Even elements, which are not modified, have to be replaced with CModifiedElementType,
+        # because we need to have access to modified metamodel even from elements that are not modified
+        # (e.g. create modified element 'class' as child of unmodified element 'package')
 
         for elementType in parentMetamodel.GetElementFactory().IterTypes():
             id = elementType.GetId()
