@@ -4,7 +4,7 @@ from lib.Addons.Metamodel.Modifications.ModifiedMetamodelBuilder import CModifie
 from lib.Elements.TypeSetter import CElementTypeSetter
 
 
-class CApplyModificationBundles(CCommand):
+class CApplyModificationBundlesCommand(CCommand):
 
     __elementTypeSetter = CElementTypeSetter()
     __metamodelModificationMerger = CMetamodelModificationMerger()
