@@ -9,7 +9,8 @@ def CreateModifications(project):
     modificationRoot = list(project.GetRoot().GetChilds())[2]
 
     emBuilder = modificationRoot.CreateModification()
-    emBuilder.AddDomainAttribute('Class', 'class', 'docstring',
+    bundleBuilder = emBuilder.CreateBundle("bundle 1")
+    bundleBuilder.AddDomainAttribute('Class', 'class', 'docstring',
                                  dict(
                                      name='Documentation string',
                                      type='text',
@@ -17,7 +18,7 @@ def CreateModifications(project):
                                      default=None,
                                      condition=BuildParam('#self.sealed')
                                  ))
-    emBuilder.AddDomainAttribute('Class', 'class', 'sealed',
+    bundleBuilder.AddDomainAttribute('Class', 'class', 'sealed',
                                  dict(
                                      name='Sealed',
                                      type='bool',
@@ -29,7 +30,8 @@ def CreateModifications(project):
 
     modificationRoot = list(project.GetRoot().GetChilds())[3]
     emBuilder = modificationRoot.CreateModification()
-    emBuilder.AddDomainAttribute('Class', 'class', 'final',
+    bundleBuilder = emBuilder.CreateBundle("bundle 2")
+    bundleBuilder.AddDomainAttribute('Class', 'class', 'final',
                                  dict(
                                      name='Final',
                                      type='bool',

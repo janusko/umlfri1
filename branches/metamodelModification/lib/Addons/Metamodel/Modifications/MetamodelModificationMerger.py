@@ -6,6 +6,6 @@ class CMetamodelModificationMerger(object):
     __modifiedMetamodelBuilder = CModifiedMetamodelBuilder()
 
     def MergeMetamodels(self, parentMetamodel, childMetamodel):
-        elementTypeModifications = childMetamodel.GetElementFactory().GetOwnedModifications()
-        mergedMetamodel = self.__modifiedMetamodelBuilder.BuildMetamodel(childMetamodel.GetRootNode(), elementTypeModifications, parentMetamodel)
+        modificationBundles = childMetamodel.GetModificationBundles()
+        mergedMetamodel = self.__modifiedMetamodelBuilder.BuildMetamodel(childMetamodel.GetRootNode(), modificationBundles, parentMetamodel)
         return mergedMetamodel
