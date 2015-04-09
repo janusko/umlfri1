@@ -1,3 +1,4 @@
+import itertools
 from ..Base.Command import CCommand, CommandNotDone
 from lib.Addons.Metamodel.Modifications.MetamodelModificationMerger import CMetamodelModificationMerger
 from lib.Addons.Metamodel.Modifications.ModifiedMetamodelBuilder import CModifiedMetamodelBuilder
@@ -19,12 +20,18 @@ class CApplyModificationBundlesCommand(CCommand):
         self.__oldTypes = {}
 
     def _Do(self):
-        metamodel = self.__modifiedMetamodelBuilder.BuildMetamodel(self.__node, self.__bundles)
+        parentMetamodel = None
+        if self.__node.IsModifiedMetamodelRoot():
+            parentMetamodel = self.__node.GetMetamodel().GetParentMetamodel()
+
+            self.__bundles = list(itertools.chain(self.__node.GetMetamodel().GetModificationBundles(), self.__bundles))
+
+        metamodel = self.__modifiedMetamodelBuilder.BuildMetamodel(self.__node, self.__bundles, parentMetamodel)
         nodesToProcess = [(self.__node, metamodel)]
 
         while len(nodesToProcess) > 0:
             node, metamodel = nodesToProcess.pop(0)
-            if node.IsModifiedMetamodelRoot():
+            if node.IsModifiedMetamodelRoot() and node != self.__node:
                 # TODO: optimize - when both metamodels have same root, no need to merge
                 metamodel = self.__metamodelModificationMerger.MergeMetamodels(metamodel, node.GetMetamodel())
 
