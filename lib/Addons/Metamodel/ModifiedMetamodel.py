@@ -16,6 +16,9 @@ class CModifiedMetamodel(CMetamodel):
     def GetRootNode(self):
         return self.rootNode
 
+    def GetParentMetamodel(self):
+        return self.parentMetamodel()
+
     def IsModified(self):
         return True
 
