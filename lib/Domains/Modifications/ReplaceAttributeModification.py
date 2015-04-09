@@ -1,7 +1,9 @@
-from DomainAttributeModification import CDomainAttributeModification
+from DomainAttributeModification import CDomainAttributeModification, DomainAttributeModificationType
 
 
 class CReplaceAttributeModification(CDomainAttributeModification):
+
+    type = DomainAttributeModificationType.REPLACE
 
     def __init__(self, attributeID, attributeProperties):
         CDomainAttributeModification.__init__(self, attributeID)
