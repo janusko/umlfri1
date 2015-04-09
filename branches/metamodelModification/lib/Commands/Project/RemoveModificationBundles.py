@@ -28,7 +28,10 @@ class CRemoveModificationBundlesCommand(CCommand):
         newBundles = [bundle for bundle in bundles if bundle not in self.__bundles]
 
         parentMetamodel = metamodel.GetParentMetamodel()
-        metamodel = self.__modifiedMetamodelBuilder.BuildMetamodel(self.__node, newBundles, parentMetamodel)
+        if not newBundles:  # no more bundles left, use parent metamodel
+            metamodel = parentMetamodel
+        else:
+            metamodel = self.__modifiedMetamodelBuilder.BuildMetamodel(self.__node, newBundles, parentMetamodel)
 
         self.__newTypes, self.__oldTypes = self.__modificationTreeBuilder.CreateObjectTypeMappings(self.__node, metamodel)
 
