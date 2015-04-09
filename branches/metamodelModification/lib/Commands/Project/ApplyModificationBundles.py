@@ -1,6 +1,6 @@
 import itertools
 from ..Base.Command import CCommand, CommandNotDone
-from lib.Addons.Metamodel.Modifications.MetamodelModificationMerger import CMetamodelModificationMerger
+from lib.Addons.Metamodel.Modifications.ModificationTreeBuilder import CModificationTreeBuilder
 from lib.Addons.Metamodel.Modifications.ModifiedMetamodelBuilder import CModifiedMetamodelBuilder
 from lib.Elements.TypeSetter import CElementTypeSetter
 
@@ -8,16 +8,16 @@ from lib.Elements.TypeSetter import CElementTypeSetter
 class CApplyModificationBundlesCommand(CCommand):
 
     __elementTypeSetter = CElementTypeSetter()
-    __metamodelModificationMerger = CMetamodelModificationMerger()
     __modifiedMetamodelBuilder = CModifiedMetamodelBuilder()
+    __modificationTreeBuilder = CModificationTreeBuilder(False)    # builder that doesn't merge metamodel at root node
 
     def __init__(self, node, bundles):
         CCommand.__init__(self)
 
         self.__node = node
         self.__bundles = bundles
-        self.__newTypes = {}
-        self.__oldTypes = {}
+        self.__newTypes = None
+        self.__oldTypes = None
 
     def _Do(self):
         parentMetamodel = None
@@ -27,19 +27,8 @@ class CApplyModificationBundlesCommand(CCommand):
             self.__bundles = list(itertools.chain(self.__node.GetMetamodel().GetModificationBundles(), self.__bundles))
 
         metamodel = self.__modifiedMetamodelBuilder.BuildMetamodel(self.__node, self.__bundles, parentMetamodel)
-        nodesToProcess = [(self.__node, metamodel)]
 
-        while len(nodesToProcess) > 0:
-            node, metamodel = nodesToProcess.pop(0)
-            if node.IsModifiedMetamodelRoot() and node != self.__node:
-                # TODO: optimize - when both metamodels have same root, no need to merge
-                metamodel = self.__metamodelModificationMerger.MergeMetamodels(metamodel, node.GetMetamodel())
-
-            self.__newTypes[node] = metamodel.GetElementFactory().GetElement(node.GetType())
-            self.__oldTypes[node] = node.GetObject().GetType()
-
-            children = tuple((c, metamodel) for c in node.GetChilds())
-            nodesToProcess.extend(children)
+        self.__newTypes, self.__oldTypes = self.__modificationTreeBuilder.CreateObjectTypeMappings(self.__node, metamodel)
 
         self._Redo()
 
