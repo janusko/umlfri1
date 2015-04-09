@@ -2,6 +2,7 @@ try:
     from lxml import etree
     from lxml.etree import XMLSyntaxError
     from lxml import html
+    from lxml import builder
     HAVE_LXML = True
     LIBRARY=("lxml " + etree.__version__ + 
         " (libxml " + '.'.join(str(i) for i in etree.LIBXML_VERSION) + ")")
