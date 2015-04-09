@@ -1,4 +1,5 @@
-from lib.Commands.Project.ApplyModifiedMetamodel import CApplyModifiedMetamodelCommand
+from lib.Addons.Metamodel.Modifications.ModificationBundleBuilder import CMetamodelModificationBundleBuidler
+from lib.Commands.Project.ApplyModificationBundles import CApplyModificationBundles
 from lib.Domains.AttributeConditions import BuildParam
 
 
@@ -8,8 +9,8 @@ def CreateModifications(project):
 
     modificationRoot = list(project.GetRoot().GetChilds())[2]
 
-    emBuilder = modificationRoot.CreateModification()
-    bundleBuilder = emBuilder.CreateBundle("bundle 1")
+    mbBuilder = CMetamodelModificationBundleBuidler()
+    bundleBuilder = mbBuilder.CreateBundle("bundle 1")
     bundleBuilder.AddDomainAttribute('Class', 'class', 'docstring',
                                  dict(
                                      name='Documentation string',
@@ -26,11 +27,11 @@ def CreateModifications(project):
                                      default=False
                                  ))
 
-    metamodel1 = emBuilder.BuildMetamodel()
+    modification1 = (modificationRoot, mbBuilder.BuildBundles())
 
     modificationRoot = list(project.GetRoot().GetChilds())[3]
-    emBuilder = modificationRoot.CreateModification()
-    bundleBuilder = emBuilder.CreateBundle("bundle 2")
+    mbBuilder = CMetamodelModificationBundleBuidler()
+    bundleBuilder = mbBuilder.CreateBundle("bundle 2")
     bundleBuilder.AddDomainAttribute('Class', 'class', 'final',
                                  dict(
                                      name='Final',
@@ -38,8 +39,8 @@ def CreateModifications(project):
                                      hidden=False,
                                      default=None
                                  ))
-    metamodel2 = emBuilder.BuildMetamodel()
+    modification2 = (modificationRoot, mbBuilder.BuildBundles())
 
-    metamodels = [metamodel1, metamodel2]
-    for m in metamodels:
-        yield CApplyModifiedMetamodelCommand(m.GetRootNode(), m)
+    modifications = [modification1, modification2]
+    for (root, bundles) in modifications:
+        yield CApplyModificationBundles(root, bundles)
