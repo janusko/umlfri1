@@ -11,4 +11,4 @@ class CMetamodelModificationBundleBuidler(object):
         return self.bundleBuilders.setdefault(name, CElementModificationBuilder())
 
     def BuildBundles(self):
-        return {name: CMetamodelModificationBundle(name, builder.GetElementTypeModifications()) for name, builder in self.bundleBuilders.iteritems()}
+        return [CMetamodelModificationBundle(name, builder.GetElementTypeModifications()) for name, builder in self.bundleBuilders.iteritems()]
