@@ -55,9 +55,12 @@ class CModifiedMetamodelBuilder(object):
         return modifiedMetamodel
 
     def __GetElementTypeModifications(self, modificationBundles):
-        modifications = {}
+        modifications = None
         for bundle in modificationBundles:
-            modifications.update(bundle.GetElementModifications())
+            if not modifications:
+                modifications = bundle.GetElementModifications()
+            else:
+                modifications = self.__elementModificationMerger.MergeModifications(modifications, bundle.GetElementModifications())
         return modifications
 
     def __CreateModifiedDomainTypes(self, factory, domainModifications):
