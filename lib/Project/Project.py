@@ -1,5 +1,6 @@
-from lib.Depend.libxml import etree
+from lib.Depend.libxml import etree, builder
 from lib.Domains import CDomainObject
+from lib.Domains.Modifications.DomainAttributeModification import DomainAttributeModificationType
 
 from lib.lib import XMLEncode, Indent
 from ProjectNode import CProjectNode
@@ -113,6 +114,7 @@ class CProject(CBaseObject):
         elements = set()
         connections = set()
         diagrams = set()
+        metamodelRoots = []
         def _search(node):
             obj = node.GetObject()
             elements.add(obj)
@@ -122,9 +124,11 @@ class CProject(CBaseObject):
                 diagrams.add(diagram)
             for chld in node.GetChilds():
                 _search(chld)
+            if node.IsModifiedMetamodelRoot():
+                metamodelRoots.append(node)
         
         _search(node)
-        return elements, connections, diagrams
+        return elements, connections, diagrams, metamodelRoots
     
     def SaveProject(self, filename = None, isZippedFile = None):
         if filename is None:
@@ -227,12 +231,13 @@ class CProject(CBaseObject):
             nodeNode.append(diagramsNode)
             element.append(nodeNode)
         
-        elements, connections, diagrams = self.searchCE(self.root)
+        elements, connections, diagrams, metamodelRoots = self.searchCE(self.root)
         
         rootNode = etree.XML('<umlproject saveversion="%s" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/umlproject.xsd"></umlproject>'%('.'.join(str(i) for i in self.SaveVersion)))
         
         metamodelNode = etree.Element(UMLPROJECT_NAMESPACE+'metamodel')
         domainNode = etree.Element(UMLPROJECT_NAMESPACE+'domain')
+        modificationBundlesNode = etree.Element(UMLPROJECT_NAMESPACE+'modificationbundles')
         objectsNode = etree.Element(UMLPROJECT_NAMESPACE+'objects')
         connectionsNode = etree.Element(UMLPROJECT_NAMESPACE+'connections')
         diagramsNode = etree.Element(UMLPROJECT_NAMESPACE+'diagrams')
@@ -251,6 +256,57 @@ class CProject(CBaseObject):
 
         domainNode.append(SaveDomainObjectInfo(self.__domainObject.GetSaveInfo()))
         rootNode.append(domainNode)
+
+        rootNode.append(modificationBundlesNode)
+
+        for node in metamodelRoots:
+            bundles = node.GetMetamodel().GetModificationBundles()
+            elementNode = etree.SubElement(modificationBundlesNode, UMLPROJECT_NAMESPACE+'element', id=unicode(node.GetObject().GetUID()))
+            for bundle in bundles:
+                bundleNode = etree.SubElement(elementNode, UMLPROJECT_NAMESPACE+'bundle', name=bundle.GetName())
+                for type, modifications in bundle.GetElementModifications().iteritems():
+                    elementTypeNode = etree.SubElement(bundleNode, UMLPROJECT_NAMESPACE+'element', id=type)
+                    for domain, modifications in modifications.iteritems():
+                        domainModificationNode = etree.SubElement(elementTypeNode, UMLPROJECT_NAMESPACE+'domain', id=domain)
+                        for attributeModification in modifications:
+                            if attributeModification.GetType() == DomainAttributeModificationType.DELETE:
+                                attributeNode = etree.SubElement(domainModificationNode, UMLPROJECT_NAMESPACE+'deleteattribute')
+
+                            elif attributeModification.GetType() == DomainAttributeModificationType.REPLACE:
+                                attributeNode = etree.SubElement(domainModificationNode, UMLPROJECT_NAMESPACE+'replaceattribute')
+                                props = attributeModification.GetAttributeProperties()
+                                attributeNode.set('name', unicode(props['name']))
+
+                                type = props['type']
+                                if props.get('hidden', False):
+                                    attributeNode.set('hidden', 'true')
+
+                                typeNode = etree.SubElement(attributeNode, UMLPROJECT_NAMESPACE+type.title())
+
+                                if type in ('int', 'float'):
+                                    if 'max' in props:
+                                        typeNode.append(builder.E(UMLPROJECT_NAMESPACE+'max', unicode(str(props['max']))))
+                                    if 'min' in props:
+                                        typeNode.append(builder.E(UMLPROJECT_NAMESPACE+'min', unicode(str(props['min']))))
+
+                                if 'enum' in props:
+                                    if type == 'enum':
+                                        enumNode = typeNode
+                                    else:
+                                        enumNode = etree.SubElement(typeNode, UMLPROJECT_NAMESPACE+'Enum')
+                                    for value in props['enum']:
+                                        enumNode.append(builder.E(UMLPROJECT_NAMESPACE+'Value', unicode(value)))
+
+                                if type in ('str', 'text') and 'restricted' in props:
+                                    typeNode.append(builder.E(UMLPROJECT_NAMESPACE+'Restriction', unicode(props['restricted'])))
+
+                                defaultValue = props.get('default', None)
+                                if type != 'list' and defaultValue:
+                                    typeNode.set('default', unicode(str(defaultValue)))
+                            else:
+                                raise ProjectError('Unknown domain attribute modification type "%s"' % attributeModification.GetType())
+
+                            attributeNode.set('id', unicode(attributeModification.GetAttributeID()))
         
         elements = list(elements)
         elements.sort(key = CBaseObject.GetUID)
