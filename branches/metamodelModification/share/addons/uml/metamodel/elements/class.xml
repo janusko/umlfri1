@@ -171,5 +171,16 @@
                 </HBox>
             </Rectangle>
         </Shadow>
+        <Label position="left">
+            <HBox>
+                <Condition condition="#self.note">
+                    <Align align="center">
+                        <Rectangle fill="#cfg.Styles.Connection.TextFill">
+                            <TextBox text="#self.note" font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>
+                        </Rectangle>
+                    </Align>
+                </Condition>
+            </HBox>
+        </Label>
     </Appearance>
 </ElementType>
