@@ -1,3 +1,4 @@
+from itertools import chain
 from lib.Addons.Metamodel.Modifications.ElementModificationMerger import CElementModificationMerger
 from lib.Addons.Metamodel.ModifiedMetamodel import CModifiedMetamodel
 from lib.Domains.ModifiedFactory import CModifiedDomainFactory
@@ -10,17 +11,17 @@ class CModifiedMetamodelBuilder(object):
 
     __elementModificationMerger = CElementModificationMerger()
 
-    def BuildMetamodel(self, elementNode, elementTypeModifications, parentMetamodel = None):
+    def BuildMetamodel(self, elementNode, modificationBundles, parentMetamodel = None):
         if parentMetamodel is None:
             parentMetamodel = elementNode.GetObject().GetType().GetMetamodel()
 
-        ownedElementTypeModifications = elementTypeModifications
+        elementTypeModifications = self.__GetElementTypeModifications(modificationBundles)
         if parentMetamodel.IsModified():
-            inheritedElementTypeModifications = parentMetamodel.GetElementFactory().GetModifications()
+            inheritedElementTypeModifications = self.__GetElementTypeModifications(parentMetamodel.GetModificationBundles())
 
-            elementTypeModifications = self.__elementModificationMerger.MergeModifications(inheritedElementTypeModifications, ownedElementTypeModifications)
+            elementTypeModifications = self.__elementModificationMerger.MergeModifications(inheritedElementTypeModifications, elementTypeModifications)
 
-        modifiedMetamodel = CModifiedMetamodel(parentMetamodel, elementNode, elementTypeModifications, ownedElementTypeModifications)
+        modifiedMetamodel = CModifiedMetamodel(parentMetamodel, elementNode, elementTypeModifications, modificationBundles)
 
         modifiedElementFactory = modifiedMetamodel.GetElementFactory()
 
@@ -49,6 +50,12 @@ class CModifiedMetamodelBuilder(object):
             modifiedElementType.SetDomain(domainfactory.GetDomain(elementType.GetDomain().GetName()))
 
         return modifiedMetamodel
+
+    def __GetElementTypeModifications(self, modificationBundles):
+        modifications = {}
+        for bundle in modificationBundles.itervalues():
+            modifications.update(bundle.GetElementModifications())
+        return modifications
 
     def __CreateModifiedDomainTypes(self, factory, domainModifications):
         for name, modifications in domainModifications.iteritems():
