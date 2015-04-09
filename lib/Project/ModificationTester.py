@@ -1,5 +1,5 @@
 from lib.Addons.Metamodel.Modifications.ModificationBundleBuilder import CMetamodelModificationBundleBuidler
-from lib.Commands.Project.ApplyModificationBundles import CApplyModificationBundles
+from lib.Commands.Project.ApplyModificationBundles import CApplyModificationBundlesCommand
 from lib.Domains.AttributeConditions import BuildParam
 
 
@@ -43,4 +43,4 @@ def CreateModifications(project):
 
     modifications = [modification1, modification2]
     for (root, bundles) in modifications:
-        yield CApplyModificationBundles(root, bundles)
+        yield CApplyModificationBundlesCommand(root, bundles)
