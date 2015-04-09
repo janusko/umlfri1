@@ -9,5 +9,8 @@ class CReplaceAttributeModification(CDomainAttributeModification):
         CDomainAttributeModification.__init__(self, attributeID)
         self.attributeProperties = attributeProperties
 
+    def GetAttributeProperties(self):
+        return self.attributeProperties
+
     def ApplyToAttributes(self, attributes):
         attributes[self.attributeID] = self.attributeProperties
