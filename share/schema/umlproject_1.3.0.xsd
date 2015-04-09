@@ -28,6 +28,16 @@
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
+                <xs:element name="modificationbundles">
+					<xs:annotation>
+						<xs:documentation>In this block modification bundles are defined</xs:documentation>
+					</xs:annotation>
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="element" type="modificationBundleRootType" minOccurs="0" maxOccurs="unbounded" />
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
 				<xs:element name="objects">
 					<xs:annotation>
 						<xs:documentation>In this block all object (element) are defined</xs:documentation>
@@ -123,6 +133,149 @@
 			</xs:attribute>
 		</xs:complexType>
 	</xs:element>
+    <xs:complexType name="modificationBundleRootType">
+		<xs:annotation>
+			<xs:documentation>type of metamodel modification bundle root</xs:documentation>
+		</xs:annotation>
+        <xs:sequence>
+            <xs:element name="bundle" type="modificationBundleType" minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string" use="required" />
+    </xs:complexType>
+    <xs:complexType name="modificationBundleType">
+		<xs:annotation>
+			<xs:documentation>type of metamodel modification bundle</xs:documentation>
+		</xs:annotation>
+        <xs:sequence>
+            <xs:element name="element" type="elementModificationType" minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required" />
+    </xs:complexType>
+    <xs:complexType name="elementModificationType">
+		<xs:annotation>
+			<xs:documentation>type of element modification</xs:documentation>
+		</xs:annotation>
+        <xs:sequence>
+            <xs:element name="domain" type="domainModificationType" minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string" use="required" />
+    </xs:complexType>
+    <xs:complexType name="domainModificationType">
+		<xs:annotation>
+			<xs:documentation>type of domain modification</xs:documentation>
+		</xs:annotation>
+        <xs:sequence>
+            <xs:element ref="replaceattribute" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element ref="deleteattribute" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string" use="required" />
+    </xs:complexType>
+    <xs:complexType name="domainAttributeModificationType" abstract="true">
+        <xs:annotation>
+			<xs:documentation>type of domain attribute modification</xs:documentation>
+		</xs:annotation>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+    </xs:complexType>
+    <xs:element name="replaceattribute">
+        <xs:annotation>
+			<xs:documentation>Replace modification of domain attribute.</xs:documentation>
+		</xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="domainAttributeModificationType">
+                    <xs:choice>
+                        <xs:element name="Color" minOccurs="1" maxOccurs="1">
+                            <xs:complexType>
+                                <xs:attribute name="default" type="xs:string" use="optional"/>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="Font" minOccurs="1" maxOccurs="1">
+                            <xs:complexType>
+                                <xs:attribute name="default" type="xs:string" use="optional"/>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="Int" minOccurs="1" maxOccurs="1">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="Min" minOccurs="0" maxOccurs="1"/>
+                                    <xs:element name="Max" minOccurs="0" maxOccurs="1"/>
+                                    <xs:element name="Enum" minOccurs="0" maxOccurs="1">
+                                        <xs:complexType>
+                                            <xs:sequence>
+                                                <xs:element name="Value" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+                                            </xs:sequence>
+                                        </xs:complexType>
+                                    </xs:element>
+                                </xs:sequence>
+                                <xs:attribute name="default" type="xs:integer" use="optional"/>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="Float" minOccurs="1" maxOccurs="1">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="Min" minOccurs="0" maxOccurs="1"/>
+                                    <xs:element name="Max" minOccurs="0" maxOccurs="1"/>
+                                    <xs:element name="Enum" minOccurs="0" maxOccurs="1">
+                                        <xs:complexType>
+                                            <xs:sequence>
+                                                <xs:element name="Value" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+                                            </xs:sequence>
+                                        </xs:complexType>
+                                    </xs:element>
+                                </xs:sequence>
+                                <xs:attribute name="default" type="xs:float" use="optional"/>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="Bool" minOccurs="1" maxOccurs="1">
+                            <xs:complexType>
+                                <xs:attribute name="default" use="optional">
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="True"/>
+                                            <xs:enumeration value="False"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="Text" minOccurs="1" maxOccurs="1">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="Restriction" minOccurs="0" maxOccurs="1"/>
+                                </xs:sequence>
+                                <xs:attribute name="default" type="xs:string" use="optional"/>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="Str" minOccurs="1" maxOccurs="1">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="Restriction" minOccurs="0" maxOccurs="1"/>
+                                    <xs:element name="Enum" minOccurs="0" maxOccurs="1">
+                                        <xs:complexType>
+                                            <xs:sequence>
+                                                <xs:element name="Value" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+                                            </xs:sequence>
+                                        </xs:complexType>
+                                    </xs:element>
+                                </xs:sequence>
+                                <xs:attribute name="default" type="xs:string" use="optional"/>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="Enum" minOccurs="1" maxOccurs="1">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="Value" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+                                </xs:sequence>
+                                <xs:attribute name="default" type="xs:string" use="optional"/>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:choice>
+                    <xs:attribute name="name" type="xs:string" use="required"/>
+                    <xs:attribute name="hidden" type="xs:boolean" use="optional" default="false"/>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
 	<xs:complexType name="nodeType">
 		<xs:annotation>
 			<xs:documentation>type of Node</xs:documentation>
@@ -169,7 +322,17 @@
 		</xs:sequence>
 		<xs:attribute name="id" type="xs:string" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="diagramType">
+    <xs:element name="deleteattribute">
+        <xs:annotation>
+            <xs:documentation>Delete modification of domain attribute.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="domainAttributeModificationType" />
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="diagramType">
 		<xs:annotation>
 			<xs:documentation>type of Diagram</xs:documentation>
 		</xs:annotation>
