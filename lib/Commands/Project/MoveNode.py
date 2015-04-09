@@ -1,5 +1,6 @@
 from ..Base.Command import CCommand, CommandNotDone
 from lib.Addons.Metamodel.Modifications.MetamodelModificationMerger import CMetamodelModificationMerger
+from lib.Addons.Metamodel.Modifications.ModificationTreeBuilder import CModificationTreeBuilder
 from lib.Elements.TypeSetter import CElementTypeSetter
 
 
@@ -8,16 +9,22 @@ class CMoveNodeCommand(CCommand):
     __elementTypeSetter = CElementTypeSetter()
     __metamodelModificationMerger = CMetamodelModificationMerger()
 
+    # root == root of subtree being moved (i.e. node being moved)
+    # We need builder that DOES merge metamodel at root node, because new parent could have modified metamodel
+    # and at the same time the node that is being moved is a root for new modified metamodel.
+    # Then we need to perform metamodel merge at that node.
+    __modificationTreeBuilder = CModificationTreeBuilder(False)
+
     def __init__(self, node, newParent, newPosition):
         CCommand.__init__(self)
 
         self.__node = node
         self.__newParent = newParent
         self.__newPosition = newPosition
-        self.__newTypes = {}
+        self.__newTypes = None
         self.__oldParent = None
         self.__oldPosition = None
-        self.__oldTypes = {node: node.GetObject().GetType()}
+        self.__oldTypes = None
 
     def _Do(self):
         if self.__newParent is None:
@@ -42,25 +49,12 @@ class CMoveNodeCommand(CCommand):
         isNewParentModified = self.__newParent.HasModifiedMetamodel()
         isOldParentModified = self.__oldParent.HasModifiedMetamodel()
 
+        # when only node being moved has modified metamodel, there is no need to change element types
         if isNewParentModified or isOldParentModified:
-            self.__CreateObjectTypeMappings()
-
+            self.__newTypes, self.__oldTypes =\
+                self.__modificationTreeBuilder.CreateObjectTypeMappings(self.__node,
+                                                                        self.__newParent.GetMetamodel())
         self._Redo()
-
-    def __CreateObjectTypeMappings(self):
-        nodesToProcess = [(self.__node, self.__newParent.GetMetamodel())]
-
-        while len(nodesToProcess) > 0:
-            node, metamodel = nodesToProcess.pop(0)
-            if node.IsModifiedMetamodelRoot():
-                # TODO: optimize - when both metamodels have same root, no need to merge
-                metamodel = self.__metamodelModificationMerger.MergeMetamodels(metamodel, node.GetMetamodel())
-
-            self.__newTypes[node] = metamodel.GetElementFactory().GetElement(node.GetType())
-            self.__oldTypes[node] = node.GetObject().GetType()
-
-            children = tuple((c, metamodel) for c in node.GetChilds())
-            nodesToProcess.extend(children)
 
     def _Redo(self):
         self.__oldParent.RemoveChild(self.__node)
