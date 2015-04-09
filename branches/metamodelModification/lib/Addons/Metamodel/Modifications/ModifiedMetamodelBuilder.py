@@ -56,7 +56,7 @@ class CModifiedMetamodelBuilder(object):
 
     def __GetElementTypeModifications(self, modificationBundles):
         modifications = {}
-        for bundle in modificationBundles.itervalues():
+        for bundle in modificationBundles:
             modifications.update(bundle.GetElementModifications())
         return modifications
 
