@@ -1,3 +1,4 @@
+from types import MethodType
 import weakref
 from Type import CDomainType
 from lib.Domains.Modifications import CReplaceAttributeModification
@@ -45,19 +46,22 @@ class CModifiedDomainType(CDomainType):
         if self.__class__.__dict__.has_key(item):
             return object.__getattribute__(self, item)
 
+        parentType = self.parentType()
+
         # by now we should now that the attribute is not in this class or this instance,\
         # so that remains only parent type
-        if not hasattr(self.parentType(), item):
+        if not hasattr(parentType, item):
             raise AttributeError("'%s' object has no attribute '%s'" % (self.__class__, item))
 
-        obj = getattr(self.parentType(), item)
+        obj = getattr(parentType, item)
 
         if hasattr(obj, '__call__'):
-            # assume callable is bound method
-            def proxy_method(*args, **kwargs):
-                return getattr(CDomainType, item)(self, *args, **kwargs)
-
-            return proxy_method
+            if isinstance(obj, weakref.ref):
+                return obj
+            elif isinstance(obj, MethodType):
+                return MethodType(obj.im_func, self)
+            else:
+                return obj
         else:
             # anything other than function from parent type is returned verbatim
             return obj
