@@ -401,6 +401,7 @@
 			<xs:element name="text" type="textType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="dict" type="dictType" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:choice>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="connectionType">
 		<xs:annotation>
