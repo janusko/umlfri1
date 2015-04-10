@@ -574,7 +574,7 @@ class CProject(CBaseObject):
                                         props = {'name': attributeModificationNode.get('name')}
                                         child = attributeModificationNode[0]
                                         type = child.tag[child.tag.rfind('}')+1:]
-                                        props['type'] = type
+                                        props['type'] = type.lower()
                                         props['hidden'] = attributeModificationNode.get('hidden') in ('true', '1')
 
                                         restrictions = {}
