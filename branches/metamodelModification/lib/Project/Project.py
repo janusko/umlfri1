@@ -1,5 +1,5 @@
 from lib.Depend.libxml import etree, builder
-from lib.Domains import CDomainObject
+from lib.Domains import CDomainObject, CDomainType
 from lib.Domains.Modifications.DeleteAttributeModification import CDeleteAttributeModification
 from lib.Domains.Modifications.DomainAttributeModification import DomainAttributeModificationType
 from lib.Domains.Modifications.ReplaceAttributeModification import CReplaceAttributeModification
@@ -284,28 +284,31 @@ class CProject(CBaseObject):
                                 if props.get('hidden', False):
                                     attributeNode.set('hidden', 'true')
 
-                                typeNode = etree.SubElement(attributeNode, UMLPROJECT_NAMESPACE+type.title())
+                                if not CDomainType.IsDomainAtomic(type):
+                                    attributeNode.set('type', type)
+                                else:
+                                    typeNode = etree.SubElement(attributeNode, UMLPROJECT_NAMESPACE+type.title())
 
-                                if type in ('int', 'float'):
-                                    if 'max' in props:
-                                        typeNode.append(builder.E(UMLPROJECT_NAMESPACE+'max', unicode(str(props['max']))))
-                                    if 'min' in props:
-                                        typeNode.append(builder.E(UMLPROJECT_NAMESPACE+'min', unicode(str(props['min']))))
+                                    if type in ('int', 'float'):
+                                        if 'max' in props:
+                                            typeNode.append(builder.E(UMLPROJECT_NAMESPACE+'max', unicode(str(props['max']))))
+                                        if 'min' in props:
+                                            typeNode.append(builder.E(UMLPROJECT_NAMESPACE+'min', unicode(str(props['min']))))
 
-                                if 'enum' in props:
-                                    if type == 'enum':
-                                        enumNode = typeNode
-                                    else:
-                                        enumNode = etree.SubElement(typeNode, UMLPROJECT_NAMESPACE+'Enum')
-                                    for value in props['enum']:
-                                        enumNode.append(builder.E(UMLPROJECT_NAMESPACE+'Value', unicode(value)))
+                                    if 'enum' in props:
+                                        if type == 'enum':
+                                            enumNode = typeNode
+                                        else:
+                                            enumNode = etree.SubElement(typeNode, UMLPROJECT_NAMESPACE+'Enum')
+                                        for value in props['enum']:
+                                            enumNode.append(builder.E(UMLPROJECT_NAMESPACE+'Value', unicode(value)))
 
-                                if type in ('str', 'text') and 'restricted' in props:
-                                    typeNode.append(builder.E(UMLPROJECT_NAMESPACE+'Restriction', unicode(props['restricted'])))
+                                    if type in ('str', 'text') and 'restricted' in props:
+                                        typeNode.append(builder.E(UMLPROJECT_NAMESPACE+'Restriction', unicode(props['restricted'])))
 
-                                defaultValue = props.get('default', None)
-                                if type != 'list' and defaultValue:
-                                    typeNode.set('default', unicode(str(defaultValue)))
+                                    defaultValue = props.get('default', None)
+                                    if type != 'list' and defaultValue:
+                                        typeNode.set('default', unicode(str(defaultValue)))
                             else:
                                 raise ProjectError('Unknown domain attribute modification type "%s"' % attributeModification.GetType())
 
