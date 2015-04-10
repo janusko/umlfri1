@@ -184,6 +184,7 @@
             <xs:complexContent>
                 <xs:extension base="domainAttributeModificationType">
                     <xs:choice>
+                        <xs:choice />
                         <xs:element name="Color" minOccurs="1" maxOccurs="1">
                             <xs:complexType>
                                 <xs:attribute name="default" type="xs:string" use="optional"/>
@@ -272,6 +273,7 @@
                     </xs:choice>
                     <xs:attribute name="name" type="xs:string" use="required"/>
                     <xs:attribute name="hidden" type="xs:boolean" use="optional" default="false"/>
+                    <xs:attribute name="type" type="xs:string" use="optional"/>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
