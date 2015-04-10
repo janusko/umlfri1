@@ -558,6 +558,7 @@ class CfrmProperties(object):
                 continue
 
             attribute_name = key
+            attribute_type = att['type']
 
             def append_item(item):
                 dialog.AppendItemToTab(tabname, attribute_name, item, att['name'])
@@ -565,15 +566,15 @@ class CfrmProperties(object):
             def append_item_using_factory(item_factory):
                 append_item(item_factory(type, att, key))
 
-            if att['type']=='str':
+            if attribute_type=='str':
                 append_item_using_factory(self.__CreateStr)
-            elif att['type']=='enum':
+            elif attribute_type=='enum':
                 append_item_using_factory(self.__CreateEnum)
-            elif att['type']=='bool':
+            elif attribute_type=='bool':
                 append_item_using_factory(self.__CreateBool)
-            elif att['type']=='text':
+            elif attribute_type=='text':
                 append_item_using_factory(self.__CreateText)
-            elif att['type']=='list':
+            elif attribute_type=='list':
                 is_list=True
                 type=type.GetFactory().GetDomain(att['list']['type'])
                 for key in type.IterAttributeIDs():
@@ -582,6 +583,7 @@ class CfrmProperties(object):
                         continue
 
                     list_item_attribute_name = attribute_name + '.' + key
+                    attribute_type = att['type']
 
                     def append_item(item):
                         dialog.AppendItemToTab(tabname, list_item_attribute_name, item, att['name'])
@@ -589,23 +591,23 @@ class CfrmProperties(object):
                     def append_item_using_factory(item_factory):
                         append_item(item_factory(type, att, key))
 
-                    if att['type']=='str':
+                    if attribute_type=='str':
                         append_item_using_factory(self.__CreateStr)
-                    elif att['type']=='enum':
+                    elif attribute_type=='enum':
                         append_item_using_factory(self.__CreateEnum)
-                    elif att['type']=='bool':
+                    elif attribute_type=='bool':
                         append_item_using_factory(self.__CreateBool)
-                    elif att['type']=='text':
+                    elif attribute_type=='text':
                         append_item_using_factory(self.__CreateText)
-                    elif att['type']=='list':
+                    elif attribute_type=='list':
                         append_item(self.__CreateEditBoxWithButton(type,att,key,dialog))
-                    elif att['type']=='int':
+                    elif attribute_type=='int':
                         append_item_using_factory(self.__CreateInt)
-                    elif att['type']=='float':
+                    elif attribute_type=='float':
                         append_item_using_factory(self.__CreateFloat)
-            elif att['type']=='int':
+            elif attribute_type=='int':
                 append_item_using_factory(self.__CreateInt)
-            elif att['type']=='float':
+            elif attribute_type=='float':
                 append_item_using_factory(self.__CreateFloat)
         if not main_dialog or is_list:
             dialog.AppendItemToTab(tabname,'table',self.__CreateTable(type,dialog),att['name'])
