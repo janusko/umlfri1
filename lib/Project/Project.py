@@ -629,8 +629,7 @@ class CProject(CBaseObject):
                         id = subelem.get("id")
                         object = CElementObject(self.GetMetamodel().GetElementFactory().GetElement(subelem.get("type")))
                         object.SetUID(id)
-                        object.SetSaveInfo(CProject.__LoadDomainObjectInfo(subelem[0]))
-                        ListObj[id] = object
+                        ListObj[id] = (object, CProject.__LoadDomainObjectInfo(subelem[0]))
             
             elif element.tag == UMLPROJECT_NAMESPACE+'connections':
                 for connection in element:
@@ -660,9 +659,10 @@ class CProject(CBaseObject):
                 for subelem in element:
                     if subelem.tag == UMLPROJECT_NAMESPACE+'node':
                         elemid = subelem.get("id")
-                        proNode = CProjectNode(None,ListObj[elemid])
+                        listObj = {id: obj for id, (obj, x) in ListObj.iteritems()}
+                        proNode = CProjectNode(None,listObj[elemid])
                         self.SetRoot(proNode)
-                        self.__CreateTree(ListObj, ListCon, ListDiag, subelem, proNode, savever)
+                        self.__CreateTree(listObj, ListCon, ListDiag, subelem, proNode, savever)
             
             elif element.tag == UMLPROJECT_NAMESPACE + 'counters':
                 for item in element:
@@ -670,5 +670,8 @@ class CProject(CBaseObject):
                         self.GetMetamodel().GetElementFactory().GetElement(item.get('id')).SetCounter(int(item.get('value')))
                     elif self.GetMetamodel().GetDiagramFactory().HasType(item.get('id')):
                         self.GetMetamodel().GetDiagramFactory().GetDiagram(item.get('id')).SetCounter(int(item.get('value')))
-        
+
+        for obj, saveinfo in ListObj.itervalues():
+            obj.SetSaveInfo(saveinfo)
+
         self.__addonManager.GetPluginManager().GetPluginAdapter().gui_project_opened(self)
