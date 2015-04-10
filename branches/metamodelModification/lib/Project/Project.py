@@ -673,6 +673,12 @@ class CProject(CBaseObject):
                     elif self.GetMetamodel().GetDiagramFactory().HasType(item.get('id')):
                         self.GetMetamodel().GetDiagramFactory().GetDiagram(item.get('id')).SetCounter(int(item.get('value')))
 
+        from lib.Commands.Project.ApplyModificationBundles import CApplyModificationBundlesCommand
+
+        for nodeId, bundles in reversed(ListBundles.items()):
+            node = ListObj[nodeId][0].GetNode()
+            CApplyModificationBundlesCommand(node, bundles).Do()
+
         for obj, saveinfo in ListObj.itervalues():
             obj.SetSaveInfo(saveinfo)
 
