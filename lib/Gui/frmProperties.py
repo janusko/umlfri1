@@ -542,7 +542,7 @@ class CfrmProperties(object):
             att=type.GetAttribute(id)
             if att['hidden']:
                 continue
-            if att['type']!='list':
+            if type.IsAtomic(id) and att['type']!='list':
                 attributes_order.setdefault('General',[]).append(id)
             else:
                 attributes_order.setdefault(att['name'],[]).append(id)
@@ -552,6 +552,7 @@ class CfrmProperties(object):
     def __ProcessAttributesTab(self,type,tabname,atts_order,dialog,main_dialog=False):
 
         is_list=False
+        is_domain=False
         for key in atts_order:
             att=type.GetAttribute(key)
             if att['hidden']:
@@ -574,48 +575,60 @@ class CfrmProperties(object):
                 append_item_using_factory(self.__CreateBool)
             elif attribute_type=='text':
                 append_item_using_factory(self.__CreateText)
-            elif attribute_type=='list':
-                is_list=True
-                type=type.GetFactory().GetDomain(att['list']['type'])
-                for key in type.IterAttributeIDs():
-                    att=type.GetAttribute(key)
-                    if att['hidden']:
-                        continue
-
-                    list_item_attribute_name = attribute_name + '.' + key
-                    attribute_type = att['type']
-
-                    def append_item(item):
-                        dialog.AppendItemToTab(tabname, list_item_attribute_name, item, att['name'])
-
-                    def append_item_using_factory(item_factory):
-                        append_item(item_factory(type, att, key))
-
-                    if attribute_type=='str':
-                        append_item_using_factory(self.__CreateStr)
-                    elif attribute_type=='enum':
-                        append_item_using_factory(self.__CreateEnum)
-                    elif attribute_type=='bool':
-                        append_item_using_factory(self.__CreateBool)
-                    elif attribute_type=='text':
-                        append_item_using_factory(self.__CreateText)
-                    elif attribute_type=='list':
-                        append_item(self.__CreateEditBoxWithButton(type,att,key,dialog))
-                    elif attribute_type=='int':
-                        append_item_using_factory(self.__CreateInt)
-                    elif attribute_type=='float':
-                        append_item_using_factory(self.__CreateFloat)
             elif attribute_type=='int':
                 append_item_using_factory(self.__CreateInt)
             elif attribute_type=='float':
                 append_item_using_factory(self.__CreateFloat)
+            else:
+                # inner_type = None
+                if attribute_type=='list':
+                    is_list=True
+                    type=type.GetFactory().GetDomain(att['list']['type'])
+                elif not type.IsAtomic(domain=attribute_type):
+                    is_domain=True
+                    type=type.GetFactory().GetDomain(attribute_type)
+
+                if type:
+                    for key in type.IterAttributeIDs():
+                        att=type.GetAttribute(key)
+                        if att['hidden']:
+                            continue
+
+                        list_item_attribute_name = attribute_name + '.' + key
+                        attribute_type = att['type']
+
+                        def append_item(item):
+                            dialog.AppendItemToTab(tabname, list_item_attribute_name, item, att['name'])
+
+                        def append_item_using_factory(item_factory):
+                            append_item(item_factory(type, att, key))
+
+                        if attribute_type=='str':
+                            append_item_using_factory(self.__CreateStr)
+                        elif attribute_type=='enum':
+                            append_item_using_factory(self.__CreateEnum)
+                        elif attribute_type=='bool':
+                            append_item_using_factory(self.__CreateBool)
+                        elif attribute_type=='text':
+                            append_item_using_factory(self.__CreateText)
+                        elif attribute_type=='list':
+                            append_item(self.__CreateEditBoxWithButton(type,att,key,dialog))
+                        elif attribute_type=='int':
+                            append_item_using_factory(self.__CreateInt)
+                        elif attribute_type=='float':
+                            append_item_using_factory(self.__CreateFloat)
         if not main_dialog or is_list:
             dialog.AppendItemToTab(tabname,'table',self.__CreateTable(type,dialog),att['name'])
         else:
+            if is_domain:
+                domain_object=self.domain_object.GetValue(atts_order[0])
+            else:
+                domain_object=self.domain_object
+
             for id in type.IterAttributeIDs():
                 if type.GetAttribute(id)['hidden']:
                     continue
-                val=str(self.domain_object.GetValue(id))
+                val=str(domain_object.GetValue(id))
                 if type.GetAttribute(id)['type']=='str':
                     if isinstance(self.attributes[type.GetName()][id],CEditableComboBox):
                         self.attributes[type.GetName()][id].SetActiveItemText(val)
