@@ -506,7 +506,9 @@ class CProject(CBaseObject):
                 raise XMLError("Schema validation failed\n" + str(xmlschema.error_log.last_error))
             else:
                 raise XMLError("Schema validation failed")
-        
+
+        from lib.Addons.Metamodel.Modifications.ModificationBundle import CMetamodelModificationBundle
+
         for element in root:
             if element.tag == UMLPROJECT_NAMESPACE+'metamodel':
                 uri = None
@@ -556,7 +558,6 @@ class CProject(CBaseObject):
                     for bundleNode in elementNode:
                         name = bundleNode.get('name')
                         elementTypeModifications = {}
-                        bundles.append((name, elementTypeModifications))
                         for elementTypeNode in bundleNode:
                             elementId = elementTypeNode.get('id')
                             domains = {}
@@ -622,6 +623,8 @@ class CProject(CBaseObject):
 
                                     else:
                                         raise ProjectError('Unknown domain attribute modification  element "%s"' % name)
+
+                        bundles.append(CMetamodelModificationBundle(name, elementTypeModifications))
 
             elif element.tag == UMLPROJECT_NAMESPACE+'objects':
                 for subelem in element:
