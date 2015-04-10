@@ -7,13 +7,14 @@ class CDomainTypeSetter(object):
 
         for id in domaintype.IterAttributeIDs():
             attrib = domaintype.GetAttribute(id)
+            type = attrib['type']
 
-            if domaintype.IsAtomic(id) and attrib['type'] != 'list':
+            if domaintype.IsAtomic(id) and type != 'list':
                 continue
 
             value = domainobject.GetValue(id)
 
-            if attrib['type'] == 'list':
+            if type == 'list':
                 itemType = factory.GetDomain(attrib['list']['type'])
 
                 for obj in value:
@@ -23,6 +24,6 @@ class CDomainTypeSetter(object):
 
                 assert isinstance(value, CDomainObject)
 
-                domaintype = factory.GetDomain(domaintype.GetName())
+                attributeDomainType = factory.GetDomain(type)
 
-                self.ApplyType(value, domaintype)
+                self.ApplyType(value, attributeDomainType)
