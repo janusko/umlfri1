@@ -601,16 +601,15 @@ class CProject(CBaseObject):
                                         elif type in otherTypes:
                                             otherType = otherTypes[type]
                                             load_default_value(otherType)
-                                        elif type == 'Str':
-                                            load_default_value(str)
                                         elif type == 'Bool':
                                             props['default'] = trycast(lambda x: x == 'True', child.get('default'))
-
-                                        if type in ('Text', 'Str'):
+                                        elif type in ('Text', 'Str'):
                                             load_restriction('Restriction', 'restricted', str)
+                                            load_default_value(str)
 
                                         if type == 'Enum':
                                             enumChild = child
+                                            load_default_value(str)
                                         else:
                                             enumChild = child.find(UMLPROJECT_NAMESPACE+'Enum')
 
