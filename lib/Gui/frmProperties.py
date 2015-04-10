@@ -755,18 +755,20 @@ class CfrmProperties(object):
     
     def __SaveFunction(self,type):
         for id in type.IterAttributeIDs():
-            if type.GetAttribute(id)['hidden']:
+            attribute = type.GetAttribute(id)
+            attribute_type = attribute['type']
+            if attribute['hidden']:
                 continue
-            if type.GetAttribute(id)['type'] in ('str', 'int', 'float'):
+            if attribute_type in ('str', 'int', 'float'):
                 if isinstance(self.attributes[type.GetName()][id],CEditableComboBox):
                     val=self.attributes[type.GetName()][id].GetActiveItemText()
                 elif isinstance(self.attributes[type.GetName()][id],CEditBox):
                     val=self.attributes[type.GetName()][id].GetText()
-            elif type.GetAttribute(id)['type'] in ('bool', 'enum'):
+            elif attribute_type in ('bool', 'enum'):
                 val=self.attributes[type.GetName()][id].GetActiveItemText()
-            elif type.GetAttribute(id)['type']=='text':
+            elif attribute_type=='text':
                 val=self.attributes[type.GetName()][id].GetText()
-            elif type.GetAttribute(id)['type']=='list':
+            elif attribute_type=='list':
                 continue
             self.domain_object.SetValue(id,val)
         if self.old_domain_object is not None:
