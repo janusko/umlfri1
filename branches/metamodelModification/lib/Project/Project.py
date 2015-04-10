@@ -1,6 +1,9 @@
 from lib.Depend.libxml import etree, builder
 from lib.Domains import CDomainObject
+from lib.Domains.Modifications.DeleteAttributeModification import CDeleteAttributeModification
 from lib.Domains.Modifications.DomainAttributeModification import DomainAttributeModificationType
+from lib.Domains.Modifications.ReplaceAttributeModification import CReplaceAttributeModification
+from lib.datatypes import CFont, CColor
 
 from lib.lib import XMLEncode, Indent
 from ProjectNode import CProjectNode
@@ -460,6 +463,7 @@ class CProject(CBaseObject):
         ListObj = {}
         ListCon = {}
         ListDiag = {}
+        ListBundles = {}
         
         if storage is not None:
             self.isZippedFile = True
@@ -543,6 +547,81 @@ class CProject(CBaseObject):
             elif element.tag == UMLPROJECT_NAMESPACE+'domain':
                 data = CProject.__LoadDomainObjectInfo(element[0])
                 self.__domainObject.SetSaveInfo(data)
+
+            elif element.tag == UMLPROJECT_NAMESPACE+'modificationbundles':
+                for elementNode in element:
+                    id = elementNode.get('id')
+                    bundles = []
+                    ListBundles[id] = bundles
+                    for bundleNode in elementNode:
+                        name = bundleNode.get('name')
+                        elementTypeModifications = {}
+                        bundles.append((name, elementTypeModifications))
+                        for elementTypeNode in bundleNode:
+                            elementId = elementTypeNode.get('id')
+                            domains = {}
+                            elementTypeModifications[elementId] = domains
+                            for domainNode in elementTypeNode:
+                                domainId = domainNode.get('id')
+                                attributeModifications = []
+                                domains[domainId] = attributeModifications
+                                for attributeModificationNode in domainNode:
+                                    attributeID = attributeModificationNode.get('id')
+                                    tag = attributeModificationNode.tag
+                                    if tag == UMLPROJECT_NAMESPACE+'deleteattribute':
+                                        attributeModifications.append(CDeleteAttributeModification(attributeID))
+                                    elif tag == UMLPROJECT_NAMESPACE+'replaceattribute':
+                                        props = {'name': attributeModificationNode.get('name')}
+                                        child = attributeModificationNode[0]
+                                        type = child.tag[child.tag.rfind('}')+1:]
+                                        props['type'] = type
+                                        props['hidden'] = attributeModificationNode.get('hidden') in ('true', '1')
+
+                                        restrictions = {}
+
+                                        trycast = lambda type, value: None if value is None else type(value)
+
+                                        def load_restriction(elementName, res, type):
+                                            node = attributeModificationNode.find(UMLPROJECT_NAMESPACE+elementName)
+                                            if node is not None:
+                                                restrictions[res] = trycast(type, node.text)
+
+                                        def load_default_value(type):
+                                            props['default'] = trycast(type, child.get('default'))
+
+                                        numberTypes = {'Int' : int, 'Float': float}
+                                        otherTypes = {'Font' : CFont, 'Color' : CColor}
+
+                                        if type in numberTypes:
+                                            numberType = numberTypes[type]
+                                            load_restriction('Min', 'min', numberType)
+                                            load_restriction('Max', 'max', numberType)
+                                            load_default_value(numberType)
+                                        elif type in otherTypes:
+                                            otherType = otherTypes[type]
+                                            load_default_value(otherType)
+                                        elif type == 'Str':
+                                            load_default_value(str)
+                                        elif type == 'Bool':
+                                            props['default'] = trycast(lambda x: x == 'True', child.get('default'))
+
+                                        if type in ('Text', 'Str'):
+                                            load_restriction('Restriction', 'restricted', str)
+
+                                        if type == 'Enum':
+                                            enumChild = child
+                                        else:
+                                            enumChild = child.find(UMLPROJECT_NAMESPACE+'Enum')
+
+                                        if enumChild:
+                                            for option in enumChild:
+                                                if option.tag == UMLPROJECT_NAMESPACE+'Value':
+                                                    props.setdefault('enum', []).append(option.text)
+
+                                        attributeModifications.append(CReplaceAttributeModification(attributeID, props))
+
+                                    else:
+                                        raise ProjectError('Unknown domain attribute modification  element "%s"' % name)
 
             elif element.tag == UMLPROJECT_NAMESPACE+'objects':
                 for subelem in element:
