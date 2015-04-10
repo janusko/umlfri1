@@ -754,6 +754,17 @@ class CfrmProperties(object):
            return 'save'
     
     def __SaveFunction(self,type):
+        self.__SaveDomainObject(self.domain_object, type)
+        if self.old_domain_object is not None:
+            self.old_domain_object.SetValues(self.domain_object)
+        #self.domain_object=self.old_domain_object.GetCopy()
+        if self.element is not None:
+            diff = CDomainObjectComparator(self.element.GetDomainObject(), self.domain_object)
+            l = list(diff)
+            cmd = CApplyPropertyPatchCommand(self.element, list(diff))
+            self.application.GetCommands().Execute(cmd)
+
+    def __SaveDomainObject(self, domain_object, type):
         for id in type.IterAttributeIDs():
             attribute = type.GetAttribute(id)
             attribute_type = attribute['type']
@@ -770,15 +781,12 @@ class CfrmProperties(object):
                 val=self.attributes[type.GetName()][id].GetText()
             elif attribute_type=='list':
                 continue
-            self.domain_object.SetValue(id,val)
-        if self.old_domain_object is not None:
-            self.old_domain_object.SetValues(self.domain_object)
-        #self.domain_object=self.old_domain_object.GetCopy()
-        if self.element is not None:
-            diff = CDomainObjectComparator(self.element.GetDomainObject(), self.domain_object)
-            l = list(diff)
-            cmd = CApplyPropertyPatchCommand(self.element, list(diff))
-            self.application.GetCommands().Execute(cmd)
+            elif not type.IsAtomic(domain=attribute_type):
+                inner_domain_object = self.domain_object.GetValue(id)
+                inner_type = type.GetFactory().GetDomain(attribute_type)
+                self.__SaveDomainObject(inner_domain_object,inner_type)
+                continue
+            domain_object.SetValue(id,val)
 
     def __UpdateControls(self, dialog, type, main_dialog):
         new_attribute_order = self.__GroupAttributesByTab(type)
