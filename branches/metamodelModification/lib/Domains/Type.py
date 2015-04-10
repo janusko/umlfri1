@@ -365,10 +365,14 @@ class CDomainType(CBaseObject):
                 raise DomainTypeError('Unknown identifier "%s"'%(id, ))
             return self.IsAtomic(domain = self.GetAttribute(id)['type'])
         elif domain is not None:
-            return domain in self.ATOMIC
+            return self.IsDomainAtomic(domain)
         else:
             raise DomainTypeError("Invalid input parameters")
-    
+
+    @staticmethod
+    def IsDomainAtomic(domain):
+        return domain in CDomainType.ATOMIC
+
     def IsHidden(self, id):
         '''
         Test on hidden attribute of domain
