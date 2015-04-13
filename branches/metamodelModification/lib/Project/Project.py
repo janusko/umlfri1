@@ -267,53 +267,51 @@ class CProject(CBaseObject):
             elementNode = etree.SubElement(modificationBundlesNode, UMLPROJECT_NAMESPACE+'element', id=unicode(node.GetObject().GetUID()))
             for bundle in bundles:
                 bundleNode = etree.SubElement(elementNode, UMLPROJECT_NAMESPACE+'bundle', name=bundle.GetName())
-                for type, modifications in bundle.GetElementModifications().iteritems():
-                    elementTypeNode = etree.SubElement(bundleNode, UMLPROJECT_NAMESPACE+'element', id=type)
-                    for domain, modifications in modifications.iteritems():
-                        domainModificationNode = etree.SubElement(elementTypeNode, UMLPROJECT_NAMESPACE+'domain', id=domain)
-                        for attributeModification in modifications:
-                            if attributeModification.GetType() == DomainAttributeModificationType.DELETE:
-                                attributeNode = etree.SubElement(domainModificationNode, UMLPROJECT_NAMESPACE+'deleteattribute')
+                for domain, modifications in bundle.GetDomainModifications().iteritems():
+                    domainModificationNode = etree.SubElement(bundleNode, UMLPROJECT_NAMESPACE+'domain', id=domain)
+                    for attributeModification in modifications:
+                        if attributeModification.GetType() == DomainAttributeModificationType.DELETE:
+                            attributeNode = etree.SubElement(domainModificationNode, UMLPROJECT_NAMESPACE+'deleteattribute')
 
-                            elif attributeModification.GetType() == DomainAttributeModificationType.REPLACE:
-                                attributeNode = etree.SubElement(domainModificationNode, UMLPROJECT_NAMESPACE+'replaceattribute')
-                                props = attributeModification.GetAttributeProperties()
-                                attributeNode.set('name', unicode(props['name']))
+                        elif attributeModification.GetType() == DomainAttributeModificationType.REPLACE:
+                            attributeNode = etree.SubElement(domainModificationNode, UMLPROJECT_NAMESPACE+'replaceattribute')
+                            props = attributeModification.GetAttributeProperties()
+                            attributeNode.set('name', unicode(props['name']))
 
-                                type = props['type']
-                                if props.get('hidden', False):
-                                    attributeNode.set('hidden', 'true')
+                            type = props['type']
+                            if props.get('hidden', False):
+                                attributeNode.set('hidden', 'true')
 
-                                if not CDomainType.IsDomainAtomic(type):
-                                    attributeNode.set('type', type)
-                                else:
-                                    typeNode = etree.SubElement(attributeNode, UMLPROJECT_NAMESPACE+type.title())
-
-                                    if type in ('int', 'float'):
-                                        if 'max' in props:
-                                            typeNode.append(builder.E(UMLPROJECT_NAMESPACE+'max', unicode(str(props['max']))))
-                                        if 'min' in props:
-                                            typeNode.append(builder.E(UMLPROJECT_NAMESPACE+'min', unicode(str(props['min']))))
-
-                                    if 'enum' in props:
-                                        if type == 'enum':
-                                            enumNode = typeNode
-                                        else:
-                                            enumNode = etree.SubElement(typeNode, UMLPROJECT_NAMESPACE+'Enum')
-                                        for value in props['enum']:
-                                            enumNode.append(builder.E(UMLPROJECT_NAMESPACE+'Value', unicode(value)))
-
-                                    if type in ('str', 'text') and 'restricted' in props:
-                                        typeNode.append(builder.E(UMLPROJECT_NAMESPACE+'Restriction', unicode(props['restricted'])))
-
-                                    defaultValue = props.get('default', None)
-                                    if type != 'list' and defaultValue:
-                                        typeNode.set('default', unicode(str(defaultValue)))
+                            if not CDomainType.IsDomainAtomic(type):
+                                attributeNode.set('type', type)
                             else:
-                                raise ProjectError('Unknown domain attribute modification type "%s"' % attributeModification.GetType())
+                                typeNode = etree.SubElement(attributeNode, UMLPROJECT_NAMESPACE+type.title())
 
-                            attributeNode.set('id', unicode(attributeModification.GetAttributeID()))
-        
+                                if type in ('int', 'float'):
+                                    if 'max' in props:
+                                        typeNode.append(builder.E(UMLPROJECT_NAMESPACE+'max', unicode(str(props['max']))))
+                                    if 'min' in props:
+                                        typeNode.append(builder.E(UMLPROJECT_NAMESPACE+'min', unicode(str(props['min']))))
+
+                                if 'enum' in props:
+                                    if type == 'enum':
+                                        enumNode = typeNode
+                                    else:
+                                        enumNode = etree.SubElement(typeNode, UMLPROJECT_NAMESPACE+'Enum')
+                                    for value in props['enum']:
+                                        enumNode.append(builder.E(UMLPROJECT_NAMESPACE+'Value', unicode(value)))
+
+                                if type in ('str', 'text') and 'restricted' in props:
+                                    typeNode.append(builder.E(UMLPROJECT_NAMESPACE+'Restriction', unicode(props['restricted'])))
+
+                                defaultValue = props.get('default', None)
+                                if type != 'list' and defaultValue:
+                                    typeNode.set('default', unicode(str(defaultValue)))
+                        else:
+                            raise ProjectError('Unknown domain attribute modification type "%s"' % attributeModification.GetType())
+
+                        attributeNode.set('id', unicode(attributeModification.GetAttributeID()))
+
         elements = list(elements)
         elements.sort(key = CBaseObject.GetUID)
         for object in elements:
@@ -560,78 +558,74 @@ class CProject(CBaseObject):
                     ListBundles[id] = bundles
                     for bundleNode in elementNode:
                         name = bundleNode.get('name')
-                        elementTypeModifications = {}
-                        for elementTypeNode in bundleNode:
-                            elementId = elementTypeNode.get('id')
-                            domains = {}
-                            elementTypeModifications[elementId] = domains
-                            for domainNode in elementTypeNode:
-                                domainId = domainNode.get('id')
-                                attributeModifications = []
-                                domains[domainId] = attributeModifications
-                                for attributeModificationNode in domainNode:
-                                    attributeID = attributeModificationNode.get('id')
-                                    tag = attributeModificationNode.tag
-                                    if tag == UMLPROJECT_NAMESPACE+'deleteattribute':
-                                        attributeModifications.append(CDeleteAttributeModification(attributeID))
-                                    elif tag == UMLPROJECT_NAMESPACE+'replaceattribute':
-                                        props = {'name': attributeModificationNode.get('name')}
-                                        type = attributeModificationNode.get('type')
-                                        props['hidden'] = attributeModificationNode.get('hidden') in ('true', '1')
-                                        if type is not None:
-                                            props['type'] = type
-                                            props['default'] = None
-                                        else:
-                                            child = attributeModificationNode[0]
-                                            type = child.tag[child.tag.rfind('}')+1:]
-                                            props['type'] = type.lower()
-
-                                            restrictions = {}
-
-                                            trycast = lambda type, value: None if value is None else type(value)
-
-                                            def load_restriction(elementName, res, type):
-                                                node = attributeModificationNode.find(UMLPROJECT_NAMESPACE+elementName)
-                                                if node is not None:
-                                                    restrictions[res] = trycast(type, node.text)
-
-                                            def load_default_value(type):
-                                                props['default'] = trycast(type, child.get('default'))
-
-                                            numberTypes = {'Int' : int, 'Float': float}
-                                            otherTypes = {'Font' : CFont, 'Color' : CColor}
-
-                                            if type in numberTypes:
-                                                numberType = numberTypes[type]
-                                                load_restriction('Min', 'min', numberType)
-                                                load_restriction('Max', 'max', numberType)
-                                                load_default_value(numberType)
-                                            elif type in otherTypes:
-                                                otherType = otherTypes[type]
-                                                load_default_value(otherType)
-                                            elif type == 'Bool':
-                                                props['default'] = trycast(lambda x: x == 'True', child.get('default'))
-                                            elif type in ('Text', 'Str'):
-                                                load_restriction('Restriction', 'restricted', str)
-                                                load_default_value(str)
-
-                                            if type == 'Enum':
-                                                enumChild = child
-                                                load_default_value(str)
-                                            else:
-                                                enumChild = child.find(UMLPROJECT_NAMESPACE+'Enum')
-
-                                            if enumChild:
-                                                for option in enumChild:
-                                                    if option.tag == UMLPROJECT_NAMESPACE+'Value':
-                                                        props.setdefault('enum', []).append(option.text)
-
-                                        attributeModifications.append(CReplaceAttributeModification(attributeID, props))
-
+                        domains = {}
+                        for domainNode in bundleNode:
+                            domainId = domainNode.get('id')
+                            attributeModifications = []
+                            domains[domainId] = attributeModifications
+                            for attributeModificationNode in domainNode:
+                                attributeID = attributeModificationNode.get('id')
+                                tag = attributeModificationNode.tag
+                                if tag == UMLPROJECT_NAMESPACE+'deleteattribute':
+                                    attributeModifications.append(CDeleteAttributeModification(attributeID))
+                                elif tag == UMLPROJECT_NAMESPACE+'replaceattribute':
+                                    props = {'name': attributeModificationNode.get('name')}
+                                    type = attributeModificationNode.get('type')
+                                    props['hidden'] = attributeModificationNode.get('hidden') in ('true', '1')
+                                    if type is not None:
+                                        props['type'] = type
+                                        props['default'] = None
                                     else:
-                                        raise ProjectError('Unknown domain attribute modification  element "%s"' % name)
+                                        child = attributeModificationNode[0]
+                                        type = child.tag[child.tag.rfind('}')+1:]
+                                        props['type'] = type.lower()
 
-                        bundles.append(CMetamodelModificationBundle(name, elementTypeModifications))
+                                        restrictions = {}
+
+                                        trycast = lambda type, value: None if value is None else type(value)
+
+                                        def load_restriction(elementName, res, type):
+                                            node = attributeModificationNode.find(UMLPROJECT_NAMESPACE+elementName)
+                                            if node is not None:
+                                                restrictions[res] = trycast(type, node.text)
+
+                                        def load_default_value(type):
+                                            props['default'] = trycast(type, child.get('default'))
+
+                                        numberTypes = {'Int' : int, 'Float': float}
+                                        otherTypes = {'Font' : CFont, 'Color' : CColor}
+
+                                        if type in numberTypes:
+                                            numberType = numberTypes[type]
+                                            load_restriction('Min', 'min', numberType)
+                                            load_restriction('Max', 'max', numberType)
+                                            load_default_value(numberType)
+                                        elif type in otherTypes:
+                                            otherType = otherTypes[type]
+                                            load_default_value(otherType)
+                                        elif type == 'Bool':
+                                            props['default'] = trycast(lambda x: x == 'True', child.get('default'))
+                                        elif type in ('Text', 'Str'):
+                                            load_restriction('Restriction', 'restricted', str)
+                                            load_default_value(str)
+
+                                        if type == 'Enum':
+                                            enumChild = child
+                                            load_default_value(str)
+                                        else:
+                                            enumChild = child.find(UMLPROJECT_NAMESPACE+'Enum')
+
+                                        if enumChild:
+                                            for option in enumChild:
+                                                if option.tag == UMLPROJECT_NAMESPACE+'Value':
+                                                    props.setdefault('enum', []).append(option.text)
+
+                                    attributeModifications.append(CReplaceAttributeModification(attributeID, props))
+
+                                else:
+                                    raise ProjectError('Unknown domain attribute modification  element "%s"' % name)
+
+                        bundles.append(CMetamodelModificationBundle(name, None, domains))
 
             elif element.tag == UMLPROJECT_NAMESPACE+'objects':
                 for subelem in element:
