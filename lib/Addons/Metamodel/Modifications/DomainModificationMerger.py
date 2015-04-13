@@ -1,7 +1,8 @@
-class CElementModificationMerger(object):
+class CDomainModificationBuilder(object):
     def MergeModifications(self, parentModifications, childModifications):
-        elementModificationsResolver = lambda parent, child: self.__MergeObjects(parent, child, self.__MergeAttributeModifications)
-        return self.__MergeObjects(parentModifications, childModifications, elementModificationsResolver)
+        return self.__MergeAttributeModifications(parentModifications, childModifications)
+        # elementModificationsResolver = lambda parent, child: self.__MergeObjects(parent, child, self.__MergeAttributeModifications)
+        # return self.__MergeObjects(parentModifications, childModifications, elementModificationsResolver)
 
     @staticmethod
     def __MergeObjects(parentObjects, childObjects, mergeResolver):
@@ -21,5 +22,5 @@ class CElementModificationMerger(object):
         # TODO: optimize
         parentDict = {m.GetAttributeID(): m for m in parentModifications}
         childDict = {m.GetAttributeID(): m for m in childModifications}
-        merged = CElementModificationMerger.__MergeObjects(parentDict, childDict, lambda parent, child: child)
+        merged = CDomainModificationBuilder.__MergeObjects(parentDict, childDict, lambda parent, child: child)
         return merged.values()
