@@ -24,6 +24,9 @@ class CModifiedMetamodel(CMetamodel):
     def IsModified(self):
         return True
 
+    def GetDomainFactory(self):
+        return self.domainFactory
+
     def GetElementFactory(self):
         return self.elementFactory
 
