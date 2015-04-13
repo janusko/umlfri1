@@ -1,5 +1,5 @@
 from itertools import chain
-from lib.Addons.Metamodel.Modifications.ElementModificationMerger import CElementModificationMerger
+from lib.Addons.Metamodel.Modifications.DomainModificationMerger import CDomainModificationBuilder
 from lib.Addons.Metamodel.ModifiedMetamodel import CModifiedMetamodel
 from lib.Domains.ModifiedFactory import CModifiedDomainFactory
 from lib.Domains.ModifiedType import CModifiedDomainType
@@ -9,21 +9,22 @@ from lib.Elements.ModifiedType import CModifiedElementType
 
 class CModifiedMetamodelBuilder(object):
 
-    __elementModificationMerger = CElementModificationMerger()
+    __domainModificationMerger = CDomainModificationBuilder()
 
     def BuildMetamodel(self, elementNode, modificationBundles, parentMetamodel = None):
         if parentMetamodel is None:
             parentMetamodel = elementNode.GetObject().GetType().GetMetamodel()
 
-        elementTypeModifications = self.__GetElementTypeModifications(modificationBundles)
+        domainModifications = self.__GetDomainModifications(modificationBundles)
         if parentMetamodel.IsModified():
-            inheritedElementTypeModifications = self.__GetElementTypeModifications(parentMetamodel.GetModificationBundles())
+            inheritedDomainModifications = self.__GetDomainModifications(parentMetamodel.GetModificationBundles())
 
-            elementTypeModifications = self.__elementModificationMerger.MergeModifications(inheritedElementTypeModifications, elementTypeModifications)
+            domainModifications = self.__domainModificationMerger.MergeModifications(inheritedDomainModifications, domainModifications)
 
-        modifiedMetamodel = CModifiedMetamodel(parentMetamodel, elementNode, elementTypeModifications, modificationBundles)
+        modifiedMetamodel = CModifiedMetamodel(parentMetamodel, elementNode, modificationBundles)
 
         modifiedElementFactory = modifiedMetamodel.GetElementFactory()
+        modifiedDomainFactory = modifiedMetamodel.GetDomainFactory()
 
         # algorithm overview:
         # - encapsulate element types from parent metamodel with new element type
@@ -35,35 +36,34 @@ class CModifiedMetamodelBuilder(object):
         # because we need to have access to modified metamodel even from elements that are not modified
         # (e.g. create modified element 'class' as child of unmodified element 'package')
 
+        for domain in parentMetamodel.GetDomainFactory().IterTypes():
+            name = domain.GetName()
+
+            if domainModifications.has_key(name):
+                modifications = domainModifications[name]
+                domain = self.__CreateModifiedDomainType(domain, modifications)
+                modifiedDomainFactory.AddDomain(domain)
+
         for elementType in parentMetamodel.GetElementFactory().IterTypes():
-            id = elementType.GetId()
             if isinstance(elementType, CElementAlias):
                 continue
 
             modifiedElementType = CModifiedElementType(elementType, modifiedElementFactory)
             modifiedElementFactory.AddType(modifiedElementType)
 
-            domainfactory = elementType.GetDomain().GetFactory()
-            if elementTypeModifications.has_key(id):
-                modifications = elementTypeModifications[id]
-
-                domainfactory = CModifiedDomainFactory(elementType.GetDomain().GetFactory())
-                self.__CreateModifiedDomainTypes(domainfactory, modifications)
-
-            modifiedElementType.SetDomain(domainfactory.GetDomain(elementType.GetDomain().GetName()))
+            domain = modifiedDomainFactory.GetDomain(elementType.GetDomain().GetName())
+            modifiedElementType.SetDomain(domain)
 
         return modifiedMetamodel
 
-    def __GetElementTypeModifications(self, modificationBundles):
+    def __GetDomainModifications(self, modificationBundles):
         modifications = None
         for bundle in modificationBundles:
             if not modifications:
-                modifications = bundle.GetElementModifications()
+                modifications = bundle.GetDomainModifications()
             else:
-                modifications = self.__elementModificationMerger.MergeModifications(modifications, bundle.GetElementModifications())
+                modifications = self.__domainModificationMerger.MergeModifications(modifications, bundle.GetDomainModifications())
         return modifications
 
-    def __CreateModifiedDomainTypes(self, factory, domainModifications):
-        for name, modifications in domainModifications.iteritems():
-            domain = CModifiedDomainType(factory.GetDomain(name), factory, modifications)
-            factory.AddDomain(domain)
+    def __CreateModifiedDomainType(self, parentDomain, modifications):
+        return CModifiedDomainType(parentDomain, parentDomain.GetFactory(), modifications)

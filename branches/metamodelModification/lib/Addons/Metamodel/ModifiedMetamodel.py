@@ -1,13 +1,15 @@
 import weakref
 from lib.Addons.Metamodel.Metamodel import CMetamodel
+from lib.Domains.ModifiedFactory import CModifiedDomainFactory
 from lib.Elements.ModifiedFactory import CModifiedElementFactory
 
 
 class CModifiedMetamodel(CMetamodel):
-    def __init__(self, parentMetamodel, rootNode, elementModifications, modificationBundles):
+    def __init__(self, parentMetamodel, rootNode, modificationBundles):
         self.parentMetamodel = weakref.ref(parentMetamodel)
         self.rootNode = rootNode
-        self.elementFactory = CModifiedElementFactory(parentMetamodel.GetElementFactory(), self, elementModifications)
+        self.elementFactory = CModifiedElementFactory(parentMetamodel.GetElementFactory(), self)
+        self.domainFactory = CModifiedDomainFactory(parentMetamodel.GetDomainFactory())
         self.modificationBundles = modificationBundles
 
     def GetModificationBundles(self):
