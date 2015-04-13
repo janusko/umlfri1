@@ -1,4 +1,4 @@
-from lib.Addons.Metamodel.Modifications.ElementModificationBuilder import CElementModificationBuilder
+from lib.Addons.Metamodel.Modifications.DomainModificationBuilder import CDomainModificationBuilder
 from lib.Addons.Metamodel.Modifications.ModificationBundle import CMetamodelModificationBundle
 
 
@@ -8,7 +8,7 @@ class CMetamodelModificationBundleBuidler(object):
         self.bundleBuilders = {}
 
     def CreateBundle(self, name):
-        return self.bundleBuilders.setdefault(name, CElementModificationBuilder())
+        return self.bundleBuilders.setdefault(name, CDomainModificationBuilder())
 
     def BuildBundles(self):
-        return [CMetamodelModificationBundle(name, builder.GetElementTypeModifications()) for name, builder in self.bundleBuilders.iteritems()]
+        return [CMetamodelModificationBundle(name, None, builder.GetDomainModifications()) for name, builder in self.bundleBuilders.iteritems()]
