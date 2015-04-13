@@ -12,7 +12,7 @@ def CreateModifications(project):
 
     mbBuilder = CMetamodelModificationBundleBuidler()
     bundleBuilder = mbBuilder.CreateBundle("bundle 1")
-    bundleBuilder.AddDomainAttribute('Class', 'class', 'docstring',
+    bundleBuilder.AddDomainAttribute('class', 'docstring',
                                  dict(
                                      name='Documentation string',
                                      type='text',
@@ -20,7 +20,7 @@ def CreateModifications(project):
                                      default=None,
                                      condition=BuildParam('#self.sealed')
                                  ))
-    bundleBuilder.AddDomainAttribute('Class', 'class', 'sealed',
+    bundleBuilder.AddDomainAttribute('class', 'sealed',
                                  dict(
                                      name='Sealed',
                                      type='bool',
@@ -34,14 +34,14 @@ def CreateModifications(project):
     modificationRoot = list(project.GetRoot().GetChilds())[3]
     mbBuilder = CMetamodelModificationBundleBuidler()
     bundleBuilder = mbBuilder.CreateBundle("bundle 2")
-    bundleBuilder.AddDomainAttribute('Class', 'class', 'final',
+    bundleBuilder.AddDomainAttribute('class', 'final',
                                  dict(
                                      name='Final',
                                      type='bool',
                                      hidden=False,
                                      default=None
                                  ))
-    bundleBuilder.AddDomainAttribute('Class', 'class', 'metaclass',
+    bundleBuilder.AddDomainAttribute('class', 'metaclass',
                                  dict(
                                      name='Metaclass',
                                      type='enum',
@@ -49,7 +49,7 @@ def CreateModifications(project):
                                      default=None,
                                      enum=['object', 'type', 'interface', 'Enum']
                                  ))
-    bundleBuilder.AddDomainAttribute('Class', 'class', 'numbers',
+    bundleBuilder.AddDomainAttribute('class', 'numbers',
                                  dict(
                                      name='Numbers',
                                      type='int',
@@ -57,7 +57,7 @@ def CreateModifications(project):
                                      default=5,
                                      enum=[1, 2, 4, 5, 10]
                                  ))
-    bundleBuilder.AddDomainAttribute('Class', 'class', 'coefficients',
+    bundleBuilder.AddDomainAttribute('class', 'coefficients',
                                  dict(
                                      name='Coefficients',
                                      type='float',
