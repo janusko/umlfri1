@@ -465,6 +465,9 @@ class CProject(CBaseObject):
         ListCon = {}
         ListDiag = {}
         ListBundles = {}
+
+        DomainObjectSaveInfo = None
+        DomainModifications = None
         
         if storage is not None:
             self.isZippedFile = True
@@ -547,9 +550,11 @@ class CProject(CBaseObject):
 
                 self.__domainObject = CDomainObject(self.__metamodel.GetDomain())
 
+            elif element.tag == UMLPROJECT_NAMESPACE+'domainmodifications':
+                DomainModifications = self.__LoadAttributeModifications(element)
+
             elif element.tag == UMLPROJECT_NAMESPACE+'domain':
-                data = CProject.__LoadDomainObjectInfo(element[0])
-                self.__domainObject.SetSaveInfo(data)
+                DomainObjectSaveInfo = CProject.__LoadDomainObjectInfo(element[0])
 
             elif element.tag == UMLPROJECT_NAMESPACE+'modificationbundles':
                 for elementNode in element:
@@ -616,6 +621,12 @@ class CProject(CBaseObject):
                         self.GetMetamodel().GetDiagramFactory().GetDiagram(item.get('id')).SetCounter(int(item.get('value')))
 
         from lib.Commands.Project.ApplyModificationBundles import CApplyModificationBundlesCommand
+        from lib.Commands.Project.ModifyProjectDomain import CModifyProjectDomain
+
+        if DomainModifications:
+            CModifyProjectDomain(self, DomainModifications).Do()
+
+        self.__domainObject.SetSaveInfo(DomainObjectSaveInfo)
 
         for nodeId, bundles in reversed(ListBundles.items()):
             node = ListObj[nodeId][0].GetNode()
