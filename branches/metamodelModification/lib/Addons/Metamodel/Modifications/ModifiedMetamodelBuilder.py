@@ -66,4 +66,4 @@ class CModifiedMetamodelBuilder(object):
         return modifications
 
     def __CreateModifiedDomainType(self, parentDomain, modifications):
-        return CModifiedDomainType(parentDomain, parentDomain.GetFactory(), modifications)
+        return CModifiedDomainType(parentDomain, modifications)
