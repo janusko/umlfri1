@@ -4,8 +4,9 @@ from lib.Base import CBaseObject
 
 class CProjectNode(CBaseObject):
     
-    def __init__(self, parent = None, object = None):
+    def __init__(self, parent = None, object = None, project = None):
         self.SetParent(parent)
+        self.SetProject(project)
         self.childs = []
         self.diagrams = []
         self.object = object
@@ -99,7 +100,16 @@ class CProjectNode(CBaseObject):
         if parent is None:
             self.parent = lambda: None
         else:
-            self.parent = weakref.ref(parent) 
+            self.parent = weakref.ref(parent)
+
+    def GetProject(self):
+        return self.project()
+
+    def SetProject(self, project):
+        if project is None:
+            self.project = lambda: None
+        else:
+            self.project = weakref.ref(project)
 
     def RemoveChild(self, child):
         if child in self.childs:
