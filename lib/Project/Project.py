@@ -664,7 +664,7 @@ class CProject(CBaseObject):
                     if subelem.tag == UMLPROJECT_NAMESPACE+'node':
                         elemid = subelem.get("id")
                         listObj = {id: obj for id, (obj, x) in ListObj.iteritems()}
-                        proNode = CProjectNode(None,listObj[elemid])
+                        proNode = CProjectNode(None,listObj[elemid],self)
                         self.SetRoot(proNode)
                         self.__CreateTree(listObj, ListCon, ListDiag, subelem, proNode, savever)
             
