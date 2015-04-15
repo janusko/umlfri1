@@ -269,48 +269,7 @@ class CProject(CBaseObject):
                 bundleNode = etree.SubElement(elementNode, UMLPROJECT_NAMESPACE+'bundle', name=bundle.GetName())
                 for domain, modifications in bundle.GetDomainModifications().iteritems():
                     domainModificationNode = etree.SubElement(bundleNode, UMLPROJECT_NAMESPACE+'domain', id=domain)
-                    for attributeModification in modifications:
-                        if attributeModification.GetType() == DomainAttributeModificationType.DELETE:
-                            attributeNode = etree.SubElement(domainModificationNode, UMLPROJECT_NAMESPACE+'deleteattribute')
-
-                        elif attributeModification.GetType() == DomainAttributeModificationType.REPLACE:
-                            attributeNode = etree.SubElement(domainModificationNode, UMLPROJECT_NAMESPACE+'replaceattribute')
-                            props = attributeModification.GetAttributeProperties()
-                            attributeNode.set('name', unicode(props['name']))
-
-                            type = props['type']
-                            if props.get('hidden', False):
-                                attributeNode.set('hidden', 'true')
-
-                            if not CDomainType.IsDomainAtomic(type):
-                                attributeNode.set('type', type)
-                            else:
-                                typeNode = etree.SubElement(attributeNode, UMLPROJECT_NAMESPACE+type.title())
-
-                                if type in ('int', 'float'):
-                                    if 'max' in props:
-                                        typeNode.append(builder.E(UMLPROJECT_NAMESPACE+'max', unicode(str(props['max']))))
-                                    if 'min' in props:
-                                        typeNode.append(builder.E(UMLPROJECT_NAMESPACE+'min', unicode(str(props['min']))))
-
-                                if 'enum' in props:
-                                    if type == 'enum':
-                                        enumNode = typeNode
-                                    else:
-                                        enumNode = etree.SubElement(typeNode, UMLPROJECT_NAMESPACE+'Enum')
-                                    for value in props['enum']:
-                                        enumNode.append(builder.E(UMLPROJECT_NAMESPACE+'Value', unicode(value)))
-
-                                if type in ('str', 'text') and 'restricted' in props:
-                                    typeNode.append(builder.E(UMLPROJECT_NAMESPACE+'Restriction', unicode(props['restricted'])))
-
-                                defaultValue = props.get('default', None)
-                                if type != 'list' and defaultValue:
-                                    typeNode.set('default', unicode(str(defaultValue)))
-                        else:
-                            raise ProjectError('Unknown domain attribute modification type "%s"' % attributeModification.GetType())
-
-                        attributeNode.set('id', unicode(attributeModification.GetAttributeID()))
+                    self.__CreateAttributeModificationsXml(domainModificationNode, modifications)
 
         elements = list(elements)
         elements.sort(key = CBaseObject.GetUID)
@@ -364,7 +323,57 @@ class CProject(CBaseObject):
         Indent(rootNode)
         
         return rootNode
-    
+
+
+    def __CreateAttributeModificationsXml(self, parentNode, modifications):
+        nodes = self.__CreateAttributeModificationsNodes(modifications)
+        for node in nodes:
+            parentNode.append(node)
+
+    def __CreateAttributeModificationsNodes(self, modifications):
+        for attributeModification in modifications:
+            if attributeModification.GetType() == DomainAttributeModificationType.DELETE:
+                attributeNode = etree.Element(UMLPROJECT_NAMESPACE+'deleteattribute')
+
+            elif attributeModification.GetType() == DomainAttributeModificationType.REPLACE:
+                attributeNode = etree.Element(UMLPROJECT_NAMESPACE+'replaceattribute')
+                props = attributeModification.GetAttributeProperties()
+                attributeNode.set('name', unicode(props['name']))
+
+                type = props['type']
+                if props.get('hidden', False):
+                    attributeNode.set('hidden', 'true')
+
+                if not CDomainType.IsDomainAtomic(type):
+                    attributeNode.set('type', type)
+                else:
+                    typeNode = etree.SubElement(attributeNode, UMLPROJECT_NAMESPACE+type.title())
+
+                    if type in ('int', 'float'):
+                        if 'max' in props:
+                            typeNode.append(builder.E(UMLPROJECT_NAMESPACE+'max', unicode(str(props['max']))))
+                        if 'min' in props:
+                            typeNode.append(builder.E(UMLPROJECT_NAMESPACE+'min', unicode(str(props['min']))))
+
+                    if 'enum' in props:
+                        if type == 'enum':
+                            enumNode = typeNode
+                        else:
+                            enumNode = etree.SubElement(typeNode, UMLPROJECT_NAMESPACE+'Enum')
+                        for value in props['enum']:
+                            enumNode.append(builder.E(UMLPROJECT_NAMESPACE+'Value', unicode(value)))
+
+                    if type in ('str', 'text') and 'restricted' in props:
+                        typeNode.append(builder.E(UMLPROJECT_NAMESPACE+'Restriction', unicode(props['restricted'])))
+
+                    defaultValue = props.get('default', None)
+                    if type != 'list' and defaultValue:
+                        typeNode.set('default', unicode(str(defaultValue)))
+            else:
+                raise ProjectError('Unknown domain attribute modification type "%s"' % attributeModification.GetType())
+
+            attributeNode.set('id', unicode(attributeModification.GetAttributeID()))
+            yield attributeNode
     
     def __CreateTree(self, ListObj, ListCon, ListDiag, root, parentNode, savever):
         for elem in root:
