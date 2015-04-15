@@ -1,5 +1,5 @@
 from itertools import chain
-from lib.Addons.Metamodel.Modifications.DomainModificationMerger import CDomainModificationBuilder
+from lib.Addons.Metamodel.Modifications.DomainModificationMerger import CDomainModificationMerger
 from lib.Addons.Metamodel.ModifiedMetamodel import CModifiedMetamodel
 from lib.Domains.ModifiedFactory import CModifiedDomainFactory
 from lib.Domains.ModifiedType import CModifiedDomainType
@@ -9,7 +9,7 @@ from lib.Elements.ModifiedType import CModifiedElementType
 
 class CModifiedMetamodelBuilder(object):
 
-    __domainModificationMerger = CDomainModificationBuilder()
+    __domainModificationMerger = CDomainModificationMerger()
 
     def BuildMetamodel(self, elementNode, modificationBundles, parentMetamodel = None):
         if parentMetamodel is None:
