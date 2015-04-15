@@ -18,6 +18,16 @@
 						</xs:sequence>
 					</xs:complexType>
 				</xs:element>
+                <xs:element name="domainmodifications">
+                    <xs:annotation>
+                        <xs:documentation>Modifications of project's domain object.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:complexContent>
+                            <xs:extension base="domainModificationType" />
+                        </xs:complexContent>
+                    </xs:complexType>
+                </xs:element>
                 <xs:element name="domain">
                     <xs:annotation>
                         <xs:documentation>Project's domain object.</xs:documentation>
