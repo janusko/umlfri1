@@ -14,6 +14,9 @@ class CModifiedDomainType(CDomainType):
     def GetModifications(self):
         return self.modifications
 
+    def GetParentType(self):
+        return self.parentType()
+
     def AppendAttribute(self, id, name, type = None, default = None, hidden=False):
         properties = {'name': name, 'type': type, 'default': default, 'hidden': (hidden in ('true', '1'))}
         modification = CReplaceAttributeModification(id, properties)
