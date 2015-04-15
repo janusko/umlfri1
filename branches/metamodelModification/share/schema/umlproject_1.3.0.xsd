@@ -147,7 +147,15 @@
 			<xs:documentation>type of metamodel modification bundle</xs:documentation>
 		</xs:annotation>
         <xs:sequence>
-            <xs:element name="domain" type="domainModificationType" minOccurs="1" maxOccurs="unbounded" />
+            <xs:element name="domain" minOccurs="1" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="domainModificationType">
+                            <xs:attribute name="id" type="xs:string" use="required" />
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
         </xs:sequence>
         <xs:attribute name="name" type="xs:string" use="required" />
     </xs:complexType>
@@ -159,7 +167,6 @@
             <xs:element ref="replaceattribute" minOccurs="0" maxOccurs="unbounded" />
             <xs:element ref="deleteattribute" minOccurs="0" maxOccurs="unbounded" />
         </xs:sequence>
-        <xs:attribute name="id" type="xs:string" use="required" />
     </xs:complexType>
     <xs:complexType name="domainAttributeModificationType" abstract="true">
         <xs:annotation>
