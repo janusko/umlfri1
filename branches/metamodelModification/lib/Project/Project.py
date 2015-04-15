@@ -561,66 +561,7 @@ class CProject(CBaseObject):
                         domains = {}
                         for domainNode in bundleNode:
                             domainId = domainNode.get('id')
-                            attributeModifications = []
-                            domains[domainId] = attributeModifications
-                            for attributeModificationNode in domainNode:
-                                attributeID = attributeModificationNode.get('id')
-                                tag = attributeModificationNode.tag
-                                if tag == UMLPROJECT_NAMESPACE+'deleteattribute':
-                                    attributeModifications.append(CDeleteAttributeModification(attributeID))
-                                elif tag == UMLPROJECT_NAMESPACE+'replaceattribute':
-                                    props = {'name': attributeModificationNode.get('name')}
-                                    type = attributeModificationNode.get('type')
-                                    props['hidden'] = attributeModificationNode.get('hidden') in ('true', '1')
-                                    if type is not None:
-                                        props['type'] = type
-                                        props['default'] = None
-                                    else:
-                                        child = attributeModificationNode[0]
-                                        type = child.tag[child.tag.rfind('}')+1:]
-                                        props['type'] = type.lower()
-
-                                        restrictions = {}
-
-                                        trycast = lambda type, value: None if value is None else type(value)
-
-                                        def load_restriction(elementName, res, type):
-                                            node = attributeModificationNode.find(UMLPROJECT_NAMESPACE+elementName)
-                                            if node is not None:
-                                                restrictions[res] = trycast(type, node.text)
-
-                                        def load_default_value(type):
-                                            props['default'] = trycast(type, child.get('default'))
-
-                                        numberTypes = {'Int' : int, 'Float': float}
-                                        otherTypes = {'Font' : CFont, 'Color' : CColor}
-
-                                        if type in numberTypes:
-                                            numberType = numberTypes[type]
-                                            load_restriction('Min', 'min', numberType)
-                                            load_restriction('Max', 'max', numberType)
-                                            load_default_value(numberType)
-                                        elif type in otherTypes:
-                                            otherType = otherTypes[type]
-                                            load_default_value(otherType)
-                                        elif type == 'Bool':
-                                            props['default'] = trycast(lambda x: x == 'True', child.get('default'))
-                                        elif type in ('Text', 'Str'):
-                                            load_restriction('Restriction', 'restricted', str)
-                                            load_default_value(str)
-
-                                        if type == 'Enum':
-                                            enumChild = child
-                                            load_default_value(str)
-                                        else:
-                                            enumChild = child.find(UMLPROJECT_NAMESPACE+'Enum')
-
-                                        if enumChild:
-                                            for option in enumChild:
-                                                if option.tag == UMLPROJECT_NAMESPACE+'Value':
-                                                    props.setdefault('enum', []).append(option.text)
-
-                                    attributeModifications.append(CReplaceAttributeModification(attributeID, props))
+                            domains[domainId] = self.__LoadAttributeModifications(domainNode)
 
                         bundles.append(CMetamodelModificationBundle(name, None, domains))
 
@@ -684,3 +625,67 @@ class CProject(CBaseObject):
             obj.SetSaveInfo(saveinfo)
 
         self.__addonManager.GetPluginManager().GetPluginAdapter().gui_project_opened(self)
+
+    def __LoadAttributeModifications(self, parentNode):
+        modifications = []
+
+        for attributeModificationNode in parentNode:
+            attributeID = attributeModificationNode.get('id')
+            tag = attributeModificationNode.tag
+            if tag == UMLPROJECT_NAMESPACE + 'deleteattribute':
+                modifications.append(CDeleteAttributeModification(attributeID))
+            elif tag == UMLPROJECT_NAMESPACE + 'replaceattribute':
+                props = {'name': attributeModificationNode.get('name')}
+                type = attributeModificationNode.get('type')
+                props['hidden'] = attributeModificationNode.get('hidden') in ('true', '1')
+                if type is not None:
+                    props['type'] = type
+                    props['default'] = None
+                else:
+                    child = attributeModificationNode[0]
+                    type = child.tag[child.tag.rfind('}') + 1:]
+                    props['type'] = type.lower()
+
+                    restrictions = {}
+
+                    trycast = lambda type, value: None if value is None else type(value)
+
+                    def load_restriction(elementName, res, type):
+                        node = attributeModificationNode.find(UMLPROJECT_NAMESPACE + elementName)
+                        if node is not None:
+                            restrictions[res] = trycast(type, node.text)
+
+                    def load_default_value(type):
+                        props['default'] = trycast(type, child.get('default'))
+
+                    numberTypes = {'Int': int, 'Float': float}
+                    otherTypes = {'Font': CFont, 'Color': CColor}
+
+                    if type in numberTypes:
+                        numberType = numberTypes[type]
+                        load_restriction('Min', 'min', numberType)
+                        load_restriction('Max', 'max', numberType)
+                        load_default_value(numberType)
+                    elif type in otherTypes:
+                        otherType = otherTypes[type]
+                        load_default_value(otherType)
+                    elif type == 'Bool':
+                        props['default'] = trycast(lambda x: x == 'True', child.get('default'))
+                    elif type in ('Text', 'Str'):
+                        load_restriction('Restriction', 'restricted', str)
+                        load_default_value(str)
+
+                    if type == 'Enum':
+                        enumChild = child
+                        load_default_value(str)
+                    else:
+                        enumChild = child.find(UMLPROJECT_NAMESPACE + 'Enum')
+
+                    if enumChild:
+                        for option in enumChild:
+                            if option.tag == UMLPROJECT_NAMESPACE + 'Value':
+                                props.setdefault('enum', []).append(option.text)
+
+                modifications.append(CReplaceAttributeModification(attributeID, props))
+
+        return modifications
