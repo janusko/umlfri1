@@ -6,6 +6,8 @@ class CProjectNode(CBaseObject):
     
     def __init__(self, parent = None, object = None, project = None):
         self.SetParent(parent)
+        if project is None and parent is not None:
+            project = parent.GetProject()
         self.SetProject(project)
         self.childs = []
         self.diagrams = []
