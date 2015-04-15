@@ -239,6 +239,7 @@ class CProject(CBaseObject):
         rootNode = etree.XML('<umlproject saveversion="%s" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/umlproject.xsd"></umlproject>'%('.'.join(str(i) for i in self.SaveVersion)))
         
         metamodelNode = etree.Element(UMLPROJECT_NAMESPACE+'metamodel')
+        domainModificationNode = etree.Element(UMLPROJECT_NAMESPACE+'domainmodifications')
         domainNode = etree.Element(UMLPROJECT_NAMESPACE+'domain')
         modificationBundlesNode = etree.Element(UMLPROJECT_NAMESPACE+'modificationbundles')
         objectsNode = etree.Element(UMLPROJECT_NAMESPACE+'objects')
@@ -256,6 +257,13 @@ class CProject(CBaseObject):
         metamodelNode.append(metamodelUriNode)
         metamodelNode.append(metamodelVersionNode)
         rootNode.append(metamodelNode)
+
+        domainType = self.__domainObject.GetType()
+        if hasattr(domainType, 'GetModifications'):
+            modifications = domainType.GetModifications()
+            self.__CreateAttributeModificationsXml(domainModificationNode, modifications)
+
+        rootNode.append(domainModificationNode)
 
         domainNode.append(SaveDomainObjectInfo(self.__domainObject.GetSaveInfo()))
         rootNode.append(domainNode)
