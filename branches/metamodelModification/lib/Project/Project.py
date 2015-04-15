@@ -642,7 +642,9 @@ class CProject(CBaseObject):
                         conTo = connection.get("destination")
                         if conFrom in ListObj and conTo in ListObj:
                             id = connection.get("id")
-                            con = CConnectionObject(self.GetMetamodel().GetConnectionFactory().GetConnection(connection.get("type")),ListObj[conFrom],ListObj[conTo])
+                            source = ListObj[conFrom][0]
+                            destination = ListObj[conTo][0]
+                            con = CConnectionObject(self.GetMetamodel().GetConnectionFactory().GetConnection(connection.get("type")),source,destination)
                             con.SetUID(id)
                             con.SetSaveInfo(CProject.__LoadDomainObjectInfo(connection[0]))
                             ListCon[id] = con
