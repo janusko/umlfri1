@@ -622,9 +622,6 @@ class CProject(CBaseObject):
 
                                     attributeModifications.append(CReplaceAttributeModification(attributeID, props))
 
-                                else:
-                                    raise ProjectError('Unknown domain attribute modification  element "%s"' % name)
-
                         bundles.append(CMetamodelModificationBundle(name, None, domains))
 
             elif element.tag == UMLPROJECT_NAMESPACE+'objects':
