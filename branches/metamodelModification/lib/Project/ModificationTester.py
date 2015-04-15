@@ -1,12 +1,26 @@
 from lib.Addons.Metamodel.Modifications.ModificationBundleBuilder import CMetamodelModificationBundleBuidler
 from lib.Commands.Project.ApplyModificationBundles import CApplyModificationBundlesCommand
+from lib.Commands.Project.ModifyProjectDomain import CModifyProjectDomain
 from lib.Commands.Project.RemoveModificationBundles import CRemoveModificationBundlesCommand
 from lib.Domains.AttributeConditions import BuildParam
+from lib.Domains.Modifications.ReplaceAttributeModification import CReplaceAttributeModification
 
 
 def CreateModifications(project):
     if not project.GetRoot().HasChild():
         return
+
+    attributeModifications = []
+    attributeModifications.append(CReplaceAttributeModification('my_attribute',
+                                                                dict(
+                                                                    name='My new shiny attribute',
+                                                                    type='str',
+                                                                    hidden=False,
+                                                                    default=None
+                                                                )))
+
+    yield CModifyProjectDomain(project, attributeModifications)
+    return
 
     modificationRoot = list(project.GetRoot().GetChilds())[2]
 
