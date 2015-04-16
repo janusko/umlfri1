@@ -6,6 +6,7 @@ import ConnectionObject
 import Diagram
 import ConnectionLabel
 import Metamodel
+import ModificationBundle
 import ConnectionType
 import ConnectionAlias
 import DiagramType
