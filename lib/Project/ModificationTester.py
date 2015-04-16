@@ -1,4 +1,4 @@
-from lib.Addons.Metamodel.Modifications.ModificationBundleBuilder import CMetamodelModificationBundleBuidler
+from lib.Addons.Metamodel.Modifications.ModificationBundleBuilder import CMetamodelModificationBundleBuilder
 from lib.Commands.Project.ApplyModificationBundles import CApplyModificationBundlesCommand
 from lib.Commands.Project.ModifyProjectDomain import CModifyProjectDomain
 from lib.Commands.Project.RemoveModificationBundles import CRemoveModificationBundlesCommand
@@ -24,7 +24,7 @@ def CreateModifications(project):
 
     modificationRoot = list(project.GetRoot().GetChilds())[2]
 
-    mbBuilder = CMetamodelModificationBundleBuidler()
+    mbBuilder = CMetamodelModificationBundleBuilder()
     bundleBuilder = mbBuilder.CreateBundle("bundle 1")
     bundleBuilder.AddDomainAttribute('class', 'docstring',
                                  dict(
@@ -46,7 +46,7 @@ def CreateModifications(project):
     modification1 = (modificationRoot, bundles1)
 
     modificationRoot = list(project.GetRoot().GetChilds())[3]
-    mbBuilder = CMetamodelModificationBundleBuidler()
+    mbBuilder = CMetamodelModificationBundleBuilder()
     bundleBuilder = mbBuilder.CreateBundle("bundle 2")
     bundleBuilder.AddDomainAttribute('class', 'final',
                                  dict(
