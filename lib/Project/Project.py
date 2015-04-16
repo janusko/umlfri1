@@ -358,10 +358,10 @@ class CProject(CBaseObject):
                     typeNode = etree.SubElement(attributeNode, UMLPROJECT_NAMESPACE+type.title())
 
                     if type in ('int', 'float'):
-                        if 'max' in props:
-                            typeNode.append(builder.E(UMLPROJECT_NAMESPACE+'max', unicode(str(props['max']))))
                         if 'min' in props:
-                            typeNode.append(builder.E(UMLPROJECT_NAMESPACE+'min', unicode(str(props['min']))))
+                            typeNode.append(builder.E(UMLPROJECT_NAMESPACE+'Min', unicode(str(props['min']))))
+                        if 'max' in props:
+                            typeNode.append(builder.E(UMLPROJECT_NAMESPACE+'Max', unicode(str(props['max']))))
 
                     if 'enum' in props:
                         if type == 'enum':
