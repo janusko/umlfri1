@@ -53,7 +53,7 @@ primitiveTypes = {
     'boolean':      PrimitiveType('boolean', isLogic = True, convertor = boolConvertor, default = False),
     'inputstream':  PrimitiveType('inputstream', isObject = True),
     'int32':        PrimitiveType('int32', isNumeric = True, convertor = int, default = 0),
-    'float':        PrimitiveType('float', isNumeric = True, convertor = int, default = 0.0),
+    'float':        PrimitiveType('float', isNumeric = True, convertor = float, default = 0.0),
     'variant':      PrimitiveType('variant'), # one of: boolean, int32, float, string
     'string':       PrimitiveType('string', isString = True, convertor = str, default = ""),
     'xy':           PrimitiveType('xy', isObject = True),
