@@ -1,0 +1,114 @@
+<?xml version="1.0" ?>
+<interface
+    xmlns="http://umlfri.org/xmlschema/publicApi.xsd"
+    name="org.umlfri.api.metamodel.ModificationBundle">
+
+    <documentation>
+        Modification bundle. Contains information about changes to domain's attributes.
+    </documentation>
+
+    <method name="replaceAttributeBool">
+        <documentation>
+            Replaces attribute in specified domain with new bool attribute.
+        </documentation>
+
+        <parameter name="domain" type="string" />
+
+        <parameter name="id" type="string" />
+
+        <parameter name="name" type="string" />
+
+        <parameter name="default" type="boolean" required="false" default="false" />
+
+        <parameter name="hidden" type="boolean" required="false" default="false" />
+    </method>
+
+    <method name="replaceAttributeInt">
+        <documentation>
+            Replaces attribute in specified domain with new int attribute.
+        </documentation>
+
+        <parameter name="domain" type="string" />
+
+        <parameter name="id" type="string" />
+
+        <parameter name="name" type="string" />
+
+        <parameter name="default" type="int32" required="false" default="0" />
+
+        <parameter name="hidden" type="boolean" required="false" default="false" />
+
+        <parameter name="min" type="int32" required="false" default="0" />
+
+        <parameter name="max" type="int32" required="false" default="0" />
+    </method>
+
+    <method name="replaceAttributeFloat">
+        <documentation>
+            Replaces attribute in specified domain with new float attribute.
+        </documentation>
+
+        <parameter name="domain" type="string" />
+
+        <parameter name="id" type="string" />
+
+        <parameter name="name" type="string" />
+
+        <parameter name="default" type="float" required="false" default="0.0" />
+
+        <parameter name="hidden" type="boolean" required="false" default="false" />
+
+        <parameter name="min" type="float" required="false" default="0.0" />
+
+        <parameter name="max" type="float" required="false" default="0.0" />
+    </method>
+
+    <method name="replaceAttributeStr">
+        <documentation>
+            Replaces attribute in specified domain with new str attribute.
+        </documentation>
+
+        <parameter name="domain" type="string" />
+
+        <parameter name="id" type="string" />
+
+        <parameter name="name" type="string" />
+
+        <parameter name="default" type="string" required="false" default="" />
+
+        <parameter name="hidden" type="boolean" required="false" default="false" />
+
+        <parameterDictionary name="enumValues">
+            <documentation>
+                Enum values.
+            </documentation>
+        </parameterDictionary>
+    </method>
+
+    <method name="replaceAttributeText">
+        <documentation>
+            Replaces attribute in specified domain with new text attribute.
+        </documentation>
+
+        <parameter name="domain" type="string" />
+
+        <parameter name="id" type="string" />
+
+        <parameter name="name" type="string" />
+
+        <parameter name="default" type="string" required="false" default="" />
+
+        <parameter name="hidden" type="boolean" required="false" default="false" />
+    </method>
+
+    <method name="removeAttribute">
+        <documentation>
+            Remove attribute in specified domain.
+        </documentation>
+
+        <parameter name="domain" type="string" />
+
+        <parameter name="id" type="string" />
+    </method>
+
+</interface>
