@@ -15,19 +15,19 @@ class CProjectNodeModificationBundleBuilder(CBaseObject):
         return self.__projectNode
 
     def ReplaceDomainAttributeBool(self, domain, id, name, default, hidden):
-        return self.__ReplaceDomainAttribute(domain, id, {'name': name, 'default': default, 'hidden': hidden})
+        return self.__ReplaceDomainAttribute(domain, id, {'type': 'bool', 'name': name, 'default': default, 'hidden': hidden})
 
     def ReplaceDomainAttributeInt(self, domain, id, name, default, hidden, min, max):
-        return self.__ReplaceDomainAttribute(domain, id, {'name': name, 'default': default, 'hidden': hidden, 'min': min, 'max': max})
+        return self.__ReplaceDomainAttribute(domain, id, {'type': 'int', 'name': name, 'default': default, 'hidden': hidden, 'min': min, 'max': max})
 
     def ReplaceDomainAttributeFloat(self, domain, id, name, default, hidden, min, max):
-        return self.__ReplaceDomainAttribute(domain, id, {'name': name, 'default': default, 'hidden': hidden, 'min': min, 'max': max})
+        return self.__ReplaceDomainAttribute(domain, id, {'type': 'float', 'name': name, 'default': default, 'hidden': hidden, 'min': min, 'max': max})
 
     def ReplaceDomainAttributeStr(self, domain, id, name, default, hidden, enumValues):
-        return self.__ReplaceDomainAttribute(domain, id, {'name': name, 'default': default, 'hidden': hidden, 'enum': enumValues})
+        return self.__ReplaceDomainAttribute(domain, id, {'type': 'str', 'name': name, 'default': default, 'hidden': hidden, 'enum': enumValues})
 
     def ReplaceDomainAttributeText(self, domain, id, name, default, hidden):
-        return self.__ReplaceDomainAttribute(domain, id, {'name': name, 'default': default, 'hidden': hidden})
+        return self.__ReplaceDomainAttribute(domain, id, {'type': 'text', 'name': name, 'default': default, 'hidden': hidden})
 
     def RemoveDomainAttribute(self, domain, attributeID):
         self.__CheckBundle()
@@ -41,6 +41,8 @@ class CProjectNodeModificationBundleBuilder(CBaseObject):
         return self.__bundle
 
     def __ReplaceDomainAttribute(self, domain, attributeID, attributeProperties):
+        self.__CheckBundle()
+
         self.__bundleBuilder.ReplaceDomainAttribute(domain, attributeID, attributeProperties)
 
     def __CheckBundle(self):
