@@ -6,6 +6,7 @@ from lib.Addons.Plugin.Interface.Classes.base import IBase
 from lib.Addons.Plugin.Interface.decorators import *
 from lib.Commands.Diagrams import CShowElementCommand
 from lib.Commands.Project import CCreateConnectionObjectCommand, CCreateDiagramCommand, CCreateElementObjectCommand
+from lib.Commands.Project.ApplyModificationBundles import CApplyModificationBundlesCommand
 from lib.Drawing.Diagram import CDiagram
 from lib.Drawing.Element import CElement
 from lib.Elements.Object import CElementObject
@@ -42,6 +43,12 @@ class IElementObject(IDomainObject):
         builder = CProjectNodeModificationBundleBuilder(him.GetNode(), name)
         IElementObject.__modificationBundleBuilders.append(builder)
         return builder
+
+    @destructive
+    def ModifyMetamodel(him, command, modificationBundle):
+        bundle = modificationBundle.Build()
+        cmd = CApplyModificationBundlesCommand(modificationBundle.GetNode(), [bundle])
+        command.Execute(cmd)
     
     @destructive
     def ConnectWith(him, command, other, connectionType):
