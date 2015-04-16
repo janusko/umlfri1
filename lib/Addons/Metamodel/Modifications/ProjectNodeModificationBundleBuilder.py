@@ -1,8 +1,9 @@
 from lib.Addons.Metamodel.Modifications.ModificationBundleBuilder import CMetamodelModificationBundleBuilder
+from lib.Base.BaseObject import CBaseObject
 from lib.Exceptions import MetamodelModificationError
 
 
-class CProjectNodeModificationBundleBuilder(object):
+class CProjectNodeModificationBundleBuilder(CBaseObject):
 
     def __init__(self, projectNode, bundleName):
         self.__projectNode = projectNode
