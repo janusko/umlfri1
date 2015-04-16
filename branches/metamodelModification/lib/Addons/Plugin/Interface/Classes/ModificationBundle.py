@@ -17,8 +17,6 @@ class IModificationBundle(IBase):
         him.ReplaceDomainAttributeFloat(domain, id, name, default, hidden, min, max)
 
     def ReplaceAttributeStr(him, domain, id, name, default, hidden, enumValues):
-        if enumValues:
-            enumValues = enumValues.split('|')
         him.ReplaceDomainAttributeStr(domain, id, name, default, hidden, enumValues)
 
     def ReplaceAttributeText(him, domain, id, name, default, hidden):
