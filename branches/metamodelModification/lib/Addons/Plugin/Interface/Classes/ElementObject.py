@@ -46,7 +46,10 @@ class IElementObject(IDomainObject):
 
     @destructive
     def ModifyMetamodel(him, command, modificationBundle):
-        bundle = modificationBundle.Build()
+        try:
+            bundle = modificationBundle.Build()
+        except MetamodelModificationError:
+            raise ParamValueError("Specified modification bundle was already applied.")
         cmd = CApplyModificationBundlesCommand(modificationBundle.GetNode(), [bundle])
         command.Execute(cmd)
     
