@@ -14,19 +14,19 @@ class CProjectNodeModificationBundleBuilder(CBaseObject):
     def GetNode(self):
         return self.__projectNode
 
-    def ReplaceDomainAttributeBool(self, domain, id, name, default=None, hidden=False):
+    def ReplaceDomainAttributeBool(self, domain, id, name, default, hidden):
         return self.__ReplaceDomainAttribute(domain, id, {'name': name, 'default': default, 'hidden': hidden})
 
-    def ReplaceDomainAttributeInt(self, domain, id, name, default=None, hidden=False, min=None, max=None):
+    def ReplaceDomainAttributeInt(self, domain, id, name, default, hidden, min, max):
         return self.__ReplaceDomainAttribute(domain, id, {'name': name, 'default': default, 'hidden': hidden, 'min': min, 'max': max})
 
-    def ReplaceDomainAttributeFloat(self, domain, id, name, default=None, hidden=False, min=None, max=None):
+    def ReplaceDomainAttributeFloat(self, domain, id, name, default, hidden, min, max):
         return self.__ReplaceDomainAttribute(domain, id, {'name': name, 'default': default, 'hidden': hidden, 'min': min, 'max': max})
 
-    def ReplaceDomainAttributeStr(self, domain, id, name, default=None, hidden=False, enumValues=None):
+    def ReplaceDomainAttributeStr(self, domain, id, name, default, hidden, enumValues):
         return self.__ReplaceDomainAttribute(domain, id, {'name': name, 'default': default, 'hidden': hidden, 'enum': enumValues})
 
-    def ReplaceDomainAttributeText(self, domain, id, name, default=None, hidden=False):
+    def ReplaceDomainAttributeText(self, domain, id, name, default, hidden):
         return self.__ReplaceDomainAttribute(domain, id, {'name': name, 'default': default, 'hidden': hidden})
 
     def RemoveDomainAttribute(self, domain, attributeID):
