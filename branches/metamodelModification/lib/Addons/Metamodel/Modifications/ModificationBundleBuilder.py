@@ -2,7 +2,7 @@ from lib.Addons.Metamodel.Modifications.DomainModificationBuilder import CDomain
 from lib.Addons.Metamodel.Modifications.ModificationBundle import CMetamodelModificationBundle
 
 
-class CMetamodelModificationBundleBuidler(object):
+class CMetamodelModificationBundleBuilder(object):
 
     def __init__(self):
         self.bundleBuilders = {}
