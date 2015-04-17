@@ -1,8 +1,7 @@
 class CDomainModificationMerger(object):
     def MergeModifications(self, parentModifications, childModifications):
-        return self.__MergeAttributeModifications(parentModifications, childModifications)
-        # elementModificationsResolver = lambda parent, child: self.__MergeObjects(parent, child, self.__MergeAttributeModifications)
-        # return self.__MergeObjects(parentModifications, childModifications, elementModificationsResolver)
+        attributeModificationsResolver = lambda parent, child:  self.__MergeAttributeModifications(parent, child)
+        return self.__MergeObjects(parentModifications, childModifications, attributeModificationsResolver)
 
     @staticmethod
     def __MergeObjects(parentObjects, childObjects, mergeResolver):
