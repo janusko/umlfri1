@@ -34,11 +34,12 @@ class CModifiedDomainFactory():
 
         @rtype: L{CDomainType<CDomainType>}
         '''
-        for id in self.parentFactory.IterTypes():
-            if id in self.domains:
-                yield self.domains[id]
+        for domain in self.parentFactory.IterTypes():
+            name = domain.GetName()
+            if name in self.domains:
+                yield self.domains[name]
             else:
-                yield type
+                yield domain
 
         for id in self.domains.iterkeys():
             if not self.parentFactory.HasDomain(id):
