@@ -13,7 +13,7 @@ class CMoveNodeCommand(CCommand):
     # We need builder that DOES merge metamodel at root node, because new parent could have modified metamodel
     # and at the same time the node that is being moved is a root for new modified metamodel.
     # Then we need to perform metamodel merge at that node.
-    __modificationTreeBuilder = CModificationTreeBuilder(False)
+    __modificationTreeBuilder = CModificationTreeBuilder(True)
 
     def __init__(self, node, newParent, newPosition):
         CCommand.__init__(self)
