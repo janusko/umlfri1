@@ -1,5 +1,6 @@
 from lib.Depend.libxml import etree, builder
 from lib.Domains import CDomainObject, CDomainType
+from lib.Domains.AttributeConditions import BuildParam
 from lib.Domains.Modifications.DeleteAttributeModification import CDeleteAttributeModification
 from lib.Domains.Modifications.DomainAttributeModification import DomainAttributeModificationType
 from lib.Domains.Modifications.ReplaceAttributeModification import CReplaceAttributeModification
@@ -348,6 +349,11 @@ class CProject(CBaseObject):
                 props = attributeModification.GetAttributeProperties()
                 attributeNode.set('name', unicode(props['name']))
 
+                if 'condition' in props:
+                    condition = props['condition'].GetCodeString()
+                    attributeNode.append(builder.E(UMLPROJECT_NAMESPACE+'condition', unicode(condition)))
+
+
                 type = props['type']
                 if props.get('hidden', False):
                     attributeNode.set('hidden', 'true')
@@ -666,11 +672,16 @@ class CProject(CBaseObject):
                 props = {'name': attributeModificationNode.get('name')}
                 type = attributeModificationNode.get('type')
                 props['hidden'] = attributeModificationNode.get('hidden') in ('true', '1')
+                conditionNode = attributeModificationNode.find(UMLPROJECT_NAMESPACE+'condition')
+                if conditionNode is not None:
+                    props['condition'] = BuildParam(conditionNode.text)
+
                 if type is not None:
                     props['type'] = type
                     props['default'] = None
                 else:
-                    child = attributeModificationNode[0]
+                    count = len(attributeModificationNode.getchildren())
+                    child = attributeModificationNode[count - 1]
                     type = child.tag[child.tag.rfind('}') + 1:]
                     props['type'] = type.lower()
 
