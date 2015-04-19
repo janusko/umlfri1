@@ -208,12 +208,7 @@ class CDomainObject(CBaseObject):
         
         if len(path) == 1: #work with current attribute
             if action == 'setvalue':
-                if path[0] == DEFAULT_IDENTITY:
-                    self.__SetAttributeValue(path[0], str(value))
-                else:
-                    if not self.type.HasAttribute(path[0]):
-                        raise DomainObjectError('Invalid attribute %s in domain %s' % (path[0], self.type.GetName()))
-                    self.__SetAttributeValue(path[0], self.type.TransformValue(value, id = path[0]))
+                self.__SetValueInternal(path[0], value)
                 return
             elif action == 'getvalue':
                 if not self.type.HasAttribute(path[0]):
@@ -348,27 +343,38 @@ class CDomainObject(CBaseObject):
         @type data: dict
         '''
         for key, value in data.iteritems():
-            if self.type.HasAttribute(key):
+            if self.rawType.HasAttribute(key):
                 if isinstance(value, dict):
                     self.GetValue(key).SetSaveInfo(value)
                 elif isinstance(value, (list, str, unicode, NoneType)):
-                    self.SetValue(key, value)
+                    self.__SetValueInternal(key, value, False)
     
     def __iter__(self):
         for id in self.type.IterAttributeIDs():
             yield id, self.__GetAttributeValue(id)
 
-    def __SetValueInternal(self, key, value):
-        pass
+    def __SetValueInternal(self, key, value, useRuntimeType=True):
+        type = self.rawType
+        if useRuntimeType:
+            type = self.type
 
-    def __GetAttributeValue(self, id):
-        return self.values.setdefault(id, self.type.GetDefaultValue(id))
+        if key == DEFAULT_IDENTITY:
+            self.__SetAttributeValue(key, str(value))
+        else:
+            if not type.HasAttribute(key):
+                raise DomainObjectError('Invalid attribute %s in domain %s' % (key, type.GetName()))
+            self.__SetAttributeValue(key, type.TransformValue(value, id=key), type=type)
 
-    def __SetAttributeValue(self, id, value, index = None):
+    def __GetAttributeValue(self, id, type=None):
+        if type is None:
+            type = self.type
+        return self.values.setdefault(id, type.GetDefaultValue(id))
+
+    def __SetAttributeValue(self, id, value, index=None, type=None):
         self.__SetParentForValue(value)
 
         if index is not None:
-            self.__GetAttributeValue(id)[index] = value
+            self.__GetAttributeValue(id, type)[index] = value
         else:
             self.values[id] = value
 
