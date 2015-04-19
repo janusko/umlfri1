@@ -23,6 +23,10 @@ class CParamEval(CBaseObject):
     def _UpdateLocals(self, context, locals):
         pass
 
+    def __str__(self):
+        return '#{0}'.format(self.__codeString)
+
+
 def BoolWrap(value):
     if isinstance(value, (str, unicode)):
         return value.lower() in ('true', 'yes', '1')
