@@ -1,6 +1,6 @@
 class CDomainModificationMerger(object):
     def MergeModifications(self, parentModifications, childModifications):
-        attributeModificationsResolver = lambda parent, child:  self.__MergeAttributeModifications(parent, child)
+        attributeModificationsResolver = lambda parent, child:  self.MergeAttributeModifications(parent, child)
         return self.__MergeObjects(parentModifications, childModifications, attributeModificationsResolver)
 
     @staticmethod
@@ -17,7 +17,7 @@ class CDomainModificationMerger(object):
         return mergedObjects
 
     @staticmethod
-    def __MergeAttributeModifications(parentModifications, childModifications):
+    def MergeAttributeModifications(parentModifications, childModifications):
         # TODO: optimize
         parentDict = {m.GetAttributeID(): m for m in parentModifications}
         childDict = {m.GetAttributeID(): m for m in childModifications}
