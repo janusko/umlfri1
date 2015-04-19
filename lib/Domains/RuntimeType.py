@@ -1,6 +1,7 @@
 import weakref
 from lib.Domains import CDomainType
 from lib.Domains.AttributeConditions import CAttributeEvaluationContext
+from lib.Domains.AttributeConditions.ParamEval import CAttributeConditionParamEval
 
 
 class CRuntimeDomainType(CDomainType):
@@ -28,8 +29,11 @@ class CRuntimeDomainType(CDomainType):
     def __EvaluateAttributeCondition(self, attribute):
         if 'condition' in attribute:
             condition = attribute['condition']
-            context = CAttributeEvaluationContext(self.object)
-            return condition(context)
+            if isinstance(condition, CAttributeConditionParamEval):
+                context = CAttributeEvaluationContext(self.object)
+                return condition(context)
+            else:
+                return condition
         else:
             return True
 
