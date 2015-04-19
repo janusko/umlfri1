@@ -25,7 +25,7 @@ class CModifyProjectDomain(CCommand):
         parentType = self.__oldType
 
         if isinstance(self.__oldType, CModifiedDomainType):
-            modifications =  self.__domainModificationMerger.MergeModifications(self.__oldType.GetModifications(),
+            modifications =  self.__domainModificationMerger.MergeAttributeModifications(self.__oldType.GetModifications(),
                 modifications)
             parentType = self.__oldType
 
