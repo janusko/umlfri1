@@ -182,6 +182,9 @@
         <xs:annotation>
 			<xs:documentation>type of domain attribute modification</xs:documentation>
 		</xs:annotation>
+        <xs:sequence>
+            <xs:element name="condition" minOccurs="0" type="xs:string" />
+        </xs:sequence>
         <xs:attribute name="id" type="xs:string" use="required"/>
     </xs:complexType>
     <xs:element name="replaceattribute">
