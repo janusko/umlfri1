@@ -115,8 +115,6 @@ class CDomainObject(CBaseObject):
         @type domainobject: L{CDomainObject<lib.Domains.Object.CDomainObject>}
         '''
         if self.GetType().GetName()==domainobject.GetType().GetName():
-            for id in self.type.IterAttributeIDs():
-                self.__SetAttributeValue(id, self.type.GetDefaultValue(id))
             for id in self.GetType().IterAttributeIDs():
                 if self.GetType().GetAttribute(id)['type']!='list':
                     self.SetValue(id,domainobject.GetValue(id))
