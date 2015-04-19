@@ -522,11 +522,11 @@ class CProject(CBaseObject):
             if ver > savever:
                 break
             xmlschema = sch
-        # if not xmlschema.validate(root):
-        #     if __debug__:
-        #         raise XMLError("Schema validation failed\n" + str(xmlschema.error_log.last_error))
-        #     else:
-        #         raise XMLError("Schema validation failed")
+        if not xmlschema.validate(root):
+            if __debug__:
+                raise XMLError("Schema validation failed\n" + str(xmlschema.error_log.last_error))
+            else:
+                raise XMLError("Schema validation failed")
 
         from lib.Addons.Metamodel.Modifications.ModificationBundle import CMetamodelModificationBundle
 
