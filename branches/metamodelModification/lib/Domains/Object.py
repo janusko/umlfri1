@@ -59,8 +59,10 @@ class CDomainObject(CBaseObject):
         """
         from lib.Domains.RuntimeType import CRuntimeDomainType
         if isinstance(type, CRuntimeDomainType):
-            self.type = CRuntimeDomainType(type.GetParentType(), self)
+            self.rawType = type.GetParentType()
+            self.type = CRuntimeDomainType(self.rawType, self)
         else:
+            self.rawType = type
             self.type = CRuntimeDomainType(type, self)
 
     def GetType(self, id=''):
@@ -355,6 +357,9 @@ class CDomainObject(CBaseObject):
     def __iter__(self):
         for id in self.type.IterAttributeIDs():
             yield id, self.__GetAttributeValue(id)
+
+    def __SetValueInternal(self, key, value):
+        pass
 
     def __GetAttributeValue(self, id):
         return self.values.setdefault(id, self.type.GetDefaultValue(id))
