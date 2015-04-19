@@ -3,8 +3,12 @@ from lib.Base import CBaseObject
 
 class CParamEval(CBaseObject):
     def __init__(self, str, type = None):
+        self.__codeString = str
         self.__code = compile(str, "<param>", 'eval')
         self.__type = type
+
+    def GetCodeString(self):
+        return self.__codeString
     
     def __call__(self, context):
         locals = dict()
