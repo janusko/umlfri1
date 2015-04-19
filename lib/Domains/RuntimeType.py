@@ -12,9 +12,12 @@ class CRuntimeDomainType(CDomainType):
     def GetParentType(self):
         return self.parentType()
 
+    def HasAttribute(self, id):
+        return self.__GetAttributeInternal(id) is not None
+
     def GetAttribute(self, id):
-        attribute = self.__GetParentProxyMethod(CDomainType.GetAttribute)(id)
-        if not self.__EvaluateAttributeCondition(attribute):
+        attribute = self.__GetAttributeInternal(id)
+        if attribute is None:
             raise KeyError("Invalid attribute ID: {0}".format(id))
 
         return attribute
@@ -25,6 +28,13 @@ class CRuntimeDomainType(CDomainType):
             attribute = self.__GetParentProxyMethod(CDomainType.GetAttribute)(id)
             if self.__EvaluateAttributeCondition(attribute):
                 yield id
+
+    def __GetAttributeInternal(self, id):
+        attribute = self.__GetParentProxyMethod(CDomainType.GetAttribute)(id)
+        if self.__EvaluateAttributeCondition(attribute):
+            return attribute
+        else:
+            return None
 
     def __EvaluateAttributeCondition(self, attribute):
         if 'condition' in attribute:
