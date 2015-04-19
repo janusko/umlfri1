@@ -350,7 +350,7 @@ class CProject(CBaseObject):
                 attributeNode.set('name', unicode(props['name']))
 
                 if 'condition' in props:
-                    condition = props['condition'].GetCodeString()
+                    condition = str(props['condition'])
                     attributeNode.append(builder.E(UMLPROJECT_NAMESPACE+'condition', unicode(condition)))
 
 
