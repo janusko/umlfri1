@@ -4,6 +4,7 @@ from lib.Domains.AttributeConditions import BuildParam
 from lib.Domains.Modifications.DeleteAttributeModification import CDeleteAttributeModification
 from lib.Domains.Modifications.DomainAttributeModification import DomainAttributeModificationType
 from lib.Domains.Modifications.ReplaceAttributeModification import CReplaceAttributeModification
+from lib.Domains.ModifiedType import CModifiedDomainType
 from lib.datatypes import CFont, CColor
 
 from lib.lib import XMLEncode, Indent
@@ -260,7 +261,7 @@ class CProject(CBaseObject):
         rootNode.append(metamodelNode)
 
         domainType = self.__domainObject.GetType()
-        if hasattr(domainType, 'GetModifications'):
+        if isinstance(domainType, CModifiedDomainType):
             modifications = domainType.GetModifications()
             self.__CreateAttributeModificationsXml(domainModificationNode, modifications)
 
