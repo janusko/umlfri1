@@ -331,9 +331,15 @@ class CDomainObject(CBaseObject):
         @return: structured dictionary containing all the necessary data for .frip file
         @rtype: dict
         '''
-        return dict([(id, self.type.PackValue(id, value) if id != DEFAULT_IDENTITY else str(value))
-            for id, value in self.values.iteritems()])
-    
+        saveinfo = {}
+        for id in self.type.IterAttributeIDs():
+            if id not in self.values:
+                continue
+            value = self.values[id]
+            saveinfo[id] = self.type.PackValue(id, value) if id != DEFAULT_IDENTITY else str(value)
+
+        return saveinfo
+
     def SetSaveInfo(self, data):
         '''
         Restore all the attribute values from dictionary loaded from .frip file
