@@ -100,32 +100,16 @@
         <value type="org.umlfri.api.model.ElementObject" iterable="true" />
     </property>
 
-    <method name="createModificationBundle">
-        <documentation>
-            Create modification bundle on this element object.
-        </documentation>
-
-        <parameter name="name" type="string">
-            <documentation>
-                Name of the modification bundle.
-            </documentation>
-        </parameter>
-
-        <return type="org.umlfri.api.metamodel.ModificationBundle" />
-    </method>
-
     <method name="modifyMetamodel" mutator="true">
         <documentation>
             Modify metamodel at this element in project.
         </documentation>
 
-        <parameter name="modificationBundle" type="org.umlfri.api.metamodel.ModificationBundle">
+        <parameter name="modificationBundles" type="string">
             <documentation>
                 Modification bundle, which contains definition of metamodel changes.
             </documentation>
         </parameter>
-        
-        <throws exception="org.umlfri.api.exceptions.ParamValueError" />
     </method>
     
     <method name="connectWith" mutator="true">

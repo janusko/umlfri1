@@ -1,6 +1,6 @@
+from ast import literal_eval
 from DomainObject import IDomainObject
-from lib.Addons.Metamodel.Modifications.ProjectNodeModificationBundleBuilder import \
-    CProjectNodeModificationBundleBuilder
+from lib.Addons.Metamodel.Modifications.ModificationBundleFactory import CModificationBundleFactory
 from lib.Addons.Plugin.Communication.ComSpec import *
 from lib.Addons.Plugin.Interface.Classes.base import IBase
 from lib.Addons.Plugin.Interface.decorators import *
@@ -17,8 +17,6 @@ from lib.Project import CProjectNode
 
 class IElementObject(IDomainObject):
     __cls__ = CElementObject
-
-    __modificationBundleBuilders = []
     
     def GetName(him):
         return him.GetName()
@@ -39,18 +37,11 @@ class IElementObject(IDomainObject):
     def GetAppears(him):
         return list(him.GetAppears())
 
-    def CreateModificationBundle(him, name):
-        builder = CProjectNodeModificationBundleBuilder(him.GetNode(), name)
-        IElementObject.__modificationBundleBuilders.append(builder)
-        return builder
-
     @destructive
-    def ModifyMetamodel(him, command, modificationBundle):
-        try:
-            bundle = modificationBundle.Build()
-        except MetamodelModificationError:
-            raise ParamValueError("Specified modification bundle was already applied.")
-        cmd = CApplyModificationBundlesCommand(modificationBundle.GetNode(), [bundle])
+    def ModifyMetamodel(him, command, modificationBundles):
+        bundleList = literal_eval(modificationBundles)
+        bundleObjects = CModificationBundleFactory.CreateFromList(bundleList)
+        cmd = CApplyModificationBundlesCommand(him.GetNode(), bundleObjects)
         command.Execute(cmd)
     
     @destructive
