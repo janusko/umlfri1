@@ -2,12 +2,8 @@ from lib.Drawing.DrawingArea import CDrawingArea
 
 
 class COpenedDrawingAreas:
-    "Tu je pojde komentar triedy..."
 
     def __init__(self, app):
-        """
-        Creates new instance.
-        """
         self.application = app
         self.diagrams = dict()
         """Dict of opened drawing Areas. Key = Diagram, Value = DrawingArea."""

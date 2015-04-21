@@ -214,8 +214,8 @@ class CfrmMain(CWindow):
         self.picDrawingArea.Redraw()
         self.UpdateMenuSensitivity(project = True)
         for diagram in self.application.GetProject().GetDefaultDiagrams():
-            self.nbTabs.AddTab(diagram)
             self.picDrawingArea.SetDiagram(diagram)
+            self.nbTabs.AddTab(diagram)
         self.twProjectView.GetRootNode()
         self.twProjectView.twProjectView.grab_focus()
         self.application.GetCommands().Clear()
@@ -816,8 +816,8 @@ class CfrmMain(CWindow):
         self.picDrawingArea.Redraw()
         self.UpdateMenuSensitivity(project = True)
         for diagram in self.application.GetProject().GetDefaultDiagrams():
-            self.nbTabs.AddTab(diagram)
             self.picDrawingArea.SetDiagram(diagram)
+            self.nbTabs.AddTab(diagram)
         self.application.GetCommands().Clear()
         self.on_undo_redo_action(None, 'start')
 

@@ -2,7 +2,7 @@ from lib.Depend.gtk2 import gtk
 from lib.Depend.gtk2 import gobject
 
 from common import CWidget
-from common import  event
+from common import event
 from lib.Drawing import CDiagram
 from lib.Drawing.PixmapImageLoader import PixmapFromPath
 
@@ -23,7 +23,7 @@ class CTabs(CWidget):
     
     def __init__(self, app, wTree):
         CWidget.__init__(self, app, wTree)
-        diagram = CDiagram(None,'StartPage')
+        diagram = CDiagram(None, 'StartPage')
         self.diagrams = [diagram]
         self.labels = {}
         self.__Current = 0
@@ -139,7 +139,10 @@ class CTabs(CWidget):
             for chld in self.nbTabs.get_nth_page(self.__StartPage).get_children():
                 chld.show()
         else:
-            self.diagrams[page_num].GetSelection().DeselectAll()
+            # TODO upravit triedu CTabs, nemusi si uz uchovavat zoznam otvorenych diagramov, teraz to vie COpenedDrawingAreas
+            #self.diagrams[page_num].GetSelection().DeselectAll()
+            self.application.GetOpenedDrawingAreas().GetDrawingArea(self.diagrams[page_num]).GetSelection().DeselectAll()
+
             page = self.nbTabs.get_nth_page(page_num)
             page.pack_start(self.tbDrawingArea)
             self.emit("change_current_page", self.diagrams[page_num])

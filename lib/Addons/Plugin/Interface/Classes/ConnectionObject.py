@@ -28,7 +28,8 @@ class IConnectionObject(IDomainObject):
             raise PluginInvalidMethodParameters(him.GetUID(), "connection is already shown on given diagram")
         
         try:
-            cmd = CShowConnectionCommand(him, diagram)
+            selection = IBase.GetAdapter().application.GetOpenedDrawingAreas().GetDrawingArea(diagram).GetSelection()
+            cmd = CShowConnectionCommand(him, diagram, selection)
             command.Execute(cmd)
         except ShowConnectionError, e:
             raise PluginInvalidMethodParameters(him.GetUID(), str(e))

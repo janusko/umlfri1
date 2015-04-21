@@ -67,6 +67,6 @@ class CmnuItems(CWidget):
         if self.__selectedNode is None:
             return
         type = self.application.GetProject().GetMetamodel().GetElementFactory().GetElement(element)
-        cmd = CCreateElementObjectCommand(type, self.__selectedNode)
+        cmd = CCreateElementObjectCommand(type, self.__selectedNode, self.application.GetOpenedDrawingAreas())
         self.application.GetCommands().Execute(cmd)
         

@@ -21,19 +21,21 @@ class IDiagram(IDomainObject):
         return him.GetConnection(obj)
     
     def GetSelected(him):
-        return list(him.GetSelection().GetSelected())
-    
+        return list(IBase.GetAdapter().application.GetOpenedDrawingAreas().GetDrawingArea(him).GetSelection().GetSelected())
+
     def GetSelectedElements(him):
-        return list(him.GetSelection().GetSelectedElements(True))
-        
+        return list(IBase.GetAdapter().application.GetOpenedDrawingAreas().GetDrawingArea(him).GetSelection().GetSelectedElements(True))
+
     def GetSelectedConnectionLabels(him):
-        return [item for item in him.GetSelection().GetSelectedElements(False) if isinstance(item, CConLabelInfo)]
+        selElements = IBase.GetAdapter().application.GetOpenedDrawingAreas().GetDrawingArea(him).GetSelection().GetSelectedElements(False)
+        return [item for item in selElements if isinstance(item, CConLabelInfo)]
     
     def GetSelectedConnections(him): 
-        return list(him.GetSelection().GetSelectedConnections())
+        return list(IBase.GetAdapter().application.GetOpenedDrawingAreas().GetDrawingArea(him).GetSelection().GetSelectedConnections())
         
     def GetSelectSquare(him):
-        return him.GetSelectSquare()
+        selection = IBase.GetAdapter().application.GetOpenedDrawingAreas().GetDrawingArea(him).GetSelection()
+        return him.GetSelectSquare(selection)
     
     def GetElementAtPosition(him, pos): 
         return him.GetElementAtPosition(pos)
@@ -55,6 +57,6 @@ class IDiagram(IDomainObject):
     
     @destructive
     def CreateElement(him, command, elementType):
-        cmd = CCreateElementCommand(elementType, him)
+        cmd = CCreateElementCommand(elementType, him, IBase.GetAdapter().application.GetOpenedDrawingAreas())
         command.Execute(cmd)
         return cmd.GetElementVisual()

@@ -306,7 +306,7 @@ class CpicDrawingArea(CWidget):
             and not bool(set(i.GetObject() for i in self.application.openedDrawingAreas.GetActiveDiagram().GetElements()).intersection(set(i.GetObject() for i in self.application.GetClipboard().GetContent())))
         )
 
-        selection = list(self.application.openedDrawingAreas.GetActiveDiagram().GetSelection().GetSelectedSet())
+        selection = list(self.application.GetOpenedDrawingAreas().GetActiveDrawingArea().GetSelection().GetSelectedSet())
         self.pmOpenSpecification.set_sensitive(len(selection) <= 1)
         self.mnuChangeSourceTarget.set_sensitive(connection and len(selection) == 1)
         self.mnuAlign.set_sensitive(element)

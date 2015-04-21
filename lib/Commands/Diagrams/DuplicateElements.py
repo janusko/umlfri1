@@ -5,15 +5,16 @@ from lib.Exceptions import UMLException
 from lib.Project import CProjectNode
 
 class CDuplicateElementsCommand(CCommand):
-    def __init__(self, elements, diagram):
+    def __init__(self, elements, diagram, selection):
         CCommand.__init__(self)
         self.__originalElements = elements
         self.__duplicatedElements = []
         self.__diagram = diagram
         self.__elementNodes = []
+        self.__selection = selection
 
     def _Do(self):
-        self.__diagram.GetSelection().DeselectAll()
+        self.__selection.DeselectAll()
         # create element objects
         newElementObjects = []
         for element in self.__originalElements:
@@ -41,7 +42,7 @@ class CDuplicateElementsCommand(CCommand):
         try:
             for elobj in mapping.values():
                 newElement = Element.CElement(self.__diagram, elobj)
-                self.__diagram.GetSelection().AddToSelection(newElement)
+                self.__selection.AddToSelection(newElement)
                 element = backward_mapping[elobj]
                 newElement.CopyFromElement(element)
                 #shift element +(5, 5) units
@@ -49,7 +50,7 @@ class CDuplicateElementsCommand(CCommand):
                 self.__duplicatedElements.append(newElement)
         except UMLException, e:
             for el in self.__duplicatedElements:
-                self.__diagram.DeleteElement(el)
+                self.__diagram.DeleteElement(el, self.__selection)
             raise
         self.__parentNode = self.__diagram.GetNode()
         for element in self.__duplicatedElements:
@@ -59,12 +60,12 @@ class CDuplicateElementsCommand(CCommand):
         del self.__originalElements
 
     def _Redo(self):
-        self.__diagram.GetSelection().DeselectAll()
+        self.__selection.DeselectAll()
         new_duplicates = []
         for element in self.__duplicatedElements:
             new_element = Element.CElement(self.__diagram, element.GetObject())
             new_element.CopyFromElement(element)
-            self.__diagram.GetSelection().AddToSelection(new_element)
+            self.__selection.AddToSelection(new_element)
             elementNode = CProjectNode(self.__parentNode, new_element.GetObject())
             self.__parentNode.AddChild(elementNode)
             self.__elementNodes.append(elementNode)
@@ -72,9 +73,9 @@ class CDuplicateElementsCommand(CCommand):
         self.__duplicatedElements = new_duplicates
 
     def _Undo(self):
-        self.__diagram.GetSelection().DeselectAll()
+        self.__selection.DeselectAll()
         for element in self.__duplicatedElements:
-            self.__diagram.DeleteElement(element)
+            self.__diagram.DeleteElement(element, self.__selection)
         for elementNode in self.__elementNodes:
             self.__parentNode.RemoveChild(elementNode)
         self.__elementNodes = []
