@@ -264,7 +264,7 @@ class CtwProjectView(CWidget):
     def on_mnuAddElement_activate(self, widget, element):
         node = self.GetSelectedNode()
         type = self.application.GetProject().GetMetamodel().GetElementFactory().GetElement(element)
-        cmd = CCreateElementObjectCommand(type, node)
+        cmd = CCreateElementObjectCommand(type, node, self.application.GetOpenedDrawingAreas())
         self.application.GetCommands().Execute(cmd)
     
     def on_mnuTreeAddDiagram_activate(self, widget, diagramId):
@@ -281,7 +281,7 @@ class CtwProjectView(CWidget):
             self.RemoveFromArea(j)
 
         for d in self.application.GetProject().GetDiagrams():
-            d.DeleteObject(node.GetObject())
+            d.DeleteObject(node.GetObject(), self.application.GetOpenedDrawingAreas().GetDrawingArea(d).GetSelection())
     
     
     def DeleteElement(self, elementObject):

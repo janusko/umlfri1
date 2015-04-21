@@ -5,6 +5,7 @@ from lib.Drawing.DrawingAreaKeyPressEventArgs import KEY_A, KEY_DELETE, KEY_ESCA
     KEY_UP, KEY_DOWN
 from lib.Drawing.DrawingAreaScrollEventArgs import SCROLL_LEFT, SCROLL_UP, SCROLL_RIGHT, SCROLL_DOWN
 
+from lib.Drawing.Selection import CSelection
 from lib.Elements import CElementObject
 from lib.Connections import CConnectionObject
 from lib.Drawing import CDiagram, CConnection, CElement, CConLabelInfo
@@ -32,6 +33,7 @@ class CDrawingArea(CBaseObject):
         self.virtualAreaBounds = ((0, 0), BUFFER_SIZE)
         self.scale = 1.0
         self.diagram = diagram
+        self.selection = CSelection()
 
         self.setResize = True
 
@@ -114,6 +116,9 @@ class CDrawingArea(CBaseObject):
         pos = self.TupleToLogical(pos)
         size = self.TupleToLogical(size)
         return (pos, size)
+
+    def GetSelection(self):
+        return self.selection
 
     def SetLogicalViewPort(self, viewPort):
         """
@@ -436,7 +441,7 @@ class CDrawingArea(CBaseObject):
 
             logical_virtual_area_bounds = (virtual_area_offset, virtual_area_size)
 
-            self.diagram.Paint(canvas, logical_virtual_area_bounds)
+            self.diagram.Paint(canvas, logical_virtual_area_bounds, self.selection)
 
         if self.__viewPortShiftDirection != "":
             self.__ShiftViewPort(self.__viewPortShiftDirection)
@@ -459,28 +464,28 @@ class CDrawingArea(CBaseObject):
         """
         Selects all elements and connections in the diagram.
         """
-        self.diagram.GetSelection().SelectAll(self.diagram.GetElements(), self.diagram.GetConnections())
+        self.selection.SelectAll(self.diagram.GetElements(), self.diagram.GetConnections())
 
     def DeselectAll(self):
         """
         Deselects all elements and connections in the diagram.
         """
-        self.diagram.GetSelection().DeselectAll()
+        self.selection.DeselectAll()
 
     def DeleteSelectedObjects(self):
         """
         Deletes all currently selected objects.
         """
-        for sel in self.diagram.GetSelection().GetSelected():
+        for sel in self.selection.GetSelected():
             if isinstance(sel, CConnection):
                 index = sel.GetSelectedPoint()
                 if index is not None and (sel.GetSource() != sel.GetDestination() or len(tuple(sel.GetMiddlePoints())) > 2):
                     sel.RemovePoint(index)
-                    self.diagram.GetSelection().DeselectAll()
+                    self.selection.DeselectAll()
                     return
-        for sel in self.diagram.GetSelection().GetSelected():
-            self.diagram.DeleteItem(sel)
-        self.diagram.GetSelection().DeselectAll()
+        for sel in self.selection.GetSelected():
+            self.diagram.DeleteItem(sel, self.selection)
+        self.selection.DeselectAll()
         self.__OnSelectionUpdated()
 
     def ShiftElements(self, actionName):
@@ -491,59 +496,59 @@ class CDrawingArea(CBaseObject):
         @type actionName: str
         """
         if (actionName == 'SendBack'):
-            self.diagram.ShiftElementsBack()
+            self.diagram.ShiftElementsBack(self.selection)
         elif (actionName == 'BringForward'):
-            self.diagram.ShiftElementsForward()
+            self.diagram.ShiftElementsForward(self.selection)
         elif (actionName == 'ToBottom'):
-            self.diagram.ShiftElementsToBottom()
+            self.diagram.ShiftElementsToBottom(self.selection)
         elif (actionName == 'ToTop'):
-            self.diagram.ShiftElementsToTop()
+            self.diagram.ShiftElementsToTop(self.selection)
 
     def CopySelectedObjects(self):
         """
         Copies selected objects to clipboard.
         """
-        self.diagram.CopySelection(self.application.GetClipboard())
+        self.diagram.CopySelection(self.application.GetClipboard(), self.selection)
 
     def CutSelectedObjects(self):
         """
         Cuts selected objects from diagram into clipboard.
         """
-        self.diagram.CutSelection(self.application.GetClipboard())
+        self.diagram.CutSelection(self.application.GetClipboard(), self.selection)
         self.__OnSelectionUpdated()
 
     def PasteObjects(self):
         """
         Pastes objects from clipboard into diagram.
         """
-        self.diagram.PasteSelection(self.application.GetClipboard())
+        self.diagram.PasteSelection(self.application.GetClipboard(), self.selection)
         self.__OnSelectionUpdated()
 
     def DuplicateSelectedObjects(self):
         """
         Duplicates selected objects.
         """
-        cmd  = CDuplicateElementsCommand(tuple(self.diagram.GetSelection().GetSelectedElements()), self.diagram)
+        cmd = CDuplicateElementsCommand(tuple(self.selection.GetSelectedElements()), self.diagram, self.selection)
         self.application.GetCommands().Execute(cmd)
 
     def ShiftDeleteSelectedObjects(self):
         """
         "Shift" deletes selected objects, i.e. removes them from project, not just from current diagram.
         """
-        for sel in self.diagram.GetSelection().GetSelected():
+        for sel in self.selection.GetSelected():
             if isinstance(sel, CElement):
                 self.application.GetBus().emit('delete-element-from-all', sel.GetObject())
             elif isinstance(sel, CConLabelInfo):
-                self.diagram.ShiftDeleteConLabel(sel)
+                self.diagram.ShiftDeleteConLabel(sel, self.selection)
             else:
-                self.diagram.ShiftDeleteConnection(sel)
+                self.diagram.ShiftDeleteConnection(sel, self.selection)
 
     def ChangeConnectionSourceTarget(self):
         """
         Switches source and target of selected connections (L{CConnectionObject<lib.Connections.CConnectionObject>}).
         This also switches L{CConnection<lib.Drawing.CConnection> in all diagrams, that contain given connection.
         """
-        for sel in self.diagram.GetSelection().GetSelected():
+        for sel in self.selection.GetSelected():
             if isinstance(sel, CConnection):
                 sel.GetObject().ChangeConnection()
             project = self.application.GetProject()
@@ -566,7 +571,7 @@ class CDrawingArea(CBaseObject):
         @param alignToSelectedElement: If True, aligning is done to selected element, False otherwise.
         @type alignToSelectedElement: bool
         """
-        self.diagram.AlignElementsXY(isHorizontal, alignToSelectedElement, self.itemSel if alignToSelectedElement else None)
+        self.diagram.AlignElementsXY(isHorizontal, alignToSelectedElement, self.selection, self.itemSel if alignToSelectedElement else None)
 
     def AlignCenter(self, isHorizontal, alignToSelectedElement = True):
         """
@@ -580,57 +585,57 @@ class CDrawingArea(CBaseObject):
         @param alignToSelectedElement: If True, aligning is done to selected element, False otherwise.
         @type alignToSelectedElement: bool
         """
-        self.diagram.AlignElementCentersXY(isHorizontal, self.itemSel if alignToSelectedElement else None)
+        self.diagram.AlignElementCentersXY(isHorizontal, self.selection, self.itemSel if alignToSelectedElement else None)
 
     def ResizeHeight(self):
         """
         Resize selected elements evenly to minimal or maximal height of selected
         elements or requested height.
         """
-        self.diagram.ResizeElementsEvenly(False, self.itemSel)
+        self.diagram.ResizeElementsEvenly(False, self.selection, self.itemSel)
 
     def ResizeWidth(self):
         """
         Resize selected elements evenly to minimal or maximal width of selected
         elements or requested width.
         """
-        self.diagram.ResizeElementsEvenly(True, self.itemSel)
+        self.diagram.ResizeElementsEvenly(True, self.selection, self.itemSel)
 
     def ResizeWidthAndHeight(self):
         """
         Resize selected elements evenly to minimal or maximal size of selected
         elements or requested size.
         """
-        self.diagram.ResizeElementsEvenly(True, self.itemSel)
-        self.diagram.ResizeElementsEvenly(False, self.itemSel)
+        self.diagram.ResizeElementsEvenly(True, self.selection, self.itemSel)
+        self.diagram.ResizeElementsEvenly(False, self.selection, self.itemSel)
 
     def ResizeByMaximalElement(self):
         """
         Resize all elements based on the size of the maximal element
         """
-        self.diagram.ResizeByMaximalElement()
+        self.diagram.ResizeByMaximalElement(self.selection)
 
     def ResizeByMinimalElement(self):
         """
         Resize all elements based on the size of the minimal element
         """
-        self.diagram.ResizeByMinimalElement()
+        self.diagram.ResizeByMinimalElement(self.selection)
 
     def SnapSelected(self):
-        self.diagram.SnapElementsOnGrid()
+        self.diagram.SnapElementsOnGrid(self.selection)
 
     def MakeSpacing(self, isHorizontal):
-        self.diagram.SpaceElementsEvenlyXY(isHorizontal)
+        self.diagram.SpaceElementsEvenlyXY(isHorizontal, self.selection)
 
     def PaintSelected(self, canvas):
-        self.diagram.PaintSelected(canvas)
+        self.diagram.PaintSelected(canvas, self.selection)
 
     def Export(self, filename, export_type, zoom, padding, background=None):
         exporter = CDiagramExporter(self.application.GetProject().GetMetamodel().GetStorage(), export_type)
         exporter.SetZoom(zoom)
         exporter.SetPadding(padding)
         exporter.SetBackground(background)
-        exporter.ExportDiagram(self.diagram, filename)
+        exporter.ExportDiagram(self.diagram, self.selection, filename)
 
     def GetSelectionPixbuf(self, zoom, padding, background):
         exporter = CDiagramExporter(self.application.GetProject().GetMetamodel().GetStorage(), 'pixbuf')
@@ -638,11 +643,11 @@ class CDrawingArea(CBaseObject):
         exporter.SetPadding(padding)
         exporter.SetBackground(background)
 
-        return exporter.GetSelectionPixbuf(self.diagram)
+        return exporter.GetSelectionPixbuf(self.diagram, self.selection)
 
     def SelectObject(self, object):
         drawingObject = self.diagram.GetElement(object)
-        self.diagram.GetSelection().AddToSelection(drawingObject)
+        self.selection.AddToSelection(drawingObject)
         self.CenterOnObject(drawingObject)
 
     def CenterOnObject(self, object):
@@ -707,12 +712,12 @@ class CDrawingArea(CBaseObject):
         @param args: L{DrawingAreaMouseDownEventArgs<lib.Drawing.DrawingAreaMouseDownEventArgs>}
         """
         if args.button == 1 and args.isDoubleClick == True:
-            if len(tuple(self.diagram.GetSelection().GetSelected())) == 1:
-                for Element in self.diagram.GetSelection().GetSelected():
+            if len(tuple(self.selection.GetSelected())) == 1:
+                for Element in self.selection.GetSelected():
                     if isinstance(Element, (CElement,CConnection)):
                         self.__OpenSpecification(Element)
                         return True
-            elif len(tuple(self.diagram.GetSelection().GetSelected())) == 0:
+            elif len(tuple(self.selection.GetSelected())) == 0:
                 self.__OpenSpecification(self.diagram)
 
         pos = self.GetAbsolutePos(args.position)
@@ -728,9 +733,9 @@ class CDrawingArea(CBaseObject):
 
             itemSel = self.diagram.GetElementAtPosition(pos)
             if itemSel is not None: #something is hit:
-                if itemSel in self.diagram.GetSelection().GetSelected(): # deselecting:
+                if itemSel in self.selection.GetSelected(): # deselecting:
                     if args.IsControlPressed() or args.IsShiftPressed():
-                        self.diagram.GetSelection().RemoveFromSelection(itemSel)
+                        self.selection.RemoveFromSelection(itemSel)
 
                         self.__OnSelectionUpdated()
                     elif isinstance(itemSel, CConnection): #Connection is selected
@@ -746,8 +751,8 @@ class CDrawingArea(CBaseObject):
                     else: #elements are selected
                         self.__BeginDragRect(pos)
                 elif not args.IsControlPressed() and not args.IsShiftPressed():
-                    self.diagram.GetSelection().DeselectAll()
-                    self.diagram.GetSelection().AddToSelection(itemSel)
+                    self.selection.DeselectAll()
+                    self.selection.AddToSelection(itemSel)
                     if isinstance(itemSel, CConnection):
                         i = itemSel.GetPointAtPosition(pos)
                         if i is not None:
@@ -758,19 +763,19 @@ class CDrawingArea(CBaseObject):
                             i = itemSel.WhatPartOfYouIsAtPosition(pos)
                             self.__BeginDragLine(pos, itemSel, i)
                     else:
-                        selElements = list(self.diagram.GetSelection().GetSelectedElements())
+                        selElements = list(self.selection.GetSelectedElements())
                         self.selElem = selElements[0]
                         if len(selElements) == 1:
-                            self.selSq = self.diagram.GetSelection().GetSquareAtPosition(pos)
+                            self.selSq = self.selection.GetSquareAtPosition(pos)
                         self.__BeginDragRect(pos)
                     self.__OnSelectionUpdated()
                 else:
-                    self.diagram.GetSelection().AddToSelection(itemSel)
+                    self.selection.AddToSelection(itemSel)
                     self.__OnSelectionUpdated()
             else: # nothing under pointer
-                if self.diagram.GetSelection().SelectedCount() > 0:
+                if self.selection.SelectedCount() > 0:
                     if not args.IsControlPressed():
-                        self.diagram.GetSelection().DeselectAll()
+                        self.selection.DeselectAll()
                         self.__OnSelectionUpdated()
                 self.__BeginDragSel(pos)
 
@@ -779,10 +784,10 @@ class CDrawingArea(CBaseObject):
 
         elif args.button == 3:
             itemSel = self.diagram.GetElementAtPosition(pos)
-            if itemSel not in frozenset(self.diagram.GetSelection().GetSelected()):
-                self.diagram.GetSelection().DeselectAll()
+            if itemSel not in frozenset(self.selection.GetSelected()):
+                self.selection.DeselectAll()
             if itemSel is not None:
-                self.diagram.GetSelection().AddToSelection(itemSel)
+                self.selection.AddToSelection(itemSel)
             self.__OnSelectionUpdated()
             self.itemSel = itemSel
 
@@ -805,7 +810,7 @@ class CDrawingArea(CBaseObject):
                 self.dnd = None
             elif self.dnd == 'rect':
                 delta = self.__GetDelta(pos)
-                self.diagram.MoveSelection(delta)
+                self.diagram.MoveSelection(delta, self.selection)
                 self.dnd = None
             elif self.dnd == 'point':
                 connection, index = self.DragPoint
@@ -829,7 +834,7 @@ class CDrawingArea(CBaseObject):
                     x2, x1 = x1, x2
                 if y2 < y1:
                     y2, y1 = y1, y2
-                self.diagram.AddRangeToSelection((x1, y1), (x2, y2))
+                self.diagram.AddRangeToSelection((x1, y1), (x2, y2), self.selection)
                 self.dnd = None
                 self.__OnSelectionUpdated()
             elif self.__NewConnection is not None:
@@ -841,7 +846,7 @@ class CDrawingArea(CBaseObject):
                     obj = CConnectionObject(type, source.GetObject(), destination.GetObject())
                     x = CConnection(self.diagram, obj, source, destination, points[1:])
                     self.application.GetBus().emit('set-selected-toolbox-item', None)
-                    self.diagram.GetSelection().AddToSelection(x)
+                    self.selection.AddToSelection(x)
                     self.__OnSelectionUpdated()
                     self.__NewConnection = None
                 else:
@@ -867,8 +872,8 @@ class CDrawingArea(CBaseObject):
             if args.IsShiftPressed():
                 self.ShiftDeleteSelectedObjects()
             else:
-                for sel in self.diagram.GetSelection().GetSelected():
-                    self.diagram.DeleteItem(sel)
+                for sel in self.selection.GetSelected():
+                    self.diagram.DeleteItem(sel, self.selection)
 
                 self.__OnSelectionUpdated()
         elif args.IsKeyPressed(KEY_ESCAPE):
@@ -877,7 +882,7 @@ class CDrawingArea(CBaseObject):
         elif args.IsKeyPressed(KEY_SPACE):
             self.cursor = 'grab'
         elif args.IsArrowKeyPressed():
-            selected = list(self.diagram.GetSelection().GetSelectedElements())
+            selected = list(self.selection.GetSelectedElements())
             if selected:
                 if self.dnd is None:
                     self.keydragPosition = list(selected[0].GetCenter())
@@ -921,7 +926,7 @@ class CDrawingArea(CBaseObject):
         if args.WasArrowKeyPressed() and self.dnd == 'rect':
             delta = self.__GetDelta(self.keydragPosition)
             self.keydragPosition = None
-            self.diagram.MoveSelection(delta)
+            self.diagram.MoveSelection(delta, self.selection)
             self.dnd = None
 
     def OnScroll(self, args):
@@ -961,7 +966,7 @@ class CDrawingArea(CBaseObject):
         return self.SetPhysicalViewPortPos((x, y))
 
     def OpenSpecificationForSelectedObject(self):
-        selection = tuple(self.diagram.GetSelection().GetSelected())
+        selection = tuple(self.selection.GetSelected())
         if len(selection) == 1:
             element = selection[0]
             if isinstance(element, CElement) or isinstance(element, CConnection):
@@ -970,7 +975,7 @@ class CDrawingArea(CBaseObject):
             self.__OpenSpecification(self.diagram)
 
     def ShowSelectedObjectInProjectView(self):
-        selection = tuple(self.diagram.GetSelection().GetSelected())
+        selection = tuple(self.selection.GetSelected())
         if len(selection) != 1:
             return
 
@@ -1036,7 +1041,7 @@ class CDrawingArea(CBaseObject):
             #here, I get prent element of selected elements (if element is on (over) another element)
             minzorder = 9999999
             parentElement = None
-            for el in self.diagram.GetSelection().GetSelectedElements(True):
+            for el in self.selection.GetSelectedElements(True):
                 pos1, pos2 = el.GetSquare()
                 zorder = self.diagram.GetElementZOrder(el)
                 if newElement.AreYouInRange(pos1, pos2, True):
@@ -1045,9 +1050,9 @@ class CDrawingArea(CBaseObject):
                             minzorder = self.diagram.GetElementZOrder(el2)
                             parentElement = el2.GetObject()
 
-            self.diagram.GetSelection().DeselectAll()
+            self.selection.DeselectAll()
             self.application.GetBus().emit('add-element', ElementObject, self.diagram, parentElement)
-            self.diagram.GetSelection().AddToSelection(newElement)
+            self.selection.AddToSelection(newElement)
             self.__OnSelectionUpdated()
 
         elif itemType == 'Connection':
@@ -1087,18 +1092,18 @@ class CDrawingArea(CBaseObject):
         self.SetLogicalViewPortPos((posx - x1 + x2, posy - y1 + y2))
 
     def __BeginDragRect(self, pos):
-        selElements = list(self.diagram.GetSelection().GetSelectedElements())
+        selElements = list(self.selection.GetSelectedElements())
         self.selElem = selElements[0]
         self.DragStartPos = pos
         if len(selElements) == 1:
-            self.selSq = self.diagram.GetSelection().GetSquareAtPosition(self.DragStartPos)
+            self.selSq = self.selection.GetSquareAtPosition(self.DragStartPos)
             if(self.setResize == False):
                 self.selSq = None
                 self.setResize = True
         else:
             self.selSq = None
 
-        self.DragRect = (self.diagram.GetSelectSquare())
+        self.DragRect = (self.diagram.GetSelectSquare(self.selection))
         self.DragPoint = list(self.DragRect[0])
         if (self.selSq is None): # Neresizujem
             self.__UpdateDragRect(pos)
@@ -1220,10 +1225,10 @@ class CDrawingArea(CBaseObject):
             self.__NewConnection = None
 
     def __OnSelectionUpdated(self):
-        self.application.GetBus().emit('selected-items', list(self.diagram.GetSelection().GetSelected()))
+        self.application.GetBus().emit('selected-items', list(self.selection.GetSelected()))
 
     def __CenterZoom(self, scale):
-        elements = tuple(self.diagram.GetSelection().GetSelectedElements())
+        elements = tuple(self.selection.GetSelectedElements())
         if (len(elements)>0):
             avgH = 0
             avgW = 0

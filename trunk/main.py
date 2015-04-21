@@ -87,6 +87,9 @@ class Application(CApplication):
     
     def GetCommands(self):
         return self.commands
+
+    def GetOpenedDrawingAreas(self):
+        return self.openedDrawingAreas
     
     @argument("-o", "--open", True)
     def DoOpen(self, value):

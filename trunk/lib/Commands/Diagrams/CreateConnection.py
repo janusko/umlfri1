@@ -3,12 +3,13 @@ from lib.Connections.Object import CConnectionObject
 from lib.Drawing.Connection import CConnection
 
 class CCreateConnectionCommand(CCommand):
-    def __init__(self, sourceElement, destinationElement, connectionType):
+    def __init__(self, sourceElement, destinationElement, connectionType, openedDrawingAreas):
         CCommand.__init__(self)
         
         self.__sourceElement = sourceElement
         self.__destinationElement = destinationElement
         self.__connectionType = connectionType
+        self.__openedDrawingAreas = openedDrawingAreas
         self.__diagram = None
         self.__connectionObject = None
         self.__connectionVisual = None
@@ -37,7 +38,7 @@ class CCreateConnectionCommand(CCommand):
         self.__sourceElement.GetObject().RemoveConnection(self.__connectionObject)
         self.__destinationElement.GetObject().RemoveConnection(self.__connectionObject)
         
-        self.__diagram.DeleteConnection(self.__connectionVisual)
+        self.__diagram.DeleteConnection(self.__connectionVisual, self.__openedDrawingAreas.GetDrawingArea(self.__diagram).GetSelection())
     
     def GetGuiUpdates(self):
         return [

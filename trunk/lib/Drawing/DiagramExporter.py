@@ -17,7 +17,7 @@ class CDiagramExporter():
         self.padding = 0
         self.background = None
 
-    def ExportDiagram(self, diagram, filename):
+    def ExportDiagram(self, diagram, selection, filename):
         """
         Exports specified diagram to file.
 
@@ -27,7 +27,7 @@ class CDiagramExporter():
         @param filename: Path of the file, where to export the diagram.
         @type filename : str
         """
-        diagram.GetSelection().DeselectAll()
+        selection.DeselectAll()
 
         (x1, y1), (x2, y2) = diagram.GetSizeSquare()
         size = (x2 - x1, y2 - y1)
@@ -39,7 +39,7 @@ class CDiagramExporter():
         diagram.PaintFull(canvas)
         canvas.Finish()
 
-    def GetSelectionPixbuf(self, diagram):
+    def GetSelectionPixbuf(self, diagram, selection):
         """
         Creates pixbuf, which contains exported diagram with only selected elements and connections.
 
@@ -48,10 +48,10 @@ class CDiagramExporter():
 
         @return: Pixbuf containing exported diagram with selected elements and connections.
         """
-        pos, size = diagram.GetSelectSquare(True)
+        pos, size = diagram.GetSelectSquare(selection, True)
         size = self.__CalculateDiagramPhysicalSize(size)
         canvas = self.__CreateCanvas('pixbuf', None, size, pos)
-        diagram.PaintSelected(canvas)
+        diagram.PaintSelected(canvas, selection)
         return canvas.Finish()
 
     def __CreateCanvas(self, export_type, filename, (sizeX, sizeY), offset):

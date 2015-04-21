@@ -4,16 +4,17 @@ from lib.Elements import CElementObject
 from lib.Project import CProjectNode
 
 class CCreateElementCommand(CCommand):
-    def __init__(self, elementType, diagram):
+    def __init__(self, elementType, diagram, openedDrawingAreas):
         CCommand.__init__(self)
         
         self.__elementType = elementType
         self.__diagram = diagram
+        self.__openedDrawingAreas = openedDrawingAreas
         self.__parentNode = None
         self.__elementObject = None
         self.__elementNode = None
         self.__elementVisual = None
-    
+
     def _Do(self):
         self.__parentNode = self.__diagram.GetNode()
         self.__elementObject = CElementObject(self.__elementType)
@@ -29,7 +30,7 @@ class CCreateElementCommand(CCommand):
             
     def _Undo(self):
         for diagram in self.__elementObject.GetAppears():
-            diagram.DeleteItem(diagram.GetElement(self.__elementObject))
+            diagram.DeleteItem(diagram.GetElement(self.__elementObject), self.__openedDrawingAreas.GetDrawingArea(diagram).GetSelection())
         
         self.__parentNode.RemoveChild(self.__elementNode)
         self.__elementNode = None
