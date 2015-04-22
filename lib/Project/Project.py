@@ -650,7 +650,8 @@ class CProject(CBaseObject):
         if DomainModifications:
             CModifyProjectDomain(self, DomainModifications).Do()
 
-        self.__domainObject.SetSaveInfo(DomainObjectSaveInfo)
+        if DomainObjectSaveInfo is not None:
+            self.__domainObject.SetSaveInfo(DomainObjectSaveInfo)
 
         for nodeId, bundles in reversed(ListBundles.items()):
             node = ListObj[nodeId][0].GetNode()
