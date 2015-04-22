@@ -27,6 +27,10 @@ class CModifiedMetamodelBuilder(object):
         modifiedDomainFactory = modifiedMetamodel.GetDomainFactory()
 
         # algorithm overview:
+        # two parts:
+        # - create modified domains
+        # - create modified element types
+
         # - encapsulate element types from parent metamodel with new element type
         # - if there are modifications for given element type, stop and process them:
         #   - create modified domain factory
@@ -41,8 +45,11 @@ class CModifiedMetamodelBuilder(object):
 
             if domainModifications.has_key(name):
                 modifications = domainModifications[name]
-                domain = self.__CreateModifiedDomainType(domain, modifications)
-                modifiedDomainFactory.AddDomain(domain)
+            else:
+                modifications = []
+
+            domain = CModifiedDomainType(domain, modifications)
+            modifiedDomainFactory.AddDomain(domain)
 
         for elementType in parentMetamodel.GetElementFactory().IterTypes():
             if isinstance(elementType, CElementAlias):
@@ -64,6 +71,3 @@ class CModifiedMetamodelBuilder(object):
             else:
                 modifications = self.__domainModificationMerger.MergeModifications(modifications, bundle.GetDomainModifications())
         return modifications
-
-    def __CreateModifiedDomainType(self, parentDomain, modifications):
-        return CModifiedDomainType(parentDomain, modifications)
