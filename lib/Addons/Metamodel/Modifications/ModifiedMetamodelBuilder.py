@@ -48,7 +48,7 @@ class CModifiedMetamodelBuilder(object):
             else:
                 modifications = []
 
-            domain = CModifiedDomainType(domain, modifications)
+            domain = CModifiedDomainType(domain, modifiedDomainFactory, modifications)
             modifiedDomainFactory.AddDomain(domain)
 
         for elementType in parentMetamodel.GetElementFactory().IterTypes():

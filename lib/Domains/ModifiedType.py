@@ -6,9 +6,9 @@ from lib.Domains.Modifications import CReplaceAttributeModification
 
 class CModifiedDomainType(CDomainType):
 
-    def __init__(self, parentType, modifications):
+    def __init__(self, parentType, factory, modifications):
         self.parentType = weakref.ref(parentType)
-        self.factory = lambda: parentType.GetFactory()
+        self.factory = lambda: factory
         self.modifications = modifications
 
     def GetModifications(self):
