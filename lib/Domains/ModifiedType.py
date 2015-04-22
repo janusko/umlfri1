@@ -23,21 +23,39 @@ class CModifiedDomainType(CDomainType):
         self.modifications.append(modification)
 
     def HasAttribute(self, id):
-        return id in self._GetAttributes()
+        if self.__HasModifications():
+            return id in self._GetAttributes()
+        else:
+            return self.parentType().HasAttribute(id)
 
     def GetAttribute(self, id):
-        return self._GetAttributes()[id]
+        if self.__HasModifications():
+            return self._GetAttributes()[id]
+        else:
+            return self.parentType().GetAttribute(id)
 
     def IterAttributeIDs(self):
+        if self.__HasModifications():
+            return self.__IterAttributeIDsInternal()
+        else:
+            return self.parentType().IterAttributeIDs()
+
+    def __IterAttributeIDsInternal(self):
         for id in self._GetAttributes().iterkeys():
             yield id
 
     def _GetAttributes(self):
+        if not self.__HasModifications():
+            return self.parentType()._GetAttributes()
+
         attributes = dict(self.parentType()._GetAttributes())
         for m in self.modifications:
             m.ApplyToAttributes(attributes)
 
         return attributes
+
+    def __HasModifications(self):
+        return len(self.modifications) > 0
 
     def __getattribute__(self, item):
         # special cases, don't know how to address these properly
