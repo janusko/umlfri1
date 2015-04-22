@@ -17,7 +17,10 @@ from lib.Project import CProjectNode
 
 class IElementObject(IDomainObject):
     __cls__ = CElementObject
-    
+
+    def GetUid(him):
+        return him.GetUID()
+
     def GetName(him):
         return him.GetName()
     
