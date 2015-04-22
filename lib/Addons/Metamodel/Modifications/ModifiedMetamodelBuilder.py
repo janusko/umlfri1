@@ -35,10 +35,17 @@ class CModifiedMetamodelBuilder(object):
         # - if there are modifications for given element type, stop and process them:
         #   - create modified domain factory
         #   - create modified domain types
-        #
-        # Even elements, which are not modified, have to be replaced with CModifiedElementType,
+
+        # creating modified domains:
+        # - take domain from parent metamodel
+        # - create modified domain type
+        #   - either take modifications defined for this domain, or create empty list
+        # - collect modified domains into modified domain factory
+
+        # Even domains, which are not modified, have to be replaced with CModifiedDomainType,
         # because we need to have access to modified metamodel even from elements that are not modified
-        # (e.g. create modified element 'class' as child of unmodified element 'package')
+        # (e.g. create new operation inside class, i.e. inside 'class' CDomainObject create new CDomainObject
+        # for 'class.operations' domain)
 
         for domain in parentMetamodel.GetDomainFactory().IterTypes():
             name = domain.GetName()
@@ -50,6 +57,15 @@ class CModifiedMetamodelBuilder(object):
 
             domain = CModifiedDomainType(domain, modifiedDomainFactory, modifications)
             modifiedDomainFactory.AddDomain(domain)
+
+        # creating modified element types:
+        # - take element type from parent metamodel
+        # - retrieve modified domain for this element from modified domain factory
+        # - create element type with this domain
+        # - collect modified element types into modified element factory
+
+        # Similar as for domains: need to create CModifiedElementType for all element types
+        # (e.g. create modified element 'class' as child of unmodified element 'package')
 
         for elementType in parentMetamodel.GetElementFactory().IterTypes():
             if isinstance(elementType, CElementAlias):
