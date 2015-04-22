@@ -1,5 +1,6 @@
 from ..Base.Command import CCommand, CommandNotDone
 from lib.Addons.Metamodel.Modifications.DomainModificationMerger import CDomainModificationMerger
+from lib.Domains.ModifiedFactory import CModifiedDomainFactory
 from lib.Domains.ModifiedType import CModifiedDomainType
 from lib.Domains.TypeSetter import CDomainTypeSetter
 
@@ -29,7 +30,10 @@ class CModifyProjectDomain(CCommand):
                 modifications)
             parentType = self.__oldType
 
-        self.__newType = CModifiedDomainType(parentType, modifications)
+        factory = CModifiedDomainFactory(parentType.GetFactory())
+
+        self.__newType = CModifiedDomainType(parentType, factory, modifications)
+        factory.AddDomain(self.__newType)
 
         self._Redo()
 
