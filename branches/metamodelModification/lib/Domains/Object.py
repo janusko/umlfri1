@@ -73,7 +73,7 @@ class CDomainObject(CBaseObject):
         @param id: path to the attribute
         @type id: str
         '''
-        return self._TracePath(id, 'gettype', useRuntimeType)
+        return self._TracePath(id, 'gettype', useRuntimeType=useRuntimeType)
     
     def GetDomainName(self, id):
         '''
@@ -169,7 +169,7 @@ class CDomainObject(CBaseObject):
         @return: value with entered id
         @rtype: object
         '''
-        return self._TracePath(id, 'getvalue', useRuntimeType)
+        return self._TracePath(id, 'getvalue', useRuntimeType=useRuntimeType)
     
     def SetValue(self, id, value, useRuntimeType=True):
         '''
@@ -181,7 +181,7 @@ class CDomainObject(CBaseObject):
         @param value: new value to be set
         @type value: various
         '''
-        self._TracePath(id, 'setvalue', value, useRuntimeType)
+        self._TracePath(id, 'setvalue', value, useRuntimeType=useRuntimeType)
     
     def AppendItem(self, id, item=None, useRuntimeType=True):
         '''
@@ -205,7 +205,7 @@ class CDomainObject(CBaseObject):
         @param id: path to the attribute
         @type id: str
         '''
-        self._TracePath(id, 'remove', useRuntimeType)
+        self._TracePath(id, 'remove', useRuntimeType=useRuntimeType)
 
     def SwapItems(self, id, indexes):
         '''
