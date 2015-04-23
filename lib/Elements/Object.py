@@ -143,11 +143,11 @@ class CElementObject(CBaseObject):
     def GetDomainObject(self):
         return self.domainobject
     
-    def GetValue(self, key):
-        return self.domainobject.GetValue(key)
+    def GetValue(self, key, useRuntimeType=True):
+        return self.domainobject.GetValue(key, useRuntimeType)
     
-    def SetValue(self, key, value):
-        self.domainobject.SetValue(key, value)
+    def SetValue(self, key, value, useRuntimeType=True):
+        self.domainobject.SetValue(key, value, useRuntimeType)
         self.revision += 1
         
     def GetSaveInfo(self):
@@ -175,12 +175,12 @@ class CElementObject(CBaseObject):
         else:
             raise ConnectionError("ConnectionNotFound")
     
-    def AppendItem(self, key, value = None):
-        self.domainobject.AppendItem(key, value)
+    def AppendItem(self, key, value=None, useRuntimeType=True):
+        self.domainobject.AppendItem(key, value, useRuntimeType)
         self.revision += 1
     
-    def RemoveItem(self, key):
-        self.domainobject.RemoveItem(key)
+    def RemoveItem(self, key, useRuntimeType=True):
+        self.domainobject.RemoveItem(key, useRuntimeType)
         self.revision += 1
     
     def Assign(self, cprojNode):
