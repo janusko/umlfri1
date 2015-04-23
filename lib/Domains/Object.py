@@ -207,43 +207,44 @@ class CDomainObject(CBaseObject):
         path = re.split(r'(\[|\.)', id, 1)
         
         if len(path) == 1: #work with current attribute
+            attributeID = path[0]
             if action == 'setvalue':
-                self.__SetValueInternal(path[0], value)
+                self.__SetValueInternal(attributeID, value)
                 return
             elif action == 'getvalue':
-                if not self.type.HasAttribute(path[0]):
-                    raise DomainObjectError('Invalid attribute %s in domain %s' % (path[0], self.type.GetName()))
-                return self.__GetAttributeValue(path[0])
+                if not self.type.HasAttribute(attributeID):
+                    raise DomainObjectError('Invalid attribute %s in domain %s' % (attributeID, self.type.GetName()))
+                return self.__GetAttributeValue(attributeID)
             elif action == 'gettype':
-                if path[0] == '':
+                if attributeID == '':
                     return self.type
                 else:
-                    if not self.type.HasAttribute(path[0]):
-                        raise DomainObjectError('Invalid attribute %s in domain %s' % (path[0], self.type.GetName()))
-                    return self.type.GetFactory().GetDomain(self.type.GetAttribute(path[0])['type'])
+                    if not self.type.HasAttribute(attributeID):
+                        raise DomainObjectError('Invalid attribute %s in domain %s' % (attributeID, self.type.GetName()))
+                    return self.type.GetFactory().GetDomain(self.type.GetAttribute(attributeID)['type'])
             elif action == 'getdomainname':
-                if path[0] == '':
+                if attributeID == '':
                     return self.type.GetName()
                 else:
-                    if not self.type.HasAttribute(path[0]):
-                        raise DomainObjectError('Invalid attribute %s in domain %s' % (path[0], self.type.GetName()))
-                    return self.type.GetAttribute(path[0])['type']
+                    if not self.type.HasAttribute(attributeID):
+                        raise DomainObjectError('Invalid attribute %s in domain %s' % (attributeID, self.type.GetName()))
+                    return self.type.GetAttribute(attributeID)['type']
             elif action == 'append':
-                if not self.type.HasAttribute(path[0]):
-                    raise DomainObjectError('Invalid attribute %s in domain %s' % (path[0], self.type.GetName()))
-                if self.type.GetAttribute(path[0])['type'] == 'list':
+                if not self.type.HasAttribute(attributeID):
+                    raise DomainObjectError('Invalid attribute %s in domain %s' % (attributeID, self.type.GetName()))
+                if self.type.GetAttribute(attributeID)['type'] == 'list':
                     if value is None:
-                        value = self.type.GetDefaultValue(domain = self.type.GetAttribute(path[0])['list']['type'])
+                        value = self.type.GetDefaultValue(domain = self.type.GetAttribute(attributeID)['list']['type'])
                     self.__SetParentForValue(value)
-                    self.__GetAttributeValue(path[0]).append(value)
+                    self.__GetAttributeValue(attributeID).append(value)
                     return value
                 else:
                     raise DomainObjectError('Attribute %s of domain %s is not of type "list"'%\
-                    (path[0], self.type.GetName()))
+                    (attributeID, self.type.GetName()))
             elif action == 'swap':
-                if not self.type.HasAttribute(path[0]):
-                    raise DomainObjectError('Invalid attribute %s in domain %s' % (path[0], self.type.GetName()))
-                if self.type.GetAttribute(path[0])['type'] == 'list':
+                if not self.type.HasAttribute(attributeID):
+                    raise DomainObjectError('Invalid attribute %s in domain %s' % (attributeID, self.type.GetName()))
+                if self.type.GetAttribute(attributeID)['type'] == 'list':
                     leftIndex = value[0]
                     rightIndex = value[1]
 
@@ -257,11 +258,11 @@ class CDomainObject(CBaseObject):
                         raise DomainObjectError('Trying to swap values out of index: %s' % value)
                 else:
                     raise DomainObjectError('Attribute %s of domain %s is not of type "list"'%\
-                    (path[0], self.type.GetName()))
+                    (attributeID, self.type.GetName()))
             elif action == 'remove':
                 raise DomainObjectError('RemoveItem is allowed on item of a list only')
             elif action == 'visual':
-                return self.type.HasVisualAttribute(path[0])
+                return self.type.HasVisualAttribute(attributeID)
         
         elif path[1] == '.': #nested call
             if action == 'getvalue':
