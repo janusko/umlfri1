@@ -97,11 +97,13 @@ class CDomainObject(CBaseObject):
             elif attributeType != 'list':
                 copy.__SetValueInternal(id, oldValue, useRuntimeType=False)
             else:
-                ind=0
+                itemType = attribute['list']['type']
                 for att in oldValue:
-                    copy.AppendItem(id)
-                    self.__CopyFromObjectToObject(att,copy.GetValue(id)[ind])
-                    ind=ind+1
+                    if old.rawType.IsDomainAtomic(itemType):
+                        copy.AppendItem(id, att)
+                    else:
+                        item = copy.AppendItem(id)
+                        self.__CopyFromObjectToObject(att, item)
         return copy
 
     def CopyFrom(self, domainobject):
