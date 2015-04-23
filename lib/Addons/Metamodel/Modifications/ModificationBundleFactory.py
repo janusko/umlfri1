@@ -3,6 +3,10 @@ from lib.Addons.Metamodel.Modifications.ModificationBundleBuilder import CMetamo
 from lib.Domains.AttributeConditions import BuildParam
 
 
+class AttributeModificationType:
+    Replace = 'replace'
+    Delete = 'delete'
+
 class CModificationBundleFactory(object):
 
     defaultAttributeProperties = {
@@ -19,12 +23,16 @@ class CModificationBundleFactory(object):
             for domain, modifications in bundleDict.iteritems():
                 for m in modifications:
                     attributeID =  m['attribute_id']
-                    attributeProperties = m['attribute_properties']
-                    if 'condition' in attributeProperties:
-                        attributeProperties['condition'] = BuildParam(attributeProperties['condition'])
+                    modificationType = m['modification_type']
+                    if modificationType == AttributeModificationType.Delete:
+                        bundleBuilder.DeleteDomainAttribute(domain, attributeID)
+                    elif modificationType == AttributeModificationType.Replace:
+                        attributeProperties = m['attribute_properties']
+                        if 'condition' in attributeProperties:
+                            attributeProperties['condition'] = BuildParam(attributeProperties['condition'])
 
-                    cls.__SetDefaultAttributeProperties(attributeProperties)
-                    bundleBuilder.AddDomainAttribute(domain, attributeID, attributeProperties)
+                        cls.__SetDefaultAttributeProperties(attributeProperties)
+                        bundleBuilder.AddDomainAttribute(domain, attributeID, attributeProperties)
 
         return builder.BuildBundles()
 
