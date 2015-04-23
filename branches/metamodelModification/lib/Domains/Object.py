@@ -387,8 +387,10 @@ class CDomainObject(CBaseObject):
         if id in self.values:
             return self.values[id]
         else:
-            self.values[id] = type.GetDefaultValue(id)
-            return self.values[id]
+            value = type.GetDefaultValue(id)
+            self.values[id] = value
+            self.__SetParentForValue(value)
+            return value
 
     def __SetAttributeValue(self, id, value, index=None, type=None):
         self.__SetParentForValue(value)
