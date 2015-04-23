@@ -119,6 +119,18 @@
             </documentation>
         </parameter>
     </method>
+
+    <method name="revertModifications" mutator="true">
+        <documentation>
+            Revertes modification of metamodel at this element in project.
+        </documentation>
+
+        <parameter name="modificationBundles" type="string">
+            <documentation>
+                List of modification bundle names, which changes to metamodel should be reverted.
+            </documentation>
+        </parameter>
+    </method>
     
     <method name="connectWith" mutator="true">
         <documentation>

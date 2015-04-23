@@ -7,6 +7,7 @@ from lib.Addons.Plugin.Interface.decorators import *
 from lib.Commands.Diagrams import CShowElementCommand
 from lib.Commands.Project import CCreateConnectionObjectCommand, CCreateDiagramCommand, CCreateElementObjectCommand
 from lib.Commands.Project.ApplyModificationBundles import CApplyModificationBundlesCommand
+from lib.Commands.Project.RemoveModificationBundles import CRemoveModificationBundlesCommand
 from lib.Drawing.Diagram import CDiagram
 from lib.Drawing.Element import CElement
 from lib.Elements.Object import CElementObject
@@ -56,6 +57,26 @@ class IElementObject(IDomainObject):
         cmd = CApplyModificationBundlesCommand(node, bundleObjects)
         command.Execute(cmd)
 
+    @destructive
+    def RevertModifications(him, command, modificationBundles):
+        bundleList = literal_eval(modificationBundles)
+        node = him.GetNode()
+        if not node.IsModifiedMetamodelRoot():
+            raise PluginInvalidMethodParameters(him.GetUID(), "This element does not have any modifications defined")
+
+        allBundles = IElementObject.__GetModificationBundles(node.GetMetamodel())
+        bundleObjects = []
+        for name in bundleList:
+            if name not in allBundles:
+                raise PluginInvalidMethodParameters(him.GetUID(), "Unknown bundle %s" % name)
+
+            bundle = allBundles[name]
+
+            bundleObjects.append(bundle)
+
+        cmd = CRemoveModificationBundlesCommand(him.GetNode(), bundleObjects)
+        command.Execute(cmd)
+    
     @destructive
     def ConnectWith(him, command, other, connectionType):
         cmd = CCreateConnectionObjectCommand(him, other, connectionType)
