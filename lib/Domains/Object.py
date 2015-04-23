@@ -302,18 +302,22 @@ class CDomainObject(CBaseObject):
         
         elif path[1] == '[': #index of list
 
-            if not self.type.HasAttribute(attributeID):
+            if not self.__ChooseType(useRuntimeType).HasAttribute(attributeID):
                 raise DomainObjectError('Invalid attribute %s in domain %s' % (attributeID, self.type.GetName()))
-            
-            if self.type.GetAttribute(attributeID)['type'] <> 'list':
+
+            attribute = self.__ChooseType(useRuntimeType).GetAttribute(attributeID)
+
+            if attribute['type'] != 'list':
                 raise DomainObjectError('Attribute %s of domain %s cannot be indexed'%\
                     (attributeID, self.type.GetName()))
 
-            list = self.__GetAttributeValue(attributeID)
+            itemType = attribute['list']['type']
+
+            list = self.__GetAttributeValue(attributeID, useRuntimeType)
             
             idx, rest = path[2].split(']', 1)
             idx = int(idx)
-            if self.type.IsAtomic(domain = self.type.GetAttribute(attributeID)['list']['type']) or rest == '':
+            if self.__ChooseType(useRuntimeType).IsAtomic(domain = itemType) or rest == '':
                 if rest:
                     raise DomainObjectError('Nothing was expected after "]"')
 
@@ -321,8 +325,8 @@ class CDomainObject(CBaseObject):
                     if idx < 0 or idx >= len(list):
                         raise DomainObjectError('Index out of bounds in attribute %s of domain %s'%\
                             (attributeID, self.type.GetName()))
-                    value = self.type.TransformValue(value, domain = self.type.GetAttribute(attributeID)['list']['type'])
-                    self.__SetAttributeValue(attributeID, value, index=idx)
+                    value = self.__ChooseType(useRuntimeType).TransformValue(value, domain = itemType)
+                    self.__SetAttributeValue(attributeID, value, index=idx, type=self.__ChooseType(useRuntimeType))
                     return
                 elif action == 'getvalue':
                     if idx < 0 or idx >= len(list):
@@ -330,15 +334,15 @@ class CDomainObject(CBaseObject):
                             (attributeID, self.type.GetName()))
                     return list[idx]
                 elif action == 'gettype':
-                    return self.type.GetFactory().GetDomain(self.type.GetAttribute(attributeID)['list']['type'])
+                    return self.type.GetFactory().GetDomain(itemType)
                 elif action == 'getdomainname':
-                    return self.type.GetAttribute(attributeID)['list']['type']
+                    return itemType
                 elif action == 'append':
                     if idx < 0 or idx > len(list):
                         raise DomainObjectError('Index out of bounds in attribute %s of domain %s'%\
                             (attributeID, self.type.GetName()))
                     if value is None:
-                        value = self.type.GetDefaultValue(domain = self.type.GetAttribute(attributeID)['list']['type'])
+                        value = self.__ChooseType(useRuntimeType).GetDefaultValue(domain = itemType)
                     self.__SetParentForValue(value)
                     list.insert(idx, value)
                     return value
@@ -348,7 +352,7 @@ class CDomainObject(CBaseObject):
                             (attributeID, self.type.GetName()))
                     list.pop(idx)
                 elif action == 'visual':
-                    return self.type.HasVisualAttribute(attributeID)
+                    return self.__ChooseType(useRuntimeType).HasVisualAttribute(attributeID)
                 
             if rest.startswith('.'):
                 return list[idx]._TracePath(rest[1:], action, value)
@@ -391,6 +395,9 @@ class CDomainObject(CBaseObject):
             return self.type
         else:
             return self.rawType
+
+    def __HasAttribute(self, id, useRuntimeType=True):
+        return self.__ChooseType(useRuntimeType).HasAttribute(id)
 
     def __GetAttribute(self, id, useRuntimeType=True):
         return self.__ChooseType(useRuntimeType).GetAttribute(id)
