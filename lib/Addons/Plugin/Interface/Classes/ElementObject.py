@@ -43,8 +43,8 @@ class IElementObject(IDomainObject):
 
     @destructive
     def ModifyMetamodel(him, command, modificationBundles):
-        bundleList = literal_eval(modificationBundles)
-        bundleObjects = CModificationBundleFactory.CreateFromList(bundleList)
+        bundleDict = literal_eval(modificationBundles)
+        bundleObjects = CModificationBundleFactory.CreateFromList(bundleDict.iteritems())
 
         node = him.GetNode()
         if node.IsModifiedMetamodelRoot():
