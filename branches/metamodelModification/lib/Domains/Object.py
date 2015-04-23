@@ -86,12 +86,19 @@ class CDomainObject(CBaseObject):
         return self._TracePath(id, 'getdomainname')
     
     def __CopyFromObjectToObject(self,old,copy):
-        for id in old.GetType().IterAttributeIDs():
-            if old.GetType().GetAttribute(id)['type']!='list':
-                copy.SetValue(id,old.GetValue(id))
+        for id in old.rawType.IterAttributeIDs():
+            attribute = old.rawType.GetAttribute(id)
+            attributeType = attribute['type']
+            oldValue = old.__GetValueInternal(id, useRuntimeType=False)
+            if not old.rawType.IsDomainAtomic(attributeType):
+                newObject = CDomainObject(oldValue.GetType())
+                self.__CopyFromObjectToObject(oldValue, newObject)
+                copy.__SetValueInternal(id, newObject, useRuntimeType=False)
+            elif attributeType != 'list':
+                copy.__SetValueInternal(id, oldValue, useRuntimeType=False)
             else:
                 ind=0
-                for att in old.GetValue(id):
+                for att in oldValue:
                     copy.AppendItem(id)
                     self.__CopyFromObjectToObject(att,copy.GetValue(id)[ind])
                     ind=ind+1
