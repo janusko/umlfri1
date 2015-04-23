@@ -223,9 +223,10 @@ class CDomainObject(CBaseObject):
         '''
         
         path = re.split(r'(\[|\.)', id, 1)
+
+        attributeID = path[0]
         
         if len(path) == 1: #work with current attribute
-            attributeID = path[0]
             if action == 'setvalue':
                 self.__SetValueInternal(attributeID, value, useRuntimeType)
                 return
@@ -292,62 +293,62 @@ class CDomainObject(CBaseObject):
         elif path[1] == '.': #nested call
             if action == 'getvalue':
                 # special treatment for getting the @length property of the list
-                if self.type.GetAttribute(path[0])['type'] == 'list' and path[2] == LENGTH_PROPERTY:
-                    return len(self.__GetAttributeValue(path[0]))
-            if self.type.IsAtomic(id = path[0]): #atomic element doesn't have items
+                if self.type.GetAttribute(attributeID)['type'] == 'list' and path[2] == LENGTH_PROPERTY:
+                    return len(self.__GetAttributeValue(attributeID))
+            if self.type.IsAtomic(id = attributeID): #atomic element doesn't have items
                 raise DomainObjectError('Attribute %s of domain %s is atomic'%\
-                    (path[0], self.type.GetName()))
-            return self.__GetAttributeValue(path[0])._TracePath(path[2], action, value)
+                    (attributeID, self.type.GetName()))
+            return self.__GetAttributeValue(attributeID)._TracePath(path[2], action, value)
         
         elif path[1] == '[': #index of list
 
-            if not self.type.HasAttribute(path[0]):
-                raise DomainObjectError('Invalid attribute %s in domain %s' % (path[0], self.type.GetName()))
+            if not self.type.HasAttribute(attributeID):
+                raise DomainObjectError('Invalid attribute %s in domain %s' % (attributeID, self.type.GetName()))
             
-            if self.type.GetAttribute(path[0])['type'] <> 'list':
+            if self.type.GetAttribute(attributeID)['type'] <> 'list':
                 raise DomainObjectError('Attribute %s of domain %s cannot be indexed'%\
-                    (path[0], self.type.GetName()))
+                    (attributeID, self.type.GetName()))
 
-            list = self.__GetAttributeValue(path[0])
+            list = self.__GetAttributeValue(attributeID)
             
             idx, rest = path[2].split(']', 1)
             idx = int(idx)
-            if self.type.IsAtomic(domain = self.type.GetAttribute(path[0])['list']['type']) or rest == '':
+            if self.type.IsAtomic(domain = self.type.GetAttribute(attributeID)['list']['type']) or rest == '':
                 if rest:
                     raise DomainObjectError('Nothing was expected after "]"')
 
                 if action == 'setvalue':
                     if idx < 0 or idx >= len(list):
                         raise DomainObjectError('Index out of bounds in attribute %s of domain %s'%\
-                            (path[0], self.type.GetName()))
-                    value = self.type.TransformValue(value, domain = self.type.GetAttribute(path[0])['list']['type'])
-                    self.__SetAttributeValue(path[0], value, index=idx)
+                            (attributeID, self.type.GetName()))
+                    value = self.type.TransformValue(value, domain = self.type.GetAttribute(attributeID)['list']['type'])
+                    self.__SetAttributeValue(attributeID, value, index=idx)
                     return
                 elif action == 'getvalue':
                     if idx < 0 or idx >= len(list):
                         raise DomainObjectError('Index out of bounds in attribute %s of domain %s'%\
-                            (path[0], self.type.GetName()))
+                            (attributeID, self.type.GetName()))
                     return list[idx]
                 elif action == 'gettype':
-                    return self.type.GetFactory().GetDomain(self.type.GetAttribute(path[0])['list']['type'])
+                    return self.type.GetFactory().GetDomain(self.type.GetAttribute(attributeID)['list']['type'])
                 elif action == 'getdomainname':
-                    return self.type.GetAttribute(path[0])['list']['type']
+                    return self.type.GetAttribute(attributeID)['list']['type']
                 elif action == 'append':
                     if idx < 0 or idx > len(list):
                         raise DomainObjectError('Index out of bounds in attribute %s of domain %s'%\
-                            (path[0], self.type.GetName()))
+                            (attributeID, self.type.GetName()))
                     if value is None:
-                        value = self.type.GetDefaultValue(domain = self.type.GetAttribute(path[0])['list']['type'])
+                        value = self.type.GetDefaultValue(domain = self.type.GetAttribute(attributeID)['list']['type'])
                     self.__SetParentForValue(value)
                     list.insert(idx, value)
                     return value
                 elif action == 'remove':
                     if idx < 0 or idx >= len(list):
                         raise DomainObjectError('Index out of bounds in attribute %s of domain %s'%\
-                            (path[0], self.type.GetName()))
+                            (attributeID, self.type.GetName()))
                     list.pop(idx)
                 elif action == 'visual':
-                    return self.type.HasVisualAttribute(path[0])
+                    return self.type.HasVisualAttribute(attributeID)
                 
             if rest.startswith('.'):
                 return list[idx]._TracePath(rest[1:], action, value)
