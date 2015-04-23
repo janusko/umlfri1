@@ -125,18 +125,27 @@ class CDomainObject(CBaseObject):
         @param domainobject: domain object with values to be copied
         @type domainobject: L{CDomainObject<lib.Domains.Object.CDomainObject>}
         '''
-        if self.GetType().GetName()==domainobject.GetType().GetName():
-            for id in self.GetType().IterAttributeIDs():
-                if self.GetType().GetAttribute(id)['type']!='list':
-                    self.SetValue(id,domainobject.GetValue(id))
-                else:
-                    ind=0
-                    for att in domainobject.GetValue(id):
-                        self.AppendItem(id)
-                        self.__CopyFromObjectToObject(att,self.GetValue(id)[ind])
-                        ind=ind+1
-        else:
+        if self.GetType().GetName() != domainobject.GetType().GetName():
             raise DomainObjectError('Domain type mismatch.')
+
+        for id in self.rawType.IterAttributeIDs():
+            attribute = self.rawType.GetAttribute(id)
+            attributeType = attribute['type']
+            value = domainobject.__GetValueInternal(id, useRuntimeType=False)
+            if not self.rawType.IsDomainAtomic(attributeType):
+                newObject = CDomainObject(value.GetType())
+                self.__CopyFromObjectToObject(value, newObject)
+                self.__SetValueInternal(id, newObject, useRuntimeType=False)
+            if attributeType != 'list':
+                self.__SetValueInternal(id, value, useRuntimeType=False)
+            else:
+                itemType = attribute['list']['type']
+                for att in domainobject.GetValue(id):
+                    if self.rawType.IsDomainAtomic(itemType):
+                        self.AppendItem(id, att)
+                    else:
+                        item = self.AppendItem(id)
+                        self.__CopyFromObjectToObject(att, item)
 
     def GetValue(self, id):
         '''
