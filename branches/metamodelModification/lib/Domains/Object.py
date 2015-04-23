@@ -198,14 +198,14 @@ class CDomainObject(CBaseObject):
         '''
         return self._TracePath(id, 'append', item, useRuntimeType)
     
-    def RemoveItem(self, id):
+    def RemoveItem(self, id, useRuntimeType=True):
         '''
         Remove object from attribute with type list
         
         @param id: path to the attribute
         @type id: str
         '''
-        self._TracePath(id, 'remove')
+        self._TracePath(id, 'remove', useRuntimeType)
 
     def SwapItems(self, id, indexes):
         '''
