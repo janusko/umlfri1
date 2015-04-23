@@ -65,7 +65,7 @@ class CDomainObject(CBaseObject):
             self.rawType = type
             self.type = CRuntimeDomainType(type, self)
 
-    def GetType(self, id=''):
+    def GetType(self, id='', useRuntimeType=True):
         '''
         @return: DomainType of attribute
         @rtype: L{CDomainType<lib.Domains.Type.CDomainType>}
@@ -73,7 +73,7 @@ class CDomainObject(CBaseObject):
         @param id: path to the attribute
         @type id: str
         '''
-        return self._TracePath(id, 'gettype')
+        return self._TracePath(id, 'gettype', useRuntimeType)
     
     def GetDomainName(self, id):
         '''
@@ -233,15 +233,16 @@ class CDomainObject(CBaseObject):
             elif action == 'getvalue':
                 return self.__GetValueInternal(attributeID, useRuntimeType)
             elif action == 'gettype':
+                type = self.__ChooseType(useRuntimeType)
                 if attributeID == '':
-                    return self.type
+                    return type
                 else:
-                    if not self.type.HasAttribute(attributeID):
-                        raise DomainObjectError('Invalid attribute %s in domain %s' % (attributeID, self.type.GetName()))
-                    attribute = self.type.GetAttribute(attributeID)
+                    if not type.HasAttribute(attributeID):
+                        raise DomainObjectError('Invalid attribute %s in domain %s' % (attributeID, type.GetName()))
+                    attribute = type.GetAttribute(attributeID)
                     type = attribute['type']
-                    if not self.type.IsDomainAtomic(type):
-                        value = self.__GetAttributeValue(attributeID)
+                    if not type.IsDomainAtomic(type):
+                        value = self.__GetAttributeValue(attributeID, type)
                         return value.GetType()
                     elif type == 'list':
                         type = attribute['list']['type']
@@ -317,7 +318,8 @@ class CDomainObject(CBaseObject):
             
             idx, rest = path[2].split(']', 1)
             idx = int(idx)
-            if self.__ChooseType(useRuntimeType).IsAtomic(domain = itemType) or rest == '':
+            isItemTypeAtomic = self.__ChooseType(useRuntimeType).IsAtomic(domain = itemType)
+            if isItemTypeAtomic or rest == '':
                 if rest:
                     raise DomainObjectError('Nothing was expected after "]"')
 
@@ -334,7 +336,10 @@ class CDomainObject(CBaseObject):
                             (attributeID, self.type.GetName()))
                     return list[idx]
                 elif action == 'gettype':
-                    return self.type.GetFactory().GetDomain(itemType)
+                    if isItemTypeAtomic:
+                        return itemType
+                    else:
+                        return self.type.GetFactory().GetDomain(itemType)
                 elif action == 'getdomainname':
                     return itemType
                 elif action == 'append':
