@@ -338,7 +338,7 @@ class CfrmProperties(object):
         self.application=app
         self.old_domain_object=None
         self.domain_object=self.element.GetDomainObject().GetCopy()
-        type=self.element.GetDomainObject().GetType()
+        type=self.domain_object.GetType()
         self.attributes={}
         self.tables={}
         dlg=self.__CreateBoneWindow(type,'Properties',self.parent,True)
@@ -586,9 +586,10 @@ class CfrmProperties(object):
                     type=type.GetFactory().GetDomain(att['list']['type'])
                 elif not type.IsAtomic(domain=attribute_type):
                     is_domain=True
-                    type=type.GetFactory().GetDomain(attribute_type)
+                    type=self.domain_object.GetType(attribute_type)
 
                 if type:
+                    self.attributes.setdefault(type.GetName(), {})
                     for key in type.IterAttributeIDs():
                         att=type.GetAttribute(key)
                         if att['hidden']:
@@ -770,22 +771,28 @@ class CfrmProperties(object):
             attribute_type = attribute['type']
             if attribute['hidden']:
                 continue
-            if attribute_type in ('str', 'int', 'float'):
-                if isinstance(self.attributes[type.GetName()][id],CEditableComboBox):
-                    val=self.attributes[type.GetName()][id].GetActiveItemText()
-                elif isinstance(self.attributes[type.GetName()][id],CEditBox):
-                    val=self.attributes[type.GetName()][id].GetText()
-            elif attribute_type in ('bool', 'enum'):
-                val=self.attributes[type.GetName()][id].GetActiveItemText()
-            elif attribute_type=='text':
-                val=self.attributes[type.GetName()][id].GetText()
-            elif attribute_type=='list':
+
+            if attribute_type=='list':
                 continue
             elif not type.IsAtomic(domain=attribute_type):
                 inner_domain_object = self.domain_object.GetValue(id)
-                inner_type = type.GetFactory().GetDomain(attribute_type)
+                inner_type = inner_domain_object.GetType()
                 self.__SaveDomainObject(inner_domain_object,inner_type)
                 continue
+
+            typeAttributes = self.attributes[type.GetName()]
+            if id not in typeAttributes:
+                continue
+
+            if attribute_type in ('str', 'int', 'float'):
+                if isinstance([id],CEditableComboBox):
+                    val=typeAttributes[id].GetActiveItemText()
+                elif isinstance(typeAttributes[id],CEditBox):
+                    val=typeAttributes[id].GetText()
+            elif attribute_type in ('bool', 'enum'):
+                val=typeAttributes[id].GetActiveItemText()
+            elif attribute_type=='text':
+                val=typeAttributes[id].GetText()
             domain_object.SetValue(id,val)
 
     def __UpdateControls(self, dialog, type, main_dialog):
@@ -821,7 +828,7 @@ class CfrmProperties(object):
                     self.__RecreateTabAttributes(type, tabname, new_attributes, dialog, main_dialog)
 
             elif not type.IsAtomic(domain=attribute['type']):
-                objectType = type.GetFactory().GetDomain(attribute['type'])
+                objectType = self.domain_object.GetType(name)
                 typeAttributes = set(objectType.IterAttributeIDs())
                 controlAttributes = self.attributes[objectType.GetName()]
                 if typeAttributes != set(controlAttributes.iterkeys()):
