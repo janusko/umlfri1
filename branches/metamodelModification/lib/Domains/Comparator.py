@@ -86,12 +86,12 @@ class CDomainObjectComparator(object):
             self.__compareAtomics(path, first, second, ret)
     
     def __compareStructs(self, path, first, second, ret):
-        type = first.GetType()
+        type = first.GetType(useRuntimeType=False)
         for attr in type.IterAttributeIDs():
             self.__compare(
                 self.__appendPath(path, attr = attr),
-                first.GetValue(attr),
-                second.GetValue(attr),
+                first.GetValue(attr, useRuntimeType=False),
+                second.GetValue(attr, useRuntimeType=False),
                 ret
             )
     
