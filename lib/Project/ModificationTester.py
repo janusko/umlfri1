@@ -7,8 +7,8 @@ from lib.Domains.Modifications.ReplaceAttributeModification import CReplaceAttri
 
 
 def CreateModifications(project):
-    if not project.GetRoot().HasChild():
-        return
+    # if not project.GetRoot().HasChild():
+    return
 
     attributeModifications = []
     attributeModifications.append(CReplaceAttributeModification('my_attribute',
