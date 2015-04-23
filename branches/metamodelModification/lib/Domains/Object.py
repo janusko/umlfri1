@@ -251,8 +251,8 @@ class CDomainObject(CBaseObject):
                     if not type.HasAttribute(attributeID):
                         raise DomainObjectError('Invalid attribute %s in domain %s' % (attributeID, type.GetName()))
                     attribute = type.GetAttribute(attributeID)
-                    type = attribute['type']
-                    if not type.IsDomainAtomic(type):
+                    attributeType = attribute['type']
+                    if not type.IsDomainAtomic(attributeType):
                         value = self.__GetAttributeValue(attributeID, type)
                         return value.GetType()
                     elif type == 'list':
