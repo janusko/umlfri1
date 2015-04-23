@@ -212,9 +212,7 @@ class CDomainObject(CBaseObject):
                 self.__SetValueInternal(attributeID, value)
                 return
             elif action == 'getvalue':
-                if not self.type.HasAttribute(attributeID):
-                    raise DomainObjectError('Invalid attribute %s in domain %s' % (attributeID, self.type.GetName()))
-                return self.__GetAttributeValue(attributeID)
+                return self.__GetValueInternal(attributeID)
             elif action == 'gettype':
                 if attributeID == '':
                     return self.type
@@ -380,6 +378,15 @@ class CDomainObject(CBaseObject):
             if not type.HasAttribute(key):
                 raise DomainObjectError('Invalid attribute %s in domain %s' % (key, type.GetName()))
             self.__SetAttributeValue(key, type.TransformValue(value, id=key), type=type)
+
+    def __GetValueInternal(self, attributeID, useRuntimeType=True):
+        type = self.rawType
+        if useRuntimeType:
+            type = self.type
+
+        if not type.HasAttribute(attributeID):
+            raise DomainObjectError('Invalid attribute %s in domain %s' % (attributeID, type.GetName()))
+        return self.__GetAttributeValue(attributeID, type)
 
     def __GetAttributeValue(self, id, type=None):
         if type is None:
