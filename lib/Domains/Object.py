@@ -172,7 +172,7 @@ class CDomainObject(CBaseObject):
         '''
         self._TracePath(id, 'setvalue', value)
     
-    def AppendItem(self, id,item=None):
+    def AppendItem(self, id, item=None, useRuntimeType=True):
         '''
         Append next object to the attribute with type list
         
@@ -185,7 +185,7 @@ class CDomainObject(CBaseObject):
         @return: appended value
         @rtype: object
         '''
-        return self._TracePath(id, 'append',item)
+        return self._TracePath(id, 'append', item, useRuntimeType)
     
     def RemoveItem(self, id):
         '''
@@ -255,17 +255,17 @@ class CDomainObject(CBaseObject):
                         raise DomainObjectError('Invalid attribute %s in domain %s' % (attributeID, self.type.GetName()))
                     return self.type.GetAttribute(attributeID)['type']
             elif action == 'append':
-                if not self.type.HasAttribute(attributeID):
-                    raise DomainObjectError('Invalid attribute %s in domain %s' % (attributeID, self.type.GetName()))
-                if self.type.GetAttribute(attributeID)['type'] == 'list':
-                    if value is None:
-                        value = self.type.GetDefaultValue(domain = self.type.GetAttribute(attributeID)['list']['type'])
-                    self.__SetParentForValue(value)
-                    self.__GetAttributeValue(attributeID).append(value)
-                    return value
-                else:
+                items = self.__GetValueInternal(attributeID)
+                attribute = self.__GetAttribute(attributeID, useRuntimeType)
+                if attribute['type'] != 'list':
                     raise DomainObjectError('Attribute %s of domain %s is not of type "list"'%\
                     (attributeID, self.type.GetName()))
+
+                if value is None:
+                    value = self.__GetDefaultValue(attribute['list']['type'], useRuntimeType)
+                self.__SetParentForValue(value)
+                items.append(value)
+                return value
             elif action == 'swap':
                 if not self.type.HasAttribute(attributeID):
                     raise DomainObjectError('Invalid attribute %s in domain %s' % (attributeID, self.type.GetName()))
@@ -384,6 +384,20 @@ class CDomainObject(CBaseObject):
     def __iter__(self):
         for id in self.type.IterAttributeIDs():
             yield id, self.__GetAttributeValue(id)
+
+    def __GetAttribute(self, id, useRuntimeType=True):
+        type = self.rawType
+        if useRuntimeType:
+            type = self.type
+
+        return type.GetAttribute(id)
+
+    def __GetDefaultValue(self, domain, useRuntimeType=True):
+        type = self.rawType
+        if useRuntimeType:
+            type = self.type
+
+        return type.GetDefaultValue(domain=domain)
 
     def __SetValueInternal(self, key, value, useRuntimeType=True):
         type = self.rawType
