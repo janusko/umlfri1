@@ -823,7 +823,7 @@ class CfrmProperties(object):
             elif not type.IsAtomic(domain=attribute['type']):
                 objectType = type.GetFactory().GetDomain(attribute['type'])
                 typeAttributes = set(objectType.IterAttributeIDs())
-                controlAttributes = self.attributes[listType.GetName()]
+                controlAttributes = self.attributes[objectType.GetName()]
                 if typeAttributes != set(controlAttributes.iterkeys()):
                     self.__RecreateTabAttributes(type, tabname, new_attributes, dialog, main_dialog)
 
