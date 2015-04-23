@@ -15,6 +15,9 @@ class IElementType(IBase):
     
     def GetIdentity(him):
         return him.GetIdentity()
+
+    def GetMetamodel(him):
+        return him.GetMetamodel()
     
     def GetConnections(him):
         cf = him.GetMetamodel().GetConnectionFactory()

@@ -22,6 +22,14 @@
         
         <value type="org.umlfri.api.metamodel.DomainType" readable="true" />
     </property>
+
+    <property name="metamodel">
+        <documentation>
+            Metamodel of this element type.
+        </documentation>
+
+        <value type="org.umlfri.api.metamodel.Metamodel" readable="true" />
+    </property>
     
     <property name="identity">
         <documentation>
