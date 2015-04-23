@@ -385,36 +385,30 @@ class CDomainObject(CBaseObject):
         for id in self.type.IterAttributeIDs():
             yield id, self.__GetAttributeValue(id)
 
-    def __GetAttribute(self, id, useRuntimeType=True):
-        type = self.rawType
+    def __ChooseType(self, useRuntimeType):
         if useRuntimeType:
-            type = self.type
+            return self.type
+        else:
+            return self.rawType
 
-        return type.GetAttribute(id)
+    def __GetAttribute(self, id, useRuntimeType=True):
+        return self.__ChooseType(useRuntimeType).GetAttribute(id)
 
     def __GetDefaultValue(self, domain, useRuntimeType=True):
-        type = self.rawType
-        if useRuntimeType:
-            type = self.type
-
-        return type.GetDefaultValue(domain=domain)
+        return self.__ChooseType(useRuntimeType).GetDefaultValue(domain=domain)
 
     def __SetValueInternal(self, key, value, useRuntimeType=True):
-        type = self.rawType
-        if useRuntimeType:
-            type = self.type
+        type = self.__ChooseType(useRuntimeType)
 
         if key == DEFAULT_IDENTITY:
-            self.__SetAttributeValue(key, str(value))
+            self.__SetAttributeValue(key, str(value), type=type)
         else:
             if not type.HasAttribute(key):
                 raise DomainObjectError('Invalid attribute %s in domain %s' % (key, type.GetName()))
             self.__SetAttributeValue(key, type.TransformValue(value, id=key), type=type)
 
     def __GetValueInternal(self, attributeID, useRuntimeType=True):
-        type = self.rawType
-        if useRuntimeType:
-            type = self.type
+        type = self.__ChooseType(useRuntimeType)
 
         if not type.HasAttribute(attributeID):
             raise DomainObjectError('Invalid attribute %s in domain %s' % (attributeID, type.GetName()))
