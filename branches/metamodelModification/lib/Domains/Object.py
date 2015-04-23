@@ -147,15 +147,16 @@ class CDomainObject(CBaseObject):
                         item = self.AppendItem(id)
                         self.__CopyFromObjectToObject(att, item)
 
-    def IterValues(self):
+    def IterValues(self, useRuntimeType=True):
         '''
         Returns attribute values of this domain object
 
         @return: values of attributes
         @rtype: tuple(id, various)
         '''
-        for id in self.type.IterAttributeIDs():
-            yield id, self.__GetAttributeValue(id)
+        type = self.__ChooseType(useRuntimeType)
+        for id in type.IterAttributeIDs():
+            yield id, self.__GetAttributeValue(id, type)
 
     def GetValue(self, id, useRuntimeType=True):
         '''
