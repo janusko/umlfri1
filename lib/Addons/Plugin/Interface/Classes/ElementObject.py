@@ -44,9 +44,18 @@ class IElementObject(IDomainObject):
     def ModifyMetamodel(him, command, modificationBundles):
         bundleList = literal_eval(modificationBundles)
         bundleObjects = CModificationBundleFactory.CreateFromList(bundleList)
-        cmd = CApplyModificationBundlesCommand(him.GetNode(), bundleObjects)
+
+        node = him.GetNode()
+        if node.IsModifiedMetamodelRoot():
+            allBundles = IElementObject.__GetModificationBundles(node.GetMetamodel())
+            for b in bundleObjects:
+                if b.GetName() in allBundles:
+                    raise PluginInvalidMethodParameters(him.GetUID(),
+                        "Modification bundle with name %s already exists" % b.GetName())
+
+        cmd = CApplyModificationBundlesCommand(node, bundleObjects)
         command.Execute(cmd)
-    
+
     @destructive
     def ConnectWith(him, command, other, connectionType):
         cmd = CCreateConnectionObjectCommand(him, other, connectionType)
@@ -74,3 +83,8 @@ class IElementObject(IDomainObject):
         cmd = CShowElementCommand(him, diagram)
         command.Execute(cmd)
         return cmd.GetElementVisual()
+
+    @classmethod
+    @not_interface
+    def __GetModificationBundles(cls, metamodel):
+        return {b.GetName(): b for b in metamodel.GetModificationBundles()}
