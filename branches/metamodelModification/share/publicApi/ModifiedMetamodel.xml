@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<interface
+    xmlns="http://umlfri.org/xmlschema/publicApi.xsd"
+    name="org.umlfri.api.metamodel.ModifiedMetamodel"
+    base="org.umlfri.api.metamodel.Metamodel">
+
+    <documentation>
+        Objects representing modified metamodel.
+    </documentation>
+
+</interface>
