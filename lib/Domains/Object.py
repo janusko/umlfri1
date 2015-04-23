@@ -147,6 +147,16 @@ class CDomainObject(CBaseObject):
                         item = self.AppendItem(id)
                         self.__CopyFromObjectToObject(att, item)
 
+    def IterValues(self):
+        '''
+        Returns attribute values of this domain object
+
+        @return: values of attributes
+        @rtype: tuple(id, various)
+        '''
+        for id in self.type.IterAttributeIDs():
+            yield id, self.__GetAttributeValue(id)
+
     def GetValue(self, id, useRuntimeType=True):
         '''
         @return: value of attribute
@@ -392,8 +402,7 @@ class CDomainObject(CBaseObject):
                     self.__SetValueInternal(key, value, False)
     
     def __iter__(self):
-        for id in self.type.IterAttributeIDs():
-            yield id, self.__GetAttributeValue(id)
+        return self.GetValues()
 
     def __ChooseType(self, useRuntimeType):
         if useRuntimeType:
