@@ -24,21 +24,21 @@ class CApplyPropertyPatchCommand(CCommand):
         for patchCommand in self.__patch:
             cmd = patchCommand.GetCommand()
             if cmd == 'modify':
-                self.__object.SetValue(patchCommand.GetPath(), patchCommand.GetNewValue())
+                self.__object.SetValue(patchCommand.GetPath(), patchCommand.GetNewValue(), useRuntimeType=False)
             elif cmd == 'append':
-                self.__object.AppendItem(patchCommand.GetPath(), patchCommand.GetNewValue())
+                self.__object.AppendItem(patchCommand.GetPath(), patchCommand.GetNewValue(), useRuntimeType=False)
             elif cmd == 'remove':
-                self.__object.RemoveItem("%s[%d]" % (patchCommand.GetPath(), patchCommand.GetIndex()))
+                self.__object.RemoveItem("%s[%d]" % (patchCommand.GetPath(), patchCommand.GetIndex()), useRuntimeType=False)
     
     def _Undo(self):
         for patchCommand in self.__patch:
             cmd = patchCommand.GetCommand()
             if cmd == 'modify':
-                self.__object.SetValue(patchCommand.GetPath(), patchCommand.GetOldValue())
+                self.__object.SetValue(patchCommand.GetPath(), patchCommand.GetOldValue(), useRuntimeType=False)
             elif cmd == 'append':
-                self.__object.RemoveItem("%s[%d]" % (patchCommand.GetPath(), patchCommand.GetIndex()))
+                self.__object.RemoveItem("%s[%d]" % (patchCommand.GetPath(), patchCommand.GetIndex()), useRuntimeType=False)
             elif cmd == 'remove':
-                self.__object.AppendItem(patchCommand.GetPath(), patchCommand.GetOldValue())
+                self.__object.AppendItem(patchCommand.GetPath(), patchCommand.GetOldValue(), useRuntimeType=False)
     
     def GetGuiUpdates(self):
         if isinstance(self.__object, CElementObject):
