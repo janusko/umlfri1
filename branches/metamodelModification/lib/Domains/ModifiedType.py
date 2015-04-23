@@ -7,7 +7,7 @@ from lib.Domains.Modifications import CReplaceAttributeModification
 class CModifiedDomainType(CDomainType):
 
     def __init__(self, parentType, factory, modifications):
-        self.parentType = weakref.ref(parentType)
+        self.__parentType = weakref.ref(parentType)
         self.factory = lambda: factory
         self.modifications = modifications
 
@@ -15,7 +15,7 @@ class CModifiedDomainType(CDomainType):
         return self.modifications
 
     def GetParentType(self):
-        return self.parentType()
+        return self.__parentType()
 
     def AppendAttribute(self, id, name, type = None, default = None, hidden=False):
         properties = {'name': name, 'type': type, 'default': default, 'hidden': (hidden in ('true', '1'))}
@@ -26,19 +26,19 @@ class CModifiedDomainType(CDomainType):
         if self.__HasModifications():
             return id in self._GetAttributes()
         else:
-            return self.parentType().HasAttribute(id)
+            return self.__parentType().HasAttribute(id)
 
     def GetAttribute(self, id):
         if self.__HasModifications():
             return self._GetAttributes()[id]
         else:
-            return self.parentType().GetAttribute(id)
+            return self.__parentType().GetAttribute(id)
 
     def IterAttributeIDs(self):
         if self.__HasModifications():
             return self.__IterAttributeIDsInternal()
         else:
-            return self.parentType().IterAttributeIDs()
+            return self.__parentType().IterAttributeIDs()
 
     def __IterAttributeIDsInternal(self):
         for id in self._GetAttributes().iterkeys():
@@ -46,9 +46,9 @@ class CModifiedDomainType(CDomainType):
 
     def _GetAttributes(self):
         if not self.__HasModifications():
-            return self.parentType()._GetAttributes()
+            return self.__parentType()._GetAttributes()
 
-        attributes = dict(self.parentType()._GetAttributes())
+        attributes = dict(self.__parentType()._GetAttributes())
         for m in self.modifications:
             m.ApplyToAttributes(attributes)
 
@@ -70,7 +70,7 @@ class CModifiedDomainType(CDomainType):
         if self.__class__.__dict__.has_key(item):
             return object.__getattribute__(self, item)
 
-        parentType = self.parentType()
+        parentType = self.__parentType()
 
         # by now we should now that the attribute is not in this class or this instance,\
         # so that remains only parent type
