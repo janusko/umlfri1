@@ -257,13 +257,13 @@ class CDomainObject(CBaseObject):
                     return self.type.GetAttribute(attributeID)['type']
             elif action == 'append':
                 items = self.__GetValueInternal(attributeID)
-                attribute = self.__GetAttribute(attributeID, useRuntimeType)
+                attribute = self.__ChooseType(useRuntimeType).GetAttribute(attributeID)
                 if attribute['type'] != 'list':
                     raise DomainObjectError('Attribute %s of domain %s is not of type "list"'%\
                     (attributeID, self.type.GetName()))
 
                 if value is None:
-                    value = self.__GetDefaultValue(attribute['list']['type'], useRuntimeType)
+                    value = self.__ChooseType(useRuntimeType).GetDefaultValue(domain=attribute['list']['type'])
                 self.__SetParentForValue(value)
                 items.append(value)
                 return value
@@ -395,15 +395,6 @@ class CDomainObject(CBaseObject):
             return self.type
         else:
             return self.rawType
-
-    def __HasAttribute(self, id, useRuntimeType=True):
-        return self.__ChooseType(useRuntimeType).HasAttribute(id)
-
-    def __GetAttribute(self, id, useRuntimeType=True):
-        return self.__ChooseType(useRuntimeType).GetAttribute(id)
-
-    def __GetDefaultValue(self, domain, useRuntimeType=True):
-        return self.__ChooseType(useRuntimeType).GetDefaultValue(domain=domain)
 
     def __SetValueInternal(self, key, value, useRuntimeType=True):
         type = self.__ChooseType(useRuntimeType)
