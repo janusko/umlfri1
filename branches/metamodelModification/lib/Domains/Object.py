@@ -221,7 +221,16 @@ class CDomainObject(CBaseObject):
                 else:
                     if not self.type.HasAttribute(attributeID):
                         raise DomainObjectError('Invalid attribute %s in domain %s' % (attributeID, self.type.GetName()))
-                    return self.type.GetFactory().GetDomain(self.type.GetAttribute(attributeID)['type'])
+                    attribute = self.type.GetAttribute(attributeID)
+                    type = attribute['type']
+                    if not self.type.IsDomainAtomic(type):
+                        value = self.__GetAttributeValue(attributeID)
+                        return value.GetType()
+                    elif type == 'list':
+                        type = attribute['list']['type']
+                        return self.type.GetFactory().GetDomain(type)
+                    else:
+                        return type
             elif action == 'getdomainname':
                 if attributeID == '':
                     return self.type.GetName()
