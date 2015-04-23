@@ -147,7 +147,7 @@ class CDomainObject(CBaseObject):
                         item = self.AppendItem(id)
                         self.__CopyFromObjectToObject(att, item)
 
-    def GetValue(self, id):
+    def GetValue(self, id, useRuntimeType=True):
         '''
         @return: value of attribute
         @rtype: various
@@ -160,7 +160,7 @@ class CDomainObject(CBaseObject):
         '''
         return self._TracePath(id, 'getvalue')
     
-    def SetValue(self, id, value):
+    def SetValue(self, id, value, useRuntimeType=True):
         '''
         Set new value to the attribute
         
@@ -215,7 +215,7 @@ class CDomainObject(CBaseObject):
         return self.GetDomainName(id) != 'text'
         #return self._TracePath(id, 'visual')
     
-    def _TracePath(self, id, action, value = None):
+    def _TracePath(self, id, action, value = None, useRuntimeType=True):
         '''
         Find attribute defined by id and perform action
         
@@ -227,10 +227,10 @@ class CDomainObject(CBaseObject):
         if len(path) == 1: #work with current attribute
             attributeID = path[0]
             if action == 'setvalue':
-                self.__SetValueInternal(attributeID, value)
+                self.__SetValueInternal(attributeID, value, useRuntimeType)
                 return
             elif action == 'getvalue':
-                return self.__GetValueInternal(attributeID)
+                return self.__GetValueInternal(attributeID, useRuntimeType)
             elif action == 'gettype':
                 if attributeID == '':
                     return self.type
