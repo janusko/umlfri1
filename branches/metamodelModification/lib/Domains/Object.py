@@ -169,7 +169,7 @@ class CDomainObject(CBaseObject):
         @return: value with entered id
         @rtype: object
         '''
-        return self._TracePath(id, 'getvalue')
+        return self._TracePath(id, 'getvalue', useRuntimeType)
     
     def SetValue(self, id, value, useRuntimeType=True):
         '''
@@ -181,7 +181,7 @@ class CDomainObject(CBaseObject):
         @param value: new value to be set
         @type value: various
         '''
-        self._TracePath(id, 'setvalue', value)
+        self._TracePath(id, 'setvalue', value, useRuntimeType)
     
     def AppendItem(self, id, item=None, useRuntimeType=True):
         '''
