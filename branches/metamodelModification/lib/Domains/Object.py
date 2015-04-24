@@ -403,7 +403,7 @@ class CDomainObject(CBaseObject):
                     self.__SetValueInternal(key, value, False)
     
     def __iter__(self):
-        return self.GetValues()
+        return self.IterValues()
 
     def __ChooseType(self, useRuntimeType):
         if useRuntimeType:
