@@ -18,7 +18,7 @@ class CDomainType(CBaseObject):
     
     ATOMIC = 'int', 'float', 'str', 'text', 'bool', 'enum', 'list', 'color', 'font'
     
-    def __init__(self, name, factory):
+    def __init__(self, name, factory, attributes=None):
         '''
         @param name: Domain identifier
         @type name: str
@@ -28,7 +28,10 @@ class CDomainType(CBaseObject):
         '''
         self.name = name
         self.imports = []
-        self.attributes = OrderedDict()
+        if attributes is None:
+            self.attributes = OrderedDict()
+        else:
+            self.attributes = attributes
         if factory is None:
             self.factory = lambda:None
         else:
