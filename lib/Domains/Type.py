@@ -1,3 +1,4 @@
+from collections import OrderedDict
 import re
 from Object import CDomainObject
 from lib.Exceptions import DomainTypeError
@@ -13,7 +14,6 @@ class CDomainType(CBaseObject):
     @ivar attributes: description of attributes
     @ivar factory: reference to factory that created current instance
     @ivar parsers: list of parsers of this domain
-    @ivar attributeorder: order of attributes defined by metamodel
     '''
     
     ATOMIC = 'int', 'float', 'str', 'text', 'bool', 'enum', 'list', 'color', 'font'
@@ -28,14 +28,13 @@ class CDomainType(CBaseObject):
         '''
         self.name = name
         self.imports = []
-        self.attributes = {}
+        self.attributes = OrderedDict()
         if factory is None:
             self.factory = lambda:None
         else:
             self.factory = weakref.ref(factory)
         self.parsers = []
         self.joiners = []
-        self.attributeorder = []
     
     def GetFactory(self):
         '''
@@ -71,7 +70,6 @@ class CDomainType(CBaseObject):
                 'in definition of "%s.%s"'%(type, self.name, id))
         
         self.attributes[id] = {'name': name, 'type':type, 'default': default,'hidden': (hidden in ('true', '1'))}
-        self.attributeorder.append(id)
     
     def HasAttribute(self, id):
         '''
@@ -263,8 +261,7 @@ class CDomainType(CBaseObject):
 
         @rtype: str
         '''
-        for id in self.attributeorder:
-            yield id
+        return self.attributes.iterkeys()
     
     def IterParsers(self):
         '''
@@ -615,10 +612,7 @@ class CDomainType(CBaseObject):
             return value.GetSaveInfo()
     
     def GetAttributesCount(self):
-        return len(self.attributeorder)
+        return len(self.attributes)
 
     def _GetAttributes(self):
         return self.attributes
-
-    def _GetAttributesOrder(self):
-        return self.attributeorder
