@@ -30,11 +30,12 @@ class CRuntimeDomainType(CDomainType):
                 yield id
 
     def __GetAttributeInternal(self, id):
-        attribute = self.__GetParentProxyMethod(CDomainType.GetAttribute)(id)
-        if self.__EvaluateAttributeCondition(attribute):
-            return attribute
-        else:
-            return None
+        if self.__GetParentProxyMethod(CDomainType.HasAttribute)(id):
+            attribute = self.__GetParentProxyMethod(CDomainType.GetAttribute)(id)
+            if self.__EvaluateAttributeCondition(attribute):
+                return attribute
+
+        return None
 
     def __EvaluateAttributeCondition(self, attribute):
         if 'condition' in attribute:
