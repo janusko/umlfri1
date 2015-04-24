@@ -9,15 +9,15 @@ class CDrawingContextParamEval(CParamEval):
 
         locals['_line'] = context.GetLine()
         locals['cfg'] = CConfigEvalWrapper()
-        locals['self'] = CDrawingContextNodeEvalWrapper(context.GetDomainObject(), node)
+        locals['self'] = CDrawingContextNodeEvalWrapper(context.GetDomainObject(), self._CreateCustomAttributes(), node)
         if node is not None:
-            locals['model'] = CDrawingContextNodeEvalWrapper(node.GetProject().GetDomainObject())
+            locals['model'] = CDrawingContextNodeEvalWrapper(node.GetProject().GetDomainObject(), self._CreateCustomAttributes())
 
         locals.update(context.GetVariables())
 
 class CDrawingContextParamBuilder(CParamBuilder):
-    def _CreateParamEval(self, str, type):
-        return CDrawingContextParamEval(str, type)
+    def _CreateParamEval(self, str, type, createCustomAttributes=False):
+        return CDrawingContextParamEval(str, type, createCustomAttributes)
 
 __paramBuilder = CDrawingContextParamBuilder()
 
