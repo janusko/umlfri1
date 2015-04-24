@@ -586,7 +586,7 @@ class CfrmProperties(object):
                     type=type.GetFactory().GetDomain(att['list']['type'])
                 elif not type.IsAtomic(domain=attribute_type):
                     is_domain=True
-                    type=self.domain_object.GetType(attribute_type)
+                    type=self.domain_object.GetType(attribute_name)
 
                 if type:
                     self.attributes.setdefault(type.GetName(), {})
