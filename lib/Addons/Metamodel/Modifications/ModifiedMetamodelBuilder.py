@@ -1,4 +1,5 @@
 from itertools import chain
+from lib.Addons.Metamodel.Modifications.DomainFactory import CDomainTypeFactory
 from lib.Addons.Metamodel.Modifications.DomainModificationMerger import CDomainModificationMerger
 from lib.Addons.Metamodel.ModifiedMetamodel import CModifiedMetamodel
 from lib.Domains.ModifiedFactory import CModifiedDomainFactory
@@ -10,6 +11,7 @@ from lib.Elements.ModifiedType import CModifiedElementType
 class CModifiedMetamodelBuilder(object):
 
     __domainModificationMerger = CDomainModificationMerger()
+    __domainTypeFactory = CDomainTypeFactory()
 
     def BuildMetamodel(self, elementNode, modificationBundles, parentMetamodel = None):
         if parentMetamodel is None:
@@ -56,6 +58,13 @@ class CModifiedMetamodelBuilder(object):
                 modifications = []
 
             domain = CModifiedDomainType(domain, modifiedDomainFactory, modifications)
+            modifiedDomainFactory.AddDomain(domain)
+
+        for name, modifications in domainModifications.iteritems():
+            if modifiedDomainFactory.HasDomain(name):
+                continue
+
+            domain = self.__domainTypeFactory.CreateDomainFromModifications(name, modifiedDomainFactory, modifications)
             modifiedDomainFactory.AddDomain(domain)
 
         # creating modified element types:
