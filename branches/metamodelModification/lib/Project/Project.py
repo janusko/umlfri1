@@ -381,6 +381,9 @@ class CProject(CBaseObject):
                     if type in ('str', 'text') and 'restricted' in props:
                         typeNode.append(builder.E(UMLPROJECT_NAMESPACE+'Restriction', unicode(props['restricted'])))
 
+                    if type == 'list':
+                        typeNode.set('type', unicode(props['list']['type']))
+
                     defaultValue = props.get('default', None)
                     if type != 'list' and defaultValue:
                         typeNode.set('default', unicode(str(defaultValue)))
@@ -726,6 +729,9 @@ class CProject(CBaseObject):
                         for option in enumChild:
                             if option.tag == UMLPROJECT_NAMESPACE + 'Value':
                                 props.setdefault('enum', []).append(option.text)
+
+                    if type == 'List':
+                        props['list'] = {'type': child.get('type')}
 
                 modifications.append(CReplaceAttributeModification(attributeID, props))
 
