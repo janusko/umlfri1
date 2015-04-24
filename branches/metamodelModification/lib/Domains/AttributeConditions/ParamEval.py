@@ -4,11 +4,11 @@ from lib.ParameterEvaluation.ParamEval import CParamEval, CParamBuilder
 
 class CAttributeConditionParamEval(CParamEval):
     def _UpdateLocals(self, context, locals):
-        locals['self'] = CAttributeConditionEvalWrapper(context.GetDomainObject())
+        locals['self'] = CAttributeConditionEvalWrapper(context.GetDomainObject(), self._CreateCustomAttributes())
 
 class CAttributeConditionParamBuilder(CParamBuilder):
-    def _CreateParamEval(self, str, type):
-        return CAttributeConditionParamEval(str, type)
+    def _CreateParamEval(self, str, type, createCustomAttributes=True):
+        return CAttributeConditionParamEval(str, type, createCustomAttributes)
 
 __paramBuilder = CAttributeConditionParamBuilder()
 
