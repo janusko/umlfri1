@@ -3,7 +3,7 @@ from lib.ParameterEvaluation.NodeEvalWrapper import CNodeEvalWrapper
 class CAttributeConditionEvalWrapper(CNodeEvalWrapper):
 
     def _CreateNodeEvalWrapper(self, object):
-        return CAttributeConditionEvalWrapper(object)
+        return CAttributeConditionEvalWrapper(object, self._CreateCustomAttributes())
 
     def _CreateCustomAttributes(self):
         yield '_Parent', self._Parent
