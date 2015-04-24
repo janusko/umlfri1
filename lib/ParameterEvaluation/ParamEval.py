@@ -2,10 +2,11 @@ from NodeEvalWrapper import CNodeEvalWrapper
 from lib.Base import CBaseObject
 
 class CParamEval(CBaseObject):
-    def __init__(self, str, type = None):
+    def __init__(self, str, type = None, createCustomAttributes=True):
         self.__codeString = str
         self.__code = compile(str, "<param>", 'eval')
         self.__type = type
+        self.__createCustomAttributes = createCustomAttributes
 
     def GetCodeString(self):
         return self.__codeString
@@ -19,6 +20,9 @@ class CParamEval(CBaseObject):
         if self.__type is not None:
             value = self.__type(value)
         return value
+
+    def _CreateCustomAttributes(self):
+        return self.__createCustomAttributes
 
     def _UpdateLocals(self, context, locals):
         pass
@@ -56,8 +60,8 @@ def TupleWrap(type):
     return tmp
 
 class CParamBuilder(CBaseObject):
-    def _CreateParamEval(self, str, type):
-        return CParamEval(str, type)
+    def _CreateParamEval(self, str, type, createCustomAttributes=True):
+        return CParamEval(str, type, createCustomAttributes)
 
     def BuildParam(self, value, type = None):
         if type is bool:
@@ -76,7 +80,12 @@ class CParamBuilder(CBaseObject):
                 else:
                     return value[1:]
             else:
-                return self._CreateParamEval(value[1:], type)
+                dontCreateCustomAttributes = value[1] == '!'
+                if dontCreateCustomAttributes:
+                    value = value[2:]
+                else:
+                    value = value[1:]
+                return self._CreateParamEval(value, type, not dontCreateCustomAttributes)
         elif type2 is not None:
             return type2(value)
         else:

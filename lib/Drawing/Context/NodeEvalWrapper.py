@@ -4,12 +4,12 @@ class CDrawingContextNodeEvalWrapper(CNodeEvalWrapper):
 
     _node = None
 
-    def __init__(self, object, node = None):
-        CNodeEvalWrapper.__init__(self, object)
+    def __init__(self, object, createCustomAttributes, node = None):
+        CNodeEvalWrapper.__init__(self, object, createCustomAttributes)
         self._node = node
 
-    def _CreateNodeEvalWrapper(self, object):
-        return CDrawingContextNodeEvalWrapper(object)
+    def _CreateNodeEvalWrapper(self, object, node=None):
+        return CDrawingContextNodeEvalWrapper(object, self._createCustomAttributes, node or self._node)
 
     def _CreateCustomAttributes(self):
         yield '_Parent', self._Parent
@@ -21,7 +21,7 @@ class CDrawingContextNodeEvalWrapper(CNodeEvalWrapper):
         if not self._node:
             return None
         parent = self._node.GetParent()
-        return CDrawingContextNodeEvalWrapper(parent.GetObject().GetDomainObject(), parent)
+        return self._CreateNodeEvalWrapper(parent.GetObject().GetDomainObject(), parent)
 
     @property
     def _Icon(self):
@@ -33,4 +33,4 @@ class CDrawingContextNodeEvalWrapper(CNodeEvalWrapper):
     def _Children(self):
         if self._node:
             for child in self._node.GetChilds():
-                yield CDrawingContextNodeEvalWrapper(child.GetObject().GetDomainObject(), child)
+                yield self._CreateNodeEvalWrapper(child.GetObject().GetDomainObject(), child)
