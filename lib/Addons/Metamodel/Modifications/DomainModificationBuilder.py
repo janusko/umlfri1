@@ -18,9 +18,15 @@ class CDomainModificationBuilder:
         self.__AppendDomainAttributeModification(domain,
                                                  CDeleteAttributeModification(attributeID))
 
+    def CreateDomain(self, domain):
+        self.__GetDomainModifications(domain)
+
     def GetDomainModifications(self):
         return self.domainModifications
 
+    def __GetDomainModifications(self, domain):
+        return self.domainModifications.setdefault(domain, [])
+
     def __AppendDomainAttributeModification(self, domain, modification):
-        list = self.domainModifications.setdefault(domain, [])
+        list = self.__GetDomainModifications(domain)
         list.append(modification)
