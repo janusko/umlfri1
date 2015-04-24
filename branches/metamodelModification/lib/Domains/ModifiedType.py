@@ -1,3 +1,4 @@
+from collections import OrderedDict
 from types import MethodType
 import weakref
 from Type import CDomainType
@@ -48,7 +49,7 @@ class CModifiedDomainType(CDomainType):
         if not self.__HasModifications():
             return self.__parentType()._GetAttributes()
 
-        attributes = dict(self.__parentType()._GetAttributes())
+        attributes = OrderedDict(self.__parentType()._GetAttributes())
         for m in self.modifications:
             m.ApplyToAttributes(attributes)
 
