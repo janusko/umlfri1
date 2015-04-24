@@ -33,6 +33,8 @@ class CModificationBundleFactory(object):
 
                         cls.__SetDefaultAttributeProperties(attributeProperties)
                         bundleBuilder.AddDomainAttribute(domain, attributeID, attributeProperties)
+                else:
+                    bundleBuilder.CreateDomain(domain)
 
         return builder.BuildBundles()
 
