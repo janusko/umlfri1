@@ -19,11 +19,8 @@ class CNodeEvalWrapper(CBaseObject):
             return val
     
     def __getattr__(self, name):
-        if self._object.GetType().HasAttribute(name):
-            return self.__convert(self._object.GetValue(name))
-        else:
-            return None
-    
+        return self.__convert(self._object.GetValue(name))
+
     def __getitem__(self, name):
         return self.__convert(self._object[name])
     
