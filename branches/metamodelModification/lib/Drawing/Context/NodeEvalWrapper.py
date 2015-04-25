@@ -1,3 +1,4 @@
+from lib.Drawing.Context.DomainAttributesEvalWrapper import CDomainAttributesEvalWrapper
 from lib.ParameterEvaluation.NodeEvalWrapper import CNodeEvalWrapper
 
 class CDrawingContextNodeEvalWrapper(CNodeEvalWrapper):
@@ -15,6 +16,11 @@ class CDrawingContextNodeEvalWrapper(CNodeEvalWrapper):
         yield '_Parent', self._Parent
         yield '_Icon', self._Icon
         yield '_Children', self._Children
+        yield '_Attributes', self._Attributes
+
+    @property
+    def _Attributes(self):
+        return CDomainAttributesEvalWrapper(self._object.GetType())
 
     @property
     def _Parent(self):
