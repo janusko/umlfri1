@@ -248,13 +248,19 @@ class CCairoBaseCanvas(CAbstractCanvas):
         self.cairo_context.paint()
         self.cairo_context.restore()
 
-    def DrawIcon(self, pos, filename):
+    def DrawIcon(self, pos, filename, scale=1.0):
         if self.storage is None:
             raise DrawingError('storage')
         pixmap = PixmapFromPath(self.storage, filename)
         self.cr.save()
-        self.cr.scale(self.scale, self.scale)
-        self.cr.set_source_surface (pixmap, pos[0] - self.baseX, pos[1] - self.baseY)
+        x, y = pos
+        x -= self.baseX
+        y -= self.baseY
+        x = int(x / scale)
+        y = int(y / scale)
+
+        self.cr.scale(self.scale * scale, self.scale * scale)
+        self.cr.set_source_surface (pixmap, x, y)
         self.cr.paint()
         self.cr.restore()
 
