@@ -23,7 +23,11 @@ class CDomainTypeSetter(object):
                 continue
 
             if type == 'list':
-                itemType = factory.GetDomain(attrib['list']['type'])
+                itemTypeStr = attrib['list']['type']
+                if domaintype.IsDomainAtomic(itemTypeStr):
+                    continue
+
+                itemType = factory.GetDomain(itemTypeStr)
 
                 for obj in value:
                     self.ApplyType(obj, itemType)
