@@ -439,6 +439,8 @@ class CDomainType(CBaseObject):
                         if val.find(string)!=-1:
                             raise DomainTypeError('Value of attribute %s is out of bounds.'%(id))
                 return val
+            elif type == 'enum':
+                return self.__GetEnum(value, attribute['enum'])
             elif type in ('color', 'font'):
                 return self.__GetStr(value)
             else:
