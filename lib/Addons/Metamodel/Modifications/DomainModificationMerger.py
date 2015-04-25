@@ -1,11 +1,17 @@
 from lib.Domains.Modifications.DomainAttributeModification import DomainAttributeModificationType
 from lib.Domains.Modifications.ReplaceAttributeModification import CReplaceAttributeModification
 
+class AttributeModificationReplaceDeleteMergeStrategy:
+    KeepDelete = 0
+    CancelEachOtherOut = 1
+
 
 class CDomainModificationMerger(object):
 
-    def __init__(self, mergeEnumValues=True):
+    def __init__(self, mergeEnumValues=True,
+                 replaceDeleteMergeStrategy=AttributeModificationReplaceDeleteMergeStrategy.KeepDelete):
         self.mergeEnumValues = mergeEnumValues
+        self.replaceDeleteMergeStrategy = replaceDeleteMergeStrategy
 
     def MergeModifications(self, parentModifications, childModifications):
         attributeModificationsResolver = lambda parent, child:  self.MergeAttributeModifications(parent, child)
@@ -20,7 +26,11 @@ class CDomainModificationMerger(object):
                 mergedObjects[id] = child
             else:
                 parent = parentObjects[id]
-                mergedObjects[id] = mergeResolver(parent, child)
+                merged = mergeResolver(parent, child)
+                if merged is None:
+                    del mergedObjects[id]
+                else:
+                    mergedObjects[id] = merged
 
         return mergedObjects
 
@@ -37,9 +47,23 @@ class CDomainModificationMerger(object):
         # e.g. enum -> enum (merge values), int -> int or float -> float (merge constraints)
         # if needed, extend modification bundles (in API and builder too) with merge options
 
+        parentType = parentModification.GetType()
+        childType = childModification.GetType()
+
+        if childType == DomainAttributeModificationType.DELETE:
+            if parentType == DomainAttributeModificationType.DELETE:
+                # doesn't make sense to delete attribute twice
+                return None
+            elif parentType == DomainAttributeModificationType.REPLACE:
+                strategy = self.replaceDeleteMergeStrategy
+                if strategy == AttributeModificationReplaceDeleteMergeStrategy.CancelEachOtherOut:
+                    return None
+                elif strategy == AttributeModificationReplaceDeleteMergeStrategy.KeepDelete:
+                    return childModification
+
         # don't merge, if both modifications are not replacements
-        if not (parentModification.GetType() == DomainAttributeModificationType.REPLACE) and (
-                    childModification.GetType() == DomainAttributeModificationType.REPLACE):
+        if not (parentType == DomainAttributeModificationType.REPLACE) and (
+                    childType == DomainAttributeModificationType.REPLACE):
 
             return childModification
 
