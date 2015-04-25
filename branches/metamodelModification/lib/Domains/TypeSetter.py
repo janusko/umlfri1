@@ -9,10 +9,18 @@ class CDomainTypeSetter(object):
             attrib = domaintype.GetAttribute(id)
             type = attrib['type']
 
-            if domaintype.IsAtomic(id) and type != 'list':
-                continue
+            value = domainobject.GetValue(id, False)
 
-            value = domainobject.GetValue(id)
+            if domaintype.IsAtomic(id) and type != 'list':
+                # hack to allow changing possible enum values for given enum attribute
+                # when multiple values with different types for same attribute is implemented in
+                # CDomainObject, this should be refactored (take into account that two enums can be different
+                # and thus should be considered as value of different type)
+                try:
+                    domaintype.CheckValue(value, id)
+                except:
+                    domainobject.SetValue(id, domaintype.GetDefaultValue(id), False)
+                continue
 
             if type == 'list':
                 itemType = factory.GetDomain(attrib['list']['type'])
