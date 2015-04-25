@@ -30,6 +30,28 @@
         
         <value type="org.umlfri.api.metamodel.Metamodel" readable="true" />
     </property>
+
+    <property name="values" singular="value">
+        <documentation>
+            Collection, that contains all property values.
+        </documentation>
+
+        <index name="path" type="string">
+            <documentation>
+                Identifier of the project attribute.
+            </documentation>
+        </index>
+        <value type="variant" readable="true" writable="true" />
+    </property>
+
+    <property name="allValues">
+        <documentation>
+            Iterator over all property values.
+        </documentation>
+
+        <value type="keyvalue" iterable="true" />
+    </property>
+
     
     <method name="save" mutator="true" transactional="false">
         <documentation>
