@@ -8,7 +8,8 @@ from lib.Domains.TypeSetter import CDomainTypeSetter
 
 class CModifyProjectDomainCommand(CCommand):
 
-    __domainModificationMerger = CDomainModificationMerger(AttributeModificationReplaceDeleteMergeStrategy.CancelEachOtherOut)
+    __domainModificationMerger = CDomainModificationMerger(
+        replaceDeleteMergeStrategy=AttributeModificationReplaceDeleteMergeStrategy.CancelEachOtherOut)
     __domainTypeSetter = CDomainTypeSetter()
 
     def __init__(self, project, modifications):
