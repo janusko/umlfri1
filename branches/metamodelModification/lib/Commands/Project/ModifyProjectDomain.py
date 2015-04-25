@@ -30,7 +30,7 @@ class CModifyProjectDomainCommand(CCommand):
         if isinstance(self.__oldType, CModifiedDomainType):
             modifications =  self.__domainModificationMerger.MergeAttributeModifications(self.__oldType.GetModifications(),
                 modifications)
-            parentType = self.__oldType
+            parentType = self.__oldType.GetParentType()
 
         factory = CModifiedDomainFactory(parentType.GetFactory())
 
