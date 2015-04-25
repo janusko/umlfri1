@@ -55,3 +55,18 @@ def XMLEncode(val):
     elif isinstance(val, unicode):
         ret = ret[2:-1]
     return ret.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('<', '&gt;').replace('"', '&quot;').encode('utf8')
+
+def ParseScale(val):
+    """
+    Parses scale from string into float.
+
+    @param val: scale as defined in metamodel schema (float in range 0.0-1.0 or in percentage form)
+    @type  val: str
+
+    @return: scale as floating-point number in range 0.0-1.0
+    @rtype : float
+    """
+    if val[-1] == '%':
+        return float(val[:-1])/100
+    else:
+        return float(val)
