@@ -4,7 +4,9 @@ from lib.Addons.Metamodel.Modifications.DomainModificationFactory import CDomain
 from lib.Addons.Plugin.Communication.ComSpec import *
 from DomainObject import IDomainObject
 from lib.Addons.Plugin.Interface.decorators import *
+from lib.Commands.Project.AppendProjectPropertyItem import CAppendProjectPropertyItemCommand
 from lib.Commands.Project.ModifyProjectDomain import CModifyProjectDomainCommand
+from lib.Commands.Project.RemoveProjectPropertyItem import CRemoveProjectPropertyItemCommand
 from lib.Commands.Project.SetProjectPropertyValues import CSetProjectPropertyValuesCommand
 from lib.Project.Project import CProject
 from lib.Exceptions import *
@@ -42,6 +44,16 @@ class IProject(IBase):
     @destructive
     def SetValue(him, command, path, value):
         cmd = CSetProjectPropertyValuesCommand(him, {path: value})
+        command.Execute(cmd)
+
+    @destructive
+    def AppendItem(him, command, path):
+        cmd = CAppendProjectPropertyItemCommand(him, path)
+        command.Execute(cmd)
+
+    @destructive
+    def RemoveItem(him, command, path):
+        cmd = CRemoveProjectPropertyItemCommand(him, path)
         command.Execute(cmd)
     
     

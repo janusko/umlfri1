@@ -52,6 +52,30 @@
         <value type="keyvalue" iterable="true" />
     </property>
 
+    <method name="appendItem">
+        <documentation>
+            Appends new item to the list contained in the project property.
+        </documentation>
+
+        <parameter name="path" type="string">
+            <documentation>
+                Path to the list.
+            </documentation>
+        </parameter>
+    </method>
+
+    <method name="removeItem">
+        <documentation>
+            Removes an item from the list contained in the project property.
+        </documentation>
+
+        <parameter name="path" type="string">
+            <documentation>
+                Path to the item.
+            </documentation>
+        </parameter>
+    </method>
+
 
     <method name="modifyDomain" mutator="true">
         <documentation>
