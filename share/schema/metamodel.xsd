@@ -58,7 +58,7 @@
 											<xs:attribute name="position" use="required">
 												<xs:simpleType>
 													<xs:restriction base="xs:string">
-														<xs:pattern value="(left|lefttop|top|righttop|left|leftbottom|bottom|rightbottom)([+\-][0-9]+)?"/>
+														<xs:pattern value="(left|lefttop|top|righttop|right|leftbottom|bottom|rightbottom)([+\-][0-9]+)?"/>
 													</xs:restriction>
 												</xs:simpleType>
 											</xs:attribute>
