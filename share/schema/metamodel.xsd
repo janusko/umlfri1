@@ -272,6 +272,7 @@
 				<xs:documentation>Define name of icon</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
+        <xs:attribute name="scale" type="ScaleType" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="LineType">
 		<xs:annotation>
