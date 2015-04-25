@@ -6,7 +6,7 @@ from lib.Domains.ModifiedType import CModifiedDomainType
 from lib.Domains.TypeSetter import CDomainTypeSetter
 
 
-class CModifyProjectDomain(CCommand):
+class CModifyProjectDomainCommand(CCommand):
 
     __domainModificationMerger = CDomainModificationMerger(AttributeModificationReplaceDeleteMergeStrategy.CancelEachOtherOut)
     __domainTypeSetter = CDomainTypeSetter()

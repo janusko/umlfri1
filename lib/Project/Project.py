@@ -648,10 +648,10 @@ class CProject(CBaseObject):
                         self.GetMetamodel().GetDiagramFactory().GetDiagram(item.get('id')).SetCounter(int(item.get('value')))
 
         from lib.Commands.Project.ApplyModificationBundles import CApplyModificationBundlesCommand
-        from lib.Commands.Project.ModifyProjectDomain import CModifyProjectDomain
+        from lib.Commands.Project.ModifyProjectDomain import CModifyProjectDomainCommand
 
         if DomainModifications:
-            CModifyProjectDomain(self, DomainModifications).Do()
+            CModifyProjectDomainCommand(self, DomainModifications).Do()
 
         if DomainObjectSaveInfo is not None:
             self.__domainObject.SetSaveInfo(DomainObjectSaveInfo)
