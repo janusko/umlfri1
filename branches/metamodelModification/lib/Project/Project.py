@@ -728,7 +728,10 @@ class CProject(CBaseObject):
                     if enumChild:
                         for option in enumChild:
                             if option.tag == UMLPROJECT_NAMESPACE + 'Value':
-                                props.setdefault('enum', []).append(option.text)
+                                value = option.text
+                                if value is None:
+                                    value = ''
+                                props.setdefault('enum', []).append(value)
 
                     if type == 'List':
                         props['list'] = {'type': child.get('type')}
