@@ -1,6 +1,6 @@
 from lib.Addons.Metamodel.Modifications.ModificationBundleBuilder import CMetamodelModificationBundleBuilder
 from lib.Commands.Project.ApplyModificationBundles import CApplyModificationBundlesCommand
-from lib.Commands.Project.ModifyProjectDomain import CModifyProjectDomain
+from lib.Commands.Project.ModifyProjectDomain import CModifyProjectDomainCommand
 from lib.Commands.Project.RemoveModificationBundles import CRemoveModificationBundlesCommand
 from lib.Domains.AttributeConditions import BuildParam
 from lib.Domains.Modifications.ReplaceAttributeModification import CReplaceAttributeModification
@@ -19,7 +19,7 @@ def CreateModifications(project):
                                                                     default=None
                                                                 )))
 
-    yield CModifyProjectDomain(project, attributeModifications)
+    yield CModifyProjectDomainCommand(project, attributeModifications)
     return
 
     modificationRoot = list(project.GetRoot().GetChilds())[2]
