@@ -2,6 +2,8 @@ from VisualObject import CVisualObject
 from lib.Math2D import TransformMatrix, Path
 from lib.consts import METAMODEL_NAMESPACE
 from lib.datatypes import CColor
+from lib.lib import ParseScale
+
 
 class CSvg(CVisualObject):
     types = {
@@ -10,10 +12,7 @@ class CSvg(CVisualObject):
         'scale': str
     }
     def __init__(self, width, height, scale="1"):
-        if scale[-1] == '%':
-            self.scale = float(scale[:-1])/100
-        else:
-            self.scale = float(scale)
+        self.scale = ParseScale(scale)
         self.width = width
         self.height = height
         self.svg = []
