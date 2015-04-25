@@ -14,7 +14,7 @@ class CIcon(CVisualObject):
         filename, = self.GetVariables(context, 'filename')
         return GetIconSize(context.GetMetamodel().GetStorage(), filename)
 
-    def Paint(self, context, canvas, shadow = False):
+    def Paint(self, context, canvas):
         filename, = self.GetVariables(context, 'filename')
         
         canvas.DrawIcon(context.GetPos(), filename)
