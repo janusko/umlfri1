@@ -1,7 +1,10 @@
+from ast import literal_eval
 from base import IBase
+from lib.Addons.Metamodel.Modifications.DomainModificationFactory import CDomainModificationFactory
 from lib.Addons.Plugin.Communication.ComSpec import *
 from DomainObject import IDomainObject
 from lib.Addons.Plugin.Interface.decorators import *
+from lib.Commands.Project.ModifyProjectDomain import CModifyProjectDomainCommand
 from lib.Commands.Project.SetProjectPropertyValues import CSetProjectPropertyValuesCommand
 from lib.Project.Project import CProject
 from lib.Exceptions import *
@@ -22,6 +25,13 @@ class IProject(IBase):
     def GetMetamodel(him):
         return him.GetMetamodel()
 
+
+    @destructive
+    def ModifyDomain(him, command, modifications):
+        modificationList = literal_eval(modifications)
+        attributeModifications = CDomainModificationFactory.CreateFromList('', modificationList)['']
+        cmd = CModifyProjectDomainCommand(him, attributeModifications)
+        command.Execute(cmd)
 
     def GetValue(him, path):
         return IDomainObject.GetValue(him.GetDomainObject(), path)
