@@ -28,7 +28,7 @@ class CAbstractCanvas(CBaseObject):
     def GetTextSize(self, text, font):
         return (0, 0)
     
-    def DrawIcon(self, pos, filename):
+    def DrawIcon(self, pos, filename, scale=1.0):
         pass
     
     def GetIconSize(self, filename):
