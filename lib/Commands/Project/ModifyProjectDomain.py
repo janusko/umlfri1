@@ -1,5 +1,6 @@
 from ..Base.Command import CCommand, CommandNotDone
-from lib.Addons.Metamodel.Modifications.DomainModificationMerger import CDomainModificationMerger
+from lib.Addons.Metamodel.Modifications.DomainModificationMerger import CDomainModificationMerger, \
+    AttributeModificationReplaceDeleteMergeStrategy
 from lib.Domains.ModifiedFactory import CModifiedDomainFactory
 from lib.Domains.ModifiedType import CModifiedDomainType
 from lib.Domains.TypeSetter import CDomainTypeSetter
@@ -7,7 +8,7 @@ from lib.Domains.TypeSetter import CDomainTypeSetter
 
 class CModifyProjectDomain(CCommand):
 
-    __domainModificationMerger = CDomainModificationMerger()
+    __domainModificationMerger = CDomainModificationMerger(AttributeModificationReplaceDeleteMergeStrategy.CancelEachOtherOut)
     __domainTypeSetter = CDomainTypeSetter()
 
     def __init__(self, project, modifications):
