@@ -47,10 +47,10 @@ class Meta(type):
             kwds['_addr'] = addr
         if hasattr(fun, '_synchronized'):
             fun = fun._synchronized
-        # try:
-        return fun(obj, *args, **kwds)
-        # except TypeError:
-            # raise PluginInvalidMethodParameters(obj.GetUID(), fname)
+        try:
+            return fun(obj, *args, **kwds)
+        except TypeError:
+            raise PluginInvalidMethodParameters(obj.GetUID(), fname)
         
     @classmethod
     def Create(cls, hisclass, params):
