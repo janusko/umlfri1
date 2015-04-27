@@ -1,3 +1,6 @@
+from lib.Exceptions import DomainTypeError
+
+
 class CDomainTypeSetter(object):
     def ApplyType(self, domainobject, domaintype):
         factory = domaintype.GetFactory()
@@ -18,7 +21,7 @@ class CDomainTypeSetter(object):
                 # and thus should be considered as value of different type)
                 try:
                     domaintype.CheckValue(value, id)
-                except:
+                except DomainTypeError:
                     domainobject.SetValue(id, domaintype.GetDefaultValue(id), False)
                 continue
 
