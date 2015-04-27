@@ -35,8 +35,8 @@ class CDiagram(CBaseObject):
     def GetObject(self):
         return self
     
-    def GetValue(self, name):
-        return self.domainobject.GetValue(name)
+    def GetValue(self, name, useRuntimeType=True):
+        return self.domainobject.GetValue(name, useRuntimeType)
         
     def GetDomainName(self, key=''):
         return self.domainobject.GetDomainName(key)
@@ -50,16 +50,16 @@ class CDiagram(CBaseObject):
     def GetSelection(self):
         return self.selection
     
-    def SetValue(self, key, value):
-        self.domainobject.SetValue(key, value)
+    def SetValue(self, key, value, useRuntimeType=True):
+        self.domainobject.SetValue(key, value, useRuntimeType)
         self.revision += 1
         
-    def AppendItem(self, key, value = None):
-        self.domainobject.AppendItem(key, value)
+    def AppendItem(self, key, value = None, useRuntimeType=True):
+        self.domainobject.AppendItem(key, value, useRuntimeType)
         self.revision += 1
     
-    def RemoveItem(self, key):
-        self.domainobject.RemoveItem(key)
+    def RemoveItem(self, key, useRuntimeType=True):
+        self.domainobject.RemoveItem(key, useRuntimeType)
         self.revision += 1
     
     def GetSaveInfo(self):
