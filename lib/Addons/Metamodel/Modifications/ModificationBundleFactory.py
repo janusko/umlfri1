@@ -7,10 +7,14 @@ class CModificationBundleFactory(object):
     @classmethod
     def CreateFromList(cls, list):
         builder = CMetamodelModificationBundleBuilder()
-        for bundleName, bundleDict in list:
+        for bundleDict in list:
+            bundleName = bundleDict['name']
+            bundleModificationsDict = bundleDict['modifications']
             bundleBuilder = builder.CreateBundle(bundleName)
 
-            for domain, modifications in bundleDict.iteritems():
-                CDomainModificationFactory.CreateFromList(domain, modifications, bundleBuilder)
+            for domainModifications in bundleModificationsDict:
+                domain = domainModifications['name']
+                domainModifications = domainModifications['modifications']
+                CDomainModificationFactory.CreateFromList(domain, domainModifications, bundleBuilder)
 
         return builder.BuildBundles()
