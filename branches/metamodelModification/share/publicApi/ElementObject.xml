@@ -7,14 +7,6 @@
         Logical information about element in model.
     </documentation>
 
-    <property name="uid">
-        <documentation>
-            Unique identifier of element.
-        </documentation>
-
-        <value type="string" readable="true" />
-    </property>
-    
     <property name="name">
         <documentation>
             Element name.
