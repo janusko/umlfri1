@@ -30,7 +30,8 @@ class CDomainModificationFactory(object):
 
                 cls.__SetDefaultAttributeProperties(attributeProperties)
                 builder.AddDomainAttribute(domain, attributeID, attributeProperties)
-        else:
+
+        if len(modifications) == 0:
             builder.CreateDomain(domain)
 
         return builder.GetDomainModifications()
