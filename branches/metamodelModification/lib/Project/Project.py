@@ -656,7 +656,7 @@ class CProject(CBaseObject):
         if DomainObjectSaveInfo is not None:
             self.__domainObject.SetSaveInfo(DomainObjectSaveInfo)
 
-        for nodeId, bundles in reversed(ListBundles.items()):
+        for nodeId, bundles in ListBundles.iteritems():
             node = ListObj[nodeId][0].GetNode()
             CApplyModificationBundlesCommand(node, bundles).Do()
 
