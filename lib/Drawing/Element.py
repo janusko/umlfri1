@@ -47,10 +47,10 @@ class CElement(CVisibleObject):
 
         w, h = self.GetSize()
         wasSmall = False
-        if w < minsize[0]:
+        if w < minsize[0] or not rx:
             w = minsize[0]
             wasSmall = True
-        if h < minsize[1]:
+        if h < minsize[1] or not ry:
             h = minsize[1]
             wasSmall = True
         if wasSmall:
