@@ -7,7 +7,7 @@ from lib.Domains.AttributeConditions.ParamEval import CAttributeConditionParamEv
 class CRuntimeDomainType(CDomainType):
     def __init__(self, parentType, object):
         self.parentType = lambda: parentType
-        self.object = object
+        self.object = weakref.ref(object)
 
     def GetParentType(self):
         return self.parentType()
@@ -41,7 +41,7 @@ class CRuntimeDomainType(CDomainType):
         if 'condition' in attribute:
             condition = attribute['condition']
             if isinstance(condition, CAttributeConditionParamEval):
-                context = CAttributeEvaluationContext(self.object)
+                context = CAttributeEvaluationContext(self.object())
                 return condition(context)
             else:
                 return condition
