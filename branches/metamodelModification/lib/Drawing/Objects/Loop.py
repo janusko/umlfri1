@@ -19,7 +19,27 @@ class CLoop(CSimpleContainer):
             return "vertical"
         else:
             raise XMLError("Orientation.")
-    
+
+    def GetResizable(self, context):
+        rx, ry = False, False
+        collection, = self.GetVariables(context, 'collection')
+        for line, item in enumerate(collection):
+            for i in self.childs:
+                context.Push()
+                context.SetVariables(item)
+                context.SetLine(line)
+
+                rcx, rcy = i.GetResizable(context)
+                rx = rx or rcx
+                ry = ry or rcy
+
+                context.Pop()
+
+                if rx and ry:
+                    return True, True
+
+        return rx, ry
+
     def ComputeSize(self, context):
         w, h = 0, 0
         o = self.__GetOrientation()
