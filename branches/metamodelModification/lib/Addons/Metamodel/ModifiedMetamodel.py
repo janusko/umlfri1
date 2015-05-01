@@ -7,7 +7,7 @@ from lib.Elements.ModifiedFactory import CModifiedElementFactory
 class CModifiedMetamodel(CMetamodel):
     def __init__(self, parentMetamodel, rootNode, modificationBundles):
         self.parentMetamodel = weakref.ref(parentMetamodel)
-        self.rootNode = rootNode
+        self.rootNode = weakref.ref(rootNode)
         self.elementFactory = CModifiedElementFactory(parentMetamodel.GetElementFactory(), self)
         self.domainFactory = CModifiedDomainFactory(parentMetamodel.GetDomainFactory())
         self.modificationBundles = modificationBundles
