@@ -16,7 +16,7 @@ class CModifiedMetamodel(CMetamodel):
         return self.modificationBundles
 
     def GetRootNode(self):
-        return self.rootNode
+        return self.rootNode()
 
     def GetParentMetamodel(self):
         return self.parentMetamodel()
