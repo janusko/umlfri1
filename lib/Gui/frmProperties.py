@@ -830,8 +830,10 @@ class CfrmProperties(object):
             elif not type.IsAtomic(domain=attribute['type']):
                 objectType = self.domain_object.GetType(name)
                 typeAttributes = set(objectType.IterAttributeIDs())
-                controlAttributes = self.attributes[objectType.GetName()]
-                if typeAttributes != set(controlAttributes.iterkeys()):
+                controlAttributes = set(self.attributes[objectType.GetName()].iterkeys())
+                if typeAttributes != controlAttributes:
+                    del self.attributes[objectType.GetName()]
+
                     self.__RecreateTabAttributes(type, tabname, new_attributes, dialog, main_dialog)
 
     def __RecreateTabAttributes(self, type, tabname, atts_order, dialog, main_dialog = False):
