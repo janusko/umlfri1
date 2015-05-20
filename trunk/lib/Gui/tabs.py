@@ -115,8 +115,6 @@ class CTabs(CWidget):
     def on_reorder_page(self, notebook, page, page_num):
         diagram = self.diagrams.pop(self.__Current)
         self.diagrams.insert(page_num, diagram)
-        label = self.labels.pop(self.__Current)
-        self.labels.insert(page_num, label)
         if self.__Current == self.__StartPage:
             self.__StartPage = page_num
         elif self.__StartPage > self.__Current and self.__StartPage <= page_num:
@@ -139,10 +137,7 @@ class CTabs(CWidget):
             for chld in self.nbTabs.get_nth_page(self.__StartPage).get_children():
                 chld.show()
         else:
-            # TODO upravit triedu CTabs, nemusi si uz uchovavat zoznam otvorenych diagramov, teraz to vie COpenedDrawingAreas
-            #self.diagrams[page_num].GetSelection().DeselectAll()
             self.application.GetOpenedDrawingAreas().GetDrawingArea(self.diagrams[page_num]).GetSelection().DeselectAll()
-
             page = self.nbTabs.get_nth_page(page_num)
             page.pack_start(self.tbDrawingArea)
             self.emit("change_current_page", self.diagrams[page_num])
