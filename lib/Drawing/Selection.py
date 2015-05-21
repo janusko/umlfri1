@@ -1,4 +1,5 @@
 import Connection, Element, ConLabelInfo
+from lib.Exceptions import ConnectionError
 from lib.config import config
 from lib.Drawing.Context import CDrawingContext
 
@@ -7,6 +8,7 @@ class CSelection:
     def __init__(self):
         self.selected = set()
         '''Set of selected elements, connections or conlabelinfos'''
+        self.selpoint = None
 
     def GetSelected(self):
         selected = tuple(self.selected)
@@ -106,6 +108,18 @@ class CSelection:
                 if (x >= sqbx and x <= sqex and y >= sqby and y <= sqey):
                     return sq[0]
 
+    def GetSelectedPoint(self):
+        '''
+        Get index of selected point. None if no one is selected.
+
+        @return: self.selpoint
+        @rtype: int / NoneType
+        '''
+        return self.selpoint
+
+    def SetSelectedPoint(self, selpoint):
+        self.selpoint = selpoint
+
     def SelectedCount(self):
         return len(self.selected)
 
@@ -118,12 +132,31 @@ class CSelection:
     def DeselectAll(self):
         self.selected = set()
 
+    def DeselectPoint(self):
+        '''set self.selpoint to None'''
+        self.selpoint = None
+
     def SelectAll(self, elements, connections):
         for e in elements:
             self.selected.add(e)
 
         for c in connections:
             self.selected.add(c)
+
+    def SelectPoint(self, index, points):
+        '''set self.selpoint to index if index within range
+
+        @param index: index of point to be selected
+        @type  index: int
+        @param points: points of connection
+        @type points: list
+        '''
+        if 0 < index <= len(list(points)):
+            self.selpoint = index
+        else:
+            raise ConnectionError("PointNotExists")
+
+
 
     def __IsSelected(self, selObj):
         '''

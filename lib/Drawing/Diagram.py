@@ -206,10 +206,10 @@ class CDiagram(CBaseObject):
                 for con in el.GetConnections():
                     if (con.GetSource() in elements) and (con.GetDestination() in elements):
                         if con not in movedCon:
-                            con.MoveAll(condelta)
+                            con.MoveAll(condelta, selection)
                             movedCon.add(con)
         for conn in self.connections:
-            conn.ValidatePoints()
+            conn.ValidatePoints(selection)
 
     def DeleteObject(self, object, selection):
         self.size = None
@@ -369,11 +369,11 @@ class CDiagram(CBaseObject):
         for c in self.connections:
             ((ex1, ey1), (ex2, ey2)) = c.GetSquare()
             if not (ex2 < x or x + w < ex1 or ey2 < y or y + h < ey1):
-                c.Paint(canvas)
+                c.Paint(canvas, selection)
                 if selection is not None:
                     selection.PaintSelection(canvas, c)
             
-    def PaintFull(self, canvas):
+    def PaintFull(self, canvas, selection):
         """Paints the whole diagram. Used
         for exporting.
         """
@@ -381,7 +381,7 @@ class CDiagram(CBaseObject):
         for e in self.elements:
             e.Paint(canvas)
         for c in self.connections:
-            c.Paint(canvas)
+            c.Paint(canvas, selection)
         
     def PaintSelected(self, canvas, selection):
         """Paints _only_ selected items (elements + connections)
@@ -396,9 +396,9 @@ class CDiagram(CBaseObject):
             if e in setElements:
                 e.Paint(canvas)
                 selection.AddToSelection(e)
-        for e in self.connections:
-            if e in setConnections:
-                e.Paint(canvas)
+        for c in self.connections:
+            if c in setConnections:
+                c.Paint(canvas, selection)
                 selection.AddToSelection(e)
  
     def GetElements(self):
@@ -563,8 +563,8 @@ class CDiagram(CBaseObject):
         else:
             element.SetPosition(pos)
     
-    def MoveConnectionPoint(self, conn, pos, idx):
-        self.grid.SnapConnection(conn, pos, idx)
+    def MoveConnectionPoint(self, conn, pos, idx, selection):
+        self.grid.SnapConnection(conn, pos, idx, selection)
 
     def AlignElementsXY(self, isHorizontal, isLowerBoundary, selection,
             defaultElement=None):

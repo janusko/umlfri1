@@ -478,9 +478,9 @@ class CDrawingArea(CBaseObject):
         """
         for sel in self.selection.GetSelected():
             if isinstance(sel, CConnection):
-                index = sel.GetSelectedPoint()
+                index = self.selection.GetSelectedPoint()
                 if index is not None and (sel.GetSource() != sel.GetDestination() or len(tuple(sel.GetMiddlePoints())) > 2):
-                    sel.RemovePoint(index)
+                    sel.RemovePoint(index, self.selection)
                     self.selection.DeselectAll()
                     return
         for sel in self.selection.GetSelected():
@@ -741,10 +741,10 @@ class CDrawingArea(CBaseObject):
                     elif isinstance(itemSel, CConnection): #Connection is selected
                          i = itemSel.GetPointAtPosition(pos)
                          if i is not None:
-                             itemSel.SelectPoint(i)
+                             self.selection.SelectPoint(i, itemSel.GetPoints())
                              self.__BeginDragPoint(pos, itemSel, i)
                          else:
-                             itemSel.DeselectPoint()
+                             self.selection.DeselectPoint()
                              i = itemSel.WhatPartOfYouIsAtPosition(pos)
                              self.__BeginDragLine(pos, itemSel, i)
                          self.__OnSelectionUpdated()
@@ -756,10 +756,10 @@ class CDrawingArea(CBaseObject):
                     if isinstance(itemSel, CConnection):
                         i = itemSel.GetPointAtPosition(pos)
                         if i is not None:
-                            itemSel.SelectPoint(i)
+                            self.selection.SelectPoint(i, itemSel.GetPoints())
                             self.__BeginDragPoint(pos, itemSel, i)
                         else:
-                            itemSel.DeselectPoint()
+                            self.selection.DeselectPoint()
                             i = itemSel.WhatPartOfYouIsAtPosition(pos)
                             self.__BeginDragLine(pos, itemSel, i)
                     else:
@@ -814,12 +814,12 @@ class CDrawingArea(CBaseObject):
                 self.dnd = None
             elif self.dnd == 'point':
                 connection, index = self.DragPoint
-                self.diagram.MoveConnectionPoint(connection, pos, index)
+                self.diagram.MoveConnectionPoint(connection, pos, index, self.selection)
                 self.dnd = None
             elif self.dnd == 'line':
                 connection, index = self.DragPoint
-                if connection.InsertPoint(pos, index):
-                    self.diagram.MoveConnectionPoint(connection, pos, index+1)
+                if connection.InsertPoint(pos, self.selection, index):
+                    self.diagram.MoveConnectionPoint(connection, pos, index+1, self.selection)
                 self.dnd = None
             elif self.dnd == 'move':
                 if args.wasSpacePressed:
