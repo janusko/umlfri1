@@ -1,6 +1,5 @@
 from lib.Exceptions.UserException import *
 from lib.config import config
-from lib.Connections.Object import CConnectionObject
 from lib.Math2D import CPoint, CLine, CPolyLine, CRectangle
 from math import sqrt, atan2, pi
 from CacheableObject import CCacheableObject
@@ -75,7 +74,6 @@ class CConnection(CCacheableObject):
         self.source = weakref.ref(source)
         self.destination = weakref.ref(destination)
         self.labels = dict((id, CConLabelInfo(self, value[0], value[1])) for id, value in enumerate(self.object.GetType().GetLabels()))
-        self.selpoint = None
         self.object.AddAppears(diagram)
         CCacheableObject.__init__(self)
 
@@ -92,30 +90,6 @@ class CConnection(CCacheableObject):
         '''
         self.DeselectPoint()
         
-    def SelectPoint(self, index):
-        '''set self.selpoint to index if index within range
-        
-        @param index: index of point to be selected
-        @type  index: int
-        '''
-        if 0 < index <= len(self.points):
-            self.selpoint = index
-        else:
-            raise ConnectionError("PointNotExists")
-            
-    def DeselectPoint(self):
-        '''set self.selpoint to None'''
-        self.selpoint = None
-        
-    def GetSelectedPoint(self):
-        '''
-        Get index of selected point. None if no one is selected.
-        
-        @return: self.selpoint
-        @rtype: int / NoneType
-        '''
-        return self.selpoint
-    
     def GetPointAtPosition(self, pos):
         '''
         Get index of point from connection, if there is one close enough to 
@@ -134,7 +108,7 @@ class CConnection(CCacheableObject):
                 return i + 1
         else:
             return None
-            
+
     def GetSquare(self, includeLabels=False):
         '''get absolute positoin of minimal rectangle to which fits connection
         
@@ -162,7 +136,6 @@ class CConnection(CCacheableObject):
         '''
         return self.source()
     def SetSource (self, sour):
-        
         self.source = weakref.ref(sour)
 
     def GetDestination(self):
@@ -262,7 +235,7 @@ class CConnection(CCacheableObject):
         if id in self.labels:
             self.labels[id].SetSaveInfo(**info)
         
-    def InsertPoint(self, point, index = None):
+    def InsertPoint(self, point, selection, index = None):
         '''
         Add new point forming polyline of connection
         
@@ -281,6 +254,9 @@ class CConnection(CCacheableObject):
         
         @param index: position at polyline to which to put new point. 
         @type  index: int
+
+        @param selection: selection object
+        @type selection: CSelection
 
         @return: point was added ?
         @rtype: bool
@@ -317,7 +293,7 @@ class CConnection(CCacheableObject):
         
         self.points.insert(index, point)
         points_count = len(self.points)
-        self.ValidatePoints()
+        self.ValidatePoints(selection)
         
         for label in changed:
             label.RecalculatePosition() # adjust (x, y) to new position
@@ -371,21 +347,23 @@ class CConnection(CCacheableObject):
         '''
         return self.WhatPartOfYouIsAtPosition(point) is not None
 
-    def MoveAll(self, delta):
+    def MoveAll(self, delta, selection):
         '''Move all points and labels of connection
         
         @param delta: (dx, dy) distance to move
         @type  delta: tuple
+        @param selection: selection object
+        @type selection: CSelection
         '''
         self.points = map(
             lambda x: (x[0] + delta[0], x[1] + delta[1]), 
             self.points)
         for idx, point in enumerate(self.points):
             if point[0] < 0 or point[1] < 0:
-                self.MovePoint(point, idx+1)
+                self.MovePoint(point, idx+1, selection)
             
         
-    def MovePoint(self, pos, index):
+    def MovePoint(self, pos, index, selection):
         '''
         Change position of point defined by index to to new position pos
 
@@ -411,11 +389,11 @@ class CConnection(CCacheableObject):
             for label in self.labels.values():
                 if label.idx in (index - 1, index):
                     label.RecalculatePosition()
-            self.ValidatePoints()
+            self.ValidatePoints(selection)
         else:
-            self.RemovePoint(index)
+            self.RemovePoint(index, selection)
 
-    def Paint(self, canvas):
+    def Paint(self, canvas, selection):
         '''
         Paint connection including labels at canvas
         
@@ -426,19 +404,21 @@ class CConnection(CCacheableObject):
         @type  canvas: L{CCairoCanvas<lib.Drawing.Canvas.CairoCanvas.CCairoCanvas>}
         '''
         
-        self.ValidatePoints()
+        self.ValidatePoints(selection)
         self.object.Paint(CDrawingContext(self, (0, 0)), canvas)
         
         for lbl in self.labels.values():
             lbl.Paint(canvas)
 
-    def RemovePoint(self, index, runValidation = True):
+    def RemovePoint(self, index, selection, runValidation = True):
         '''
         Delete point from polyline and colapse two neighbouring segments of 
         polyline
         
         @param index: index of point to be deleted
         @type  index: int
+        @param selection: selection object
+        @type selection: CSelection
         
         @param runValidation: if True then at the end executes 
         L{self.ValidatePoints<self.ValidatePoints>}
@@ -467,17 +447,19 @@ class CConnection(CCacheableObject):
             elif label.idx > index:
                 label.idx -= 1
         del self.points[index - 1]
-        
-        if index  == self.selpoint:
-            self.selpoint = None
-        elif self.selpoint > index:
-            self.selpoint -= 1
+
+        selpoint = selection.GetSelectedPoint()
+        if index  == selpoint:
+            selpoint = None
+        elif selection.GetSelectedPoint() > index:
+            selpoint -= 1
+        selection.SetSelectedPoint(selpoint)
 
         for label in changed:
             label.RecalculatePosition()
         
         if runValidation:
-            self.ValidatePoints()
+            self.ValidatePoints(selection)
     
     def GetPoints(self):
         '''
@@ -547,7 +529,7 @@ class CConnection(CCacheableObject):
             else:
                 return point[0], bottomRight[1]
     
-    def ValidatePoints(self):
+    def ValidatePoints(self, selection):
         '''
         Remove unnecessary points from polyline forming connection and colapse
         segments
@@ -563,7 +545,7 @@ class CConnection(CCacheableObject):
             if self.ValidPoint(points[i - 1 : i + 2]):
                 i += 1
             else:
-                self.RemovePoint(i, False)
+                self.RemovePoint(i, selection, False)
                 del points[i]
 
     def ValidPoint(self, points):

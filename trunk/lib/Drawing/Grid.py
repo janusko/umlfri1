@@ -321,7 +321,7 @@ class CGrid(CBaseObject):
                 #element.SetSizeRelative((rel[0] + dw, rel[1] + dh))
                 element.SetSize((w + dw, h + dh))
         
-    def SnapConnection(self, conn, pos, idx, override=False):
+    def SnapConnection(self, conn, pos, idx, selection, override=False):
         """
         Snap connection breakpoint to grid.
 
@@ -334,6 +334,9 @@ class CGrid(CBaseObject):
         @param idx: connection breakpoint index
         @type idx: int
 
+        @param selection: selection object
+        @type selection: CSelection
+
         @param override: ignore grid beiing turned off
         @type override: bool
         """
@@ -344,7 +347,7 @@ class CGrid(CBaseObject):
             self.active = config['/Grid/Active'] == 'true'
         if (self.active and self.snap_breakpoints) or override:
             pos = self.SnapPosition(pos)
-        conn.MovePoint(pos, idx)
+        conn.MovePoint(pos, idx, selection)
     
     def IsActive(self):
         """

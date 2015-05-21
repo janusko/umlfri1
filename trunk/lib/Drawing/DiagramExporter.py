@@ -36,7 +36,7 @@ class CDiagramExporter():
         size = self.__CalculateDiagramPhysicalSize(size)
 
         canvas = self.__CreateCanvas(self.export_type, filename, size, offset)
-        diagram.PaintFull(canvas)
+        diagram.PaintFull(canvas, selection)
         canvas.Finish()
 
     def GetSelectionPixbuf(self, diagram, selection):
