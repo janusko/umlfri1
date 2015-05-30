@@ -214,12 +214,20 @@ class CfrmMain(CWindow):
         self.picDrawingArea.Redraw()
         self.UpdateMenuSensitivity(project = True)
         for diagram in self.application.GetProject().GetDefaultDiagrams():
-            self.picDrawingArea.SetDiagram(diagram)
-            self.nbTabs.AddTab(diagram)
+            self.AddDiagram(diagram)
         self.twProjectView.GetRootNode()
         self.twProjectView.twProjectView.grab_focus()
         self.application.GetCommands().Clear()
         self.on_undo_redo_action(None, 'start')
+
+    def AddDiagram(self, diagram):
+        """
+        Method for adding diagram into CTabs and COpenedDrawingAreas.
+        :param diagram:
+        :return:
+        """
+        self.picDrawingArea.SetDiagram(diagram)
+        self.nbTabs.AddTab(diagram)
 
     def __ClearApplication(self, filenameOrTemplate, copy = None):
         """
@@ -487,7 +495,7 @@ class CfrmMain(CWindow):
             Keys = [gtk.keysyms._1, gtk.keysyms._2, gtk.keysyms._3, gtk.keysyms._4, gtk.keysyms._5,
                     gtk.keysyms._6, gtk.keysyms._7, gtk.keysyms._8, gtk.keysyms._9, gtk.keysyms._0]
             if event.keyval in Keys:
-                self.nbTabs.SetCurrentPage(Keys.index(event.keyval))
+                self.nbTabs.set_current_page(Keys.index(event.keyval))
 
     @event("nbTabs","drawing-area-set-focus")
     def on_drawing_area_set_focus(self,widget):
@@ -648,7 +656,7 @@ class CfrmMain(CWindow):
 
     @event("twProjectView", "close-diagram")
     def on_remove_diagram(self, widget, diagram):
-        self.nbTabs.CloseTab(diagram)
+        self.nbTabs.CloseTabByDiagram(diagram)
 
     @event("nbTabs", "change_current_page")
     def on_change_diagram(self, widget, diagram):
@@ -692,8 +700,7 @@ class CfrmMain(CWindow):
 
     @event("twProjectView","selected_diagram")
     def on_select_diagram_and_element(self, widget, diagram, object):
-        self.picDrawingArea.SetDiagram(diagram)
-        self.nbTabs.AddTab(diagram)
+        self.AddDiagram(diagram)
         if object is not None:
             self.picDrawingArea.SelectObject(object)
 
@@ -816,8 +823,7 @@ class CfrmMain(CWindow):
         self.picDrawingArea.Redraw()
         self.UpdateMenuSensitivity(project = True)
         for diagram in self.application.GetProject().GetDefaultDiagrams():
-            self.picDrawingArea.SetDiagram(diagram)
-            self.nbTabs.AddTab(diagram)
+            self.AddDiagram(diagram)
         self.application.GetCommands().Clear()
         self.on_undo_redo_action(None, 'start')
 
