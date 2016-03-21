@@ -1,0 +1,1 @@
+from AddonComponent import CCompositeAddonComponent

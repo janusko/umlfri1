@@ -1,0 +1,14 @@
+<Domain id="usecase" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" >
+    <Attribute id="name" name="Name" >
+		<Str/>
+	</Attribute>
+    <Attribute id="stereotype" name="Stereotype" >
+		<Str/>
+	</Attribute>
+    <Attribute id="abstract" name="Abstract" >
+		<Bool default="False"/>
+	</Attribute>
+    <Attribute id="note" name="Note" >
+		<Text/>
+	</Attribute>
+</Domain>

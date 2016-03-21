@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<delegate
+    xmlns="http://umlfri.org/xmlschema/publicApi.xsd"
+    name="org.umlfri.api.fileTypes.ImportExportHandler">
+    
+    <documentation>
+        Handler for processing the import or export user requests.
+    </documentation>
+    
+    <parameter name="fileName" type="string">
+        <documentation>
+            Name of the file being imported or exported.
+        </documentation>
+    </parameter>
+    
+    <parameter name="fileType" type="org.umlfri.api.fileTypes.FileType">
+        <documentation>
+            Type of the file being imported or exported.
+        </documentation>
+    </parameter>
+</delegate>

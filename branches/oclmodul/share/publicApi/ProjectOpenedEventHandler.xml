@@ -1,0 +1,8 @@
+<delegate
+    xmlns="http://umlfri.org/xmlschema/publicApi.xsd"
+    name="org.umlfri.api.base.ProjectOpenedEventHandler">
+    
+    <documentation>
+        Event handler for the project opened event.
+    </documentation>
+</delegate>

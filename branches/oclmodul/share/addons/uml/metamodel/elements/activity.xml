@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ElementType id="Activity" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Icon path="icons/state.png" />
+    <Domain id="activity" identity="name" />
+    <Connections>
+        <Item value="Control Flow"/>
+    </Connections>
+    <Appearance>
+        <Shadow padding="3" color="#cfg.Styles.Element.ShadowColor">
+            <Rectangle fill="#cfg.Styles.Element.FillColor" border="#cfg.Styles.Element.LineColor" right="10 rounded_side" left="10 rounded_side">
+                <Align align="center">
+                    <Sizer minheight="30">
+                        <Padding padding="5">
+                            <HBox>
+                                <Condition condition="#self.stereotype">
+                                    <Align align="center">
+                                        <VBox>
+                                            <TextBox text="&#171;" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                                            <TextBox text="#self.stereotype" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                                            <TextBox text="&#187;" font="#cfg.Styles.Element.TextFont" color="#cfg.Styles.Element.TextColor"/>
+                                        </VBox>
+                                    </Align>
+                                </Condition>
+                                <Align align="center">
+                                    <TextBox text="#self.name" font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/>
+                                </Align>
+                            </HBox>
+                        </Padding>
+                    </Sizer>
+                </Align>
+            </Rectangle>
+        </Shadow>
+    </Appearance>
+    <Options>
+    </Options>
+</ElementType>

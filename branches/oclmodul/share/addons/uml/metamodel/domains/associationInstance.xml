@@ -1,0 +1,37 @@
+<Domain id="associationInstance" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" >
+    <Attribute id="name" name="Name" >
+		<Str/>
+	</Attribute>
+    <Attribute id="stereotype" name="Stereotype" >
+		<Str/>
+	</Attribute>
+    <Attribute id="SRoleVisibility" name="Source Role Visibility" >
+		<Str>
+			<Enum>
+				<Value>Unspecified</Value>
+	    	    <Value>Public</Value>
+	    	    <Value>Private</Value>
+	    	    <Value>Protected</Value>
+			</Enum>
+		</Str>
+    </Attribute>
+    <Attribute id="SRole" name="Source Role" >
+		<Str/>
+	</Attribute>
+    <Attribute id="DRoleVisibility" name="Destination Role Visibility" >
+		<Str>
+			<Enum>
+				<Value>Unspecified</Value>
+	    	    <Value>Public</Value>
+	    	    <Value>Private</Value>
+	    	    <Value>Protected</Value>
+			</Enum>
+		</Str>
+    </Attribute>
+    <Attribute id="DRole" name="Destination Role" >
+		<Str/>
+	</Attribute>
+    <Attribute id="note" name="Note" >
+		<Text/>
+	</Attribute>
+</Domain>

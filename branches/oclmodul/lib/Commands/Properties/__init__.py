@@ -1,0 +1,4 @@
+from .SetPropertyValues import CSetPropertyValuesCommand
+from .ApplyPropertyPatch import CApplyPropertyPatchCommand
+from .AppendPropertyItem import CAppendPropertyItemCommand
+from .RemovePropertyItem import CRemovePropertyItemCommand
