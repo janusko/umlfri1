@@ -42,7 +42,7 @@ class CAlign(CSimpleContainer):
     def ComputeChildSize(self, context):
         return self.GetChild().GetSize(context)
 
-    def Paint(self, context, canvas):
+    def Paint(self, context):
         x, y = context.GetPos()
         we, he = context.GetSize()
         w, h = context.ComputeSize(self)
@@ -67,5 +67,5 @@ class CAlign(CSimpleContainer):
         context.Push()
         context.Move((x, y))
         context.Resize((wc, hc))
-        CSimpleContainer.Paint(self, context, canvas)
+        CSimpleContainer.Paint(self, context)
         context.Pop()

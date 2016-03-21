@@ -1,8 +1,7 @@
-from select import select
 from lib.Depend.gtk2 import gtk
 from common import CWindow, event
 
-from lib.consts import WEB, UNDO_BUTTONS_VISIBLE, SHOW_UNDO_REDO_ITEMS
+from lib.consts import SCALE_MIN, SCALE_MAX, SCALE_INCREASE, WEB, UNDO_BUTTONS_VISIBLE, SHOW_UNDO_REDO_ITEMS
 from lib.Exceptions import *
 
 import gobject
@@ -143,8 +142,8 @@ class CfrmMain(CWindow):
         if not self.application.GetClipboard().IsEmpty():
              changes += 1
 
-        zoomin = diagram and self.picDrawingArea.CanIncreaseScale()
-        zoomout = diagram and self.picDrawingArea.CanDecreaseScale()
+        zoomin = diagram and (self.picDrawingArea.GetScale()+0.00001) < SCALE_MAX
+        zoomout = diagram and (self.picDrawingArea.GetScale()-0.00001) > SCALE_MIN
 
         changes += zoomin != self.__sensitivity_project[3]
         changes += zoomout != self.__sensitivity_project[4]
@@ -197,15 +196,21 @@ class CfrmMain(CWindow):
             else:
                 self.application.GetProject().LoadProject(filenameOrTemplate, copy)
         except ProjectError as e:
-            self.__ClearApplication(filenameOrTemplate, copy)
-            return CErrorDialog(self.form, str(e)).run()
+            CErrorDialog(self.form, str(e)).run()
         except Exception, ex:
-            self.__ClearApplication(filenameOrTemplate, copy)
-            '''
+            if copy is not None:
+                self.application.GetRecentFiles().RemoveFile(filenameOrTemplate)
+            self.application.ProjectDelete()
+            self.nbTabs.CloseAll()
+            self.twProjectView.ClearProjectView()
+            self.ReloadTitle()
+            self.nbProperties.Fill(None)
+            self.UpdateMenuSensitivity(project = False)
+
             if __debug__:
                 raise
-            '''
-            return CErrorDialog(self.form, _('Error opening file') + '\n' + _(str(ex))).run()
+
+            return CWarningDialog(self.form, _('Error opening file') + '\n' + _(str(ex))).run()
 
         self.ReloadTitle()
         self.twProjectView.Redraw(True)
@@ -214,37 +219,12 @@ class CfrmMain(CWindow):
         self.picDrawingArea.Redraw()
         self.UpdateMenuSensitivity(project = True)
         for diagram in self.application.GetProject().GetDefaultDiagrams():
-            self.AddDiagram(diagram)
+            self.nbTabs.AddTab(diagram)
+            self.picDrawingArea.SetDiagram(diagram)
         self.twProjectView.GetRootNode()
         self.twProjectView.twProjectView.grab_focus()
         self.application.GetCommands().Clear()
         self.on_undo_redo_action(None, 'start')
-
-    def AddDiagram(self, diagram):
-        """
-        Method for adding diagram into CTabs and COpenedDrawingAreas.
-        :param diagram:
-        :return:
-        """
-        self.picDrawingArea.SetDiagram(diagram)
-        self.nbTabs.AddTab(diagram)
-
-    def __ClearApplication(self, filenameOrTemplate, copy = None):
-        """
-        It sets main application for clear using (for loading new project). It's closing last loaded project, closing all tabs...
-        It can be called, when exceptions were threw during loading project.
-        :param filenameOrTemplate:
-        :param copy:
-        :return:
-        """
-        if copy is not None:
-            self.application.GetRecentFiles().RemoveFile(filenameOrTemplate)
-        self.application.ProjectDelete()
-        self.nbTabs.CloseAll()
-        self.twProjectView.ClearProjectView()
-        self.ReloadTitle()
-        self.nbProperties.Fill(None)
-        self.UpdateMenuSensitivity(project = False)
 
     def PaintAll(self):
         if not self.nbTabs.IsStartPageActive():
@@ -495,7 +475,7 @@ class CfrmMain(CWindow):
             Keys = [gtk.keysyms._1, gtk.keysyms._2, gtk.keysyms._3, gtk.keysyms._4, gtk.keysyms._5,
                     gtk.keysyms._6, gtk.keysyms._7, gtk.keysyms._8, gtk.keysyms._9, gtk.keysyms._0]
             if event.keyval in Keys:
-                self.nbTabs.set_current_page(Keys.index(event.keyval))
+                self.nbTabs.SetCurrentPage(Keys.index(event.keyval))
 
     @event("nbTabs","drawing-area-set-focus")
     def on_drawing_area_set_focus(self,widget):
@@ -547,13 +527,13 @@ class CfrmMain(CWindow):
     @event("cmdZoomOut", "clicked")
     @event("mnuZoomOut","activate")
     def on_mnuZoomOut_click(self, widget):
-        self.picDrawingArea.DecreaseScale()
+        self.picDrawingArea.IncScale(-SCALE_INCREASE)
         self.UpdateMenuSensitivity()
 
     @event("cmdZoomIn", "clicked")
     @event("mnuZoomIn","activate")
     def on_mnuZoomIn_click(self, widget):
-        self.picDrawingArea.IncreaseScale()
+        self.picDrawingArea.IncScale(SCALE_INCREASE)
         self.UpdateMenuSensitivity()
 
     @event("cmdCut", "clicked")
@@ -654,9 +634,13 @@ class CfrmMain(CWindow):
         self.mnuImport.set_sensitive(toImport)
         self.mnuExportToFile.set_sensitive(toExport)
 
+    @event("picDrawingArea", "get-selected")
+    def on_picDrawingArea_get_selected(self, widget):
+        return self.tbToolBox.GetSelected()
+
     @event("twProjectView", "close-diagram")
     def on_remove_diagram(self, widget, diagram):
-        self.nbTabs.CloseTabByDiagram(diagram)
+        self.nbTabs.CloseTab(diagram)
 
     @event("nbTabs", "change_current_page")
     def on_change_diagram(self, widget, diagram):
@@ -672,8 +656,12 @@ class CfrmMain(CWindow):
     def on_show_diagram_in_project(self, widget, diagram):
         self.twProjectView.ShowDiagram(diagram)
 
-    @event("application.bus", "selected-items")
-    def on_picDrawingArea_selected_item(self, widget, selected):
+    @event("picDrawingArea", "set-selected")
+    def on_picDrawingArea_set_selected(self, widget, selected):
+        self.tbToolBox.SetSelected(selected)
+
+    @event("picDrawingArea", "selected-item")
+    def on_picDrawingArea_selected_item(self, widget, selected, new = False):
         self.UpdateMenuSensitivity(
             element = any(isinstance(x, CElement) for x in selected),
             topElement = any((isinstance(x, CElement) and x.GetObject().GetNode().GetParent() is None) for x in selected),
@@ -684,13 +672,13 @@ class CfrmMain(CWindow):
         else:
             self.nbProperties.Fill(None)
 
-    @event("application.bus","delete-element-from-all")
+    @event("picDrawingArea","delete-element-from-all")
     def on_picDrawingArea_delete_selected_item(self, widget, selected):
         self.twProjectView.DeleteElement(selected)
 
     @event("twProjectView", "selected-item-tree")
     def on_twTreeView_selected_item(self, widget, selected):
-        self.picDrawingArea.DeselectAll()
+        self.picDrawingArea.Diagram.DeselectAll()
         self.picDrawingArea.Paint()
         self.nbProperties.Fill(selected)
 
@@ -700,7 +688,8 @@ class CfrmMain(CWindow):
 
     @event("twProjectView","selected_diagram")
     def on_select_diagram_and_element(self, widget, diagram, object):
-        self.AddDiagram(diagram)
+        self.picDrawingArea.SetDiagram(diagram)
+        self.nbTabs.AddTab(diagram)
         if object is not None:
             self.picDrawingArea.SelectObject(object)
 
@@ -708,13 +697,7 @@ class CfrmMain(CWindow):
     def on_open_diagram(self, widget, diagrams):
         for diagram in diagrams:
             self.on_select_diagram_and_element(widget, diagram, None)
-
-    @event("application.bus", "open-specification")
-    def on_open_specification(self, widget, obj):
-        frmProps = self.application.GetWindow('frmProperties')
-        frmProps.SetParent(self)
-        frmProps.ShowPropertiesWindow(obj, self.application)
-
+    
     @event('application.bus', 'properties-editing-started')
     def on_nbProperties_editing_started (self, widget):
         for menuitem in self.mnuMenubar:
@@ -746,25 +729,37 @@ class CfrmMain(CWindow):
 
     @event("tbToolBox", "toggled")
     def on_tbToolBox_toggled(self, widget, ItemId, ItemType):
-        # self.picDrawingArea.GetDiagram().GetSelection().DeselectAll()
-        # self.picDrawingArea.ResetAction()
-        self.application.GetBus().emit('selected-toolbox-item-changed', (ItemId, ItemType))
+        self.picDrawingArea.Diagram.DeselectAll()
+        self.picDrawingArea.ResetAction()
 
-    @event('application.bus', 'get-selected-toolbox-item')
-    def on_get_selected_toolbox_item(self, widget):
-        return self.tbToolBox.GetSelected()
-
-    @event('application.bus', 'set-selected-toolbox-item')
-    def on_get_selected_toolbox_item(self, widget, item):
-        self.tbToolBox.SetSelected(item)
+    @event("picDrawingArea","drop-from-treeview")
+    def on_drop_from_treeview(self, widget, position):
+        node = self.twProjectView.GetSelectedElement()
+        if node is not None:
+            diagram = self.picDrawingArea.GetDiagram()
+            try:
+                Element = CElement(diagram, node.GetObject()).SetPosition(position)
+                self.UpdateMenuSensitivity()
+            except UserException, e:
+                if e.GetName() == "ElementAlreadyExists":
+                    return CWarningDialog(self.form, _('Unable to insert element')).run()
+                elif e.GetName() == "DiagramHaveNotThisElement":
+                    return CWarningDialog(self.form, _('Wrong element: ') + node.GetObject().GetType().GetId()).run()
+                else:
+                    return CWarningDialog(e.GetName()).run()
 
 
     @event('application.bus', 'run-dialog')
+    @event("picDrawingArea", "run-dialog")
     def on_run_dialog(self, widget, type, message):
         if type == 'warning':
             return CWarningDialog(self.form, message).run()
         else:
             pass
+
+    @event("picDrawingArea","show-element-in-treeView")
+    def on_show_element_in_treeView(self, widget, Element):
+        self.twProjectView.ShowElement(Element)
 
     #Z-Order
     # 'mmShift_SendBack', 'mmShift_BringForward', 'mmShift_ToBottom', 'mmShift_ToTop'
@@ -823,7 +818,8 @@ class CfrmMain(CWindow):
         self.picDrawingArea.Redraw()
         self.UpdateMenuSensitivity(project = True)
         for diagram in self.application.GetProject().GetDefaultDiagrams():
-            self.AddDiagram(diagram)
+            self.nbTabs.AddTab(diagram)
+            self.picDrawingArea.SetDiagram(diagram)
         self.application.GetCommands().Clear()
         self.on_undo_redo_action(None, 'start')
 

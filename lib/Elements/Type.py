@@ -131,11 +131,11 @@ class CElementType(CBaseObject):
         '''
         return self.appearance.GetResizable(context)
     
-    def Paint(self, context, canvas):
+    def Paint(self, context):
         '''
         Paint element type using context
         '''
-        self.appearance.Paint(context, canvas)
+        self.appearance.Paint(context)
     
     def SetAppearance(self, appearance):
         '''

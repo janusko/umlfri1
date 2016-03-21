@@ -42,7 +42,7 @@ class CLoop(CSimpleContainer):
                         h = hc
         return (w, h)
 
-    def Paint(self, context, canvas):
+    def Paint(self, context):
         size = context.ComputeSize(self)
         w, h = context.GetSize()
         x, y = context.GetPos()
@@ -62,7 +62,7 @@ class CLoop(CSimpleContainer):
                 
                 context.Move((x, y))
                 context.Resize((w, h))
-                i.Paint(context, canvas)
+                i.Paint(context)
                 
                 if o == "horizontal":
                     y += h

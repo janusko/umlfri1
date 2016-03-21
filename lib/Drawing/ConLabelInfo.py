@@ -122,12 +122,16 @@ class CConLabelInfo(CCacheableObject):
         '''
         return self.actualSize
     
-    def GetMinimalSize(self):
+    def GetMinimalSize(self, canvas):
         '''
-        The same as L{GetSize<self.GetSize>}.
+        The same as L{GetSize<self.GetSize>}. Canvas parameter is necessary, because this method also
+        exists on other classes.
         
         @return: size of label in 2-tuple (width, height)
         @rtype:  tuple
+
+        @param canvas:
+        @type canvas: L{CCairoCanvas<lib.Drawing.Canvas.CairoCanvas.CCairoCanvas>}
         '''
         return self.GetSize()
         
@@ -144,6 +148,16 @@ class CConLabelInfo(CCacheableObject):
         
         return ( (int(x - width / 2.), int(y - height / 2.) ),
                  (int(x + width / 2.), int(y + height / 2.) ) )
+    
+    def GetSquareAtPosition(self, pos):
+        '''
+        Does nothing, only for interface compatibility with 
+        L{CElement<Element.CElement>}
+        
+        @return: None
+        @rtype: NoneType
+        '''
+        return None
     
     def GetAbsolutePosition(self):
         '''
@@ -293,17 +307,32 @@ class CConLabelInfo(CCacheableObject):
                 (.5 - self.pos) > 0 else 1
             x, y = self.GetAbsolutePosition()
             self.RecalculatePosition((x, y + multi * offset * 15))
-
-    def Paint(self, canvas):
+    
+    def Select(self):
+        '''
+        directs call to self.connection
+        '''
+        return self.connection().Select()
+    
+    def Deselect(self):
+        '''
+        directs call to self.connection
+        '''
+        return self.connection().Deselect()
+    
+    def GetSelected(self):
+        '''
+        directs call to self.connection
+        '''
+        return self.connection().GetSelected()
+    
+    def Paint(self, canvas, delta = (0, 0)):
         if self.position:
             self.SetToDefaultPosition(self.position)
             self.position = None
 
-        context = CDrawingContext(self.connection(), (0,0))
+        context = CDrawingContext(canvas, self.connection(), (0,0))
         self.actualSize = self.logicalLabel.GetSize(context)
+        context.SetPosition(self.GetPosition())
 
-        (x, y) = self.GetPosition()
-
-        context.SetPosition((x, y))
-
-        self.logicalLabel.Paint(context, canvas)
+        self.logicalLabel.Paint(context)

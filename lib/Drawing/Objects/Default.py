@@ -32,9 +32,9 @@ class CDefault(CSimpleContainer):
         
         return ret
     
-    def Paint(self, context, canvas):
+    def Paint(self, context):
         self.__PushToContext(context)
         
-        CSimpleContainer.Paint(self, context, canvas)
+        CSimpleContainer.Paint(self, context)
         
         context.Pop()

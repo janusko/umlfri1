@@ -67,10 +67,10 @@ class CSizer(CSimpleContainer):
         
         return (w, h)
 
-    def Paint(self, context, canvas):
+    def Paint(self, context):
         size = context.ComputeSize(self)
         
         context.Push()
         context.Resize(size)
-        CSimpleContainer.Paint(self, context, canvas)
+        CSimpleContainer.Paint(self, context)
         context.Pop()

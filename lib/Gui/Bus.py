@@ -52,23 +52,10 @@ class CBus(gobject.GObject):
             [gobject.TYPE_STRING]),
         'add-element':(gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE,
             (gobject.TYPE_PYOBJECT,gobject.TYPE_PYOBJECT,gobject.TYPE_PYOBJECT,)),
-        'delete-element-from-all':(gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE,
-            (gobject.TYPE_PYOBJECT, )),
         'project-expand-node': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
             [gobject.TYPE_PYOBJECT]),
         'open-diagram': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, 
             [gobject.TYPE_PYOBJECT]),
-        'open-specification': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE,
-            [gobject.TYPE_PYOBJECT]),
-        'get-selected-toolbox-item': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_PYOBJECT,
-            []),
-        'set-selected-toolbox-item': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE,
-            [gobject.TYPE_PYOBJECT]),
-        'selected-toolbox-item-changed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE,
-            [gobject.TYPE_PYOBJECT]),
-        'selected-items': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE,
-            [gobject.TYPE_PYOBJECT]),
-        'show-element-in-treeView': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, )),
     }
     
     __actionMap = {

@@ -17,7 +17,7 @@ class CVBox(CContainer):
             h = max(h, hi)
         return (w, h)
 
-    def Paint(self, context, canvas):
+    def Paint(self, context):
         x, y = context.GetPos()
         we, he = context.GetSize()
         if he is None:
@@ -47,6 +47,6 @@ class CVBox(CContainer):
             context.Push()
             context.Move((x, y))
             context.Resize((w[id], h))
-            i.Paint(context, canvas)
+            i.Paint(context)
             context.Pop()
             x += w[id]

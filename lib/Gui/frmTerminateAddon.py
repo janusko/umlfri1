@@ -4,7 +4,7 @@ import os.path
 import webbrowser
 
 import lib.consts
-from lib.Drawing.PixmapImageLoader import PixmapFromPath
+from lib.Drawing.Canvas.GtkPlus import PixmapFromPath
 
 from common import event, CWindow
 from dialogs import CQuestionDialog

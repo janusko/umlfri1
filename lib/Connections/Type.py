@@ -117,14 +117,14 @@ class CConnectionType(CBaseObject):
         """
         return self.id
 
-    def Paint(self, context, canvas):
+    def Paint(self, context):
         """
         Paint connection of given type on canvas
         
         @param context: context in which is connection being drawn
         @type  context: L{CDrawingContext<lib.Drawing.Context.DrawingContext.CDrawingContext>}
         """
-        self.appearance.Paint(context, canvas)
+        self.appearance.Paint(context)
     
     def GetLabels(self):
         """

@@ -14,12 +14,15 @@ class CDiagram(CBaseObject):
     def __init__(self, type, name = None): #  name = "untitled"
         self.elements = []
         self.connections = []
+        self.selected = set()
         self.type = type
         if type is not None:
             self.domainobject = CDomainObject(type.GetDomain())
         else:
             self.domainobject = CDomainObject(CDomainFactory.startPageDomain)
         self.size = None
+        self.viewport = ((0, 0), (0, 0))
+        self.scrollingPos = [0, 0]                  #position on diagram (needed for scrollBars)
         if name is None:
             self.SetName(self.type.GenerateName())
         else:
@@ -41,7 +44,7 @@ class CDiagram(CBaseObject):
     
     def GetDomainObject(self):
         return self.domainobject
-
+    
     def SetValue(self, key, value):
         self.domainobject.SetValue(key, value)
         self.revision += 1
@@ -91,7 +94,19 @@ class CDiagram(CBaseObject):
             self.domainobject.SetValue(self.type.GetIdentity() or DEFAULT_IDENTITY if self.type else DEFAULT_IDENTITY, value)
         else:
             self.name = value
-
+    
+    def GetHScrollingPos(self):
+        return self.scrollingPos[0]
+    
+    def GetVScrollingPos(self):
+        return self.scrollingPos[1]
+    
+    def SetHScrollingPos(self, value):
+        self.scrollingPos[0] = value
+    
+    def SetVScrollingPos(self, value):
+        self.scrollingPos[1] = value
+        
     def HasElementObject(self, object):
         for i in self.elements:
             if i.GetObject() is object:
@@ -139,30 +154,69 @@ class CDiagram(CBaseObject):
             self.elements.append(element)
         else:
             raise DrawingError("ElementAlreadyExists", element)
-
+     
+    def GetSelected(self):
+        selected = tuple(self.selected)
+        for i in selected:
+            if i in self.selected:
+                yield i
+            
+    def GetSelectedElements(self, nolabels = False):
+        for i in self.selected:
+            if nolabels:
+                if isinstance(i, Element.CElement):
+                    yield i
+            else:
+                if isinstance(i, (Element.CElement, ConLabelInfo.CConLabelInfo)):
+                    yield i
+            
+    def GetSelectedConnections(self):
+        for i in self.selected:
+            if isinstance(i, Connection.CConnection):
+                yield i
+            
     def AddConnection(self, connection):
         self.size = None
         if connection not in self.connections:
             self.connections.append(connection)
         else:
             raise DrawingError("ConnectionAlreadyExists")
-
-    def AddRangeToSelection(self, topleft, rightbottom, selection):
+            
+    def SelectedCount(self):
+        return len(self.selected)
+    
+    def AddToSelection(self, element):
+        self.selected.add(element)
+        element.Select()
+    
+    def AddRangeToSelection(self, topleft, rightbottom):
         for el in self.GetElementsInRange(topleft, rightbottom, False):
-            selection.AddToSelection(el)
-
-    def GetSelectSquare(self, selection, includeConnections = False):
-        """
-        :param selection: Selection object.
-        :type selection: CSelection
-        :param includeConnections:
-        :type includeConnections: bool
-        :return:
-        """
+            self.selected.add(el)
+            el.Select()
+    
+    def RemoveFromSelection(self, element):
+        self.selected.remove(element)
+        element.Deselect()
+    
+    def DeselectAll(self):
+        for e in self.selected:
+            e.Deselect()
+        self.selected = set()
+            
+    def SelectAll(self):
+        for e in self.elements:
+            self.selected.add(e)
+            e.Select()
+        
+        for c in self.connections:
+            self.selected.add(c)
+            c.Select()
+    
+    def GetSelectSquare(self, includeConnections = False):
         x1, y1 = self.GetSize()
         x2, y2 = 0, 0
         
-        for el in selection.GetSelectedElements():
+        for el in self.GetSelectedElements():
             x, y = el.GetPosition()
             w, h = el.GetSize()
             if x < x1:
@@ -174,98 +228,101 @@ class CDiagram(CBaseObject):
             if y + h > y2:
                 y2 = y + h
         if includeConnections:
-            for connection in selection.GetSelectedConnections():
+            for connection in self.GetSelectedConnections():
                 for x, y in connection.GetMiddlePoints():
                     x1 = min(x, x1)
                     x2 = max(x, x2)
                     y1 = min(y, y1)
                     y2 = max(y, y2)
         return (int(x1), int(y1)), (int(x2 - x1), int(y2 - y1))
-
-    def MoveSelection(self, delta, selection):
+    
+    def MoveSelection(self, delta, canvas = None):
         self.size = None
-        deltax = max(delta[0], -min(el.GetSquare()[0][0] for el in selection.GetSelectedElements()))
-        deltay = max(delta[1], -min(el.GetSquare()[0][1] for el in selection.GetSelectedElements()))
+        deltax = max(delta[0], -min(el.GetSquare()[0][0] for el in self.GetSelectedElements()))
+        deltay = max(delta[1], -min(el.GetSquare()[0][1] for el in self.GetSelectedElements()))
         movedCon = set()
         elements = set()
-        for el in selection.GetSelectedElements():
-            if not isinstance(el, ConLabelInfo.CConLabelInfo):
-                pos1, pos2 = el.GetSquare()
-                zorder = self.elements.index(el)
-                for el2 in self.GetElementsInRange(pos1, pos2):
-                    if not isinstance(el2, ConLabelInfo.CConLabelInfo):
-                        if self.elements.index(el2) > zorder:
-                            elements.add(el2)
-        elements |= set(selection.GetSelectedElements())
+        if canvas is not None:
+            for el in self.GetSelectedElements():
+                if not isinstance(el, ConLabelInfo.CConLabelInfo):
+                    pos1, pos2 = el.GetSquare()
+                    zorder = self.elements.index(el)
+                    for el2 in self.GetElementsInRange(pos1, pos2):
+                        if not isinstance(el2, ConLabelInfo.CConLabelInfo):
+                            if self.elements.index(el2) > zorder:
+                                elements.add(el2)
+        elements |= set(self.GetSelectedElements())
         condelta = self.grid.SnapPosition(delta) if self.grid.IsActive() \
             else delta
         for el in elements:
             x, y = el.GetPosition()
-            self.MoveElement(el, (x + deltax, y + deltay))
+            self.MoveElement(el, (x + deltax, y + deltay), canvas)
             if not isinstance(el, ConLabelInfo.CConLabelInfo):
                 for con in el.GetConnections():
                     if (con.GetSource() in elements) and (con.GetDestination() in elements):
                         if con not in movedCon:
-                            con.MoveAll(condelta, selection)
+                            con.MoveAll(condelta)
                             movedCon.add(con)
-        for conn in self.connections:
-            conn.ValidatePoints(selection)
-
-    def DeleteObject(self, object, selection):
+        if canvas is not None:
+            for conn in self.connections:
+                conn.ValidatePoints()
+    
+    def DeleteObject(self, object):
         self.size = None
         for o in self.elements:
             if o.GetObject() is object:
                 for c in o.GetConnections():
-                    self.ShiftDeleteConnection(c, selection)
-                self.DeleteItem(o, selection)
+                    self.ShiftDeleteConnection(c)
+                self.DeleteItem(o)
                 return
     
-    def DeleteItem(self, item, selection):
+    def DeleteItem(self, item):
         self.size = None
         item.GetObject().RemoveAppears(self)
         if isinstance(item, ConLabelInfo.CConLabelInfo):
-            self.DeleteConLabel(item, selection)
+            self.DeleteConLabel(item)
         elif isinstance(item, Connection.CConnection):
-            self.DeleteConnection(item, selection)
+            self.DeleteConnection(item)
         elif isinstance(item, Element.CElement):
-            self.DeleteElement(item, selection)
+            self.DeleteElement(item)
         else:
             raise DrawingError("UnknownItemClass")
         
-    def DeleteElement(self, element, selection):
+        
+    def DeleteElement(self, element):
         self.size = None
         if element in self.elements:
             deleted = []
             self.elements.remove(element)
-            if element in selection.GetSelected():
-                selection.RemoveFromSelection(element)
+            if element in self.selected:
+                self.selected.remove(element)
             for con in self.connections:
                 if (con.GetSource() is element) or \
                     (con.GetDestination() is element):
                     deleted.append(con)
             for con in deleted:
-                self.DeleteConnection(con, selection)
+                self.DeleteConnection(con)
         else:
             raise DrawingError("ElementDoesNotExists")
         
-    def DeleteConLabel(self, conlabel, selection):
+    def DeleteConLabel(self,conlabel):
         self.size = None
-        self.DeleteConnection(conlabel.GetConnection(), selection)
-        if conlabel in selection.GetSelected():
-            selection.RemoveFromSelection(conlabel)
-
-    def ShiftDeleteConLabel(self, conlabel, selection):
+        self.DeleteConnection(conlabel.GetConnection())
+        if conlabel in self.selected:
+            self.selected.remove(conlabel)
+            
+    def ShiftDeleteConLabel(self,conlabel):
         self.size = None
-        self.ShiftDeleteConnection(conlabel.GetConnection(), selection)
-        if conlabel in selection.GetSelected():
-            selection.RemoveFromSelection(conlabel)
-
-    def DeleteConnection(self, connection, selection):
+        self.ShiftDeleteConnection(conlabel.GetConnection())
+        if conlabel in self.selected:
+            self.selected.remove(conlabel)
+    
+    def DeleteConnection(self, connection):
         self.size = None
         if connection in self.connections:
             self.connections.remove(connection)
-            if connection in selection.GetSelected():
-                selection.RemoveFromSelection(connection)
+            if connection in self.selected:
+                self.selected.remove(connection)
         else:
             raise DrawingError("ConnectionDoesNotExists")
     
@@ -275,19 +332,19 @@ class CDiagram(CBaseObject):
                 self.connections.remove(i)
                 return
     
-    def ShiftDeleteConnection(self, connection, selection):
+    def ShiftDeleteConnection(self, connection):
         self.size = None
         if connection in self.connections:
             obj = connection.GetObject()
             for a in obj.GetAppears():
                 a.DeleteConnectionObject(obj)
-
+                
             obj.GetSource().RemoveConnection(obj)
             if obj.GetSource() is not obj.GetDestination():
                 obj.GetDestination().RemoveConnection(obj)
             #self.connections.remove(connection)
-            if connection in selection.GetSelected():
-                selection.RemoveFromSelection(connection)
+            if connection in self.selected:
+                self.selected.remove(connection)
         else:
             raise DrawingError("ConnectionDoesNotExists")
     
@@ -321,31 +378,27 @@ class CDiagram(CBaseObject):
                 return e
             
         return None
-
+    
     def GetElementsInRange(self, topleft, bottomright, includeall = True):
         for e in self.elements:
             if e.AreYouInRange(topleft, bottomright, includeall):
                 yield e
+    
+    def SetViewPort(self, view):
+        self.viewport = view
+        
+    def GetViewPort(self):
+        return self.viewport
 
     #view = ((x, y), (w, h)
-    def Paint(self, canvas, virtualAreaBounds, selection = None):
-        """
-        Paints diagram onto canvas. Paints only elements and connection, which fall into specified view port.
-
-        @param canvas: Canvas on which its being drawn
-        @type  canvas: L{CCairoCanvas<lib.Drawing.Canvas.CairoCanvas.CCairoCanvas>}
-
-        @param virtualAreaBounds: Bounds of virtual drawing area
-        @type virtualAreaBounds : tuple, (x, y), (width, height)
-        """
-
+    def Paint(self, canvas):
         # TODO
         # optimize: multiple call for one update event:
         #   double calling on click-to-select-element
 
-        ((x, y), (w, h)) = virtualAreaBounds
+        ((x, y), (w, h)) = self.viewport
         canvas.Clear()
-        self.grid.Paint(canvas, virtualAreaBounds)
+        self.grid.Paint(canvas, self.viewport)
         var = set([])
         for e in self.elements:#here is created a set of layer values
             var.add(int(e.GetObject().GetType().GetOptions().get('Layer', 0)))
@@ -362,18 +415,14 @@ class CDiagram(CBaseObject):
                         num+=1
         for e in self.elements:
             ((ex1, ey1), (ex2, ey2)) = e.GetSquare()
-            if not (ex2 < x or x + w < ex1 or ey2 < y or y + h < ey1):
-                e.Paint(canvas)
-                if selection is not None:
-                    selection.PaintSelection(canvas, e)
+            if not (ex2 < x or x + w < ex1 or ey2 < y or y + w < ey1):
+                e.Paint(canvas, delta = (-x, -y))
         for c in self.connections:
             ((ex1, ey1), (ex2, ey2)) = c.GetSquare()
-            if not (ex2 < x or x + w < ex1 or ey2 < y or y + h < ey1):
-                c.Paint(canvas, selection)
-                if selection is not None:
-                    selection.PaintSelection(canvas, c)
+            if not (ex2 < x or x + w < ex1 or ey2 < y or y + w < ey1):
+                c.Paint(canvas, delta = (-x, -y))
             
-    def PaintFull(self, canvas, selection):
+    def PaintFull(self, canvas):
         """Paints the whole diagram. Used
         for exporting.
         """
@@ -381,25 +430,25 @@ class CDiagram(CBaseObject):
         for e in self.elements:
             e.Paint(canvas)
         for c in self.connections:
-            c.Paint(canvas, selection)
+            c.Paint(canvas)
         
-    def PaintSelected(self, canvas, selection):
+    def PaintSelected(self, canvas):
         """Paints _only_ selected items (elements + connections)
         as if they were deselected. Used for pixbuf copying.
         """
         canvas.Clear()
-        old_selected = selection.GetSelectedSet();
-        selection.DeselectAll()
+        old_selected =  self.selected
+        self.DeselectAll()
         setElements = set(e for e in old_selected if isinstance(e, Element.CElement))
         setConnections = set(e for e in old_selected if isinstance(e, Element.CConnection))
         for e in self.elements:
             if e in setElements:
                 e.Paint(canvas)
-                selection.AddToSelection(e)
-        for c in self.connections:
-            if c in setConnections:
-                c.Paint(canvas, selection)
-                selection.AddToSelection(e)
+                self.AddToSelection(e)
+        for e in self.connections:
+            if e in setConnections:
+                e.Paint(canvas)
+                self.AddToSelection(e)
  
     def GetElements(self):
         for e in self.elements:
@@ -415,22 +464,22 @@ class CDiagram(CBaseObject):
     def GetNode(self):
         return self.node()
     
-    def ShiftElementsToTop(self, selection):
-        for selectedElement in selection.GetSelectedElements():
+    def ShiftElementsToTop(self):
+        for selectedElement in self.GetSelectedElements():
             if not isinstance(selectedElement, ConLabelInfo.CConLabelInfo):
                 selectedIdx = self.elements.index(selectedElement)
                 del self.elements[selectedIdx]
                 self.elements.append(selectedElement) 
 
-    def ShiftElementsToBottom(self, selection):
-        for selectedElement in selection.GetSelectedElements():
+    def ShiftElementsToBottom(self):
+        for selectedElement in self.GetSelectedElements():
             if not isinstance(selectedElement, ConLabelInfo.CConLabelInfo):
                 selectedIdx = self.elements.index(selectedElement)
                 del self.elements[selectedIdx]
                 self.elements.insert(0, selectedElement)
 
-    def ShiftElementsForward(self, selection):
-        for selectedElement in selection.GetSelectedElements():
+    def ShiftElementsForward(self, canvas):
+        for selectedElement in self.GetSelectedElements():
             if not isinstance(selectedElement, ConLabelInfo.CConLabelInfo):
                 selectedIdx = self.elements.index(selectedElement)
                 selSq = selectedElement.GetSquare()
@@ -447,8 +496,8 @@ class CDiagram(CBaseObject):
                         selectedShifted = True
                     otherElementIdx += 1
                 
-    def ShiftElementsBack(self, selection):
-        for selectedElement in selection.GetSelectedElements():
+    def ShiftElementsBack(self, canvas):
+        for selectedElement in self.GetSelectedElements():
             if not isinstance(selectedElement, ConLabelInfo.CConLabelInfo):
                 selectedIdx = self.elements.index(selectedElement)
                 selSq = selectedElement.GetSquare()
@@ -465,27 +514,27 @@ class CDiagram(CBaseObject):
                         selectedShifted = True
                     otherElementIdx -= 1
     
-    def CutSelection(self, clipboard, selection):
-        if selection.GetSelected():
-            clipboard.SetContent((el for el in selection.GetSelected() if isinstance(el, Element.CElement)))
-            for el in list(selection.GetSelectedSet()):
+    def CutSelection(self, clipboard):
+        if self.selected:
+            clipboard.SetContent((el for el in self.selected if isinstance(el, Element.CElement)))
+            for el in list(self.selected):
                 if isinstance(el, Element.CElement):
-                    self.DeleteElement(el, selection)
+                    self.DeleteElement(el)
     
-    def CopySelection(self, clipboard, selection):
-        if selection.GetSelected():
-            clipboard.SetContent((el for el in selection.GetSelectedSet() if isinstance(el, Element.CElement)))
+    def CopySelection(self, clipboard):
+        if self.selected:
+            clipboard.SetContent((el for el in self.selected if isinstance(el, Element.CElement)))
     
-    def PasteSelection(self, clipboard, selection):
+    def PasteSelection(self, clipboard):
         pasted = set()
         for i in clipboard.GetContent():
             try:
                 el = Element.CElement(self, i.GetObject())
             except UMLException, e:
                 for el in pasted:
-                    self.DeleteElement(el, selection)
+                    self.DeleteElement(el)
                 raise
-            selection.AddToSelection(el)
+            self.AddToSelection(el)
             el.CopyFromElement(i)
             pasted.add(el)
 
@@ -557,31 +606,33 @@ class CDiagram(CBaseObject):
     def SnapPositionToGrid(self, pos):
         return self.grid.SnapPosition(pos)
 
-    def MoveElement(self, element, pos):
+    def MoveElement(self, element, pos, canvas):
         if not isinstance(element, ConLabelInfo.CConLabelInfo):
-            self.grid.SnapElement(element, pos)
+            self.grid.SnapElement(element, pos, canvas)
         else:
             element.SetPosition(pos)
     
-    def MoveConnectionPoint(self, conn, pos, idx, selection):
-        self.grid.SnapConnection(conn, pos, idx, selection)
+    def MoveConnectionPoint(self, conn, pos, idx):
+        self.grid.SnapConnection(conn, pos, idx)
 
-    def AlignElementsXY(self, isHorizontal, isLowerBoundary, selection,
-            defaultElement=None):
+    def AlignElementsXY(self, isHorizontal, isLowerBoundary,
+            canvas, defaultElement=None): 
         """
         Aligns selected elements along specified axis and position.
         If position isn't set, elements will be aligned to their average
         position.
     
-        @param isHorizontal: align horizontally or vertically
+        @param isHorizontal: align horizontaly or verticaly
         @type isHorizontal: bool
         @param isLowerBoundary: align to lower or higher boundary
         @type isLowerBoundary: bool
+        @param canvas: drawing canvas
+        @type canvas: L{CCairoCanvas<lib.Drawing.Canvas.Cairo.CCairoCanvas>}
         @param defaultElement: Element to align to
-        @type defaultElement: L{CElement<lib.Drawing.Elemenst.CElement>}
+        @type defaultElement: L{CElement<lib.Drawing.Element.CElement>}
         """
         xy = 1-int(bool(isHorizontal))
-        elements = tuple(selection.GetSelectedElements())
+        elements = tuple(self.GetSelectedElements())
         if len(elements)<2: return
         if not defaultElement:
             fun = min if isLowerBoundary else max
@@ -597,51 +648,53 @@ class CDiagram(CBaseObject):
             pos = list(e.GetPosition())
             pos[xy] = most - \
                 ( 0 if isLowerBoundary else e.GetSize()[xy] )
-            self.MoveElement(e, pos)
+            self.MoveElement(e, pos, canvas)
     
-    def AlignElementCentersXY(self, isHorizontal, selection, defaultElement=None):
+    def AlignElementCentersXY(self, isHorizontal, canvas, defaultElement=None):
         """
         Aligns centers of selected elements to defaultElements center 
         along x or y axis.
         If defaultElement it's set, elements will be aligned to their average
         center position.
         
-        @param isHorizontal: align horizontally or vertically
+        @param isHorizontal: align horizontaly or verticaly
         @type isHorizontal: bool
+        @param canvas: drawing canvas
+        @type canvas: L{CCairoCanvas<lib.Drawing.Canvas.Cairo.CCairoCanvas>}
         @param defaultElement: Element to align to
         @type defaultElement: L{CElement<lib.Drawing.Element.CElement>}
         """
         xy = 1-int(bool(isHorizontal))
-        elements = tuple(selection.GetSelectedElements())
+        elements = tuple(self.GetSelectedElements())
         if len(elements)<2: return
         if not defaultElement:
             avg = 0
             for e in elements:
-                avg += e.GetCenter()[xy]
+                avg += e.GetCenter(canvas)[xy]
             position = avg/len(elements)
         else:
-            position = defaultElement.GetCenter()[xy]
+            position = defaultElement.GetCenter(canvas)[xy]
         for e in elements:
             pos = list(e.GetPosition())
-            pos[xy] = position - e.GetSize()[xy]/2
-            self.MoveElement(e, pos)
+            pos[xy] = position - e.GetSize(canvas)[xy]/2
+            self.MoveElement(e, pos, canvas)
 
-    def SpaceElementsEvenlyXY(self, isHorizontal, selection):
+    def SpaceElementsEvenlyXY(self, isHorizontal, canvas):
         """
-        Spaces selected elements evenly along x or y axis.
-
+        Spaces selected elements evenly along x or y axis. 
+        
         @param isHorizontal: space horizontaly or verticaly
         @type isHorizontal: bool
-        @param selection: Selection object.
-        @type selection: CSelection
+        @param canvas: drawing canvas
+        @type canvas: L{CCairoCanvas<lib.Drawing.Canvas.Cairo.CCairoCanvas>}
         """
         xy = 1-int(bool(isHorizontal))
-        elements = list(selection.GetSelectedElements())
+        elements = list(self.GetSelectedElements())
         if len(elements)<3: return
         elemtotal = 0
         for e in elements:
             elemtotal += e.GetSize()[xy]
-        total = self.GetSelectSquare(selection)[1][xy]
+        total = self.GetSelectSquare()[1][xy]
         spacing = (total - elemtotal)/(len(elements) - 1)
         elements.sort(lambda x, y: cmp(x.GetPosition()[xy],
             y.GetPosition()[xy]))
@@ -649,16 +702,18 @@ class CDiagram(CBaseObject):
         pos[xy] = elements[0].GetPosition()[xy]
         for e in elements:
             pos[1-xy] = e.GetPosition()[1-xy]
-            self.MoveElement(e, pos)
+            self.MoveElement(e, pos, canvas)
             pos[xy] += e.GetSize()[xy] + spacing
 
-    def ResizeElementsEvenly(self, resizeByWidth, selection, selectedElement=None):
+    def ResizeElementsEvenly(self, resizeByWidth, canvas, selectedElement=None):
         """
         Resize selected elements evenly to minimal or maximal size of selected
         elements or requested size.
         
         @param resizeByWidth: resize to maximum or minimum
         @type resizeByWidth: bool
+        @param canvas: drawing canvas
+        @type canvas: L{CCairoCanvas<lib.Drawing.Canvas.Cairo.CCairoCanvas>}
         @param selectedElement: element used as reference for resizing
         @type selectedElement: L{CElement<lib.Drawing.Element.CElement>}
         """    
@@ -667,7 +722,7 @@ class CDiagram(CBaseObject):
         
         if selectedElement:
             selectedElementSize = selectedElement.GetSize()
-        elements = tuple(selection.GetSelectedElements())
+        elements = tuple(self.GetSelectedElements())
         if len(elements)<2: return
         
         for e in elements:
@@ -675,11 +730,11 @@ class CDiagram(CBaseObject):
             size[xy] = selectedElementSize[xy]
             e.SetSize(size)
     
-    def ResizeByMaximalElement(self, selection):
+    def ResizeByMaximalElement(self, canvas):
         """
         Resize all elements based on the size of the maximal element
         """
-        elements = tuple(selection.GetSelectedElements())
+        elements = tuple(self.GetSelectedElements())
         if len(elements)<2: return
 
         # find maximum size
@@ -696,11 +751,11 @@ class CDiagram(CBaseObject):
         for e in elements:
             e.SetSize((maxheight, maxwidth))
 
-    def ResizeByMinimalElement(self, selection):
+    def ResizeByMinimalElement(self, canvas):
         """
         Resize all elements based on the size of the minimal element
         """
-        elements = tuple(selection.GetSelectedElements())
+        elements = tuple(self.GetSelectedElements())
         if len(elements)<2: return
 
         # find minimum size
@@ -717,13 +772,13 @@ class CDiagram(CBaseObject):
         for e in elements:
             e.SetSize((minheight, minwidth))
             
-    def SnapElementsOnGrid(self, selection):
+    def SnapElementsOnGrid(self, canvas):
         """
         Snaps selected elements on grid. Grid doesn't have to be active.
         """
-        elements = list(selection.GetSelectedElements())
+        elements = list(self.GetSelectedElements())
         if len(elements)<1: return
         for e in elements:
             pos = e.GetPosition()
-            self.grid.SnapElement(e, pos, True)
+            self.grid.SnapElement(e, pos, canvas, True)
         

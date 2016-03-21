@@ -127,6 +127,7 @@ class CPluginAdapter(CBaseObject, CGuiObject):
     
     def SelectDiagramTab(self, diagram):
         if diagram is not None:
-            self.application.GetWindow('frmMain').AddDiagram(diagram)
+            self.application.GetWindow('frmMain').nbTabs.AddTab(diagram)
+            self.application.GetWindow('frmMain').picDrawingArea.SetDiagram(diagram)
         else:
             self.application.GetWindow('frmMain').nbTabs.SetStartPageAsCurrentPage()

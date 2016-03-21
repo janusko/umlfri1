@@ -17,14 +17,15 @@ class CDiamond(CSimpleContainer):
     def GetResizable(self, context):
         return True, True
 
-    def Paint(self, context, canvas):
+    def Paint(self, context):
         size = context.ComputeSize(self)
         shadowcolor = context.GetShadowColor()
         if shadowcolor is None:
             border, fill = self.GetVariables(context, 'border', 'fill')
         else:
             border, fill = None, shadowcolor
-
+        
+        canvas = context.GetCanvas()
         pos = context.GetPos()
         size = context.ComputeSize(self)
         
@@ -46,4 +47,4 @@ class CDiamond(CSimpleContainer):
         if shadowcolor is not None:
             return
         
-        CSimpleContainer.Paint(self, context, canvas)
+        CSimpleContainer.Paint(self, context)

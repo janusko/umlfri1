@@ -67,10 +67,10 @@ class CSwitch(CContainer):
         
         return (0, 0)
 
-    def Paint(self, context, canvas):
+    def Paint(self, context):
         value, = self.GetVariables(context, 'value')
         
         for i in self.childs:
             if i.IsTrue(context, value):
-                i.Paint(context, canvas)
+                i.Paint(context)
                 break

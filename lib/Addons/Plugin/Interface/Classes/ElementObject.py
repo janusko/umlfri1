@@ -49,7 +49,7 @@ class IElementObject(IDomainObject):
     
     @destructive
     def CreateChildElement(him, command, elementType):
-        cmd = CCreateElementObjectCommand(elementType, him.GetNode(), IBase.application.GetOpenedDrawingAreas())
+        cmd = CCreateElementObjectCommand(elementType, him.GetNode())
         command.Execute(cmd)
         return cmd.GetElementObject()
     
@@ -57,8 +57,7 @@ class IElementObject(IDomainObject):
     def ShowIn(him, command, diagram):
         if diagram.HasElement(him):
             raise PluginInvalidMethodParameters(him.GetUID(), "element is already shown on given diagram")
-
-        selection = IBase.GetAdapter().application.GetOpenedDrawingAreas().GetDrawingArea(diagram).GetSelection()
-        cmd = CShowElementCommand(him, diagram, selection)
+        
+        cmd = CShowElementCommand(him, diagram)
         command.Execute(cmd)
         return cmd.GetElementVisual()

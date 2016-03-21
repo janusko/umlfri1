@@ -412,7 +412,7 @@ class CProject(CBaseObject):
         
         savever = tuple(int(i) for i in root.get('saveversion').split('.'))
         if savever > self.SaveVersion:
-            raise ProjectError("This version of UML .FRI cannot open this file")
+            raise ProjectError("this version of UML .FRI cannot open this file")
         
         
         #xml (version) file is validate with xsd schema (metamodel.xsd)

@@ -41,7 +41,7 @@ class CRectangle(CSimpleContainer):
     def GetResizable(self, context):
         return True, True
 
-    def Paint(self, context, canvas):
+    def Paint(self, context):
         paths = context.GetMetamodel().GetPathFactory()
         size = context.ComputeSize(self)
         shadowcolor = context.GetShadowColor()
@@ -67,7 +67,8 @@ class CRectangle(CSimpleContainer):
                 trans = TransformMatrix.mk_rotation((i+1)*math.pi/2)
                 s = str(s[2]), trans*paths.GetPath(s[1]), int(s[0])
             sides.append(s)
-
+        
+        canvas = context.GetCanvas()
         pos = context.GetPos()
         size = context.ComputeSize(self)
         
@@ -126,7 +127,7 @@ class CRectangle(CSimpleContainer):
         if shadowcolor is not None:
             return
         
-        CSimpleContainer.Paint(self, context, canvas)
+        CSimpleContainer.Paint(self, context)
         
         for i, c in enumerate(corners):
             if c is not None and len(c[1]) > 0:

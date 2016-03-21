@@ -1,6 +1,5 @@
 from VisualObject import CVisualObject
-from ..IconSizeMeasurer import GetIconSize
-# import sys
+import sys
 
 class CIcon(CVisualObject):
     types = {
@@ -12,9 +11,9 @@ class CIcon(CVisualObject):
 
     def ComputeSize(self, context):
         filename, = self.GetVariables(context, 'filename')
-        return GetIconSize(context.GetMetamodel().GetStorage(), filename)
+        return context.GetCanvas().GetIconSize(filename)
 
-    def Paint(self, context, canvas, shadow = False):
+    def Paint(self, context, shadow = False):
         filename, = self.GetVariables(context, 'filename')
         
-        canvas.DrawIcon(context.GetPos(), filename)
+        context.GetCanvas().DrawIcon(context.GetPos(), filename)

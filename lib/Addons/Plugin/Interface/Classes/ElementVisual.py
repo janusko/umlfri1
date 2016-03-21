@@ -24,7 +24,7 @@ class IElementVisual(IVisibleObject):
         if diagram is not other.GetDiagram():
             raise PluginInvalidMethodParameters(him.GetUID(), 'Elements must be on the same diagram')
         
-        cmd = CCreateConnectionCommand(him, other, connectionType, IBase.GetAdapter().application.GetOpenedDrawingAreas())
+        cmd = CCreateConnectionCommand(him, other, connectionType)
         command.Execute(cmd)
         return cmd.GetConnectionVisual()
 

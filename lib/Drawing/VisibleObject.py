@@ -1,9 +1,10 @@
 from lib.config import config
 from lib.Drawing import CConnection
 from CacheableObject import CCacheableObject
+from SelectableObject import CSelectableObject
 from Context import CDrawingContext
 
-class CVisibleObject(CCacheableObject):
+class CVisibleObject(CCacheableObject, CSelectableObject):
     '''
     Ancestor for CElement and CConLabel    
     '''
@@ -17,6 +18,7 @@ class CVisibleObject(CCacheableObject):
         # delta size-based computing of size
         self.actualSize = (0,0)
         CCacheableObject.__init__(self)
+        CSelectableObject.__init__(self)
 
     def AreYouAtPosition(self, pos):
         x, y = pos
@@ -51,8 +53,8 @@ class CVisibleObject(CCacheableObject):
     def GetSize(self):
         return self.actualSize
         
-    def GetMinimalSize(self):
-        w, h = self.object.GetSize(CDrawingContext(self, (0, 0)))
+    def GetMinimalSize(self, canvas):
+        w, h = self.object.GetSize(CDrawingContext(canvas, self, (0, 0)))
         return w, h
         
     def GetSquare(self):

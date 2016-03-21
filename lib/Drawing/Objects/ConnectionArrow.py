@@ -32,7 +32,7 @@ class CConnectionArrow(CVisualObject):
     def ComputeSize(self, context):
         return 0, 0
 
-    def Paint(self, context, canvas):
+    def Paint(self, context):
         index, direction, style, fill, size, color = self.GetVariables(context, 'index', 'direction', 'style', 'fill', 'size', 'color')
         
         if direction is None:
@@ -65,4 +65,4 @@ class CConnectionArrow(CVisualObject):
                         TransformMatrix.mk_scale(size)
         
         arrow = transMatrix*context.GetMetamodel().GetPathFactory().GetPath(style)
-        canvas.DrawPath(arrow, color, fill)
+        context.GetCanvas().DrawPath(arrow, color, fill)

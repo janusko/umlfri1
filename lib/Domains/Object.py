@@ -246,7 +246,7 @@ class CDomainObject(CBaseObject):
                 raise DomainObjectError('Invalid attribute %s in domain %s' % (path[0], self.type.GetName()))
             
             if self.type.GetAttribute(path[0])['type'] <> 'list':
-                raise DomainObjectError('Attribute %s of domain %s cannot be indexed'%\
+                raise CDomainObjectError('Attribute %s of domain %s cannot be indexed'%\
                     (path[0], self.type.GetName()))
             
             idx, rest = path[2].split(']', 1)

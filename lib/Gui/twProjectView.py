@@ -7,11 +7,9 @@ from lib.Project import CProject, CProjectNode
 from lib.Elements import CElementObject
 from lib.Drawing import CElement, CDiagram
 from lib.Exceptions.UserException import *
-from lib.Drawing.PixmapImageLoader import PixmapFromPath
+from lib.Drawing.Canvas.GtkPlus import PixmapFromPath
 
 from common import  event
-from lib.consts import PROJECT_NODE_UID_SELECTION_TARGET
-
 
 class CtwProjectView(CWidget):
     name = 'twProjectView'
@@ -53,7 +51,7 @@ class CtwProjectView(CWidget):
         self.twProjectView.get_selection().set_mode(gtk.SELECTION_SINGLE)
         
         self.TARGETS = [
-        (PROJECT_NODE_UID_SELECTION_TARGET, 0, 0),
+        ('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_WIDGET, 0),
         ('text/plain', 0, 1),
         ('TEXT', 0, 2),
         ('STRING', 0, 3),
@@ -264,7 +262,7 @@ class CtwProjectView(CWidget):
     def on_mnuAddElement_activate(self, widget, element):
         node = self.GetSelectedNode()
         type = self.application.GetProject().GetMetamodel().GetElementFactory().GetElement(element)
-        cmd = CCreateElementObjectCommand(type, node, self.application.GetOpenedDrawingAreas())
+        cmd = CCreateElementObjectCommand(type, node)
         self.application.GetCommands().Execute(cmd)
     
     def on_mnuTreeAddDiagram_activate(self, widget, diagramId):
@@ -281,7 +279,7 @@ class CtwProjectView(CWidget):
             self.RemoveFromArea(j)
 
         for d in self.application.GetProject().GetDiagrams():
-            d.DeleteObject(node.GetObject(), self.application.GetOpenedDrawingAreas().GetDrawingArea(d).GetSelection())
+            d.DeleteObject(node.GetObject())
     
     
     def DeleteElement(self, elementObject):
@@ -372,12 +370,8 @@ class CtwProjectView(CWidget):
     def on_drag_data_get(self, widget,drag_context, selection_data, info, time):
         treeselection = widget.get_selection()
         model, iter = treeselection.get_selected()
-        if selection_data.target == PROJECT_NODE_UID_SELECTION_TARGET:
-            projectNode = model.get_value(iter, 3)
-            selection_data.set(PROJECT_NODE_UID_SELECTION_TARGET, 8, projectNode.GetUID())
-        else:
-            data = model.get_value(iter, 0)
-            selection_data.set(selection_data.target, 8, data)
+        data = model.get_value(iter, 0)
+        selection_data.set(selection_data.target, 8, data)
     
     # Adopted from the discussion at http://www.daa.com.au/pipermail/pygtk/2003-November/006304.html
     def IterCopy(self, model, iter_to_copy, target_iter, pos):
@@ -567,7 +561,3 @@ class CtwProjectView(CWidget):
             
             
             self.twProjectView.expand_to_path(iterPath)
-
-    @event('application.bus','show-element-in-treeView')
-    def on_show_element_in_treeView(self, widget, Element):
-        self.ShowElement(Element)

@@ -1,7 +1,7 @@
 from lib.Depend.gtk2 import gtk
 from lib.Depend.gtk2 import gobject
 
-from lib.Drawing.PixmapImageLoader import PixmapFromPath
+from lib.Drawing.Canvas.GtkPlus import PixmapFromPath
 
 from common import CWidget, event
 from lib.Commands.Project import CCreateElementObjectCommand, CCreateDiagramCommand
@@ -67,6 +67,6 @@ class CmnuItems(CWidget):
         if self.__selectedNode is None:
             return
         type = self.application.GetProject().GetMetamodel().GetElementFactory().GetElement(element)
-        cmd = CCreateElementObjectCommand(type, self.__selectedNode, self.application.GetOpenedDrawingAreas())
+        cmd = CCreateElementObjectCommand(type, self.__selectedNode)
         self.application.GetCommands().Execute(cmd)
         

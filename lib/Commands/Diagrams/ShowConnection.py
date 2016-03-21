@@ -5,12 +5,11 @@ class ShowConnectionError(Exception):
     pass
 
 class CShowConnectionCommand(CCommand):
-    def __init__(self, connectionObject, diagram, selection):
+    def __init__(self, connectionObject, diagram):
         CCommand.__init__(self)
         
         self.__connectionObject = connectionObject
         self.__diagram = diagram
-        self.__selection = selection
         self.__connectionVisual = None
     
     def _Do(self):
@@ -26,7 +25,7 @@ class CShowConnectionCommand(CCommand):
         self.__diagram.AddConnection(self.__connectionVisual)
     
     def _Undo(self):
-        self.__diagram.DeleteConnection(self.__connectionVisual, self.__selection)
+        self.__diagram.DeleteConnection(self.__connectionVisual)
     
     def GetGuiUpdates(self):
         return [

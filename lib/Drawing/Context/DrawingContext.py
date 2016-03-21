@@ -1,7 +1,8 @@
 from lib.Base import CBaseObject
 
 class CDrawingContext(CBaseObject):
-    def __init__(self, element, pos, size = (None, None)):
+    def __init__(self, canvas, element, pos, size = (None, None)):
+        self.canvas = canvas
         self.element = element
         self.pos = pos
         self.size = size
@@ -10,6 +11,7 @@ class CDrawingContext(CBaseObject):
         self.stack = []
         self.shadowcolor = None
         self.line = 0
+        self.sizeCache = {}
     
     def Push(self):
         self.stack.append((self.pos, self.size, self.variables.copy(), self.stack, self.shadowcolor, self.line, self.defaults.copy()))
@@ -17,12 +19,12 @@ class CDrawingContext(CBaseObject):
     def Pop(self):
         self.pos, self.size, self.variables, self.stack, self.shadowcolor, self.line, self.defaults = self.stack.pop()
 
+    '''
+    Set position to the center of the DrawinContext
+    @param position: actual pisition of DrawingContenxt
+    '''
     def SetPosition(self, position):
-        """
-        Set position to the center of the DrawingContext
-        @param position: actual position of DrawingContext
-        """
-        self.pos = position
+        self.pos=position
 
     def ComputeSize(self, object):
         size = self.size
@@ -38,10 +40,16 @@ class CDrawingContext(CBaseObject):
         return self.size
     
     def GetCachedSize(self, object):
-        return self.element.GetCachedSize(self, object)
+        if self.canvas.GetCachableGlobally():
+            return self.element.GetCachedSize(self, object)
+        else:
+            return self.sizeCache.get((id(object), self.GetLoopPath()))
     
     def GetPos(self):
         return self.pos
+    
+    def GetCanvas(self):
+        return self.canvas
     
     def GetShadowColor(self):
         return self.shadowcolor
@@ -71,7 +79,11 @@ class CDrawingContext(CBaseObject):
         self.size = newsize
     
     def CacheSize(self, object, size):
-        return self.element.CacheSize(self, object, size)
+        if self.canvas.GetCachableGlobally():
+            return self.element.CacheSize(self, object, size)
+        else:
+            self.sizeCache[(id(object), self.GetLoopPath())] = size
+            return size
     
     def Move(self, newpos):
         self.pos = newpos

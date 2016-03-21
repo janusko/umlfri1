@@ -1,4 +1,4 @@
- <ConnectionType xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" id="Agregation">
+<ConnectionType xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" id="Agregation">
     <Icon path="icons/agregate.png"/>
     <Domain id="association" identity="name"/>
     
@@ -43,60 +43,18 @@
             </Condition>
         </Label>
         <Label position="source+1">
-	        <HBox>
-		        <Condition condition="#self.SRole">
-                    <Rectangle fill="#cfg.Styles.Connection.TextFill">
-			            <VBox>
-				            <Switch value="#self.SRoleVisibility">
-                                <Case condition="Private">
-                                    <TextBox text=" - " font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>
-                                </Case>
-                                <Case condition="Protected">
-                                    <TextBox text=" # " font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>
-                                </Case>
-                                <Case condition="Public">
-                                    <TextBox text=" + " font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>
-                                </Case>
-						        <Case condition="Unspecified">
-                                    <TextBox text="  " font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>
-                                </Case>
-                            </Switch>
-                    		<TextBox text="#self.SRole" font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>
-                	    </VBox>
-			        </Rectangle>
-                </Condition>
-	        </HBox>
+            <Condition condition="#self.SRole">
+                <Rectangle fill="#cfg.Styles.Connection.TextFill">
+                    <TextBox text="#self.SRole" font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>
+                </Rectangle>
+            </Condition>
         </Label>
-
-
         <Label position="destination+1">
-	        <HBox>
-		        <Condition condition="#self.DRole">
-                    <Rectangle fill="#cfg.Styles.Connection.TextFill">
-			            <VBox>
-				            <Switch value="#self.DRoleVisibility">
-                                <Case condition="Private">
-                                    <TextBox text=" - " font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>
-                                </Case>
-                                <Case condition="Protected">
-                                    <TextBox text=" # " font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>
-                                </Case>
-                                <Case condition="Public">
-                                    <TextBox text=" + " font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>
-                                </Case>
-						        <Case condition="Unspecified">
-                                    <TextBox text="  " font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>
-                                </Case>
-                            </Switch>
-                            <TextBox text="#self.DRole" font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>
-                	    </VBox>
-			        </Rectangle>
-            	</Condition>
-	        </HBox>
+            <Condition condition="#self.DRole">
+                <Rectangle fill="#cfg.Styles.Connection.TextFill">
+                    <TextBox text="#self.DRole" font="#cfg.Styles.Connection.NameTextFont" color="#cfg.Styles.Connection.NameTextColor"/>
+                </Rectangle>
+            </Condition>
         </Label>
-
-
-
-
     </Appearance>
 </ConnectionType>

@@ -24,7 +24,7 @@ class CConnectionLine(CVisualObject):
     def ComputeSize(self, context):
         return 0, 0
 
-    def Paint(self, context, canvas):
+    def Paint(self, context):
         color, style, width, begin, end = self.GetVariables(context, 'color', 'style', 'width', 'begin', 'end')
         
         if context.GetShadowColor() is not None:
@@ -76,5 +76,5 @@ class CConnectionLine(CVisualObject):
         
         for point in points:
             if oldpoint is not None:
-                canvas.DrawLine(oldpoint, point, color, line_width = width, line_style = style)
+                context.GetCanvas().DrawLine(oldpoint, point, color, line_width = width, line_style = style)
             oldpoint = point

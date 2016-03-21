@@ -1,14 +1,9 @@
 from lib.Depend.gtk2 import pango
 from lib.Depend.gtk2 import pangocairo
 from lib.Depend.gtk2 import cairo
-from lib.Depend.gtk2 import gtk
 
 from lib.Exceptions.UserException import *
 from Abstract import CAbstractCanvas
-
-from lib.Drawing.DrawingHelper import PositionToLogical, PositionToPhysical
-
-from ..PangoLayoutConfiguration import ConfigurePangoLayout
 
 #  dash sequence for line styles used in self.cr.set_dash(dash_sequence, offset), where
 #  dash_sequence - an array specifying alternate lengths of on and off stroke portions
@@ -81,12 +76,37 @@ class CCairoBaseCanvas(CAbstractCanvas):
         if alpha >= 0.0 and alpha <= 1.0:
             self.alpha = alpha
 
-    def __SetFont(self, font):
-        #pango_layout = self.cr.create_layout()
-        pango_context = gtk.gdk.pango_context_get()
-        pango_layout = pango.Layout(pango_context)
+    def __SetFont(self, font, returndesc = False):
+        pango_layout = self.cr.create_layout()
+        underline = 'underline' in font.GetStyle()
+        strikeout = 'strike' in font.GetStyle()
+        desc = [font.GetFamily()]
+        # some (supported) font styles, append order is important
+        if 'bold' in font.GetStyle():
+            desc.append('Bold')
 
-        ConfigurePangoLayout(pango_layout, font)
+        if 'italic' in font.GetStyle():
+            desc.append('Italic')
+
+        desc.append('%dpx'%font.GetSize())
+        desc = ' '.join(desc)
+
+        if desc in self.fonts:
+            fontobj = self.fonts[desc]
+        else:
+            self.fonts[desc] = fontobj = pango.FontDescription(desc)
+
+        if returndesc:
+            return fontobj
+        pango_layout.set_font_description(fontobj)
+
+        atlist = pango.AttrList()
+        if underline:
+            atlist.insert(pango.AttrUnderline(pango.UNDERLINE_SINGLE, 0, 10000))
+        if strikeout:
+            atlist.insert(pango.AttrStrikethrough(True, 0, 10000))
+
+        pango_layout.set_attributes(atlist)
         
         return pango_layout
 
@@ -263,7 +283,8 @@ class CCairoBaseCanvas(CAbstractCanvas):
         Draws contents of buffer onto canvas.
 
         @param buffer: BufferCanvas containig pattern/image...
-        @type buffer: L{CBufferCanvas <lib.Drawing.Canvas.BufferCanvas.CBufferCanvas>}
+        @type buffer: L{CBufferCanvas
+        <lib.Drawing.Canvas.BufferCanvas.CBufferCanvas>}
 
         @param origin: coordinate at which the surface origin should appear
         @type: tuple
@@ -279,7 +300,6 @@ class CCairoBaseCanvas(CAbstractCanvas):
         self.cr.fill()
         self.cr.restore()
 
-    # extract to separate class/function
     def GetIconSize(self, filename):
         if self.storage is None:
             raise DrawingError('storage')

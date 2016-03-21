@@ -37,7 +37,7 @@ class CVisualObject(CBaseObject):
     def GetParent(self):
         return self.parent()
 
-    def Paint(self, context, canvas):
+    def Paint(self, context):
         pass
 
     def SetParent(self, parent):

@@ -4,7 +4,7 @@ import os.path
 import webbrowser
 
 from lib.consts import CHECK_ADDON_INTERVAL
-from lib.Drawing.PixmapImageLoader import PixmapFromPath
+from lib.Drawing.Canvas.GtkPlus import PixmapFromPath
 
 from common import event, CWindow
 from dialogs import CQuestionDialog
@@ -425,7 +425,7 @@ class CfrmAddons(CWindow):
     @event("twPluginList", "button-press-event")
     def PluginPopup(self, treeView, event):
         if event.button == 3:
-            path = self.twPluginList.get_path_at_pos(int(event.x), int(event.y))
+            path = self.twPluginList.get_path_at_pos(event.x, event.y)
             if path is None:
                 return
             addon = self.__GetSelectedAddon(self.twPluginList, path[0])
