@@ -1,0 +1,2 @@
+import Depend
+Depend.check()

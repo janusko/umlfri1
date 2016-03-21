@@ -1,0 +1,81 @@
+<?xml version="1.0" ?>
+<interface
+    xmlns="http://umlfri.org/xmlschema/publicApi.xsd"
+    name="org.umlfri.api.fileTypes.FileType">
+    
+    <documentation>
+        Represents one file type managed by some addon.
+    </documentation>
+    
+    <property name="mimeType">
+        <documentation>
+            Mimetype of the file type.
+        </documentation>
+        
+        <value type="string" readable="true" />
+    </property>
+    
+    <property name="description">
+        <documentation>
+            Short description of the file type.
+        </documentation>
+        
+        <value type="string" readable="true" />
+    </property>
+    
+    <property name="importEnabled">
+        <documentation>
+            True, if import is enabled for the file type.
+        </documentation>
+        
+        <value type="boolean" readable="true" writable="true" />
+        
+        <setter transactional="false" />
+    </property>
+    
+    <property name="exportEnabled">
+        <documentation>
+            True, if import is enabled for the file type.
+        </documentation>
+        
+        <value type="boolean" readable="true" writable="true" />
+        
+        <setter transactional="false" />
+    </property>
+    
+    <method name="addExtension">
+        <documentation>
+            Associates the given extension with the file type.
+        </documentation>
+        
+        <parameter name="extension" type="string">
+            <documentation>
+                The extension.
+            </documentation>
+        </parameter>
+    </method>
+    
+    <method name="registerImportHandler">
+        <documentation>
+            Registers the handler for importing files of this type.
+        </documentation>
+        
+        <parameter name="handler" type="org.umlfri.api.fileTypes.ImportExportHandler">
+            <documentation>
+                The import handler.
+            </documentation>
+        </parameter>
+    </method>
+    
+    <method name="registerExportHandler">
+        <documentation>
+            Registers the handler for export files of this type.
+        </documentation>
+        
+        <parameter name="handler" type="org.umlfri.api.fileTypes.ImportExportHandler">
+            <documentation>
+                The export handler.
+            </documentation>
+        </parameter>
+    </method>
+</interface>

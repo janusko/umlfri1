@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DiagramType id="Use Case diagram" umlversion="*" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd">
+    <Icon path="icons/use_case_diagram.png" />
+    <Domain id="basic_diagram" identity="name" />
+    <Special swimlines="0" lifelines="0" />
+    <Elements>
+        <Item value="Package" />
+        <Item value="UseCase" />
+        <Item value="Actor" />
+        <Item value="Note" />
+        <Item value="Boundary" />
+    </Elements>
+    <Connections>
+        <Item value="Generalization" />       
+        <Item value="AssociationUseCase" />
+        <Item value="Note Link" />
+        <Item value="Include"/>
+        <Item value="Extend"/>
+    </Connections>
+</DiagramType>
