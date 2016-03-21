@@ -1,8 +1,0 @@
-<ConnectionType xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" id="Note Link">
-    <Icon path="icons/NoteLink.png"/>
-    <Domain id="NoteLink"/>
-    
-    <Appearance>
-        <ConnectionLine style="dot" color="#cfg.Styles.Connection.LineColor"/>
-    </Appearance>
-</ConnectionType>

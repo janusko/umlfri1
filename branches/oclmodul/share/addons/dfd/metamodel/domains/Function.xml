@@ -1,8 +1,0 @@
-<Domain id="Function" xmlns="http://umlfri.kst.fri.uniza.sk/xmlschema/metamodel.xsd" >
-    <Attribute id="functionname" name="Function Name" >
-		<Str/>
-	</Attribute>
-    <Attribute id="note" name="Note" >
-		<Text/>
-	</Attribute>
-</Domain>
