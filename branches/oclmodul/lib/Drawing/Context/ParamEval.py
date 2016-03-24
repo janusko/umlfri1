@@ -1,12 +1,14 @@
 from NodeEvalWrapper import CNodeEvalWrapper
 from ConfigEvalWrapper import CConfigEvalWrapper
+from grammar import parser as p
 from lib.Base import CBaseObject
 
 class CParamEval(CBaseObject):
     def __init__(self, str, type = None):
+        self.__exp = str
         self.__code = compile(str, "<param>", 'eval')
         self.__type = type
-    
+
     def __call__(self, context):
         locals = dict(
             self = CNodeEvalWrapper(context.GetDomainObject(), context.GetProjectNode()),
@@ -14,8 +16,9 @@ class CParamEval(CBaseObject):
             _line = context.GetLine(),
         )
         locals.update(context.GetVariables())
-        
-        value = eval(self.__code, locals, {'__builtins__': {}})
+        #value = eval(self.__code, locals, {'__builtins__': {}})
+        value = p.evalexp(self.__exp, locals)
+
         if self.__type is not None:
             value = self.__type(value)
         return value
