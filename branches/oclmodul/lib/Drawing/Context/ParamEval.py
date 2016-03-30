@@ -5,7 +5,11 @@ from lib.Base import CBaseObject
 
 class CParamEval(CBaseObject):
     def __init__(self, str, type = None):
-        self.__exp = str
+        try:
+            self.__ast = p.parse(str)
+        except Exception:
+            # TODO remove exception
+            print "Error parsing:", str
         self.__code = compile(str, "<param>", 'eval')
         self.__type = type
 
@@ -17,7 +21,8 @@ class CParamEval(CBaseObject):
         )
         locals.update(context.GetVariables())
         #value = eval(self.__code, locals, {'__builtins__': {}})
-        value = p.evalexp(self.__exp, locals)
+        #value = p.evalexp(self.__exp, locals)
+        value = p.evalexp2(self.__ast, locals)
 
         if self.__type is not None:
             value = self.__type(value)
