@@ -4,14 +4,24 @@ from grammar import parser as p
 from lib.Base import CBaseObject
 
 class CParamEval(CBaseObject):
-    def __init__(self, str, type = None):
+    def __init__(self, str_, domain, type_ = None):
         try:
-            self.__ast = p.parse(str)
-        except Exception:
+            self.__ast = p.parse(str_)
+            vars_ = dict(
+                self=None,
+                cfg=CConfigEvalWrapper(),
+                _line=None
+            )
+            evaltype = p.checktype2(self.__ast, vars_)
+        except Exception as e:
             # TODO remove exception
-            print "Error parsing:", str
-        self.__code = compile(str, "<param>", 'eval')
-        self.__type = type
+            print "Error parsing:", str_
+            print e
+            print type_
+
+        #if evaltype != type_:
+        #    raise TypeError("Element attribute in metamodel have bad type: {0}, {1}".format(evaltype, type_))
+        self.__type = type_
 
     def __call__(self, context):
         locals = dict(
@@ -56,7 +66,7 @@ def TupleWrap(type):
         return tuple(out)
     return tmp
 
-def BuildParam(value, type = None):
+def BuildParam(value, domain, type = None):
     if type is bool:
         type2 = BoolWrap
     elif type is float:
@@ -73,7 +83,7 @@ def BuildParam(value, type = None):
             else:
                 return value[1:]
         else:
-            return CParamEval(value[1:], type)
+            return CParamEval(value[1:], domain, type)
     elif type2 is not None:
         return type2(value)
     else:
