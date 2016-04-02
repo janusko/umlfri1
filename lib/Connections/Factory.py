@@ -119,13 +119,13 @@ class CConnectionFactory(CBaseObject):
                     if root and child.tag == METAMODEL_NAMESPACE+'Label':
                         labels.append((child.get('position'), self.__LoadLabelAppearance(child[0])))
                     else:
-                        visualObj.AppendChild(self.__LoadAppearance(child))
+                        visualObj.AppendChild(self.__LoadAppearance(child, domain))
 
         tmp = self.types[id] = CConnectionType(self, id, visualObj, icon, domain, identity)
         for pos, lbl in labels:
             tmp.AddLabel(pos, lbl)
     
-    def __LoadAppearance(self, root):
+    def __LoadAppearance(self, root, domain):
         """
         Loads an appearance section of an XML file
         
@@ -145,7 +145,7 @@ class CConnectionFactory(CBaseObject):
         
         params = {}
         for attr in root.attrib.items():
-            params[attr[0]] = BuildParam(attr[1], cls.types.get(attr[0], None))
+            params[attr[0]] = BuildParam(attr[1], domain, cls.types.get(attr[0], None))
         ret = obj = cls(**params)
         
         if hasattr(obj, "LoadXml"):
@@ -156,7 +156,7 @@ class CConnectionFactory(CBaseObject):
                 obj.SetChild(tmp)
                 obj = tmp
             for child in root:
-                obj.AppendChild(self.__LoadAppearance(child))
+                obj.AppendChild(self.__LoadAppearance(child, domain))
         return ret
     
     def __LoadLabelAppearance(self, root):
