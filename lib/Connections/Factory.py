@@ -3,6 +3,8 @@ from lib.Base import CBaseObject
 
 import os
 import os.path
+
+from lib.Domains.Object import CDomainObject
 from lib.Exceptions.DevException import *
 from Type import CConnectionType
 from Alias import CConnectionAlias
@@ -117,15 +119,15 @@ class CConnectionFactory(CBaseObject):
             elif element.tag == METAMODEL_NAMESPACE+'Appearance':
                 for child in element:
                     if root and child.tag == METAMODEL_NAMESPACE+'Label':
-                        labels.append((child.get('position'), self.__LoadLabelAppearance(child[0])))
+                        labels.append((child.get('position'), self.__LoadLabelAppearance(child[0], CDomainObject(domain))))
                     else:
-                        visualObj.AppendChild(self.__LoadAppearance(child, domain))
+                        visualObj.AppendChild(self.__LoadAppearance(child, CDomainObject(domain)))
 
         tmp = self.types[id] = CConnectionType(self, id, visualObj, icon, domain, identity)
         for pos, lbl in labels:
             tmp.AddLabel(pos, lbl)
     
-    def __LoadAppearance(self, root, domain):
+    def __LoadAppearance(self, root, domainObject):
         """
         Loads an appearance section of an XML file
         
@@ -145,7 +147,7 @@ class CConnectionFactory(CBaseObject):
         
         params = {}
         for attr in root.attrib.items():
-            params[attr[0]] = BuildParam(attr[1], domain, cls.types.get(attr[0], None))
+            params[attr[0]] = BuildParam(attr[1], domainObject, cls.types.get(attr[0], None))
         ret = obj = cls(**params)
         
         if hasattr(obj, "LoadXml"):
@@ -156,10 +158,10 @@ class CConnectionFactory(CBaseObject):
                 obj.SetChild(tmp)
                 obj = tmp
             for child in root:
-                obj.AppendChild(self.__LoadAppearance(child, domain))
+                obj.AppendChild(self.__LoadAppearance(child, domainObject))
         return ret
     
-    def __LoadLabelAppearance(self, root):
+    def __LoadLabelAppearance(self, root, domainObject):
         """
         Loads the label from an appearance section of an XML file
         
@@ -176,13 +178,13 @@ class CConnectionFactory(CBaseObject):
         cls = ALL[root.tag.split("}")[1]]
         params = {}
         for attr in root.attrib.items():
-            params[attr[0]] = BuildParam(attr[1], cls.types.get(attr[0], None))
+            params[attr[0]] = BuildParam(attr[1], domainObject, cls.types.get(attr[0], None))
         obj = cls(**params)
         if hasattr(obj, "LoadXml"):
             obj.LoadXml(root)
         else:
             for child in root:
-                obj.AppendChild(self.__LoadLabelAppearance(child))
+                obj.AppendChild(self.__LoadLabelAppearance(child, domainObject))
         return obj
     
     def GetMetamodel(self):
