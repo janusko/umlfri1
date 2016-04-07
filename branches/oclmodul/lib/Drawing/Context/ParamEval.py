@@ -1,22 +1,23 @@
-from NodeEvalWrapper import CNodeEvalWrapper
 from ConfigEvalWrapper import CConfigEvalWrapper
+from NodeEvalWrapper import CNodeEvalWrapper
 from grammar import parser as p
 from lib.Base import CBaseObject
-from lib.Domains.Object import CDomainObject
 
 
 class CParamEval(CBaseObject):
-    def __init__(self, str_, domaintype, type_=None):
+    def __init__(self, str_, domainObject, type_=None):
+        self.__str = str_
         evaltype = None
         try:
             self.__ast = p.parse(str_)
-            domainObject = CDomainObject(domaintype)
             vars_ = dict(
                 self=CNodeEvalWrapper(domainObject, None),
                 cfg=CConfigEvalWrapper(),
                 _line=None
             )
+
             vars_.update(domainObject.values)
+
             evaltype = p.checktype2(self.__ast, vars_)
         except Exception as e:
             # TODO remove exception
@@ -24,11 +25,13 @@ class CParamEval(CBaseObject):
             print "str: ", str_
             print type_
 
+        """
         if type_ is not None:
             if type_ is bool and evaltype is str:
                 pass
             elif evaltype != type_:
                 raise TypeError("Element attribute in metamodel have bad type: {0}, {1}".format(evaltype, type_))
+        """
         self.__type = type_
 
     def __call__(self, context):
@@ -74,7 +77,7 @@ def TupleWrap(type):
         return tuple(out)
     return tmp
 
-def BuildParam(value, domain, type=None):
+def BuildParam(value, domainObject, type=None):
     if type is bool:
         type2 = BoolWrap
     elif type is float:
@@ -91,7 +94,7 @@ def BuildParam(value, domain, type=None):
             else:
                 return value[1:]
         else:
-            return CParamEval(value[1:], domain, type)
+            return CParamEval(value[1:], domainObject, type)
     elif type2 is not None:
         return type2(value)
     else:

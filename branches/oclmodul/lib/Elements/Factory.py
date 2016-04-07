@@ -2,6 +2,7 @@ import os
 import os.path
 import weakref
 
+from lib.Domains.Object import CDomainObject
 from lib.Exceptions.DevException import *
 from Type import CElementType
 from Alias import CElementAlias
@@ -123,7 +124,7 @@ class CElementFactory(CBaseObject):
                 tmp = None
                 for j in element:
                     tmp = j
-                obj.SetAppearance(self.__LoadAppearance(tmp, obj.GetDomain()))
+                obj.SetAppearance(self.__LoadAppearance(tmp, CDomainObject(obj.GetDomain())))
             elif element.tag == METAMODEL_NAMESPACE+'Options':
                 for item in element:
                     name = item.tag.split('}')[1]
@@ -134,7 +135,7 @@ class CElementFactory(CBaseObject):
         
         self.types[root.get('id')] = obj
     
-    def __LoadAppearance(self, root, domain):
+    def __LoadAppearance(self, root, domainObject):
         """
         Loads an appearance section of an XML file
         
@@ -149,13 +150,13 @@ class CElementFactory(CBaseObject):
         cls = ALL[root.tag.split("}")[1]]
         params = {}
         for attr in root.attrib.items():    #return e.g. attr == ('id', '1') => attr[0] == 'id', attr[1] == '1'
-            params[attr[0]] = BuildParam(attr[1], domain, cls.types.get(attr[0], None))
+            params[attr[0]] = BuildParam(attr[1], domainObject, cls.types.get(attr[0], None))
         obj = cls(**params)
         if hasattr(obj, "LoadXml"):
             obj.LoadXml(root)
         else:
             for child in root:
-                obj.AppendChild(self.__LoadAppearance(child, domain))
+                obj.AppendChild(self.__LoadAppearance(child, domainObject))
         return obj
     
     def __LoadConnections(self, obj, root):
