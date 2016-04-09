@@ -26,6 +26,7 @@ class CColor(CBaseObject):
         return self.__color
 
 class CFont(CBaseObject):
+
     def __init__(self, font):
         if isinstance(font, CFont):
             self.__fontFamily = font.__fontFamily
@@ -69,6 +70,44 @@ class CFont(CBaseObject):
             return ' '.join((self.__fontFamily, ' '.join(self.__fontStyle), str(self.__fontSize)))
         else:
             return ' '.join((self.__fontFamily, str(self.__fontSize)))
+
+
+class MethodAttrTypes(object):
+    ATTRIBUTES = {}
+    METHODS = {
+        CColor: {
+        },
+        CFont: {
+            'GetSize': {
+                'args': [],
+                'rtype': int
+            },
+            'GetStyle': {
+                'args': [],
+                'rtype': set
+            },
+            'GetFamily': {
+                'args': [],
+                'rtype': (str, unicode)
+            },
+            'ChangeStyle': {
+                'args': [str, bool],
+                'rtype': CFont
+            },
+            'ChangeSize': {
+                'args': [int, bool],
+                'rtype': int
+            }
+        }
+    }
+
+    def GetMethod(self, type_, name):
+        if type_ in self.METHODS:
+            if name in self.METHODS[type_]:
+                args = self.METHODS[type_][name]['args']
+                rtype = self.METHODS[type_][name]['rtype']
+                return args, rtype
+
 
 class CVersion(object):
     __reVersion = re.compile(r'(?P<version>[0-9]+(\.[0-9]+)*)(?P<verchar>[a-z])?(-(?P<suffix>(alpha|beta|pre|rc|p))(?P<sufnum>[0-9]+))?(@(?P<rev>([0-9]+|\*)))?$')
