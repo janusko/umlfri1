@@ -101,11 +101,11 @@ class MethodAttrTypes(object):
         }
     }
 
-    def GetMethod(self, type_, name):
-        if type_ in self.METHODS:
-            if name in self.METHODS[type_]:
-                args = self.METHODS[type_][name]['args']
-                rtype = self.METHODS[type_][name]['rtype']
+    def GetMethod(self, target, selector):
+        if target in self.METHODS:
+            if selector in self.METHODS[target]:
+                args = self.METHODS[target][selector]['args']
+                rtype = self.METHODS[target][selector]['rtype']
                 return args, rtype
 
 
