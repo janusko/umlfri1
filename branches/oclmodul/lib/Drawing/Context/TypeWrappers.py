@@ -1,41 +1,46 @@
-from lib.datatypes import MethodAttrTypes
-from tree.evalvisitor import IObjectTypeWrapper, IOperationTypeWrapper, IAttributeTypeWrapper
 import inspect
+
+from lib.config import types
+from lib.Base import CBaseObject
+from lib.datatypes import MethodAttrTypes
+from tree.typevisitor import IObjectTypeWrapper, OperationTypeWrapper
 
 __author__ = 'Vincent Jurcisin-Kukla'
 
 
 class ObjectTypeWrapper(IObjectTypeWrapper):
-    def __init__(self, object_):
-        super(ObjectTypeWrapper, self).__init__(object_)
 
-    def __getattr__(self, item):
-        obj = getattr(self.object, item)
-        if inspect.ismethod(obj):   # method
-            methodwrap = MethodAttrTypes().GetMethod(self.object_type, item)
-            if methodwrap is not None:
-                return OperationTypeWrapper(methodwrap[0], methodwrap[1])
+    def getOperationType(self, target, selector):
+        obj = getattr(target, selector)
+        if inspect.ismethod(obj):
+            methodWrapper = MethodAttrTypes().GetMethod(target, selector)
+            if methodWrapper is not None:
+                return OperationTypeWrapper(methodWrapper[0], methodWrapper[1])
             else:
-                raise Exception("Missing wrapper of method: {0}".format(item))
-        else:   # attribute
-            # object = cfg
-            # cfg.Styles.Element.TextFont
-            return AttributeTypeWrapper()
+                raise Exception("Doesn't exist operation wrapper for operation: {0}".format(selector))
+        else:
+            TypeError("Method: {0} doesn't exist on {1}".format(selector, target))
 
-
-class OperationTypeWrapper(IOperationTypeWrapper):
-    def __init__(self, args, rtype):
-        self.__args = args
-        self.__rtype = rtype
-
-    def rtype(self):
-        return self.__rtype
-
-    def args_generator(self):
-        for i in self.__args:
-            yield i
-
-
-class AttributeTypeWrapper(IAttributeTypeWrapper):
-    def attribute_type(self):
+    def getAttributeType(self, target, attr):
         pass
+
+
+class ConfigTypeWrapper(object):
+    def __init__(self, path = []):
+        self.__path = path
+
+    def __getattr__(self, attr):
+        path = self.__path + [attr]
+        pathStr = '/' + '/'.join(path)
+        if pathStr in types:
+            return types[pathStr]
+        else:
+            return ConfigTypeWrapper(path)
+
+
+class DomainTypeWrapper(object):
+    def __init__(self, domainType):
+        self.__domainObject = domainType
+
+    def __getattr__(self, name):
+        return eval(self.__domainObject.GetAttribute(name)['type'])

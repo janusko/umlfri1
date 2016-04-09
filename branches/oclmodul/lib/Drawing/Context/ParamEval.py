@@ -2,37 +2,40 @@ from ConfigEvalWrapper import CConfigEvalWrapper
 from NodeEvalWrapper import CNodeEvalWrapper
 from grammar import parser as p
 from lib.Base import CBaseObject
+from lib.Drawing.Context.TypeWrappers import ObjectTypeWrapper, ConfigTypeWrapper, DomainTypeWrapper
 
 
 class CParamEval(CBaseObject):
-    def __init__(self, str_, domainObject, type_=None):
+    def __init__(self, str_, domainType, type_=None):
         self.__str = str_
+        self.__type = type_
         evaltype = None
         try:
             self.__ast = p.parse(str_)
             vars_ = dict(
-                self=CNodeEvalWrapper(domainObject, None),
-                cfg=CConfigEvalWrapper(),
+                self=DomainTypeWrapper(domainType),
+                cfg=ConfigTypeWrapper(),
                 _line=None
             )
-
-            vars_.update(domainObject.values)
-
-            evaltype = p.checktype2(self.__ast, vars_)
+            #vars_.update(domainType.values)
+            evaltype = p.checktype2(self.__ast, ObjectTypeWrapper(), vars_)
         except Exception as e:
-            # TODO remove exception
-            print e
-            print "str: ", str_
-            print type_
+            if type_ is not None:
+                type_ = type_.__name__
+            print "Exception: {0}, STR: {1}, TYPE: {2}".format(e, str_, type_)
+            return
 
-        """
-        if type_ is not None:
-            if type_ is bool and evaltype is str:
-                pass
-            elif evaltype != type_:
-                raise TypeError("Element attribute in metamodel have bad type: {0}, {1}".format(evaltype, type_))
-        """
-        self.__type = type_
+        if evaltype in (list, str) and type_ == bool:
+            pass
+        elif evaltype in (str, unicode) and type_ in (str, unicode):
+            pass
+        elif evaltype != type_:
+            #raise TypeError("Element attribute in metamodel have bad type: {0}, {1}".format(evaltype, type_))
+            if evaltype is not None:
+                evaltype = evaltype.__name__
+            if type_ is not None:
+                type_ = type_.__name__
+            print "Error: {0} != {1}    ON: {2}".format(evaltype, type_, str_)
 
     def __call__(self, context):
         locals = dict(
@@ -77,7 +80,7 @@ def TupleWrap(type):
         return tuple(out)
     return tmp
 
-def BuildParam(value, domainObject, type=None):
+def BuildParam(value, domainType, type=None):
     if type is bool:
         type2 = BoolWrap
     elif type is float:
@@ -94,7 +97,7 @@ def BuildParam(value, domainObject, type=None):
             else:
                 return value[1:]
         else:
-            return CParamEval(value[1:], domainObject, type)
+            return CParamEval(value[1:], domainType, type)
     elif type2 is not None:
         return type2(value)
     else:

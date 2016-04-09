@@ -119,15 +119,15 @@ class CConnectionFactory(CBaseObject):
             elif element.tag == METAMODEL_NAMESPACE+'Appearance':
                 for child in element:
                     if root and child.tag == METAMODEL_NAMESPACE+'Label':
-                        labels.append((child.get('position'), self.__LoadLabelAppearance(child[0], CDomainObject(domain))))
+                        labels.append((child.get('position'), self.__LoadLabelAppearance(child[0], domain)))
                     else:
-                        visualObj.AppendChild(self.__LoadAppearance(child, CDomainObject(domain)))
+                        visualObj.AppendChild(self.__LoadAppearance(child, domain))
 
         tmp = self.types[id] = CConnectionType(self, id, visualObj, icon, domain, identity)
         for pos, lbl in labels:
             tmp.AddLabel(pos, lbl)
     
-    def __LoadAppearance(self, root, domainObject):
+    def __LoadAppearance(self, root, domainType):
         """
         Loads an appearance section of an XML file
         
@@ -147,7 +147,7 @@ class CConnectionFactory(CBaseObject):
         
         params = {}
         for attr in root.attrib.items():
-            params[attr[0]] = BuildParam(attr[1], domainObject, cls.types.get(attr[0], None))
+            params[attr[0]] = BuildParam(attr[1], domainType, cls.types.get(attr[0], None))
         ret = obj = cls(**params)
         
         if hasattr(obj, "LoadXml"):
@@ -158,10 +158,10 @@ class CConnectionFactory(CBaseObject):
                 obj.SetChild(tmp)
                 obj = tmp
             for child in root:
-                obj.AppendChild(self.__LoadAppearance(child, domainObject))
+                obj.AppendChild(self.__LoadAppearance(child, domainType))
         return ret
     
-    def __LoadLabelAppearance(self, root, domainObject):
+    def __LoadLabelAppearance(self, root, domainType):
         """
         Loads the label from an appearance section of an XML file
         
@@ -178,13 +178,13 @@ class CConnectionFactory(CBaseObject):
         cls = ALL[root.tag.split("}")[1]]
         params = {}
         for attr in root.attrib.items():
-            params[attr[0]] = BuildParam(attr[1], domainObject, cls.types.get(attr[0], None))
+            params[attr[0]] = BuildParam(attr[1], domainType, cls.types.get(attr[0], None))
         obj = cls(**params)
         if hasattr(obj, "LoadXml"):
             obj.LoadXml(root)
         else:
             for child in root:
-                obj.AppendChild(self.__LoadLabelAppearance(child, domainObject))
+                obj.AppendChild(self.__LoadLabelAppearance(child, domainType))
         return obj
     
     def GetMetamodel(self):

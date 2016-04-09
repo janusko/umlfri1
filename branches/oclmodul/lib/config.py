@@ -33,7 +33,7 @@ types = {
     "/Styles/Connection/TextColor": CColor,
     "/Styles/Connection/TextFill": CColor,
     "/Styles/Connection/NameTextFont": CFont,
-    "/Styles/Connection/Textfont": CFont,
+    "/Styles/Connection/TextFont": CFont,
     "/Styles/Selection/PointsSize": int,
     "/Styles/Selection/RectangleWidth": int,
     "/Styles/Selection/PointsColor": CColor,
