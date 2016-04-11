@@ -6,7 +6,7 @@ from lib.Drawing.Context.TypeWrappers import ObjectTypeWrapper, ConfigTypeWrappe
 
 
 class CParamEval(CBaseObject):
-    def __init__(self, str_, domainType, type_=None):
+    def __init__(self, str_, domainType, localvars, type_=None):
         self.__str = str_
         self.__type = type_
         evaltype = None
@@ -17,7 +17,7 @@ class CParamEval(CBaseObject):
                 cfg=ConfigTypeWrapper(),
                 _line=None
             )
-            #vars_.update(domainType.values)
+            vars_.update(localvars)
             evaltype = p.checktype2(self.__ast, ObjectTypeWrapper(), vars_)
         except Exception as e:
             if type_ is not None:
@@ -28,6 +28,8 @@ class CParamEval(CBaseObject):
         if evaltype in (list, str) and type_ == bool:
             pass
         elif evaltype in (str, unicode) and type_ in (str, unicode):
+            pass
+        elif type_ is None:
             pass
         elif evaltype != type_:
             #raise TypeError("Element attribute in metamodel have bad type: {0}, {1}".format(evaltype, type_))
@@ -80,7 +82,7 @@ def TupleWrap(type):
         return tuple(out)
     return tmp
 
-def BuildParam(value, domainType, type=None):
+def BuildParam(value, domainType, localvars, type=None):
     if type is bool:
         type2 = BoolWrap
     elif type is float:
@@ -97,7 +99,7 @@ def BuildParam(value, domainType, type=None):
             else:
                 return value[1:]
         else:
-            return CParamEval(value[1:], domainType, type)
+            return CParamEval(value[1:], domainType, localvars, type)
     elif type2 is not None:
         return type2(value)
     else:

@@ -602,3 +602,19 @@ class CDomainType(CBaseObject):
     
     def GetAttributesCount(self):
         return len(self.attributeorder)
+
+    def GetAttributeTypes(self):
+        vars = dict()
+        for key, value in self.attributes.iteritems():
+            #if self.attributes[key]['type'] == 'text':
+            #    vars[key] = unicode
+            #else:
+            type_ = value['type']
+            try:
+                vars[key] = eval(type_)
+            except:
+                if type_ == 'text':
+                    vars[key] = unicode
+                else:
+                    vars[key] = str
+        return vars
