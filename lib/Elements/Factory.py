@@ -136,7 +136,7 @@ class CElementFactory(CBaseObject):
         
         self.types[root.get('id')] = obj
     
-    def __LoadAppearance(self, root, domainType, subDomainId):
+    def __LoadAppearance(self, root, domainType, subDomainId, vars={}):
         """
         Loads an appearance section of an XML file
         
@@ -151,6 +151,7 @@ class CElementFactory(CBaseObject):
         cls = ALL[root.tag.split("}")[1]]
         params = {}
         subdomain = domainType
+        localvars = vars
         for attr in root.attrib.items():    #return e.g. attr == ('id', '1') => attr[0] == 'id', attr[1] == '1'
             pomstr = attr[1]
             if pomstr.startswith('#'):
@@ -160,17 +161,19 @@ class CElementFactory(CBaseObject):
                     newSubdomainId = pomstr[1:]
                 try:
                     subdomain = self.domainfactory.GetDomain(subDomainId+'.'+newSubdomainId)
+                    localvars.update(subdomain.GetAttributeTypes())
                     subDomainId = subDomainId + '.' + newSubdomainId
-                except Exception:
+                except Exception as e:
+                    #print e
                     pass
 
-            params[attr[0]] = BuildParam(attr[1], domainType, cls.types.get(attr[0], None))
+            params[attr[0]] = BuildParam(attr[1], domainType, localvars, cls.types.get(attr[0], None))
         obj = cls(**params)
         if hasattr(obj, "LoadXml"):
             obj.LoadXml(root)
         else:
             for child in root:
-                obj.AppendChild(self.__LoadAppearance(child, domainType, subDomainId))
+                obj.AppendChild(self.__LoadAppearance(child, domainType, subDomainId, localvars))
         return obj
     
     def __LoadConnections(self, obj, root):

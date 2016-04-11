@@ -110,24 +110,26 @@ class CConnectionFactory(CBaseObject):
         domain = None
         identity = None
         visualObj = CContainer()
+        domainId = None
         for element in root:
             if element.tag == METAMODEL_NAMESPACE+'Icon':
                 icon = element.get('path')
             elif element.tag == METAMODEL_NAMESPACE+'Domain':
-                domain = self.domainfactory.GetDomain(element.get('id'))
+                domainId = element.get('id')
+                domain = self.domainfactory.GetDomain(domainId)
                 identity = element.get('identity')
             elif element.tag == METAMODEL_NAMESPACE+'Appearance':
                 for child in element:
                     if root and child.tag == METAMODEL_NAMESPACE+'Label':
-                        labels.append((child.get('position'), self.__LoadLabelAppearance(child[0], domain)))
+                        labels.append((child.get('position'), self.__LoadLabelAppearance(child[0], domain, domainId)))
                     else:
-                        visualObj.AppendChild(self.__LoadAppearance(child, domain))
+                        visualObj.AppendChild(self.__LoadAppearance(child, domain, domainId))
 
         tmp = self.types[id] = CConnectionType(self, id, visualObj, icon, domain, identity)
         for pos, lbl in labels:
             tmp.AddLabel(pos, lbl)
     
-    def __LoadAppearance(self, root, domainType):
+    def __LoadAppearance(self, root, domainType, subDomainId, vars={}):
         """
         Loads an appearance section of an XML file
         
@@ -146,8 +148,24 @@ class CConnectionFactory(CBaseObject):
         cls = ALL_CONNECTION[tagName]
         
         params = {}
+        subdomain = domainType
+        localvars = vars
         for attr in root.attrib.items():
-            params[attr[0]] = BuildParam(attr[1], domainType, cls.types.get(attr[0], None))
+            pomstr = attr[1]
+            if pomstr.startswith('#'):
+                if pomstr.startswith('#self.'):
+                    newSubdomainId = pomstr[6:]
+                else:
+                    newSubdomainId = pomstr[1:]
+                try:
+                    subdomain = self.domainfactory.GetDomain(subDomainId+'.'+newSubdomainId)
+                    localvars.update(subdomain.GetAttributeTypes())
+                    subDomainId = subDomainId + '.' + newSubdomainId
+                except Exception as e:
+                    #print e
+                    pass
+
+            params[attr[0]] = BuildParam(attr[1], domainType, localvars, cls.types.get(attr[0], None))
         ret = obj = cls(**params)
         
         if hasattr(obj, "LoadXml"):
@@ -158,10 +176,10 @@ class CConnectionFactory(CBaseObject):
                 obj.SetChild(tmp)
                 obj = tmp
             for child in root:
-                obj.AppendChild(self.__LoadAppearance(child, domainType))
+                obj.AppendChild(self.__LoadAppearance(child, domainType, subDomainId, localvars))
         return ret
     
-    def __LoadLabelAppearance(self, root, domainType):
+    def __LoadLabelAppearance(self, root, domainType, subDomainId, vars={}):
         """
         Loads the label from an appearance section of an XML file
         
@@ -177,14 +195,30 @@ class CConnectionFactory(CBaseObject):
         
         cls = ALL[root.tag.split("}")[1]]
         params = {}
+        subdomain = domainType
+        localvars = vars
         for attr in root.attrib.items():
-            params[attr[0]] = BuildParam(attr[1], domainType, cls.types.get(attr[0], None))
+            pomstr = attr[1]
+            if pomstr.startswith('#'):
+                if pomstr.startswith('#self.'):
+                    newSubdomainId = pomstr[6:]
+                else:
+                    newSubdomainId = pomstr[1:]
+                try:
+                    subdomain = self.domainfactory.GetDomain(subDomainId+'.'+newSubdomainId)
+                    localvars.update(subdomain.GetAttributeTypes())
+                    subDomainId = subDomainId + '.' + newSubdomainId
+                except Exception as e:
+                    #print e
+                    pass
+
+            params[attr[0]] = BuildParam(attr[1], domainType, localvars, cls.types.get(attr[0], None))
         obj = cls(**params)
         if hasattr(obj, "LoadXml"):
             obj.LoadXml(root)
         else:
             for child in root:
-                obj.AppendChild(self.__LoadLabelAppearance(child, domainType))
+                obj.AppendChild(self.__LoadLabelAppearance(child, domainType, subDomainId, localvars))
         return obj
     
     def GetMetamodel(self):

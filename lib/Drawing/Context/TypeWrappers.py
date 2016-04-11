@@ -2,7 +2,7 @@ import inspect
 
 from lib.config import types
 from lib.Base import CBaseObject
-from lib.datatypes import MethodAttrTypes
+from lib.datatypes import MethodAttrTypes, CColor, CFont
 from tree.typevisitor import IObjectTypeWrapper, OperationTypeWrapper
 
 __author__ = 'Vincent Jurcisin-Kukla'
@@ -43,4 +43,18 @@ class DomainTypeWrapper(object):
         self.__domainObject = domainType
 
     def __getattr__(self, name):
-        return eval(self.__domainObject.GetAttribute(name)['type'])
+        type_ = None
+        try:
+            type_ = self.__domainObject.GetAttribute(name)['type']
+            return eval(type_)
+        except KeyError:
+            pass
+        except:
+            if type_ == 'text':
+                return unicode
+            elif type_ == 'color':
+                return CColor
+            elif type_ == 'font':
+                return CFont
+            else:
+                return str
