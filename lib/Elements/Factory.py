@@ -108,13 +108,14 @@ class CElementFactory(CBaseObject):
     
     def __LoadType(self, root):
         obj = CElementType(self, root.get('id'))
-        
+        domainId = None
         for element in root:
             if element.tag == METAMODEL_NAMESPACE + 'Icon':
                 obj.SetIcon(element.get('path'))
             
             elif element.tag == METAMODEL_NAMESPACE + 'Domain':
-                obj.SetDomain(self.domainfactory.GetDomain(element.get('id')))
+                domainId = element.get('id')
+                obj.SetDomain(self.domainfactory.GetDomain(domainId))
                 obj.SetIdentity(element.get('identity'))
             
             elif element.tag == METAMODEL_NAMESPACE+'Connections':
@@ -124,7 +125,7 @@ class CElementFactory(CBaseObject):
                 tmp = None
                 for j in element:
                     tmp = j
-                obj.SetAppearance(self.__LoadAppearance(tmp, obj.GetDomain()))
+                obj.SetAppearance(self.__LoadAppearance(tmp, obj.GetDomain(), domainId))
             elif element.tag == METAMODEL_NAMESPACE+'Options':
                 for item in element:
                     name = item.tag.split('}')[1]
@@ -135,7 +136,7 @@ class CElementFactory(CBaseObject):
         
         self.types[root.get('id')] = obj
     
-    def __LoadAppearance(self, root, domainType):
+    def __LoadAppearance(self, root, domainType, subDomainId):
         """
         Loads an appearance section of an XML file
         
@@ -149,14 +150,27 @@ class CElementFactory(CBaseObject):
             raise FactoryError("XMLError", root.tag)
         cls = ALL[root.tag.split("}")[1]]
         params = {}
+        subdomain = domainType
         for attr in root.attrib.items():    #return e.g. attr == ('id', '1') => attr[0] == 'id', attr[1] == '1'
+            pomstr = attr[1]
+            if pomstr.startswith('#'):
+                if pomstr.startswith('#self.'):
+                    newSubdomainId = pomstr[6:]
+                else:
+                    newSubdomainId = pomstr[1:]
+                try:
+                    subdomain = self.domainfactory.GetDomain(subDomainId+'.'+newSubdomainId)
+                    subDomainId = subDomainId + '.' + newSubdomainId
+                except Exception:
+                    pass
+
             params[attr[0]] = BuildParam(attr[1], domainType, cls.types.get(attr[0], None))
         obj = cls(**params)
         if hasattr(obj, "LoadXml"):
             obj.LoadXml(root)
         else:
             for child in root:
-                obj.AppendChild(self.__LoadAppearance(child, domainType))
+                obj.AppendChild(self.__LoadAppearance(child, domainType, subDomainId))
         return obj
     
     def __LoadConnections(self, obj, root):
