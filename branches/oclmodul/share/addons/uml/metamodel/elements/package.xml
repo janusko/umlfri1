@@ -34,11 +34,11 @@
                     <Sizer minwidth="60" minheight="60">
                         <Padding padding="5">
                             <HBox>
-                                <Loop collection="#self._Children">
+                                <Loop collection="#node.children">
                                     <VBox>
-                                        <Icon filename="#_Icon"/>
+                                        <Icon filename="#node.icon"/>
                                         <Align align="left center">
-                                            <TextBox text="#name" font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/>
+                                            <TextBox text="#node.label" font="#cfg.Styles.Element.NameTextFont" color="#cfg.Styles.Element.NameTextColor"/>
                                         </Align>
                                     </VBox>
                                 </Loop>

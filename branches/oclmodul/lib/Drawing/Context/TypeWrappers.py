@@ -1,7 +1,7 @@
 import inspect
+from types import NoneType
 
 from lib.config import types
-from lib.Base import CBaseObject
 from lib.datatypes import MethodAttrTypes, CColor, CFont
 from tree.typevisitor import IObjectTypeWrapper, OperationTypeWrapper
 
@@ -58,3 +58,21 @@ class DomainTypeWrapper(object):
                 return CFont
             else:
                 return str
+
+
+class NodeTypeWrapper(object):
+    @property
+    def children(self):
+        return list
+
+    @property
+    def icon(self):
+        return str
+
+    @property
+    def label(self):
+        return str
+
+    @property
+    def parent(self):
+        return NoneType
