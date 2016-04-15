@@ -45,5 +45,10 @@ class ParserError(UserException):
 class PrintError(UserException):
     pass
 
+
 class StorageDestroyError(UserException):
+    pass
+
+
+class MetamodelError(UserException):
     pass
