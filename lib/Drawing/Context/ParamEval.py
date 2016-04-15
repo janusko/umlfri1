@@ -25,7 +25,7 @@ class CParamEval(CBaseObject):
             if type_ is not None:
                 type_ = type_.__name__
             raise MetamodelError("Error during type checking: {0}. Checked string: '{1}', expected type: '{2}'."
-                            .format(e, str_, type_))
+                                 .format(e, str_, type_))
 
         if evaltype in (list, str) and type_ == bool:
             pass
@@ -38,8 +38,9 @@ class CParamEval(CBaseObject):
                 evaltype = evaltype.__name__
             if type_ is not None:
                 type_ = type_.__name__
-            raise MetamodelError("Different types: domain type: {0} != expected type {1}, checked string: {2}".format(evaltype, type_, str_))
             #print "Error: {0} != {1}    ON: {2}".format(evaltype, type_, str_)
+            raise MetamodelError("Different types (domain type) {0} != {1} (expected type), checked string: {2}"
+                                 .format(evaltype, type_, str_))
 
     def __call__(self, context):
         locals = dict(
