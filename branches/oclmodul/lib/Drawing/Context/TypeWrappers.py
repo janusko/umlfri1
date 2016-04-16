@@ -3,30 +3,34 @@ from types import NoneType
 
 from lib.config import types
 from lib.datatypes import MethodAttrTypes, CColor, CFont
-from tree.typevisitor import IObjectTypeWrapper, OperationTypeWrapper
+from tree.typevisitor import OperationTypeWrapper
+from tree.typewrappers import IObjectTypeWrapper
 
 __author__ = 'Vincent Jurcisin-Kukla'
 
 
 class ObjectTypeWrapper(IObjectTypeWrapper):
 
-    def getOperationType(self, target, selector):
-        obj = getattr(target, selector)
-        if inspect.ismethod(obj):
-            methodWrapper = MethodAttrTypes().GetMethod(target, selector)
-            if methodWrapper is not None:
-                return OperationTypeWrapper(methodWrapper[0], methodWrapper[1])
-            else:
-                raise Exception("Doesn't exist operation wrapper for operation: {0}".format(selector))
-        else:
-            TypeError("Method: {0} doesn't exist on {1}".format(selector, target))
+    def getOperationTypes(self, target, selector):
+        operationList = []
+        try:
+            obj = getattr(target, selector)
+            if inspect.ismethod(obj):
+                methodWrapper = MethodAttrTypes().GetMethod(target, selector)
+                operationList.append(OperationTypeWrapper(methodWrapper[0], methodWrapper[1]))
+        except Exception:
+            pass
+        return operationList
 
     def getAttributeType(self, target, attr):
-        pass
+        try:
+            return getattr(target, attr)
+        except Exception:
+            return None
 
 
 class ConfigTypeWrapper(object):
-    def __init__(self, path = []):
+    def __init__(self, path=[]):
         self.__path = path
 
     def __getattr__(self, attr):
