@@ -4,6 +4,8 @@ from lib.Exceptions import DomainTypeError
 import weakref
 from lib.Base import CBaseObject
 from lib.datatypes import CColor, CFont
+from tree.typewrappers import CollectionType
+
 
 class CDomainType(CBaseObject):
     '''
@@ -603,15 +605,17 @@ class CDomainType(CBaseObject):
     def GetAttributesCount(self):
         return len(self.attributeorder)
 
-    def GetAttributeTypes(self):
+    def GetAttributeTypes(self, subdomainId, domainFactory):
         vars = dict()
         for key, value in self.attributes.iteritems():
-            #if self.attributes[key]['type'] == 'text':
-            #    vars[key] = unicode
-            #else:
             type_ = value['type']
             try:
-                vars[key] = eval(type_)
+                val = eval(type_)
+                if val is list:
+                    subdomain = domainFactory.GetDomain(subdomainId)
+                    vars[key] = CollectionType(val, str)
+                else:
+                    vars[key] = val
             except:
                 if type_ == 'text':
                     vars[key] = unicode

@@ -24,7 +24,8 @@ class ObjectTypeWrapper(IObjectTypeWrapper):
 
     def getAttributeType(self, target, attr):
         try:
-            return getattr(target, attr)
+            p =getattr(target, attr)
+            return p
         except Exception:
             return None
 
@@ -49,8 +50,11 @@ class DomainTypeWrapper(object):
     def __getattr__(self, name):
         type_ = None
         try:
-            type_ = self.__domainObject.GetAttribute(name)['type']
-            return eval(type_)
+            type_ = eval(self.__domainObject.GetAttribute(name)['type'])
+            if type_ is list:
+                f = self.__domainObject.factory
+                pass
+            return type_
         except KeyError:
             pass
         except:
