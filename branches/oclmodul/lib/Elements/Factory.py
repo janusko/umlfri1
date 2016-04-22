@@ -150,19 +150,20 @@ class CElementFactory(CBaseObject):
             raise FactoryError("XMLError", root.tag)
         cls = ALL[root.tag.split("}")[1]]
         params = {}
-        subdomain = domainType
+        newSubdomain = domainType
         localvars = vars
         for attr in root.attrib.items():    #return e.g. attr == ('id', '1') => attr[0] == 'id', attr[1] == '1'
             pomstr = attr[1]
             if pomstr.startswith('#'):
                 if pomstr.startswith('#self.'):
-                    newSubdomainId = pomstr[6:]
+                    newDomainId = pomstr[6:]
                 else:
-                    newSubdomainId = pomstr[1:]
+                    newDomainId = pomstr[1:]
                 try:
-                    subdomain = self.domainfactory.GetDomain(subDomainId+'.'+newSubdomainId)
-                    localvars.update(subdomain.GetAttributeTypes())
-                    subDomainId = subDomainId + '.' + newSubdomainId
+                    newSubdomainId = subDomainId + '.' + newDomainId
+                    newSubdomain = self.domainfactory.GetDomain(newSubdomainId)
+                    subDomainId = newSubdomainId
+                    localvars.update(newSubdomain.GetAttributeTypes(newSubdomainId, self.domainfactory))
                 except Exception as e:
                     #print e
                     pass
