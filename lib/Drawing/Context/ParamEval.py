@@ -5,6 +5,7 @@ from lib.Base import CBaseObject
 from lib.Drawing.Context.NodeEvalWrapper import NodeEvalWrapper
 from lib.Drawing.Context.TypeWrappers import ObjectTypeWrapper, ConfigTypeWrapper, DomainTypeWrapper, NodeTypeWrapper
 from lib.Exceptions.UserException import MetamodelError
+from tree.typewrappers import CollectionType
 
 
 class CParamEval(CBaseObject):
@@ -20,27 +21,29 @@ class CParamEval(CBaseObject):
                 _line=int
             )
             vars_.update(localvars)
-            evaltype = p.checktype2(self.__ast, ObjectTypeWrapper(), vars_)
+            checktype = p.checktype2(self.__ast, ObjectTypeWrapper(), vars_)
         except Exception as e:
             if type_ is not None:
                 type_ = type_.__name__
             raise MetamodelError("Error during type checking: {0}. Checked string: '{1}', expected type: '{2}'."
                                  .format(e, str_, type_))
 
-        if evaltype in (list, str) and type_ == bool:
+        if isinstance(checktype, CollectionType):
+            checktype = checktype.collectionType
+
+        if checktype in (list, str) and type_ == bool:
             pass
-        elif evaltype in (str, unicode) and type_ in (str, unicode):
+        elif checktype in (str, unicode) and type_ in (str, unicode):
             pass
         elif type_ is None:
             pass
-        elif evaltype != type_:
-            if evaltype is not None:
-                evaltype = evaltype.__name__
+        elif checktype != type_:
+            if checktype is not None:
+                checktype = checktype.__name__
             if type_ is not None:
                 type_ = type_.__name__
-            #print "Error: {0} != {1}    ON: {2}".format(evaltype, type_, str_)
             raise MetamodelError("Different types (domain type) {0} != {1} (expected type), checked string: {2}"
-                                 .format(evaltype, type_, str_))
+                                 .format(checktype, type_, str_))
 
     def __call__(self, context):
         locals = dict(

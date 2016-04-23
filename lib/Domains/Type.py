@@ -612,7 +612,7 @@ class CDomainType(CBaseObject):
             try:
                 val = eval(type_)
                 if val is list:
-                    subdomain = domainFactory.GetDomain(subdomainId)
+                    #subdomain = domainFactory.GetDomain(subdomainId)
                     vars[key] = CollectionType(val, str)
                 else:
                     vars[key] = val

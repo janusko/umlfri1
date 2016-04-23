@@ -4,7 +4,7 @@ from types import NoneType
 from lib.config import types
 from lib.datatypes import MethodAttrTypes, CColor, CFont
 from tree.typevisitor import OperationTypeWrapper
-from tree.typewrappers import IObjectTypeWrapper
+from tree.typewrappers import IObjectTypeWrapper, CollectionType
 
 __author__ = 'Vincent Jurcisin-Kukla'
 
@@ -24,8 +24,7 @@ class ObjectTypeWrapper(IObjectTypeWrapper):
 
     def getAttributeType(self, target, attr):
         try:
-            p =getattr(target, attr)
-            return p
+            return getattr(target, attr)
         except Exception:
             return None
 
@@ -52,8 +51,10 @@ class DomainTypeWrapper(object):
         try:
             type_ = eval(self.__domainObject.GetAttribute(name)['type'])
             if type_ is list:
-                f = self.__domainObject.factory
-                pass
+                if name == 'attributes':
+                    return CollectionType(list, str)
+                elif name == 'operations':
+                    return CollectionType(list, CollectionType(str))
             return type_
         except KeyError:
             pass
