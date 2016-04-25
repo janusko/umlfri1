@@ -197,6 +197,8 @@ class CfrmMain(CWindow):
                 self.application.GetProject().LoadProject(filenameOrTemplate, copy)
         except ProjectError as e:
             CErrorDialog(self.form, str(e)).run()
+        except MetamodelError as e:
+            CErrorDialog(self.form, str(e)).run()
         except Exception, ex:
             if copy is not None:
                 self.application.GetRecentFiles().RemoveFile(filenameOrTemplate)

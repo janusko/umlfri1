@@ -25,25 +25,25 @@ class CParamEval(CBaseObject):
         except Exception as e:
             if type_ is not None:
                 type_ = type_.__name__
-            raise MetamodelError("Error during type checking: {0}. Checked string: '{1}', expected type: '{2}'."
-                                 .format(e, str_, type_))
+            #errormsg = "Error during type checking: {0}. Checked string: '{1}', expected type: '{2}'.".format(e, str_, type_)
+            raise MetamodelError("Metamodel is not valid")
 
         if isinstance(checktype, CollectionType):
             checktype = checktype.collectionType
 
-        if checktype in (list, str) and type_ == bool:
+        if type_ is None:
+            pass
+        elif checktype in (list, str) and type_ == bool:
             pass
         elif checktype in (str, unicode) and type_ in (str, unicode):
-            pass
-        elif type_ is None:
             pass
         elif checktype != type_:
             if checktype is not None:
                 checktype = checktype.__name__
             if type_ is not None:
                 type_ = type_.__name__
-            raise MetamodelError("Different types (domain type) {0} != {1} (expected type), checked string: {2}"
-                                 .format(checktype, type_, str_))
+            #errormsg = "Different types (domain type) {0} != {1} (expected type), checked string: {2}".format(checktype, type_, str_)
+            raise MetamodelError("Metamodel is not valid")
 
     def __call__(self, context):
         locals = dict(
