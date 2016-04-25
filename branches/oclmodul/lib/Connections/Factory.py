@@ -159,8 +159,8 @@ class CConnectionFactory(CBaseObject):
                     newSubdomainId = pomstr[1:]
                 try:
                     subdomain = self.domainfactory.GetDomain(subDomainId+'.'+newSubdomainId)
-                    localvars.update(subdomain.GetAttributeTypes())
                     subDomainId = subDomainId + '.' + newSubdomainId
+                    localvars.update(subdomain.GetAttributeTypes(subDomainId, self.domainfactory))
                 except Exception as e:
                     #print e
                     pass
@@ -206,8 +206,8 @@ class CConnectionFactory(CBaseObject):
                     newSubdomainId = pomstr[1:]
                 try:
                     subdomain = self.domainfactory.GetDomain(subDomainId+'.'+newSubdomainId)
-                    localvars.update(subdomain.GetAttributeTypes())
                     subDomainId = subDomainId + '.' + newSubdomainId
+                    localvars.update(subdomain.GetAttributeTypes(subDomainId, self.domainfactory))
                 except Exception as e:
                     #print e
                     pass

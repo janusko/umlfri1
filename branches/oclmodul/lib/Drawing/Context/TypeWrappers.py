@@ -51,10 +51,10 @@ class DomainTypeWrapper(object):
         try:
             type_ = eval(self.__domainObject.GetAttribute(name)['type'])
             if type_ is list:
-                if name == 'attributes':
-                    return CollectionType(list, str)
-                elif name == 'operations':
+                if name == 'operations':
                     return CollectionType(list, CollectionType(str))
+                else:
+                    return CollectionType(list, str)
             return type_
         except KeyError:
             pass

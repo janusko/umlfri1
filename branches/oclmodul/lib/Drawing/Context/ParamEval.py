@@ -10,8 +10,8 @@ from tree.typewrappers import CollectionType
 
 class CParamEval(CBaseObject):
     def __init__(self, str_, domainType, localvars, type_=None):
-        self.__str = str_
         self.__type = type_
+        self.__ast = None
         try:
             self.__ast = p.parse(str_)
             vars_ = dict(
