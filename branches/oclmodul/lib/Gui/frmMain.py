@@ -198,7 +198,8 @@ class CfrmMain(CWindow):
         except ProjectError as e:
             CErrorDialog(self.form, str(e)).run()
         except MetamodelError as e:
-            CErrorDialog(self.form, str(e)).run()
+            CErrorDialog(self.form, "Metamodel is not valid").run()
+            raise MetamodelError(e)
         except Exception, ex:
             if copy is not None:
                 self.application.GetRecentFiles().RemoveFile(filenameOrTemplate)
